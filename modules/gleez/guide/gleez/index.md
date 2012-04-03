@@ -15,4 +15,4 @@ But creating this CMS quickly would have been nearly impossible without its foun
 
 * **Designers** will love it because its theming system is just simple HTML and PHP just like Joomla's.
 
-#####Status as of March 31, 2011: **5%**
+#####Status as of March 31, 2012: **95%**
