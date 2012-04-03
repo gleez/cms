@@ -1,0 +1,10 @@
+name = "Fluid"
+description = "A crisp and distinctive, tableless, fluid width administration theme"
+version = 1
+author = "Gleez Team"
+site = 1
+admin = 0
+regions[left] = Left
+regions[right] = Right
+regions[dashboard] = Dashboard
+regions[footer] = Footer
