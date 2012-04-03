@@ -53,5 +53,7 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * s7nCMS    [(http://code.google.com/p/s7ncms/)](http://code.google.com/p/s7ncms/)
 * Kohanut   [(http://kohanut.com/)](http://kohanut.com/)
 * Wordpress [(http://wordpress.org)](http://wordpress.org)
+* Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
+* jQuery [(http://jquery.com/)](http://jquery.com/)
 
 We've lifted some codes from these applications and felt this is palce for giving credit to them as demanded!
