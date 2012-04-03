@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /application/
+Disallow: /installer/
+Disallow: /modules/
+Disallow: /system/
+Disallow: /themes/
+
+Disallow: /admin/
+Disallow: /page/add
+Disallow: /page/edit
+Disallow: /user/login
+Disallow: /user/logout

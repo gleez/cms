@@ -1,0 +1,4 @@
+name = "User"
+description = "Gleez users and group management"
+version = 2
+
