@@ -137,7 +137,7 @@
 			    <?php if( $post->loaded() AND ACL::post('delete', $post) ):?>
 				<div id="delete-action" class="pull-left">
 				    <i class="icon-trash"></i>
-				    <?php echo HTML::anchor($post->delete_url.URL::query($destination), _('Move to Trash'), array('class' => 'submitdelete')) ?>
+				    <?php echo HTML::anchor($post->delete_url.URL::query($destination), __('Move to Trash'), array('class' => 'submitdelete')) ?>
 				</div>
 				<?php endif; ?>
 				
