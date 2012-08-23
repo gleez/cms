@@ -58,7 +58,7 @@
 	foreach($all_roles as $role => $des)
 	{
 	    echo '<tr class ="'.Text::alternate("odd", "even").'">';
-	    echo '<td>'.Form::checkbox('roles['.$role.']', $des, (in_array($role, $user_roles) ? true : false)).'</td>';
+	    echo '<td>'.Form::checkbox('roles['.$role.']', $des, in_array($role, $user_roles)).'</td>';
 	    echo '<td>'.ucfirst($role).'</td><td>'.$des.'</td>';
 	    echo '</tr>';
 	}
