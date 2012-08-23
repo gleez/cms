@@ -31,7 +31,7 @@ class Gleez_HTML extends Kohana_HTML {
 	 */
 	public static function resize($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if( strlen($file) < 5 )
+		if( strlen($file) <= 1 )
 		{
 			return;
 		}
