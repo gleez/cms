@@ -2,165 +2,118 @@
 
 return array(
 
-	/**
-	 * Site name
-	 */
-	'site_name'    => 'Gleez CMS',
+  /** @var string Site name */
+  'site_name' => 'Gleez CMS',
 
-	/**
-	 * Site slogan
-	 */
-	'site_slogan' => 'Light, Simple, Flexible Content Management System',
+  /** @var string Site slogan */
+  'site_slogan' => 'Light, Simple, Flexible Content Management System',
 
-	/**
-	 * Site logo
-	 */
-	'site_logo' => '/media/logo.png',
+  /** @var string Site logo */
+  'site_logo' => '/media/logo.png',
 
-	/**
-	 * Site favicon
-	 */
-	'site_favicon' => 'favicon.ico',
-        
-        /**
-	 * Site email
-	 */
-	'site_email' => 'webmaster@example.com',
+  /** @var string Site favicon */
+  'site_favicon' => 'favicon.ico',
 
-        /**
-	 * Site url used for background tasks, where sitename is not available
-	 */
-	'site_url' => 'www.example.com',
+  /** @var string Site email */
+  'site_email' => 'webmaster@example.com',
 
-	/**
-	 * Site mission
-	 */
-	'site_mission' => '',
-        
-	/**
-	 * Site title seperator
-	 */
-        'title_separator' => ' :: ',
-        
-	/**
-	 * Default active site theme
-	 */
-	'theme' => 'anytime',
+  /** @var string Site url used for background tasks */
+  'site_url' => 'www.example.com',
 
-	/**
-	 * Default active admin theme
-	 */
-	'admin_theme' => 'anytime',
+  /** @var string Site mission */
+  'site_mission' => 'Innovate IT',
 
-	/**
-	 * Site Maintenance Mode, when true only site admin's can access
-	 */
-	'maintenance_mode' => FALSE,
+  /** @var string Site title seperator */
+  'title_separator' => ' :: ',
 
-	/**
-	 * Site Maintenance Mode, offline message
-	 */
-	'offline_message' => FALSE,
-        
-	/**
-	 * Date Time Format
-	 */
-	'date_time_format' => 'Y-M-d H:i:s',
+  /** @var string Default active site theme */
+  'theme' => 'anytime',
 
-	/**
-	 * Date Format
-	 */
-	'date_format' => 'Y-M-d',
+  /** @var string Default active admin theme */
+  'admin_theme' => 'anytime',
 
-	/**
-	 * Time Format
-	 */
-	'time_format' => 'H:i:s',
+  /** @var boolean Maintenance Mode */
+  'maintenance_mode' => FALSE,
 
-	/**
-	 * Filter Default Format
-	 */
-	'filter_default_format' => '1',
+  /** @var boolean Offline message in Maintenance Mode */
+  'offline_message' => FALSE,
 
-	/**
-	 * Default controller
-	 */
-	'front_page' => 'welcome',
+  /** @var string Date Time Format */
+  'date_time_format' => 'Y-M-d H:i:s',
 
-	// Default headers
-	'headers' => array
-	(
-		'X-Powered-By'	=> 'Gleez CMS (http://gleezcms.org)',
-	),
+  /** @var string Date Format */
+  'date_format' => 'Y-M-d',
 
-        'xmlrpc'  => 'xmlrpc',
-        
-	// Meta defaults
-	'meta' => array
-	(
-		'links' => array
-		(
-			URL::site('media/favicon.ico', TRUE) => array
-			(
-				'rel'  => 'shortcut icon',
-                                'type' => 'image/x-icon'
-			),
-			URL::site('rss', TRUE) => array
-			(
-				'rel'   => 'alternate',
-                                'type'  => 'application/rss+xml',
-                                'title' => 'Gleez RSS 2.0'
-			),
-                        URL::site('', TRUE) => array
-			(
-				'rel'  => 'index',
-                                'title' => 'Gleez'
-			),
-		),
-		'tags' => array
-		(
-                        'charset'		=> 'text/html; charset=UTF-8',
-			'generator'		=> 'Gleez '.GLEEZ::VERSION . ' (http://gleezcms.org)',
-                        //'author'		=> 'Gleez',
-			//'copyright'		=> 'Copyright Gleez 2011. All rights reserved.',
-			'robots'		=> 'index, follow, noodp',
-			'viewport'		=> 'width=device-width; initial-scale=1.0; maximum-scale=1.0;',
-			'X-UA-Compatible'	=> array('http_equiv' => TRUE, 'value' => 'IE=edge,chrome=1'),
-		),
-	),
-        
-	/**
-	 * Default locale
-	 */
-	'locale'	=> 'en-US',
+  /** @var string Time Format */
+  'time_format' => 'H:i:s',
 
-	/**
-	 * Installed locales
-	 */
-	'installed_locales'	=> 'en-US|',
+  /** @var string Filter Default Format */
+  'filter_default_format' => '1',
 
-	/**
-	 * Default timezone
-	 */
-	'timezone'	=> 'Asia/Kolkata',
+  /** @var string Default controller */
+  'front_page' => 'welcome',
 
-	/**
-	 * Default date first day
-	 */
-	'date_first_day'	=> 1,
+  /** @var array Default headers */
+  'headers' => array(
+    'X-Powered-By' => 'Gleez CMS (http://gleezcms.org)',
+  ),
 
-	/**
-	 * Default seo
-	 */
-	'seo_url'	=> TRUE,
-        
-	/**
-	 * Site Private Key
-	 */
-	'gleez_private_key' =>'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430',
+  /** @var string XMLRPC */
+  'xmlrpc'  => 'xmlrpc',
 
-	/**
-	 * Number of seconds before password reset confirmation links expire
-	 */
-	'reset_password_expiration' => 86400 // 24 hour(s)
+  /** @var array Meta defaults */
+  'meta' => array(
+    'links' => array(
+      URL::site('media/favicon.ico', TRUE) => array(
+        'rel'  => 'shortcut icon',
+        'type' => 'image/x-icon'
+      ),
+      URL::site('rss', TRUE) => array(
+        'rel'   => 'alternate',
+        'type'  => 'application/rss+xml',
+        'title' => 'Gleez RSS 2.0'
+      ),
+      URL::site('', TRUE) => array(
+        'rel'   => 'index',
+        'title' => 'Gleez'
+      ),
+    ),
+    'tags' => array
+    (
+      'charset'         => 'text/html; charset=UTF-8',
+      'generator'       => 'Gleez '.GLEEZ::VERSION.' (http://gleezcms.org)',
+      'author'          => 'Gleez',
+      'copyright'       => 'Copyright Gleez 2011. All rights reserved.',
+      'robots'          => 'index, follow, noodp',
+      'viewport'        => 'width=device-width; initial-scale=1.0; maximum-scale=1.0;',
+      'X-UA-Compatible' => array(
+        'http_equiv' => TRUE,
+        'value' => 'IE=edge,chrome=1'
+      ),
+    ),
+  ),
+
+   /** @var string Default locale */
+  'locale' => 'en-US',
+
+  /** @var array Installed locales */
+  'installed_locales' => array(
+    'en'
+  ),
+
+  /** @var string Default timezone */
+  'timezone' => 'Asia/Kolkata',
+
+  /** @var integer Default date first day */
+  'date_first_day' => 1,
+
+  /** @var boolean Default seo */
+  'seo_url' => TRUE,
+
+  /** @var string Site Private Key */
+  'gleez_private_key' =>'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430',
+
+  /** @var string Number of seconds before password reset confirmation links expire */
+  'reset_password_expiration' => 86400
+
 );
