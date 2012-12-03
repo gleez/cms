@@ -1,29 +1,43 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
+/**
+ * Welcome Controller
+ *
+ * @package   Gleez
+ * @category  Controller
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2012 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ */
 class Controller_Welcome extends Template {
 
-	//public $debug = TRUE;
-	public function action_index()
-	{
-		if( !Gleez::$installed )
-		{
-			$this->request->redirect(Route::get('install')->uri(array('action' => 'index')));
-		}
-	
-		$content = View::factory('welcome');
-		$this->title = 'Welcome!';
-	
-		$this->response->body($content);
-	}
+  /**
+   * The before() method is called before controller action.
+   */
+  public function before()
+  {
+    // The action_index() is default
+    if($this->request->action() == 'index' )
+    {
+      $this->request->action('welcome');
+    }
+    parent::before();
+  }
 
-	public function action_welcome( )
-	{
-		//$user = ORM::factory('user', 2);
-		//$user->pass = 'ELuC0HKi';
-		//$user->save();
-		//$this->response->body(  Debug::vars($_SERVER)  );
-		$this->response->body(  ''  );
-	}
+  /**
+   * Prepare welcome page
+   */
+  public function action_welcome()
+  {
+    // If Gleez CMS don't installed
+    if(! Gleez::$installed)
+    {
+      // Send to the installer with server status
+      $this->request->redirect(Route::get('install')->uri(array('action' => 'index')), 200);
+    }
 
-	
-} // End Welcome
+    $this->title = 'Welcome!';
+    $content = View::factory('welcome');
+    $this->response->body($content);
+  }
+
+}
