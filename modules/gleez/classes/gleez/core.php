@@ -2,11 +2,12 @@
 /**
  * Cleez Core class
  *
- * @package Gleez
- * @category Core
- * @author Sandeep Sangamreddi - Gleez
+ * @package   Gleez
+ * @category  Core
+ * @version   0.9.8.1
+ * @author    Sandeep Sangamreddi - Gleez
  * @copyright (c) 2012 Gleez Technologies
- * @license http://gleezcms.org/license
+ * @license   http://gleezcms.org/license
  */
 class Gleez_Core {
 
@@ -30,8 +31,6 @@ class Gleez_Core {
 
   /**
    * Runs the Gleez environment
-   *
-   * @throws Gleez_Exception
    */
   public static function ready()
   {
@@ -44,8 +43,11 @@ class Gleez_Core {
     // Gleez is now initialized
     self::$_ginit = TRUE;
 
-    // Set default session type & Cookie Salt
-    Cookie::$salt = 'e41eb68d5605ebcc01424519da854';
+    // Set default cookie salt
+    Cookie::$salt = Kohana::$config->load('cookie.salt');
+
+    // Set default cookie lifetime
+    Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
 
     if(Kohana::$environment !== Kohana::DEVELOPMENT)
     {
@@ -90,8 +92,8 @@ class Gleez_Core {
       return;
     }
 
-    // Set the default session type to db
-    Session::$default = 'db';
+    // Set the default session type
+    Session::$default = Kohana::$config->load('site.session_type');
 
     // Initialize Gleez modules
     Module::load_modules(FALSE);
@@ -112,9 +114,9 @@ class Gleez_Core {
   /**
    * APC cache. Provides an opcode based cache.
    *
-   * @param   string   name of the cache
-   * @param   mixed    data to cache
-   * @param   integer  number of seconds the cache is valid for
+   * @param   string   $name      name of the cache
+   * @param   mixed    $data      data to cache [Optional]
+   * @param   integer  $lifetime  number of seconds the cache is valid for
    * @return  mixed    for getting
    * @return  boolean  for setting
    */
@@ -150,7 +152,11 @@ class Gleez_Core {
       catch (Exception $e)
       {
         // Cache is corrupt, let return happen normally.
-        Kohana::$log->add(LOG::ERROR, "Cache name: {$name} is corrupt");
+        Kohana::$log->add(LOG::ERROR, "Cache name: `:name` is corrupt",
+          array(
+            ':name' => $name
+          )
+        );
       }
 
       // Cache not found
@@ -196,7 +202,7 @@ class Gleez_Core {
    *   // Sanitize a cache id
    *   $id = $this->_sanitize_id($id);
    *
-   * @param   string   id of cache to sanitize
+   * @param   string   $id  id of cache to sanitize
    * @return  string
    */
   protected static function _sanitize_id($id)
@@ -230,7 +236,7 @@ class Gleez_Core {
    * If Gleez is in maintenance mode, then force all non-admins to get routed
    * to a "This site is down for maintenance" page.
    *
-   * @throws HTTP_Exception_503
+   * @throws  HTTP_Exception_503
    */
   public static function maintenance_mode()
   {
@@ -251,8 +257,8 @@ class Gleez_Core {
   /**
    * Return a unix timestamp in a user specified format including date and time.
    *
-   * @param $timestamp unix timestamp
-   * @return string
+   * @param   integer   $timestamp unix timestamp
+   * @return  string
    */
   static function date_time($timestamp)
   {
@@ -262,8 +268,8 @@ class Gleez_Core {
   /**
    * Return a unix timestamp in a user specified format that's just the date.
    *
-   * @param $timestamp unix timestamp
-   * @return string
+   * @param   integer   $timestamp unix timestamp
+   * @return  string
    */
   static function date($timestamp)
   {
@@ -273,8 +279,8 @@ class Gleez_Core {
   /**
    * Return a unix timestamp in a user specified format that's just the time.
    *
-   * @param $timestamp unix timestamp
-   * @return string
+   * @param   integer   $timestamp unix timestamp
+   * @return  string
    */
   static function time($timestamp)
   {
@@ -285,9 +291,9 @@ class Gleez_Core {
    * This function searches for the file that first matches the specified file
    * name and returns its path.
    *
-   * @param string $file the file name
-   * @return string the file path
-   * @throws Kohana_Exception indicates that the file does not exist
+   * @param   string  $file the file name
+   * @return  string  the file path
+   * @throws  Kohana_Exception indicates that the file does not exist
    */
   protected static function find_file_custom($file)
   {
@@ -334,33 +340,46 @@ class Gleez_Core {
   /**
    * Create a image tag for sprite images
    *
-   * @param mixed $name
-   * @param mixed $title. (default: null)
-   * @param mixed $extra_class. (default: null)
-   * @return void
+   * @param   mixed   $class  Image class name
+   * @param   string  $title  Image title [Optional]
+   * @return  string  An HTML-prepared image
    */
   public static function spriteImg($class, $title = NULL)
   {
     $attr = array();
     $attr['width']  = 16;
     $attr['height'] = 16;
-    $attr['class'] = 'icon ' . $class;
+    $image_class    = '';
 
-    if ($title)
+    if (is_array($class))
+    {
+      foreach ($class as $name)
+      {
+        $image_class .= $name;
+      }
+    }
+    elseif (is_string($class))
+    {
+      $image_class = $class;
+    }
+
+    $attr['class'] = 'icon ' . $image_class;
+
+    if (! is_null($title))
     {
       $attr['title'] = $title;
     }
 
-    return Html::image(Route::get('media')->uri(array('file' => 'images/spacer.gif')), $attr);
+    return HTML::image(Route::get('media')->uri(array('file' => 'images/spacer.gif')), $attr);
   }
 
   /**
    * Check the supplied integer in given range
    *
-   * @param int $min
-   * @param int $max
-   * @param int $from_user supplied intiger
-   * @return bool
+   * @param   integer   $min
+   * @param   integer   $max
+   * @param   integer   $from_user supplied intiger
+   * @return  boolean
    */
   public static function check_in_range($min, $max, $from_user)
   {
@@ -371,16 +390,6 @@ class Gleez_Core {
 
     // Check that user data is between start & end
     return (($user > $start) AND ($user < $end));
-  }
-
-  public static function ping_o_matic()
-  {
-    $urls = array();
-    $urls[] = 'http://pingomatic.com/ping/?title=Gleez&blogurl=http%3A%2F%2Fgleez.com&rssurl=http%3A%2F%2Fgleez.com%2Frss.xml&chk_weblogscom=on&chk_blogs=on&chk_feedburner=on&chk_syndic8=on&chk_newsgator=on&chk_myyahoo=on&chk_pubsubcom=on&chk_blogdigger=on&chk_blogstreet=on&chk_weblogalot=on&chk_newsisfree=on&chk_topicexchange=on&chk_google=on&chk_tailrank=on&chk_postrank=on&chk_skygrid=on&chk_collecta=on&chk_superfeedr=on';
-
-    $urls[] = 'http://pingomatic.com/ping/?title=Gleez&blogurl=http%3A%2F%2Fgleez.com&rssurl=http%3A%2F%2Fgleez.com%2Frss%2Fblog&chk_weblogscom=on&chk_blogs=on&chk_feedburner=on&chk_syndic8=on&chk_newsgator=on&chk_myyahoo=on&chk_pubsubcom=on&chk_blogdigger=on&chk_blogstreet=on&chk_weblogalot=on&chk_newsisfree=on&chk_topicexchange=on&chk_google=on&chk_tailrank=on&chk_postrank=on&chk_skygrid=on&chk_collecta=on&chk_superfeedr=on';
-
-    $urls[] = 'http://pingomatic.com/ping/?title=Gleez&blogurl=http%3A%2F%2Fgleez.com&rssurl=http%3A%2F%2Fgleez.com%2Frss%2Fforum&chk_weblogscom=on&chk_blogs=on&chk_feedburner=on&chk_syndic8=on&chk_newsgator=on&chk_myyahoo=on&chk_pubsubcom=on&chk_blogdigger=on&chk_blogstreet=on&chk_weblogalot=on&chk_newsisfree=on&chk_topicexchange=on&chk_google=on&chk_tailrank=on&chk_postrank=on&chk_skygrid=on&chk_collecta=on&chk_superfeedr=on';
   }
 
   /**
