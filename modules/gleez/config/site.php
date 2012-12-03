@@ -78,8 +78,7 @@ return array(
         'title' => 'Gleez'
       ),
     ),
-    'tags' => array
-    (
+    'tags' => array(
       'charset'         => 'text/html; charset=UTF-8',
       'generator'       => 'Gleez '.GLEEZ::VERSION.' (http://gleezcms.org)',
       'author'          => 'Gleez',
@@ -92,9 +91,6 @@ return array(
       ),
     ),
   ),
-
-   /** @var string Default locale */
-  'locale' => 'en-US',
 
   /** @var array Installed locales */
   'installed_locales' => array(
@@ -114,6 +110,9 @@ return array(
   'gleez_private_key' =>'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430',
 
   /** @var string Number of seconds before password reset confirmation links expire */
-  'reset_password_expiration' => 86400
+  'reset_password_expiration' => 86400,
+
+  /** @var string Default session type */
+  'session_type' => 'db'
 
 );
