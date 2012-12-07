@@ -253,7 +253,7 @@ abstract class Gleez_Template extends Controller {
       Module::event('template', $this);
 
       // Set pimary menu
-      $pimary_menu = Menu::links('main-menu', array('class' => 'menus nav'))
+      $pimary_menu = Menu::links('main-menu', array('class' => 'menus nav'));
 
       // Bind the generic page variables
       $this->template
