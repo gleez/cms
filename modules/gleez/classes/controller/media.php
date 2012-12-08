@@ -61,7 +61,7 @@ class Controller_Media extends Controller {
         if (! is_dir($directory))
         {
           // Recursively create the directories needed for the file
-          $this->mkdir($directory, 0777, TRUE);
+          System::mkdir($directory, 0777, TRUE);
         }
 
         file_put_contents($public_path, $this->response->body());
@@ -77,30 +77,6 @@ class Controller_Media extends Controller {
       // Return a 404 status
       $this->response->status(404);
     }
-  }
-
-  /**
-   * Attempts to create the directory specified by `$path`
-   *
-   * To create the nested structure, the `$recursive` parameter
-   * to mkdir() must be specified.
-   *
-   * @param   string  $path       The directory path
-   * @param   integer $mode       Set permission mode (as in chmod) [Optional]
-   * @param   boolean $recursive  Create directories recursively if necessary [Optional]
-   * @return  boolean             Returns TRUE on success or FALSE on failure
-   *
-   * @see     http://php.net/manual/en/function.mkdir.php
-   * @todo    Overload is not an elegant by design
-   */
-  private function mkdir($path, $mode = 0777, $recursive = TRUE)
-  {
-    $oldumask = umask(0);
-    if(! is_dir($path))
-    {
-      return @mkdir($path, $mode, $recursive);
-    }
-    umask($oldumask);
   }
 
 }
