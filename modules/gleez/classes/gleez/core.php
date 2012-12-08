@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Cleez Core class
+ * Gleez Core class
  *
  * @package   Gleez
  * @category  Core
