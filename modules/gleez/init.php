@@ -74,6 +74,7 @@ if (! Route::cache())
     'action' => 'list'
   ));
 
+  // Manage menu items
   Route::set('admin/menu/item', 'admin/menu/manage/<id>(/<action>)(/p/<page>)',
     array(
       'id' => '[0-9]+',
