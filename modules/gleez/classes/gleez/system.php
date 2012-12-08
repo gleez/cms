@@ -15,7 +15,7 @@ class Gleez_System {
    * Get the server load averages (if possible)
    *
    * @return  string
-   * @see     http://php.net/manual/en/function.sys-getloadavg.php
+   * @link http://php.net/manual/en/function.sys-getloadavg.php sys-getloadavg()
    */
   public static function get_avg()
   {
