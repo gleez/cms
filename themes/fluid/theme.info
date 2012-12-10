@@ -1,10 +1,18 @@
-name = "Fluid"
-description = "A crisp and distinctive, tableless, fluid width administration theme"
-version = 1
-author = "Gleez Team"
-site = 1
-admin = 0
-regions[left] = Left
-regions[right] = Right
-regions[dashboard] = Dashboard
-regions[footer] = Footer
+; Empty strings and strings beginning with ; simbols ignored
+  name        = "fluid"
+  title       = "Fluid Theme"
+  description = "A crisp and distinctive, tableless, fluid width administration theme"
+  version     = 1
+  license     = http://gleezcms.org/license
+  themeURL    = https://github.com/gleez/cms/tree/master/themes/fluid
+  depends     =
+  author      = "Gleez Team"
+  authorURL   = http://www.gleeztech.com/
+  site        = 1
+  admin       = 0
+
+; Regions
+  regions[right]      = Left
+  regions[right]      = Right
+  regions[dashboard]  = Dashboard
+  regions[footer]     = Footer

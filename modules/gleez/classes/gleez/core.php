@@ -21,7 +21,7 @@ class Gleez_Core {
   public static $installed = FALSE;
 
   /** @var string Theme name */
-  public static $theme = 'anytime';
+  public static $theme = 'fluid';
 
   /** @var string Application language */
   public static $locale = '';
