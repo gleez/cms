@@ -132,7 +132,7 @@ CREATE TABLE {config} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `config` (`group_name`, `config_key`, `config_value`) VALUES
-('site', 'admin_theme', 's:7:"anytime";'),
+('site', 'admin_theme', 's:5:"fluid";'),
 ('site', 'date_first_day', 's:1:"1";'),
 ('site', 'date_format', 's:9:"l, F j, Y";'),
 ('site', 'date_time_format', 's:15:"l, F j, Y - H:i";'),
@@ -417,7 +417,7 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0),
 (4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
 (5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0),
-(6, 'admin/donate', 'Donate', 'gleez', 'anytime', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
+(6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
 (7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0),
 (8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0),
 (9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),

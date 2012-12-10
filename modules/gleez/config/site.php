@@ -30,7 +30,7 @@ return array(
   'theme' => 'anytime',
 
   /** @var string Default active admin theme */
-  'admin_theme' => 'anytime',
+  'admin_theme' => 'fluid',
 
   /** @var boolean Maintenance Mode */
   'maintenance_mode' => FALSE,
