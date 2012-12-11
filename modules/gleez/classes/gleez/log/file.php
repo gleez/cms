@@ -87,7 +87,7 @@ class Gleez_Log_File extends Log_Writer {
     $info = array(
       'hostname'   => Request::$client_ip,
       'user_agent' => Request::$user_agent,
-      'url'        => Request::current()->uri(),
+      'url'        => Request::$initial->uri(),
       'referer'    => isset(Request::$referrer) ? Request::$referrer : '',
     );
 
