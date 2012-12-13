@@ -27,7 +27,7 @@ return array(
   'title_separator' => ' :: ',
 
   /** @var string Default active site theme */
-  'theme' => 'anytime',
+  'theme' => 'fluid',
 
   /** @var string Default active admin theme */
   'admin_theme' => 'fluid',

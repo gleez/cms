@@ -101,12 +101,13 @@ class Gleez_ACL {
 	 *         ACL::cache(TRUE);
 	 *     }
 	 *
-	 * @param   boolean   cache the current perms
-	 * @return  void      when saving perms
-	 * @return  boolean   when loading perms
+	 * @param   boolean $save   cache the current perms
+	 * @param   boolean $append append, rather than replace, cached perms when loading
+	 * @return  void    when saving perms
+	 * @return  boolean when loading perms
 	 * @uses    Kohana::cache
 	 */
-	public static function cache($save = FALSE)
+	public static function cache($save = FALSE, $append = FALSE)
 	{
 		if ($save === TRUE)
 		{
@@ -117,14 +118,23 @@ class Gleez_ACL {
 		{
 			if ($perms = Kohana::cache('ACL::cache()'))
 			{
-				ACL::$_perms = $perms;
+				if ($append)
+				{
+					// Append cached perms
+					ACL::$_perms += $perms;
+				}
+				else
+				{
+					// Replace existing perms
+					ACL::$_perms = $perms;
+				}
 
-				// Perms were cached
+				// perms were cached
 				return ACL::$cache = TRUE;
 			}
 			else
 			{
-				// Perms were not cached
+				// perms were not cached
 				return ACL::$cache = FALSE;
 			}
 		}
