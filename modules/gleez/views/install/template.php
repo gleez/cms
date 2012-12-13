@@ -55,7 +55,7 @@
 		
 
 		<footer class="footer">
-			<blockquote> Did something go wrong? Try the <a href="http://gleezcms.org">FAQ</a> or ask in the <a href="http://gleezcms.org/forum">Gleez Forums</a>. </blockquote>
+			<blockquote> Did something go wrong? Try the <a href="https://github.com/gleez/cms/issues">Issues</a> or ask in the <a href="https://github.com/gleez/cms/issues">Github Issues</a>. </blockquote>
 		
 			<p class="powered pull-right">Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez') ?> v<?php echo GLEEZ::VERSION ?></p>
 			<p class="copyright pull-left">&copy; <?php echo date('Y') ?> Gleez Technologies</p>
