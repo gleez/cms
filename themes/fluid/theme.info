@@ -1,4 +1,4 @@
-; Empty strings and strings beginning with ; simbols ignored
+; Empty strings and strings beginning with ; symbols ignored
   name        = "fluid"
   title       = "Fluid Theme"
   description = "A crisp and distinctive, tableless, fluid width administration theme"
@@ -12,7 +12,8 @@
   admin       = 0
 
 ; Regions
-  regions[right]      = Left
-  regions[right]      = Right
-  regions[dashboard]  = Dashboard
-  regions[footer]     = Footer
+[regions]
+  left        = Left
+  right       = Right
+  footer      = Footer
+  dashboard   = Dashboard
