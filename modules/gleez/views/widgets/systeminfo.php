@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <th><?php echo __('Load Average ') ?></th>
-      <td><?php echo Gleez::get_avg() ?></td>
+      <td><?php echo System::get_avg() ?></td>
     </tr>
   </tbody>
 </table>
