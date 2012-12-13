@@ -76,7 +76,7 @@ class Gleez_Theme{
         public static function get_info($theme_name)
         {
                 $info_file               = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
-                $theme_info              = new ArrayObject(parse_ini_file($info_file), ArrayObject::ARRAY_AS_PROPS);
+                $theme_info              = new ArrayObject(parse_ini_file($info_file, true), ArrayObject::ARRAY_AS_PROPS);
                 $theme_info->title       = __($theme_info->title);
                 $theme_info->description = __($theme_info->description);
                 
