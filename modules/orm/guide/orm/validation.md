@@ -77,23 +77,26 @@ Certain forms contain information that should not be validated by the model, but
 
 	public function action_create()
 	{
-		try
+		if ($this->request->method === Request::POST)
 		{
-			$user = ORM::factory('user');
-			$user->username = $_POST['username'];
-			$user->password = $_POST['password'];
+			try
+			{
+				$user = ORM::factory('user');
+				
+				$user->values($this->request->post(), array('username','password'));
 
-			$extra_rules = Validation::factory($_POST)
-				->rule('password_confirm', 'matches', array(
-					':validation', ':field', 'password'
-				));
+				$extra_rules = Validation::factory($this->request->post())
+					->rule('password_confirm', 'matches', array(
+						':validation', ':field', 'password'
+					));
 
-			// Pass the extra rules to be validated with the model
-			$user->save($extra_rules);
-		}
-		catch (ORM_Validation_Exception $e)
-		{
-			$errors = $e->errors('models');
+				// Pass the extra rules to be validated with the model
+				$user->save($extra_rules);
+			}
+			catch (ORM_Validation_Exception $e)
+			{
+				$errors = $e->errors('models');
+			}
 		}
 	}
 
