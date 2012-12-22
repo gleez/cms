@@ -5,7 +5,7 @@
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Kodoc_Property extends Kodoc {
@@ -51,7 +51,7 @@ class Kohana_Kodoc_Property extends Kodoc {
 
 				if (isset($matches[2]))
 				{
-					$this->description = Markdown($matches[2]);
+					$this->description = Kodoc_Markdown::markdown($matches[2]);
 				}
 			}
 		}

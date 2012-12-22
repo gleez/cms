@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Database query builder for DELETE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
@@ -16,7 +16,7 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	/**
 	 * Set the table for a delete.
 	 *
-	 * @param   mixed  table name or array($table, $alias) or object
+	 * @param   mixed  $table  table name or array($table, $alias) or object
 	 * @return  void
 	 */
 	public function __construct($table = NULL)
@@ -34,7 +34,7 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	/**
 	 * Sets the table to delete from.
 	 *
-	 * @param   mixed  table name or array($table, $alias) or object
+	 * @param   mixed  $table  table name or array($table, $alias) or object
 	 * @return  $this
 	 */
 	public function table($table)
@@ -47,7 +47,7 @@ class Kohana_Database_Query_Builder_Delete extends Database_Query_Builder_Where 
 	/**
 	 * Compile the SQL query and return it.
 	 *
-	 * @param   object  Database instance
+	 * @param   object  $db  Database instance
 	 * @return  string
 	 */
 	public function compile(Database $db)

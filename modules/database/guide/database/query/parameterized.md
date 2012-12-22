@@ -1,6 +1,6 @@
-# Prepared Statements
+# Parameterized Statements
 
-Using prepared statements allows you to write SQL queries manually while still escaping the query values automatically to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). Creating a query is simple:
+Using parameterized statements allows you to write SQL queries manually while still escaping the query values automatically to prevent [SQL injection](http://wikipedia.org/wiki/SQL_Injection). Creating a query is simple:
 
     $query = DB::query(Database::SELECT, 'SELECT * FROM users WHERE username = :user');
 
@@ -50,9 +50,9 @@ The only difference between `param()` and `bind()` is that `bind()` passes the v
 
 ## Display the raw query
 
-If you want to display the SQL that will be executed, simply cast the object to a string:
+If you want to display the SQL that will be executed, you can simply echo the query:
 
-    echo Kohana::debug((string) $query);
+    echo $query;
     // Should display:
     // SELECT * FROM users WHERE username = 'john'
 

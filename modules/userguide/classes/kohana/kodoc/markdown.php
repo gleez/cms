@@ -5,7 +5,7 @@
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
@@ -38,6 +38,26 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 	 */
 	public static $show_toc = false;
 	
+	/**
+	 * Transform some text using [Kodoc_Markdown]
+	 *
+	 * @see Markdown()
+	 *
+	 * @param   string  Text to parse
+	 * @return  string  Transformed text
+	 */
+	public static function markdown($text)
+	{
+		static $instance;
+
+		if ($instance === NULL)
+		{
+			$instance = new Kodoc_Markdown;
+		}
+
+		return $instance->transform($text);
+	}
+
 	public function __construct()
 	{
 		// doImage is 10, add image url just before
@@ -107,7 +127,7 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 			$attr = ' id="'.$this->make_heading_id($matches[2]).'"';
 		
 		// Add this header to the page toc
-		$this->_add_to_toc($level,$matches[2],$this->make_heading_id($matches[2]));
+		$this->_add_to_toc($level, $matches[2], $this->make_heading_id(empty($matches[3]) ? $matches[2] : $matches[3]));
 		
 		$block = "<h$level$attr>".$this->runSpanGamut($matches[2])."</h$level>";
 		return "\n" . $this->hashBlock($block) . "\n\n";
@@ -152,18 +172,21 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 			{
 				list($search, $view) = $set;
 
-				try
+				if (Kohana::find_file('views', $view))
 				{
-					$replace[$search] = View::factory($view)->render();
-				}
-				catch (Exception $e)
-				{
-					ob_start();
+					try
+					{
+						$replace[$search] = View::factory($view)->render();
+					}
+					catch (Exception $e)
+					{
+						ob_start();
 
-					// Capture the exception handler output and insert it instead
-					Kohana_exception::handler($e);
+						// Capture the exception handler output and insert it instead
+						Kohana_exception::handler($e);
 
-					$replace[$search] = ob_get_clean();
+						$replace[$search] = ob_get_clean();
+					}
 				}
 			}
 

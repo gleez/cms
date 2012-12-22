@@ -1,62 +1,56 @@
-<h1><?php echo __('Available Classes') ?></h1>
+<h1><?php echo 'Available Classes' ?></h1>
 
 <label>Filter:</label>
-<input type="text" id="api-filter-box" />
+<input type="text" id="kodoc-api-filter-box" />
 
 <script type="text/javascript">
 (function($) {
 	$.fn.extend({
-		filter_content: function(search){
-			var search_regex = new RegExp(search,'gi');
-			
-			// Run through each .class definition
-			$('.class', this).each(function(k, container){
-				if (search == '') {
-					// If search box is empty show everything without doing any regex
-					$(container).show();
-					$('li', container).show();
-					
-					// Continue
-					return true;
-				}
-				
-				// Run through every anchor
-				$('a', $(container)).each(function(k, anchor){
-					// Keep track of the li
-					var $parent = $(anchor).closest('li');
-					
-					if ($(anchor).text().match(search_regex)) {
-						// Show the li and .class parent if its a match
-						$parent.show();
-						$(container).show();
-					} else {
-						// Otherwise we can only assume to hide the li
-						$parent.hide();
-					}
-				});
-				
-				if ($('li:visible', $(container)).length == 0) {
-					// If there are not any visible li's, the entire .class section needs to hide
-					$(container).hide();
-				} else {
-					// Otherwise show the .class container
-					$(container).show();
-				}
-			});
-		},
-		
 		api_filter: function(api_container_selector){
-			$(this).keyup(function(){
-				// Run the filter method on this value
-				$(api_container_selector).filter_content($(this).val());
-			});
-		}
-	})
-})(jQuery);
+			var $api_container = $(api_container_selector);
+			var $this = this;
 
-$(document).ready(function(){
-    $('#api-filter-box').api_filter('#kodoc-main');
-});
+			if ($api_container.length) {
+				var $classes = $('.class', $api_container);
+				var $methods = $('.methods li', $classes);
+				var text = $methods.map(function(){ return $(this).text(); });
+				var timeout = null;
+
+				this.keyup(function(){
+					clearTimeout(timeout);
+					timeout = setTimeout(filter_content, 300);
+				});
+
+				filter_content();
+			}
+
+			function filter_content(){
+				var search = $this.val();
+				var search_regex = new RegExp(search,'gi');
+
+				if (search == '') {
+					$methods.show();
+					$classes.show();
+				} else {
+					$classes.hide();
+					$methods.hide();
+
+					text.each(function(i){
+						if (this.match(search_regex)) {
+							$($methods[i]).show().closest('.class').show();
+						}
+					});
+				}
+			}
+
+			return this;
+		}
+	});
+
+	$(document).ready(function(){
+		$('#kodoc-api-filter-box').api_filter('#kodoc-body').focus();
+	});
+})(jQuery);
 </script>
 
 <div class="class-list">
