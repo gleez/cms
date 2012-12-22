@@ -4,7 +4,7 @@
  *
  * @package    Kohana/ORM
  * @author     Kohana Team
- * @copyright  (c) 2007-2010 Kohana Team
+ * @copyright  (c) 2007-2012 Kohana Team
  * @license    http://kohanaframework.org/license
  */
 class Kohana_ORM_Validation_Exception extends Kohana_Exception {
@@ -150,7 +150,11 @@ class Kohana_ORM_Validation_Exception extends Kohana_Exception {
 		{
 			if (is_array($object))
 			{
-				$errors[$key] = $this->generate_errors($key, $object, $directory, $translate);
+				$errors[$key] = ($key === '_external')
+					// Search for errors in $alias/_external.php
+					? $this->generate_errors($alias.'/'.$key, $object, $directory, $translate)
+					// Regular models get their own file not nested within $alias
+					: $this->generate_errors($key, $object, $directory, $translate);
 			}
 			elseif ($object instanceof Validation)
 			{

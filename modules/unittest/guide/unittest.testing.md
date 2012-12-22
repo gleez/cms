@@ -1,8 +1,12 @@
 # Usage
 
-	$ phpunit --bootstrap=index.php modules/unittest/tests.php
+	$ phpunit --bootstrap=modules/unittest/bootstrap.php modules/unittest/tests.php
 
-Of course, you'll need to make sure the path to the tests.php file is correct.  If you want you can copy it to a more accessible location
+Alternatively you can use a phpunit.xml to have a more fine grained control over which tests are included and which files are whitelisted.
+
+Make sure you only whitelist the highest files in the cascading filesystem, else you could end up with a lot of "class cannot be redefined" errors.
+
+If you use the tests.php testsuite loader then it will only whitelist the highest files. see config/unittest.php for details on configuring the tests.php whitelist.
 
 ## Writing tests
 
@@ -99,13 +103,13 @@ This functionality can be used to record which bug reports a test is for:
 
 To see all groups that are available in your code run:
 
-	$ phpunit --boostrap=index.php --list-groups modules/unittest/tests.php
+	$ phpunit --boostrap=modules/unittest/bootstrap.php --list-groups modules/unittest/tests.php
 
 *Note:* the `--list-groups` switch should appear before the path to the test suite loader
 
 You can also exclude groups while testing using the `--exclude-group` switch.  This can be useful if you want to ignore all kohana tests:
 
-	$ phpunit --bootstrap=index.php --exclude-group=kohana modules/unittest/tests.php
+	$ phpunit --bootstrap=modules/unittest/bootstrap.php --exclude-group=kohana modules/unittest/tests.php
 
 For more info see:
 

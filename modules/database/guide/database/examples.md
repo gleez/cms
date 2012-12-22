@@ -2,9 +2,9 @@
 
 Here are some "real world" examples of using the database library to construct your queries and use the results.
 
-## Examples of Prepared Statements
+## Examples of Parameterized Statements
 
-TODO: 4-6 examples of prepared statements of varying complexity, including a good bind() example.
+TODO: 4-6 examples of parameterized statements of varying complexity, including a good bind() example.
 
 ## Pagination and search/filter
 

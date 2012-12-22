@@ -5,7 +5,7 @@
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
+ * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Kodoc {
@@ -129,16 +129,19 @@ class Kohana_Kodoc {
 
 		$classes = array();
 
+		// This will be used a lot!
+		$ext_length = strlen(EXT);
+
 		foreach ($list as $name => $path)
 		{
 			if (is_array($path))
 			{
 				$classes += Kodoc::classes($path);
 			}
-			else
+			elseif (substr($name, -$ext_length) === EXT)
 			{
 				// Remove "classes/" and the extension
-				$class = substr($name, 8, -(strlen(EXT)));
+				$class = substr($name, 8, -$ext_length);
 
 				// Convert slashes to underscores
 				$class = str_replace(DIRECTORY_SEPARATOR, '_', strtolower($class));
@@ -286,7 +289,7 @@ class Kohana_Kodoc {
 		if ($comment = trim(implode("\n", $comment)))
 		{
 			// Parse the comment with Markdown
-			$comment = Markdown($comment);
+			$comment = Kodoc_Markdown::markdown($comment);
 		}
 
 		return array($comment, $tags);

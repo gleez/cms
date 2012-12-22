@@ -2,16 +2,6 @@
 
 Having unittests for your application is a nice idea, but unless you actually use them they're about as useful as a chocolate firegaurd.  There are quite a few ways of getting tests "into" your development process and this guide aims to cover a few of them.
 
-## Testing through the webui
-
-The web ui is a fairly temporary solution, aimed at helping developers get into unittesting and code coverage.  Eventually it's hoped that people migrate on to the termainl & CI servers.
-
-To access it goto
-
-	http://example.com/unittest/
-
-*Note:* Your site will need to be in the correct environment in order to use the webui.  See the config file for more details.  You may also need to use http://example.com/index.php/unittest/
-
 ## Integrating with IDEs
 
 Modern IDEs have come a long way in the last couple of years and ones like netbeans have pretty decent PHP / PHPUnit support.
