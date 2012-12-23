@@ -24,7 +24,7 @@ CONNECTION_ARRAY
 :  Specific driver options for connecting to your database. (Driver options are explained [below](#connection-settings).)
 
 TABLE_PREFIX
-:  Prefix that will be added to all table names by the [query builder](#query_building). Prepared statements will **not** use the table prefix.
+:  Prefix that will be added to all table names by the [query builder](#query_building).
 
 QUERY_PROFILING
 :  Enables [profiling](../kohana/profiling) of database queries.  This is useful for seeing how many queries each page is using, and which are taking the longest.  You must enable the profiler the view these stats.
@@ -111,6 +111,7 @@ A [PDO database](http://php.net/manual/en/book.pdo.php) can accept these options
 Type      | Option     |  Description               | Default value
 ----------|------------|----------------------------| -------------------------
 `string`  | dsn        | PDO data source identifier | `localhost`
+`array`   | options    | Driver-specific options    | none
 `string`  | username   | Database username          | `NULL`
 `string`  | password   | Database password          | `NULL`
 `boolean` | persistent | Persistent connections     | `FALSE`

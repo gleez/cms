@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * MySQL database connection.
  *
@@ -97,7 +97,7 @@ class Kohana_Database_MySQL extends Database {
 	/**
 	 * Select the database
 	 *
-	 * @param   string  Database
+	 * @param   string  $database Database
 	 * @return  void
 	 */
 	protected function _select_db($database)
@@ -276,7 +276,7 @@ class Kohana_Database_MySQL extends Database {
 	 *
 	 * @link http://dev.mysql.com/doc/refman/5.0/en/set-transaction.html
 	 *
-	 * @param string Isolation level
+	 * @param string $mode  Isolation level
 	 * @return boolean
 	 */
 	public function begin($mode = NULL)
@@ -297,7 +297,6 @@ class Kohana_Database_MySQL extends Database {
 	/**
 	 * Commit a SQL transaction
 	 *
-	 * @param string Isolation level
 	 * @return boolean
 	 */
 	public function commit()
@@ -311,7 +310,6 @@ class Kohana_Database_MySQL extends Database {
 	/**
 	 * Rollback a SQL transaction
 	 *
-	 * @param string Isolation level
 	 * @return boolean
 	 */
 	public function rollback()

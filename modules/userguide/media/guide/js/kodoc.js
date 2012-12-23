@@ -17,10 +17,10 @@ $(document).ready(function()
 	$('a[href="'+ window.location.pathname +'"]').addClass('current');
 
 	// Breadcrumbs magic
-	$('#breadcrumb li.last').each(function()
+	$('#kodoc-breadcrumb li.last').each(function()
 	{
 		var $this = $(this);
-		var $topics = $('#topics li').has('a.current').slice(0, -1);
+		var $topics = $('#kodoc-topics li').has('a.current').slice(0, -1);
 
 		$topics.each(function()
 		{
@@ -33,7 +33,7 @@ $(document).ready(function()
 	});
 
 	// Collapsing menus
-	$('#topics li:has(li)').each(function()
+	$('#kodoc-topics li:has(li)').each(function()
 	{
 		var $this = $(this);
 		var toggle = $('<span class="toggle"></span>');
@@ -88,7 +88,7 @@ $(document).ready(function()
 	});
 
 	// "Link to this" link that appears when you hover over a header
-	$('#body')
+	$('#kodoc-body')
 		.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]')
 		.append(function(){
 			var $this = $(this);

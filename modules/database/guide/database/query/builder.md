@@ -2,8 +2,6 @@
 
 Creating queries dynamically using objects and methods allows queries to be written very quickly in an agnostic way. Query building also adds identifier (table and column name) quoting, as well as value quoting.
 
-[!!] At this time, it is not possible to combine query building with prepared statements.
-
 ## Select
 
 Each type of database query is represented by a different class, each with their own methods. For instance, to create a SELECT query, we use [DB::select] which is a shortcut to return a new [Database_Query_Builder_Select] object:
@@ -38,7 +36,7 @@ By default, [DB::select] will select all columns (`SELECT * ...`), but you can a
 
 Now take a minute to look at what this method chain is doing. First, we create a new selection object using the [DB::select] method. Next, we set table(s) using the `from()` method. Last, we search for a specific records using the `where()` method. We can display the SQL that will be executed by casting the query to a string:
 
-    echo Kohana::debug((string) $query);
+    echo Debug::vars((string) $query);
     // Should display:
     // SELECT `username`, `password` FROM `users` WHERE `username` = 'john'
 

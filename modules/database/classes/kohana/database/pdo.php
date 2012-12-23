@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * PDO database connection.
  *
@@ -41,18 +41,18 @@ class Kohana_Database_PDO extends Database {
 		unset($this->_config['connection']);
 
 		// Force PDO to use exceptions for all errors
-		$attrs = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+		$options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 
 		if ( ! empty($persistent))
 		{
 			// Make the connection persistent
-			$attrs[PDO::ATTR_PERSISTENT] = TRUE;
+			$options[PDO::ATTR_PERSISTENT] = TRUE;
 		}
 
 		try
 		{
 			// Create a new PDO connection
-			$this->_connection = new PDO($dsn, $username, $password, $attrs);
+			$this->_connection = new PDO($dsn, $username, $password, $options);
 		}
 		catch (PDOException $e)
 		{

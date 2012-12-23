@@ -5,7 +5,7 @@
  * @package    Kohana/Image
  * @category   Drivers
  * @author     Tamas Mihalik tamas.mihalik@gmail.com
- * @copyright  (c) 2009-2010 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
 class Kohana_Image_Imagick extends Image {

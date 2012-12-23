@@ -192,6 +192,8 @@ To link to page in a different module, prefix your url with `../` and the module
 
 **Images are also namespaced**, using `![Alt Text](imagename.jpg)` would look for `media/guide/<modulename>/imagename.jpg`.
 
+[!!] If you want your userguide pages to be browsable on github or similar sites outside Kohana's own userguide module, specify the optional .md file extension in your links
+
 ## API Links
 
 You can make links to the api browser by wrapping any class name in brackets.  You may also include a function name, or propery name to link to that specifically.  All of the following will link to the API browser:
