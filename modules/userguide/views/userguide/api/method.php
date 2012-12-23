@@ -27,7 +27,7 @@
 <?php if ($doc->tags) echo View::factory('userguide/api/tags')->set('tags', $doc->tags) ?>
 
 <?php if ($doc->return): ?>
-<h4><?php echo __('Return Values'); ?></h4>
+<h4><?php echo 'Return Values'; ?></h4>
 <ul class="return">
 <?php foreach ($doc->return as $set): list($type, $text) = $set; ?>
 <li><code><?php echo HTML::chars($type) ?></code><?php if ($text) echo ' - '.HTML::chars(ucfirst($text)) ?></li>
@@ -37,7 +37,7 @@
 
 <?php if ($doc->source): ?>
 <div class="method-source">
-<h4><?php echo __('Source Code'); ?></h4>
+<h4><?php echo 'Source Code'; ?></h4>
 <pre><code><?php echo HTML::chars($doc->source) ?></code></pre>
 </div>
 <?php endif ?>

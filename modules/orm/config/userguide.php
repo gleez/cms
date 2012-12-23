@@ -17,7 +17,7 @@ return array(
 			'description' => 'Official ORM module, a modeling library for object relational mapping.',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2008–2011 Kohana Team',
+			'copyright' => '&copy; 2008–2012 Kohana Team',
 		)	
 	)
 );

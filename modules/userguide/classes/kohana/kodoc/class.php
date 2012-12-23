@@ -5,7 +5,7 @@
  * @package    Kohana/Userguide
  * @category   Base
  * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
+ * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
 class Kohana_Kodoc_Class extends Kodoc {
@@ -106,7 +106,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 				           found or loaded. This could be caused by a missing
 						   module or other dependancy. The documentation for
 						   class may not be complete!**";
-				$this->description = Markdown($warning).$this->description;
+				$this->description = Kodoc_Markdown::markdown($warning).$this->description;
 			}
 		}
 	}
@@ -194,7 +194,7 @@ class Kohana_Kodoc_Class extends Kodoc {
 		
 		
 		/*
-		echo kohana::debug('a is '.$a->class.'::'.$a->name,'b is '.$b->class.'::'.$b->name,
+		echo Debug::vars('a is '.$a->class.'::'.$a->name,'b is '.$b->class.'::'.$b->name,
 						   'are the classes the same?', $a->class == $b->class,'if they are, the result is:',strcmp($a->name, $b->name),
 						   'is a this class?', $a->name == $this->class->name,-1,
 						   'is b this class?', $b->name == $this->class->name,1,

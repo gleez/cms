@@ -4,11 +4,14 @@ return array
 (
 	// Enable the API browser.  TRUE or FALSE
 	'api_browser'  => TRUE,
-	
+
 	// Enable these packages in the API browser.  TRUE for all packages, or a string of comma seperated packages, using 'None' for a class with no @package
 	// Example: 'api_packages' => 'Kohana,Kohana/Database,Kohana/ORM,None',
 	'api_packages' => TRUE,
-	
+
+	// Enables Disqus comments on the API and User Guide pages
+	'show_comments' => Kohana::$environment === Kohana::PRODUCTION,
+
 	// Leave this alone
 	'modules' => array(
 
@@ -25,7 +28,7 @@ return array
 			'description' => 'Documentation viewer and api generation.',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2008–2011 Kohana Team',
+			'copyright' => '&copy; 2008–2012 Kohana Team',
 		)	
 	)
 );
