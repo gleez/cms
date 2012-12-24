@@ -34,7 +34,7 @@ class Model_Auth_User extends ORM {
 					'hash' => array( 'type' => 'string' ),
 					'data' => array( 'type' => 'string' ),
 					);
-	
+
 	/**
 	 * Auto fill create and update columns
 	*/
@@ -56,7 +56,7 @@ class Model_Auth_User extends ORM {
 	);
 
 	protected $_ignored_columns = array('password', 'old_pass');
-	
+
 	/**
 	 * Rules for the user model. Because the password is _always_ a hash
 	 * when it's set,you need to run an additional not_empty rule in your controller
@@ -125,14 +125,14 @@ class Model_Auth_User extends ORM {
 			'dob'          => __('Birthday'),
 		);
 	}
-	
+
 	public function __get($field)
 	{
 		if( $field === 'name' OR $field === 'mail' )
 		{
 			return Html::chars( parent::__get($field) );
 		}
-	
+
 		// Return the best version of the user's name. Either their specified
 		// nick name, or fall back to the user name.
 		if( $field === 'nick' )
@@ -140,23 +140,23 @@ class Model_Auth_User extends ORM {
 			$nick = parent::__get('nick');
 			return empty($nick) ? Html::chars( $this->name ) : Html::chars($nick);
 		}
-	
+
 		if( $field === 'rawurl' )
 			return Route::get('user')->uri( array( 'id' => $this->id ) );
-		
+
 	        // Model specefic links; view, edit, delete url's.
                 if( $field === 'url' )
 			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
-	
+
                 if( $field === 'edit_url' )
 			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'edit' ) );
 
                 if( $field === 'delete_url' )
 			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'delete' ) );
-	
+
 		return parent::__get($field);
 	}
-	
+
 	/**
 	 *  Override the create method with defaults
 	 */
@@ -164,13 +164,13 @@ class Model_Auth_User extends ORM {
 	{
 		if ($this->_loaded)
 			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
-		
+
 		$this->init = $this->mail;
 		$this->status  = (int) 1;
-		
+
 		return parent::create($validation);
 	}
-	
+
   	public function roles()
 	{
     		return $this->roles->find_all();
@@ -181,7 +181,7 @@ class Model_Auth_User extends ORM {
 		$this->where($this->_object_name.'.id', '!=', 1);
 		return parent::find_all($id);
 	}
-	
+
 	/**
 	 * Complete the login for a user by incrementing the logins and saving login timestamp
 	 *
@@ -202,7 +202,7 @@ class Model_Auth_User extends ORM {
 			{
 				$this->pass = $this->password;
 			}
-		
+
 			// Save the user
 			$this->update();
 		}
@@ -255,7 +255,7 @@ class Model_Auth_User extends ORM {
 			$validation->error($field, 'email_not_available', array($validation[$field]));
 		}
 	}
-	
+
 	/**
 	 * Tests if a unique key value exists in the database.
 	 *
@@ -308,28 +308,32 @@ class Model_Auth_User extends ORM {
 	 *
 	 * @param string $file
 	 * @return file path
+	* @uses System::mkdir Making dir for uploading photo
 	 */
 	public function upload_photo($file)
 	{
 		//Uploads directory and url for profile pictures
 		$profile_path = APPPATH . 'media/pictures';
-		if(!is_dir($profile_path)) mkdir($profile_path);
-	
+		if(!is_dir($profile_path))
+		{
+			System::mkdir($profile_path);
+		}
+
 		// check if there is an uploaded file
 		if (Upload::valid($file))
 		{
 			$filename = uniqid().preg_replace('/\s+/u', '-', $file['name']);
 			$path = Upload::save($file, $filename, $profile_path);
- 
+
 			if ($path)
 			{
-				return 'media/pictures/'.$filename;  
+				return 'media/pictures/'.$filename;
 			}
 		}
 
 		return NULL;
 	}
-	
+
 	/**
 	 * Validates login information from an array, and optionally redirects
 	 * after a successful login.
@@ -342,39 +346,39 @@ class Model_Auth_User extends ORM {
 	{
 		$labels = $this->labels();
 		$rules  = $this->rules();
-	
+
 		$array = Validation::factory($array);
-	
+
 		//important to check isset to avoid unecessary routing
                 if( isset( $array['name'] ) )
 		{
 			$login_name = $this->unique_key($array['name']);
-		
+
 			//be sure remove the name/email_available rule during login
 			if( isset($rules[$login_name][4]))
 				unset($rules[$login_name][4]);
-	
+
 			$array->rules('name', $rules[$login_name]);
 			$array->label('name', $labels[$login_name]);
-		
+
 			$array->label('password', $labels['pass']);
 			$array->rules('password', $rules['pass']);
                 }
-	
+
 		// Get the remember login option
 		$remember = isset($array['remember']);
                 Module::event('user_login_validate', $array);
-        
+
 		if ($array->check())
 		{
 			// Attempt to load the user
 			$this->where($login_name, '=', $array['name'])->find();
-		
+
 			if ($this->loaded() AND $this->status != 1)
 			{
                                 $array->error('name', 'blocked');
                                 Module::event('user_blocked', $array);
-			
+
                                 Kohana::$log->add( Log::ERROR, 'User: :name account blocked.', array(':name' => $array['name']) );
                                 throw new Validation_Exception($array, 'Account Blocked');
 			}
@@ -383,14 +387,14 @@ class Model_Auth_User extends ORM {
 				// Redirect after a successful login
 				if (is_string($redirect))
 					Request::initial()->redirect($redirect);
-			
+
 				return $this;
 			}
 			else
 			{
                                 $array->error('name', 'invalid');
                                 Module::event('user_auth_failed', $array);
-			
+
                                 Kohana::$log->add( Log::ERROR, 'User: :name failed login.', array(':name' => $array['name']) );
 				throw new Validation_Exception($array, 'Validation has failed for login');
 			}
@@ -400,7 +404,7 @@ class Model_Auth_User extends ORM {
 			Kohana::$log->add( Log::ERROR, 'User Login error');
                         throw new Validation_Exception($array, 'Validation has failed for login');
                 }
-	
+
 		return FALSE;
 	}
 
@@ -415,25 +419,25 @@ class Model_Auth_User extends ORM {
 			//return t('The username cannot begin with a space.');
 			$validation->error($field, 'leading_space', array($validation[$field]));
 		}
-		
+
 		if (substr($validation[$field], -1) == ' ')
 		{
 			//return t('The username cannot end with a space.');
 			$validation->error($field, 'ending_space', array($validation[$field]));
 		}
-		
+
 		if (strpos($validation[$field], '  ') !== FALSE)
 		{
 			//return t('The username cannot contain multiple spaces in a row.');
 			$validation->error($field, 'multiple_spaces', array($validation[$field]));
 		}
-		
+
 		if (preg_match('/[^\x{80}-\x{F7} a-z0-9@_.\'-]/i', $validation[$field]))
 		{
 			//return t('The username contains an illegal character.');
 			$validation->error($field, 'illegal_character', array($validation[$field]));
 		}
-		
+
 		if (preg_match( '/[\x{80}-\x{A0}' .       // Non-printable ISO-8859-1 + NBSP
 				'\x{AD}' .                // Soft-hyphen
 				'\x{2000}-\x{200F}' .     // Various space characters
@@ -495,19 +499,19 @@ class Model_Auth_User extends ORM {
 			$this->nick = $data['nick'];
 			$this->url  = $data['link'];
 			$this->status  = (int) 1;
-		
+
 			// Set email if it's available via OAuth provider
 			if ( isset($data['email']) )
 			{
 				$this->mail = $data['email'];
 			}
-		
+
 			// Set gender if it's available via OAuth provider
 			if( isset($data['gender']) )
 			{
 				$this->gender = ($data['gender'] === 'male') ? 1 : 2;
 			}
-		
+
 			// Save user
 			$this->save();
 
@@ -546,7 +550,7 @@ class Model_Auth_User extends ORM {
 			// Give the user the "user" role
 			$this->add('roles', 3);
 		}
-	
+
 		// Return user
 		return $this;
 	}
@@ -562,7 +566,7 @@ class Model_Auth_User extends ORM {
 	{
 		// Add user
 		$this->values($data)->save();
-	
+
 		// Give user the "login" role
 		if ( ! $this->has('roles', 2))
 		{
@@ -574,7 +578,7 @@ class Model_Auth_User extends ORM {
 		//Token consists of email and the last_login field.
 		//So as soon as the user logs in again, the reset link expires automatically
 		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$this->login);
-		
+
 		$body = View::factory('email/confirm_signup', $this->as_array())
 			->set('url', URL::site(
 				Route::get('user')->uri(array('action' => 'confirm',
@@ -624,7 +628,7 @@ class Model_Auth_User extends ORM {
 
 		//send welcome mail
 		$this->welcome_mail();
-	
+
 		// User is already confirmed.
 		// We're not showing an error message.
 		if ($this->has('roles', ORM::factory('role', array('name' => 'user'))))
@@ -649,7 +653,7 @@ class Model_Auth_User extends ORM {
 			//So as soon as the user logs in again, the reset link expires automatically
 			$time = time();
 			$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login);
-		
+
 			$body = View::factory('email/welcome_signup', $this->as_array())
 					->set('url', URL::site('', TRUE ));
 
@@ -665,7 +669,7 @@ class Model_Auth_User extends ORM {
 
 		return TRUE;
 	}
-	
+
 	/**
 	 * Reset password: step 1.
 	 * The form where a user enters the email address he signed up with.
@@ -677,7 +681,7 @@ class Model_Auth_User extends ORM {
 	{
 		$labels = $this->labels();
 		$rules  = $this->rules();
-		
+
 		$data = Validation::factory($data)
 				->rule('mail', 'not_empty')
 				->rule('mail', 'min_length', array(':value', 4) )
@@ -693,13 +697,13 @@ class Model_Auth_User extends ORM {
 
 		// Invalid user
 		if ( ! $this->_loaded ) return FALSE;
-	
+
 		// Create e-mail body with reset password link
 		//Token consists of email and the last_login field.
 		//So as soon as the user logs in again, the reset link expires automatically
 		$time = time();
 		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login);
-	
+
 		$body = View::factory('email/confirm_reset_password', $this->as_array())
 			->set('time', $time)
 			->set('url', URL::site(
@@ -744,7 +748,7 @@ class Model_Auth_User extends ORM {
 
 		//clear any loaded object in memory
 		$this->clear();
-	
+
 		// Load user by id and status is active
 		$this->where('id', '=', $id)->where('status', '=', 1)->find();
 
@@ -754,7 +758,7 @@ class Model_Auth_User extends ORM {
 
 		// Used onetime login link
 		if ( $time < $this->login ) return FALSE;
-	
+
 		// Invalid confirmation token
 		if ($token !== Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login))
 			return FALSE;
@@ -800,5 +804,5 @@ class Model_Auth_User extends ORM {
 
 		return TRUE;
 	}
-	
+
 } // End Auth User Model
