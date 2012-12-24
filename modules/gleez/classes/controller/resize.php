@@ -59,8 +59,7 @@ class Controller_Resize extends Controller {
 		}
 		else
 		{
-			//$image_original_name = Kohana::find_file('media', substr($this->image_src, 6), FALSE);
-			$image_original_name = Kohana::find_file('media', $this->image_src, FALSE);
+			$image_original_name = Route::get('media')->uri(array('file' => $this->image_src));
 		}
 
 		//if image file not found stop here
