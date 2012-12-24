@@ -8,7 +8,7 @@
 			<h3>Ooops!</h3>
 			<ol>
 				<?php foreach($errors as $field => $message): ?>
-					<li>	
+					<li>
 						<?php echo $field .': '.$message ?>
 					</li>
 				<?php endforeach ?>
@@ -17,13 +17,13 @@
 	<?php endif ?>
 
         <div class="control-group <?php echo isset($errors['picture']) ? 'error': ''; ?>">
-                <?php echo Form::label('photo', 'Photo:', array('class' => 'control-label')) ?>
+                <?php echo Form::label('photo', __('Photo:'), array('class' => 'control-label')) ?>
                 <?php print Form::file('picture', array('class' => 'input-file')); ?>
         </div>
 </div>
 
 <div id="status"></div>
-<div class="progress progress-success progress-striped active hide">	<div class="bar" style="width: 0%;"></div > </div>
+<div class="progress progress-success progress-striped active hide">	<div class="bar" style="width: 0%;"></div> </div>
 
 <div class="modal-footer">
 	<?php echo Form::submit('user_edit', __('Upload Photo'), array('class' => 'btn btn-primary')) ?>
