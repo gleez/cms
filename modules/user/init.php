@@ -3,13 +3,13 @@
 if ( ! Route::cache())
 {
         Route::set('user', 'user(/<action>)(/<id>)(/<token>)', array('action' =>
-					'(index|edit|login|logout|view|register|confirm|password|profile|photo)', 'id' => '\d+'))
+					'(edit|login|logout|view|register|confirm|password|profile|photo)', 'id' => '\d+'))
                 ->defaults(array(
                 	'controller' => 'user',
                 	'action'     => 'view',
 			'token'      => NULL,
                 ));
-        
+
 	Route::set('user/oauth', 'oauth/<controller>(/<action>)')
 		->defaults(array(
 			'directory'  => 'oauth',
@@ -23,7 +23,7 @@ if ( ! Route::cache())
 			'token'      => NULL,
 			'time'	     => NULL,
                 ));
-		
+
         Route::set('admin/permission', 'admin/permissions(/<action>)')
                 ->defaults(array(
 			'directory'  => 'admin',
@@ -45,7 +45,7 @@ if ( ! Route::cache())
                         'directory'   => 'admin',
                         'controller'  => 'user',
                         'action'      => 'list',
-                ));   
+                ));
 }
 
 ACL::set('user',  array('administer permissions' =>  array(
