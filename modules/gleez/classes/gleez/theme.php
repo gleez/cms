@@ -16,21 +16,20 @@
  * @copyright (c) 2012 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
-class Gleez_Theme{
-        
+class Gleez_Theme {
+
         /** @var string The file contains information about theme */
         const INFO_FILE = 'theme.info';
-        
+
         /** @var string Site theme name */
         public static $site_theme_name = 'fluid';
-        
-        /** @var string  admin theme name
-         */
+
+        /** @var string Admin theme name */
         public static $admin_theme_name = 'fluid';
-        
+
         /** @var boolean Admin? */
         public static $is_admin = FALSE;
-        
+
         /**
          * Load the active theme.
          *
@@ -42,7 +41,7 @@ class Gleez_Theme{
         public static function load_themes()
         {
                 $config = Kohana::$config->load('site');
-                
+
                 if (self::$is_admin)
                 {
                         // Load the admin theme
@@ -59,14 +58,14 @@ class Gleez_Theme{
                                 self::$site_theme_name => THEMEPATH . self::$site_theme_name
                         );
                 }
-                
+
                 // Merging array of modules
                 Kohana::modules(Arr::merge($array, Kohana::modules()));
-                
+
                 // Clean up
                 unset($array);
         }
-        
+
         /**
          * Gets info abou theme
          *
@@ -79,10 +78,10 @@ class Gleez_Theme{
                 $theme_info              = new ArrayObject(parse_ini_file($info_file, true), ArrayObject::ARRAY_AS_PROPS);
                 $theme_info->title       = __($theme_info->title);
                 $theme_info->description = __($theme_info->description);
-                
+
                 return $theme_info;
         }
-        
+
         /**
          * Gets list of avaliable themes
          *
@@ -91,7 +90,7 @@ class Gleez_Theme{
         public static function avaliable()
         {
                 $themes = array();
-                
+
                 foreach (scandir(THEMEPATH) as $theme_name)
                 {
                         $info_file = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
@@ -107,8 +106,8 @@ class Gleez_Theme{
                                 $themes[$theme_name] = $theme->name;
                         }
                 }
-                
+
                 return $themes;
         }
-        
+
 }
