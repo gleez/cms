@@ -3,7 +3,7 @@
 if ( ! Route::cache())
 {
         Route::set('user', 'user(/<action>)(/<id>)(/<token>)', array('action' =>
-					'(edit|login|logout|view|register|confirm|password|profile|photo)', 'id' => '\d+'))
+					'edit|login|logout|view|register|confirm|password|profile|photo', 'id' => '\d+'))
                 ->defaults(array(
                 	'controller' => 'user',
                 	'action'     => 'view',
