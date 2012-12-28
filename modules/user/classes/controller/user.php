@@ -3,7 +3,7 @@
 class Controller_User extends Template {
 
 	protected $user;
-	
+
 	public function before()
 	{
 		parent::before();
@@ -14,14 +14,14 @@ class Controller_User extends Template {
 		{
 			$this->user = ORM::factory('user');
 		}
-	
+
 		if( strpos($this->request->uri(), 'user/reset/', 0) !== FALSE )
 		{
 			//message::debug('test');
 			$this->request->action( 'reset_'.$this->request->action());
 		}
 	}
-	
+
 	/**
 	 * Register a new user.
 	 */
@@ -29,7 +29,7 @@ class Controller_User extends Template {
 	{
 		// set the template title (see Template for implementation)
 		$this->title = __('User Registration');
-      
+
 		// If user already signed-in
 		if( $this->_auth->logged_in() != false )
 		{
@@ -46,7 +46,7 @@ class Controller_User extends Template {
 			// If user registration disabled, we return access denied.
                         throw new HTTP_Exception_404('User registration not allowed');
 		}
-	
+
 		// Load the view
 		$view = View::factory('user/register')
 				->set('errors', array())
@@ -58,34 +58,35 @@ class Controller_User extends Template {
 			$captcha = Captcha::instance();
 			$view->set('captcha', $captcha);
 		}
-	
+
 		#If there is a post and $_POST is not empty
 		if ( $this->valid_post('register') )
 		{
 			try
-			{				
+			{
 				//creating user, adding roles and sending verification mail
-				$post->signup($this->request->post());
-	
+				$form = $this->request->post()
+				$post->signup($form);
+
 				#sign the user in
 				Auth::instance()->login($post->name, $post->pass);
 
 				Message::success(__("Account created: %title Successful", array('%title' => $post->nick)));
-				
+
 				if ( ! $this->_internal)
 					$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')));
-				
+
 			}
                         catch (ORM_Validation_Exception $e)
 			{
 				$view->errors =  $e->errors('models');
 			}
 		}
-	
+
 		$this->response->body($view);
 	}
-	
-	public function action_login() 
+
+	public function action_login()
  	{
 		// If user already signed-in
 		if( $this->_auth->logged_in() != false )
@@ -93,18 +94,18 @@ class Controller_User extends Template {
 			// redirect to the user account
 			$this->request->redirect('user/profile');
 		}
-	
+
 		$this->title =  __('Login');
 		$config = Kohana::$config->load('auth');
-		
+
 		$view   = View::factory('user/login')
 					->set('errors', array())
 					->set('use_username', $config->get('username'))
 					->set('providers', array_filter($config->get('providers')) )
 					->bind('post', $user);
-	
+
 		$user = ORM::factory('user')->values($this->request->post());
-		
+
 		if ( $this->valid_post('login') )
 		{
 			try
@@ -118,24 +119,24 @@ class Controller_User extends Template {
 
 				#redirect to the user account
 				$this->request->redirect(isset($_GET['destination']) ? $_GET['destination'] :'');
-				
+
 			}
                         catch (Validation_Exception $e)
 			{
 				$view->errors =  $e->array->errors('login');
 			}
 		}
-        
+
                 $this->response->body($view);
 	}
-  
+
 	public function action_logout()
 	{
 		#Sign out the user
 		Auth::instance()->logout();
- 
+
 		#redirect to the user account and then the signin page if logout worked as expected
-		$this->request->redirect('user/profile');		
+		$this->request->redirect('user/profile');
 	}
 
 	/**
@@ -162,21 +163,21 @@ class Controller_User extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$user = ORM::factory('user', $id);
 		$account = FALSE;
-	
+
 		if( ! $user->loaded() )
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent user');
 			//throw new HTTP_Exception_404( __('Attempt to access non-existent user') );
-		
+
 			// No user is currently logged in
 			$this->request->redirect('user/login');
 		}
-	
+
 		if ( $this->_auth->logged_in() != false AND $user->id > 1 )
 		{
 			$account = Auth::instance()->get_user();
 		}
-	
+
 		if( $account AND $account->id == $user->id )
 		{
 			$this->title = __('My Account');
@@ -204,9 +205,9 @@ class Controller_User extends Template {
 		$user = $this->_auth->get_user();
 		$this->title =  __('Edit Account');
 		$errors = FALSE;
-		
+
 		$view = View::factory('user/edit')->set('user', $user);
-		
+
 		// Form submitted
 		if ( $this->valid_post('user_edit') )
 		{
@@ -214,10 +215,10 @@ class Controller_User extends Template {
 			{
 				$post = array_merge($this->request->post(), $_FILES);
 				$user->values($post)->save();
-			
+
 				#If the post data validates using the rules setup in the user model
 				Message::success(__("%title successfully updated!", array('%title' => $user->nick)));
-			
+
 				#redirect to the user account
 				$this->request->redirect('user/profile');
 			}
@@ -226,10 +227,10 @@ class Controller_User extends Template {
 				$view->errors = $e->errors('models');
 			}
 		}
-		
+
 		$this->response->body( $view );
 	}
-	
+
 	public function action_password()
 	{
 		// The user is not logged in
@@ -249,21 +250,21 @@ class Controller_User extends Template {
 			{
 				#Change password
 				$user->change_pass($this->request->post());
-				
+
 				#If the post data validates using the rules setup in the user model
 				Message::success(__("%title successfully changed your password.
 					We hope you feel safer now.", array('%title' => $user->name)));
-				
+
 				#redirect to the user account
 				$this->request->redirect('user/profile');
-				
+
 			}
                         catch (ORM_Validation_Exception $e)
 			{
 				$errors =  $e->errors('models');
 			}
 		}
-		
+
 		$this->response->body( View::factory('user/password')->set('errors', $errors)  );
 	}
 
@@ -279,7 +280,7 @@ class Controller_User extends Template {
 		$this->title =  __('Upload Photo');
 		$errors = FALSE;
 		$view = View::factory('user/photo')->set('user', $user);
-	
+
 		// Form submitted
 		if ( $this->valid_post('user_edit') )
 		{
@@ -287,10 +288,10 @@ class Controller_User extends Template {
 			{
 				$post = array_merge($this->request->post(), $_FILES);
 				$user->values($post)->save();
-			
+
 				#If the post data validates using the rules setup in the user model
 				Message::success(__("%title successfully updated!", array('%title' => $user->nick)));
-			
+
 				#redirect to the user account
 				$this->request->redirect('user/profile');
 			}
@@ -299,10 +300,10 @@ class Controller_User extends Template {
 				$view->errors = $e->errors('models');
 			}
 		}
-		
+
 		$this->response->body( $view );
 	}
-	
+
 	/*
 	 * Confirm signup by email link validation
 	 */
@@ -329,7 +330,7 @@ class Controller_User extends Template {
 		Message::error('Oh no! This confirmation link is invalid.');
 		$this->request->redirect('user/profile');
 	}
-	
+
 	public function action_reset_password()
 	{
 		// The user is logged in, yet it is possible that he lost his password anyway
@@ -356,10 +357,10 @@ class Controller_User extends Template {
 
 			$errors = $post->errors('models/mail');
 		}
-	
+
 		$this->response->body($view);
 	}
-	
+
 	public function action_reset_confirm_password()
 	{
 		if ($this->_auth->logged_in())
@@ -367,7 +368,7 @@ class Controller_User extends Template {
 			#redirect to the user account
 			$this->request->redirect('user/profile');
 		}
-	
+
 		// Grab the user id, token and timestamp from the confirmation link.
 		$id = (int) $this->request->param('id');
 		$token = (string) $this->request->param('token');
@@ -398,10 +399,10 @@ class Controller_User extends Template {
 
 			$errors = $post->errors('models');
 		}
-	
+
 		$this->response->body($view);
 	}
-	
+
 	/**
 	 * If a user is currently logged in, but his id does not match the one provided here,
 	 * log that user out and reset the user object. This situation could arise, for example,
