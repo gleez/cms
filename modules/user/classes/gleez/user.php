@@ -21,7 +21,7 @@ class Gleez_User {
 	public static function active_user()
 	{
 		// @todo (maybe) cache this object so we're not always doing session lookups.
-		return (is_null(Auth::instance()->get_user()) ? self::guest() : Auth::instance()->get_user());
+		return (! (Auth::instance()->get_user()) ? self::guest() : Auth::instance()->get_user());
 	}
 
 	/**
