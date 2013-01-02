@@ -142,8 +142,7 @@ class Gleez_Core {
                         try
                         {
                                 // Return the cache
-                                $c_data = apc_fetch(self::_sanitize_id($name), $success);
-                                return $success ? $c_data : FALSE;
+                                return apc_fetch(self::_sanitize_id($name));
                         }
                         catch (Exception $e)
                         {
