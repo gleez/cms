@@ -10,9 +10,9 @@
  * @license	http://gleezcms.org/license
  */
 class Gleez_HTML extends Kohana_HTML {
-	
+
 	public static $windowed_urls = TRUE;
-	
+
 	public static $current_route;
 
 	/**
@@ -35,7 +35,7 @@ class Gleez_HTML extends Kohana_HTML {
 		{
 			return;
 		}
-	
+
 		if( isset($attributes['width']))
 		{
 			$width = $attributes['width'];
@@ -55,7 +55,7 @@ class Gleez_HTML extends Kohana_HTML {
 		{
 			$type = 'crop';
 		}
-	
+
 		if (strpos($file, '://') === FALSE)
 		{
 			if( isset($width) AND isset($height) )
@@ -72,32 +72,32 @@ class Gleez_HTML extends Kohana_HTML {
 
 		return '<img'.HTML::attributes($attributes).' />';
 	}
-	
+
 	/**
          * Print out a themed set of links.
          */
         public static function links($links, $attributes = array('class' => 'links'))
         {
 		$output = '';
-		
+
 		if (count($links) > 0)
 		{
 			$output = '<ul'. HTML::attributes($attributes) .'>';
-			
+
 			if (is_null(HTML::$current_route))
 				HTML::$current_route = Url::site(Request::current()->uri());
-		
+
 			$num_links = count($links);
 			$i = 1;
 			foreach ($links as $item)
 			{
 				$class = 'link-' . $i;
-				
+
 				// Add first, last and active classes to the list of links to help out themers.
 				if ($i == 1) {
 					$class .= ' first';
 				}
-			
+
 				// Check if the menu item URI is or contains the current URI
 				if( is_object($item) AND HTML::is_active($item->link) )
 				{
@@ -107,12 +107,12 @@ class Gleez_HTML extends Kohana_HTML {
 				{
 					$class .= ' active';
 				}
-				
+
 				if ($i == $num_links) {
 					$class .= ' last';
 				}
 				$output .= '<li'. HTML::attributes(array('class' => $class)) .'>';
-			
+
 				if( is_object($item))
 				{
 					$output .= HTML::anchor($item->link, $item->name);
@@ -121,13 +121,13 @@ class Gleez_HTML extends Kohana_HTML {
 				{
 					$output .= HTML::anchor($item['link'], $item['name']);
 				}
-				
+
 				$i++;
 				$output .= "</li>\n";
 			}
 			$output .= '</ul>';
 		}
-		
+
 		return $output;
         }
 
@@ -137,25 +137,25 @@ class Gleez_HTML extends Kohana_HTML {
         public static function tabs($tabs, $attributes = array('class' => 'tabs'))
         {
 		$output = '';
-		
+
 		if (count($tabs) > 0)
 		{
 			if (is_null(HTML::$current_route))
 				HTML::$current_route = Url::site(Request::current()->uri());
-		
+
 			$output = '<ul'. HTML::attributes($attributes) .'>';
-			
+
 			$num_links = count($tabs);
 			$i = 1;
 			foreach ($tabs as $tab)
 			{
 				$class = 'tab-' . $i;
-				
+
 				if( isset($tab['active']) OR ( isset($tab['link']) AND HTML::is_active($tab['link']) ) )
 				{
 					$class .= ' active';
 				}
-				
+
 				// Add first, last and active classes to the list of links to help out themers.
 				if ($i == 1) {
 					$class .= ' first';
@@ -163,12 +163,12 @@ class Gleez_HTML extends Kohana_HTML {
 				if ($i == $num_links) {
 					$class .= ' last';
 				}
-				
+
 				$output .= '<li'. HTML::attributes(array('class' => $class)) .'>';
-				
+
 				//sanitized link text
 				$tab['text'] = Text::plain( $tab['text'] );
-				
+
 				if(empty($tab['link']))
 				{
 					$output .= '<span class="active">'.$tab['text'].'</span>';
@@ -182,7 +182,7 @@ class Gleez_HTML extends Kohana_HTML {
 			}
 			$output .= '</ul>';
 		}
-		
+
 		return $output;
         }
 
@@ -228,7 +228,7 @@ class Gleez_HTML extends Kohana_HTML {
 		}
 		return $compiled;
 	}
-	
+
 	/**
 	 * Cleans HTML with HTML Purifier
  	 *
@@ -253,5 +253,43 @@ class Gleez_HTML extends Kohana_HTML {
 
 		return $clean;
 	}
+
+        /**
+         * Create a image tag for sprite images
+         *
+         * @param   mixed   $class  Image class name
+         * @param   string  $title  Image title [Optional]
+         * @return  string  An HTML-prepared image
+         */
+        public static function spriteImg($class, $title = NULL)
+        {
+                $attr           = array();
+                $attr['width']  = 16;
+                $attr['height'] = 16;
+                $image_class    = '';
+
+                if (is_array($class))
+                {
+                        foreach ($class as $name)
+                        {
+                                $image_class .= $name;
+                        }
+                }
+                elseif (is_string($class))
+                {
+                        $image_class = $class;
+                }
+
+                $attr['class'] = 'icon ' . $image_class;
+
+                if (!is_null($title))
+                {
+                        $attr['title'] = $title;
+                }
+
+                return HTML::image(Route::get('media')->uri(array(
+                        'file' => 'images/spacer.gif'
+                )), $attr);
+        }
 
 }

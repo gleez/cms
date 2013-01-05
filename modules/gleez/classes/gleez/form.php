@@ -36,16 +36,16 @@ class Gleez_Form extends Kohana_Form {
 			// Default type is text
 			$attributes['type'] = 'text';
 		}
-	
+
 		$out = '';
-	
+
 		if( $attributes['type'] === 'text' AND $url )
 		{
 			$attributes['class'] = isset($attributes['class']) ? $attributes['class'].' form-autocomplete' : 'form-autocomplete';
 			$attributes['id'] = $name;
 			// Assign the autocomplete js file
 			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
-		
+
 			$attr = array();
 			$attr['type'] = 'hidden';
 			$attr['id'] = $name . '-autocomplete';
@@ -54,12 +54,12 @@ class Gleez_Form extends Kohana_Form {
 			$attr['class'] = 'autocomplete';
 			$out .= Form::hidden($attr['id'], $attr['value'], $attr);
 		}
-	
+
 		$out .= '<input'.HTML::attributes($attributes).' />';
 
 		return $out;
 	}
-	
+
 	/**
 	 * Creates CSRF token input.
 	 *
@@ -82,14 +82,14 @@ class Gleez_Form extends Kohana_Form {
 	 * @uses    Form::select
 	 */
 	public static function weight($name, $selected = 0, array $attributes = NULL, $delta = 15) {
-		
+
 		for ($n = (-1 * $delta); $n <= $delta; $n++)
 		{
 			$options[$n] = $n;
 		}
 		return Form::select($name, $options, $selected, $attributes);
 	}
-	
+
 	/**
 	 * create a form field for filtering
 	 *
@@ -103,7 +103,7 @@ class Gleez_Form extends Kohana_Form {
 	{
 		return Form::input("filter[$column]", Arr::get($filtervals, $column), array('style' => 'width:100%'));
 	}
-	
+
 	/**
 	 * create a 'new x button'
 	 *
@@ -117,12 +117,12 @@ class Gleez_Form extends Kohana_Form {
 	public static function newButton($name, $title = null, $url = null)
 	{
 		$url = ($url) ? $url : Request::current()->uri(array('action' => 'add'));
-		$title = ($title) ? $title : Gleez::spriteImg('add') . __('add :object', array(':object' => __($name)));
+		$title = ($title) ? $title : HTML::spriteImg('add') . __('add :object', array(':object' => __($name)));
 
 		return Html::anchor($url, $title, array('class' => 'button positive'));
 
 	}
-	
+
 	/**
 	 * Generates an opening HTML form tag.
 	 *
@@ -145,7 +145,7 @@ class Gleez_Form extends Kohana_Form {
 	 * @uses    ACL::key
 	 */
 	public static function open($action = NULL, array $attributes = NULL)
-	{		
+	{
 		if ($action instanceof Request)
 		{
 			// Use the current URI
@@ -176,17 +176,17 @@ class Gleez_Form extends Kohana_Form {
 		}
 
 		$out = "<form".HTML::attributes($attributes).">\n";
-		
+
 		if( Gleez::$installed )
 		{
 			// Assign the global form css file
 			Assets::css('form', 'media/css/form.css', array('weight' => 2));
-		
+
 			$action  = md5($action.CSRF::key());
 			$out 	.= Form::hidden('_token', CSRF::token(false, $action))."\n";
 			$out 	.= Form::hidden('_action', $action)."\n";
 		}
-		
+
 		return $out;
 	}
 
