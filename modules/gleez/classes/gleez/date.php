@@ -4,10 +4,10 @@
  * Extend the Kohana Date helper
  */
 class Gleez_Date extends Kohana_Date {
-	  
+
         /**
          * Return month start timestamp.
-         * 
+         *
          * @param int month
          * @param int year
          * @return unix timestamp
@@ -16,7 +16,7 @@ class Gleez_Date extends Kohana_Date {
         {
                 return strtotime($month . '/01/' . $year . ' 00:00:00');
         }
-        
+
         /**
          * Return month end timestamp.
          *
@@ -28,7 +28,7 @@ class Gleez_Date extends Kohana_Date {
         {
                 return strtotime('-1 second', strtotime('+1 month', strtotime($month . '/01/' . $year . ' 00:00:00')));
         }
-        
+
         /**
          * Return week days.
          * @return array
@@ -45,27 +45,29 @@ class Gleez_Date extends Kohana_Date {
                         6 => __('Saturday')
                 );
         }
-        
+
         /**
          * Number of months in a year. Value will hold month name
-         * 
-         * @static
+         *
+         * @param   boolean     Long (TRUE) or short (FALSE) months names [Optional]
          * @uses    Date::hours
          * @return  array  Array from 1-12 with month names
          */
-        public static function months_with_name()
+        public static function months_with_name($long = FALSE)
         {
+                // Default values
+                $long = (bool) $long
                 $months = Date::hours();
-                
+
                 for ($i = 1; $i <= 12; $i++)
                 {
-                        $timestamp  = mktime(0, 0, 0, $i, 1, 2005);
-                        $months[$i] = date("M", $timestamp);
+                        $timestamp  = mktime(0, 0, 0, $i);
+                        $months[$i] = date(($long) ? "F" : "M", $timestamp);
                 }
-                
+
                 return $months;
         }
-        
+
         /**
          * Checks whether a string is a date
          *
@@ -77,7 +79,7 @@ class Gleez_Date extends Kohana_Date {
         {
                 return (boolean) strtotime($str);
         }
-        
+
         /**
          * Return a list of timezones.
          * @return array
@@ -96,27 +98,27 @@ class Gleez_Date extends Kohana_Date {
                         'Indian',
                         'Pacific'
                 );
-                
+
                 $zones = DateTimeZone::listIdentifiers();
-                
+
                 $locations = array();
-                
+
                 foreach ($zones as $zone)
                 {
                         $zone = explode('/', $zone); // 0 => Continent, 1 => City
-                        
+
                         if (!in_array($zone[0], $continents))
                         {
                                 continue;
                         }
-                        
+
                         if (isset($zone[1]) != '')
                         {
                                 // Creates array(DateTimeZone => 'Friendly name')
                                 $locations[$zone[0]][__($zone[0] . '/' . $zone[1])] = __(str_replace('_', ' ', $zone[1]));
                         }
                 }
-                
+
                 $offset_range = array(
                         -12,
                         -11.5,
@@ -174,7 +176,7 @@ class Gleez_Date extends Kohana_Date {
                         13.75,
                         14
                 );
-                
+
                 foreach ($offset_range as $offset)
                 {
                         if (0 <= $offset)
@@ -185,7 +187,7 @@ class Gleez_Date extends Kohana_Date {
                         {
                                 $offset_name = (string) $offset;
                         }
-                        
+
                         $offset_value = $offset_name;
                         $offset_name  = str_replace(array(
                                 '.25',
@@ -196,15 +198,15 @@ class Gleez_Date extends Kohana_Date {
                                 ':30',
                                 ':45'
                         ), $offset_name);
-                        
+
                         $locations[__('Manual Offsets')]['UTC' . $offset_value] = __('UTC :value', array(
                                 ':value' => $offset_name
                         ));
                 }
-                
+
                 return $locations;
         }
-        
+
         /**
          * Return available date time formats.
          * @param $timestamp unix timestamp
@@ -249,20 +251,20 @@ class Gleez_Date extends Kohana_Date {
                         'j M Y - g:ia',
                         'Y M j - g:ia'
                 );
-                
+
                 if ($timestamp && $date_time_format)
                 {
                         foreach ($date_time_format as $f)
                         {
                                 $date_choices[$f] = date($f, time());
                         }
-                        
+
                         return $date_choices;
                 }
-                
+
                 return $date_time_format;
         }
-        
+
         /**
          * Return available date formats.
          * @param $timestamp unix timestamp
@@ -296,20 +298,20 @@ class Gleez_Date extends Kohana_Date {
                         'j M Y',
                         'Y M j'
                 );
-                
+
                 if ($timestamp && $date_format)
                 {
                         foreach ($date_format as $f)
                         {
                                 $date_choices[$f] = date($f, time());
                         }
-                        
+
                         return $date_choices;
                 }
-                
+
                 return $date_format;
         }
-        
+
         /**
          * Return available time formats.
          * @param $timestamp unix timestamp
@@ -325,20 +327,20 @@ class Gleez_Date extends Kohana_Date {
                         'H:i:s',
                         'G:i'
                 );
-                
+
                 if ($timestamp && $time_format)
                 {
                         foreach ($time_format as $f)
                         {
                                 $time_choices[$f] = date($f, time());
                         }
-                        
+
                         return $time_choices;
                 }
-                
+
                 return $time_format;
         }
-        
+
 }
 
 // End Date
