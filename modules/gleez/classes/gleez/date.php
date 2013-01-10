@@ -56,7 +56,7 @@ class Gleez_Date extends Kohana_Date {
         public static function months_with_name($long = FALSE)
         {
                 // Default values
-                $long = (bool) $long
+                $long = (bool) $long;
                 $months = Date::hours();
 
                 for ($i = 1; $i <= 12; $i++)
