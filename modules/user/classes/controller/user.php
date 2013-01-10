@@ -65,7 +65,7 @@ class Controller_User extends Template {
 			try
 			{
 				//creating user, adding roles and sending verification mail
-				$form = $this->request->post()
+				$form = $this->request->post();
 				$post->signup($form);
 
 				#sign the user in
