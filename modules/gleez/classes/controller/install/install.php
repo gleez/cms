@@ -203,7 +203,7 @@ class Controller_Install_Install extends Controller_Template {
 						break;
 					case 'version':
 						$this->template->error = __('Gleez requires at least MySQL version 5.0.0. You\'re using version :version',
-								array( 'version' => $this->mysql_version(1) )
+								array( ':version' => $this->mysql_version(1) )
 							);
 						break;
 					default:
