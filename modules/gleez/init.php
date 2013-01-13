@@ -256,120 +256,117 @@ if ( ! Route::cache())
  *
  * @uses ACL Used to define the privileges
  */
-if (class_exists('ACL'))
+if ( class_exists('ACL') && ! ACL::cache() )
 {
-	if ( ! ACL::cache())
-	{
-		ACL::set('comment', array(
-			'administer comment' => array(
-				'title' => __('administer comments'),
-				'restrict access' => TRUE,
-				'description' => __('Administer comments and comment settings'),
-			),
-			'access comment' => array(
-				'title' => __('Access comments'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'post comment' =>  array(
-				'title' => __('Post comments'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'skip comment approval' =>  array(
-				'title' => __('Skip comment approval'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'edit own comment' =>  array(
-				'title' => __('Edit own comments'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-		));
+	ACL::set('comment', array(
+		'administer comment' => array(
+			'title' => __('administer comments'),
+			'restrict access' => TRUE,
+			'description' => __('Administer comments and comment settings'),
+		),
+		'access comment' => array(
+			'title' => __('Access comments'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'post comment' =>  array(
+			'title' => __('Post comments'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'skip comment approval' =>  array(
+			'title' => __('Skip comment approval'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'edit own comment' =>  array(
+			'title' => __('Edit own comments'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+	));
 
-		ACL::set('content', array(
-			'administer content' => array(
-				'title' => __('Administer content'),
-				'restrict access' => TRUE,
-				'description' => __(''),
-			),
-			'access content' => array(
-				'title' => __('Access content'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'view own unpublished content' => array(
-				'title' => __('View own unpublished content'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'administer page' => array(
-				'title' => __('Administer pages'),
-				'restrict access' => TRUE,
-				'description' => __(''),
-			),
-			'create page' => array(
-				'title' => __('Create pages'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'edit own page' => array(
-				'title' => __('Edit own page'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'edit any page' => array(
-				'title' => __('Edit any pages'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'delete own page' => array(
-				'title' => __('Delete own page'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'delete any page' => array(
-				'title' => __('Delete any pages'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-		));
+	ACL::set('content', array(
+		'administer content' => array(
+			'title' => __('Administer content'),
+			'restrict access' => TRUE,
+			'description' => __(''),
+		),
+		'access content' => array(
+			'title' => __('Access content'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'view own unpublished content' => array(
+			'title' => __('View own unpublished content'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'administer page' => array(
+			'title' => __('Administer pages'),
+			'restrict access' => TRUE,
+			'description' => __(''),
+		),
+		'create page' => array(
+			'title' => __('Create pages'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'edit own page' => array(
+			'title' => __('Edit own page'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'edit any page' => array(
+			'title' => __('Edit any pages'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'delete own page' => array(
+			'title' => __('Delete own page'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'delete any page' => array(
+			'title' => __('Delete any pages'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+	));
 
-		ACL::set('site', array(
-			'administer menu' => array(
-				'title' => __('Administer Menus'),
-				'restrict access' => TRUE,
-				'description' => __(''),
-			),
-			'administer paths' => array(
-				'title' => __('Administer paths'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'administer site' => array(
-				'title' => __('Administer site'),
-				'restrict access' => TRUE,
-				'description' => __(''),
-			),
-			'administer tags' => array(
-				'title' => __('Administer tags'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'administer terms' => array(
-				'title' => __('Administer terms'),
-				'restrict access' => FALSE,
-				'description' => __(''),
-			),
-			'administer logs' => array(
-				'title' => __('Administer logs'),
-				'restrict access' => TRUE,
-				'description' => __(''),
-			),
-		));
-	}
+	ACL::set('site', array(
+		'administer menu' => array(
+			'title' => __('Administer Menus'),
+			'restrict access' => TRUE,
+			'description' => __(''),
+		),
+		'administer paths' => array(
+			'title' => __('Administer paths'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'administer site' => array(
+			'title' => __('Administer site'),
+			'restrict access' => TRUE,
+			'description' => __(''),
+		),
+		'administer tags' => array(
+			'title' => __('Administer tags'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'administer terms' => array(
+			'title' => __('Administer terms'),
+			'restrict access' => FALSE,
+			'description' => __(''),
+		),
+		'administer logs' => array(
+			'title' => __('Administer logs'),
+			'restrict access' => TRUE,
+			'description' => __(''),
+		),
+	));
 
-	/** Cache the Permissions in production */
+	/** Cache the module specific permissions in production */
 	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
