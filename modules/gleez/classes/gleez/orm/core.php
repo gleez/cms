@@ -1,15 +1,125 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct script access.');
+/**
+ * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
+ * access to standard PHP calls. All table rows are represented as model objects,
+ * with object properties representing row data. ORM in Kohana generally follows
+ * the [Active Record][ref-act] pattern.
+ *
+ * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
+ * [ref-act]: http://wikipedia.org/wiki/Active_record
+ *
+ * @package    Gleez/ORM
+ * @author     Gleez Team
+ * @copyright  (c) 2013 Gleez Team
+ * @license    http://gleezcms.org/license
+ * @author     Kohana Team
+ * @copyright  (c) 2007-2010 Kohana Team
+ * @license    http://kohanaframework.org/license
+ */
+class Gleez_ORM_Core extends Model implements serializable {
 
-class Gleez_ORM_Core extends Kohana_ORM {
+        const DELETE =  5;
         
-	const DELETE =  5;
+	/**
+	 * Stores column information for ORM models
+	 * @var array
+	 */
+	protected static $_column_cache = array();
 
 	/**
 	 * Initialization storage for ORM models
 	 * @var array
 	 */
 	protected static $_init_cache = array();
+        
+	/**
+	 * Creates and returns a new model.
+	 *
+	 * @chainable
+	 * @param   string  $model  Model name
+	 * @param   mixed   $id     Parameter for find()
+	 * @return  ORM
+	 */
+	public static function factory($model, $id = NULL)
+	{
+		// Set class name
+		$model = 'Model_'.ucfirst($model);
+
+		return new $model($id);
+	}
+        
+	/**
+	 * "Has one" relationships
+	 * @var array
+	 */
+	protected $_has_one = array();
+
+	/**
+	 * "Belongs to" relationships
+	 * @var array
+	 */
+	protected $_belongs_to = array();
+
+	/**
+	 * "Has many" relationships
+	 * @var array
+	 */
+	protected $_has_many = array();
+
+	/**
+	 * "Many to many" relationships
+	 * @var array
+	 */
+	protected $_has_many_keys = array();
 	
+	/**
+	 * Relationships that should always be joined
+	 * @var array
+	 */
+	protected $_load_with = array();
+
+	/**
+	 * Validation object created before saving/updating
+	 * @var Validation
+	 */
+	protected $_validation = NULL;
+
+	/**
+	 * Current object
+	 * @var array
+	 */
+	protected $_object = array();
+
+	/**
+	 * @var array
+	 */
+	protected $_changed = array();
+
+	/**
+	 * @var array
+	 */
+	protected $_original_values = array();
+
+	/**
+	 * @var array
+	 */
+	protected $_related = array();
+
+	/**
+	 * @var bool
+	 */
+	protected $_valid = FALSE;
+
+	/**
+	 * @var bool
+	 */
+	protected $_loaded = FALSE;
+
+	/**
+	 * @var bool
+	 */
+	protected $_saved = FALSE;
+
 	/**
 	 * @var bool
 	 */
@@ -19,25 +129,187 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	 * @var bool
 	 */
 	protected $_cache = FALSE;
+        
+	/**
+	 * @var array
+	 */
+	protected $_sorting;
+
+	/**
+	 * Foreign key suffix
+	 * @var string
+	 */
+	protected $_foreign_key_suffix = '_id';
+
+	/**
+	 * Model name
+	 * @var string
+	 */
+	protected $_object_name;
+
+	/**
+	 * Plural model name
+	 * @var string
+	 */
+	protected $_object_plural;
+
+	/**
+	 * Table name
+	 * @var string
+	 */
+	protected $_table_name;
+
+	/**
+	 * Table columns
+	 * @var array
+	 */
+	protected $_table_columns;
+
+	/**
+	 * Auto-update columns for updates
+	 * @var string
+	 */
+	protected $_updated_column = NULL;
+
+	/**
+	 * Auto-update columns for creation
+	 * @var string
+	 */
+	protected $_created_column = NULL;
+
+	/**
+	 * Auto-serialize and unserialize columns on get/set
+	 * @var array
+	 */
+	protected $_serialize_columns = array();
+
+	/**
+	 * Table primary key
+	 * @var string
+	 */
+	protected $_primary_key = 'id';
+
+	/**
+	 * Primary key value
+	 * @var mixed
+	 */
+	protected $_primary_key_value;
+
+	/**
+	 * Model configuration, table names plural?
+	 * @var bool
+	 */
+	protected $_table_names_plural = TRUE;
+
+	/**
+	 * Model configuration, reload on wakeup?
+	 * @var bool
+	 */
+	protected $_reload_on_wakeup = TRUE;
+
+	/**
+	 * Database Object
+	 * @var Database
+	 */
+	protected $_db = NULL;
+
+	/**
+	 * Database config group
+	 * @var String
+	 */
+	protected $_db_group = NULL;
+
+	/**
+	 * Database methods applied
+	 * @var array
+	 */
+	protected $_db_applied = array();
+
+	/**
+	 * Database methods pending
+	 * @var array
+	 */
+	protected $_db_pending = array();
+
+	/**
+	 * Reset builder
+	 * @var bool
+	 */
+	protected $_db_reset = TRUE;
+
+	/**
+	 * Database query builder
+	 * @var Database_Query_Builder_Where
+	 */
+	protected $_db_builder;
+
+	/**
+	 * With calls already applied
+	 * @var array
+	 */
+	protected $_with_applied = array();
+
+	/**
+	 * Data to be loaded into the model from a database call cast
+	 * @var array
+	 */
+	protected $_cast_data = array();
+
+	/**
+	 * The message filename used for validation errors.
+	 * Defaults to ORM::$_object_name
+	 * @var string
+	 */
+	protected $_errors_filename = NULL;
+
+	/**
+	 * @var object DataTables
+	 */
+	protected $_datatables;
 	
         /**
 	 * Ignored columns
 	 * @var array
 	 */
         protected $_ignored_columns = array();
-
-	public function updated()
+        
+	/**
+	 * Constructs a new model and loads a record if given
+	 *
+	 * @param   mixed $id Parameter for find or object to load
+	 * @return  void
+	 */
+	public function __construct($id = NULL)
 	{
-		return $this->_updated;
+		$this->_initialize();
+
+		if ($id !== NULL)
+		{
+			if (is_array($id))
+			{
+				foreach ($id as $column => $value)
+				{
+					// Passing an array of column => values
+					$this->where($column, '=', $value);
+				}
+
+				$this->find();
+			}
+			else
+			{
+				// Passing the primary key
+				$this->where($this->_object_name.'.'.$this->_primary_key, '=', $id)->find();
+			}
+		}
+		elseif ( ! empty($this->_cast_data))
+		{
+			// Load preloaded data from a database call cast
+			$this->_load_values($this->_cast_data);
+
+			$this->_cast_data = array();
+		}
 	}
 
-	public function cache()
-	{
-		$this->_cache = TRUE;
-		$this->_reload_on_wakeup = FALSE;
-		return $this;
-	}
-	
 	/**
 	 * Prepares the model database connection, determines the table name,
 	 * and loads column information.
@@ -53,9 +325,10 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		if ( ! $init = Arr::get(ORM::$_init_cache, $this->_object_name, FALSE))
 		{
 			$init = array(
-				'_belongs_to' => array(),
-				'_has_one'    => array(),
-				'_has_many'   => array(),
+				'_belongs_to'     => array(),
+				'_has_one'        => array(),
+				'_has_many'   	  => array(),
+				'_has_many_keys'  => array(),
 			);
 
 			// Set the object plural name if none predefined
@@ -113,20 +386,21 @@ class Gleez_ORM_Core extends Kohana_ORM {
 
 			foreach ($this->_has_many as $alias => $details)
 			{
-				if ( ! isset($details['model']))
-				{
-					$defaults['model'] = Inflector::singular($alias);
-				}
-				
+				$defaults['model'] = Inflector::singular($alias);
 				$defaults['foreign_key'] = $this->_object_name.$this->_foreign_key_suffix;
 				$defaults['through'] = NULL;
-				
-				if ( ! isset($details['far_key']))
-				{
-					$defaults['far_key'] = Inflector::singular($alias).$this->_foreign_key_suffix;
-				}
-				
+				$defaults['far_key'] = Inflector::singular($alias).$this->_foreign_key_suffix;
+			
 				$init['_has_many'][$alias] = array_merge($defaults, $details);
+			}
+
+			foreach ($this->_has_many_keys as $alias => $details)
+			{
+				$defaults['model'] = Inflector::singular($alias);
+				$defaults['foreign_key'] = array($this->_object_name.$this->_foreign_key_suffix);
+				$defaults['far_key'] = array(Inflector::singular($alias).$this->_foreign_key_suffix);
+			
+				$init['_has_many_keys'][$alias] = array_merge($defaults, $details);
 			}
 			
 			ORM::$_init_cache[$this->_object_name] = $init;
@@ -144,24 +418,326 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		// Clear initial model state
 		$this->clear();
 	}
-	
+
+	/**
+	 * Initializes validation rules, and labels
+	 *
+	 * @return void
+	 */
+	protected function _validation()
+	{
+		// Build the validation object with its rules
+		$this->_validation = Validation::factory($this->_object)
+			->bind(':model', $this)
+			->bind(':original_values', $this->_original_values)
+			->bind(':changed', $this->_changed);
+
+		foreach ($this->rules() as $field => $rules)
+		{
+			$this->_validation->rules($field, $rules);
+		}
+
+		// Use column names by default for labels
+		$columns = array_keys($this->_table_columns);
+
+		// Merge user-defined labels
+		$labels = array_merge(array_combine($columns, $columns), $this->labels());
+
+		foreach ($labels as $field => $label)
+		{
+			$this->_validation->label($field, $label);
+		}
+	}
+
+	/**
+	 * Reload column definitions.
+	 *
+	 * @chainable
+	 * @param   boolean $force Force reloading
+	 * @return  ORM
+	 */
+	public function reload_columns($force = FALSE)
+	{
+		if ($force === TRUE OR empty($this->_table_columns))
+		{
+			if (isset(ORM::$_column_cache[$this->_object_name]))
+			{
+				// Use cached column information
+				$this->_table_columns = ORM::$_column_cache[$this->_object_name];
+			}
+			else
+			{
+				// Grab column information from database
+				$this->_table_columns = $this->list_columns(TRUE);
+
+				// Load column cache
+				ORM::$_column_cache[$this->_object_name] = $this->_table_columns;
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Unloads the current object and clears the status.
+	 *
+	 * @chainable
+	 * @return ORM
+	 */
+	public function clear()
+	{
+		// Create an array with all the columns set to NULL
+		$values = array_combine(array_keys($this->_table_columns), array_fill(0, count($this->_table_columns), NULL));
+
+		// Replace the object and reset the object status
+		$this->_object = $this->_changed = $this->_related = $this->_original_values = array();
+
+		// Replace the current object with an empty one
+		$this->_load_values($values);
+
+		// Reset primary key
+		$this->_primary_key_value = NULL;
+
+		$this->reset();
+
+		return $this;
+	}
+
+	/**
+	 * Reloads the current object from the database.
+	 *
+	 * @chainable
+	 * @return ORM
+	 */
+	public function reload()
+	{
+		$primary_key = $this->pk();
+
+		// Replace the object and reset the object status
+		$this->_object = $this->_changed = $this->_related = $this->_original_values = array();
+
+		// Only reload the object if we have one to reload
+		if ($this->_loaded)
+			return $this->clear()
+				->where($this->_object_name.'.'.$this->_primary_key, '=', $primary_key)
+				->find();
+		else
+			return $this->clear();
+	}
+
+	/**
+	 * Checks if object data is set.
+	 *
+	 * @param  string $column Column name
+	 * @return boolean
+	 */
+	public function __isset($column)
+	{
+		return (isset($this->_object[$column]) OR
+			isset($this->_related[$column]) OR
+			isset($this->_has_one[$column]) OR
+			isset($this->_belongs_to[$column]) OR
+			isset($this->_has_many[$column]));
+	}
+
+	/**
+	 * Unsets object data.
+	 *
+	 * @param  string $column Column name
+	 * @return void
+	 */
+	public function __unset($column)
+	{
+		unset($this->_object[$column], $this->_changed[$column], $this->_related[$column]);
+	}
+
+	/**
+	 * Displays the primary key of a model when it is converted to a string.
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->pk();
+	}
+
 	/**
 	 * Allows serialization of only the object data and state, to prevent
 	 * "stale" objects being unserialized, which also requires less memory.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function serialize()
 	{
 		// Store only information about the object
-		foreach (array('_primary_key_value', '_object', '_changed', '_loaded', '_saved', '_sorting',  '_original_values', '_ignored_columns') as $var)
+		foreach (array('_primary_key_value', '_object', '_changed', '_loaded', '_saved', '_sorting', '_original_values', '_ignored_columns') as $var)
 		{
 			$data[$var] = $this->{$var};
 		}
 
 		return serialize($data);
 	}
-	
+
+	/**
+	 * Check whether the model data has been modified.
+	 * If $field is specified, checks whether that field was modified.
+	 *
+	 * @param string  field to check for changes
+	 * @return  bool  Whether or not the field has changed
+	 */
+	public function changed($field = NULL)
+	{
+		return ($field === NULL)
+			? $this->_changed
+			: Arr::get($this->_changed, $field);
+	}
+
+	/**
+	 * Prepares the database connection and reloads the object.
+	 *
+	 * @param string $data String for unserialization
+	 * @return  void
+	 */
+	public function unserialize($data)
+	{
+		// Initialize model
+		$this->_initialize();
+
+		foreach (unserialize($data) as $name => $var)
+		{
+			$this->{$name} = $var;
+		}
+
+		if ($this->_reload_on_wakeup === TRUE)
+		{
+			// Reload the object
+			$this->reload();
+		}
+	}
+
+	/**
+	 * Handles retrieval of all model values, relationships, and metadata.
+	 *
+	 * @param   string $column Column name
+	 * @return  mixed
+	 */
+	public function __get($column)
+	{
+		if (array_key_exists($column, $this->_object))
+		{
+			return (in_array($column, $this->_serialize_columns))
+				? $this->_unserialize_value($this->_object[$column])
+				: $this->_object[$column];
+		}
+		elseif (isset($this->_related[$column]))
+		{
+			// Return related model that has already been fetched
+			return $this->_related[$column];
+		}
+		elseif (isset($this->_belongs_to[$column]))
+		{
+			$model = $this->_related($column);
+
+			// Use this model's column and foreign model's primary key
+			$col = $model->_object_name.'.'.$model->_primary_key;
+			$val = $this->_object[$this->_belongs_to[$column]['foreign_key']];
+
+			$model->where($col, '=', $val)->find();
+
+			return $this->_related[$column] = $model;
+		}
+		elseif (isset($this->_has_one[$column]))
+		{
+			$model = $this->_related($column);
+
+			// Use this model's primary key value and foreign model's column
+			$col = $model->_object_name.'.'.$this->_has_one[$column]['foreign_key'];
+			$val = $this->pk();
+
+			// Make sure we don't run WHERE "AUTO_INCREMENT column" = NULL queries. This would
+			// return the last inserted record instead of an empty result.
+			// See: http://mysql.localhost.net.ar/doc/refman/5.1/en/server-session-variables.html#sysvar_sql_auto_is_null
+			if ($val !== NULL)
+			{
+				$model->where($col, '=', $val)->find();
+			}
+
+			return $this->_related[$column] = $model;
+		}
+		elseif (isset($this->_has_many[$column]))
+		{
+			$model = ORM::factory($this->_has_many[$column]['model']);
+
+			if (isset($this->_has_many[$column]['through']))
+			{
+				// Grab has_many "through" relationship table
+				$through = $this->_has_many[$column]['through'];
+
+				// Join on through model's target foreign key (far_key) and target model's primary key
+				$join_col1 = $through.'.'.$this->_has_many[$column]['far_key'];
+				$join_col2 = $model->_object_name.'.'.$model->_primary_key;
+
+				$model->join($through)->on($join_col1, '=', $join_col2);
+
+				// Through table's source foreign key (foreign_key) should be this model's primary key
+				$col = $through.'.'.$this->_has_many[$column]['foreign_key'];
+				$val = $this->pk();
+			}
+			else
+			{
+				// Simple has_many relationship, search where target model's foreign key is this model's primary key
+				$col = $model->_object_name.'.'.$this->_has_many[$column]['foreign_key'];
+				$val = $this->pk();
+			}
+
+			return $model->where($col, '=', $val);
+		}
+		elseif (isset($this->_has_many_keys[$column]))
+		{
+			$model = ORM::factory($this->_has_many_keys[$column]['model']);
+			$far_key = $this->_has_many_keys[$column]['far_key'];
+			
+			foreach( $this->_has_many_keys[$column]['foreign_key'] as $fcol => $fvalue )
+			{
+				if( is_int($fcol) )
+				{
+					$fcol   = $fvalue;
+					$fvalue = isset($far_key[$fcol]) ? $far_key[$fcol] : isset($this->$fcol) ? $this->$fcol : $this->pk();
+				}
+				
+				$model->where($model->_object_name.'.'.$fcol, '=', $fvalue);
+			}
+
+			return $model;
+		}
+		else
+		{
+			throw new Kohana_Exception('The :property property does not exist in the :class class',
+				array(':property' => $column, ':class' => get_class($this)));
+		}
+	}
+
+	/**
+	 * Base set method - this should not be overridden.
+	 *
+	 * @param  string $column  Column name
+	 * @param  mixed  $value   Column value
+	 * @return void
+	 */
+	public function __set($column, $value)
+	{
+		if ( ! isset($this->_object_name))
+		{
+			// Object not yet constructed, so we're loading data from a database call cast
+			$this->_cast_data[$column] = $value;
+		}
+		else
+		{
+			// Set the model's column to given value
+			$this->set($column, $value);
+		}
+	}
+
 	/**
 	 * Handles setting of column
 	 *
@@ -171,11 +747,19 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	 */
 	public function set($column, $value)
 	{
+                if ( ! isset($this->_object_name))
+                {
+                        // Object not yet constructed, so we're loading data from a database call cast
+                        $this->_cast_data[$column] = $value;
+                        
+                        return $this;
+                }
+        
 		if (in_array($column, $this->_serialize_columns))
 		{
 			$value = $this->_serialize_value($value);
 		}
-	
+
 		if (array_key_exists($column, $this->_ignored_columns))
 		{
 			// No processing for ignored columns, just store it
@@ -204,7 +788,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 			$this->_related[$column] = $value;
 
 			// Update the foreign key of this model
-			$this->_object[$this->_belongs_to[$column]['foreign_key']] = ($value instanceof ORM) ? $value->pk() : NULL;
+			$this->_object[$this->_belongs_to[$column]['foreign_key']] = $value->pk();
 
 			$this->_changed[$column] = $this->_belongs_to[$column]['foreign_key'];
 		}
@@ -216,7 +800,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set values from an array with support for one-one relationships.  This method should be used
 	 * for loading in post data, etc.
@@ -301,7 +885,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	
 		return $object;
 	}
-	
+
 	/**
 	 * Binds another one-to-one object to this model.  One-to-one objects
 	 * can be nested using 'object1:object2' syntax
@@ -360,16 +944,11 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		// Use the keys of the empty object to determine the columns
 		foreach (array_keys($target->_object) as $column)
 		{
-			// Skip over ignored columns
-			if( ! in_array($column, $target->_ignored_columns))
-			{
-				$name = $target_path.'.'.$column;
-				$alias = $target_path.':'.$column;
+			$name = $target_path.'.'.$column;
+			$alias = $target_path.':'.$column;
 
-				// Add the prefix so that load_result can determine the relationship
-				$this->select(array($name, $alias));
-			}
-
+			// Add the prefix so that load_result can determine the relationship
+			$this->select(array($name, $alias));
 		}
 
 		if (isset($parent->_belongs_to[$target_alias]))
@@ -388,10 +967,9 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		// Join the related object into the result
 		$this->join(array($target->_table_name, $target_path), 'LEFT')->on($join_col1, '=', $join_col2);
 
-
 		return $this;
 	}
-	
+
 	/**
 	 * Initializes the Database Builder to given query type
 	 *
@@ -436,7 +1014,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	 * @chainable
 	 * @return ORM
 	 */
-	public function find1111()
+	public function find()
 	{
 		if ($this->_loaded)
 			throw new Kohana_Exception('Method find() cannot be called on loaded objects');
@@ -450,33 +1028,9 @@ class Gleez_ORM_Core extends Kohana_ORM {
 			}
 		}
 
-		if($this->_cache)
-		{
-			// Get the cache instace from this table
-			$cache = Cache::instance($this->_table_name);
-	
-			//$callback = function($value) { return implode("\t", $value); };
-			// The query hash
-			$query_hash = sha1( Arr::multi_implode("|", $this->_db_pending) );
-	
-			//Try to get from cache. if fails query db and save to cache
-			if( ! $return = $cache->get($query_hash) )
-			{
-				//cache false, fetch from db
-				$this->_build(Database::SELECT);
-				$return = $this->_load_result(FALSE);
+		$this->_build(Database::SELECT);
 
-				//save to cache
-				$cache->set($query_hash, $return);
-			}
-		}
-		else
-		{
-			$this->_build(Database::SELECT);
-			$return = $this->_load_result(FALSE);
-		}
-
-		return $return;
+		return $this->_load_result(FALSE);
 	}
 
 	/**
@@ -484,7 +1038,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	 *
 	 * @return Database_Result
 	 */
-	public function find_all111()
+	public function find_all()
 	{
 		if ($this->_loaded)
 			throw new Kohana_Exception('Method find_all() cannot be called on loaded objects');
@@ -498,32 +1052,294 @@ class Gleez_ORM_Core extends Kohana_ORM {
 			}
 		}
 
-		if($this->_cache)
+		$this->_build(Database::SELECT);
+
+		return $this->_load_result(TRUE);
+	}
+
+	/**
+        * Returns an array of columns to include in the select query. This method
+        * can be overridden to change the default select behavior.
+        *
+        * @return array Columns to select
+        */
+        protected function _build_select()
+        {
+                $columns = array();
+                
+                foreach ($this->_table_columns as $column => $_)
+                {
+                $columns[] = array($this->_object_name.'.'.$column, $column);
+                }
+                
+                return $columns;
+        }
+        
+	/**
+	 * Loads a database result, either as a new record for this model, or as
+	 * an iterator for multiple rows.
+	 *
+	 * @chainable
+	 * @param  bool $multiple Return an iterator or load a single row
+	 * @return ORM|Database_Result
+	 */
+	protected function _load_result($multiple = FALSE)
+	{
+		$this->_db_builder->from(array($this->_table_name, $this->_object_name));
+
+		if ($multiple === FALSE)
 		{
-			// Get the cache instace from this table
-			$cache = Cache::instance("{$this->_table_name}_all");
+			// Only fetch 1 record
+			$this->_db_builder->limit(1);
+		}
 
-			// The query hash
-			$query_hash = sha1( Arr::multi_implode("|", $this->_db_pending) );
-	
-			//Try to get from cache. if fails query db and save to cache
-			if( ! $return = $cache->get($query_hash) )
+		// Select all columns by default
+		$this->_db_builder->select($this->_object_name.'.*');
+
+		if ( ! isset($this->_db_applied['order_by']) AND ! empty($this->_sorting))
+		{
+			foreach ($this->_sorting as $column => $direction)
 			{
-				//cache false, fetch from db
-				$this->_build(Database::SELECT);
-				$return = $this->_load_result(TRUE);
+				if (strpos($column, '.') === FALSE)
+				{
+					// Sorting column for use in JOINs
+					$column = $this->_object_name.'.'.$column;
+				}
 
-				//save to cache
-				$cache->set($query_hash, $return);
+				$this->_db_builder->order_by($column, $direction);
 			}
+		}
+
+		if ($multiple === TRUE)
+		{
+			// Return database iterator casting to this object type
+			$result = $this->_db_builder->as_object(get_class($this))->execute($this->_db);
+
+			$this->reset();
+
+			return $result;
 		}
 		else
 		{
-			$this->_build(Database::SELECT);
-			$return = $this->_load_result(TRUE);
+			// Load the result as an associative array
+			$result = $this->_db_builder->as_assoc()->execute($this->_db);
+
+			$this->reset();
+
+			if ($result->count() === 1)
+			{
+				// Load object values
+				$this->_load_values($result->current());
+			}
+			else
+			{
+				// Clear the object, nothing was found
+				$this->clear();
+			}
+
+			return $this;
+		}
+	}
+
+	/**
+	 * Loads an array of values into into the current object.
+	 *
+	 * @chainable
+	 * @param  array $values Values to load
+	 * @return ORM
+	 */
+	protected function _load_values(array $values)
+	{
+		if (array_key_exists($this->_primary_key, $values))
+		{
+			if ($values[$this->_primary_key] !== NULL)
+			{
+				// Flag as loaded and valid
+				$this->_loaded = $this->_valid = TRUE;
+
+				// Store primary key
+				$this->_primary_key_value = $values[$this->_primary_key];
+			}
+			else
+			{
+				// Not loaded or valid
+				$this->_loaded = $this->_valid = FALSE;
+			}
 		}
 
-		return $return;
+		// Related objects
+		$related = array();
+
+		foreach ($values as $column => $value)
+		{
+			if (strpos($column, ':') === FALSE)
+			{
+				// Load the value to this model
+				$this->_object[$column] = $value;
+			}
+			else
+			{
+				// Column belongs to a related model
+				list ($prefix, $column) = explode(':', $column, 2);
+
+				$related[$prefix][$column] = $value;
+			}
+		}
+
+		if ( ! empty($related))
+		{
+			foreach ($related as $object => $values)
+			{
+				// Load the related objects with the values in the result
+				$this->_related($object)->_load_values($values);
+			}
+		}
+
+		if ($this->_loaded)
+		{
+			// Store the object in its original state
+			$this->_original_values = $this->_object;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Rule definitions for validation
+	 *
+	 * @return array
+	 */
+	public function rules()
+	{
+		return array();
+	}
+
+	/**
+	 * Filters a value for a specific column
+	 *
+	 * @param  string $field  The column name
+	 * @param  string $value  The value to filter
+	 * @return string
+	 */
+	protected function run_filter($field, $value)
+	{
+		$filters = $this->filters();
+
+		// Get the filters for this column
+		$wildcards = empty($filters[TRUE]) ? array() : $filters[TRUE];
+
+		// Merge in the wildcards
+		$filters = empty($filters[$field]) ? $wildcards : array_merge($wildcards, $filters[$field]);
+
+		// Bind the field name and model so they can be used in the filter method
+		$_bound = array
+		(
+			':field' => $field,
+			':model' => $this,
+		);
+
+		foreach ($filters as $array)
+		{
+			// Value needs to be bound inside the loop so we are always using the
+			// version that was modified by the filters that already ran
+			$_bound[':value'] = $value;
+
+			// Filters are defined as array($filter, $params)
+			$filter = $array[0];
+			$params = Arr::get($array, 1, array(':value'));
+
+			foreach ($params as $key => $param)
+			{
+				if (is_string($param) AND array_key_exists($param, $_bound))
+				{
+					// Replace with bound value
+					$params[$key] = $_bound[$param];
+				}
+			}
+
+			if (is_array($filter) OR ! is_string($filter))
+			{
+				// This is either a callback as an array or a lambda
+				$value = call_user_func_array($filter, $params);
+			}
+			elseif (strpos($filter, '::') === FALSE)
+			{
+				// Use a function call
+				$function = new ReflectionFunction($filter);
+
+				// Call $function($this[$field], $param, ...) with Reflection
+				$value = $function->invokeArgs($params);
+			}
+			else
+			{
+				// Split the class and method of the rule
+				list($class, $method) = explode('::', $filter, 2);
+
+				// Use a static method call
+				$method = new ReflectionMethod($class, $method);
+
+				// Call $Class::$method($this[$field], $param, ...) with Reflection
+				$value = $method->invokeArgs(NULL, $params);
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Filter definitions for validation
+	 *
+	 * @return array
+	 */
+	public function filters()
+	{
+		return array();
+	}
+
+	/**
+	 * Label definitions for validation
+	 *
+	 * @return array
+	 */
+	public function labels()
+	{
+		return array();
+	}
+
+	/**
+	 * Validates the current model's data
+	 *
+	 * @param  Validation $extra_validation Validation object
+	 * @return ORM
+	 */
+	public function check(Validation $extra_validation = NULL)
+	{
+		// Determine if any external validation failed
+		$extra_errors = ($extra_validation AND ! $extra_validation->check());
+
+		// Always build a new validation object
+		$this->_validation();
+
+                // add custom rules to $this->_validation();
+		Module::event($this->_object_name .'_validation', $this->_validation, $extra_errors);
+        
+		$array = $this->_validation;
+
+		if (($this->_valid = $array->check()) === FALSE OR $extra_errors)
+		{
+			$exception = new ORM_Validation_Exception($this->errors_filename(), $array);
+
+			if ($extra_errors)
+			{
+				// Merge any possible errors from the external object
+				$exception->add_object('_external', $extra_validation);
+			}
+			$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+			throw $exception;
+		}
+
+		$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+		return $this;
 	}
 
 	/**
@@ -536,16 +1352,17 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		if ($this->_loaded)
 			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
 
-		Module::event($this->_object_name .'_prevalid', $this, $validation);
-	
+                Module::event($this->_object_name .'_prevalid', $this, $validation);
+        
 		// Require model validation before saving
-		if ( ! $this->_valid)
+		if ( ! $this->_valid OR $validation)
 		{
 			$this->check($validation);
 		}
 	
-		Module::event($this->_object_name .'_presave', $this, $validation);
-	
+		$this->before_save();
+                Module::event($this->_object_name .'_presave', $this, $validation);
+
 		$data = array();
 		foreach ($this->_changed as $column)
 		{
@@ -580,7 +1397,8 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		$this->_changed = array();
 		$this->_original_values = $this->_object;
 
-		Module::event($this->_object_name .'_save', $this);
+		$this->after_save();
+                Module::event($this->_object_name .'_save', $this);
 	
 		return $this;
 	}
@@ -596,22 +1414,22 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	{
 		if ( ! $this->_loaded)
 			throw new Kohana_Exception('Cannot update :model model because it is not loaded.', array(':model' => $this->_object_name));
-
+	
 		Module::event($this->_object_name .'_prevalid', $this, $validation);
 	
-		if (empty($this->_changed))
-		{
-			// Nothing to update
-			return $this;
-		}
-
-		// Require model validation before saving
-		if ( ! $this->_valid)
+		// Run validation if the model isn't valid or we have additional validation rules.
+		if ( ! $this->_valid OR $validation)
 		{
 			$this->check($validation);
 		}
 
-		Module::event($this->_object_name .'_presave', $this, $validation);
+		if (empty($this->_changed))
+		{
+			return $this;
+		}
+	
+		$this->before_save();
+                Module::event($this->_object_name .'_presave', $this, $validation);
 	
 		$data = array();
 		foreach ($this->_changed as $column)
@@ -645,15 +1463,28 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		}
 
 		// Object has been saved
-		$this->_saved   = $this->_updated = TRUE;
+		$this->_saved  = $this->_updated = TRUE;
 
 		// All changes have been saved
 		$this->_changed = array();
 		$this->_original_values = $this->_object;
 
-		Module::event($this->_object_name .'_save', $this);
+		$this->after_save();
+                Module::event($this->_object_name .'_save', $this);
 
 		return $this;
+	}
+
+	/**
+	 * Updates or Creates the record depending on loaded()
+	 *
+	 * @chainable
+	 * @param  Validation $validation Validation object
+	 * @return ORM
+	 */
+	public function save(Validation $validation = NULL)
+	{
+		return $this->loaded() ? $this->update($validation) : $this->create($validation);
 	}
 
 	/**
@@ -670,6 +1501,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 		// Use primary key value
 		$id = $this->pk();
 
+		$this->before_delete($id);
                 Module::event($this->_object_name .'_predelete', $this);
 
 		// Delete the object
@@ -677,11 +1509,12 @@ class Gleez_ORM_Core extends Kohana_ORM {
 			->where($this->_primary_key, '=', $id)
 			->execute($this->_db);
 
+		$this->after_delete($id);
                 Module::event($this->_object_name .'_delete', $this);
         
 		return $this->clear();
 	}
-        
+
 	/**
 	 * Delete all objects in the associated table. This does NOT destroy
 	 * relationships that have been created with other objects.
@@ -693,49 +1526,61 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	{
 		if ( $this->_loaded)
 			throw new Kohana_Exception('Cannot delete all :model model because it is loaded.', array(':model' => $this->_object_name));
-	
+        
+                Module::event($this->_object_name .'_pre_delete_all', $this);
+        
 		$this->_build(ORM::DELETE);
 		$this->_db_builder->execute($this->_db);
-
-		Module::event($this->_object_name .'_delete_all', $this);
 	
+                Module::event($this->_object_name .'_delete_all', $this);
+        
 		return $this->clear();
 	}
-	
-	/**
-	 * Validates the current model's data
-	 *
-	 * @param  Validation $extra_validation Validation object
-	 * @return ORM
-	 */
-	public function check(Validation $extra_validation = NULL)
-	{
-		// Determine if any external validation failed
-		$extra_errors = ($extra_validation AND ! $extra_validation->check());
-
-		// Always build a new validation object
-		$this->_validation();
-
-                // add custom rules to $this->_validation();
-		Module::event($this->_object_name .'_validation', $this->_validation, $extra_errors);
         
-		$array = $this->_validation;
-
-		if (($this->_valid = $array->check()) === FALSE OR $extra_errors)
+	/**
+	 * Tests if this object has a relationship to a different model,
+	 * or an array of different models.
+	 *
+	 *     // Check if $model has the login role
+	 *     $model->has('roles', ORM::factory('role', array('name' => 'login')));
+	 *     // Check for the login role if you know the roles.id is 5
+	 *     $model->has('roles', 5);
+	 *     // Check for all of the following roles
+	 *     $model->has('roles', array(1, 2, 3, 4));
+	 *     // Check if $model has any roles
+	 *     $model->has('roles')
+	 *
+	 * @param  string  $alias    Alias of the has_many "through" relationship
+	 * @param  mixed   $far_keys Related model, primary key, or an array of primary keys
+	 * @return Database_Result
+	 */
+	public function has($alias, $far_keys = NULL)
+	{
+		if ($far_keys === NULL)
 		{
-			$exception = new ORM_Validation_Exception($this->_object_name, $array);
-
-			if ($extra_errors)
-			{
-				// Merge any possible errors from the external object
-				$exception->add_object('_external', $extra_validation);
-			}
-			$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
-			throw $exception;
+			return (bool) DB::select(array('COUNT("*")', 'records_found'))
+				->from($this->_has_many[$alias]['through'])
+				->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
+				->execute($this->_db)->get('records_found');
 		}
 
-		$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
-		return $this;
+		$far_keys = ($far_keys instanceof ORM) ? $far_keys->pk() : $far_keys;
+
+		// We need an array to simplify the logic
+		$far_keys = (array) $far_keys;
+
+		// Nothing to check if the model isn't loaded or we don't have any far_keys
+		if ( ! $far_keys OR ! $this->_loaded)
+			return FALSE;
+
+		$count = (int) DB::select(array('COUNT("*")', 'records_found'))
+			->from($this->_has_many[$alias]['through'])
+			->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
+			->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys)
+			->execute($this->_db)->get('records_found');
+
+		// Rows found need to match the rows searched
+		return $count === count($far_keys);
 	}
 
 	/**
@@ -750,7 +1595,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 	 *
 	 * @param  string  $alias    Alias of the has_many "through" relationship
 	 * @param  mixed   $far_keys Related model, primary key, or an array of primary keys
-	 * @param  array    $data    additional data to store in "through"/pivot table
+	 * @param  array   $data     Additional data to store in "through"/pivot table
 	 * @return ORM
 	 */
 	public function add($alias, $far_keys, $data = NULL)
@@ -765,7 +1610,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 			// Additional data stored in pivot table
 			$columns = array_merge($columns, array_keys($data));
 		}
-		
+
 		$query = DB::insert($this->_has_many[$alias]['through'], $columns);
 
 		foreach ( (array) $far_keys as $key)
@@ -776,7 +1621,7 @@ class Gleez_ORM_Core extends Kohana_ORM {
 				// Additional data stored in pivot table
 				$values  = array_merge($values, array_values($data));
 			}
-
+			
 			$query->values($values);
 		}
 
@@ -784,64 +1629,901 @@ class Gleez_ORM_Core extends Kohana_ORM {
 
 		return $this;
 	}
-	
+
 	/**
-	 * Join a has-many-through related object/model
-	 * 
-	 * @param ORM $model Model of which the table has to be joined
+	 * Removes a relationship between this model and another.
+	 *
+	 *     // Remove a role using a model instance
+	 *     $model->remove('roles', ORM::factory('role', array('name' => 'login')));
+	 *     // Remove the role knowing the primary key
+	 *     $model->remove('roles', 5);
+	 *     // Remove multiple roles (for example, from checkboxes on a form)
+	 *     $model->remove('roles', array(1, 2, 3, 4));
+	 *     // Remove all related roles
+	 *     $model->remove('roles');
+	 *
+	 * @param  string $alias    Alias of the has_many "through" relationship
+	 * @param  mixed  $far_keys Related model, primary key, or an array of primary keys
+	 * @return ORM
 	 */
-	public function with_many(ORM $joined_model)
+	public function remove($alias, $far_keys = NULL)
 	{
-		// Check both models for the correct many-to-many relationship
-		if (isset($this->_has_many[$joined_model->_table_name])
-			&& isset($this->_has_many[$joined_model->_table_name]['through'])
-			&& isset($joined_model->_has_many[$this->_table_name])
-			&& isset($joined_model->_has_many[$this->_table_name]['through'])
-			&& $this->_has_many[$joined_model->_table_name]['through'] == $joined_model->_has_many[$this->_table_name]['through'])
+		$far_keys = ($far_keys instanceof ORM) ? $far_keys->pk() : $far_keys;
+
+		$query = DB::delete($this->_has_many[$alias]['through'])
+			->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk());
+
+		if ($far_keys !== NULL)
 		{
-			// Get the objects relationship arrays
-			$this_relationship = $this->_has_many[$joined_model->_table_name];
-			$join_relationship = $joined_model->_has_many[$this->_table_name];
+			// Remove all the relationships in the array
+			$query->where($this->_has_many[$alias]['far_key'], 'IN', (array) $far_keys);
+		}
 
-			$through_table = $this_relationship['through'];
+		$query->execute($this->_db);
 
-			// First, join the "through" table
-			$this
-				->join($through_table)
-				->on($this->_table_name.'.'.$this->_primary_key, '=', $through_table.'.'.$this_relationship['foreign_key']);
+		return $this;
+	}
 
-			// Then join the related table using a pivot ("through") table
-			$this
-				->join($joined_model->_table_name)
-				->on($joined_model->_table_name.'.'.$joined_model->_primary_key, '=', $through_table.'.'.$join_relationship['foreign_key']);
+	/**
+	 * Count the number of records in the table.
+	 *
+	 * @return integer
+	 */
+	public function count_all()
+	{
+		$selects = array();
 
-			// Chainable
-			return $this;
+		foreach ($this->_db_pending as $key => $method)
+		{
+			if ($method['name'] == 'select')
+			{
+				// Ignore any selected columns for now
+				$selects[] = $method;
+				unset($this->_db_pending[$key]);
+			}
+			elseif ($method['name'] == 'order_by')
+			{
+				// Also, ignore order clause
+				$order_by[$key] = $method; // Fix of the fix here!
+				unset($this->_db_pending[$key]);
+			}
+		}
+
+		if ( ! empty($this->_load_with))
+		{
+			foreach ($this->_load_with as $alias)
+			{
+				// Bind relationship
+				$this->with($alias);
+			}
+		}
+
+		$this->_build(Database::SELECT);
+
+		$records = $this->_db_builder->from(array($this->_table_name, $this->_object_name))
+			->select(array('COUNT("*")', 'records_found'))
+			->execute($this->_db)
+			->get('records_found');
+
+		// Add back in selected columns
+		//$this->_db_pending += $selects;
+		$this->_db_pending = array_merge($this->_db_pending, $selects);
+
+		if( isset($order_by) )
+		{
+			// Add back in order_by clause
+			//$this->_db_pending += $order_by;
+			$this->_db_pending = array_merge($this->_db_pending, $order_by);
+		}
+	
+		$this->reset();
+
+		// Return the total number of records in a table
+		return $records;
+	}
+
+	/**
+	 * Proxy method to Database list_columns.
+	 *
+	 * @return array
+	 */
+	public function list_columns()
+	{
+		// Proxy to database
+		return $this->_db->list_columns($this->_table_name);
+	}
+
+	/**
+	 * Returns an ORM model for the given one-one related alias
+	 *
+	 * @param  string $alias Alias name
+	 * @return ORM
+	 */
+	protected function _related($alias)
+	{
+		if (isset($this->_related[$alias]))
+		{
+			return $this->_related[$alias];
+		}
+		elseif (isset($this->_has_one[$alias]))
+		{
+			return $this->_related[$alias] = ORM::factory($this->_has_one[$alias]['model']);
+		}
+		elseif (isset($this->_belongs_to[$alias]))
+		{
+			return $this->_related[$alias] = ORM::factory($this->_belongs_to[$alias]['model']);
 		}
 		else
 		{
-			throw new Kohana_Exception('The :joined_model that you\'re trying to join is not correctly related by has-many-through relationship wih the :current_model', array(':joined_model' => get_class($joined_model), ':current_model' => get_class($this)));
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Returns the value of the primary key
+	 *
+	 * @return mixed Primary key
+	 */
+	public function pk()
+	{
+		return $this->_primary_key_value;
+	}
+
+	/**
+	 * Returns last executed query
+	 *
+	 * @return string
+	 */
+	public function last_query()
+	{
+		return $this->_db->last_query;
+	}
+
+	/**
+	 * Clears query builder.  Passing FALSE is useful to keep the existing
+	 * query conditions for another query.
+	 *
+	 * @param bool $next Pass FALSE to avoid resetting on the next call
+	 * @return ORM
+	 */
+	public function reset($next = TRUE)
+	{
+		if ($next AND $this->_db_reset)
+		{
+			$this->_db_pending   = array();
+			$this->_db_applied   = array();
+			$this->_db_builder   = NULL;
+			$this->_with_applied = array();
+		}
+
+		// Reset on the next call?
+		$this->_db_reset = $next;
+
+		return $this;
+	}
+
+	protected function _serialize_value($value)
+	{
+		return json_encode($value);
+	}
+
+	protected function _unserialize_value($value)
+	{
+		return json_decode($value);
+	}
+
+	public function object_name()
+	{
+		return $this->_object_name;
+	}
+
+	public function object_plural()
+	{
+		return $this->_object_plural;
+	}
+
+	public function loaded()
+	{
+		return $this->_loaded;
+	}
+
+	public function saved()
+	{
+		return $this->_saved;
+	}
+
+	public function updated()
+	{
+		return $this->_updated;
+	}
+        
+	public function primary_key()
+	{
+		return $this->_primary_key;
+	}
+
+	public function table_name()
+	{
+		return $this->_table_name;
+	}
+
+	public function table_columns()
+	{
+		return $this->_table_columns;
+	}
+
+	public function has_one()
+	{
+		return $this->_has_one;
+	}
+
+	public function belongs_to()
+	{
+		return $this->_belongs_to;
+	}
+
+	public function has_many()
+	{
+		return $this->_has_many;
+	}
+
+	public function has_many_keys()
+	{
+		return $this->_has_many_keys;
+	}
+        
+	public function load_with()
+	{
+		return $this->_load_with;
+	}
+
+	public function original_values()
+	{
+		return $this->_original_values;
+	}
+
+	public function created_column()
+	{
+		return $this->_created_column;
+	}
+
+	public function updated_column()
+	{
+		return $this->_updated_column;
+	}
+
+	public function validation()
+	{
+		if ( ! isset($this->_validation))
+		{
+			// Initialize the validation object
+			$this->_validation();
+		}
+
+		return $this->_validation;
+	}
+
+	public function object()
+	{
+		return $this->_object;
+	}
+
+	public function errors_filename()
+	{
+		return $this->_errors_filename;
+	}
+
+        /**
+         * Override this method to take certain actions before the data is saved
+         */
+        protected function before_save(){}
+        
+        /**
+         * Override this method to take actions after data is saved
+         */
+        protected function after_save(){}
+        
+        /**
+         * Override this method to take actions before the values are loaded
+         */
+        protected function before_load(){}
+        
+        /**
+         * Override this method to take actions after the values are loaded
+         */
+        protected function after_load(){}
+        
+        /**
+         * Override this method to take actions before the document is deleted
+         */
+        protected function before_delete($id){}
+        
+        /**
+         * Override this method to take actions after the document is deleted
+         */
+        protected function after_delete($id){}
+        
+	/**
+	 * Alias of and_where()
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function where($column, $op, $value)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'where',
+			'args' => array($column, $op, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Creates a new "AND WHERE" condition for the query.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function and_where($column, $op, $value)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_where',
+			'args' => array($column, $op, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Creates a new "OR WHERE" condition for the query.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function or_where($column, $op, $value)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_where',
+			'args' => array($column, $op, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Alias of and_where_open()
+	 *
+	 * @return  $this
+	 */
+	public function where_open()
+	{
+		return $this->and_where_open();
+	}
+
+	/**
+	 * Opens a new "AND WHERE (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function and_where_open()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_where_open',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Opens a new "OR WHERE (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function or_where_open()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_where_open',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Closes an open "AND WHERE (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function where_close()
+	{
+		return $this->and_where_close();
+	}
+
+	/**
+	 * Closes an open "AND WHERE (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function and_where_close()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_where_close',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Closes an open "OR WHERE (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function or_where_close()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_where_close',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Applies sorting with "ORDER BY ..."
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  direction of sorting
+	 * @return  $this
+	 */
+	public function order_by($column, $direction = NULL)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'order_by',
+			'args' => array($column, $direction),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Return up to "LIMIT ..." results
+	 *
+	 * @param   integer  maximum results to return
+	 * @return  $this
+	 */
+	public function limit($number)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'limit',
+			'args' => array($number),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
+	 *
+	 * @param   boolean  enable or disable distinct columns
+	 * @return  $this
+	 */
+	public function distinct($value)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'distinct',
+			'args' => array($value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Choose the columns to select from.
+	 *
+	 * @param   mixed  column name or array($column, $alias) or object
+	 * @param   ...
+	 * @return  $this
+	 */
+	public function select($columns = NULL)
+	{
+		$columns = func_get_args();
+
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'select',
+			'args' => $columns,
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Choose the tables to select "FROM ..."
+	 *
+	 * @param   mixed  table name or array($table, $alias) or object
+	 * @param   ...
+	 * @return  $this
+	 */
+	public function from($tables)
+	{
+		$tables = func_get_args();
+
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'from',
+			'args' => $tables,
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Adds addition tables to "JOIN ...".
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  join type (LEFT, RIGHT, INNER, etc)
+	 * @return  $this
+	 */
+	public function join($table, $type = NULL)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'join',
+			'args' => array($table, $type),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Adds "ON ..." conditions for the last created JOIN statement.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @return  $this
+	 */
+	public function on($c1, $op, $c2)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'on',
+			'args' => array($c1, $op, $c2),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Adds "ON ..." conditions for the last created JOIN statement.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @return  $this
+	 */
+	public function my_on($c1, $op, $c2)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'join_and',
+			'args' => array($c1, $op, $c2),
+		);
+
+		return $this;
+	}
+        
+	/**
+	 * Creates a "GROUP BY ..." filter.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   ...
+	 * @return  $this
+	 */
+	public function group_by($columns)
+	{
+		$columns = func_get_args();
+
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'group_by',
+			'args' => $columns,
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Alias of and_having()
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function having($column, $op, $value = NULL)
+	{
+		return $this->and_having($column, $op, $value);
+	}
+
+	/**
+	 * Creates a new "AND HAVING" condition for the query.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function and_having($column, $op, $value = NULL)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_having',
+			'args' => array($column, $op, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Creates a new "OR HAVING" condition for the query.
+	 *
+	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   string  logic operator
+	 * @param   mixed   column value
+	 * @return  $this
+	 */
+	public function or_having($column, $op, $value = NULL)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_having',
+			'args' => array($column, $op, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Alias of and_having_open()
+	 *
+	 * @return  $this
+	 */
+	public function having_open()
+	{
+		return $this->and_having_open();
+	}
+
+	/**
+	 * Opens a new "AND HAVING (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function and_having_open()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_having_open',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Opens a new "OR HAVING (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function or_having_open()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_having_open',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Closes an open "AND HAVING (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function having_close()
+	{
+		return $this->and_having_close();
+	}
+
+	/**
+	 * Closes an open "AND HAVING (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function and_having_close()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'and_having_close',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Closes an open "OR HAVING (...)" grouping.
+	 *
+	 * @return  $this
+	 */
+	public function or_having_close()
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'or_having_close',
+			'args' => array(),
+		);
+
+		return $this;
+	}
+	
+	/**
+	 * Start returning results after "OFFSET ..."
+	 *
+	 * @param   integer   starting result number
+	 * @return  $this
+	 */
+	public function offset($number)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'offset',
+			'args' => array($number),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Enables the query to be cached for a specified amount of time.
+	 *
+	 * @param   integer  number of seconds to cache
+	 * @return  $this
+	 * @uses    Kohana::$cache_life
+	 */
+	public function cached($lifetime = NULL)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'cached',
+			'args' => array($lifetime),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Set the value of a parameter in the query.
+	 *
+	 * @param   string   parameter key to replace
+	 * @param   mixed    value to use
+	 * @return  $this
+	 */
+	public function param($param, $value)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'param',
+			'args' => array($param, $value),
+		);
+
+		return $this;
+	}
+
+	/**
+	 * Adds "USING ..." conditions for the last created JOIN statement.
+	 *
+	 * @param   string  $columns  column name
+	 * @return  $this
+	 */
+	public function using($columns)
+	{
+		// Add pending database call which is executed after query type is determined
+		$this->_db_pending[] = array(
+			'name' => 'using',
+			'args' => array($columns),
+		);
+
+		return $this;
+	}
+        
+	/**
+	 * Checks whether a column value is unique.
+	 * Excludes itself if loaded.
+	 *
+	 * @param   string   the field to check for uniqueness
+	 * @param   mixed    the value to check for uniqueness
+	 * @return  bool     whteher the value is unique
+	 */
+	public function unique($field, $value)
+	{
+		$model = ORM::factory($this->object_name())
+			->where($field, '=', $value)
+			->find();
+
+		if ($this->loaded())
+		{
+			return ( ! ($model->loaded() AND $model->pk() != $this->pk()));
+		}
+
+		return ( ! $model->loaded());
+	}
+	
+	/**
+	 * Setter/Getter for jquery DataTables support
+	 *
+	 * @return object DataTables
+	 */
+	public function dataTables(array $columns = NULL)
+	{
+		if ( ! empty($columns) )
+		{
+			$this->_datatables = DataTables::factory($this)->columns($columns)->execute();
+		}
+		
+		return $this->_datatables;
+	}
+
+	/**
+	 * Finds or creates a model instance with the given values
+	 * 
+	 * @param  array $values
+	 * @throws ORM_Validation_Exception If the object was not found and could not be created due to validation errors
+	 * @return $this
+	 */
+	public function find_or_create($values)
+	{
+		// Unload any previously loaded objects
+		$this->clear();
+	
+		// Attempt to find the object
+		foreach ($values as $key => $value)
+		{
+		    $this->where($key, '=', $value);
+		}
+		
+		$found = $this->find()->loaded();
+		
+		if ($found)
+		{
+		    return $this;
+		}
+		else
+		{
+		    $this->values($values);
+		    $s = $this->save();
+		    return $s;
 		}
 	}
     
-	/**
-	 * Fetches statistics for n days back, returns a simple totals array
-	 *
-	 * @param  int    days back
-	 * @param  int    user id
-	 * @return array  totals by week
-	 */
-	public function sparklines($user_id = FALSE, $days = 90) {
-
-		$query = DB::query(Database::SELECT, '
-			SELECT WEEK(FROM_UNIXTIME(created)) AS w, count(id) as total
-			FROM '.$this->_table_name.'
-			WHERE datediff(now(), FROM_UNIXTIME(created)) <= :days
-			'.(is_numeric($user_id) ? ' AND author = '.$user_id : '').'
-			GROUP BY WEEK(FROM_UNIXTIME(created))
-		')->param(':days', $days);
-
-		return array_values($query->execute()->as_array('w', 'total'));
-	}
-
-}
+} // End ORM
