@@ -3,12 +3,12 @@
  * Setting the Routes
  *
  * @package    Gleez
- * @category   User
+ * @category   Routing/User
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
-if (! Route::cache())
+if ( ! Route::cache())
 {
 	Route::set('user', 'user(/<action>)(/<id>)(/<token>)', array(
 		'action'     => 'edit|login|logout|view|register|confirm|password|profile|photo',
@@ -72,7 +72,7 @@ if (! Route::cache())
 
 
 /**
- * Setting the Permiossions
+ * Define Module specific Permissions
  *
  * Definition of user privileges by default if the ACL is present in the system.
  * Note: Parameter `restrict access` indicates that these privileges have serious
@@ -82,31 +82,36 @@ if (! Route::cache())
  */
 if (class_exists('ACL'))
 {
-	ACL::set('user', array(
-		'administer permissions' => array(
-			'title'           => __('Administer permissions'),
-			'restrict access' => TRUE,
-			'description'     => __('Managing user authority'),
-		),
-		'administer users' => array(
-			'title'           => __('Administer users'),
-			'restrict access' => TRUE,
-			'description'     => __('User management'),
-		),
-		'access profiles' => array(
-			'title'           => __('Access profiles'),
-			'restrict access' => FALSE,
-			'description'     => __('Access to all profiles'),
-		),
-		'edit profile' => array(
-			'title'           => __('Edit profile'),
-			'restrict access' => FALSE,
-			'description'     => __('The ability to change profile'),
-		),
-		'change own username' => array(
-			'title'           => __('Change own username'),
-			'restrict access' => TRUE,
-			'description'     => __('The ability to change own username'),
-		)
-	));
+	if ( ! ACL::cache())
+	{
+		ACL::set('user', array(
+			'administer permissions' => array(
+				'title'           => __('Administer permissions'),
+				'restrict access' => TRUE,
+				'description'     => __('Managing user authority'),
+			),
+			'administer users' => array(
+				'title'           => __('Administer users'),
+				'restrict access' => TRUE,
+				'description'     => __('User management'),
+			),
+			'access profiles' => array(
+				'title'           => __('Access profiles'),
+				'restrict access' => FALSE,
+				'description'     => __('Access to all profiles'),
+			),
+			'edit profile' => array(
+				'title'           => __('Edit profile'),
+				'restrict access' => FALSE,
+				'description'     => __('The ability to change profile'),
+			),
+			'change own username' => array(
+				'title'           => __('Change own username'),
+				'restrict access' => TRUE,
+				'description'     => __('The ability to change own username'),
+			)
+		));
+	}
+
+	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }

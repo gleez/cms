@@ -20,7 +20,7 @@
       </thead>
          <?php foreach ($users as $i => $user): ?>
 	   <tr id="user-row-<?php echo $user->id ?>" class="<?php echo Text::alternate('odd', 'even') ?>">
-	  
+
             <td id="user-<?php echo $user->id ?>">
               <?php echo $user->name ?>
             </td>
@@ -28,10 +28,10 @@
             	<?php echo $user->mail ?>
             </td>
             <td>
-            	<?php echo Gleez::date($user->created) ?>
+            	<?php echo Date::date($user->created) ?>
             </td>
             <td>
-            	<?php echo ($user->login > 0) ? Gleez::date($user->login) : __('Never') ?>
+            	<?php echo ($user->login > 0) ? Date::date($user->login) : __('Never') ?>
             </td>
             <td>
 		<ul class="user-roles">
@@ -52,5 +52,5 @@
           </tr>
           <?php endforeach ?>
     </table>
-    
+
   <?php echo $pagination ?>
