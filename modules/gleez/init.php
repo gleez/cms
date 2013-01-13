@@ -30,7 +30,7 @@ if ( ! Route::cache())
 		'file'       => NULL,
 		));
 
-	Route::cache(Kohana::$environment === Kohana::PRODUCTION);
+	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 /** Run Gleez Components */
@@ -244,7 +244,7 @@ if ( ! Route::cache())
 		'controller' => 'welcome'
 	));
 
-	Route::cache(Kohana::$environment === Kohana::PRODUCTION);
+	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 /**
