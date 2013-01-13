@@ -18,19 +18,16 @@
                                         ?>
                                 </span>
                                 <span class="DateCreated">
-                                        <?php echo Gleez::date($comment->created) ?>
+                                        <?php echo Date::date($comment->created) ?>
                                 </span>
-                                <span class="Permalink">
-                                        <?php //echo HTML::anchor($comment->url, _('Permalink'), array('class' => 'Permalink')) ?>
-                                </span>
-                                
+
                                 <?php if ($comment->user_can('edit') ): ?>
                                         <span class="edit">
                                                 <?php echo HTML::anchor($comment->edit_url, _('edit'), array('class' => 'Edit')) ?>
                                         </span>
                                 <?php endif;?>
 
-                                
+
                                 <?php if ($comment->user_can('delete') ): ?>
                                         <span class="edit">
                                                 <?php echo HTML::anchor($comment->delete_url, _('delete'), array('class' => 'Delete')) ?>
@@ -42,7 +39,7 @@
                         </div>
                 </div>
         </li>
-        
+
 <?php endforeach; ?>
 </ol>
 

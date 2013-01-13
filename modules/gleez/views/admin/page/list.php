@@ -53,7 +53,7 @@
 
 		</td>
 		<td class="status"> <span class="label label-<?php echo $post->status; ?>"><?php echo $post->status; ?></span> </td>
-		<td> <?php echo Gleez::date($post->updated); ?> </td>
+		<td> <?php echo Date::date($post->updated); ?> </td>
 		<td class="action">
 		    <?php echo HTML::anchor($post->edit_url.URL::query($destination), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit'))) ?>
 		    <?php echo HTML::anchor($post->delete_url.URL::query($destination), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete'))) ?>
