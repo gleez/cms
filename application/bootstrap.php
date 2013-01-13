@@ -139,5 +139,4 @@ if ( ! Route::cache())
 
 	// Cache the routes in production
 	Route::cache(Kohana::$environment === Kohana::PRODUCTION);
-	//Route::cache(TRUE);
 }

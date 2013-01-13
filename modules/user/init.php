@@ -67,7 +67,7 @@ if ( ! Route::cache())
 		'action'     => 'list',
 	));
 
-	Route::cache(Kohana::$environment === Kohana::PRODUCTION);
+	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 
