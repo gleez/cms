@@ -110,7 +110,6 @@ Kohana::modules(array(
 	 'database'    => MODPATH.'database',   // Database access
 	 'image'       => MODPATH.'image',      // Image manipulation
 	 'captcha'     => MODPATH.'captcha',    // Captcha implementation
-	 'orm'         => MODPATH.'orm',        // Object Relationship Mapping
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	 'userguide'   => MODPATH.'userguide',  // User guide and API documentation
