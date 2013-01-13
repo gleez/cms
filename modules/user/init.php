@@ -80,38 +80,36 @@ if ( ! Route::cache())
  *
  * @uses ACL Used to define the privileges
  */
-if (class_exists('ACL'))
+if ( class_exists('ACL') && ! ACL::cache() )
 {
-	if ( ! ACL::cache())
-	{
-		ACL::set('user', array(
-			'administer permissions' => array(
-				'title'           => __('Administer permissions'),
-				'restrict access' => TRUE,
-				'description'     => __('Managing user authority'),
-			),
-			'administer users' => array(
-				'title'           => __('Administer users'),
-				'restrict access' => TRUE,
-				'description'     => __('User management'),
-			),
-			'access profiles' => array(
-				'title'           => __('Access profiles'),
-				'restrict access' => FALSE,
-				'description'     => __('Access to all profiles'),
-			),
-			'edit profile' => array(
-				'title'           => __('Edit profile'),
-				'restrict access' => FALSE,
-				'description'     => __('The ability to change profile'),
-			),
-			'change own username' => array(
-				'title'           => __('Change own username'),
-				'restrict access' => TRUE,
-				'description'     => __('The ability to change own username'),
-			)
-		));
-	}
+	ACL::set('user', array(
+		'administer permissions' => array(
+			'title'           => __('Administer permissions'),
+			'restrict access' => TRUE,
+			'description'     => __('Managing user authority'),
+		),
+		'administer users' => array(
+			'title'           => __('Administer users'),
+			'restrict access' => TRUE,
+			'description'     => __('User management'),
+		),
+		'access profiles' => array(
+			'title'           => __('Access profiles'),
+			'restrict access' => FALSE,
+			'description'     => __('Access to all profiles'),
+		),
+		'edit profile' => array(
+			'title'           => __('Edit profile'),
+			'restrict access' => FALSE,
+			'description'     => __('The ability to change profile'),
+		),
+		'change own username' => array(
+			'title'           => __('Change own username'),
+			'restrict access' => TRUE,
+			'description'     => __('The ability to change own username'),
+		)
+	));
 
+	/** Cache the module specific permissions in production */
 	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
