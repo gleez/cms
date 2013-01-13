@@ -4,7 +4,6 @@
  *
  * @package   Gleez
  * @category  Core/Utils
- * @version   0.9.8.1
  * @author    Sergey Yakovlev (me@klay.me)
  * @copyright (c) 2012 Gleez Technologies
  * @license   http://gleezcms.org/license
