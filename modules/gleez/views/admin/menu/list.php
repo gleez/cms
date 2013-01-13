@@ -5,9 +5,9 @@
 </div>
 
 <?php echo HTML::anchor(Route::get('admin/menu')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Menu'), array('class' => 'btn btn-danger pull-right')) ?>
+<div class='clearfix'></div><br/>
 
-
-<table id="menu-admin-list" class="table table-striped table-bordered">
+<table id="menu1-admin-list" class="table table-striped table-bordered">
       <thead>
         <tr>
           <th><?php echo __('Title') ?></th>
@@ -17,7 +17,7 @@
       
         <?php foreach ($menus as $i => $menu): ?>
         
-          <tr id="menu-row-<?php echo $menu->id ?>" class="<?php echo Text::alternate("odd", "even") ?>">
+          <tr id="menu1-row-<?php echo $menu->id ?>" >
           
             <td id="menu-<?php echo $menu->name ?>">
               <?php echo HTML::chars($menu->title) ?>
@@ -27,17 +27,17 @@
 	       </div>
             </td>
             
-            <td class="action">
-		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), __("List Links"), array('class'=>'action-list', 'title'=>__('List Links'))) ?>
+            <td class="action1">
+		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), '<i class="icon-th-list"></i>', array('class'=>'action-list', 'title'=>__('List Links'))) ?>
 	    </td>
 	    <td class="action">
-		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), __("Add Link"), array('class'=>'action-add', 'title'=>__('Add Link'))) ?>
+		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), '<i class="icon-plus"></i>', array('class'=>'action-add', 'title'=>__('Add Link'))) ?>
 	    </td>
 	    <td class="action">
-               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), __("Edit"), array('class'=>'action-edit', 'title'=>__('Edit Menu'))) ?>
+               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=>__('Edit Menu'))) ?>
 	    </td>
 	    <td class="action">
-               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), __("Delete"), array('class'=>'action-delete', 'title'=>__('Delete Menu'))) ?>
+               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete Menu'))) ?>
             </td>
           </tr>
           <?php endforeach ?>

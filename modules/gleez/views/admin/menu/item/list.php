@@ -1,10 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.') ?>
 
-<?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $id)), '<i class="icon-plus icon-white"></i>'.__('Add New Item'), array('title'=>__('Add New Item'), 'class' => 'btn btn-danger pull-right'));
+<?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $id)), '<i class="icon-plus icon-white"></i>'.__('Add New Item'), array('title'=>__('Add New Item'), 'class' => 'btn btn-danger pull-right')); ?>
+<div class='clearfix'></div><br/>
 
-    echo Form::open(Route::get('admin/menu/item')->uri(array('action' => 'confirm', 'id' => $id)), array('id'=>'menu-form', 'class'=>'form')); ?>
+    <?php echo Form::open(Route::get('admin/menu/item')->uri(array('action' => 'confirm', 'id' => $id)), array('id'=>'menu-form', 'class'=>'form')); ?>
 
-    <table id="menu-admin-list" class="table table-striped">
+    <table id="menu-admin-list" class="table table-bordered table-striped">
 	
 	<thead>
 	    <tr>
@@ -43,9 +44,9 @@
 	    
             <td class="action">
                <?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'edit', 'id' => $item['id'])),
-                                       __('Edit'), array('class' => 'action-edit', 'title' => __('Edit Item'))) ?>
+                                       '<i class="icon-edit"></i>', array('class' => 'action-edit', 'title' => __('Edit Item'))) ?>
                <?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'delete', 'id' => $item['id'])),
-                                       __('Delete'), array('class' => 'action-delete', 'title' => __('Delete Item'))) ?>
+                                        '<i class="icon-trash"></i>', array('class' => 'action-delete', 'title' => __('Delete Item'))) ?>
             </td>
 	    
           </tr>
@@ -54,5 +55,5 @@
 	
     </table>
     
-    <?php echo Form::submit('menu-item-list', 'Submit', array('class'=>'btn btn-primary btn-large')); ?>
+    <?php echo Form::submit('menu-item-list', __('Submit'), array('class'=>'btn btn-success btn-large')); ?>
     <?php echo Form::close(); ?>
