@@ -385,7 +385,7 @@ class Gleez_Date extends Kohana_Date {
 	 * @param  string  $key       The key with the value of the configuration file [Optional]
 	 * @return string
 	 */
-	public static function time($timestamp, $config = 'site', $key = 'date_format')
+	public static function time($timestamp, $config = 'site', $key = 'time_format')
 	{
 		return date(Kohana::$config->load($config)->get($key), $timestamp);
 	}
