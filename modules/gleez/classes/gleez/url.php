@@ -5,7 +5,7 @@
  * @package	Gleez
  * @category	URL
  * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
+ * @copyright	(c) 2013 Gleez Technologies
  * @license	http://gleezcms.org/license
  */
 class Gleez_URL extends Kohana_URL {
@@ -117,64 +117,33 @@ class Gleez_URL extends Kohana_URL {
 	}
 	
 	/**
-	 * Merges the current GET parameters with an array of new or overloaded
-	 * parameters and returns the resulting query string.
-	 *
-	 * Customized to sort the query string parameters and remove parameters
-	 * without values.
-	 *
-	 *		// Returns "?sort=title&limit=10" combined with any existing GET values
-	 *		$query = URL::query(array('sort' => 'title', 'limit' => 10));
-	 *
-	 * Typically you would use this when you are sorting query results,
-	 * or something similar.
-	 *
-	 * [!!] Parameters with a NULL value are left out.
+         * Splits url into array of it's pieces as follows:
+         * [scheme]://[user]:[pass]@[host]/[path]?[query]#[fragment]
+         * In addition it adds 'query_params' key which contains array of
+         * url-decoded key-value pairs
 	 *
 	 * @access	public
-	 * @param	array	array of GET parameters
-	 * @return	string
+	 * @param	string	an url
+	 * @return	array
 	 */
-	public static function query1111(array $params = NULL, $use_get = TRUE)
+        public static function explode($_url)
 	{
-		if ($use_get)
+		$url = parse_url($_url);
+		$url['query_params'] = array();
+	
+		//On seriously malformed URLs, parse_url() may return FALSE. 
+		if( isset($url['query']) )
 		{
-			if ($params === NULL)
+			$pairs = explode('&', $url['query']);
+			foreach($pairs as $pair)
 			{
-				// Use only the current parameters
-				$params = $_GET;
-			}
-			else
-			{
-				// Merge the current and new parameters
-				$params = array_merge($_GET, $params);
+			if (trim($pair) == '') { continue; }
+			list($sKey, $sValue) = explode('=', $pair);
+			$url['query_params'][$sKey] = urldecode($sValue);
 			}
 		}
-
-		if (empty($params))
-		{
-			// No query parameters
-			return '';
-		}
-
-		$qstring = '';
-		if ($params)
-		{
-			// Sort the query string parameters
-			ksort($params);
-			foreach ($params as $name => $value)
-			{
-				// Remove query string parameters without values
-				if (empty($value))
-				{
-					unset($params[$name]);
-				}
-			}
-			$qstring = http_build_query($params);
-		}
-
-		// Don't prepend '?' to an empty string
-		return (empty($qstring)) ? '' : ('?'.$qstring);
-	}
+	
+		return $url;
+        }
         
 }

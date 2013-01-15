@@ -7,6 +7,7 @@ return array(
         'max_length' => 'The username must be less than :param2 characters long.',
         'username_available' => 'This username is not available.',
         'invalid' => 'This username or password is not valid.',
+        'unique' => 'This username already exists.',
     ),
     'pass' => array(
         'not_empty' => 'You must provide a password.',
