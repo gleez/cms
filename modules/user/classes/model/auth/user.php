@@ -5,7 +5,7 @@
  * @package    Gleez
  * @category   User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Auth_User extends ORM {
@@ -408,52 +408,6 @@ class Model_Auth_User extends ORM {
 		return FALSE;
 	}
 
-	/**
-	 * Verify the syntax of the given name.
-	 * Taken from Drupal user module
-	 */
-	public function validate_name(Validation $validation, $field)
-	{
-		if (substr($validation[$field], 0, 1) == ' ')
-		{
-			//return t('The username cannot begin with a space.');
-			$validation->error($field, 'leading_space', array($validation[$field]));
-		}
-
-		if (substr($validation[$field], -1) == ' ')
-		{
-			//return t('The username cannot end with a space.');
-			$validation->error($field, 'ending_space', array($validation[$field]));
-		}
-
-		if (strpos($validation[$field], '  ') !== FALSE)
-		{
-			//return t('The username cannot contain multiple spaces in a row.');
-			$validation->error($field, 'multiple_spaces', array($validation[$field]));
-		}
-
-		if (preg_match('/[^\x{80}-\x{F7} a-z0-9@_.\'-]/i', $validation[$field]))
-		{
-			//return t('The username contains an illegal character.');
-			$validation->error($field, 'illegal_character', array($validation[$field]));
-		}
-
-		if (preg_match( '/[\x{80}-\x{A0}' .       // Non-printable ISO-8859-1 + NBSP
-				'\x{AD}' .                // Soft-hyphen
-				'\x{2000}-\x{200F}' .     // Various space characters
-				'\x{2028}-\x{202F}' .     // Bidirectional text overrides
-				'\x{205F}-\x{206F}' .     // Various text hinting characters
-				'\x{FEFF}' .              // Byte order mark
-				'\x{FF01}-\x{FF60}' .     // Full-width latin
-				'\x{FFF9}-\x{FFFD}' .     // Replacement characters
-				'\x{0}-\x{1F}]/u',        // NULL byte and control characters
-				$validation[$field]))
-		{
-			//return t('The username contains an illegal character.');
-			$validation->error($field, 'illegal_character', array($validation[$field]));
-		}
-	}
-
 	public function change_pass($values, $expected = NULL )
 	{
 		// Validation for passwords
@@ -562,7 +516,7 @@ class Model_Auth_User extends ORM {
 	 * @param   array    values to check
 	 * @return  boolean
 	 */
-	public function signup(array & $data)
+	public function signup(array $data)
 	{
 		// Add user
 		$this->values($data)->save();
@@ -577,7 +531,7 @@ class Model_Auth_User extends ORM {
 		//Create e-mail body with reset password link
 		//Token consists of email and the last_login field.
 		//So as soon as the user logs in again, the reset link expires automatically
-		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$this->login);
+		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.(int)$this->login);
 
 		$body = View::factory('email/confirm_signup', $this->as_array())
 			->set('url', URL::site(
@@ -623,7 +577,7 @@ class Model_Auth_User extends ORM {
 			return FALSE;
 
 		// Invalid confirmation token
-		if ($token !== Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$this->login))
+		if ($token !== Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.(int)$this->login))
 			return FALSE;
 
 		//send welcome mail
@@ -649,11 +603,6 @@ class Model_Auth_User extends ORM {
 	{
 		if ($this->_loaded)
 		{
-			//Token consists of email and the last_login field.
-			//So as soon as the user logs in again, the reset link expires automatically
-			$time = time();
-			$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login);
-
 			$body = View::factory('email/welcome_signup', $this->as_array())
 					->set('url', URL::site('', TRUE ));
 
@@ -702,7 +651,7 @@ class Model_Auth_User extends ORM {
 		//Token consists of email and the last_login field.
 		//So as soon as the user logs in again, the reset link expires automatically
 		$time = time();
-		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login);
+		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.(int)$this->login);
 
 		$body = View::factory('email/confirm_reset_password', $this->as_array())
 			->set('time', $time)
@@ -760,7 +709,7 @@ class Model_Auth_User extends ORM {
 		if ( $time < $this->login ) return FALSE;
 
 		// Invalid confirmation token
-		if ($token !== Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.$this->login))
+		if ($token !== Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.(int)$this->login))
 			return FALSE;
 
 		return TRUE;
