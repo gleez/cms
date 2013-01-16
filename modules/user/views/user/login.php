@@ -2,7 +2,7 @@
 <?php Assets::css('user', 'media/css/user.css', array('weight' => 2)); ?>
 
 <?php $destin = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
-      echo Form::open(Route::get('user')->uri(array('action' => 'login')). URL::query( array('destination' => $destin))); ?>
+      echo Form::open(Route::get('user')->uri(array('action' => 'login')). URL::query( array('destination' => $destin)), array('class' => 'row-fluid')); ?>
 
       <?php if ( ! empty($errors)): ?>
 	    <div id="formerrors" class="errorbox">
@@ -18,19 +18,25 @@
 <div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
       <?php //echo Form::label('username', 'Username/Email', array('class' => 'control-label')) ?>
       <div class="controls">
-	    <?php echo Form::input('name', $post->name, array('class' => 'input-large', 'placeholder' => __('Email'))); ?>
+	    <div class="input-prepend">
+		  <span class="add-on"><i class="icon-large icon-user"></i></span>
+		  <?php echo Form::input('name', $post->name, array('class' => 'span10', 'placeholder' => __('Email'))); ?>
+	    </div>
       </div>
 </div>
 
 <div class="control-group <?php echo isset($errors['password']) ? 'error': ''; ?>">
       <?php //echo Form::label('password', 'Password', array('class' => 'control-label')) ?>
       <div class="controls">
-	    <?php echo Form::password('password', NULL, array('class' => 'input-large', 'placeholder' => __('Password'))); ?>
+	    <div class="input-prepend">
+		  <span class="add-on"><i class="icon-large icon-key"></i></span>
+		  <?php echo Form::password('password', NULL, array('class' => 'span10', 'placeholder' => __('Password'))); ?>
+	    </div>
       </div>
 </div>
 
       <?php echo Form::checkbox('remember',TRUE) . ' ' . __('Stay Signed in'); ?>
-      <?php echo Form::submit('login', __('Log In'), array('class' => 'btn btn-primary')) ?>
+      <?php echo Form::submit('login', __('Login'), array('class' => 'btn btn-danger')) ?>
       
       <ul>
 	    <li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?></li>

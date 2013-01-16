@@ -417,7 +417,7 @@ class Controller_Install_Install extends Controller_Template {
 		$skey = serialize($key);
 		$sql = "UPDATE `config` SET `config_value` = '$skey' WHERE `config`.`group_name` = 'site' AND `config`.`config_key` = 'gleez_private_key'";
 		mysql_query($sql);
-	//a29c7acd7bc4f51750d1e89b0948ab6e2843d1c8
+
 		$password = Text::random('alnum', 8);
 		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
 		mysql_query("UPDATE `users` SET `pass` = '$pass' WHERE `id` = 2");

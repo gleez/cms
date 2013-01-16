@@ -453,8 +453,9 @@ class Controller_Page extends Template {
 			//Add RichText Support
 			Assets::editor('.textarea', '99.9%', '300');
 			
-			//css selector to disable left/right sidebars
-			$this->_page_class = 'folded';
+			//flag to disable left/right sidebars
+			//$this->_page_class = 'folded';
+			$this->_sidebars = FALSE;
 		}
 	
 		parent::after();
