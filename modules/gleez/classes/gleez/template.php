@@ -79,6 +79,13 @@ abstract class Gleez_Template extends Controller{
                 );
         
         /**
+         * Enable/Disable sidebars for this request, ex: add or edit page requires no sidebars.
+         *
+         * @var bool
+         */
+        protected $_sidebars;
+        
+        /**
          * Loads the template View object, if it is direct request
          *
          * @return  void
@@ -428,17 +435,20 @@ abstract class Gleez_Template extends Controller{
                 }
         }
         
-        /**
-         * Add sidebars.
-         * This method is chainable.
-         */
-        protected function _set_sidebars()
-        {
-                $this->template->sidebar_left  = $this->_widgets->render('left');
-                $this->template->sidebar_right = $this->_widgets->render('right');
-                
-                return $this;
-        }
+	/**
+	 * Add sidebars.
+	 * This method is chainable.
+	 */
+	protected function _set_sidebars()
+	{
+                if( $this->_sidebars !== FALSE )
+                {
+                        $this->template->sidebar_left  = $this->_widgets->render('left');
+                        $this->template->sidebar_right = $this->_widgets->render('right');
+                }
+	
+		return $this;
+	}
         
         /**
          * Add sidebar column class.

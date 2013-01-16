@@ -100,7 +100,7 @@
 		    <div id="minor-publishing">
 			<div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
 			    <?php echo Form::label('status', __('Status:'), array('class' => 'control-label')) ?>
-			    <?php echo Form::select('status', Post::status(), $post->status, array('class' => 'span2')); ?> 
+			    <?php echo Form::select('status', Post::status(), $post->status, array('class' => 'span11')); ?> 
 			</div>
 		
 			<div class="control-group <?php echo isset($errors['sticky']) ? 'error': ''; ?>">
@@ -119,7 +119,7 @@
 			<div class="control-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
 			    <?php echo Form::label('author_date', __('Date:'), array('class' => 'control-label') ) ?>
 			    <div class="controls">
-				<?php echo Form::input('author_date', $created, array('class' => 'span2')); ?>
+				<?php echo Form::input('author_date', $created, array('class' => 'span11')); ?>
 			    </div>
 			</div>
 		
@@ -127,7 +127,7 @@
 			    <div class="control-group <?php echo isset($errors['author_name']) ? 'error': ''; ?>">
 				<?php echo Form::label('author_name', __('Author:'), array('class' => 'control-label') ) ?>
 				<div class="controls">
-				    <?php echo Form::input('author_name', $author,array('class' => 'span2'), 'autocomplete/user'); ?>
+				    <?php echo Form::input('author_name', $author,array('class' => 'span11'), 'autocomplete/user'); ?>
 				</div>
 			    </div>
 			<?php endif; ?>
@@ -155,7 +155,7 @@
 		
 		<div class='inside'>
 			<div class="control-group <?php echo isset($errors['categories']) ? 'error': ''; ?>">
-			<?php echo Form::select('categories[1]', $terms, $post->terms_form, array('class' => 'span2')); ?>
+			<?php echo Form::select('categories[1]', $terms, $post->terms_form, array('class' => 'span11')); ?>
 			</div>
 		</div>
 		

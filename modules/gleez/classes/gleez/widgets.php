@@ -5,7 +5,7 @@
  * @package	Gleez
  * @category	Widget
  * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
+ * @copyright	(c) 2013 Gleez Technologies
  * @license	http://gleezcms.org/license
  */
 abstract class Gleez_Widgets {
@@ -225,32 +225,48 @@ abstract class Gleez_Widgets {
 		$response = array();
 		foreach ($this->_regions[$this->_region] as $id => $name)
 		{
-			if ( ! $widget = $this->get($name) )
-				continue;
-
-			$this->is_visible($widget);
-		
-			// Enable developers to override widget
-			Module::event('widget', $widget);
-			Module::event("widget_{$widget->name}", $widget);
-		
-			if ( $widget->status AND $widget->visible ) 
-			{
-				try
-				{
-					$widget->content = Widget::factory($name, $widget, $widget->config)->render();
-					$response[] = $this->_html($widget, $this->_region, $this->_format);
-				}
-				catch( Exception $e )
-				{
-					Kohana::$log->add(LOG::ERROR, 'Error processing widget: :name',
-										array( ':name' => $name ));
-				}
-				
-			}
+			$response[] = $this->get_widget($name, TRUE, $this->_region, $this->_format);
 		}
 
-		return implode("\n\n", $response);
+		return trim( implode("\n\n", $response) );
+	}
+
+	/**
+	 * Returns the named widget
+	 *
+	 * @chainable
+	 * @param   name	string  name of the widget
+	 * @param   visible	bool    visibility permisson from widget or FALSE to skip
+	 * @param   region	string  The name of the region ex:left, right or FALSE for all regions
+	 * @param   format	bool    The format of the output ex:xhtml, html or FALSE for object
+	 * 
+	 * @return  mixed   object/string  Widget widget/HTML widget
+	 */
+        public function get_widget($name, $visible = FALSE, $region = FALSE, $format =  FALSE)
+	{
+		$response = FALSE;
+		if ( ! $widget = $this->get($name) ) return;
+		($visible == TRUE) ? $this->is_visible($widget) : $widget->visible == TRUE;
+	
+		// Enable developers to override widget
+		Module::event('widget', $widget);
+		Module::event("widget_{$widget->name}", $widget);
+	
+		if ( $widget->status AND $widget->visible ) 
+		{
+			try
+			{
+				$widget->content = Widget::factory($name, $widget, $widget->config)->render();
+				$response = ($format === FALSE) ? $widget : $this->_html($widget, $this->_region, $this->_format);
+			}
+			catch( Exception $e )
+			{
+				Kohana::$log->add(LOG::ERROR, 'Error processing widget: :name', array( ':name' => $name ));
+			}
+			
+		}
+
+		return trim( $response );
 	}
 	
 	/**
@@ -340,7 +356,7 @@ abstract class Gleez_Widgets {
 		}
 
 		//role based widget access
-                if ( ! User::belongsto($widget->roles)) $widget->visible = FALSE;
+                if ( ! User::belongsto($widget->roles) ) $widget->visible = FALSE;
 
 		if($widget->pages)
 		{
@@ -357,7 +373,7 @@ abstract class Gleez_Widgets {
 	{
 		$zebra = $id = FALSE;
 		
-		if( empty($widget->content) OR !$widget->content) return;
+		if( empty($widget->content) || !$widget->content) return;
 	
 		if( $region )
 		{
@@ -372,6 +388,7 @@ abstract class Gleez_Widgets {
 	
 		//replace '/' with '-' for name in css
 		$widget->name = str_replace('/', '-', $widget->name);
+		$widget->menu = ( strpos($widget->name, 'menu-')  === false ) ? FALSE : TRUE;
         
                 return View::factory('widgets/' .$format)
 				->set('content', $widget->content)

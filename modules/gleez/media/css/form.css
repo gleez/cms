@@ -1,4 +1,19 @@
-
+.admin-page-list fieldset {
+    background-color: #FFFFFF;
+    border: 1px solid #DADCE0;
+    margin: 1.5em 2px;
+    padding: 0.5em;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+}
+.admin-page-list fieldset legend{
+	margin: 0px;
+	border: none;
+	width: 10%;
+	font-size: 12.5px;
+	line-height: normal;
+}
 form .captcha{
 	display: inline;
 	vertical-align: middle;
@@ -158,49 +173,40 @@ form span.req{
 	margin-left:1em;
 }
 
-/**
- * Autocomplete.
- *
- * @see autocomplete.js
- */
-/* Suggestion list */
-#autocomplete {
-  border: 1px solid;
-  overflow: hidden;
-  position: absolute;
-  z-index: 100;
-}
-#autocomplete ul {
-  list-style: none;
-  list-style-image: none;
-  margin: 0;
-  padding: 0;
-  background: #fff;
-}
-#autocomplete li {
-  background: #fff;
-  color: #000;
-  cursor: default;
-  white-space: pre;
-  list-style: none;
-  margin: 0;
-  padding: 3px;
-}
-/* Suggestion list */
-#autocomplete li.selected {
-  background: #0072b9;
-  color: #fff;
-}
 /* Animated throbber */
 html.js input.form-autocomplete {
   background-image: url('../images/throbber.gif');
   background-position: 100% 7px; /* LTR */
   background-repeat: no-repeat;
 }
-html.js input.throbbing {
+html.js input.form-autocomplete.ui-autocomplete-loading{
   background-position: 100% -13px; /* LTR */
 }
-
+ul.ui-autocomplete{
+	padding: 0;
+}
+ul.ui-autocomplete li.ui-autocomplete-header {
+    /*background: url("../images/search-header-bg.gif") repeat-x scroll center bottom transparent;*/
+    background-color: #50A8DC;
+    color: #FFFFFF;
+    padding: 5px 3px;
+    font-weight: bold;
+    margin: 0 !important;
+    clear: both;
+}
+ul.ui-autocomplete li.ui-menu-item {
+    border-bottom: 1px solid #C5C5C5;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+ul.ss-box li.ss-result p span.ss-result-title {
+    color: #222222;
+    display: inline !important;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 .errorbox h3 {
 	background: none;
 }
@@ -328,7 +334,7 @@ html.js input.throbbing {
 	margin-bottom: 0px;
 }
 .format-wrapper .input-prepend .add-on, .input-prepend .btn {
-    margin-right: -5px;
+    /*margin-right: -5px;*/
 }
 
 .post-comment-form-wrapper
@@ -370,4 +376,26 @@ html.js input.throbbing {
 }
 .table td.role-checkbox{
 	text-align: center;
+}
+
+#permissions td.permission-key {
+	font-weight:bold;
+	padding: 7px 4px;
+	background-color: #CFE591;
+}
+#permissions td.permission {
+	padding-left:1.5em;
+}
+div.widget .widget-content > form{
+    margin: 0;
+}
+#widgets tr.region-title td {
+    background-color: #CFE591;
+    font-weight: bold;
+}
+#widgets tr.region-populated {
+    display: none;
+}
+#widgets tr.region-title--1 td {
+    color: red;
 }
