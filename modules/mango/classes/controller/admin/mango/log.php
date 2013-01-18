@@ -22,7 +22,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
     parent::before();
   }
 
-  /** Show sist of events */
+  /** Shows list of events */
   public function action_list()
   {
     $this->title = 'System log';
