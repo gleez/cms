@@ -3,11 +3,11 @@
  * This class wraps the functionality of Mongo (connection)
  * and MongoDB (database object) into one class.
  *
- * When used with Kohana it can be instantiated simply by:
- *  $db = Mongo_Database::instance();
+ * When used with Gleez it can be instantiated simply by:
+ *  $db = Mango::instance();
  *
- * The above will assume the 'default' configuration from the
- * APPPATH/config/mongo.php file (or MODPATH/config/mongo.php).
+ * The above will assume the `default` configuration from the
+ * APPPATH/config/mongo.php file (or MODPATH/config/mongo.php by default).
  *
  * Alternatively it may be instantiated with the name and
  * configuration specified as arguments:
@@ -16,30 +16,33 @@
  * ### System Requirements
  *
  * - PHP 5.3 or higher
- * - PHP-extension Mongodb
+ * - PHP-extension MongoDB
  *
  * @package   Mango
- * @category  MongoDB/Database
+ * @category  Database
  * @author    Sergey Yakovlev
+ * @version   0.1.1.0
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
+ * @link      http://php.net/manual/ru/book.mongo.php MongoDB Native Driver
  *
- * @todo Divide the class into three:
- *  - Mango_Database
- *  - Mango_Collection
- *  - Mango_Document
+ * @todo Divide this class into the following three:
+ *  - Mango_Database (Database and connection manage)
+ *  - Mango_Collection (Collection manage)
+ *  - Mango_Document (Document manage )
+ *
  * @todo Implement profiling
  */
 
 class Mango_Database {
 
-  /** @var array Mongo_Database instances */
+  /** @var array Mango_Database instances */
   public static $instances = array();
 
   /** @var string Config group */
   public static $default = 'default';
 
-  /** @var string Mongo_Database instance name */
+  /** @var string Mango_Database instance name */
   protected $_name;
 
   /** @var array Configuration */
@@ -154,7 +157,7 @@ class Mango_Database {
    *
    * @param   string  $cmd    Command
    * @param   array   $args   Arguments [Optional]
-   * @param   array   $values The values ​​passed to the command [Optional]
+   * @param   array   $values The values passed to the command [Optional]
    * @return  mixed   The result of the method by passing in a `$cmd`
    */
   public function _call($cmd, array $args = array(), $values = NULL)
@@ -193,7 +196,7 @@ class Mango_Database {
    * Prepare connection
    *
    * @param   string  $host   Database host
-   * @param   string  $user   Database user
+   * @param   string  $user   Database user name
    * @param   string  $passwd Database user password
    * @return  string
    */
@@ -213,9 +216,9 @@ class Mango_Database {
   }
 
   /**
-   * Get an instance of MongoDb directly
+   * Get an instance of MongoDB directly
    *
-   * @return MongoDb
+   * @return MongoDB
    */
   public function db()
   {
@@ -257,7 +260,9 @@ class Mango_Database {
   }
 
   /**
-   * Disconnects from the database
+   * Disconnecting from the database
+   *
+   * @return boolean TRUE if successful, FALSE uf it fails
    */
   protected function disconect()
   {
@@ -275,7 +280,7 @@ class Mango_Database {
    *
    * @param   string  $collection Collection Name
    * @param   array   $query      NoSQL query [Optional]
-   * @return  integer
+   * @return  integer Amount of documents
    */
   public function count($collection, array $query = array())
   {
