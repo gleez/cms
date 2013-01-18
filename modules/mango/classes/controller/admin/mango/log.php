@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * The controller control logging
+ * Controller Class for control logging
  *
  * @package   Mango
  * @category  Controller
@@ -13,7 +13,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
 
   public function before()
   {
-    // required privilege
+    // Required privilege
     ACL::Required('view logs');
 
     // Loading module specific styles
@@ -22,7 +22,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
     parent::before();
   }
 
-  /** List of events */
+  /** Shows list of events */
   public function action_list()
   {
     $this->title = 'System log';
@@ -89,7 +89,7 @@ class Controller_Admin_Mango_Log extends Controller_Admin {
   /** Delete the message from log */
   public function action_delete()
   {
-    // required privilege
+    // Required privilege
     ACL::Required('delete logs');
 
     $id = $this->request->param('id', 0);
