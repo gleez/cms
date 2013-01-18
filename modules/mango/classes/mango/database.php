@@ -1,0 +1,356 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+/**
+ * This class wraps the functionality of Mongo (connection)
+ * and MongoDB (database object) into one class.
+ *
+ * When used with Kohana it can be instantiated simply by:
+ *  $db = Mongo_Database::instance();
+ *
+ * The above will assume the 'default' configuration from the
+ * APPPATH/config/mongo.php file (or MODPATH/config/mongo.php).
+ *
+ * Alternatively it may be instantiated with the name and
+ * configuration specified as arguments:
+ *  $db = Mango::instance('mongo', array('database' => 'test'));
+ *
+ * ### System Requirements
+ *
+ * - PHP 5.3 or higher
+ * - PHP-extension Mongodb
+ *
+ * @package   Mango
+ * @category  MongoDB/Database
+ * @author    Sergey Yakovlev
+ * @copyright (c) 2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ *
+ * @todo Divide the class into three:
+ *  - Mango_Database
+ *  - Mango_Collection
+ *  - Mango_Document
+ * @todo Implement profiling
+ */
+
+class Mango_Database {
+
+  /** @var array Mongo_Database instances */
+  public static $instances = array();
+
+  /** @var string Config group */
+  public static $default = 'default';
+
+  /** @var string Mongo_Database instance name */
+  protected $_name;
+
+  /** @var array Configuration */
+  protected $_config;
+
+  /** @var boolean Connection state */
+  protected $_connected = FALSE;
+
+  /** @var object The raw Mongo server connection */
+  protected $_connection;
+
+  /** @var MongoDB The database instance for the database name chosen by the config */
+  protected $_db;
+
+  /** @var string Database name by default */
+  const MONGO_DB_NAME = 'Gleez';
+
+  /**
+   * Get an instance of Mango_Database
+   *
+   * @param   string    $name   Config group name [Optional]
+   * @param   array     $config MongoDB config [Optional]
+   * @return  Mango_Database    Database instance
+   */
+  public static function instance($name = NULL, array $config = NULL)
+  {
+    if (is_null($name))
+    {
+      $name = self::$default;
+    }
+    if (! isset(self::$instances[$name]))
+    {
+      if (is_null($config))
+      {
+        // Load the configuration for this database
+        $config = Kohana::$config->load('mango')->$name;
+      }
+
+      new self($name,$config);
+    }
+
+    return self::$instances[$name];
+  }
+
+  /**
+   * Class constructor
+   *
+   * @param   string    $name   Database instance name
+   * @param   array     $config MongoDB config
+   * @throws  Exception         In the absence of the php-mongo extension
+   * @throws  Kohana_Exception  In the absence of of mandatory configuration settings
+   */
+  protected function __construct($name, array $config)
+  {
+    if (! extension_loaded('mongo'))
+    {
+      throw new Exception('The php-mongo extension is not installed or is disabled.');
+    }
+
+    $this->_name = $name;
+    $this->_config = $config;
+
+    $this->_db = isset($this->_config['connection.database'])
+      ? $this->_config['connection.database']
+      : self::MONGO_DB_NAME;
+
+    $host = isset($this->_config['connection.hostname'])
+      ? $this->_config['connection.hostname']
+      : NULL;
+
+    $user = isset($this->_config['connection.username'])
+      ? $this->_config['connection.username']
+      : NULL;
+
+    $passwd = isset($this->_config['connection.password'])
+      ? $this->_config['connection.password']
+      : NULL;
+
+    $opt = Arr::get($this->_config['connection'], 'options', array());
+
+    $prepared = $this->_prepare_connection($host, $user, $passwd);
+
+    $this->_connection = new MongoClient($prepared, $opt);
+
+    unset($host, $user, $passwd, $opt, $prepared);
+
+    // Store the database instance
+    self::$instances[$name] = $this;
+  }
+
+  final public function __destruct()
+  {
+    try
+    {
+      $this->disconect();
+      $this->_connection = NULL;
+      $this->_connected = FALSE;
+    }
+    catch(Exception $e)
+    {
+      // can't throw exceptions in __destruct
+    }
+  }
+
+  final public function __toString()
+  {
+    return $this->_name;
+  }
+
+  /**
+   * Execute Command
+   *
+   * @param   string  $cmd    Command
+   * @param   array   $args   Arguments [Optional]
+   * @param   array   $values The values ​​passed to the command [Optional]
+   * @return  mixed   The result of the method by passing in a `$cmd`
+   */
+  public function _call($cmd, array $args = array(), $values = NULL)
+  {
+    // If there is no connection - we execute connect()
+    $this->_connected OR $this->connect();
+
+    if (isset($args['collection']))
+    {
+      $c = $this->_db->selectCollection($args['collection']);
+    }
+
+    switch ($cmd)
+    {
+      case 'batch_insert':
+        $r = $c->batchInsert($values, array('continueOnError' => TRUE));
+      break;
+      case 'count':
+        $r = $c->count($args['query']);
+      break;
+      case 'find':
+        $r = $c->find($args['query'], $args['fields']);
+      break;
+      case 'find_one':
+        $r = $c->findOne($args['query'], $args['fields']);
+      break;
+      case 'remove':
+        $r = $c->remove($args['criteria'], $args['options']);
+      break;
+    }
+
+    return $r;
+  }
+
+  /**
+   * Prepare connection
+   *
+   * @param   string  $host   Database host
+   * @param   string  $user   Database user
+   * @param   string  $passwd Database user password
+   * @return  string
+   */
+  protected function _prepare_connection($host, $user, $passwd)
+  {
+    if (is_null($host))
+    {
+      $host = ini_get('mongo.default_host').':'.ini_get('mongo.default_port');
+    }
+
+    if (! is_null($user) AND ! is_null($passwd))
+    {
+      return 'mongodb://' . $user . ':' . $passwd . '@' . $host . '/' . $this->_db;
+    }
+
+    return 'mongodb://' . $host . '/' . $this->_db;
+  }
+
+  /**
+   * Get an instance of MongoDb directly
+   *
+   * @return MongoDb
+   */
+  public function db()
+  {
+    $this->_connected OR $this->connect();
+
+    return $this->_db;
+  }
+
+  /**
+   * Database connection
+   *
+   * @return  TRUE              When the connection is successful
+   * @throws  Kohana_Exception  When a connection error
+   */
+  public function connect()
+  {
+    // If no connection
+    if(! $this->_connected)
+    {
+      try
+      {
+        // Connecting to the server
+        $this->_connected = $this->_connection->connect();
+      }
+      catch (MongoConnectionException $e)
+      {
+        // Unable to connect to database server
+        throw new Kohana_Exception('Unable to connect to MongoDB server. MongoDB said :message',
+          array(
+            ':message' => $e->getMessage()
+          )
+        );
+      }
+
+      $this->_db = $this->_connection->selectDB("$this->_db");
+    }
+
+    return $this->_connected;
+  }
+
+  /**
+   * Disconnects from the database
+   */
+  protected function disconect()
+  {
+    if ($this->_connected)
+    {
+      $this->_connected = $this->_connection->close();
+      $this->_db = "$this->_db";
+    }
+
+    return $this->_connected;
+  }
+
+  /**
+   * Counting documents in a collection
+   *
+   * @param   string  $collection Collection Name
+   * @param   array   $query      NoSQL query [Optional]
+   * @return  integer
+   */
+  public function count($collection, array $query = array())
+  {
+    return $this->_call('count', array(
+      'collection' => $collection,
+      'query'      => $query
+    ));
+  }
+
+  /**
+   * Receives documents from the collection
+   *
+   * @param   string  $collection Collection Name
+   * @param   array   $query      NoSQL query [Optional]
+   * @param   array   $fields     Fields which are looking for in the request [Optional]
+   * @return  MongoCursor
+   */
+  public function find($collection, array $query = array(), array $fields = array())
+  {
+    return $this->_call('find', array(
+      'collection'  => $collection,
+      'query'       => $query,
+      'fields'      => $fields
+    ));
+  }
+
+  /**
+   * Gets 1 document from the collection
+   *
+   * @param   string  $collection Collection Name
+   * @param   array   $query      NoSQL query [Optional]
+   * @param   array   $fields     Fields which are looking for in the request [Optional]
+   * @return  MongoCursor
+   */
+  public function find_one($collection, array $query = array(), array $fields = array())
+  {
+    return $this->_call('find_one', array(
+      'collection'  => $collection,
+      'query'       => $query,
+      'fields'      => $fields,
+    ));
+  }
+
+  /**
+   * Deleting a document from a collection
+   *
+   * @param   string  $collection Collection Name
+   * @param   array   $criteria   The search criteria
+   * @param   array   $options    Additional options [Optional]
+   * @return  boolean|array
+   */
+  public function remove($collection, array $criteria, $options = array())
+  {
+    return $this->_call('remove', array(
+      'collection'  => $collection,
+      'criteria'    => $criteria,
+      'options'     => $options
+    ));
+  }
+
+  /**
+   * Bulk insert multiple documents in a collection
+   *
+   * Note: If in the array `$a` pass the objects,
+   * they should not have the properties of `protected` or `private`
+   *
+   * @param   string      $collection Collection Name
+   * @param   array       $a          An array of arrays or objects
+   * @return  mixed
+   *
+   * @link http://php.net/manual/ru/mongocollection.insert.php MongoCollection::insert()
+   */
+  public function batch_insert($collection, array $a)
+  {
+    return $this->_call('batch_insert', array('collection' => $collection), $a);
+  }
+
+}
