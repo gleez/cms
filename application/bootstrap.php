@@ -113,12 +113,15 @@ Kohana::modules(array(
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	 'userguide'   => MODPATH.'userguide',  // User guide and API documentation
+   //'mango'       => MODPATH.'mango',      // Mango Reader
 	));
 
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
 Kohana::$log->attach(new Gleez_Log_File(APPPATH.'logs'));
+// For Log_Mango() Mango Reader is required
+// Kohana::$log->attach(new Log_Mango());
 
 //default path for uploads directory
 Upload::$default_directory = APPPATH.'uploads';

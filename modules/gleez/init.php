@@ -153,16 +153,6 @@ if ( ! Route::cache())
 		'controller' => 'format',
 	));
 
-	Route::set('admin/log', 'admin/logs(/<action>)(/p<page>)(/<id>)', array(
-		'id'         =>'([A-Za-z0-9]+)',
-		'page'       => '\d+',
-		'action'     => 'list|index|view|delete'
-	))
-	->defaults(array(
-		'directory'  => 'admin/log',
-		'controller' => 'mongo',
-	));
-
 	Route::set('admin/setting', 'admin/settings(/<action>)')
 	->defaults(array(
 		'directory'  => 'admin',
