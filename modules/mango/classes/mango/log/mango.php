@@ -29,7 +29,7 @@ class Mango_Log_Mango extends Log_Writer {
   protected $_name;
 
   /**
-   * Cobstructor
+   * Constructor
    *
    *    // Example:
    *    $writer = new Log_Mango($collection);
