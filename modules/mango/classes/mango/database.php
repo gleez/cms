@@ -16,12 +16,12 @@
  * ### System Requirements
  *
  * - PHP 5.3 or higher
- * - PHP-extension MongoDB
+ * - PHP-extension MongoDB 1.3 or higher
  *
  * @package   Mango
  * @category  Database
  * @author    Sergey Yakovlev
- * @version   0.1.1.0
+ * @version   0.1.1.1
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  * @link      http://php.net/manual/ru/book.mongo.php MongoDB Native Driver
@@ -29,7 +29,7 @@
  * @todo Divide this class into the following three:
  *  - Mango_Database (Database and connection manage)
  *  - Mango_Collection (Collection manage)
- *  - Mango_Document (Document manage )
+ *  - Mango_Document (Document manage)
  *
  * @todo Implement profiling
  */
@@ -58,7 +58,10 @@ class Mango_Database {
   protected $_db;
 
   /** @var string Database name by default */
-  const MONGO_DB_NAME = 'Gleez';
+  const MANGO_DB_NAME = 'Gleez';
+
+  /** @var string Module version */
+  const MANGO_VERSION = '0.1.1.1';
 
   /**
    * Get an instance of Mango_Database
@@ -107,7 +110,7 @@ class Mango_Database {
 
     $this->_db = isset($this->_config['connection.database'])
       ? $this->_config['connection.database']
-      : self::MONGO_DB_NAME;
+      : self::MANGO_DB_NAME;
 
     $host = isset($this->_config['connection.hostname'])
       ? $this->_config['connection.hostname']
@@ -158,7 +161,7 @@ class Mango_Database {
    * @param   string  $cmd    Command
    * @param   array   $args   Arguments [Optional]
    * @param   array   $values The values passed to the command [Optional]
-   * @return  mixed   The result of the method by passing in a `$cmd`
+   * @return  mixed   Responce the result of the method by passing in a `$cmd`
    */
   public function _call($cmd, array $args = array(), $values = NULL)
   {
@@ -173,23 +176,26 @@ class Mango_Database {
     switch ($cmd)
     {
       case 'batch_insert':
-        $r = $c->batchInsert($values, array('continueOnError' => TRUE));
+        $responce = $c->batchInsert($values, array('continueOnError' => TRUE));
       break;
       case 'count':
-        $r = $c->count($args['query']);
+        $responce = $c->count($args['query']);
       break;
       case 'find':
-        $r = $c->find($args['query'], $args['fields']);
+        $responce = $c->find($args['query'], $args['fields']);
       break;
       case 'find_one':
-        $r = $c->findOne($args['query'], $args['fields']);
+        $responce = $c->findOne($args['query'], $args['fields']);
       break;
       case 'remove':
-        $r = $c->remove($args['criteria'], $args['options']);
+        $responce = $c->remove($args['criteria'], $args['options']);
+      break;
+      case 'drop':
+        $responce = $c->drop();
       break;
     }
 
-    return $r;
+    return $responce;
   }
 
   /**
@@ -281,6 +287,8 @@ class Mango_Database {
    * @param   string  $collection Collection Name
    * @param   array   $query      NoSQL query [Optional]
    * @return  integer Amount of documents
+   *
+   * @link    http://php.net/manual/en/mongocollection.count.php MongoCollection::count()
    */
   public function count($collection, array $query = array())
   {
@@ -297,6 +305,8 @@ class Mango_Database {
    * @param   array   $query      NoSQL query [Optional]
    * @param   array   $fields     Fields which are looking for in the request [Optional]
    * @return  MongoCursor
+   *
+   * @link    http://php.net/manual/en/mongocollection.find.php MongoCollection::find()
    */
   public function find($collection, array $query = array(), array $fields = array())
   {
@@ -314,6 +324,8 @@ class Mango_Database {
    * @param   array   $query      NoSQL query [Optional]
    * @param   array   $fields     Fields which are looking for in the request [Optional]
    * @return  MongoCursor
+   *
+   * @link    http://php.net/manual/en/mongocollection.findone.php MongoCollection::findOne()
    */
   public function find_one($collection, array $query = array(), array $fields = array())
   {
@@ -331,6 +343,8 @@ class Mango_Database {
    * @param   array   $criteria   The search criteria
    * @param   array   $options    Additional options [Optional]
    * @return  boolean|array
+   *
+   * @link    http://php.net/manual/en/mongocollection.remove.php MongoCollection::remove()
    */
   public function remove($collection, array $criteria, $options = array())
   {
@@ -338,6 +352,21 @@ class Mango_Database {
       'collection'  => $collection,
       'criteria'    => $criteria,
       'options'     => $options
+    ));
+  }
+
+  /**
+   * Drop collection
+   *
+   * @param   string  $collection Collection Name
+   * @return  array   The database response as array
+   *
+   * @link    http://php.net/manual/en/mongocollection.drop.php MongoCollection::drop()
+   */
+  public function drop($collection)
+  {
+    return $this->_call('drop', array(
+      'collection'  => $collection
     ));
   }
 
@@ -351,7 +380,7 @@ class Mango_Database {
    * @param   array       $a          An array of arrays or objects
    * @return  mixed
    *
-   * @link http://php.net/manual/ru/mongocollection.insert.php MongoCollection::insert()
+   * @link    http://php.net/manual/en/mongocollection.batchinsert.php MongoCollection::batchInsert()
    */
   public function batch_insert($collection, array $a)
   {
