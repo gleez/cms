@@ -5,8 +5,8 @@
  * ### System Requirements
  *
  * - PHP 5.3 or higher
- * - PHP-extension Mongodb
- * - Mango Reader module
+ * - PHP-extension Mongodb 1.3 or higher
+ * - Mango Reader module 0.1.1.1 or higher
  *
  * @package   Mango
  * @category  Logging/Mango
