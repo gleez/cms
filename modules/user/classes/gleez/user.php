@@ -31,7 +31,7 @@ class Gleez_User {
 	 */
 	public static function is_guest()
 	{
-		return Auth::instance()->get_user();
+		return ( ! Auth::instance()->get_user() ? TRUE : FALSE );
 	}
 
 	/**
