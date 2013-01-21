@@ -1,11 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Gleez System class helper
+ * Gleez Core Utils class
  *
  * @package   Gleez
  * @category  Core/Utils
- * @author    Sergey Yakovlev (me@klay.me)
- * @copyright (c) 2012 Gleez Technologies
+ * @author    Sergey Yakovlev
+ * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Gleez_System {
@@ -19,7 +19,7 @@ class Gleez_System {
   public static function get_avg()
   {
     // Default return
-    $server_load = __('Not available');
+    $not_available = __('Not available');
 
     if (function_exists('sys_getloadavg') && is_array(sys_getloadavg()))
     {
@@ -36,12 +36,14 @@ class Gleez_System {
 
       $load_averages = empty($load_averages) ? array() : explode(' ', $load_averages);
 
-      $server_load = isset($load_averages[2]) ? $load_averages[0].' '.$load_averages[1].' '.$load_averages[2] : __('Not available');
+      $server_load = isset($load_averages[2]) ? $load_averages[0].' '.$load_averages[1].' '.$load_averages[2] : $not_available;
     }
     elseif (! in_array(PHP_OS, array('WINNT', 'WIN32')) && preg_match('/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/i', @exec('uptime'), $load_averages))
     {
       $server_load = $load_averages[1].' '.$load_averages[2].' '.$load_averages[3];
     }
+    else
+      $server_load = $not_available;
 
     return $server_load;
   }
