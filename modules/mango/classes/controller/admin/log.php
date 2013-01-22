@@ -16,7 +16,7 @@
  * @license   http://gleezcms.org/license
  */
 
-class Controller_Admin_Mango_Log extends Controller_Admin {
+class Controller_Admin_Log extends Controller_Admin {
 
   /** The before() method is called before controller action. */
   public function before()
