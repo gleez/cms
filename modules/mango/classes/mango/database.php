@@ -3,15 +3,19 @@
  * This class wraps the functionality of Mongo (connection)
  * and MongoDB (database object) into one class.
  *
- * When used with Gleez it can be instantiated simply by:
- *  $db = Mango::instance();
+ * When used with Gleez it can be instantiated simply by:<br>
+ * <code>
+ *   $db = Mango::instance();
+ * </code>
  *
  * The above will assume the `default` configuration from the
- * APPPATH/config/mongo.php file (or MODPATH/config/mongo.php by default).
+ * `APPPATH/config/mongo.php` file (or `MODPATH/config/mongo.php` by default).
  *
  * Alternatively it may be instantiated with the name and
- * configuration specified as arguments:
- *  $db = Mango::instance('mongo', array('database' => 'test'));
+ * configuration specified as arguments:<br>
+ * <code>
+ *   $db = Mango::instance('mongo', array('database' => 'test'));
+ * </code>
  *
  * ### System Requirements
  *
@@ -21,7 +25,7 @@
  * @package   Mango
  * @category  Database
  * @author    Sergey Yakovlev
- * @version   0.1.1.1
+ * @version   0.1.1.2
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  * @link      http://php.net/manual/ru/book.mongo.php MongoDB Native Driver
@@ -46,7 +50,7 @@ class Mango_Database {
   protected $_name;
 
   /** @var array Configuration */
-  protected $_config;
+  protected $_config = array();
 
   /** @var boolean Connection state */
   protected $_connected = FALSE;
@@ -61,33 +65,68 @@ class Mango_Database {
   const MANGO_DB_NAME = 'Gleez';
 
   /** @var string Module version */
-  const MANGO_VERSION = '0.1.1.1';
+  const MANGO_VERSION = '0.1.1.2';
+
+  /** @var string Module name */
+  const MANGO_NAME = 'Mango Reader';
 
   /**
-   * Get an instance of Mango_Database
+   * Creates a singleton of a Mango_Database group.
+   * If no group is supplied the __default__ Mongo group is used.
    *
-   * @param   string    $name   Config group name [Optional]
-   * @param   array     $config MongoDB config [Optional]
+   * Create an instance of the default group:<br>
+   * <code>
+   *   $default_group = Mango::instance();
+   * </code>
+   *
+   * Create an instance of a group:<br>
+   * <code>
+   *   $foo_group = Mango::instance('foo');
+   * </code>
+   *
+   * Access an instantiated group directly:<br>
+   * <code>
+   *   $foo_group = Mango::$instances['foo'];
+   * </code>
+   *
+   * @param   string    $group  Config group name [Optional]
    * @return  Mango_Database    Database instance
+   * @throws  Gleez_Exception
    */
-  public static function instance($name = NULL, array $config = NULL)
+  public static function instance($group = NULL)
   {
-    if (is_null($name))
+    // If there is no group supplied
+    if (is_null($group))
     {
-      $name = self::$default;
-    }
-    if (! isset(self::$instances[$name]))
-    {
-      if (is_null($config))
-      {
-        // Load the configuration for this database
-        $config = Kohana::$config->load('mango')->$name;
-      }
-
-      new self($name,$config);
+      // Use the default setting
+      $group = Mango::$default;
     }
 
-    return self::$instances[$name];
+    if (isset(Mango::$instances[$group]))
+    {
+      // Return the current group if initiated already
+      return Mango::$instances[$group];
+    }
+
+    // Load the configuration
+    $config = Kohana::$config->load('mango');
+
+    if (! $config->offsetExists($group))
+    {
+      throw new Gleez_Exception('Failed to load :module group: :group',
+        array(
+          ':module' => self::MANGO_NAME,
+          ':group'  => $group
+        )
+      );
+    }
+
+    // Gets config group
+    $config = $config->get($group);
+
+    new Mango($group, $config);
+
+    return Mango::$instances[$group];
   }
 
   /**
@@ -110,7 +149,7 @@ class Mango_Database {
 
     $this->_db = isset($this->_config['connection.database'])
       ? $this->_config['connection.database']
-      : self::MANGO_DB_NAME;
+      : Mango::MANGO_DB_NAME;
 
     $host = isset($this->_config['connection.hostname'])
       ? $this->_config['connection.hostname']
@@ -133,7 +172,7 @@ class Mango_Database {
     unset($host, $user, $passwd, $opt, $prepared);
 
     // Store the database instance
-    self::$instances[$name] = $this;
+    Mango::$instances[$name] = $this;
   }
 
   final public function __destruct()
