@@ -5,7 +5,7 @@ _Module that monitors all system events and recording them in a log using [Mongo
 
 ## Overview
 
-**MongoDB** (from "hu**mongo**us") is an open source document-oriented database system developed and supported by
+**MongoDB** (from "hu|mongo|us") is an open source document-oriented database system developed and supported by
 [10gen] (http://www.10gen.com/). It is part of the NoSQL family of database systems. Instead of storing data in
 tables as is done in a "classical" relational database, MongoDB stores structured data as JSON-like documents with
 dynamic schemas (MongoDB calls the format BSON), making the integration of data in certain types of applications
@@ -24,7 +24,7 @@ It is vital to check the log report on a regular basis as it is often the only w
 
 ## Current available versions
 
-- **0.1.1.1** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
+- **0.1.1.2** for Gleez CMS 0.9.8.1 or higher [Download] (https://github.com/sergeyklay/gleez-mango/archive/master.zip)
 
 
 ## System Requirements
@@ -40,17 +40,17 @@ It is vital to check the log report on a regular basis as it is often the only w
 - View list of all events
 - View single log event
 - Delete event from log
-- Drop system log
+- Drop system log collection
 
 
 ## Future Plans
 
-- Divide the `Mango_Database` Class into the following three:
- - `Mango_Database` Class: Database and connection managing
- - `Mango_Collection` Class: Collection managing
- - `Mango_Document` Class: Document managing
+- Divide the `Mango_Database Class` into the following three:
+ - `Mango_Database Class`: for database and connection managing
+ - `Mango_Collection Class`: for collection managing
+ - `Mango_Document Class`: for document managing
 - Implement Profiling
-- Implement Session Storage *(in the long term)*
+- Implement Session Storage ( *in the long term* )
 - More pure and correct English in the documentation and the string resources
 
 
@@ -86,7 +86,9 @@ It is vital to check the log report on a regular basis as it is often the only w
   Kohana::$log->attach(new Log_Mango());
 ```
 
-- For Routes see `MODPATH/<mango_dir>/init.php`
+- Go to `admin/logs` to view the system log
+
+- For all routes see `MODPATH/<mango_dir>/init.php`
 
 - Use `MODPATH/<mango_dir>/config/mango.php` as an example for creating `APPATH/config/mango.php` with your individual settings
 
@@ -106,11 +108,17 @@ Now that you're here, why not start contributing as well? :)
 
 ## Changelog
 
+**0.1.1.2** - *January 22 2013*
+
+- Modified Mango singleton
+- Modified module file system
+- Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)
+
 **0.1.1.1** - *January 19 2013*
 
 - Added I18n ability
 - Added ability to clear all messages from the log
-- Minor changes (see commits diff)
+- Minor changes (see [commits] (https://github.com/sergeyklay/gleez-mango/commits/master) diff)
 
 **0.1.1.0** - *January 17 2013*
 
