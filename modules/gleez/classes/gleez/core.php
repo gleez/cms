@@ -337,7 +337,9 @@ class Gleez_Core {
 		}
 
 		// Setting lang
-		self::$locale = $locale;
+		I18n::$lang = self::$locale = $locale;
+
+		Cookie::set('locale', $locale);
 	}
 
 }
