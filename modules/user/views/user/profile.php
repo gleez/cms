@@ -36,6 +36,8 @@
                                     <?php endforeach; ?>
                               </ul>
                         </dd>
+                        <dt><?php echo __('Age'); ?></dt>
+                        <dd><?php echo date('y', abs(time()-$user->dob))-70; ?></dd>
                   </dl>
             </div>
       </div>
