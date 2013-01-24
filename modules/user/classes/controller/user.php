@@ -197,9 +197,9 @@ class Controller_User extends Template {
 	public function action_edit()
 	{
 		// The user is not logged in
-		if ( $this->_auth->logged_in() == false )
+		if ( $this->_auth->logged_in() == FALSE )
 		{
-			$this->request->redirect( Route::get('user')->uri(array('action' => 'login')) );
+			$this->request->redirect( Route::get('user')->uri(array('action' => 'login')), 401 );
 		}
 
 		$user = $this->_auth->get_user();
@@ -211,16 +211,20 @@ class Controller_User extends Template {
 		// Form submitted
 		if ( $this->valid_post('user_edit') )
 		{
+			// Creating user age
+			$dob = strtotime(Arr::get($_POST, 'years').'-'.Arr::get($_POST, 'month').'-'.Arr::get($_POST, 'days'));
+			unset($_POST['years'], $_POST['month'], $_POST['days']);
+			$post = Arr::merge($_POST, array('dob' => $dob), $_FILES);
+
 			try
 			{
-				$post = array_merge($this->request->post(), $_FILES);
 				$user->values($post)->save();
 
-				#If the post data validates using the rules setup in the user model
+				// If the post data validates using the rules setup in the user model
 				Message::success(__("%title successfully updated!", array('%title' => $user->nick)));
 
-				#redirect to the user account
-				$this->request->redirect('user/profile');
+				// redirect to the user account
+				$this->request->redirect( Route::get('user')->uri(array('action' => 'profile')), 200 );
 			}
 			catch(ORM_Validation_Exception $e)
 			{
