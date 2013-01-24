@@ -33,9 +33,9 @@
 
 	<div class="control-group <?php echo isset($errors['dob']) ? 'error': ''; ?>">
 		<?php echo Form::label('dob', __('Birthday:'), array('class' => 'control-label')) ?>
-		<?php echo Form::select('month', Date::months(Date::MONTHS_SHORT), '', array('class' => 'input-small')); ?>
-		<?php echo Form::select('days',  Date::days(Date::DAY), '', array('class' => 'input-small')); ?>
-		<?php echo Form::select('years', Date::years(date('Y') - 95,date('Y') - 5), 2000, array('class' => 'input-small')); ?>
+		<?php echo Form::select('month', Date::months(Date::MONTHS_SHORT), date('n', $user->dob), array('class' => 'input-small')); ?>
+		<?php echo Form::select('days',  Date::days(Date::DAY), date('j', $user->dob), array('class' => 'input-small')); ?>
+		<?php echo Form::select('years', Date::years(date('Y') - 95,date('Y') - 5), date('Y', $user->dob), array('class' => 'input-small')); ?>
 	</div>
 
 	<?php echo Form::submit('user_edit', __('Update Profile'), array('class' => 'btn btn-primary')) ?>
