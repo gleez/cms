@@ -1,5 +1,13 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * The config group wrapper
+ *
+ * @package   Gleez
+ * @category  Configuration
+ * @author    Sergey Yakovlev
+ * @copyright (c) 2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ */
 class Gleez_Config_Group extends Kohana_Config_Group {
 
   public function save()
