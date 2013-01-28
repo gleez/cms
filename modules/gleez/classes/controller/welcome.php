@@ -5,29 +5,13 @@
  * @package   Gleez
  * @category  Controller
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2012 Gleez Technologies
+ * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Controller_Welcome extends Template {
 
-        /**
-         * The before() method is called before controller action.
-         */
-        public function before()
-        {
-                // The action_index() is default
-                if($this->request->action() == 'index' )
-                {
-                        $this->request->action('welcome');
-                }
-                
-                parent::before();
-        }
-      
-        /**
-         * Prepare welcome page
-         */
-        public function action_welcome()
+        /** Prepare welcome page */
+        public function action_index()
         {
                 // If Gleez CMS don't installed
                 if(! Gleez::$installed)
@@ -36,7 +20,7 @@ class Controller_Welcome extends Template {
                         $this->request->redirect(Route::get('install')->uri(array('action' => 'index')), 200);
                 }
             
-                $this->title = 'Welcome!';
+                $this->title = __('Welcome!');
                 $content = View::factory('welcome');
                 $this->response->body($content);
         }
