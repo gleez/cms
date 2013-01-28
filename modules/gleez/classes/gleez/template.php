@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Abstract template class for automatic templating.
+ * The template class for automatic templating.
  *
  * @package   Gleez
  * @category  Template
