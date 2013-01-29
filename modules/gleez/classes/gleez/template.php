@@ -83,7 +83,7 @@ abstract class Gleez_Template extends Controller{
          *
          * @var bool
          */
-        protected $_sidebars;
+        protected $_sidebars = TRUE;
         
         /**
          * Loads the template View object, if it is direct request
