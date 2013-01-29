@@ -5,17 +5,17 @@
 // Load the core Kohana class
 require SYSPATH.'classes/kohana/core'.EXT;
 
-if (is_file(APPPATH.'classes/kohana'.EXT))
+if (is_file(MODPATH.'gleez/classes/kohana'.EXT))
 {
   // Application extends the core
-  require APPPATH.'classes/kohana'.EXT;
+  require MODPATH.'gleez/classes/kohana'.EXT;
+  require MODPATH.'gleez/classes/kohana/config'.EXT;
+  require MODPATH.'gleez/classes/kohana/config'.EXT;
 }
 else
 {
-  // Load default core extension
-  require MODPATH.'gleez/classes/kohana'.EXT;
-  require MODPATH.'gleez/classes/kohana/config'.EXT;
-  require MODPATH.'gleez/classes/gleez/core'.EXT;
+  // Load empty core extension
+  require SYSPATH.'classes/kohana'.EXT;
 }
 
 /**
