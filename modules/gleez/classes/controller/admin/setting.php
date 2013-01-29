@@ -34,7 +34,7 @@ class Controller_Admin_Setting extends Controller_Admin {
 					$this->_set_front_page($value);
 				}
                         }
-	    $config->save();
+
                         Message::success(__('Site configuration updated!'));
                         $this->request->redirect(Route::get('admin/setting')->uri());
                 }

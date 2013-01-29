@@ -89,8 +89,7 @@ class Gleez_Template extends Controller{
          *
          * This method is called before controller action.
          *
-         * @return  void
-         * @throws  Http_Exception_415  If none of the accept-types are supported
+         * @throws  HTTP_Exception_415  If none of the accept-types are supported
          */
         public function before()
         {
@@ -134,7 +133,7 @@ class Gleez_Template extends Controller{
                         // Throw exception if none of the accept-types are supported
                         if ( ! array_filter($accept_types))
                         {
-                                throw new Kohana_HTTP_Exception_415('Unsupported accept-type');
+                                throw new HTTP_Exception_415('Unsupported accept-type');
                         }
 
                         // Load the template
