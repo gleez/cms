@@ -82,8 +82,8 @@ class Gleez_Template extends Controller{
         );
 
         /** @var bool Enable/Disable sidebars for this request, ex: add or edit page requires no sidebars */
-        protected $_sidebars;
-
+        protected $_sidebars = TRUE;
+        
         /**
          * Loads the template View object, if it is direct request.
          *
