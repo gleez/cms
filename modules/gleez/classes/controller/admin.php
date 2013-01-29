@@ -10,7 +10,11 @@ class Controller_Admin extends Template {
 		//Inform tht we're in admin section for themers/developers
 		Theme::$is_admin = TRUE;
 		
-		ACL::Required('administer site');
+		if ( class_exists('ACL') )
+		{
+			ACL::required('administer site');
+		}
+
 		parent::before();
 	}
 
