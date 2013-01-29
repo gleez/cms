@@ -64,7 +64,7 @@ class Gleez_Template extends Controller{
         /** @var array Tabs navigation */
         protected $_tabs;
 
-        /** @var array Profiling */
+        /** @var string Unique token for profiling */
         protected $_benchmark;
 
         /** @var string Hold the response format for this request */
@@ -132,9 +132,9 @@ class Gleez_Template extends Controller{
                 if ($this->auto_render)
                 {
                         // Throw exception if none of the accept-types are supported
-                        if (!$accept_types = array_filter($accept_types))
+                        if ( ! array_filter($accept_types))
                         {
-                                throw new Http_Exception_415('Unsupported accept-type', 415);
+                                throw new Kohana_HTTP_Exception_415('Unsupported accept-type');
                         }
 
                         // Load the template
@@ -548,21 +548,17 @@ class Gleez_Template extends Controller{
 
         /**
          * Set the profiler stats into template.
-         *
-         * @return  void
          */
         protected function _set_profiler_stats()
         {
                 $queries = 0;
-                if (Kohana::$profiling)
+
+                // DB queries
+                foreach (Profiler::groups() as $group => $benchmarks)
                 {
-                        // DB queries
-                        foreach (Profiler::groups() as $group => $benchmarks)
+                        if (strpos($group, 'database') === 0)
                         {
-                                if (strpos($group, 'database') === 0)
-                                {
-                                        $queries += count($benchmarks);
-                                }
+                                $queries += count($benchmarks);
                         }
                 }
 
