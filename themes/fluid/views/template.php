@@ -1,6 +1,6 @@
 <?php defined("SYSPATH") or die("No direct script access."); ?>
-<?php echo $doctype; ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>"/>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">
     <head profile="http://gmpg.org/xfn/11">
 	<title><?php echo $head_title ?></title>
 	<?php echo Meta::tags(); ?>
