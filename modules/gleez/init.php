@@ -186,6 +186,7 @@ if ( ! Route::cache())
 	))
 	->defaults(array(
 		'controller' => 'post',
+		'action'     => 'index'
 	));
 
 	Route::set('page', 'page(/<action>)(/<id>)(/p<page>)', array(
@@ -195,6 +196,7 @@ if ( ! Route::cache())
 	))
 	->defaults(array(
 		'controller' => 'page',
+		'action'     => 'index'
 	));
 
 	Route::set('comment', 'comment(/<action>(/<id>))(/p<page>)', array(
