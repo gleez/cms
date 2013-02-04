@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php defined("SYSPATH") OR die("No direct script access."); ?>
 
 <div class="help">
   <?php echo __('The log component monitors your website, capturing system events in a log to be reviewed by an authorized individual at a later time. The log is simply a list of recorded events containing usage data, performance data, errors, warnings and operational information. It is vital to check the log report on a regular basis as it is often the only way to tell what is going on.'); ?>
