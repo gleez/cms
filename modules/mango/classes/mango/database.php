@@ -67,7 +67,7 @@ class Mango_Database {
   /** @var string Module version */
   const MANGO_VERSION = '0.1.1.2';
 
-  /** @var string Module name */
+  /** Module name */
   const MANGO_NAME = 'Mango Reader';
 
   /**

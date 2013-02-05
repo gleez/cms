@@ -7,12 +7,6 @@ class Controller_Admin_Widget extends Controller_Admin {
    */
   protected static $WIDGET_REGION_NONE = -1;
 
-  public function before()
-  {
-    ACL::Required('administer site');
-    parent::before();
-  }
-
   public function action_index()
   {
     $this->title  = __('Widgets');

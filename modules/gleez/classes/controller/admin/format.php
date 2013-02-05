@@ -2,12 +2,6 @@
 
 class Controller_Admin_Format extends Controller_Admin {
 
-	public function before()
-	{
-		ACL::Required('administer site');
-		parent::before();
-	}
-        
         public function action_index()
         {
                 $config = Kohana::$config->load('inputfilter');

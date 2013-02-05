@@ -1,12 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin_Setting extends Controller_Admin {
-        
-        public function before()
-        {
-                ACL::Required('administer site');
-                parent::before();
-        }
 
         public function action_index()
         {
@@ -40,7 +34,7 @@ class Controller_Admin_Setting extends Controller_Admin {
 					$this->_set_front_page($value);
 				}
                         }
-	    
+
                         Message::success(__('Site configuration updated!'));
                         $this->request->redirect(Route::get('admin/setting')->uri());
                 }

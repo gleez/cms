@@ -11,10 +11,10 @@
  */
 class Gleez_Core {
 
-	/** @var string Release version */
+	/** Release version */
 	const VERSION = '0.9.8.2';
 
-	/** @var string Release codename */
+	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
 
 	/** @var boolean Installed? */

@@ -1,13 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Admin_Modules extends Controller_Admin {
-	
-        public function before()
-        {
-                ACL::Required('administer site');
-                parent::before();
-        }
-        
+
         public function action_index()
         {
 		//clear any cache for sure
