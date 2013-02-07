@@ -10,7 +10,7 @@ if (is_file(MODPATH.'gleez/classes/kohana'.EXT))
   // Application extends the core
   require MODPATH.'gleez/classes/kohana'.EXT;
   require MODPATH.'gleez/classes/kohana/config'.EXT;
-  require MODPATH.'gleez/classes/kohana/config'.EXT;
+  require MODPATH.'gleez/classes/gleez/core'.EXT;
 }
 else
 {
