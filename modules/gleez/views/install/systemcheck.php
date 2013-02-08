@@ -1,187 +1,178 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<style type="text/css">
-	#tests table th,
-	#tests table td { padding: 0.2em 0.4em; text-align: left; vertical-align: top; }
-	#tests table td.pass { color: #191; }
-	#tests table td.fail { color: #911; }
-	#tests #results { color: #fff; }
-	#tests #results p { padding: 0.8em 0.4em; }
-	#tests #results p.pass { background: #191; }
-	#tests #results p.fail { background: #911; }
-</style>
+<?php defined("SYSPATH") OR die("No direct script access.") ?>
 
 <div id="tests">
 	<table class="table table-bordered table-striped">
 		<tr>
-			<th>PHP Version</th>
+			<th><?php echo __('PHP Version'); ?></th>
 			<?php if ($php_version): ?>
-			<td class="pass"><?php echo PHP_VERSION ?></td>
+			  <td class="pass"><?php echo PHP_VERSION ?></td>
 			<?php else: ?>
-			<td class="fail">Gleez CMS requires PHP 5.2.3 or newer, this version is <?php echo PHP_VERSION ?>.</td>
+			  <td class="fail"><?php echo __('Gleez CMS requires PHP 5.3 or newer, this version is :php_version.', array(':php_version' => PHP_VERSION) ); ?>.</td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>Php Mysql</th>
+			<th><?php echo __('PHP MySQL'); ?></th>
 			<?php if ($mysql): ?>
-			<td class="pass"><?php echo __('Pass') ?></td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">Gleez CMS requires  a MySQL database, but PHP doesn't have either the
-			<a href="http://php.net/mysql">MySQL</a> or the  <a href="http://php.net/mysqli">MySQLi</a> extension.</td>
+			  <td class="fail">
+          <?php echo __('Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.', array(':mysql' => HTML::anchor('http://php.net/mysql', 'MySQL'), ':mysqli' => HTML::anchor('http://php.net/mysqli', 'MySQLi'))); ?>
+        </td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>System Directory</th>
+			<th><?php echo __('System Directory'); ?></th>
 			<?php if ($system_directory): ?>
-			<td class="pass"><code><?php echo SYSPATH ?></code></td>
+			  <td class="pass"><code><?php echo SYSPATH ?></code></td>
 			<?php else: ?>
-			<td class="fail">The configured <code>system</code> directory does not exist or does not contain required files.</td>
+			  <td class="fail"><?php echo __('The configured :system directory does not exist or does not contain required files.', array(':system' => '<code>system</code>')); ?></td>
 			<?php endif ?>
 		</tr>
-	
+
 		<tr>
-			<th>Application Directory</th>
+			<th><?php echo __('Application Directory'); ?></th>
 			<?php if ($application_directory): ?>
-			<td class="pass"><code><?php echo APPPATH ?></code></td>
+			  <td class="pass"><code><?php echo APPPATH ?></code></td>
 			<?php else: ?>
-			<td class="fail">The configured <code>application</code> directory does not exist or does not contain required files.</td>
+			  <td class="fail"><?php echo __('The configured :application directory does not exist or does not contain required files.', array(':application' => '<code>application</code>')); ?></td>
 			<?php endif ?>
 		</tr>
-	
+
 		<tr>
-			<th>Modules Directory</th>
+			<th><?php echo __('Modules Directory'); ?></th>
 			<?php if ($modules_directory): ?>
-			<td class="pass"><code><?php echo MODPATH ?></code></td>
+			  <td class="pass"><code><?php echo MODPATH ?></code></td>
 			<?php else: ?>
-			<td class="fail">The configured <code>modules</code> directory does not exist or does not contain required files.</td>
+			  <td class="fail"><?php echo __('The configured :modules directory does not exist or does not contain required files.', array(':modules' => '<code>modules</code>')); ?></td>
 			<?php endif ?>
 		</tr>
-		
+
 		<tr>
-			<th>Config Directory</th>
+			<th><?php echo __('Config Directory'); ?></th>
 			<?php if ($config_writable): ?>
-			<td class="pass"><code><?php echo str_replace('\\', '/', realpath(APPPATH.'config')).'/' ?></code> is writable</td>
+			  <td class="pass"><?php echo __('The :config_dir directory is writable.', array(':config_dir' => '<code>'. str_replace('\\', '/', realpath(APPPATH.'config')).'/</code>'))?></td>
 			<?php else: ?>
-			<td class="fail">The directory <code><?php echo str_replace('\\', '/', realpath(APPPATH.'config')).'/' ?>
-			</code> does not exist or is not writable. We're having trouble creating a place for your cms.  Can you
-			help?  Please create a directory called "config" using <code>mkdir 'application/config'</code> in your gleez
-			directory, then run <code>chmod 777 application/config</code>.  That should fix it.</td>
+        <td class="fail">
+          <?php echo __('The directory :config_dir does not exist or is not writable. We\'re having trouble creating a place for your CMS. Can you help? Please create a directory called "config" using :mkdir in your gleez directory, then run :chmod. That should fix it.', array(':config_dir' => '<code>'.str_replace('\\', '/', realpath(APPPATH.'config')).'/</code>', ':mkdir' => '<code>mkdir application/config</code>', ':chmod' => '<code>chmod a+rwx application/config</code>')) ?>
+        </td>
 			<?php endif ?>
 		</tr>
-		
+
 		<tr>
-			<th>Cache Directory</th>
+			<th><?php echo __('Cache Directory'); ?></th>
 			<?php if ($cache_writable): ?>
-			<td class="pass"><code><?php echo str_replace('\\', '/', realpath(APPPATH.'cache')).'/' ?></code> is writable</td>
+        <td class="pass"><?php echo __('The :cache_dir directory is writable.', array(':cache_dir' => '<code>'. str_replace('\\', '/', realpath(APPPATH.'cache')).'/</code>'))?></td>
 			<?php else: ?>
-			<td class="fail">The <code><?php echo str_replace('\\', '/', realpath(APPPATH.'cache')).'/' ?></code> directory is not writable.</td>
+			  <td class="fail">
+          <?php echo __('The :cache_dir directory is not writable.', array(':cache_dir' => '<code>'.str_replace('\\', '/', realpath(APPPATH.'cache')).'/</code>')) ?>
+        </td>
 			<?php endif ?>
 		</tr>
-	
+
 		<tr>
-			<th>PCRE UTF-8</th>
+			<th><?php echo __('PCRE UTF-8'); ?></th>
 			<?php if ( ! $pcre_utf8): ?>
-			<td class="fail"><a href="http://php.net/pcre">PCRE</a> has not been compiled with UTF-8 support.</td>
+			  <td class="fail"><?php echo __(':pcre has not been compiled with UTF-8 support.', array(':pcre' => '<a href="http://php.net/pcre">PCRE</a>')) ?></td>
 			<?php elseif ( ! $pcre_unicode ): ?>
-			<td class="fail"><a href="http://php.net/pcre">PCRE</a> has not been compiled with Unicode property support.</td>
+			  <td class="fail"><?php echo __(':pcre has not been compiled with Unicode property support.', array(':pcre' => HTML::anchor('http://php.net/pcre', 'PCRE') )); ?></td>
 			<?php else: ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php endif ?>
 		</tr>
-		
+
 		<tr>
-			<th>Reflection Enabled</th>
+			<th><?php echo __('Reflection API'); ?></th>
 			<?php if ($reflection_enabled): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">PHP <a href="http://www.php.net/reflection">reflection</a> is either not loaded or not compiled in.</td>
+			  <td class="fail"><?php echo __('PHP :reflection is either not loaded or not compiled in.', array(':reflection' => HTML::anchor('http://www.php.net/reflection', 'Reflection') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>Standard PHP Library (SPL)</th>
+			<th><?php echo __('Standard PHP Library (SPL)'); ?></th>
 			<?php if ($spl_autoload_register): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/spl">Standard PHP Library (SPL)</a> extension is either not loaded or not compiled in.</td>
+			  <td class="fail"><?php echo __('The :spl extension is either not loaded or not compiled in.', array(':spl' => HTML::anchor('http://php.net/spl', 'Standard PHP Library (SPL)') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>Filters Enabled</th>
+			<th><?php echo __('Filters Enabled'); ?></th>
 			<?php if ($filters_enabled): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://www.php.net/filter">filter</a> extension is either not loaded or not compiled in.</td>
+			  <td class="fail"><?php echo __('The :filer extension is either not loaded or not compiled in.', array(':filter' => HTML::anchor('http://www.php.net/filter', 'filter') )); ?></td>
 			<?php endif ?>
 		</tr>
-	
+
 		<tr>
-			<th>Iconv Extension Loaded</th>
+			<th><?php echo __('Iconv Extension'); ?></th>
 			<?php if ($iconv_loaded): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/iconv">iconv</a> extension is not loaded.</td>
+			  <td class="fail"><?php echo __('The :iconv extension is not loaded.', array(':iconv' => HTML::anchor('http://php.net/iconv', 'iconv') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>SimpleXML Extension Loaded</th>
+			<th><?php echo __('SimpleXML Extension'); ?></th>
 			<?php if ($simplexml): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/simplexml">SimpleXML</a> extension is not loaded.</td>
+			  <td class="fail"><?php echo __('The :simlexml extension is not loaded.', array(':simplexml' => HTML::anchor('http://php.net/simplexml', 'SimpleXML') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>JavaScript Object Notation (JSON)</th>
+			<th><?php echo __('JavaScript Object Notation (JSON)'); ?></th>
 			<?php if ($json_encode): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/manual/en/book.json.php">JavaScript
-			Object Notation (JSON)</a> extension is not loaded.</td>
+			  <td class="fail"><?php echo __('The :json extension is not loaded.', array(':json' => HTML::anchor('http://php.net/manual/en/book.json.php', 'JavaScript Object Notation (JSON)') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>Mbstring Not Overloaded</th>
+			<th><?php echo __('Mbstring Not Overloaded'); ?></th>
 			<?php if ($mbstring): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/mbstring">mbstring</a> extension is
-			overloading PHP's native string functions.</td>
+			  <td class="fail"><?php echo __('The :mbstring extension is overloading PHP\'s native string functions.', array(':mbstring' => HTML::anchor('http://php.net/mbstring', 'mbstring') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>Character Type (CTYPE) Extension</th>
+			<th><?php echo __('Character Type (CTYPE)'); ?></th>
 			<?php if ($ctype_digit): ?>
-			<td class="pass">Pass</td>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">The <a href="http://php.net/ctype">ctype</a> extension is not enabled.</td>
-			<?php endif ?>
-		</tr>
-	
-		<tr>
-			<th>URI Determination</th>
-			<?php if ($uri_determination): ?>
-			<td class="pass">Pass</td>
-			<?php else: ?>
-			<td class="fail">Neither <code>$_SERVER['REQUEST_URI']</code>, <code>$_SERVER['PHP_SELF']</code>,
-			or <code>$_SERVER['PATH_INFO']</code> is available</td>
+			  <td class="fail"><?php echo __('The :ctype extension is not enabled.', array(':ctype' => HTML::anchor('http://php.net/ctype', 'ctype') )); ?></td>
 			<?php endif ?>
 		</tr>
 
 		<tr>
-			<th>GD Enabled</th>
-			<?php if ($gd_info): ?>
-			<td class="pass">Pass</td>
+			<th><?php echo __('URI Determination'); ?></th>
+			<?php if ($uri_determination): ?>
+			  <td class="pass"><?php echo __('Pass') ?></td>
 			<?php else: ?>
-			<td class="fail">Gleez requires <a href="http://php.net/gd">GD</a> v2 for the Image class.</td>
+			  <td class="fail">
+          <?php echo __('Neither :request_uri, :php_self, or :path_info is available', array(':request_uri' => '<code>$_SERVER[\'REQUEST_URI\']</code>', ':php_self' => '<code>$_SERVER[\'PHP_SELF\']</code>', ':path_info' => '<code>$_SERVER[\'PATH_INFO\']</code>')); ?>
+        </td>
 			<?php endif ?>
 		</tr>
-	
+
+		<tr>
+			<th><?php echo __('GD Enabled'); ?></th>
+			<?php if ($gd_info): ?>
+			  <td class="pass"><?php echo __('Pass') ?></td>
+			<?php else: ?>
+			  <td class="fail"><?php echo __('Gleez requires :gd v2 for the Image class.', array(':gd' => HTML::anchor('http://php.net/gd', 'GD') )); ?></td>
+			<?php endif ?>
+		</tr>
+
 	</table>
 </div>

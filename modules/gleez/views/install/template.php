@@ -65,11 +65,11 @@
       <footer class="footer">
         <blockquote>
           <?php
-          echo __('Did something go wrong? Try the ').HTML::anchor('https://github.com/gleez/cms/issues', 'Github Issues');
+          echo __('Did something go wrong? Try the :github.', array(':github' => HTML::anchor('https://github.com/gleez/cms/issues', 'Github Issues') ));
           ?>
         </blockquote>
 
-        <p class="powered pull-right"><?php echo __('Powered by ').HTML::anchor('http://gleezcms.org/', 'Gleez') ?> v<?php echo Gleez::VERSION ?></p>
+        <p class="powered pull-right"><?php echo __('Powered by :gleez', array(':gleez' => HTML::anchor('http://gleezcms.org/', 'Gleez') )); ?> v<?php echo Gleez::VERSION ?></p>
         <p class="copyright pull-left">&copy; <?php echo date('Y') ?> Gleez Technologies</p>
 
       </footer>
