@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+*::selection, *::-moz-selection{
+  background-color: rgba(38, 38, 28, 0.9);
+  color: rgba(230, 230, 230, 0.9);
+}
+
+html {
+  overflow-y: scroll;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  color: #444;
+}
+
+form > div {
+  padding: 2em 0;
+}
