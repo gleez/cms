@@ -1,11 +1,10 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Admin Dashboard Controller
  *
- * @package   Gleez
- * @category  Controller
+ * @package   Gleez\Admin\Controller
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2012 Gleez Technologies
+ * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Controller_Admin_Dashboard extends Controller_Admin {
