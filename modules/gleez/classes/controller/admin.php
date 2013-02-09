@@ -1,16 +1,26 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php defined('SYSPATH') OR die('No direct script access.');
+/**
+ * Admin Main Controller
+ *
+ * @package   Gleez\Admin\Controller
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ */
 class Controller_Admin extends Template {
 
 	// Currently logged in user
 	protected $_current_user;
-	
+
 	public function before()
 	{
-		//Inform tht we're in admin section for themers/developers
+		// Inform tht we're in admin section for themers/developers
 		Theme::$is_admin = TRUE;
-		
-		ACL::Required('administer site');
+
+		if ( class_exists('ACL') )
+		{
+			ACL::required('administer site');
+		}
 		parent::before();
 	}
 
@@ -28,4 +38,4 @@ class Controller_Admin extends Template {
 	{
 		$this->response->body( __('Welcome to admin') );
 	}
-} // End Admin
+}
