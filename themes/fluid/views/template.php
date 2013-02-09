@@ -27,7 +27,7 @@
 		    </a>
 		
 		    <a href="<?php echo $site_url ?>" title="<?php echo $site_name ?>" class="brand">
-		    <img class="logo" title="Gleez CMS Light, Simple, Flexible Content Management System" alt="Gleez CMS Light, Simple, Flexible Content Management System" src="<?php echo Url::site('media/logo.png')?>"></a>
+		    <img class="logo" title="Gleez CMS Light, Simple, Flexible Content Management System" alt="Gleez CMS Light, Simple, Flexible Content Management System" src="<?php echo URL::site($template->site_logo)?>"></a>
 		
 		    <div class="nav-collapse">
 			<?php echo $primary_menu; ?>
