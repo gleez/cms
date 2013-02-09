@@ -1,12 +1,11 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Admin Menu Item Controller
  *
- * @package     Gleez
- * @category    Controller
- * @author      Sandeep Sangamreddi - Gleez
- * @copyright   (c) 2012 Gleez Technologies
- * @license     http://gleezcms.org/license
+ * @package   Gleez\Admin\Controller
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  */
 class Controller_Admin_Menu_Item extends Controller_Admin {
 

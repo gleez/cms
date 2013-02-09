@@ -1,17 +1,18 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php defined('SYSPATH') OR die('No direct script access.');
+/**
+ * Admin Widget Controller
+ *
+ * @package   Gleez\Admin\Controller
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ */
 class Controller_Admin_Widget extends Controller_Admin {
 
   /**
    * Denotes that a widget is not enabled in any region and should not be shown.
    */
   protected static $WIDGET_REGION_NONE = -1;
-
-  public function before()
-  {
-    ACL::Required('administer site');
-    parent::before();
-  }
 
   public function action_index()
   {
