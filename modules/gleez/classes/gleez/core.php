@@ -49,6 +49,9 @@ class Gleez_Core {
 		// Set default cookie lifetime
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
 
+		// I18n settins
+		self::_set_locale();
+
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
 			Kohana_Exception::$error_view = 'errors/stack';
@@ -97,9 +100,6 @@ class Gleez_Core {
 
 		// Database config reader and writer
 		Kohana::$config->attach(new Config_Database);
-
-		// I18n settins
-		self::_set_locale();
 
 		// Load the active theme(s)
 		Theme::load_themes();
