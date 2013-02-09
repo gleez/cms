@@ -1,18 +1,20 @@
-<p>Your Gleez install is complete!</p>
+<?php defined("SYSPATH") OR die("No direct script access.") ?>
 
-<h3> Before you start using it... </h3>
+<p><?php echo __('Your Gleez install is complete!'); ?></p>
+
+<h3><?php echo __('Before you start using it...'); ?></h3>
 
 <p>
-  We've created an account for you to use:
+  <?php echo __('We\'ve created an account for you to use:'); ?>
   <br/>
-  username: <b>admin</b>
+  <?php echo __('username: :username', array(':username' => '<strong>admin</strong>')); ?>
   <br/>
-  password: <b><?php echo $password ?></b>
+  <?php echo __('password: :password', array(':password' => '<strong>'.$password.'</strong>')); ?>
   <br/>
   <br/>
-  Save this information in a safe place, or change your <a href="../user/login?destination=admin/users/edit/2">admin password</a>  right away!
+  <?php echo __('Save this information in a safe place, or change your :profile right away!', array(':profile' => HTML::anchor(URL::site('user/login?destination=admin/users/edit/2'), __('admin password')) )); ?>
 </p>
 
 <p>
-	<h4><?php echo HTML::anchor('', 'Start using Gleez') ?></h4><br />
+<h4><?php echo HTML::anchor(URL::base(), __('Start using Gleez')) ?></h4>
 </p>
