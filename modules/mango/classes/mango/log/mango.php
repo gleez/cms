@@ -8,9 +8,8 @@
  * - PHP-extension Mongodb 1.3 or higher
  * - Mango Reader module 0.1.1.1 or higher
  *
- * @package   Mango
- * @category  Logging
- * @author    Sergey Yakovlev
+ * @package   Mango\Logging
+ * @author    Sergey Yakovlev - Gleez
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */

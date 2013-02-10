@@ -1,10 +1,9 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
- /**
+/**
  * Setting the Routes
  *
- * @package    Gleez
- * @category   Routing
- * @author     Sergey Yakovlev
+ * @package    Mango\Routing
+ * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
@@ -15,7 +14,7 @@ if (! Route::cache())
   Route::set('admin/log', 'admin/logs(/<action>)(/<id>)(/p<page>)', array(
       'id'      => '([A-Za-z0-9]+)',
       'page'    => '\d+',
-      'action'  => 'list|view|delete',
+      'action'  => 'list|view|delete|clear',
     ))
     ->defaults(array(
       'directory'   => 'admin',
