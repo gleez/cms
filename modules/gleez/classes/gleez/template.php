@@ -1,12 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
 /**
  * Abstract template class for automatic templating.
  *
  * @package   Gleez
  * @category  Template
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2012 Gleez Technologies
+ * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 abstract class Gleez_Template extends Controller{
@@ -72,12 +71,20 @@ abstract class Gleez_Template extends Controller{
         protected $_response_format;
         
         /**
-         * @var array Supported output formats for this controller
+         * @var array List all supported formats for this controller
          * (accept-type => path to format template)
          */
-        protected $_accept_formats = array('text/html' => '', 'application/xhtml+xml' => '', 'application/json' => 'json', '*/*' => '' //ie7 ie8
+        protected $_accept_formats = array(
+                        'text/html'             => 'html',
+                        'application/xhtml+xml' => 'xhtml',
+                        'application/xml'       => 'xml',
+                        'application/json'      => 'json',
+                        'application/csv'       => 'csv',
+                        'text/plain'            => 'php',
+                        'text/javascript'       => 'jsonp',
+                        '*/*'                   => 'xhtml' //ie7 ie8
                 );
-        
+
         /**
          * Enable/Disable sidebars for this request, ex: add or edit page requires no sidebars.
          *
@@ -165,10 +172,7 @@ abstract class Gleez_Template extends Controller{
                         // Page Title
                         $this->title = ucwords($this->request->controller());
                         
-                        //Default Doctype declaration to xhtml strict
-                        $this->doctype = 4;
-                        
-						// Assign the default css files
+			// Assign the default css files
                         Assets::css('bootstrap', 'media/css/bootstrap.css', NULL, array('weight' => -15));
                         Assets::css('font-awesome', 'media/css/font-awesome.css', array('weight' => -13));
                         Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
@@ -262,7 +266,6 @@ abstract class Gleez_Template extends Controller{
                         $this->template->set('lang', Gleez::$locale)
                                         ->set('page_id', $this->_page_id)
                                         ->set('page_class', $page_class)
-                                        ->set('doctype', '<!DOCTYPE HTML>')
                                         ->set('primary_menu', $pimary_menu)
                                         ->set('title', $this->title)
                                         ->set('mission', $this->template->mission)
@@ -565,10 +568,10 @@ abstract class Gleez_Template extends Controller{
                 
                 // Get the total memory and execution time
                 $total = array(
-                        '{memory_usage}' => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024 / 1024, 2) . 'MB',
-                        '{gleez_version}' => Gleez::VERSION,
-                        '{execution_time}' => number_format(microtime(TRUE) - KOHANA_START_TIME, 3) . ' seconds',
-                        '{included_files}' => count(get_included_files()),
+                        '{memory_usage}'     => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024 / 1024, 2) . 'MB',
+                        '{gleez_version}'    => Gleez::VERSION,
+                        '{execution_time}'   => number_format(microtime(TRUE) - KOHANA_START_TIME, 3) . ' seconds',
+                        '{included_files}'   => count(get_included_files()),
                         '{database_queries}' => $queries
                 );
                 
