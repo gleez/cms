@@ -292,7 +292,7 @@ class Controller_Admin_Widget extends Controller_Admin {
       {
         Kohana::$log->add(LOG::ERROR, 'Error occured deleting widget id: :id, :message',
           array(
-            ':id' => $post->id,
+            ':id' => $widget->id,
             ':message' => $e->getMessage()
           )
         );
