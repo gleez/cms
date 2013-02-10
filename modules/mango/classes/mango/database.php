@@ -22,9 +22,8 @@
  * - PHP 5.3 or higher
  * - PHP-extension MongoDB 1.3 or higher
  *
- * @package   Mango
- * @category  Database
- * @author    Sergey Yakovlev
+ * @package   Mango\Database
+ * @author    Sergey Yakovlev - Gleez
  * @version   0.1.1.2
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
@@ -67,7 +66,7 @@ class Mango_Database {
   /** @var string Module version */
   const MANGO_VERSION = '0.1.1.2';
 
-  /** @var string Module name */
+  /** Module name */
   const MANGO_NAME = 'Mango Reader';
 
   /**
