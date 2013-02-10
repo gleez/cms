@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Controller Class for control logging
+ * Admin Controller Class for control logging
  *
  * ### System Requirements
  *
@@ -9,9 +9,8 @@
  * - Mango Reader module 0.1.1.1 or higher
  * - ACL [Optional]
  *
- * @package   Mango
- * @category  Controller
- * @author    Sergey Yakovlev
+ * @package   Mango\Admin\Controller
+ * @author    Sergey Yakovlev - Gleez
  * @copyright (c) 2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -204,7 +203,7 @@ class Controller_Admin_Log extends Controller_Admin {
       {
         $responce = Mango::instance()->drop('Logs');
 
-        Message::notice(__('System log successfully cleared. Database message: :msg',
+        Message::success(__('System log successfully cleared. Database message: :msg',
           array(
             ':msg' => $responce['msg']
           )

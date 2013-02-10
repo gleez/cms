@@ -1,7 +1,6 @@
 <?php defined("SYSPATH") OR die("No direct script access."); ?>
 
 <div class="help">
-
 <?php echo __('This shows the complete information on the recorded event from the log.'); ?>
 </div>
 
