@@ -173,7 +173,7 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
 (2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
 (3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
-(4, 'User Menu', 'user-menu', "The User menu contains links related to the user's account, as well as the 'Log out' link.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
+(4, 'User Menu', 'user-menu', 'The User menu contains links related to the user\'s account, as well as the \'Log out\' link.', NULL, NULL, '', 1, 0, 1, 4, 1, 4),
 (8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
 (10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
 (11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
@@ -188,6 +188,7 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (20, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
 (21, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
 (22, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(23, 'Permissions', 'permissions', '', 'icon-bolt', 'admin/permissions', NULL, 1, 2, 24, 25, 2, 2),
 (24, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (25, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
 (26, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
