@@ -2,20 +2,19 @@
 /**
  * This is the API for handling modules.
  *
- * Note: by design, this class does not do any permission checking.
+ * @package   Gleez\Modules
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  *
- * @package	Gleez
- * @category	Modules
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @todo      [!!] This class does not do any permission checking
  */
 class Gleez_Module {
-        
+
         public static $active = array();
         public static $modules = array();
         public static $available = array();
-        
+
         /**
          * Set the version of the corresponding Module_Model
          * @param string  $module_name
@@ -24,20 +23,20 @@ class Gleez_Module {
         static function set_version($module_name, $version)
         {
                 $module = Module::get($module_name);
-        
+
                 if (!$module->loaded())
                 {
                         $module->name   = $module_name;
                         $module->active = $module_name == 'gleez'; // only gleez is active by default
                 }
-        
+
                 $module->version = $version;
                 $module->save();
 
                 Kohana::$log->add(LOG::DEBUG, ':module_name : version is now :version', array(
                                                         ':module_name' => $module_name, ':version' => $version) );
         }
-        
+
         /**
          * Load the corresponding Model_Module
          * @param string $module_name
@@ -50,7 +49,7 @@ class Gleez_Module {
                 }
                 return self::$modules[$module_name];
         }
-        
+
         /**
          * Get the information about a module
          * @returns ArrayObject containing the module information from the module.
@@ -61,7 +60,7 @@ class Gleez_Module {
                 $module_list = self::available();
                 return isset($module_list->$module_name) ? $module_list->$module_name : false;
         }
-        
+
         /**
          * Check to see if a module is installed
          * @param string $module_name
@@ -70,7 +69,7 @@ class Gleez_Module {
         {
                 return array_key_exists($module_name, self::$modules);
         }
-        
+
         /**
          * Check to see if a module is active
          * @param string $module_name
@@ -79,7 +78,7 @@ class Gleez_Module {
         {
                 return array_key_exists($module_name, self::$active);
         }
-        
+
         /**
          * Return the list of available modules, including uninstalled modules.
          */
@@ -89,20 +88,20 @@ class Gleez_Module {
                 {
                         $upgrade = FALSE;
                         $modules = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-                
+
                         foreach (glob(MODPATH . "*/module.info") as $file)
                         {
                                 $module_name           = basename(dirname($file));
                                 $modules->$module_name = new ArrayObject(
                                         parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
-                                
+
                                 $m =& $modules->$module_name;
                                 $m->installed    = self::is_installed($module_name);
                                 $m->active       = self::is_active($module_name);
                                 $m->code_version = $m->version;
                                 $m->version      = self::get_version($module_name);
                                 $m->locked       = false;
-        
+
                                 if ($m->active AND $m->version != $m->code_version)
                                 {
                                         $upgrade = TRUE;
@@ -114,18 +113,18 @@ class Gleez_Module {
                                 Message::warn(__('Some of your modules are out of date. <a href=":upgrade_url">
                                         Upgrade now!</a>', array(':upgrade_url' => URL::site('admin/modules/upgrade')) ));
                         }
-                
+
                         // Lock certain modules
                         $modules->user->locked  = true;
                         $modules->gleez->locked = true;
-                
+
                         $modules->ksort();
                         self::$available = $modules;
                 }
-                
+
                 return self::$available;
         }
-        
+
         /**
          * Return a list of all the active modules in no particular order.
          */
@@ -133,7 +132,7 @@ class Gleez_Module {
         {
                 return self::$active;
         }
-        
+
         /**
          * Check that the module can be activated. (i.e. all the prerequistes exist)
          * @param string $module_name
@@ -143,8 +142,8 @@ class Gleez_Module {
         {
                 Module::_add_to_path($module_name);
                 $messages = array();
-        
-                $installer_class = "{$module_name}_installer";
+
+                $installer_class = ucfirst($module_name).'_Installer';
                 if (method_exists($installer_class, "can_activate"))
                 {
                         $messages = call_user_func(array(
@@ -152,12 +151,12 @@ class Gleez_Module {
                                 "can_activate"
                         ));
                 }
-        
+
                 // Remove it from the active path
                 Module::_remove_from_path($module_name);
                 return $messages;
         }
-        
+
         /**
          * Allow modules to indicate the impact of deactivating the specifeid module
          * @param string $module_name
@@ -167,10 +166,10 @@ class Gleez_Module {
         {
                 $data = (object) array( "module" => $module_name, "messages" => array() );
                 Module::event("pre_deactivate", $data);
-        
+
                 return $data->messages;
         }
-        
+
         /**
          * Install a module.  This will call <module>_installer::install(), which is responsible for
          * creating database tables, setting module variables and calling module::set_version().
@@ -180,8 +179,8 @@ class Gleez_Module {
         static function install($module_name)
         {
                 Module::_add_to_path($module_name);
-        
-                $installer_class = "{$module_name}_installer";
+
+                $installer_class = ucfirst($module_name).'_Installer';
                 if (method_exists($installer_class, "install"))
                 {
                         call_user_func_array(array(
@@ -204,28 +203,28 @@ class Gleez_Module {
                         $module->weight = $module->id;
                         $module->save();
                 }
-        
+
         	//clear any cache for sure
 		Gleez::cache('load_modules', '');
-        
+
                 Module::load_modules(TRUE);
 
                 // Now the module is installed but inactive, so don't leave it in the active path
                 Module::_remove_from_path($module_name);
-                
+
                 Kohana::$log->add(LOG::INFO, 'Installed module :module_name', array(':module_name' => $module_name) );
         }
-        
+
         private static function _add_to_path($module_name)
         {
                 $kohana_modules = Kohana::modules();
                 array_unshift($kohana_modules, MODPATH . $module_name);
                 Kohana::modules($kohana_modules);
-                
+
                 // Rebuild the include path so the module installer can benefit from auto loading
                 Kohana::include_paths(true);
         }
-        
+
         private static function _remove_from_path($module_name)
         {
                 $kohana_modules = Kohana::modules();
@@ -237,7 +236,7 @@ class Gleez_Module {
                 Kohana::modules($kohana_modules);
                 Kohana::include_paths(true);
         }
-        
+
         /**
          * Upgrade a module.  This will call <module>_installer::upgrade(), which is responsible for
          * modifying database tables, changing module variables and calling module::set_version().
@@ -247,7 +246,7 @@ class Gleez_Module {
         static function upgrade($module_name)
         {
                 $version_before  = module::get_version($module_name);
-                $installer_class = "{$module_name}_installer";
+                $installer_class = ucfirst($module_name).'_Installer';
                 if (method_exists($installer_class, "upgrade"))
                 {
                         call_user_func_array(array(
@@ -269,9 +268,9 @@ class Gleez_Module {
                                 throw new Exception("@todo UNKNOWN_MODULE");
                         }
                 }
-                
+
                 // Now the module is upgraded so deactivate it, but we can'it deactivate gleez or user
-               
+
                 if ( !in_array($module_name, array('gleez', 'user')) )
                 {
                         self::deactivate($module_name);
@@ -279,16 +278,16 @@ class Gleez_Module {
 
         	//clear any cache for sure
 		Gleez::cache('load_modules', '');
-        
+
                 Module::load_modules(TRUE);
-                
+
                 $version_after = Module::get_version($module_name);
                 if ($version_before != $version_after)
                 {
                         Kohana::$log->add(Log::INFO, "Upgraded module $module_name from $version_before to $version_after");
                 }
         }
-        
+
         /**
          * Activate an installed module.  This will call <module>_installer::activate() which should take
          * any steps to make sure that the module is ready for use.  This will also activate any
@@ -298,8 +297,8 @@ class Gleez_Module {
         static function activate($module_name)
         {
                 Module::_add_to_path($module_name);
-        
-                $installer_class = "{$module_name}_installer";
+                $installer_class = ucfirst($module_name).'_Installer';
+
                 if (method_exists($installer_class, "activate"))
                 {
                         call_user_func_array(array(
@@ -307,9 +306,9 @@ class Gleez_Module {
                                 "activate"
                         ), array());
                 }
-        
+
                 $module = self::get($module_name);
-                
+
                 if ($module->loaded())
                 {
                         $module->active = true;
@@ -318,15 +317,15 @@ class Gleez_Module {
 
         	//clear any cache for sure
 		Gleez::cache('load_modules', '');
-        
+
                 Module::load_modules(TRUE);
-       
+
                 //Widget::activate($module_name);
                 //Menu_Item::rebuild(TRUE);
 
                 Kohana::$log->add(LOG::INFO, 'Activated module :module_name', array(':module_name' => $module_name) );
         }
-        
+
         /**
          * Deactivate an installed module.  This will call <module>_installer::deactivate() which should
          * take any cleanup steps to make sure that the module isn't visible in any way.  Note that the
@@ -335,7 +334,7 @@ class Gleez_Module {
          */
         static function deactivate($module_name)
         {
-                $installer_class = "{$module_name}_installer";
+                $installer_class = ucfirst($module_name).'_Installer';
                 if (method_exists($installer_class, "deactivate"))
                 {
                         call_user_func_array(array(
@@ -343,7 +342,7 @@ class Gleez_Module {
                                 "deactivate"
                         ), array());
                 }
-        
+
                 $module = self::get($module_name);
                 if ($module->loaded())
                 {
@@ -353,14 +352,14 @@ class Gleez_Module {
 
         	//clear any cache for sure
 		Gleez::cache('load_modules', '');
-        
+
                 Module::load_modules(TRUE);
 
                 Widgets::deregister($module_name);
 
                 Kohana::$log->add(LOG::INFO, 'Deactivated module :module_name', array(':module_name' => $module_name) );
         }
-        
+
         /**
          * Uninstall a deactivated module.  This will call <module>_installer::uninstall() which should
          * take whatever steps necessary to make sure that all traces of a module are gone.
@@ -368,7 +367,7 @@ class Gleez_Module {
          */
         static function uninstall($module_name)
         {
-                $installer_class = "{$module_name}_installer";
+                $installer_class = ucfirst($module_name).'_Installer';
                 if (method_exists($installer_class, "uninstall"))
                 {
                         call_user_func(array(
@@ -382,12 +381,12 @@ class Gleez_Module {
                 {
                         $module->delete();
                 }
-                
+
                 Module::load_modules(TRUE);
 
                 Kohana::$log->add(LOG::INFO, 'Uninstalled module :module_name', array(':module_name' => $module_name) );
         }
-        
+
         /**
          * Load the active modules.  This is called at bootstrap time.
          *
@@ -409,22 +408,22 @@ class Gleez_Module {
                         self::$modules  = $data['modules'];
                         self::$active   = $data['active'];
                         $kohana_modules = $data['kohana_modules'];
-                
+
                         unset($data);
                         Kohana::$log->add(LOG::DEBUG, 'Modules Loaded FROM Cache');
                 }
                 else
                 {
                         $modules = ORM::factory('module')->order_by('weight','ASC')->order_by('name','ASC')->find_all();
-        
+
                         $_cache_modules = $_cache_active = array();
                         foreach ($modules as $module)
                         {
                                 self::$modules[$module->name]  = $module;
                                 $_cache_modules[$module->name] = $module->as_array();
-                        
+
                                 if ( ! $module->active ) continue;
-        
+
                                 if ($module->name == 'gleez')
                                 {
                                         $gleez = $module;
@@ -432,11 +431,11 @@ class Gleez_Module {
                                 else
                                 {
                                         self::$active[$module->name]   = $module;
-                                        $_cache_active[$module->name]  = $module->as_array(); 
+                                        $_cache_active[$module->name]  = $module->as_array();
                                         $kohana_modules[$module->name] = MODPATH . $module->name;
                                 }
                         }
-                 
+
                         // put gleez last in the module list to match core.modules
                         self::$active['gleez']  = $gleez;
                         $_cache_active['gleez'] = $gleez->as_array();
@@ -451,10 +450,10 @@ class Gleez_Module {
                         unset($data, $_cache_modules, $_cache_active);
                         Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
                 }
-        
+
                 Kohana::modules( array_merge($kohana_modules, Kohana::modules()) );
         }
-        
+
         /**
          * Check to see if a module installed and active
          * @param string $module_name
@@ -463,7 +462,7 @@ class Gleez_Module {
         {
                 return self::is_active($module_name);
         }
-        
+
         /**
          * Run a specific event on all active modules.
          * @param string $name the event name
@@ -496,7 +495,7 @@ class Gleez_Module {
                                         call_user_func_array(array( 'Gleez_Event', $function ), $args);
                         }
                 }
-        
+
                 foreach (self::$active as $name => $module)
                 {
                         if ($name == 'gleez') {
@@ -508,9 +507,9 @@ class Gleez_Module {
                                 call_user_func_array(array( $class, $function ), $args);
                         }
                 }
-                
+
         }
-        
+
         /**
 	 * Call to execute a Module action
 	 * @param string The name of the action to execute
@@ -521,22 +520,22 @@ class Gleez_Module {
 		list( $action, $return ) = func_get_args();
                 $function = str_replace(".", "_", $action);
                 $filterargs = array_slice(func_get_args(), 2);
-        
+
 		foreach ( self::$active as $name => $module )
                 {
                         $class = "{$name}_Action";
 			$args = $filterargs;
 			array_unshift( $args, $return );
-                
+
                         if (method_exists($class, $function))
                         {
                                 $return = call_user_func_array(array( $class, $function ), $args);
                         }
 		}
-        
+
 		return $return;
         }
-        
+
         /**
          * Return the version of the installed module.
          * @param string $module_name
@@ -545,5 +544,5 @@ class Gleez_Module {
         {
                 return self::get($module_name)->version;
         }
-        
+
 }
