@@ -1,7 +1,7 @@
 <?php defined("SYSPATH") or die("No direct script access."); ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang; ?>" lang="<?php echo $lang; ?>">
-    <head profile="http://gmpg.org/xfn/11">
+<html lang="<?php echo $lang; ?>">
+    <head>
 	<title><?php echo $head_title ?></title>
 	<?php echo Meta::tags(); ?>
 	<?php echo Meta::links(); ?>
@@ -14,7 +14,7 @@
 	    <link type="text/css" href="/media/css/font-awesome-ie7.css" rel="stylesheet" media="all" />
 	<![endif]-->
     </head>
-    
+
     <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>">
 	
 	<div class="navbar navbar-fixed-top">
@@ -65,12 +65,12 @@
 	    <?php else:?>
 		<?php include Kohana::find_file('views', 'default.tpl'); ?>
 	    <?php endif;?>
-	    
+
 	    <footer class="footer well">
 		<div class="text-centered"><em><?php echo __('We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.'); ?></em><br>
 		<small><?php echo __('Rendered in {execution_time}, using {memory_usage} of memory.')?></small></div>
 	    </footer>
-	    
+
 	    <div id="credits">
 		    <div id="copyright" class="pull-left">
 			<?php echo __('Copyright &copy; :year :site', array(':year' => date('Y'), ':site' => HTML::anchor(URL::site(false, true), $site_name)));?>
