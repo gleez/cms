@@ -1,0 +1,3 @@
+[submodule "modules/mango"]
+  path = modules/mango
+  url = git@github.com:sergeyklay/gleez-mango.git
