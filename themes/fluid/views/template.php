@@ -60,7 +60,10 @@
 	</div>
 
 	<div class="container">
-	    <?php include Kohana::find_file('views', $is_admin ? 'admin.tpl' : 'default.tpl'); ?>
+        <?php
+            $tpl = $is_admin ? 'admin' : 'default';
+            include Kohana::find_file('views', $tpl.'.tpl');
+        ?>
 
 	    <footer class="footer well">
 		<div class="text-centered"><em><?php echo __('We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.'); ?></em><br>
