@@ -1,12 +1,13 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * User authorization library. Handles user login and logout, as well as secure
+ * User authorization library
+ *
+ * Handles user login and logout, as well as secure
  * password hashing.
  *
- * @package    Gleez
- * @category   User
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 abstract class Gleez_Auth {
@@ -17,14 +18,14 @@ abstract class Gleez_Auth {
 	 * @var string
 	 */
 	protected static $_instance;
-	
+
 	/**
 	 * Kohana session object
 	 *
 	 * @var object
 	 */
 	protected $_session;
-	
+
 	/**
 	 * Kohana config object
 	 *
@@ -58,14 +59,14 @@ abstract class Gleez_Auth {
 
 		return Auth::$_instance;
 	}
-	
+
 	public function __construct($config = array())
 	{
 		// Save the config in the object
 		$this->_config = $config;
 
 		$this->_session = Session::instance();
-	
+
 		Kohana::$log->add(Log::DEBUG, 'Auth Library loaded');
 	}
 
@@ -129,7 +130,7 @@ abstract class Gleez_Auth {
 		//return ($this->get_user() !== NULL);
 		return ($this->get_user() !== NULL);
 	}
-	
+
 	/**
 	 * Creates a hashed hmac password from a plaintext password. This
 	 * method is deprecated, [Auth::hash] should be used instead.
@@ -172,7 +173,7 @@ abstract class Gleez_Auth {
 		if (is_string($password))
 		{
 			// Create a hashed password
-			//$password = $this->hash($password); //Support for old (Drupal md5 password sum) 
+			//$password = $this->hash($password); //Support for old (Drupal md5 password sum)
 		}
 
 		return $this->_login($username, $password, $remember);
@@ -204,7 +205,7 @@ abstract class Gleez_Auth {
 		// Double check
 		return ! $this->logged_in();
 	}
-	
+
 	protected function complete_login($user)
 	{
 		// Regenerate session_id
@@ -232,7 +233,7 @@ abstract class Gleez_Auth {
 
 		return Valid::email($value) ? 'mail' : 'name';
 	}
-	
+
 	abstract protected function _login($username, $password, $remember);
 
 	abstract public function password($username);

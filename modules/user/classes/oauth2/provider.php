@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2  Provider
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 abstract class OAuth2_Provider {
 
 	public static function factory($name, array $options = NULL)
@@ -14,7 +21,7 @@ abstract class OAuth2_Provider {
 	abstract public function url_access_token();
 
 	public $name;
-	
+
 	public function url_refresh_token()
 	{
 		// By default its the same as access token URL
@@ -62,7 +69,7 @@ abstract class OAuth2_Provider {
 		$response = $request->execute();
 
 		//Session::instance()->set('refresh_token', $response->param('refresh_token') );
-	
+
 		return OAuth2_Token::factory('access', array(
 			'token' => $response->param('access_token')
 		));
@@ -87,8 +94,8 @@ abstract class OAuth2_Provider {
 			// Load user parameters
 			$request->params($params);
 		}
-	
+
 		return $request->execute();
 	}
-	
+
 }
