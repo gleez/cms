@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2 Provider Live
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 class OAuth2_Provider_Live extends OAuth2_Provider {
 
 	public $name = 'live';
@@ -34,7 +41,7 @@ class OAuth2_Provider_Live extends OAuth2_Provider {
 			$request->params($params);
 		}
 		$request->format('json');
-		
+
 		$response = $request->execute();
 
 		Session::instance()->set('refresh_token', $response->param('refresh_token') );
@@ -70,12 +77,12 @@ class OAuth2_Provider_Live extends OAuth2_Provider {
 	public function access_profile( $token )
 	{
 		$graph_url = "https://apis.live.net/v5.0/me";
-		
+
 		$request = OAuth2_Request::factory('data', 'GET', $graph_url, array(
                                                 'access_token'    => $token,
                                         ))->execute();
-		
+
 		return $response = JSON::decode($request);
 	}
-	
+
 }
