@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * File Auth driver.
- * [!!] this Auth driver does not support roles nor autologin.
+ * File Auth driver
  *
- * @package    Gleez
- * @category   User
+ *
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
+ *
+ * @todo This Auth driver does not support roles nor autologin.
  */
 class Gleez_Auth_File extends Auth {
 

@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2 Provider Google
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 class OAuth2_Provider_Google extends OAuth2_Provider {
 
 	public $name = 'google';
@@ -34,9 +41,9 @@ class OAuth2_Provider_Google extends OAuth2_Provider {
 			$request->params($params);
 		}
 		$request->format('json');
-		
+
 		$response = $request->execute();
-		
+
 		return OAuth2_Token::factory('access', array(
 			'token' => $response->param('access_token')
 		));
@@ -69,13 +76,13 @@ class OAuth2_Provider_Google extends OAuth2_Provider {
 	public function access_profile( $token )
 	{
 		$graph_url = "https://www.googleapis.com/oauth2/v1/userinfo";
-		
+
 		$request = OAuth2_Request::factory('data', 'GET', $graph_url, array(
                                                 'access_token'    => $token,
 						'alt'		  => 'json',
                                         ))->execute();
-			
+
 		return $response = JSON::decode($request);
 	}
-	
+
 }

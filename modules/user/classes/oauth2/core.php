@@ -2,10 +2,9 @@
 /**
  * OAuth v2 class
  *
- * @package    Gleez
- * @category   OAuth
+ * @package    Gleez\OAuth\Core
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 abstract class OAuth2_Core {
@@ -69,7 +68,7 @@ abstract class OAuth2_Core {
 
 		return $response;
 	}
-        
+
 	/**
 	 * RFC3986 compatible version of urlencode. Passing an array will encode
 	 * all of the values in the array. Array keys will not be encoded.
@@ -242,7 +241,7 @@ abstract class OAuth2_Core {
 		{
 			// Split the parameter into name and value
 			list($name, $value) = explode('=', $param, 2);
-			//list($name, $value) = preg_split('#=|:#', $param, 2); 
+			//list($name, $value) = preg_split('#=|:#', $param, 2);
 
 			// Decode the name and value
 			$name  = OAuth2::urldecode($name);
@@ -268,7 +267,7 @@ abstract class OAuth2_Core {
 
 		return $parsed;
 	}
-        
+
 	/**
 	 * Get request object
 	 *

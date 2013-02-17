@@ -2,10 +2,9 @@
 /**
  * Default auth user
  *
- * @package    Gleez
- * @category   User
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2013 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Auth_User extends ORM {

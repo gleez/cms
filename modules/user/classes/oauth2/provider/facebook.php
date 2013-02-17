@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2 Provider Facebook
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 class OAuth2_Provider_Facebook extends OAuth2_Provider {
 
 	public $name = 'facebook';
@@ -17,12 +24,12 @@ class OAuth2_Provider_Facebook extends OAuth2_Provider {
 	public function access_profile( $token )
 	{
 		$graph_url = "https://graph.facebook.com/me";
-		
+
 		$request = OAuth2_Request::factory('data', 'GET', $graph_url, array(
                                                 'access_token'    => $token,
                                         ))->execute();
-		
+
 		return $response = JSON::decode($request);
 	}
-	
+
 }

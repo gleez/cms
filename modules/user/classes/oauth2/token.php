@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2  Token
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 abstract class OAuth2_Token {
 
 	/**
@@ -34,7 +41,7 @@ abstract class OAuth2_Token {
 
 		return new $class($options);
 	}
-        
+
 	/**
 	 * Sets the token and secret values.
 	 *
