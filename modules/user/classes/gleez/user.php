@@ -4,6 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
@@ -32,6 +33,35 @@ class Gleez_User {
 	{
 		return ( ! Auth::instance()->get_user() ? TRUE : FALSE );
 	}
+
+  /**
+   * Check if current user is admin
+   *
+   * @return  boolean TRUE if current user is admin
+   */
+  public static function is_admin()
+  {
+    if(User::is_guest())
+    {
+      return FALSE;
+    }
+
+    $user = Auth::instance()->get_user();
+
+    // To reduce the number of SQL queries, we cache the user's roles in a static variable.
+    if ( ! isset(User::$roles[$user->id]))
+    {
+      // @todo fetch and save in session to avoid recursive lookups
+      User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
+    }
+
+    if(in_array('admin', User::$roles[$user->id]) OR  array_key_exists(4, User::$roles[$user->id]))
+    {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
 
 	/**
 	 * Generates a default anonymous $user object.
@@ -74,12 +104,12 @@ class Gleez_User {
 	 */
 	public static function belongsto($groups)
 	{
-		if ($groups == 'all' or is_null($groups))
+		if ($groups == 'all' OR is_null($groups))
 		{
 			return TRUE;
 		}
 
-		if (! is_array($groups))
+		if ( ! is_array($groups))
 		{
 			$groups = @explode(',', $groups);
 		}
@@ -89,7 +119,7 @@ class Gleez_User {
 			$user = Auth::instance()->get_user();
 
 			// To reduce the number of SQL queries, we cache the user's roles in a static variable.
-			if (!isset(User::$roles[$user->id]))
+			if ( ! isset(User::$roles[$user->id]))
 			{
 				// @todo fetch and save in session to avoid recursive lookups
 				User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
@@ -104,7 +134,7 @@ class Gleez_User {
 			return FALSE;
 		}
 
-		if(in_array('guest', $groups) OR in_array('1', $groups))
+		if(in_array('guest', $groups) OR array_key_exists(1, $groups))
 		{
 			return TRUE;
 		}
