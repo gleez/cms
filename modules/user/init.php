@@ -2,10 +2,9 @@
 /**
  * Setting the Routes
  *
- * @package    Gleez
- * @category   Routing/User
+ * @package    Gleez\Routing\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2013 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 if ( ! Route::cache())
@@ -66,8 +65,6 @@ if ( ! Route::cache())
 		'controller' => 'user',
 		'action'     => 'list',
 	));
-
-	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 

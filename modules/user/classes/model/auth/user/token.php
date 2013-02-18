@@ -2,10 +2,9 @@
 /**
  * Default auth user token
  *
- * @package    Gleez
- * @category   User
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Auth_User_Token extends ORM {
@@ -19,7 +18,7 @@ class Model_Auth_User_Token extends ORM {
 					'created' => array( 'type' => 'int' ),
 					'expires' => array( 'type' => 'int' ),
 					);
-	
+
 	// Relationships
 	protected $_belongs_to = array('user' => array());
 
