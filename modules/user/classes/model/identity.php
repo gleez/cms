@@ -1,9 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/*
- * @package    Gleez
- * @category   User
+/**
+ * Identity Model Class
+ *
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Identity extends ORM
@@ -11,7 +12,7 @@ class Model_Identity extends ORM
 	protected $_belongs_to = array(
                         'user' => array('foreign_key' => 'user_id')
 	);
-	
+
 	/**
 	 * Validates that this identity is unique
 	 * @param string URL to validate
@@ -25,7 +26,7 @@ class Model_Identity extends ORM
 			->execute()
 			->get('total');
 	}
-	
+
 	public function login()
 	{
 

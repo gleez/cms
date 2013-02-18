@@ -1,11 +1,10 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * ORM Auth driver.
+ * ORM Auth driver
  *
- * @package    Gleez
- * @category   User
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Gleez_Auth_ORM extends Auth {
@@ -43,7 +42,7 @@ class Gleez_Auth_ORM extends Auth {
 		// Run the standard completion
 		$this->complete_login($user);
 	}
-	
+
 	/**
 	 * Checks if a session is active.
 	 *
@@ -53,7 +52,7 @@ class Gleez_Auth_ORM extends Auth {
 	public function logged_in($role = NULL)
 	{
 		static $roles;
-		
+
 		// Get the user from the session
 		$user = $this->get_user();
 		if ( ! $user) return FALSE;
@@ -309,54 +308,54 @@ class Gleez_Auth_ORM extends Auth {
 	 * Register a single user
 	 * Method to register new user by Auth module, when you set the
 	 * fields, be sure they must respect the driver rules
-	 * 
+	 *
 	 * @param 	array 	$fields An array witch contains the fields to be populate
 	 * @return	boolean Operation final status
 	 */
-	public function register($fields) 
+	public function register($fields)
 	{
-		if( ! is_object($fields) ) 
+		if( ! is_object($fields) )
 		{
 			// Load the user
 			$user = ORM::factory('user');
-		} 
-		else 
+		}
+		else
 		{
 			// Check for instanced model
-			if( $fields instanceof Model_User ) 
+			if( $fields instanceof Model_User )
 			{
 				$user = $fields;
-			} 
-			else 
-			{ 
+			}
+			else
+			{
 				throw new Gleez_Exception('Invalid user fields.');
 			}
 		}
-		try 
+		try
 		{
 			$user->create_user($fields, array(
 				'name',
 				'pass',
 				'mail',
 			));
-		
+
 			// Add the login role to the user (add a row to the db)
 			$login_role = new Model_Role(array('name' =>'login'));
 			$user->add('roles', $login_role);
-		} 
-		catch (ORM_Validation_Exception $e) 
+		}
+		catch (ORM_Validation_Exception $e)
 		{
 			throw $e;
 			return FALSE;
 		}
 		return TRUE;
 	}
-	
+
 	/**
 	 * Unegister multiple users
 	 * Method to unregister existing user by Auth module, when you set the
 	 * Model_User reference for removing a user.
-	 * 
+	 *
 	 * @param 	mixed 	$users An array witch contains the Model_User or a array of Model_User
 	 * @return 	void
 	 */
@@ -364,16 +363,16 @@ class Gleez_Auth_ORM extends Auth {
 	{
 		if( ! is_array($users))
 			$users = array($users);
-		
+
 		foreach ($users as $user)
 		{
-			if($user instanceof Model_User) 
+			if($user instanceof Model_User)
 			{
-				try 
+				try
 				{
 					$user->delete();
-				} 
-				catch (ORM_Validation_Exception $e) 
+				}
+				catch (ORM_Validation_Exception $e)
 				{
 					throw $e;
 				}

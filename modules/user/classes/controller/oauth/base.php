@@ -2,10 +2,9 @@
 /**
  * The Abstract OAuth Class
  *
- * @package   Gleez
- * @category  Controller/OAuth
+ * @package   Gleez\OAuth\Controller
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2013 Gleez Technologies
+ * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 abstract class Controller_OAuth_Base extends Template {

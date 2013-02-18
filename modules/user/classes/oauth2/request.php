@@ -2,10 +2,9 @@
 /**
  * OAuth v2 Request
  *
- * @package    Gleez
- * @category   OAuth
+ * @package    Gleez\OAuth
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 abstract class OAuth2_Request {
@@ -14,7 +13,7 @@ abstract class OAuth2_Request {
 	 * @var  integer  connection timeout
 	 */
 	public $timeout = 10;
-        
+
 	/**
 	 * @var  boolean  send Authorization header?
 	 */
@@ -44,12 +43,12 @@ abstract class OAuth2_Request {
 	 * @var  array  upload parameters
 	 */
 	protected $upload = array();
-        
+
 	/**
 	 * @var  array  required parameters
 	 */
 	protected $required = array();
-        
+
 	/**
 	 * @static
 	 * @param  string $type
@@ -131,7 +130,7 @@ abstract class OAuth2_Request {
 	{
 		return time();
 	}
-        
+
 	/**
 	 * Parameter getter and setter. Setting the value to `NULL` will remove it.
 	 *
@@ -273,7 +272,7 @@ abstract class OAuth2_Request {
 
 		return $this;
 	}
-        
+
 	/**
 	 * Checks that all required request parameters have been set. Throws an
 	 * exception if any parameters are missing.
@@ -305,7 +304,7 @@ abstract class OAuth2_Request {
 
 		return TRUE;
 	}
-        
+
 	/**
 	 * Execute the request and return a response.
 	 *
@@ -348,12 +347,12 @@ abstract class OAuth2_Request {
 
 		return OAuth2::remote($url, $options);
 	}
-        
+
 	public function format($format = 'json')
 	{
 		$this->format = 'json';
-		
+
 		return $this;
 	}
-        
+
 }

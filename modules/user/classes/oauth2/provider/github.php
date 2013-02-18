@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * OAuth v2 Provider GitHub
+ *
+ * @package    Gleez\OAuth
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 class OAuth2_Provider_Github extends OAuth2_Provider {
 
 	public $name = 'github';

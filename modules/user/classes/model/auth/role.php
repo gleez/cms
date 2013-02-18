@@ -2,10 +2,9 @@
 /**
  * Default auth role
  *
- * @package    Gleez
- * @category   User
+ * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Auth_Role extends ORM {
@@ -16,7 +15,7 @@ class Model_Auth_Role extends ORM {
 					'description' => array( 'type' => 'string' ),
 					'special' => array( 'type' => 'int' ),
 					);
-	
+
 	// Relationships
 	protected $_has_many = array('users' => array('through' => 'roles_users'));
 
@@ -39,5 +38,5 @@ class Model_Auth_Role extends ORM {
 		//$this->where($this->_object_name.'.id', '>', 1);
 		return parent::find_all($id);
 	}
-	
+
 } // End Auth Role Model
