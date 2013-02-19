@@ -41,7 +41,7 @@ class Controller_Resize extends Controller {
 	private function cache()
 	{
 		// is it a remote image?
-		if($this->is_remote())
+		if(URL::is_remote($this->image_src))
 		{
 			$path = $this->image_folder . '/imagecache/original';
 			$image_original_name = "$path/".preg_replace('/\W/i', '-', $this->image_src);
