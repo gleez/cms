@@ -79,16 +79,16 @@ return array(
       ),
     ),
     'tags' => array(
-      'charset'         => 'text/html; charset=UTF-8',
-      'generator'       => 'Gleez '.GLEEZ::VERSION.' (http://gleezcms.org)',
-      'author'          => 'Gleez',
-      'copyright'       => 'Copyright Gleez 2011. All rights reserved.',
-      'robots'          => 'index, follow, noodp',
-      'viewport'        => 'width=device-width; initial-scale=1.0; maximum-scale=1.0;',
       'X-UA-Compatible' => array(
         'http_equiv' => TRUE,
         'value' => 'IE=edge,chrome=1'
       ),
+      'charset'         => 'text/html; charset=UTF-8',
+      'generator'       => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
+      'author'          => 'Gleez',
+      'copyright'       => 'Copyright Gleez 2011-2013. All rights reserved.',
+      'robots'          => 'index, follow, noodp',
+      'viewport'        => 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
     ),
   ),
 
