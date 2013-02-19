@@ -80,7 +80,7 @@ class Controller_Resize extends Controller {
 
 		return TRUE;
 
-	} // cache
+	}
 
 	private function is_valid($image_path)
 	{
@@ -88,27 +88,26 @@ class Controller_Resize extends Controller {
 		{
 			// get the size and MIME type of the requested image
 			$size	= GetImageSize($image_path);
-		} catch(Exception $e) {}
+		}
+		catch(Exception $e)
+		{}
 
 		// make sure that the requested file is actually an image
-		if(!isset($size) OR !is_array($size) OR substr($size['mime'], 0, 6) != 'image/')
+		if( ! isset($size) OR ! is_array($size) OR substr($size['mime'], 0, 6) != 'image/')
 		{
-
-			if($this->is_remote()) unlink($image_path);
+			if(URL::is_remote($image_path))
+		{
+			unlink($image_path);
+		}
 
 			$this->response->status(404);
 			$this->response->body('Error: requested file is not an accepted type: ' . $this->image_src);
-			return false;
+			return FALSE;
 		}
 
 		$this->resized_image_type = $size['mime'];
 
-		return true;
+		return TRUE;
 	}
 
-	private function is_remote()
-	{
-		return strpos( strtolower($this->image_src), 'http://') !== false ;
-	}
-
-} // Controller_Resize
+}
