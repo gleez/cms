@@ -1,12 +1,11 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- *  URL functions.
+ * URL Class Helper
  *
- * @package	Gleez
- * @category	URL
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2013 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package   Gleez\Helper\URL
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  */
 class Gleez_URL extends Kohana_URL {
 
