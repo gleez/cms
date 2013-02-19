@@ -151,8 +151,8 @@ class Gleez_URL extends Kohana_URL {
    * @param   string  $path  Path
    * @return  boolean
    */
-  public static function is_remote(string $path)
+  public static function is_remote($path)
   {
-    return strpos(strtolower($path), 'http://') ? TRUE : FALSE;
+    return (strpos(strtolower($path), 'http://') !== FALSE);
   }
 }
