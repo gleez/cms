@@ -1,12 +1,34 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
-
+/**
+ * Resize images
+ *
+ * @package    Gleez\Media\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ */
 class Controller_Resize extends Controller {
 
+	/** @var integer Image width */
 	public $width;
+
+	/** @var integer Image height */
 	public $height;
+
+	/** @var string Resize type */
 	public $resize_type;
+
+	/** @var string Image folder */
+	public $image_folder;
+
+	/** @var string Image path */
 	public $image_src;
+
+
+	/** @var string Path to resized image */
 	public $resized_image;
+
+	/** @var string Image type */
 	public $resized_image_type;
 
 	public function before()
@@ -67,8 +89,9 @@ class Controller_Resize extends Controller {
 		}
 		else
 		{
+			$ext = pathinfo($this->image_src, PATHINFO_EXTENSION);
 			// $image_original_name = Route::get('media')->uri(array('file' => $this->image_src));
-			$image_original_name = Kohana::find_file('media', $this->image_src, FALSE);
+			$image_original_name = Kohana::find_file('media', $this->image_src, $ext);
 		}
 
 		// if image file not found stop here
@@ -79,7 +102,7 @@ class Controller_Resize extends Controller {
 
 		$this->resized_image = "$this->image_folder/imagecache/$this->resize_type/{$this->width}x{$this->height}/$this->image_src";
 
-		if(!file_exists($this->resized_image))
+		if( ! file_exists($this->resized_image))
 		{
 			// make sure the directory(s) exist
 			$path = pathinfo($this->resized_image, PATHINFO_DIRNAME);
