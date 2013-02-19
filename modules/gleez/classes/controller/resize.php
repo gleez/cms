@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 class Controller_Resize extends Controller {
 
@@ -13,7 +13,11 @@ class Controller_Resize extends Controller {
 	{
 		$this->image_folder = DOCROOT . 'media';
 
-		ACL::Required('access content');
+		if ( class_exists('ACL') )
+		{
+			ACL::Required('access content');
+		}
+
 		parent::before();
 	}
 
@@ -27,7 +31,11 @@ class Controller_Resize extends Controller {
 		$this->image_src   = (isset($_REQUEST['s']) AND !empty($_REQUEST['s'])) ? $_REQUEST['s'] : $image_src;
 
 		$this->cache();
-		if( !$this->resized_image ) return;
+
+		if( ! $this->resized_image)
+		{
+			return;
+		}
 
 		// Check if the browser sent an "if-none-match: <etag>" header, and tell if the file hasn't changed
 		$this->response->check_cache(sha1($this->request->uri()).filemtime($this->resized_image), $this->request);
@@ -36,7 +44,7 @@ class Controller_Resize extends Controller {
 		$this->response->body( Image::factory($this->resized_image)->render() );
 		$this->response->headers('last-modified', date('r', filemtime($this->resized_image)));
 
-	} // action_image
+	}
 
 	private function cache()
 	{
@@ -48,7 +56,7 @@ class Controller_Resize extends Controller {
 
 			if(!file_exists($image_original_name))
 			{
-				//make sure the directory(s) exist
+				// make sure the directory(s) exist
 				System::mkdir($path);
 
 				// download image
@@ -63,13 +71,17 @@ class Controller_Resize extends Controller {
 			$image_original_name = Kohana::find_file('media', $this->image_src, FALSE);
 		}
 
-		//if image file not found stop here
-		if( !$this->is_valid($image_original_name) ) return FALSE;
+		// if image file not found stop here
+		if( ! $this->is_valid($image_original_name))
+		{
+			return FALSE;
+		}
+
 		$this->resized_image = "$this->image_folder/imagecache/$this->resize_type/{$this->width}x{$this->height}/$this->image_src";
 
 		if(!file_exists($this->resized_image))
 		{
-			//make sure the directory(s) exist
+			// make sure the directory(s) exist
 			$path = pathinfo($this->resized_image, PATHINFO_DIRNAME);
 			System::mkdir($path);
 
