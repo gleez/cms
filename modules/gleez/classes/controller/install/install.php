@@ -187,6 +187,8 @@ class Controller_Install_Install extends Controller_Template {
 				$error = $e->getMessage();
 
 				// TODO create better error messages
+        // Try to use mysql_errno.
+        // Error message of East Asian character sets will display garbled text on utf-8 web page
 				switch ($error)
 				{
 					case 'access':
@@ -389,7 +391,13 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
 
-		foreach (file(MODPATH . "gleez/views/install/install.sql") as $line) {
+    $sql_file = MODPATH . "gleez/views/install/install.".I18n::lang().".sql";
+
+    if ( ! file_exists($sql_file)) {
+      $sql_file = MODPATH . "gleez/views/install/install.sql";
+    }
+
+		foreach (file($sql_file) as $line) {
 			$buf .= trim($line);
 			if (preg_match("/;$/", $buf))
 			{
