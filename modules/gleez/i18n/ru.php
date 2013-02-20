@@ -7,7 +7,6 @@
    * @copyright (c) 2013 Gleez Technologies
    * @license   http://gleezcms.org/license
    */
-
   return array
   (
     // A
@@ -35,6 +34,7 @@
     'Finish' => 'Окончание',
     // G
     'GD Enabled' => 'Поддержка GD',
+    'General Settings' => 'Основные настройки',
     'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS требуется поддержка базы данных MySQL, но ни PHP-:mysql, ни  PHP-:mysqli не обнаружены.',
     'Gleez CMS requires PHP 5.3 or newer, this version is :php_version.' => 'Для Gleez CMS требуется PHP версии 5.2.3 или новее, а Ваша версия :php_version.',
     'Gleez Installer' => 'Установщик Gleez',
@@ -75,6 +75,8 @@
     // S
     'Save this information in a safe place, or change your :profile right away!' => 'Сохраните эту информацию в безопасном месте, или измените Ваш :profile прямо сейчас!',
     'SimpleXML Extension' => 'Расширение SimpleXML',
+    'Site configuration updated!' => 'Конфигурация сайта успешно сохранена!',
+    'Site running in maintenance mode!' => 'Сайт запущен в режиме обслуживания!',
     'Standard PHP Library (SPL)' => 'Стандартная библиотека PHP (SPL)',
     'Start using Gleez' => 'Начать использовать Gleez',
     'Success!' => 'Успех!',
