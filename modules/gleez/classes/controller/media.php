@@ -2,10 +2,9 @@
 /**
  * Media Controller
  *
- * @package   Gleez
- * @category  Controller
+ * @package   Gleez\Media\Controller
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2012 Gleez Technologies
+ * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Controller_Media extends Controller {
@@ -58,7 +57,7 @@ class Controller_Media extends Controller {
         $public_path = $this->config->get('public_dir', 'media').DIRECTORY_SEPARATOR.$file.'.'.$ext;
         $directory = dirname($public_path);
 
-        if (! is_dir($directory))
+        if ( ! is_dir($directory))
         {
           // Recursively create the directories needed for the file
           System::mkdir($directory, 0777, TRUE);

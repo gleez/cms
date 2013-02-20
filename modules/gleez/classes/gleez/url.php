@@ -1,15 +1,14 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- *  URL functions.
- *      
- * @package	Gleez
- * @category	URL
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2013 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * URL Class Helper
+ *
+ * @package   Gleez\Helper\URL
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  */
 class Gleez_URL extends Kohana_URL {
-        
+
 	/**
 	 * Get the canonical URL.
 	 *
@@ -27,12 +26,12 @@ class Gleez_URL extends Kohana_URL {
 			//Message::debug( Debug::vars($url->uri()) );
 			return URL::site($url->uri(), $protocol);
 		}
-	
+
 		if($pagination AND $pagination->current_page > 1)
 		{
 			$url .= '/p' . $pagination->current_page;
 		}
-		
+
 		return URL::site($url, $protocol).URL::query($qstring);
 	}
 
@@ -61,11 +60,11 @@ class Gleez_URL extends Kohana_URL {
 		// Process the current URL
 		$request = Request::initial();
 		$name = Route::name($request->route);
-                
+
 		$params = $request->param();
 		$params['action'] = $request->action();
 		$params['controller'] = $request->controller();
-                
+
 		$current = URL::canonical($name, $params);
 
 		// Process the home URL
@@ -80,7 +79,7 @@ class Gleez_URL extends Kohana_URL {
 		$home = URL::canonical($home_route_name, $home_route_params);
 		return ($current === $home);
 	}
-        
+
 	/**
 	 * create links to sort a column. Set $reverse to true to set asc as desc and vice versa.
 	 *
@@ -90,7 +89,7 @@ class Gleez_URL extends Kohana_URL {
 	 * @param bool    $reverse. (default: false)
 	 * @return void
 	 */
-	public static function sortAnchor($col, $reverse = false)
+	public static function sortAnchor($col, $reverse = FALSE)
 	{
 		$string = "";
 		$orders = array('asc', 'desc');
@@ -115,7 +114,7 @@ class Gleez_URL extends Kohana_URL {
 
 		return $string;
 	}
-	
+
 	/**
          * Splits url into array of it's pieces as follows:
          * [scheme]://[user]:[pass]@[host]/[path]?[query]#[fragment]
@@ -130,8 +129,8 @@ class Gleez_URL extends Kohana_URL {
 	{
 		$url = parse_url($_url);
 		$url['query_params'] = array();
-	
-		//On seriously malformed URLs, parse_url() may return FALSE. 
+
+		//On seriously malformed URLs, parse_url() may return FALSE.
 		if( isset($url['query']) )
 		{
 			$pairs = explode('&', $url['query']);
@@ -142,8 +141,18 @@ class Gleez_URL extends Kohana_URL {
 			$url['query_params'][$sKey] = urldecode($sValue);
 			}
 		}
-	
+
 		return $url;
         }
-        
+
+  /**
+   * Checks if path is remote
+   *
+   * @param   string  $path  Path
+   * @return  boolean
+   */
+  public static function is_remote($path)
+  {
+    return (strpos(strtolower($path), 'http://') !== FALSE);
+  }
 }
