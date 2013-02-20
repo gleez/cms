@@ -24,7 +24,6 @@ class Controller_Resize extends Controller {
 	/** @var string Image path */
 	public $image_src;
 
-
 	/** @var string Path to resized image */
 	public $resized_image;
 
@@ -47,10 +46,11 @@ class Controller_Resize extends Controller {
 	{
 		$this->resize_type = $this->request->param('type', 'crop');
 		$dimensions  	   = $this->request->param('dimensions', '80x80');
+
 		list($this->width, $this->height) = explode('x', $dimensions);
 
 		$image_src  	   = $this->request->param('file', NULL);
-		$this->image_src   = (isset($_REQUEST['s']) AND !empty($_REQUEST['s'])) ? $_REQUEST['s'] : $image_src;
+		$this->image_src   = (isset($_REQUEST['s']) AND ! empty($_REQUEST['s'])) ? $_REQUEST['s'] : $image_src;
 
 		$this->cache();
 
@@ -76,7 +76,7 @@ class Controller_Resize extends Controller {
 			$path = $this->image_folder . '/imagecache/original';
 			$image_original_name = "$path/".preg_replace('/\W/i', '-', $this->image_src);
 
-			if(!file_exists($image_original_name))
+			if( ! file_exists($image_original_name))
 			{
 				// make sure the directory(s) exist
 				System::mkdir($path);
@@ -89,9 +89,14 @@ class Controller_Resize extends Controller {
 		}
 		else
 		{
+			// Find the file extension
 			$ext = pathinfo($this->image_src, PATHINFO_EXTENSION);
+
+			// Remove the extension from the filename
+			$file = substr($this->image_src, 0, -(strlen($ext) + 1));
+
 			// $image_original_name = Route::get('media')->uri(array('file' => $this->image_src));
-			$image_original_name = Kohana::find_file('media', $this->image_src, $ext);
+			$image_original_name = Kohana::find_file('media', $file, $ext);
 		}
 
 		// if image file not found stop here
@@ -122,7 +127,7 @@ class Controller_Resize extends Controller {
 		try
 		{
 			// get the size and MIME type of the requested image
-			$size	= GetImageSize($image_path);
+			$size = GetImageSize($image_path);
 		}
 		catch(Exception $e)
 		{}
