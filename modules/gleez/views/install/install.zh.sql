@@ -29,7 +29,7 @@ CREATE TABLE {posts} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `posts` (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
-(1, 0, 0, 'Welcome to Gleez - Content Management System!', 'What Is GleezCMS?\r\n\r\nGleezCMS is a user-friendly website content management system. With GleezCMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser! \r\n\r\nWith an emphasis on security and functionality, GleezCMS is a professional and robust system suitable for any business or organization website. Built on the PHP programming language and the MySQL database, GleezCMS delivers superb performance on any size website.\r\n\r\nDownload:\r\nwww.gleezcms.org', 'What Is GleezCMS?\r\n\r\nGleezCMS is a user-friendly website content management system. With GleezCMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
+(1, 0, 0, '欢迎使用 Gleez 内容管理系统！', '什么是GleezCMS？\r\n\r\nGleezCMS是一个用户友好的网站内容管理系统。使用GleezCMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！\r\n\r\n注重安全性和功能性的GleezCMS是一个专业的、强大的系统，适用于任何企业或组织的网站。由PHP编程语言和MySQL数据库打造，GleezCMS对任何规模的网站都提供卓越的性能。\r\n\r\n下载：\r\nwww.gleezcms.org', '什么是GleezCMS？\r\n\r\nGleezCMS是一个用户友好的网站内容管理系统。使用GleezCMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
 
 DROP TABLE IF EXISTS {tags};
 CREATE TABLE {tags} (
@@ -57,7 +57,7 @@ CREATE TABLE {terms} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `terms` (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Pages', 'Use to group pages on similar topics into categories.', NULL, 'page', 0, 1, 2, 1, 1);
+(1, '页面', '用来将主题相似的页面分成一组。', NULL, 'page', 0, 1, 2, 1, 1);
 
 DROP TABLE IF EXISTS {comments};
 CREATE TABLE {comments} (
@@ -177,7 +177,7 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (8, '首页', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
 (10, '页面', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
 (11, '添加页面', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, '管理员', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(12, '管理', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
 (13, '菜单', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
 (14, '输入格式', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
 (15, '设置', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
@@ -411,7 +411,7 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`) VALUES
-(1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1),
+(1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, '如果您使用Gleez的，我们请您捐赠，以确保未来能够发展。', 1),
 (2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0),
 (3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0),
 (4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
