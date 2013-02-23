@@ -94,6 +94,7 @@ return array(
 
   /** @var array Installed locales */
   'installed_locales' => array(
+    'ru',
     'en'
   ),
 
