@@ -6,5 +6,4 @@
 	<?php echo __('There are no Pages that have been published.'); ?>
 </p>
 
-<?php echo HTML::anchor(Route::get('page')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> ' . __('Add Page'), array('class' => 'btn btn-primary pull-right')) ?>
-<div class='clearfix'></div><br/>
+

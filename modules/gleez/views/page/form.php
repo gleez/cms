@@ -7,11 +7,11 @@ if (isset($post->id) AND Valid::digit($post->id))
 	$created = date('Y-m-d H:i:s O', $post->created);
 	$author = $post->user->name;
 	$tags = Tags::implode($post->tags_form);
-	if ($use_book)
+	if($use_book)
 	{
 	$books = Book::all();
 	$book = $post->book->id;
-	if (!is_null($book))
+	if( ! is_null($book))
 		unset($books['new']); //already a book
 	}
 }
@@ -27,9 +27,9 @@ else
 	$book = FALSE;
 }
 
-echo Form::open(Route::get('page')->uri($parms) . URL::query($destination), array('id' => 'page-form', 'class' => 'post-form form'));
+	echo Form::open(Route::get('page')->uri($parms) . URL::query($destination), array('id' => 'page-form', 'class' => 'post-form form'));
 
-include Kohana::find_file('views', 'errors/partial');
+	include Kohana::find_file('views', 'errors/partial');
 ?>
 
 <div class="row-fluid">

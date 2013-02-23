@@ -8,9 +8,9 @@
 		<?php
 			// @todo It need be in Controller, but don't in View
 			echo View::factory($post->type.'/teaser')
-							->set('post', $post)
-							->set('config', $config)
-							->set('page_title', TRUE);
+				  ->set('post', $post)
+				  ->set('config', $config)
+				  ->set('page_title', TRUE);
 		?>
 	</div>
 <?php endforeach; ?>
