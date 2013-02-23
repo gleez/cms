@@ -4,7 +4,7 @@
 
 	<?php if ( ! empty($errors)): ?>
 		<div id="formerrors" class="errorbox">
-			<h3>Ooops!</h3>
+			<h3><?php echo __('Ooops!'); ?></h3>
 			<ol>
 				<?php foreach($errors as $field => $message): ?>
 					<li>

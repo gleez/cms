@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Server error</title>
+		<title><?php echo __('Server error'); ?></title>
 		<style>
 			* {
 				margin:  0;
@@ -42,9 +42,9 @@
 		<p class="reasons_big"><?php echo __('An error occurred while attempting to render the page!'); ?></p>
 		
 		<p class="reasons_small">
-			<small>Code: <?php echo $code ?></small><br/>
+      <small><?php echo __('Code:'); ?> <?php echo $code ?></small><br/>
 			<?php if( Kohana::$environment === Kohana::DEVELOPMENT ): ?>
-				<small>Message: <?php echo HTML::chars($message); ?></small>
+        <small<?php echo __('>Message:'); ?> <?php echo HTML::chars($message); ?></small>
 			<?php endif; ?>
 		</p>
 		
