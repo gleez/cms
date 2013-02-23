@@ -164,6 +164,7 @@ class Controller_Page extends Template {
 
 		$this->title = $post->title;
 		$view = View::factory('page/post')
+				->bind('title', $this->title)
 				->bind('page', $post->content)
 				->bind('comments', $comments)
 				->bind('comment_form', $comment_form)
