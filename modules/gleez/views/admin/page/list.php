@@ -18,6 +18,7 @@
 	<?php endif ?>
 
     <div class="content">
+	<?php echo HTML::anchor(Route::get('page')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> ' . __('Add Page'), array('class' => 'btn btn-primary pull-right')) ?>
 	<?php echo Form::open(Route::get('admin/page')->uri(array('action' => 'list')).URL::query($destination),
                                array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
 
