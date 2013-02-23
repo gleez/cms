@@ -5,7 +5,7 @@
  * @package    Gleez
  * @category   Routing
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2013 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 if ( ! Route::cache())
