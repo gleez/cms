@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>404 - Page not found</title>
+		<title><?php echo __('404 - Page not found'); ?></title>
 		<style>
 			* {
 				margin:  0;

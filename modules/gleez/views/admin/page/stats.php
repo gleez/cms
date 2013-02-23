@@ -1,23 +1,23 @@
 <?php defined('SYSPATH') or die('No direct script access.'); ?>
 
 <ul>
-	<li>Categories:
+  <li><?php echo __('Categories:'); ?>
 		<ul>
-			<li>Total: <?php echo $stats['categories']['total'] ?></li>
+      <li><?php echo __('Total:'); ?> <?php echo $stats['categories']['total'] ?></li>
 		</ul>
 	</li>
-	<li>Tags:
+  <li><?php echo __('Tags:'); ?>
 		<ul>
-			<li>Total: <?php echo $stats['tags']['total'] ?></li>
+			<li><?php echo __('Total:'); ?> <?php echo $stats['tags']['total'] ?></li>
 		</ul>
 	</li>
-	<li>Posts:
+  <li><?php echo __('Posts:'); ?>
 		<ul>
-			<li>Total: <?php echo $stats['articles']['total'] ?></li>
+			<li><?php echo __('Total:'); ?> <?php echo $stats['articles']['total'] ?></li>
 		</ul>
 	</li>
-	<li>Comments:
+  <li><?php echo __('Comments:'); ?>
 		<ul>
-			<li>Total: <?php echo $stats['comments']['total'] ?></li>
+			<li><?php echo __('Total:'); ?> <?php echo $stats['comments']['total'] ?></li>
 	</li>
 </ul>
