@@ -14,10 +14,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function before()
 	{
-		if ( class_exists('ACL') )
-		{
-			ACL::required('administer page');
-		}
+		ACL::required('administer page');
 
 		parent::before();
 	}
@@ -64,7 +61,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function action_settings()
 	{
-		$post        = Kohana::$config->load('page');
+		$post = Kohana::$config->load('page');
 		$this->title = __('Page Settings');
 		$view = View::factory('admin/page/settings')->bind('vocabs', $vocabs)->set('post', $post);
 
@@ -85,7 +82,8 @@ class Controller_Admin_Page extends Controller_Admin {
 					if ($terms)
 					{
 						DB::delete('posts_terms')
-							->where('parent_id', 'IN', array_values($terms))->execute();
+							->where('parent_id', 'IN', array_values($terms))
+							->execute();
 					}
 				}
 				$post->set($key, $value);
@@ -107,8 +105,8 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function action_list()
 	{
-		$posts   = ORM::factory('page');
-		$total   = $posts->reset(FALSE)->count_all();
+		$posts = ORM::factory('page');
+		$total = $posts->reset(FALSE)->count_all();
 
 		if ($total == 0)
 		{
