@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>403 - Access Denied</title>
+		<title><?php echo __('403 - Access Denied'); ?></title>
 		<style>
 			* {
 				margin:  0;
