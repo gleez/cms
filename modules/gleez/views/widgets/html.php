@@ -9,6 +9,6 @@
 		</div>
 	<?php endif; ?>
 
-	<div class="widget-content"> <?php echo $content; ?> </div>
+	<div class="widget-content"><?php echo $content; ?></div>
 
 </div>
