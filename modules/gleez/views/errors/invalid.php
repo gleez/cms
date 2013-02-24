@@ -44,7 +44,7 @@
 		<p class="reasons_small">
       <small><?php echo __('Code:'); ?> <?php echo $code ?></small><br/>
 			<?php if( Kohana::$environment === Kohana::DEVELOPMENT ): ?>
-        <small<?php echo __('>Message:'); ?> <?php echo HTML::chars($message); ?></small>
+        <small><?php echo __('Message:'); ?> <?php echo HTML::chars($message); ?></small>
 			<?php endif; ?>
 		</p>
 		
