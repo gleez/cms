@@ -94,7 +94,8 @@ return array(
 
   /** @var array Installed locales */
   'installed_locales' => array(
-    'en'
+    'en',
+    'zh',
   ),
 
   /** @var string Default timezone */
