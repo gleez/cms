@@ -95,6 +95,7 @@ return array(
   /** @var array Installed locales */
   'installed_locales' => array(
     'en',
+    'ru',
     'zh',
   ),
 
@@ -104,11 +105,8 @@ return array(
   /** @var integer Default date first day */
   'date_first_day' => 1,
 
-  /** @var boolean Default seo */
-  'seo_url' => TRUE,
-
   /** @var string Site Private Key */
-  'gleez_private_key' =>'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430',
+  'gleez_private_key' => NULL, //default to null, generate a random key on installation
 
   /** @var string Number of seconds before password reset confirmation links expire */
   'reset_password_expiration' => 86400,
