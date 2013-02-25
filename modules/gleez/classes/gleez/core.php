@@ -49,6 +49,14 @@ class Gleez_Core {
 		// Set default cookie lifetime
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
 
+    // Check database config file exist or not
+    Gleez::$installed = file_exists(APPPATH.'config/database.php');
+
+    if (Gleez::$installed) {
+      // Database config reader and writer
+      Kohana::$config->attach(new Config_Database);
+    }
+
 		// I18n settins
 		self::_set_locale();
 
@@ -64,9 +72,8 @@ class Gleez_Core {
 		 * If database.php doesn't exist, then we assume that the Gleez is not
 		 * properly installed and send to the installer.
 		 */
-		if (!file_exists(APPPATH.'config/database.php'))
+		if (!Gleez::$installed)
 		{
-			Gleez::$installed = FALSE; //set system not installed
 			Session::$default = 'cookie';
 			Kohana_Exception::$error_view = 'kohana/error';
 
@@ -98,14 +105,8 @@ class Gleez_Core {
 		// Initialize Gleez modules
 		Module::load_modules(FALSE);
 
-		// Database config reader and writer
-		Kohana::$config->attach(new Config_Database);
-
 		// Load the active theme(s)
 		Theme::load_themes();
-
-		// We're here means gleez installed and running, so set it
-		Gleez::$installed = TRUE;
 	}
 
 	/**
