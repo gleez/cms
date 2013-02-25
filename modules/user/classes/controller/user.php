@@ -20,12 +20,12 @@ class Controller_User extends Template {
 
 		// Get the currently logged in user or set up a new one.
 		// Note that get_user will also do an auto_login check.
-		if( ! ($this->user = $this->_auth->get_user()))
+		if (($this->user = $this->_auth->get_user()) === FALSE)
 		{
 			$this->user = ORM::factory('user');
 		}
 
-		if(strpos($this->request->uri(), 'user/reset/', 0))
+		if(strpos($this->request->uri(), 'user/reset/', 0) !== FALSE)
 		{
 			$this->request->action('reset_'.$this->request->action());
 		}
