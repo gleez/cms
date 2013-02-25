@@ -272,7 +272,6 @@ abstract class Gleez_Widgets {
 			{
 				Kohana::$log->add(LOG::ERROR, 'Error processing widget: :name', array( ':name' => $name ));
 			}
-
 		}
 
 		return trim( $response );
@@ -396,7 +395,7 @@ abstract class Gleez_Widgets {
 		$widget->name = str_replace('/', '-', $widget->name);
 		$widget->menu = ( strpos($widget->name, 'menu-')  === false ) ? FALSE : TRUE;
 		
-				return View::factory('widgets/' .$format)
+		return View::factory('widgets/' .$format)
 				->set('content', $widget->content)
 				->set('title',   $widget->title)
 				->set('widget',  $widget)
