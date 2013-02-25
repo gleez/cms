@@ -1,7 +1,7 @@
-# Set environment
-SetEnv KOHANA_ENV production
-SetEnv KOHANA_BASE /
-SetEnv BASE_URL http://www.example.com
+# Set environment variables (Optional)
+#SetEnv KOHANA_ENV production
+#SetEnv KOHANA_BASE /
+#SetEnv BASE_URL http://www.example.com
 
 # Turn on URL rewriting
 RewriteEngine On
