@@ -173,11 +173,11 @@ abstract class Gleez_Template extends Controller{
                         $this->title = ucwords($this->request->controller());
                         
 			// Assign the default css files
-                        Assets::css('bootstrap', 'media/css/bootstrap.css', NULL, array('weight' => -15));
-                        Assets::css('font-awesome', 'media/css/font-awesome.css', array('weight' => -13));
+                        Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
+                        Assets::css('font-awesome', 'media/css/font-awesome.min.css', array('weight' => -13));
                         Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
                         Assets::css('style', 'media/css/style.css', array('default'), array('weight' => 1));
-                        Assets::js('bootstrap', 'media/js/bootstrap.js', array('jquery'), FALSE, array('weight' => 5));
+                        Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
                         
                         // Set default server headers
                         $this->_set_default_server_headers();
