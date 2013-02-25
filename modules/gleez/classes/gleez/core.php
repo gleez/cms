@@ -49,13 +49,14 @@ class Gleez_Core {
 		// Set default cookie lifetime
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
 
-    // Check database config file exist or not
-    Gleez::$installed = file_exists(APPPATH.'config/database.php');
-
-    if (Gleez::$installed) {
-      // Database config reader and writer
-      Kohana::$config->attach(new Config_Database);
-    }
+                // Check database config file exist or not
+                Gleez::$installed = file_exists(APPPATH.'config/database.php');
+            
+                if (Gleez::$installed)
+                {
+                        // Database config reader and writer
+                        Kohana::$config->attach(new Config_Database);
+                }
 
 		// I18n settins
 		self::_set_locale();
