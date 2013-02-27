@@ -9,12 +9,18 @@
  */
 class Controller_Admin_Page extends Controller_Admin {
 
+	/**
+	 * The before() method is called before controller action.
+	 */
 	public function before()
 	{
-		ACL::Required('administer page');
+		ACL::required('administer page');
 		parent::before();
 	}
 
+	/**
+	 * The after() method is called after controller action.
+	 */
 	public function after()
 	{
 		$this->_tabs =  array(
@@ -48,6 +54,9 @@ class Controller_Admin_Page extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Setting the display of pages
+	 */
 	public function action_settings()
 	{
 		$post = Kohana::$config->load('page');
@@ -87,6 +96,9 @@ class Controller_Admin_Page extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * List of pages
+	 */
 	public function action_list()
 	{
 		$posts = ORM::factory('page');
@@ -194,6 +206,9 @@ class Controller_Admin_Page extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Bulk updates
+	 */
 	private function _bulk_update($post)
 	{
 		$operations = POST::bulk_actions(FALSE);

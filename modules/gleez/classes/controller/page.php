@@ -12,12 +12,12 @@ class Controller_Page extends Template {
 			$this->request->action('view');
 		}
 	
-		if( !$id AND $action === 'index' )
+		if( ! $id AND $action === 'index' )
 		{
 			$this->request->action('list');
 		}
 	
-		ACL::Required('access content');
+		ACL::required('access content');
 		parent::before();
 	}
 
@@ -118,7 +118,7 @@ class Controller_Page extends Template {
 		}
 	
 		if( ($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
-		   AND ACL::Check('access comment') )
+		   AND ACL::check('access comment') )
 		{
 			// Determine pagination offset
 			$p = ( (int) $this->request->param('page', 0) ) ? '/p'.$this->request->param('page', 0) : FALSE;
@@ -127,7 +127,7 @@ class Controller_Page extends Template {
 			$comments = Request::factory('comments/page/public/'.$id.$p)->execute()->body();
 		}
 	
-		if( $post->comment == Comment::COMMENT_OPEN AND ACL::Check('post comment') )
+		if( $post->comment == Comment::COMMENT_OPEN AND ACL::check('post comment') )
 		{
 			if( $this->_auth->logged_in() OR ($config->comment_anonymous AND !$this->_auth->logged_in()) )
 			{
@@ -161,7 +161,7 @@ class Controller_Page extends Template {
 	
 	public function action_add()
 	{
-		ACL::Required('create page');
+		ACL::required('create page');
 		$this->title = __('Add Page');
 				$config = Kohana::$config->load('page');
 	
@@ -190,7 +190,7 @@ class Controller_Page extends Template {
 			$view->set('captcha', $captcha);
 		}
 
-		if( $config->get('use_book', false) AND (ACL::Check('administer book') OR ACL::Check('create new book')) )
+		if( $config->get('use_book', false) AND (ACL::check('administer book') OR ACL::check('create new book')) )
 		{
 			
 			$view->set('use_book', true);
@@ -250,7 +250,7 @@ class Controller_Page extends Template {
 			$view->set('captcha', $captcha);
 		}
 
-		if( $config->get('use_book', false) AND (ACL::Check('administer book') OR ACL::Check('create new book')) )
+		if($config->get('use_book', false) AND (ACL::check('administer book') OR ACL::check('create new book')))
 		{
 			$view->set('use_book', true);
 		}
