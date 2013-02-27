@@ -14,7 +14,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
    */
   public function before()
   {
-    ACL::Required('administer menu');
+    ACL::required('administer menu');
     parent::before();
   }
 
@@ -26,7 +26,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
     $id = (int) $this->request->param('id');
     $menu  = ORM::factory('menu', array('id' => $id, 'lft' => 1));
 
-    if (! $menu->loaded())
+    if ( ! $menu->loaded())
     {
       Message::error(__('Menu: doesn\'t exists!'));
       Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu id: `:id`',
@@ -77,12 +77,12 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
     $id = (int) $this->request->param('id');
     $menu = ORM::factory('menu', array('id' => $id, 'lft' => 1));
 
-    if (! $menu->loaded())
+    if ( ! $menu->loaded())
     {
       Message::error(__("Menu: doesn't exists!"));
       Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
-      if (! $this->_internal)
+      if ( ! $this->_internal)
       {
         $this->request->redirect(Route::get('admin/menu')->uri());
       }
@@ -126,12 +126,12 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
     $id = (int) $this->request->param('id', 0);
     $menu = ORM::factory('menu', $id);
 
-    if (! $menu->loaded())
+    if ( ! $menu->loaded())
     {
       Message::error(__("Menu: doesn't exists!"));
       Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu');
 
-      if (! $this->_internal)
+      if ( ! $this->_internal)
       {
         $this->request->redirect( Route::get('admin/menu')->uri() );
       }
@@ -176,12 +176,12 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
     $id = (int) $this->request->param('id', 0);
     $menu = ORM::factory('menu', $id);
 
-    if (! $menu->loaded())
+    if ( ! $menu->loaded())
     {
       Message::error(__("Menu: doesn't exists!"));
       Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu');
 
-      if (! $this->_internal)
+      if ( ! $this->_internal)
       {
         $this->request->redirect(Route::get('admin/menu')->uri());
       }
