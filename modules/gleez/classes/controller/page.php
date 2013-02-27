@@ -1,7 +1,7 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 class Controller_Page extends Template {
-	//public $debug = TRUE;
+
 	public function before()
 	{
 		$id = $this->request->param('id', FALSE);
@@ -20,20 +20,38 @@ class Controller_Page extends Template {
 		ACL::Required('access content');
 		parent::before();
 	}
-	
+
+	public function after()
+	{
+		$action = $this->request->action();
+
+		if( $action === 'add' OR $action === 'edit' )
+		{
+			//Add RichText Support
+			Assets::editor('.textarea', '99.9%', '300');
+
+			//flag to disable left/right sidebars
+			//$this->_page_class = 'folded';
+			$this->_sidebars = FALSE;
+		}
+
+		parent::after();
+	}
+
 	public function action_list()
 	{
-		$posts       = ORM::factory('page');
+		$posts = ORM::factory('page');
 
-		if( !ACL::check('administer content') )
+		if( ! ACL::check('administer content') )
 		{
 			$posts->where('status', '=', 'publish');
 		}
 	
-		/** Bug in ORM to repeat the where() methods after using count_all()
-		 *  @see http://forum.kohanaframework.org/discussion/7736 -- solved
+		/**
+		 * Bug in ORM to repeat the where() methods after using count_all()
+		 * @link http://forum.kohanaframework.org/discussion/7736 Solved
 		 */
-		$total      = $posts->reset(FALSE)->count_all();
+		$total = $posts->reset(FALSE)->count_all();
 
 		if ($total == 0)
 		{
@@ -42,10 +60,10 @@ class Controller_Page extends Template {
 			return;
 		}
 	
-		$config     = Kohana::$config->load('page');
+		$config = Kohana::$config->load('page');
 		
-		$this->title    = __('Pages');
-		$view           = View::factory('page/list')
+		$this->title = __('Pages');
+		$view = View::factory('page/list')
 					->set('teaser', TRUE)
 					->set('config', $config)
 					->bind('pagination', $pagination)
@@ -53,22 +71,22 @@ class Controller_Page extends Template {
 	
 		$url = Route::get('page')->uri();
 		$pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'cms', 'key'=>'page'),
-				'total_items'    => $total,
-				'items_per_page' => $config->get('items_per_page', 15),
-				'uri'		 => $url,
-				));
+			'current_page'   => array('source'=>'cms', 'key'=>'page'),
+			'total_items'    => $total,
+			'items_per_page' => $config->get('items_per_page', 15),
+			'uri'		 => $url,
+		));
 	
 		$posts  = $posts->order_by('sticky', 'DESC')
 					->order_by('created', 'DESC')
 					->limit($pagination->items_per_page)
 					->offset($pagination->offset)
 					->find_all();
-                
-                $this->response->body($view);
+
+		$this->response->body($view);
 	
-		//Set the canocial and shortlink for search engines
-		if ( $this->auto_render === TRUE )
+		// Set the canocial and shortlink for search engines
+		if ($this->auto_render === TRUE)
 		{
 			Meta::links( URL::canonical($url, $pagination), array('rel' => 'canonical'));
 			Meta::links( Route::url('page', array(), TRUE ), array('rel' => 'shortlink'));
@@ -85,7 +103,7 @@ class Controller_Page extends Template {
 		if( ! ACL::post('view', $post) )
 		{
 			// If the post was not loaded, we return access denied.
-                        throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 
 		if( ACL::post('edit', $post) )
@@ -141,11 +159,11 @@ class Controller_Page extends Template {
 		}
 	}
 	
-        public function action_add()
+	public function action_add()
 	{
 		ACL::Required('create page');
 		$this->title = __('Add Page');
-                $config = Kohana::$config->load('page');
+				$config = Kohana::$config->load('page');
 	
 		$destination = ($this->request->query('destination') !== NULL) ?
 					array('destination' => $this->request->query('destination')) : array();
@@ -187,16 +205,17 @@ class Controller_Page extends Template {
 				Kohana::$log->add(LOG::INFO, 'Page: :title created.', array(':title' => $post->title) );
 			
 				if ( ! $this->_internal)
-					$this->request->redirect( $post->url );
-				
+				{
+					$this->request->redirect($post->url);
+				}
 			}
-                        catch (ORM_Validation_Exception $e)
+			catch (ORM_Validation_Exception $e)
 			{
 				$errors =  $e->errors('models');
 			}
 		}
 	
-                $this->response->body($view);
+		$this->response->body($view);
 	}
 
 	public function action_edit()
@@ -207,11 +226,11 @@ class Controller_Page extends Template {
 		if( ! ACL::post('edit', $post) )
 		{
 			// If the post was not loaded, we return access denied.
-                        throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 	
 		$this->title = $post->title;
-                $config = Kohana::$config->load('page');
+		$config = Kohana::$config->load('page');
 	
 		$destination = ($this->request->query('destination') !== NULL) ?
 					array('destination' => $this->request->query('destination')) : array();
@@ -225,7 +244,7 @@ class Controller_Page extends Template {
 				->bind('terms',  $terms)
 				->bind('post',   $post);
 
-		if( $config->get('use_captcha', false) )
+		if($config->get('use_captcha', false))
 		{
 			$captcha = Captcha::instance();
 			$view->set('captcha', $captcha);
@@ -255,23 +274,23 @@ class Controller_Page extends Template {
 					$this->request->redirect( empty($destination) ? $post->url : $this->request->query('destination') );
 				
 			}
-                        catch (ORM_Validation_Exception $e)
+			catch (ORM_Validation_Exception $e)
 			{
 				$errors =  $e->errors('models');
 			}
 		}
 	
 		$this->_tabs =  array(
-					array('link' => $post->url, 'text' => __('View')),
-					array('link' => $post->edit_url, 'text' => __('Edit')),
-				);
+			array('link' => $post->url, 'text' => __('View')),
+			array('link' => $post->edit_url, 'text' => __('Edit')),
+		);
 
-		if( ACL::post('delete', $post) )
+		if(ACL::post('delete', $post))
 		{
 			$this->_tabs[] =  array('link' => $post->type.'/delete/'.$post->id, 'text' => __('Delete'));
 		}
 	
-                $this->response->body($view);
+		$this->response->body($view);
 	}
 	
 	public function action_delete()
@@ -282,7 +301,7 @@ class Controller_Page extends Template {
 		if( ! ACL::post('delete', $post) )
 		{
 			// If the post was not loaded, we return access denied.
-                        throw new HTTP_Exception_404('Attempt to non-existent post.');
+						throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 	
 		$this->title = __('Delete :title', array(':title' => $post->title ));
@@ -291,38 +310,43 @@ class Controller_Page extends Template {
 					array('destination' => $this->request->query('destination')) : array();
 		
 		$view = View::factory('form/confirm')
-				->set('action', Route::get('page')
-						->uri( array('action' => 'delete', 'id' => $post->id) ).URL::query($destination) )
-				->set('title', $post->title);
+					->set('action', Route::get('page')->uri(array('action' => 'delete', 'id' => $post->id)).URL::query($destination))
+					->set('title', $post->title);
 	
 		// If deletion is not desired, redirect to post
-                if ( isset($_POST['no']) AND $this->valid_post() )
-                        $this->request->redirect( $post->url );
-        
-                // If deletion is confirmed
-                if ( isset($_POST['yes']) AND $this->valid_post() )
-                {
-                        try
-                        {
+		if (isset($_POST['no']) AND $this->valid_post())
+		{
+			$this->request->redirect( $post->url );
+		}
+
+		// If deletion is confirmed
+		if (isset($_POST['yes']) AND $this->valid_post())
+		{
+			try
+			{
 				$title = $post->title;
-                                $post->delete();
+				$post->delete();
+
 				Cache::instance('page')->delete('page-'.$id);
 				Message::success(__('Page: :title deleted successful!', array(':title' => $title)));
 				Kohana::$log->add(LOG::INFO, 'Page: :title deleted.', array(':title' => $title) );
-                        }
-                        catch (Exception $e)
-                        {
+			}
+			catch (Exception $e)
+			{
 				Kohana::$log->add(LOG::ERROR, 'Error occured deleting blog id: :id, :message',
 							array(':id' => $post->id, ':message' => $e->getMessage()));
 				Message::error('An error occured deleting page, :post.',array(':post' => $post->title));
-                        }
-			
+			}
+
 			$redirect = empty($destination) ? Route::get('page')->uri(array('action' => 'list')) :
 						$this->request->query('destination');
-			
-			if ( ! $this->_internal) $this->request->redirect( $redirect );
-                }
-	
+
+			if ( ! $this->_internal)
+			{
+				$this->request->redirect( $redirect );
+			}
+		}
+
 		$this->response->body($view);
 	}
 
@@ -330,7 +354,7 @@ class Controller_Page extends Template {
 	{		
 		$config = Kohana::$config->load('page');
 
-		if( ! $config->use_category )
+		if( ! $config->use_category)
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
 			throw new HTTP_Exception_404( __('Attempt to access disabled feature'));
@@ -339,28 +363,28 @@ class Controller_Page extends Template {
 		$id    = (int) $this->request->param('id', 0);
 		$array = array('id' => $id, 'type' => 'page');
 		$term  = ORM::factory('term', $array )->where('lvl', '!=', 1);
-        
-                if( ! $term->loaded() )
+
+		if( ! $term->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
 			throw new HTTP_Exception_404( __('Term ":term" Not Found'), array(':term'=>$id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name ));
-		$view        = View::factory('page/list')
+		$view = View::factory('page/list')
 					->set('teaser', TRUE)
 					->set('config', $config)
 					->bind('pagination', $pagination)
 					->bind('posts', $posts);
-		
+
 		$posts = $term->posts;
-                
-                if(!ACL::check('administer terms') AND !ACL::check('administer content'))
+
+		if( ! ACL::check('administer terms') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
-                
-                $total      = $posts->reset(FALSE)->count_all();
+
+		$total = $posts->reset(FALSE)->count_all();
 
 		if ($total == 0)
 		{
@@ -368,54 +392,57 @@ class Controller_Page extends Template {
 			$this->response->body( View::factory('forum/none') );
 			return;
 		}
-        
-                $pagination = Pagination::factory(array(
+
+		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
 			'items_per_page' => $config->get('items_per_page', 15),
 			'uri'		 => $term->url,
-			));
-		
-		$posts  = $posts->order_by('sticky', 'DESC')->order_by('created', 'DESC')
-				->limit($pagination->items_per_page)->offset($pagination->offset)->find_all();
-		
+		));
+
+		$posts = $posts->order_by('sticky', 'DESC')
+						->order_by('created', 'DESC')
+						->limit($pagination->items_per_page)
+						->offset($pagination->offset)
+						->find_all();
+
 		$this->response->body($view);
-	
-		//Set the canocial and shortlink for search engines
-		if ( $this->auto_render === TRUE )
+
+		// Set the canocial and shortlink for search engines
+		if ($this->auto_render === TRUE)
 		{
 			Meta::links( URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
 			Meta::links( Route::url('page', array('action' => 'category', 'id' => $term->id), TRUE ), array('rel' => 'shortlink'));
 		}
 	}
-	
+
 	public function action_tag()
 	{
 		$config = Kohana::$config->load('page');
-                $id = (int) $this->request->param('id', 0);
-                $tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
-        
-                if( ! $tag->loaded() )
+		$id = (int) $this->request->param('id', 0);
+		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
+
+		if( ! $tag->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page tag');
 			throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag'=>$id));
 		}
-	
+
 		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name) ) );
-		$view        = View::factory('page/list')
+		$view = View::factory('page/list')
 					->set('teaser', TRUE)
 					->set('config', $config)
 					->bind('pagination', $pagination)
 					->bind('posts', $posts);
-        
-                $posts = $tag->posts;
-                
-                if(!ACL::check('administer tags') AND !ACL::check('administer content'))
+
+		$posts = $tag->posts;
+
+		if( ! ACL::check('administer tags') AND ! ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
-                
-                $total      = $posts->reset(FALSE)->count_all();
+
+		$total = $posts->reset(FALSE)->count_all();
 
 		if ($total == 0)
 		{
@@ -423,41 +450,26 @@ class Controller_Page extends Template {
 			$this->response->body( View::factory('page/none') );
 			return;
 		}
-        
-                $pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'cms', 'key'=>'page'),
-				'total_items' 	 => $total,
-				'items_per_page' => $config->get('items_per_page', 15),
-				'uri'		 => $tag->url,
-				));
-		
-		$posts  = $posts->order_by('created', 'DESC')->limit($pagination->items_per_page)
-						->offset($pagination->offset)->find_all();
-                
-                $this->response->body($view);
-		
-		//Set the canocial and shortlink for search engines
+
+		$pagination = Pagination::factory(array(
+			'current_page'   => array('source'=>'cms', 'key'=>'page'),
+			'total_items' 	 => $total,
+			'items_per_page' => $config->get('items_per_page', 15),
+			'uri'		 => $tag->url,
+		));
+
+		$posts  = $posts->order_by('created', 'DESC')
+						->limit($pagination->items_per_page)
+						->offset($pagination->offset)
+						->find_all();
+
+		$this->response->body($view);
+
+		// Set the canocial and shortlink for search engines
 		if ( $this->auto_render === TRUE )
 		{
 			Meta::links( URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
 			Meta::links( Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array('rel' => 'shortlink'));
 		}
-	}
-
-	public function after()
-	{
-		$action = $this->request->action();
-
-		if( $action === 'add' OR $action === 'edit' )
-		{
-			//Add RichText Support
-			Assets::editor('.textarea', '99.9%', '300');
-			
-			//flag to disable left/right sidebars
-			//$this->_page_class = 'folded';
-			$this->_sidebars = FALSE;
-		}
-	
-		parent::after();
 	}
 }
