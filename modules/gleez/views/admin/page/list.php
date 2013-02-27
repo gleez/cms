@@ -4,18 +4,10 @@
 		<?php echo __('View, edit, and delete your site\'s pages.'); ?>
 	</div>
 
-	<?php if ( ! empty($errors)): ?>
-		<div id="formerrors" class="errorbox">
-			<h3><?php echo __('Ooops!'); ?></h3>
-			<ol>
-				<?php foreach($errors as $field => $message): ?>
-					<li><?php echo $message; ?></li>
-				<?php endforeach ?>
-			</ol>
-		</div>
-	<?php endif; ?>
+	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
 	<div class="content">
+		<?php echo HTML::anchor(Route::get('page')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> ' . __('Add Page'), array('class' => 'btn btn-primary pull-right')); ?>
 		<?php echo Form::open(Route::get('admin/page')->uri(array('action' => 'list')).URL::query($destination),
 							array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
 

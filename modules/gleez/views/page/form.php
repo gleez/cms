@@ -136,7 +136,7 @@ echo Form::open(Route::get('page')->uri($parms).URL::query($destination), array(
 				<?php if( $post->loaded() AND ACL::post('delete', $post) ):?>
 					<div id="delete-action" class="pull-left">
 						<i class="icon-trash"></i>
-						<?php echo HTML::anchor($post->delete_url.URL::query($destination), _('Move to Trash'), array('class' => 'submitdelete')) ?>
+						<?php echo HTML::anchor($post->delete_url.URL::query($destination), __('Move to Trash'), array('class' => 'submitdelete')) ?>
 					</div>
 				<?php endif; ?>
 				
@@ -217,5 +217,5 @@ echo Form::open(Route::get('page')->uri($parms).URL::query($destination), array(
 		</div>
 	<?php endif; ?>
 
-<?php echo Form::submit('page', __('Submit'), array('class' => 'btn btn-primary btn-large')) ?>
+<?php echo Form::submit('page', __('Save'), array('class' => 'btn btn-primary btn-large')) ?>
 <?php echo Form::close() ?>
