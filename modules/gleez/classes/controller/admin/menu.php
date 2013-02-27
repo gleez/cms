@@ -14,7 +14,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 */
 	public function before()
 	{
-		ACL::Required('administer menu');
+		ACL::required('administer menu');
 		parent::before();
 	}
 
@@ -69,7 +69,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
-				if (! $this->_internal)
+				if ( ! $this->_internal)
 				{
 					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 				}
@@ -117,7 +117,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
-				if (! $this->_internal)
+				if ( ! $this->_internal)
 				{
 					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 				}
@@ -142,11 +142,11 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 		if (! $menu->loaded())
 		{
-			Message::error(__('Menu: doesn\'t exists!'));
+			Message::error(__('Menu doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
 			// Redirect to listing
-			if (! $this->_internal)
+			if ( ! $this->_internal)
 			{
 				$this->request->redirect(Route::get('admin/menu')->uri(), 403);
 			}
@@ -182,7 +182,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Message::error('An error occured deleting menu ' . $menu->name);
+				Message::error(__('An error occured deleting menu %menu', array('%menu' => $menu->name)));
 				Kohana::$log->add(Log::ERROR, 'Error occured deleting menu :term, id: :id, :message',
 					array(
 						':id'      => $menu->id,
@@ -191,7 +191,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 					)
 				);
 
-				if (! $this->_internal)
+				if ( ! $this->_internal)
 				{
 					$this->request->redirect(Route::get('admin/menu')->uri(), 400);
 				}

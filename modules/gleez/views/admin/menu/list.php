@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined("SYSPATH") OR die("No direct script access.") ?>
 
 <div class="help">
 	<?php echo __('The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.', array(':menus' => 'admin/menu')); ?>
@@ -28,16 +28,16 @@
             </td>
             
             <td class="action1">
-		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), '<i class="icon-th-list"></i>', array('class'=>'action-list', 'title'=>__('List Links'))) ?>
+		 <?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), '<i class="icon-th-list"></i>', array('class'=>'action-list', 'title'=>__('List Links'))) ?>
 	    </td>
 	    <td class="action">
-		 <?php echo Html::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), '<i class="icon-plus"></i>', array('class'=>'action-add', 'title'=>__('Add Link'))) ?>
+		 <?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), '<i class="icon-plus"></i>', array('class'=>'action-add', 'title'=>__('Add Link'))) ?>
 	    </td>
 	    <td class="action">
-               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=>__('Edit Menu'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=>__('Edit Menu'))) ?>
 	    </td>
 	    <td class="action">
-               <?php echo Html::anchor(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete Menu'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete Menu'))) ?>
             </td>
           </tr>
           <?php endforeach ?>
