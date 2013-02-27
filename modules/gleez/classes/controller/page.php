@@ -1,7 +1,17 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
-
+/**
+ * Page Controller
+ *
+ * @package   Gleez\Controller
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
+ */
 class Controller_Page extends Template {
 
+	/**
+	 * The before() method is called before controller action.
+	 */
 	public function before()
 	{
 		$id = $this->request->param('id', FALSE);
@@ -21,6 +31,9 @@ class Controller_Page extends Template {
 		parent::before();
 	}
 
+	/**
+	 * The after() method is called after controller action.
+	 */
 	public function after()
 	{
 		$action = $this->request->action();
@@ -38,6 +51,9 @@ class Controller_Page extends Template {
 		parent::after();
 	}
 
+	/**
+	 * List pages
+	 */
 	public function action_list()
 	{
 		$posts = ORM::factory('page');
@@ -92,7 +108,12 @@ class Controller_Page extends Template {
 			Meta::links( Route::url('page', array(), TRUE ), array('rel' => 'shortlink'));
 		}
 	}
-	
+
+	/**
+	 * Page view
+	 *
+	 * @throws HTTP_Exception_404
+	 */
 	public function action_view()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -100,36 +121,36 @@ class Controller_Page extends Template {
 	
 		$post = Post::dcache($id, 'page', $config);
 
-		if( ! ACL::post('view', $post) )
+		if( ! ACL::post('view', $post))
 		{
 			// If the post was not loaded, we return access denied.
 			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 
-		if( ACL::post('edit', $post) )
+		if(ACL::post('edit', $post))
 		{
 			$this->_tabs[] =  array('link' => $post->url, 'text' => __('View'));
 			$this->_tabs[] = array('link' => $post->type.'/edit/'.$post->id, 'text' => __('Edit'));
 		}
 
-		if( ACL::post('delete', $post) )
+		if(ACL::post('delete', $post))
 		{
 			$this->_tabs[] =  array('link' => $post->type.'/delete/'.$post->id, 'text' => __('Delete'));
 		}
 	
-		if( ($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
+		if(($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
 		   AND ACL::check('access comment') )
 		{
 			// Determine pagination offset
-			$p = ( (int) $this->request->param('page', 0) ) ? '/p'.$this->request->param('page', 0) : FALSE;
+			$p = ((int) $this->request->param('page', 0)) ? '/p'.$this->request->param('page', 0) : FALSE;
 
 			// Handle comment listing
 			$comments = Request::factory('comments/page/public/'.$id.$p)->execute()->body();
 		}
 	
-		if( $post->comment == Comment::COMMENT_OPEN AND ACL::check('post comment') )
+		if($post->comment == Comment::COMMENT_OPEN AND ACL::check('post comment'))
 		{
-			if( $this->_auth->logged_in() OR ($config->comment_anonymous AND !$this->_auth->logged_in()) )
+			if($this->_auth->logged_in() OR ($config->comment_anonymous AND !$this->_auth->logged_in()))
 			{
 				// Handle comment posting
 				$comment_form = Comment::form($this, $post);
@@ -137,7 +158,7 @@ class Controller_Page extends Template {
 		}
 	
 		//show site and other provider login buttons
-		if( $post->comment == Comment::COMMENT_OPEN AND $config->use_provider_buttons )
+		if($post->comment == Comment::COMMENT_OPEN AND $config->use_provider_buttons)
 		{
 			$provider_buttons = User::providers();
 		}
@@ -152,13 +173,16 @@ class Controller_Page extends Template {
 		$this->response->body($view);
 	
 		//Set the canocial and shortlink for search engines
-		if ( $this->auto_render === TRUE )
+		if ($this->auto_render === TRUE)
 		{
 			Meta::links( URL::canonical($post->url), array('rel' => 'canonical'));
 			Meta::links( Route::url('page', array('id' => $post->id) ), array('rel' => 'shortlink'));
 		}
 	}
-	
+
+	/**
+	 * Page creating
+	 */
 	public function action_add()
 	{
 		ACL::required('create page');
@@ -218,6 +242,11 @@ class Controller_Page extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Page edit
+	 *
+	 * @throws HTTP_Exception_404
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -292,19 +321,24 @@ class Controller_Page extends Template {
 	
 		$this->response->body($view);
 	}
-	
+
+	/**
+	 * Delete page
+	 *
+	 * @throws HTTP_Exception_404
+	 */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
-		if( ! ACL::post('delete', $post) )
+		if( ! ACL::post('delete', $post))
 		{
 			// If the post was not loaded, we return access denied.
-						throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 	
-		$this->title = __('Delete :title', array(':title' => $post->title ));
+		$this->title = __('Delete :title', array(':title' => $post->title));
 	
 		$destination = ($this->request->query('destination') !== NULL) ?
 					array('destination' => $this->request->query('destination')) : array();
@@ -316,7 +350,7 @@ class Controller_Page extends Template {
 		// If deletion is not desired, redirect to post
 		if (isset($_POST['no']) AND $this->valid_post())
 		{
-			$this->request->redirect( $post->url );
+			$this->request->redirect($post->url);
 		}
 
 		// If deletion is confirmed
@@ -350,6 +384,11 @@ class Controller_Page extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Category selector
+	 *
+	 * @throws HTTP_Exception_403
+	 */
 	public function action_term()
 	{		
 		$config = Kohana::$config->load('page');
@@ -357,7 +396,7 @@ class Controller_Page extends Template {
 		if( ! $config->use_category)
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
-			throw new HTTP_Exception_404( __('Attempt to access disabled feature'));
+			throw new HTTP_Exception_403( __('Attempt to access disabled feature'));
 		}
 	
 		$id    = (int) $this->request->param('id', 0);
@@ -379,7 +418,7 @@ class Controller_Page extends Template {
 
 		$posts = $term->posts;
 
-		if( ! ACL::check('administer terms') AND !ACL::check('administer content'))
+		if( ! ACL::check('administer terms') AND ! ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -397,7 +436,7 @@ class Controller_Page extends Template {
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
 			'items_per_page' => $config->get('items_per_page', 15),
-			'uri'		 => $term->url,
+			'uri'            => $term->url,
 		));
 
 		$posts = $posts->order_by('sticky', 'DESC')
@@ -416,11 +455,16 @@ class Controller_Page extends Template {
 		}
 	}
 
+	/**
+	 * Tags view
+	 *
+	 * @throws HTTP_Exception_404
+	 */
 	public function action_tag()
 	{
 		$config = Kohana::$config->load('page');
 		$id = (int) $this->request->param('id', 0);
-		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
+		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page'));
 
 		if( ! $tag->loaded())
 		{
@@ -453,12 +497,12 @@ class Controller_Page extends Template {
 
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
-			'total_items' 	 => $total,
+			'total_items'    => $total,
 			'items_per_page' => $config->get('items_per_page', 15),
-			'uri'		 => $tag->url,
+			'uri'            => $tag->url,
 		));
 
-		$posts  = $posts->order_by('created', 'DESC')
+		$posts = $posts->order_by('created', 'DESC')
 						->limit($pagination->items_per_page)
 						->offset($pagination->offset)
 						->find_all();
@@ -466,7 +510,7 @@ class Controller_Page extends Template {
 		$this->response->body($view);
 
 		// Set the canocial and shortlink for search engines
-		if ( $this->auto_render === TRUE )
+		if ($this->auto_render === TRUE)
 		{
 			Meta::links( URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
 			Meta::links( Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array('rel' => 'shortlink'));
