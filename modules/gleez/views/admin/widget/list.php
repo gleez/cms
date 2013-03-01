@@ -60,5 +60,5 @@
 		</tbody>
 	</table>
 
-	<?php echo Form::submit('widget-list', 'Save Widgets', array('class'=>'btn btn-primary btn-large')); ?>
+	<?php echo Form::submit('widget-list', __('Save Widgets'), array('class'=>'btn btn-primary btn-large')); ?>
 <?php echo Form::close(); ?>
