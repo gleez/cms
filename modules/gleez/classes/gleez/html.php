@@ -85,7 +85,7 @@ class Gleez_HTML extends Kohana_HTML {
 			$output = '<ul'. HTML::attributes($attributes) .'>';
 
 			if (is_null(HTML::$current_route))
-				HTML::$current_route = Url::site(Request::current()->uri());
+				HTML::$current_route = URL::site(Request::current()->uri());
 
 			$num_links = count($links);
 			$i = 1;
@@ -141,7 +141,7 @@ class Gleez_HTML extends Kohana_HTML {
 		if (count($tabs) > 0)
 		{
 			if (is_null(HTML::$current_route))
-				HTML::$current_route = Url::site(Request::current()->uri());
+				HTML::$current_route = URL::site(Request::current()->uri());
 
 			$output = '<ul'. HTML::attributes($attributes) .'>';
 
@@ -202,11 +202,11 @@ class Gleez_HTML extends Kohana_HTML {
 		}
 		elseif ($uri)
 		{
-			return strpos(HTML::$current_route, Url::site($uri)) === 0;
+			return strpos(HTML::$current_route, URL::site($uri)) === 0;
 		}
 		else
 		{
-			return HTML::$current_route == Url::base();
+			return HTML::$current_route == URL::base();
 		}
 	}
 

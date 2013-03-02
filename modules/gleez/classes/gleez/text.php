@@ -31,7 +31,7 @@ abstract class Gleez_Text extends Kohana_Text {
 	 */
 	public static function plain($text)
 	{
-		return Html::chars($text);
+		return HTML::chars($text);
 	}
 
 	/**

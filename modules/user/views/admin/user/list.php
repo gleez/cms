@@ -46,8 +46,8 @@
             </td>
 
             <td class="action">
-               <?php echo html::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit User'))) ?>
-               <?php echo html::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete User'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit User'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete User'))) ?>
             </td>
           </tr>
           <?php endforeach ?>

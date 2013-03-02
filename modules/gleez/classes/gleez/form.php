@@ -1,11 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Form helper class.
+ * Form helper class
  *
- * @package		Gleez
- * @category	Form
+ * @package		Gleez\Helper\Form
  * @author		Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2013 Gleez Technologies
+ * @copyright	(c) 2011-2013 Gleez Technologies
  * @license		http://gleezcms.org/license
  */
 class Gleez_Form extends Kohana_Form {
@@ -13,8 +12,9 @@ class Gleez_Form extends Kohana_Form {
 	/**
 	 * Creates a form input. If no type is specified, a "text" type input will
 	 * be returned.
-	 *
-	 *     echo Form::input('username', $username);
+	 * <code>
+	 *   echo Form::input('username', $username);
+	 * </code>
 	 *
 	 * @param   string  input name
 	 * @param   string  input value
@@ -37,25 +37,25 @@ class Gleez_Form extends Kohana_Form {
 			// Default type is text
 			$attributes['type'] = 'text';
 		}
-	
+
 		$out = '';
-	
+
 		if( $attributes['type'] === 'text' AND $url )
 		{
 			$attributes['class'] = isset($attributes['class']) ? $attributes['class'].' form-autocomplete' : 'form-autocomplete';
 			$attributes['id'] = $name;
 			// Assign the autocomplete js file
 			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
-		
+
 			$attributes['data-autocomplete-path'] = URL::site($url, TRUE);
 			$attributes['data-autocomplete-smart'] = $smart;
 		}
-	
+
 		$out .= '<input'.HTML::attributes($attributes).' />';
 
 		return $out;
 	}
-	
+
 	/**
 	 * Creates CSRF token input.
 	 *
@@ -78,19 +78,17 @@ class Gleez_Form extends Kohana_Form {
 	 * @uses    Form::select
 	 */
 	public static function weight($name, $selected = 0, array $attributes = NULL, $delta = 15) {
-		
+
 		for ($n = (-1 * $delta); $n <= $delta; $n++)
 		{
 			$options[$n] = $n;
 		}
 		return Form::select($name, $options, $selected, $attributes);
 	}
-	
+
 	/**
 	 * create a form field for filtering
 	 *
-	 * @access public
-	 * @static
 	 * @param string  $column
 	 * @param array  $filtervals
 	 * @return string
@@ -117,12 +115,10 @@ class Gleez_Form extends Kohana_Form {
 
 		return Form::input($name, $value, $attributes);
 	}
-	
+
 	/**
 	 * create a 'new x button'
 	 *
-	 * @access public
-	 * @static
 	 * @param string  $name
 	 * @param string  $title. (default: null)
 	 * @param string  $url.   (default: null)
@@ -131,11 +127,11 @@ class Gleez_Form extends Kohana_Form {
 	public static function newButton($name, $title = null, $url = null)
 	{
 		$url = ($url) ? $url : Request::current()->uri(array('action' => 'add'));
-		$title = ($title) ? $title : Gleez::spriteImg('add') . __('add :object', array(':object' => __($name)));
+		$title = ($title) ? $title : HTML::sprite_img('add') . __('add :object', array(':object' => __($name)));
 
-		return Html::anchor($url, $title, array('class' => 'button positive'));
+		return HTML::anchor($url, $title, array('class' => 'button positive'));
 	}
-	
+
 	/**
 	 * Generates an opening HTML form tag.
 	 *
@@ -158,7 +154,7 @@ class Gleez_Form extends Kohana_Form {
 	 * @uses    ACL::key
 	 */
 	public static function open($action = NULL, array $attributes = NULL)
-	{		
+	{
 		if ($action instanceof Request)
 		{
 			// Use the current URI
@@ -175,7 +171,7 @@ class Gleez_Form extends Kohana_Form {
 			// Make the URI absolute
 			$action = URL::site($action);
 		}
-	
+
 		// Add the form action to the attributes
 		$attributes['action'] = $action;
 
@@ -184,18 +180,18 @@ class Gleez_Form extends Kohana_Form {
 		{
 			//properly parse the path and query
 			$url = URL::explode($action);
-		
-			//On seriously malformed URLs, parse_url() may return FALSE. 
+
+			//On seriously malformed URLs, parse_url() may return FALSE.
 			if( isset($url['path']) AND is_array($url['query_params']) )
 			{
 				//add destination param
 				$url['query_params']['destination'] = $desti;
-		
+
 				//set the form action parameter
 				$attributes['action'] = $url['path'].URL::query($url['query_params']);
 			}
 		}
-	
+
 		// Only accept the default character set
 		$attributes['accept-charset'] = Kohana::$charset;
 
@@ -206,17 +202,17 @@ class Gleez_Form extends Kohana_Form {
 		}
 
 		$out = "<form".HTML::attributes($attributes).">\n";
-		
+
 		if( Gleez::$installed )
 		{
 			// Assign the global form css file
 			Assets::css('form', 'media/css/form.css', array('weight' => 2));
-		
+
 			$action  = md5($action.CSRF::key());
 			$out 	.= Form::hidden('_token', CSRF::token(false, $action))."\n";
 			$out 	.= Form::hidden('_action', $action)."\n";
 		}
-		
+
 		return $out;
 	}
 
@@ -300,7 +296,7 @@ class Gleez_Form extends Kohana_Form {
 
 		return '<select'.HTML::attributes($attributes).'>'.$options.'</select>';
 	}
-	
+
         public static function radios($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
         {
 		if ( !isset($attributes['class']))
@@ -311,16 +307,16 @@ class Gleez_Form extends Kohana_Form {
 		{
 			$attributes['class'] .= ' radio';
 		}
-		
+
 		$output = '';
-		
+
                 foreach ($options as $k => $v)
                 {
-                        $output .= Form::label($name, Form::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attributes);   
+                        $output .= Form::label($name, Form::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attributes);
                 }
 		return $output;
         }
-	
+
 	public static function checkboxes($name, array $options = NULL, array $selected = NULL, array $attributes = NULL)
 	{
 		if ( !isset($attributes['class']))
@@ -331,18 +327,18 @@ class Gleez_Form extends Kohana_Form {
 		{
 			$attributes['class'] .= ' checkbox';
 		}
-		
+
 		if ($selected == NULL) $selected = array();
-		
+
 		$output = '';
-		
+
                 foreach ($options as $k => $v)
                 {
-                        $output .= Form::label($name, Form::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attributes);   
+                        $output .= Form::label($name, Form::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attributes);
                 }
                 return $output;
 	}
-	
+
 	public static function mycheckbox($name, $option = NULL, $value = 0, $selected = NULL, array $attributes = NULL)
 	{
 		if ( !isset($attributes['class']))
@@ -353,14 +349,14 @@ class Gleez_Form extends Kohana_Form {
 		{
 			$attributes['class'] .= ' checkbox';
 		}
-		
+
 		$output = '';
 		$output .= Form::hidden($name, 0);
 		$output .= Form::label($name, Form::checkbox( $name, $value, ( (($selected != 0) AND ($selected == $value)) ? TRUE : FALSE ) ).Text::plain($option), $attributes);
-		
+
 		return $output;
 	}
-	
+
 	/**
 	 * Creates a select form input with raw labels.
 	 *
@@ -465,5 +461,5 @@ class Gleez_Form extends Kohana_Form {
 
 		return '<select'.HTML::attributes($attributes).'>'.$options.'</select>';
 	}
-	
+
 }// End Form
