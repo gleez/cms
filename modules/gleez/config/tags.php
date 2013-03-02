@@ -5,7 +5,7 @@ return array(
         // Whether to normalize tags at all (recommended, as raw tags are preserved anyway.)
         'normalize_tags'                => FALSE,
         
-        // Use Kohana's url::title() helper for normalization
+        // Use Kohana's URL::title() helper for normalization
         'use_gleez_normalization'       => FALSE,
 
         // If 'use_gleez_normalization' is set to FALSE, you can define your own normalization here.

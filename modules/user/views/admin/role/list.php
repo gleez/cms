@@ -18,10 +18,10 @@
          <?php foreach ($roles as $i => $role): ?>
           <tr id="role-row-<?php echo $role->id ?>" class="<?php echo text::alternate("odd", "even") ?>">
             <td id="role-<?php echo $role->id ?>">
-              <?php echo Html::chars($role->name) ?>
+              <?php echo HTML::chars($role->name) ?>
             </td>
             <td>
-            	<?php echo Html::chars($role->description) ?>
+            	<?php echo HTML::chars($role->description) ?>
             </td>
             <td><span class="status-<?php echo $role->special == 1 ? 'active' : 'blocked' ?>">
             	<?php echo $role->special == 1 ? __('Yes') : __('No') ?>
@@ -31,8 +31,8 @@
 		<?php if($role->special): ?>
                  <?php echo __('Edit | Delete') ?>
 		<?php else: ?>
-                 <?php echo html::anchor(Route::get('admin/role')->uri(array('action' => 'edit', 'id' => $role->id)), __("Edit"), array('class'=>'action-edit', 'title'=> __('Edit Role'))) ?>
-                 <?php echo html::anchor(Route::get('admin/role')->uri(array('action' => 'delete', 'id' => $role->id)), __("Delete"), array('class'=>'action-delete', 'title'=> __('Delete Role'))) ?>
+                 <?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'edit', 'id' => $role->id)), __("Edit"), array('class'=>'action-edit', 'title'=> __('Edit Role'))) ?>
+                 <?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'delete', 'id' => $role->id)), __("Delete"), array('class'=>'action-delete', 'title'=> __('Delete Role'))) ?>
             	<?php endif ?>
 		</td>
           </tr>

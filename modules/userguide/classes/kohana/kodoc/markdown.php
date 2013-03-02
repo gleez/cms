@@ -143,7 +143,7 @@ class Kohana_Kodoc_Markdown extends MarkdownExtra_Parser {
 	 */
 	function make_heading_id($heading)
 	{
-		$id = url::title($heading, '-', TRUE);
+		$id = URL::title($heading, '-', TRUE);
 		
 		if(isset($this->_heading_ids[$id]))
 		{
