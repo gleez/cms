@@ -9,7 +9,7 @@
     <table id="user-admin-list" class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th><?php echo __('Name') ?></th>
+          <th><?php echo __('Username') ?></th>
           <th><?php echo __('Email') ?></th>
 	  <th><?php echo __('First Visit') ?></th>
 	  <th><?php echo __('Last Visit') ?></th>
