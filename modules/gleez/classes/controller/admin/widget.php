@@ -313,7 +313,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 						':message' => $e->getMessage()
 					)
 				);
-				Message::error(__('An error occured deleting widget, :post.', array(':post' => $widget->title)));
+				Message::error(__('An error occured deleting widget :title.', array(':title' => $widget->title)));
 			}
 
 			$redirect = empty($destination) ? Route::get('admin/widget')->uri() :
