@@ -110,7 +110,7 @@ class Gleez_URL extends Kohana_URL {
 			$query = URL::query(array('sort' => $col, 'order' => $order));
 
 
-			$string .= Html::anchor(Request::current()->uri() .  $query, $anchor_string, array('class' => $class . ' sort'));
+			$string .= HTML::anchor(Request::current()->uri() .  $query, $anchor_string, array('class' => $class . ' sort'));
 		}
 
 		return $string;

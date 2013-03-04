@@ -31,7 +31,7 @@
 			</td>
 			
 			<td class="action">
-				<?php echo Html::anchor(Route::get('admin/format')->uri(array('id' => $id, 'action' =>
+				<?php echo HTML::anchor(Route::get('admin/format')->uri(array('id' => $id, 'action' =>
 				     'configure')),__("Configure"), array('class'=>'action-list', 'title'=>__('Configure'))) ?>
 			</td>
 		</tr>

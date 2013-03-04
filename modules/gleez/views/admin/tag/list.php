@@ -23,16 +23,16 @@
             </td>
 
             <td id="tag-slug-<?php echo $tag->id ?>">
-              <?php echo Html::anchor($tag->url, $tag->url) ?>
+              <?php echo HTML::anchor($tag->url, $tag->url) ?>
             </td>
 	
             <td id="tag-type-<?php echo $tag->id ?>">
-              <?php echo Html::chars($tag->type) ?>
+              <?php echo HTML::chars($tag->type) ?>
             </td>
         
             <td class="action">
-                 <?php echo html::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit Tag'))) ?>
-                 <?php echo html::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete Tag'))) ?>
+                 <?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit Tag'))) ?>
+                 <?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete Tag'))) ?>
 		</td>
           </tr>
           <?php endforeach ?>

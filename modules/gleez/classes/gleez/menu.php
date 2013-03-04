@@ -164,7 +164,7 @@ class Gleez_Menu {
 		if( empty( $items ) ) return;
 	
 		$i++;
-		HTML::$current_route = Url::site(Request::current()->uri());
+		HTML::$current_route = URL::site(Request::current()->uri());
 	
 
 		$attrs['class'] = empty($attrs['class']) ? 'level-'.$i : $attrs['class'].' level-'.$i;
