@@ -12,11 +12,8 @@ class Controller_Admin_Role extends Controller_Admin {
 
 	public function before()
 	{
-		if($this->request->action() == 'index' )
-		{
-			//$this->request->action('list');
-		}
-		//Acl::Required('administer users');
+		ACL::Required('administer users');
+
 		parent::before();
 	}
 

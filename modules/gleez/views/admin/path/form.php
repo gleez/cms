@@ -30,5 +30,5 @@
  	<?php echo Form::input('alias', $post->alias, array('class' => 'text medium')); ?>
 </div>
 
-<?php echo form::button('path', __('Submit'), array('class' => 'btn btn-primary')) ?>
-<?php echo form::close() ?>
+<?php echo Form::button('path', __('Submit'), array('class' => 'btn btn-primary')) ?>
+<?php echo Form::close() ?>

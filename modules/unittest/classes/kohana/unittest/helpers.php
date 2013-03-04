@@ -117,7 +117,7 @@ class Kohana_Unittest_Helpers {
 				// PHPUnit makes a backup of superglobals automatically
 				$$option = $value;
 			}
-			// If this is a static property i.e. Html::$windowed_urls
+			// If this is a static property i.e. HTML::$windowed_urls
 			elseif (strpos($option, '::$') !== FALSE)
 			{
 				list($class, $var) = explode('::$', $option, 2);
