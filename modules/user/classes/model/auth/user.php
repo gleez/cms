@@ -129,7 +129,7 @@ class Model_Auth_User extends ORM {
 	{
 		if( $field === 'name' OR $field === 'mail' )
 		{
-			return Html::chars( parent::__get($field) );
+			return HTML::chars( parent::__get($field) );
 		}
 
 		// Return the best version of the user's name. Either their specified
@@ -137,7 +137,7 @@ class Model_Auth_User extends ORM {
 		if( $field === 'nick' )
 		{
 			$nick = parent::__get('nick');
-			return empty($nick) ? Html::chars( $this->name ) : Html::chars($nick);
+			return empty($nick) ? HTML::chars( $this->name ) : HTML::chars($nick);
 		}
 
 		if( $field === 'rawurl' )

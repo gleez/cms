@@ -2,7 +2,7 @@
 /**
  * Outputs the dynamic Captcha resource.
  * Usage: Call the Captcha controller from a view, e.g.
- *        <img src="<?php echo url::site('captcha') ?>" />
+ *        <img src="<?php echo URL::site('captcha') ?>" />
  *
  * $Id: captcha.php 3769 2008-12-15 00:48:56Z zombor $
  *

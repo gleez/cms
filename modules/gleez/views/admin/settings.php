@@ -72,7 +72,7 @@
 
 	<div class="control-group <?php echo isset($errors['offline_message']) ? 'error': ''; ?>">
 	    <?php echo Form::label('offline_message', __('Offline Message'), array('class' => 'control-label')) ?>
-	    <?php echo form::textarea('offline_message', $post['offline_message'], array('class' => 'textarea span12', 'rows' => 5)) ?>
+	    <?php echo Form::textarea('offline_message', $post['offline_message'], array('class' => 'textarea span12', 'rows' => 5)) ?>
         </div>
 
 	<div class="control-group <?php echo isset($errors['timezone']) ? 'error': ''; ?>">

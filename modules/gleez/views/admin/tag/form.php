@@ -42,6 +42,6 @@
 	<?php echo Form::input('path', $path, array('class' => 'text small slug')); ?>
 </div>
 
-<?php echo form::button('tag', __('Submit'), array('class' => 'btn btn-primary')) ?>
+<?php echo Form::button('tag', __('Submit'), array('class' => 'btn btn-primary')) ?>
 
-<?php echo form::close() ?>
+<?php echo Form::close() ?>
