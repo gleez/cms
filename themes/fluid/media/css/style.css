@@ -135,6 +135,10 @@ div#pageContent {
     margin-right: 5px;
     padding: 14px 24px;
 }
+
+.radio.inline, .checkbox.inline {
+  white-space: nowrap;
+}
 /* Responsive Docs
 -------------------------------------------------- */
 @media (max-width: 480px) {
