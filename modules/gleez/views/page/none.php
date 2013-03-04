@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
+<?php defined('SYSPATH') OR die('No direct script access.') ?>
 
 <h2><?php echo __('No Pages!') ?></h2>
 <p>
