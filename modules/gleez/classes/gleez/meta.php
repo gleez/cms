@@ -1,22 +1,21 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- *  Manager for rendering meta tags (<link> and <meta>).
+ * Manager for rendering meta tags (<link> and <meta>)
  *
- * @package	Gleez
- * @category	Assets
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package   Gleez\Assets\Meta
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  */
 class Gleez_Meta {
-        
-        /**
-	 * @var array an array of meta links
+
+	/**
+	 * @var array An array of meta links
 	 */
 	public static $links = array();
 
 	/**
-	 * @var array an array of meta tags
+	 * @var array An array of meta tags
 	 */
 	public static $tags = array();
 
@@ -25,40 +24,39 @@ class Gleez_Meta {
 	 *
 	 * Gets or sets Meta Links
 	 *
-	 * @access	public
-	 * @param	string	the link URL
-	 * @param	array	an associative array of link settings
-	 * @return	Setting returns asset array, getting returns asset content
+	 * @param   string  $handle      The link URL [Optional]
+	 * @param   array	$attributes  An associative array of link settings [Optional]
+	 * @return  Setting returns asset array, getting returns asset content
 	 */
 	public static function links($handle = NULL, $attributes = array())
 	{
-                // Return all meta links
+		// Return all meta links
 		if ($handle === NULL)
 		{
 			return Meta::all_links();
 		}
-                
+
 		if ( ! is_array($attributes))
 		{
 			$attributes = array();
 		}
-                
+
 		$attributes['href'] = URL::is_absolute($handle) ? $handle : URL::site($handle, TRUE);
-	
-		//Make sure have only one 'canonical' link per request
-		if( isset($attributes['rel']) AND $attributes['rel'] == 'canonical' )
+
+		// Make sure have only one 'canonical' link per request
+		if ( isset($attributes['rel']) AND $attributes['rel'] == 'canonical' )
 		{
 			$handle = 'canonical';
 		}
-	
-                return Meta::$links[$handle] = array(	'url' => $attributes['href'], 'attrs' => $attributes );
+
+		return Meta::$links[$handle] = array(	'url' => $attributes['href'], 'attrs' => $attributes );
 	}
 
 	/**
 	 * Get a single Meta Link
 	 *
-	 * @param   string   Asset name
-	 * @return  string   Asset HTML
+	 * @param   string  $handle  Asset name
+	 * @return  string  Asset HTML
 	 */
 	public static function get_link($handle)
 	{
@@ -66,18 +64,18 @@ class Gleez_Meta {
 		{
 			return FALSE;
 		}
-	
+
 		$asset = Meta::$links[$handle];
-                $attributes = $asset['attrs'];
-                $output = '';
-        
-                $conditional = Arr::get($attributes, 'conditional');
+		$attributes = $asset['attrs'];
+		$output = '';
+
+		$conditional = Arr::get($attributes, 'conditional');
 		if ( ! empty($conditional))
 		{
 			unset($attributes['conditional']);
 		}
 
-		$link = '<link'.HTML::attributes($attributes).' />';
+		$link = '<link'.HTML::attributes($attributes).'>';
 		if (empty($conditional))
 		{
 			$output .= $link;
@@ -86,14 +84,14 @@ class Gleez_Meta {
 		{
 			$output .= "<!--[if {$conditional}]>{$link}<![endif]-->";
 		}
-		
+
 		return $output;
 	}
 
 	/**
 	 * Get all Meta Links
 	 *
-	 * @return   string   Asset HTML
+	 * @return  string  Asset HTML
 	 */
 	public static function all_links()
 	{
@@ -101,20 +99,20 @@ class Gleez_Meta {
 		{
 			return FALSE;
 		}
-		
+
 		foreach (Meta::_sort(Meta::$links) as $handle => $data)
 		{
 			$assets[] = Meta::get_link($handle);
 		}
-		
-		return implode(PHP_EOL, $assets)."\n";
+
+		return implode(PHP_EOL, $assets).PHP_EOL;
 	}
 
 	/**
 	 * Remove a Meta Link, or all
 	 *
-	 * @param   mixed   Asset name, or `NULL` to remove all
-	 * @return  mixed   Empty array or void
+	 * @param   mixed  $handle  Asset name, or `NULL` to remove all [Optional]
+	 * @return  mixed  Empty array or void
 	 */
 	public static function remove_links($handle = NULL)
 	{
@@ -122,7 +120,7 @@ class Gleez_Meta {
 		{
 			return Meta::$links = array();
 		}
-		
+
 		unset(Meta::$links[$handle]);
 	}
 
@@ -131,37 +129,36 @@ class Gleez_Meta {
 	 *
 	 * Gets or sets Meta Tags
 	 *
-	 * @access	public
-	 * @param	the meta tag name
-	 * @param	string	the meta tag value
-	 * @param	array	an associative array of tag settings
-	 * @return	Setting returns asset array, getting returns asset content
+	 * @param   string  $handle      The meta tag name [Optional]
+	 * @param   string  $value	     The meta tag value [Optional]
+	 * @param   array   $attributes  An associative array of tag settings [Optional]
+	 * @return  Setting returns asset array, getting returns asset content
 	 */
 	public static function tags($handle = NULL, $value = NULL, $attributes = array())
 	{
-                // Return all meta links
+		// Return all meta links
 		if ($handle === NULL)
 		{
 			return Meta::all_tags();
 		}
-                
+
 		if ( ! is_array($attributes))
 		{
 			$attributes = array();
 		}
-                
+
 		$name_type = isset($attributes['http_equiv']) ? 'http-equiv' : 'name';
 		$attributes[$name_type] = $handle;
 		$attributes['content'] = $value;
-		
-                return Meta::$tags[$handle] = array(	'handle' => $handle, 'value' => $value, 'attrs' => $attributes );
+
+		return Meta::$tags[$handle] = array(	'handle' => $handle, 'value' => $value, 'attrs' => $attributes );
 	}
 
 	/**
 	 * Get a single Meta tag
 	 *
-	 * @param   string   Asset name
-	 * @return  string   Asset HTML
+	 * @param   string  $handle  Asset name
+	 * @return  string  Asset HTML
 	 */
 	public static function get_tag($handle)
 	{
@@ -169,18 +166,18 @@ class Gleez_Meta {
 		{
 			return FALSE;
 		}
-		
+
 		$asset = Meta::$tags[$handle];
-                $attributes = $asset['attrs'];
-                $output = '';
-        
-                $conditional = Arr::get($attributes, 'conditional');
+		$attributes = $asset['attrs'];
+		$output = '';
+
+		$conditional = Arr::get($attributes, 'conditional');
 		if ( ! empty($conditional))
 		{
 			unset($attributes['conditional']);
 		}
 
-		$meta = '<meta'.HTML::attributes($attributes).' />';
+		$meta = '<meta'.HTML::attributes($attributes).'>';
 		if (empty($conditional))
 		{
 			$output .= $meta;
@@ -189,14 +186,14 @@ class Gleez_Meta {
 		{
 			$output .= "<!--[if {$conditional}]>{$meta}<![endif]-->";
 		}
-		
+
 		return $output;
 	}
 
 	/**
 	 * Get all Meta Tags
 	 *
-	 * @return   string   Asset HTML
+	 * @return  string  Asset HTML
 	 */
 	public static function all_tags()
 	{
@@ -204,20 +201,20 @@ class Gleez_Meta {
 		{
 			return FALSE;
 		}
-		
+
 		foreach (Meta::_sort(Meta::$tags) as $handle => $data)
 		{
 			$assets[] = Meta::get_tag($handle);
 		}
-		
-		return implode(PHP_EOL, $assets)."\n";
+
+		return implode(PHP_EOL, $assets).PHP_EOL;
 	}
 
 	/**
 	 * Remove a Meta Tag, or all
 	 *
-	 * @param   mixed   Asset name, or `NULL` to remove all
-	 * @return  mixed   Empty array or void
+	 * @param   string|NULL  $handle  Asset name, or `NULL` to remove all
+	 * @return  mixed  Empty array or void
 	 */
 	public static function remove_tags($handle = NULL)
 	{
@@ -225,15 +222,15 @@ class Gleez_Meta {
 		{
 			return Meta::$tags = array();
 		}
-		
+
 		unset(Meta::$tags[$handle]);
 	}
 
 	/**
 	 * Sorts assets based on dependencies
 	 *
-	 * @param   array   Array of assets
-	 * @return  array   Sorted array of assets
+	 * @param   array  $assets  Array of assets
+	 * @return  array  Sorted array of assets
 	 */
 	protected static function _sort($assets)
 	{
@@ -260,25 +257,27 @@ class Gleez_Meta {
 							unset($assets[$key]['deps'][$k]);
 							continue;
 						}
-						
+
 						// This dependency hasn't been sorted yet
 						if ( ! isset($sorted[$v]))
+						{
 							continue;
-							
+						}
+
 						// This dependency is taken care of, remove from list
 						unset($assets[$key]['deps'][$k]);
 					}
 				}
 			}
 		}
-		
+
 		return $sorted;
 	}
-	
+
 	/**
 	 * Enforce static usage
 	 */	
 	private function __contruct() {}
 	private function __clone() {}
-	
+
 }
