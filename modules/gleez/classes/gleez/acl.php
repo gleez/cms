@@ -2,22 +2,46 @@
 /**
  * Access Control Library
  *
+ * ### Introduction
+ *
+ * Gleez_ACL provides a lightweight and flexible database-based
+ * Access Control Library (ACL) implementation for privileges
+ * management. In general, an application may utilize such ACL's
+ * to control access to certain protected objects by other
+ * requesting objects.
+ *
+ * ### Dependencies
+ *
+ * - Default Database module
+ * - Any ORM implementation
+ * - Gleez User
+ * - Gleez Core
+ *
  * @package    Gleez\ACL
+ * @version    2.0
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2012 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @author     Sergey Yakovlev - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ *
+ * @todo       Implement their own exceptions (eg. ACL_Exception)
  */
 class Gleez_ACL {
 
-	/**
-	 * Rule type: deny
-	 */
-	const DENY  = FALSE;
+	/** Rule type: deny */
+	const DENY = FALSE;
 
-	/**
-	 * Rule type: allow
-	 */
+	/** Rule type: allow */
 	const ALLOW = TRUE;
+
+	/** Guest ID */
+	const ID_GUEST = 1;
+
+	/** Admin ID */
+	const ID_ADMIN = 2;
+
+	/** Anonymous role */
+	const ANONYMOUS_ROLE = 'Anonymous';
 
 	/**
 	 * @var boolean Indicates whether perms are cached
@@ -25,17 +49,45 @@ class Gleez_ACL {
 	public static $cache = FALSE;
 
 	/**
-	 * @var array Array of Permissions
+	 * @var array All permissions
 	 */
-	protected static $_perms = array();
+	protected static $_all_perms = array();
 
 	/**
-	 * @var array Single Permission
+	 * @var array Single permission
 	 */
-	protected static $perm = array();
+	protected static $_perm = array();
 
 	/**
-	 * Returns a specific permission.
+	 * Get all roles for user
+	 *
+	 * @since   2.0
+	 * @param   Model_User  $user  User object
+	 * @return  array  All roles for user
+	 */
+	private static function get_user_roles(Model_User $user)
+	{
+		$roles = array();
+
+		// User #1 is guest
+		if ($user->id == self::ID_GUEST)
+		{
+			$roles[self::ID_GUEST] = self::ANONYMOUS_ROLE;
+		}
+		else
+		{
+			// Loop through each role in the object
+			foreach ($user->roles() as $role)
+			{
+				$roles[$role->id] = $role->name;
+			}
+		}
+
+		return $roles;
+	}
+
+	/**
+	 * Returns a specific permission
 	 *
 	 * @param   string  $name The name of the permission.
 	 * @return  ACL
@@ -43,13 +95,13 @@ class Gleez_ACL {
 	 */
 	public static function get($name)
 	{
-		if ( ! isset(ACL::$_perms[$name]))
+		if ( ! isset(ACL::$_all_perms[$name]))
 		{
 			throw new Gleez_Exception('The requested Permission does not exist: :permission',
 				array(':permission' => $name));
 		}
 
-	  return ACL::$_perms[$name];
+	  return ACL::$_all_perms[$name];
 	}
 
 	/**
@@ -65,18 +117,18 @@ class Gleez_ACL {
 	 * );
 	 * </code>
 	 *
-	 * @param   string  $name         Permission name
-	 * @param   array   $access_names Access keys
+	 * @param   string  $name          Permission name
+	 * @param   array   $access_names  Access keys
 	 * @return  ACL
 	 */
-	public static function set($name, Array $access_names)
+	public static function set($name, array $access_names)
 	{
 		// Adds the action to the action array and returns it.
-		return ACL::$_perms[$name] = $access_names;
+		return ACL::$_all_perms[$name] = $access_names;
 	}
 
 	/**
-	 * Retrieves all named Permissions.
+	 * Retrieves all named permissions
 	 *
 	 * Example:<br>
 	 * <code>
@@ -87,27 +139,11 @@ class Gleez_ACL {
 	 */
 	public static function all()
 	{
-		return ACL::$_perms;
+		return ACL::$_all_perms;
 	}
 
 	/**
-	 * Get the name of a perm.
-	 *
-	 * Example:<br>
-	 * <code>
-	 *  $name = ACL::name($perm)
-	 * </code>
-	 *
-	 * @param   ACL     $perm  An object of ACL instance
-	 * @return  string
-	 */
-	public static function name(ACL $perm)
-	{
-		return array_search($perm, ACL::$_perms);
-	}
-
-	/**
-	 * Saves or loads the ACL cache.
+	 * Saves or loads the ACL cache
 	 *
 	 * If your perms will remain the same for a long period of time,
 	 * use this to reload the ACL from the cache rather than
@@ -127,13 +163,14 @@ class Gleez_ACL {
 	 * @return  void            When saving perms
 	 * @return  boolean         When loading perms
 	 * @uses    Kohana::cache
+	 * @uses    Arr::merge
 	 */
 	public static function cache($save = FALSE, $append = FALSE)
 	{
 		if ($save)
 		{
 			// Cache all defined perms
-			Kohana::cache('ACL::cache()', ACL::$_perms);
+			Kohana::cache('ACL::cache()', ACL::$_all_perms);
 		}
 		else
 		{
@@ -142,12 +179,12 @@ class Gleez_ACL {
 				if ($append)
 				{
 					// Append cached perms
-					ACL::$_perms += $perms;
+					ACL::$_all_perms = Arr::merge(ACL::$_all_perms, $perms);
 				}
 				else
 				{
 					// Replace existing perms
-					ACL::$_perms = $perms;
+					ACL::$_all_perms = $perms;
 				}
 
 				// perms were cached
@@ -162,17 +199,54 @@ class Gleez_ACL {
 	}
 
 	/**
-	 * If the active user does not have this permission, failed with an Exception_403.
+	 * Check permission for user
 	 *
+	 * If the user doesn't have this permission,
+	 * failed with an HTTP_Exception_403 or execute `$callback` if it is defined
+	 *
+	 * Example with a callable function:<br>
+	 * <code>
+	 * ACL::required(
+	 *    'administer site',
+	 *    NULL,
+	 *    $this->request->redirect(Route::get('user')->uri(array('action' => 'login')))
+	 * );
+	 * </code>
+	 *
+	 * Simple check:<br>
+	 * <code>
+	 *   ACL::required('administer site');
+	 * </code>
+	 *
+	 * @since     2.0
 	 * @param     string      $perm_name  Permession name
 	 * @param     Model_User  $user       User object [Optional]
+	 * @param     callable    $callback   A callable function that execute if it is defined [Optional]
+	 * @param     array       $args       The callback's arguments
 	 * @return    boolean
-	 * @throws    HTTP_Exception_403 If the user doesn't have permission.
+	 * @throws    HTTP_Exception_403 If the user doesn't have permission
+	 * @throws    Exception          if the `$callback` is a not valid callback
 	 */
-	public static function required($perm_name, Model_User $user = NULL)
+	public static function required($perm_name, Model_User $user = NULL, $callback = NULL, array $args = array())
 	{
 		if ( ! ACL::check($perm_name, $user))
 		{
+			if ( ! is_null($callback))
+			{
+				// Check if the $callback is a valid callback
+				if ( ! is_callable($callback))
+				{
+					throw new Exception('An invalid callback was added to the ACL::required().');
+				}
+				call_user_func($callback, $args);
+
+				return;
+			}
+
+			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :act.',
+				array(':act' => $perm_name)
+			);
+
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
 			throw new HTTP_Exception_403('Unauthorised access attempt to action :act.',
 				array(':act' => $perm_name)
@@ -181,11 +255,14 @@ class Gleez_ACL {
 	}
 
 	/**
-	 * Checks if the current user has permission to access the current request.
+	 * Checks if the current user has permission to access the current request
 	 *
-	 * @param     string      $perm_name  Permession name
-	 * @param     Model_User  $user       User object [Optional]
-	 * @return    boolean
+	 * If the user is not given, used currently active user
+	 *
+	 * @param   string      $perm_name  Permession name
+	 * @param   Model_User  $user       User object [Optional]
+	 * @return  boolean
+	 * @uses    User::active_user
 	 */
 	public static function check($perm_name, Model_User $user = NULL)
 	{
@@ -197,51 +274,37 @@ class Gleez_ACL {
 		}
 
 		// User #2 has all privileges:
-		if ($user->id == 2)
+		if ($user->id == self::ID_ADMIN)
 		{
 			return ACL::ALLOW;
 		}
 
-		$role_ids = array();
-
-		if ($user->id == 1)
-		{
-			$role_ids[1] = 'Anonymous';
-		}
-		else
-		{
-			// Loop through each role in the object
-			foreach ($user->roles() as $role)
-			{
-				$role_ids[$role->id] = $role->name;
-			}
-		}
-
 		// To reduce the number of SQL queries, we cache the user's permissions
 		// in a static variable.
-		if ( ! isset(ACL::$perm[$user->id]))
+		if ( ! isset(ACL::$_perm[$user->id]))
 		{
-			$role_permissions = ACL::getRolePerms($role_ids);
+			$roles = self::get_user_roles($user);
 
-			$perms = array();
-			foreach ($role_permissions as $one_role)
+			if ( ! $role_permissions = ACL::role_can($roles))
 			{
-				$perms = Arr::merge($perms, $one_role);
+				return FALSE;
 			}
 
-			ACL::$perm[$user->id] = $perms;
+			ACL::$_perm[$user->id] = call_user_func_array('array_merge', $role_permissions);
 		}
 
-		return isset(ACL::$perm[$user->id][$perm_name]);
+		return isset(ACL::$_perm[$user->id][$perm_name]);
 	}
 
 	/**
-	 * Does this group have this permission?
+	 * Checks whether the role(s) have some permission(s)
 	 *
-	 * @param   array   $roles  An array of roles as id => name
-	 * @return  boolean
+	 * @since   2.0
+	 * @param   array    $roles  An array of roles as id => name
+	 * @return  boolean  FALSE If the role(s) doesn't have any permission
+	 * @return  array    Role(s) with permission(s) as array
 	 */
-	private static function getRolePerms($roles)
+	public static function role_can($roles)
 	{
 		$perms = array();
 
@@ -253,9 +316,14 @@ class Gleez_ACL {
 						->as_object(TRUE)
 						->execute();
 
+			if ( ! count($result))
+			{
+				return FALSE;
+			}
+
 			foreach ($result as $row)
 			{
-				$perms[$row->rid][$row->permission] = self::ALLOW;
+				$perms[$row->rid][$row->permission] = ACL::ALLOW;
 			}
 		}
 
@@ -263,18 +331,55 @@ class Gleez_ACL {
 	}
 
 	/**
+	 * Check permission for current user
+	 *
+	 * Checks permission and redirects if is required to URL
+	 * defined in `$route`
+	 *
+	 * @since  2.0
+	 * @param  string  $perm_name  Permission name
+	 * @param  string  $route      Route name [Optional]
+	 * @param  array   $uri        Additional route params [Optional]
+	 * @uses   Request::redirect()
+	 * @uses   Route::get()
+	 */
+	public static function redirect($perm_name, $route = NULL, array $uri = array())
+	{
+		if ( ! ACL::check($perm_name))
+		{
+			if ( ! is_null($route) AND is_string($route))
+			{
+				Request::initial()->redirect(Route::get($route)->uri($uri), 403);
+
+				return;
+			}
+
+			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :act.',
+				array(':act' => $perm_name)
+			);
+
+			// If the action is set and the role hasn't been matched, the user doesn't have permission.
+			throw new HTTP_Exception_403('Unauthorised access attempt to action :act.',
+				array(':act' => $perm_name)
+			);
+		}
+	}
+
+	/**
 	 * Make sure the user has permission to do certain action on this object
 	 *
 	 * Similar to Post::access but this return TRUE/FALSE instead of exception
 	 *
-	 * @param  string     $action   The action `view|edit|delete` default `view`
-	 * @param  mixed      $post 	  The Post object/array
-	 * @param  Model_User $user    	The user object to check permission, defaults to logded in user
-	 * @param  string     $misc     The misc element usually `id|slug` for logging purpose
-	 *
-	 * @return boolean
+	 * @param   string     $action  The action `view|edit|delete` default `view`
+	 * @param   ORM        $post    The post object
+	 * @param   Model_User $user    The user object to check permission, defaults to logded in user
+	 * @param   string     $misc    The misc element usually `id|slug` for logging purpose
+	 * @return  boolean
+	 * @throws  HTTP_Exception_404
+	 * @uses    User::active_user
+	 * @uses    Module::event
 	 */
-	public static function post( $action = 'view', $post, Model_User $user = NULL, $misc = NULL)
+	public static function post($action = 'view', ORM $post, Model_User $user = NULL, $misc = NULL)
 	{
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
@@ -285,19 +390,14 @@ class Gleez_ACL {
 			return FALSE;
 		}
 
-		if ($post instanceof ORM AND ! $post->loaded() )
+		if ( ! $post->loaded())
 		{
 			// If the post was not loaded, we return access denied.
 			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 
-		if ( ! $post instanceof ORM )
-		{
-			$post = (object) $post;
-		}
-
 		// If no user object is supplied, the access check is for the current user.
-		if (empty($user))
+		if (is_null($user))
 		{
 			$user = User::active_user();
 		}
@@ -324,13 +424,9 @@ class Gleez_ACL {
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user))
-			{
-				return TRUE;
-			}
 			else
 			{
-				return FALSE;
+				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
 			}
 		}
 
@@ -342,13 +438,9 @@ class Gleez_ACL {
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user))
-			{
-				return TRUE;
-			}
 			else
 			{
-				return FALSE;
+				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
 			}
 		}
 
@@ -360,13 +452,9 @@ class Gleez_ACL {
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user))
-			{
-				return TRUE;
-			}
 			else
 			{
-				return FALSE;
+				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
 			}
 		}
 
@@ -378,14 +466,16 @@ class Gleez_ACL {
 	 *
 	 * Similar to Comment::access but this return TRUE/FALSE instead of exception
 	 *
-	 * @param  string     $action  	The action `view|edit|delete` default `view`
-	 * @param  object     $comment 	The Comment object
-	 * @param  Model_User $user    	The user object to check permission, defaults to logded in user
-	 * @param  string     $misc     The misc element usually `id|slug` for logging purpose
-	 *
-	 * @return boolean
+	 * @param   string     $action   The action `view|edit|delete` default `view`
+	 * @param   ORM        $comment  The comment object
+	 * @param   Model_User $user     The user object to check permission, defaults to logded in user
+	 * @param   string     $misc     The misc element usually `id|slug` for logging purpose
+	 * @return  boolean
+	 * @throws  HTTP_Exception_404
+	 * @uses    User::active_user
+	 * @uses    Module::event
 	 */
-	public static function comment( $action = 'view', $comment, Model_User $user = NULL, $misc = NULL)
+	public static function comment($action = 'view', ORM $comment, Model_User $user = NULL, $misc = NULL)
 	{
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
@@ -403,7 +493,7 @@ class Gleez_ACL {
 		}
 
 		// If no user object is supplied, the access check is for the current user.
-		if (empty($user))
+		if (is_null($user))
 		{
 			$user = User::active_user();
 		}
