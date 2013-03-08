@@ -9,86 +9,84 @@
  */
 class Controller_Admin_Format extends Controller_Admin {
 
-        public function action_index()
-        {
-                $config = Kohana::$config->load('inputfilter');
-                $fallback_format = (int) $config->get('default_format', 1);
-                $rl = ORM::factory('role')->find_all();
+	/**
+	 * Formats list
+	 *
+	 * @uses  View::factory
+	 * @uses  Format::get_all
+	 * @uses  Assets::tabledrag
+	 */
+	public function action_list()
+	{
+		$this->title = __('Text formats');
 
-                $formats = array();
-                foreach ($config->formats as $id => $format)
-                {
-                        $formats[$id]['#is_fallback'] = ($id == $fallback_format);
-                        $formats[$id]['name'] = HTML::chars($format['name']);
-                        $formats[$id]['weight'] = HTML::chars($format['weight']);
+		$formats = $this->_format->get_all();
 
-                        if ($formats[$id]['#is_fallback'])
-                        {
-                              $roles_markup = __('All roles may use this format');
-                        }
-                        else
-                        {
-                                $roles = $format['roles'];
+		$view = View::factory('admin/format/list')
+					->set('formats', $formats);
 
-                                $roles_markup = $roles ? implode(', ', $roles) : __('No roles may use this format');
-                        }
-                        $formats[$id]['roles'] = $roles_markup;
-                }
+		$this->response->body($view);
 
-                $this->title   = __('Text formats');
-                $view = View::factory('admin/format/list')->set('formats', $formats);
-
-                $this->response->body($view);
-
-                if ( ! $this->_internal)
+		if ( ! $this->_internal)
 		{
-                        Assets::tabledrag('text-format-order', 'order', 'sibling', 'text-format-order-weight');
+			Assets::tabledrag('text-format-order', 'order', 'sibling', 'text-format-order-weight');
 		}
-        }
+	}
 
-        public function action_configure()
-        {
-                $id = (int) $this->request->param('id');
-                $config = Kohana::$config->load('inputfilter');
+	/**
+	 * Formats setting
+	 */
+	public function action_configure()
+	{
+		$id = $this->request->param('id');
 
-                if(!array_key_exists($id, $config->formats))
+		// Get required format
+		$format = $this->_format->get($id, FALSE);
+
+		if ( ! $format)
 		{
 			Message::error(__('Text Format doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent format id :id', array(':id' => $id));
 
 			if ( ! $this->_internal)
-				$this->request->redirect( Route::get('admin/format')->uri() );
+			{
+				$this->request->redirect( Route::get('admin/format')->uri(), 404);
+			}
 		}
 
-                $fallback_format = (int) $config->default_format;
-                $formats = $config->formats;
-                $formats[$id]['id'] = $id;
+		$all_roles = ORM::factory('role')
+						->find_all()
+						->as_array('id', 'name');
 
-                $all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+		$filters = InputFilter::filters();
 
-                $filters = InputFilter::filters();
-                $enabled_filters = $formats[$id]['filters'];//Message::error( Kohana::debug($formats[$id]['filters']) );
+		$enabled_filters = $format['filters'];
 
-                $this->title     = __('Configure :name', array(':name' => $formats[$id]['name']));
-                $view            = View::factory('admin/format/form')
-                                                        ->set('roles', $all_roles)
-                                                        ->set('filters', $filters)
-                                                        ->set('enabled_filters', $enabled_filters)
-                                                        ->set('format', $formats[$id]);
+		// Form attributes
+		$params = array('id' => $id, 'action' => 'configure');
 
-                if ($this->valid_post('filter'))
+		//Message::error(Kohana::debug($formats[$id]['filters']));
+
+		$this->title = __('Configure %name format', array('%name' => $format['name']));
+
+		$view = View::factory('admin/format/form')
+					->set('roles', $all_roles)
+					->set('filters', $filters)
+					->set('enabled_filters', $enabled_filters)
+					->set('format', $format)
+					->set('params', $params);
+
+		if ($this->valid_post('filter'))
 		{
-			//Message::debug( Debug::vars($formats[1]) );
 			unset($_POST['filter'], $_POST['_token'], $_POST['_action']);
-			//Message::debug( Debug::vars($_POST) );
-                        Message::info( __('Not implemented yet!') );
-                }
-
-                $this->response->body($view);
-
-                if ( ! $this->_internal)
-		{
-                        Assets::tabledrag('filter-order', 'order', 'sibling', 'filter-order-weight', NULL, NULL, TRUE);
+			Message::info(__('Not implemented yet!'));
 		}
-        }
+
+		$this->response->body($view);
+
+		if ( ! $this->_internal)
+		{
+			Assets::tabledrag('filter-order', 'order', 'sibling', 'filter-order-weight', NULL, NULL, TRUE);
+		}
+	}
 }
