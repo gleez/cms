@@ -115,10 +115,10 @@ class Controller_User extends Template {
 		$view = View::factory('user/login')
 					->set('errors', array())
 					->set('use_username', $config->get('username'))
-					->set('providers', array_filter($config->get('providers')) )
+					->set('providers', array_filter($config->get('providers')))
 					->bind('post', $user);
 
-		$user = ORM::factory('user')->values($this->request->post());
+		$user = ORM::factory('user');
 
 		if($this->valid_post('login'))
 		{
@@ -137,7 +137,7 @@ class Controller_User extends Template {
 			}
 			catch (Validation_Exception $e)
 			{
-				$view->errors =  $e->array->errors('login', TRUE);
+				$view->errors = $e->array->errors('login', TRUE);
 			}
 		}
 
@@ -217,19 +217,18 @@ class Controller_User extends Template {
 	public function action_edit()
 	{
 		// The user is not logged in
-		if( ! $this->_auth->logged_in())
+		if ( ! $this->_auth->logged_in())
 		{
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
 		}
 
 		$user = $this->_auth->get_user();
-		$this->title =  __('Edit Account');
-		$errors = FALSE;
+		$this->title = __('Edit Account');
 
 		$view = View::factory('user/edit')->set('user', $user);
 
 		// Form submitted
-		if( $this->valid_post('user_edit') )
+		if ($this->valid_post('user_edit'))
 		{
 			// Creating user age
 			$dob = strtotime(Arr::get($_POST, 'years').'-'.Arr::get($_POST, 'month').'-'.Arr::get($_POST, 'days'));
@@ -246,9 +245,9 @@ class Controller_User extends Template {
 				// redirect to the user account
 				$this->request->redirect( Route::get('user')->uri(array('action' => 'profile')), 200 );
 			}
-			catch(ORM_Validation_Exception $e)
+			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors = $e->errors('models');
+				$view->errors = $e->errors('models', TRUE);
 			}
 		}
 
