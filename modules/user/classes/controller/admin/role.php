@@ -12,7 +12,7 @@ class Controller_Admin_Role extends Controller_Admin {
 
 	public function before()
 	{
-		ACL::Required('administer users');
+		ACL::required('administer users');
 
 		parent::before();
 	}
@@ -43,7 +43,7 @@ class Controller_Admin_Role extends Controller_Admin {
 		$roles  = $role->order_by('name', 'ASC')->limit($pagination->items_per_page)
 						->offset($pagination->offset)->find_all();
 
-                $this->response->body($view);
+				$this->response->body($view);
 	}
 
 	public function action_add()
@@ -72,7 +72,7 @@ class Controller_Admin_Role extends Controller_Admin {
 			}
 		}
 
-                $this->response->body($view);
+				$this->response->body($view);
 	}
 
 	public function action_edit()
@@ -116,7 +116,7 @@ class Controller_Admin_Role extends Controller_Admin {
 			}
 		}
 
-                $this->response->body($view);
+				$this->response->body($view);
 	}
 
 	public function action_delete()
@@ -141,32 +141,32 @@ class Controller_Admin_Role extends Controller_Admin {
 						->set('title', $role->name);
 
 		// If deletion is not desired, redirect to list
-                if ( isset($_POST['no']) AND $this->valid_post() )
-                        $this->request->redirect(Route::get('admin/role')->uri());
+				if ( isset($_POST['no']) AND $this->valid_post() )
+						$this->request->redirect(Route::get('admin/role')->uri());
 
-                // If deletion is confirmed
-                if ( isset($_POST['yes']) AND $this->valid_post() )
-                {
-                        try
-                        {
-                               	$role->delete(); //delete the role
+				// If deletion is confirmed
+				if ( isset($_POST['yes']) AND $this->valid_post() )
+				{
+						try
+						{
+								$role->delete(); //delete the role
 				Message::success(__('Role: :name deleted successful!', array(':name' => $role->name)));
 
 				if ( ! $this->_internal)
 					$this->request->redirect(Route::get('admin/role')->uri());
-                        }
-                        catch (Exception $e)
-                        {
+						}
+						catch (Exception $e)
+						{
 				Kohana::$log->add(Log::ERROR, 'Error occured deleting role id: :id, :message',
 							array(':id' => $role->id, ':message' => $e->getMessage()));
 				Message::error('An error occured deleting blog, :post.',array(':post' => $post->title));
 
 				if ( ! $this->_internal)
 					$this->request->redirect(Route::get('admin/role')->uri());
-                        }
-                }
+						}
+				}
 
-                $this->response->body($view);
+				$this->response->body($view);
 	}
 
 }

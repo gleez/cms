@@ -88,7 +88,7 @@ if ( class_exists('ACL') && ! ACL::cache() )
 		'administer users' => array(
 			'title'           => __('Administer users'),
 			'restrict access' => TRUE,
-			'description'     => __('User management'),
+			'description'     => __('Users management'),
 		),
 		'access profiles' => array(
 			'title'           => __('Access profiles'),
