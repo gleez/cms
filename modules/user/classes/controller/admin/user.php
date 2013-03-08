@@ -164,7 +164,9 @@ class Controller_Admin_User extends Controller_Admin {
 				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')));
+				{
+					$this->request->redirect(Route::get('admin/user')->uri());
+				}
 
 			}
 			catch (ORM_Validation_Exception $e)
@@ -176,6 +178,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/** Delete user */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -184,50 +187,65 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ( ! $user->loaded())
 		{
-			Message::error(__("User: doesn't exists!"));
+			Message::error(__("User doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
 
 			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/user')->uri( array('action' => 'list') ));
+			{
+				$this->request->redirect(Route::get('admin/user')->uri());
+			}
 		}
-		else if($user->id < 2)
+		elseif($user->id < 2)
 		{
 			Message::error(__('User: can\'t delete system user'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
 
 			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/user')->uri( array('action' => 'list') ));
+			{
+				$this->request->redirect(Route::get('admin/user')->uri());
+			}
 		}
 
-		$this->title = __('Delete :title', array(':title' => $user->name ));
+		$this->title = __('Delete :title', array(':title' => $user->name));
 
 		$view = View::factory('form/confirm')
 				->set('action', Route::url('admin/user', array('action' => 'delete', 'id' => $user->id) ))
 				->set('title', $user->name);
 
 		// If deletion is not desired, redirect to list
-                if ( isset($_POST['no']) AND $this->valid_post() )
-                        $this->request->redirect(Route::get('admin/user')->uri());
+		if (isset($_POST['no']) AND $this->valid_post())
+		{
+			$this->request->redirect(Route::get('admin/user')->uri());
+		}
 
 		// If deletion is confirmed
-                if ( isset($_POST['yes']) AND $this->valid_post() )
-                {
+		if (isset($_POST['yes']) AND $this->valid_post())
+		{
 			try
 			{
 				$user->delete();
 				Message::success(__('User: :name deleted successful!', array(':name' => $user->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/user')->uri( array('action' => 'list') ));
+				{
+					$this->request->redirect(Route::get('admin/user')->uri());
+				}
 			}
 			catch (Exception $e)
 			{
 				Kohana::$log->add(Log::ERROR, 'Error occured deleting user id: :id, :message',
-							array(':id' => $user->id, ':message' => $e->getMessage()));
-				Message::error('An error occured deleting user, :user.',array(':user' => $user->name));
+					array(
+						':id' => $user->id,
+						':message' => $e->getMessage()
+					)
+				);
+				Message::error(__('An error occured deleting user, :user.', array(':user' => $user->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/user')->uri( array('action' => 'list') ));
+				{
+					$this->request->redirect(Route::get('admin/user')->uri());
+				}
+
 			}
 		}
 
