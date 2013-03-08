@@ -29,8 +29,6 @@ if ( ! Route::cache())
 		'action'     => 'serve',
 		'file'       => NULL,
 		));
-
-	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 /** Run Gleez Components */
@@ -146,11 +144,12 @@ if ( ! Route::cache())
 
 	Route::set('admin/format', 'admin/formats(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'action'     => 'index|view|add|edit|delete|configure|reset'
+		'action'     => 'list|view|add|edit|delete|configure|reset'
 	))
 	->defaults(array(
 		'directory'  => 'admin',
 		'controller' => 'format',
+		'action'     => 'list'
 	));
 
 	Route::set('admin/setting', 'admin/settings(/<action>)')
