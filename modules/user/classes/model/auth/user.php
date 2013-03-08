@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * Default auth user
  *
@@ -9,34 +9,41 @@
  */
 class Model_Auth_User extends ORM {
 
+	/** Default upload path */
+	const DEFAULT_PATH = 'media/pictures';
+
+	/**
+	 * Table columns
+	 * @var array
+	 */
 	protected $_table_columns = array(
-					'id' => array( 'type' => 'int' ),
-					'name' => array( 'type' => 'string' ),
-					'pass' => array( 'type' => 'string' ),
-					'mail' => array( 'type' => 'string' ),
-					'nick' => array( 'type' => 'string' ),
-					'gender' => array( 'type' => 'int' ),
-					'dob' => array( 'type' => 'int' ),
-					'url' => array( 'type' => 'string', "column_default" => NULL ),
-					'theme' => array( 'type' => 'string', "column_default" => NULL ),
-					'signature' => array( 'type' => 'string', "column_default" => NULL ),
-					'signature_format' => array( 'type' => 'int' ),
-					'logins' => array( 'type' => 'int' ),
-					'created' => array( 'type' => 'int' ),
-					'updated' => array( 'type' => 'int' ),
-					'login' => array( 'type' => 'int' ),
-					'status' => array( 'type' => 'int' ),
-					'timezone' => array( 'type' => 'string' ),
-					'language' => array( 'type' => 'string' ),
-					'picture' => array( 'type' => 'string' ),
-					'init' => array( 'type' => 'string' ),
-					'hash' => array( 'type' => 'string' ),
-					'data' => array( 'type' => 'string' ),
-					);
+		'id'                => array( 'type' => 'int' ),
+		'name'              => array( 'type' => 'string' ),
+		'pass'              => array( 'type' => 'string' ),
+		'mail'              => array( 'type' => 'string' ),
+		'nick'              => array( 'type' => 'string' ),
+		'gender'            => array( 'type' => 'int' ),
+		'dob'               => array( 'type' => 'int' ),
+		'url'               => array( 'type' => 'string', "column_default" => NULL ),
+		'theme'             => array( 'type' => 'string', "column_default" => NULL ),
+		'signature'         => array( 'type' => 'string', "column_default" => NULL ),
+		'signature_format'  => array( 'type' => 'int' ),
+		'logins'            => array( 'type' => 'int' ),
+		'created'           => array( 'type' => 'int' ),
+		'updated'           => array( 'type' => 'int' ),
+		'login'             => array( 'type' => 'int' ),
+		'status'            => array( 'type' => 'int' ),
+		'timezone'          => array( 'type' => 'string' ),
+		'language'          => array( 'type' => 'string' ),
+		'picture'           => array( 'type' => 'string' ),
+		'init'              => array( 'type' => 'string' ),
+		'hash'              => array( 'type' => 'string' ),
+		'data'              => array( 'type' => 'string' ),
+	);
 
 	/**
 	 * Auto fill create and update columns
-	*/
+	 */
 	protected $_created_column = array('column' => 'created', 'format' => TRUE);
 	protected $_updated_column = array('column' => 'updated', 'format' => TRUE);
 
@@ -143,41 +150,54 @@ class Model_Auth_User extends ORM {
 		if( $field === 'rawurl' )
 			return Route::get('user')->uri( array( 'id' => $this->id ) );
 
-	        // Model specefic links; view, edit, delete url's.
-                if( $field === 'url' )
+			// Model specefic links; view, edit, delete url's.
+				if( $field === 'url' )
 			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
 
-                if( $field === 'edit_url' )
+				if( $field === 'edit_url' )
 			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'edit' ) );
 
-                if( $field === 'delete_url' )
+				if( $field === 'delete_url' )
 			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'delete' ) );
 
 		return parent::__get($field);
 	}
 
 	/**
-	 *  Override the create method with defaults
+	 * Override the create method with defaults
+	 *
+	 * @throws  Kohana_Exception
 	 */
 	public function create(Validation $validation = NULL)
 	{
 		if ($this->_loaded)
+		{
 			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
+		}
 
 		$this->init = $this->mail;
-		$this->status  = (int) 1;
+		$this->status = (int) 1;
 
 		return parent::create($validation);
 	}
 
-  	public function roles()
+	/**
+	 * Gets all roles
+	 */
+	public function roles()
 	{
-    		return $this->roles->find_all();
-  	}
+		return $this->roles->find_all();
+	}
 
+	/**
+	 * Override the find_all method
+	 *
+	 * @see  Gleez_ORM_Core::find_all
+	 */
 	public function find_all($id = NULL)
 	{
 		$this->where($this->_object_name.'.id', '!=', 1);
+
 		return parent::find_all($id);
 	}
 
@@ -303,19 +323,29 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Picture validation for photo upload.
+	 * Picture validation for photo upload
 	 *
-	 * @param string $file
-	 * @return file path
-	* @uses System::mkdir Making dir for uploading photo
+	 * @param   string  $file Uploaded file
+	 * @return  NULL|string   File path
+	 * @uses    System::mkdir Making dir for uploading photo
 	 */
 	public function upload_photo($file)
 	{
-		//Uploads directory and url for profile pictures
-		$profile_path = APPPATH . 'media/pictures';
-		if(!is_dir($profile_path))
+		// Uploads directory and url for profile pictures
+		$profile_path = APPPATH . self::DEFAULT_PATH;
+
+		if( ! is_dir($profile_path))
 		{
-			System::mkdir($profile_path);
+			if( ! System::mkdir($profile_path))
+			{
+				Message::error(__('Failed to create directory %dir for uploading prfile image. Check the permissions the web server to create this directory.',
+					array('%dir' => Text::plain($profile_path))
+				));
+
+				Kohana::$log->add(Log::ERROR, 'Failed to create directory %dir for uploading profile image.',
+					array('%dir' => Text::plain($profile_path))
+				);
+			}
 		}
 
 		// check if there is an uploaded file
@@ -326,7 +356,7 @@ class Model_Auth_User extends ORM {
 
 			if ($path)
 			{
-				return 'media/pictures/'.$filename;
+				return self::DEFAULT_PATH.DIRECTORY_SEPARATOR.$filename;
 			}
 		}
 
@@ -349,7 +379,7 @@ class Model_Auth_User extends ORM {
 		$array = Validation::factory($array);
 
 		//important to check isset to avoid unecessary routing
-                if( isset( $array['name'] ) )
+				if( isset( $array['name'] ) )
 		{
 			$login_name = $this->unique_key($array['name']);
 
@@ -362,11 +392,11 @@ class Model_Auth_User extends ORM {
 
 			$array->label('password', $labels['pass']);
 			$array->rules('password', $rules['pass']);
-                }
+				}
 
 		// Get the remember login option
 		$remember = isset($array['remember']);
-                Module::event('user_login_validate', $array);
+				Module::event('user_login_validate', $array);
 
 		if ($array->check())
 		{
@@ -375,11 +405,11 @@ class Model_Auth_User extends ORM {
 
 			if ($this->loaded() AND $this->status != 1)
 			{
-                                $array->error('name', 'blocked');
-                                Module::event('user_blocked', $array);
+				$array->error('name', 'blocked');
+				Module::event('user_blocked', $array);
 
-                                Kohana::$log->add( Log::ERROR, 'User: :name account blocked.', array(':name' => $array['name']) );
-                                throw new Validation_Exception($array, 'Account Blocked');
+				Kohana::$log->add( Log::ERROR, 'User: :name account blocked.', array(':name' => $array['name']) );
+				throw new Validation_Exception($array, 'Account Blocked');
 			}
 			elseif ($this->loaded() AND Auth::instance()->login($this, $array['password'], $remember))
 			{
@@ -391,18 +421,18 @@ class Model_Auth_User extends ORM {
 			}
 			else
 			{
-                                $array->error('name', 'invalid');
-                                Module::event('user_auth_failed', $array);
+				$array->error('name', 'invalid');
+				Module::event('user_auth_failed', $array);
 
-                                Kohana::$log->add( Log::ERROR, 'User: :name failed login.', array(':name' => $array['name']) );
+				Kohana::$log->add( Log::ERROR, 'User: :name failed login.', array(':name' => $array['name']) );
 				throw new Validation_Exception($array, 'Validation has failed for login');
 			}
 		}
 		else
-                {
+				{
 			Kohana::$log->add( Log::ERROR, 'User Login error');
-                        throw new Validation_Exception($array, 'Validation has failed for login');
-                }
+						throw new Validation_Exception($array, 'Validation has failed for login');
+				}
 
 		return FALSE;
 	}
@@ -444,7 +474,7 @@ class Model_Auth_User extends ORM {
 	 */
 	public function sso_signup(array $data, array $provider)
 	{
-		if ( ! $this->_loaded )
+		if ( ! $this->_loaded)
 		{
 			// Add user
 			$this->name = $provider['provider'].'_'.$data['id'];
@@ -535,9 +565,9 @@ class Model_Auth_User extends ORM {
 		$body = View::factory('email/confirm_signup', $this->as_array())
 			->set('url', URL::site(
 				Route::get('user')->uri(array('action' => 'confirm',
-								    'id' => $this->id,
-								    'token' => $token,
-								    )),
+									'id' => $this->id,
+									'token' => $token,
+									)),
 				TRUE // Add protocol to URL
 			));
 
@@ -656,10 +686,10 @@ class Model_Auth_User extends ORM {
 			->set('time', $time)
 			->set('url', URL::site(
 				Route::get('user/reset')->uri(array('action' => 'confirm_password',
-								    'id' => $this->id,
-								    'token' => $token,
-								    'time'  => $time
-								    )),
+									'id' => $this->id,
+									'token' => $token,
+									'time'  => $time
+									)),
 				TRUE // Add protocol to URL
 			));
 
@@ -753,4 +783,4 @@ class Model_Auth_User extends ORM {
 		return TRUE;
 	}
 
-} // End Auth User Model
+}
