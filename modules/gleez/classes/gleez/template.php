@@ -48,7 +48,10 @@ abstract class Gleez_Template extends Controller{
         
         /** @var object The Widgets Object */
         protected $_widgets;
-        
+
+        /** @var Format An Format instance  */
+        protected $_format;
+
         /** @var array The destination url */
         protected $dest;
         
@@ -142,7 +145,9 @@ abstract class Gleez_Template extends Controller{
                         {
                                 throw new Http_Exception_415('Unsupported accept-type', 415);
                         }
-                        
+
+                        // Initiate a Format instance
+                        $this->_format = Format::instance();
                         // Load the template
                         $this->template         = View::factory($this->template);
                         $this->_title_separator = $this->_config->get('title_separator', ' | ');
