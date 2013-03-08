@@ -151,6 +151,7 @@ return array
 	'No roles may use this format' => 'Ни одна роль не может использовать этот формат',
 	'No Widgets in this region' => 'В этом регионе нет виджетов',
 	'none' => 'нет',
+	'Not implemented yet!' => 'Ещё не реализовано!',
 	// O
 	'Off' => 'Выкл',
 	'Offline Message' => 'Офлайн сообщение',
@@ -187,6 +188,7 @@ return array
 	// S
 	'Save' => 'Сохранить',
 	'Save Changes' => 'Сохранить изменения',
+	'Save Filters' => 'Сохранить фильтры',
 	'Save this information in a safe place, or change your :profile right away!' => 'Сохраните эту информацию в безопасном месте, или измените Ваш :profile прямо сейчас!',
 	'Save Widgets' => 'Сохранить виджеты',
 	'Settings' => 'Настройки',
