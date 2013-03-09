@@ -10,6 +10,15 @@
 class Controller_Admin_Format extends Controller_Admin {
 
 	/**
+	 * The before() method is called before controller action.
+	 */
+	public function before()
+	{
+		ACL::required('administer formats');
+		parent::before();
+	}
+
+	/**
 	 * Formats list
 	 *
 	 * @uses  View::factory
@@ -21,6 +30,16 @@ class Controller_Admin_Format extends Controller_Admin {
 		$this->title = __('Text formats');
 
 		$formats = $this->_format->get_all();
+
+		$total = $this->_format->count_all();
+
+		if ($total == 0)
+		{
+			Kohana::$log->add(Log::INFO, 'No formats found');
+			$this->response->body(View::factory('admin/format/none'));
+
+			return;
+		}
 
 		$view = View::factory('admin/format/list')
 					->set('formats', $formats);
@@ -35,22 +54,26 @@ class Controller_Admin_Format extends Controller_Admin {
 
 	/**
 	 * Formats setting
+	 *
+	 * @uses  InputFilter::filters
+	 * @uses  Assets::tabledrag
 	 */
 	public function action_configure()
 	{
-		$id = $this->request->param('id');
+		$id = $this->request->param('id', NULL);
 
 		// Get required format
-		$format = $this->_format->get($id, FALSE);
+		$format = $this->_format->get($id);
 
-		if ( ! $format)
+		if (is_null($format))
 		{
 			Message::error(__('Text Format doesn\'t exists!'));
+
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent format id :id', array(':id' => $id));
 
 			if ( ! $this->_internal)
 			{
-				$this->request->redirect( Route::get('admin/format')->uri(), 404);
+				$this->request->redirect(Route::get('admin/format')->uri(), 404);
 			}
 		}
 
@@ -64,8 +87,6 @@ class Controller_Admin_Format extends Controller_Admin {
 
 		// Form attributes
 		$params = array('id' => $id, 'action' => 'configure');
-
-		//Message::error(Kohana::debug($formats[$id]['filters']));
 
 		$this->title = __('Configure %name format', array('%name' => $format['name']));
 
