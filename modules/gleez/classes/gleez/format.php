@@ -147,4 +147,20 @@ class Gleez_Format {
 	{
 		return Arr::get(Format::$formats, $id, $default);
 	}
+
+	/**
+	 * Count the number of formats in `Format::$formats`
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   $total = Format::instance()->count_all();
+	 * </code>
+	 *
+	 * @return  integer
+	 */
+	public function count_all()
+	{
+		return count(Format::$formats);
+	}
+
 }

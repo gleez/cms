@@ -351,10 +351,10 @@ if ( class_exists('ACL') && ! ACL::cache() )
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
-		'administer logs' => array(
-			'title' => __('Administer logs'),
+		'administer formats' => array(
+			'title' => __('Administer formats'),
 			'restrict access' => TRUE,
-			'description' => __(''),
+			'description' => __('Managing the text formats of editor'),
 		),
 	));
 
