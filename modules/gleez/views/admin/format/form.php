@@ -8,12 +8,12 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="row clearfix">
-		<div class="span4">
+	<div class="row-fluid">
+		<div class="span6">
 			<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
 				<div class="controls">
 					<?php echo Form::label('name', __('Title'), array('class' => 'control-label')); ?>
-					<?php echo Form::input('name', $format['name'], array('class' => 'input-xxlarge')); ?>
+					<?php echo Form::input('name', $format['name'], array('class' => 'span12')); ?>
 				</div>
 			</div>
 
@@ -27,7 +27,7 @@
 			</div>
 		</div>
 
-		<div class="span5">
+		<div class="span6">
 			<div class="control-group">
 				<?php echo Form::label('order', __('Filters'), array('class' => 'control-label')) ?>
 				<table id="filter-order" class="table table-striped table-bordered table-condensed">
@@ -61,7 +61,7 @@
 				<ul class="nav nav-tabs">
 					<?php foreach ($filters as $name => $filter): ?>
 						<?php if( ! empty($filter['settings']) ): ?>
-							<li><?php echo HTML::anchor(URL::title($filter['title']), __($filter['title']), array('data-toggle' => 'tab')); ?></li>
+							<li><?php echo HTML::anchor('#'.URL::title($filter['title']), __($filter['title']), array('data-toggle' => 'tab')); ?></li>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</ul>
