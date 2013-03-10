@@ -178,16 +178,6 @@ if ( ! Route::cache())
 		'type'       => 'blog',
 	));
 
-	Route::set('post', 'post(/<action>)(/<id>)(/p<page>)', array(
-		'id'         => '\d+',
-		'page'       => '\d+',
-		'action'     => 'index|list|view|add|edit|delete'
-	))
-	->defaults(array(
-		'controller' => 'post',
-		'action'     => 'index'
-	));
-
 	Route::set('page', 'page(/<action>)(/<id>)(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+',
