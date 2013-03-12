@@ -9,24 +9,28 @@
  * @license    http://gleezcms.org/license
  */
 class Model_Term extends ORM_MPTT {
-	
+
 	protected $_table_columns = array(
-					'id'   => array( 'type' => 'int' ),
-					'name' => array( 'type' => 'string' ),
-					'description' => array( 'type' => 'string' ),
-					'image' => array( 'type' => 'string' ),
-					'type' => array( 'type' => 'string' ),
-					'pid' => array( 'type' => 'int' ),
-					'lft' => array( 'type' => 'int' ),
-					'rgt' => array( 'type' => 'int' ),
-					'lvl' => array( 'type' => 'int' ),
-					'scp' => array( 'type' => 'int' ),
-				);
-	
-	protected $_has_many   = array(
-                                        'posts'    => array('through' => 'posts_terms', 'foreign_key' => 'term_id' ),
-                                );
-	
+		'id'          => array( 'type' => 'int' ),
+		'name'        => array( 'type' => 'string' ),
+		'description' => array( 'type' => 'string' ),
+		'image'       => array( 'type' => 'string' ),
+		'type'        => array( 'type' => 'string' ),
+		'pid'         => array( 'type' => 'int' ),
+		'lft'         => array( 'type' => 'int' ),
+		'rgt'         => array( 'type' => 'int' ),
+		'lvl'         => array( 'type' => 'int' ),
+		'scp'         => array( 'type' => 'int' ),
+	);
+
+	protected $_has_many = array(
+		'posts' => array(
+			'model'       => 'post',
+			'through'     => 'posts_terms',
+			'foreign_key' => 'term_id'
+		),
+	);
+
 	/**
 	 * @access  public
 	 * @var     string  left column name
@@ -56,9 +60,9 @@ class Model_Term extends ORM_MPTT {
 	 * @var     string  parent column name
 	 */
 	public $parent_column = 'pid';
-	
+
 	protected $_ignored_columns = array('path', 'action');
-	
+
 	public function rules()
 	{
 		return array(
@@ -73,13 +77,13 @@ class Model_Term extends ORM_MPTT {
 	{
 		$this->type  = empty($this->type) ? 'post' : $this->type;
 		parent::save( $validation );
-	
+
 		if ( $this->loaded())
-		{		
+		{
 			//add or remove path aliases
 			$this->_aliases();
 		}
-	
+
 		return $this;
 	}
 
@@ -96,14 +100,14 @@ class Model_Term extends ORM_MPTT {
 
 		$source = $this->rawurl;
 		parent::delete($query);
-	
+
 		//Delete the path aliases associated with this object
 		Path::delete( array('source' => $source) );
 		unset($source);
-	
+
 		return $this;
 	}
-	
+
 	/**
 	 * Adds or deletes path aliases
 	 *
@@ -113,20 +117,20 @@ class Model_Term extends ORM_MPTT {
 	{
 		// create and save alias for the post
 		$values = array();
-		
+
 		$path	= Path::load($this->rawurl);
 		if( $path ) $values['id'] = (int) $path['id'];
-		
+
 		$alias  = empty($this->path) ? 'category/'.$this->name : $this->path;
 		$values['source'] = $this->rawurl;
 		$values['alias']  = Path::clean( $alias );
 		$values['type']   = $this->type ;
 		$values['action'] = empty($this->action) ? 'category' : $this->action ;
-	
+
 		$values = Module::action('term_aliases', $values, $this);
 		Path::save($values);
 	}
-	
+
 	public function __get($field)
 	{
 		if($field === 'name')
@@ -135,23 +139,23 @@ class Model_Term extends ORM_MPTT {
                 //Raw fields without markup. Usage: during edit or etc!
 		if($field === 'rawname')
 			return parent::__get('name');
-	
+
 		if( $field === 'rawurl' )
 			return Route::get($this->type)->uri( array( 'action' => 'term', 'id' => $this->id ) );
-		
+
 		// Model specefic links; view, edit, delete url's.
                 if( $field === 'url'  OR $field === 'link')
 			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
-	
+
                 if( $field === 'edit_url' )
 			return Route::get('admin/term')->uri( array( 'id' => $this->id, 'action' => 'edit' ) );
 
                 if( $field === 'delete_url' )
 			return Route::get('admin/term')->uri( array( 'id' => $this->id, 'action' => 'delete' ) );
-		
+
 		return parent::__get($field);
 	}
-	
+
 	/**
 	 * Check by triggering error if name exists.
 	 * Validation callback.
@@ -174,7 +178,7 @@ class Model_Term extends ORM_MPTT {
 		}
 	}
 
-	
+
 	/**
 	 * Create a new term in the tree as a child of $parent
 	 *
@@ -198,16 +202,16 @@ class Model_Term extends ORM_MPTT {
 		else
 		{
 			$target = ORM::factory('term',(int) $location);
-			
+
 			if ( ! $target->loaded())
 			{
 				throw new Gleez_Exception('Could not create term, could not find target
 					for insert_as_next_sibling id: :location ', array( ':location' =>  (int) $location) );
 			}
-			
+
 			//$this->insert_as_next_sibling($target);
 			$this->insert_as_last_child($target);
 		}
 	}
-        
+
 }
