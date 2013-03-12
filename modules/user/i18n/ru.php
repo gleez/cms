@@ -26,6 +26,7 @@ return array
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
+	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
 	// H
 	// I
 	// J
