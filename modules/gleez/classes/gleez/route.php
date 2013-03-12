@@ -1,7 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
 /**
- * Remove the default action from the URI
+ * @package    Gleez\Route
+ * @version    1.0
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
 class Gleez_Route extends Kohana_Route {
 	
