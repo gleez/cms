@@ -1,6 +1,6 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') OR die('No direct script access.') ?>
 
-<div id="post-<?php echo $post->id; ?>" class="<?php echo $post->type ?> post teaser <?php echo ' post-'. $post->status;  ?>">
+<div id="post-<?php echo $post->id; ?>" class="<?php echo $post->type . ' post teaser post-' . $post->status; ?>">
 
 	<div class="row-fluid meta">
 
@@ -19,19 +19,21 @@
 				?>
 				</span>
 
-				<span class="DateCreated"> <?php echo Date::date($post->created); ?> </span>
+				<span class="DateCreated"><?php echo Date::date($post->created); ?></span>
 			<?php endif;?>
 		</div>
 
-		<?php if ($post->taxonomy): ?> <div class="taxonomy span6"> <?php echo $post->taxonomy; ?> </div> <?php endif;?>
+		<?php if ($post->taxonomy): ?>
+			<div class="taxonomy span6"> <?php echo $post->taxonomy; ?> </div>
+		<?php endif;?>
 	</div>
 
 	<div class="post-content">
-	    <?php echo $post->teaser; ?>
+		<?php echo $post->teaser; ?>
 	</div>
 
-    	<?php if ($post->tagcloud): ?>
-	    <div class="tags"><?php echo __('Tagged with :tag', array(':tag' => $post->tagcloud) ); ?></div>
-	<?php endif;?>
+		<?php if ($post->tagcloud): ?>
+			<div class="tags"><?php echo __('Tagged with :tag', array(':tag' => $post->tagcloud)); ?></div>
+		<?php endif;?>
 
 </div>
