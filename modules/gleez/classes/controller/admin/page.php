@@ -5,7 +5,7 @@
  * @package   Gleez\Admin\Controller
  * @author    Sandeep Sangamreddi - Gleez
  * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @license   http://gleezcms.org/license Gleez CMS License
  */
 class Controller_Admin_Page extends Controller_Admin {
 
@@ -15,6 +15,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	public function before()
 	{
 		ACL::required('administer page');
+
 		parent::before();
 	}
 
@@ -23,6 +24,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function after()
 	{
+		// Tabs
 		$this->_tabs =  array(
 			array('link' => Route::url('admin/page', array('action' =>'index')), 'text' => __('Statistics')),
 			array('link' => Route::url('admin/page', array('action' =>'list')), 'text' => __('List')),
@@ -66,9 +68,10 @@ class Controller_Admin_Page extends Controller_Admin {
 		$vocabs[] = __('none');
 		$vocabs += ORM::factory('term')->where('lft', '=', 1)->find_all()->as_array('id', 'name');
 
-		if( $this->valid_post('page_settings') )
+		if ($this->valid_post('page_settings'))
 		{
 			unset($_POST['page_settings'], $_POST['_token'], $_POST['_action']);
+
 			$cats = $post->get('catgeory', array());
 
 			foreach ($_POST as $key => $value)
@@ -79,7 +82,8 @@ class Controller_Admin_Page extends Controller_Admin {
 					if ($terms)
 					{
 						DB::delete('posts_terms')
-							->where('parent_id', 'IN', array_values($terms))->execute();
+							->where('parent_id', 'IN', array_values($terms))
+							->execute();
 					}
 				}
 				$post->set($key, $value);
@@ -89,7 +93,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 			if ( ! $this->_internal)
 			{
-				$this->request->redirect( Route::url('admin/page', array('action' =>'settings')) );
+				$this->request->redirect(Route::url('admin/page', array('action' =>'settings')));
 			}
 		}
 
@@ -97,25 +101,27 @@ class Controller_Admin_Page extends Controller_Admin {
 	}
 
 	/**
-	 * List of pages
+	 * Displays list of pages
 	 */
 	public function action_list()
 	{
-		$posts = ORM::factory('page');
+		$posts = ORM::factory('page')
+				->where('type', '=', 'page');
+
 		$total = $posts->reset(FALSE)->count_all();
 
 		if ($total == 0)
 		{
 			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body(View::factory('page/none'));
+			$this->response->body( View::factory('page/none'));
 			return;
 		}
 
 		$pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'route', 'key'=>'page'),
-				'total_items'    => $total,
-				'items_per_page' => 30,
-				));
+			'current_page'   => array('source'=>'route', 'key'=>'page'),
+			'total_items'    => $total,
+			'items_per_page' => 30,
+		));
 
 		$posts->limit($pagination->items_per_page)->offset($pagination->offset);
 
@@ -130,17 +136,17 @@ class Controller_Admin_Page extends Controller_Admin {
 			$posts->order_by('updated', 'DESC');
 		}
 
-		$destination = array('destination' => $this->request->uri());
-
 		$this->title = __('Page List');
+
 		$view = View::factory('admin/page/list')
-					->set('destination', $destination)
-					->bind('pagination', $pagination)
-					->set('posts',      $posts->find_all() );
+				->bind('pagination', $pagination)
+				->set('destination', array('destination' => $this->request->uri()))
+				->set('actions',     Post::bulk_actions(TRUE, 'page'))
+				->set('params',      array('action' => 'list'))
+				->set('posts',       $posts->find_all());
 
 		$dest = ($this->request->query('destination') !== NULL) ?
 					array('destination' => $this->request->query('destination')) : array();
-
 		$route = Route::get('admin/page')->uri(array('action' => 'list'));
 		$redirect = empty($dest) ? $route : $this->request->query('destination') ;
 		$post = $this->request->post();
@@ -152,40 +158,44 @@ class Controller_Admin_Page extends Controller_Admin {
 		}
 
 		// If deletion is confirmed
-		if ( isset($post['yes']) AND $this->valid_post() )
+		if (isset($post['yes']) AND $this->valid_post())
 		{
 			$pages = array_filter($post['items']);
 
 			Post::bulk_delete($pages, 'page');
 
 			Message::success(__('The delete has been performed!'));
+
 			if ( ! $this->_internal)
 			{
 				$this->request->redirect($redirect);
 			}
 		}
 
-		if( $this->valid_post('page-bulk-actions') )
+		if ($this->valid_post('page-bulk-actions'))
 		{
-			if ( !isset($post['posts']) OR ( !is_array($post['posts']) OR !count(array_filter($post['posts'])) ) )
+			if ( ! isset($post['posts']) OR ( ! is_array($post['posts']) OR ! count(array_filter($post['posts']))))
 			{
-				$view->errors = array( __('No items selected.') );
-				if ( ! $this->_internal)  $this->request->redirect( $this->request->uri() );
+				$view->errors = array(__('No items selected.'));
+				if ( ! $this->_internal)
+				{
+					$this->request->redirect($this->request->uri());
+				}
 			}
 
 			try
 			{
-				if($post['operation'] == 'delete')
+				if ($post['operation'] == 'delete')
 				{
 					$pages = array_filter($post['posts']); // Filter out unchecked posts
 					$this->title = __('Delete Pages');
 
 					$items = DB::select('id', 'title')->from('posts')
-						->where('id', 'IN', $pages)->execute()->as_array('id', 'title');
+								->where('id', 'IN', $pages)->execute()->as_array('id', 'title');
 
 					$view = View::factory('form/confirm_multi')->set('action', '')->set('items', $items );
 
-					$this->response->body( $view );
+					$this->response->body($view);
 					return;
 				}
 
@@ -208,14 +218,16 @@ class Controller_Admin_Page extends Controller_Admin {
 
 	/**
 	 * Bulk updates
+	 *
+	 * @param  array  $post
 	 */
 	private function _bulk_update($post)
 	{
-		$operations = POST::bulk_actions(FALSE);
+		$operations = Post::bulk_actions(FALSE);
 		$operation  = $operations[$post['operation']];
 		$pages = array_filter($post['posts']); // Filter out unchecked pages
 
-		if ( $operation['callback'] )
+		if ($operation['callback'])
 		{
 			list($func, $params) = Arr::callback($operation['callback']);
 			if (isset($operation['arguments']))
