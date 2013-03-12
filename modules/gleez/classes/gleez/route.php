@@ -4,17 +4,6 @@
  * Remove the default action from the URI
  */
 class Gleez_Route extends Kohana_Route {
-
-	// Defines the wildcard
-	const SUBDOMAIN_WILDCARD = '*';
-	
-	// Defines the subdomain status
-	const SUBDOMAIN_EMPTY = '';
-
-    	/**
-	 * @var  array  default sub_domains
-	 */
-	public static $default_subdomains = array( self::SUBDOMAIN_EMPTY, 'www' );
 	
 	/**
 	 * @var  string  route name
@@ -57,9 +46,6 @@ class Gleez_Route extends Kohana_Route {
 
 		// Store the compiled regex locally
 		$this->_route_regex = Route::compile($uri, $regex);
-		
-		// Set default subdomains in this route rule
-		$this->_subdomain = self::$default_subdomains ;
 	}
 
 	/**
@@ -171,82 +157,55 @@ class Gleez_Route extends Kohana_Route {
 	 */
 	public function matches($uri, $subdomain = NULL)
 	{
-		$subdomain = ($subdomain === NULL) ? Request::$subdomain : $subdomain;
-		if($subdomain === FALSE) $subdomain = self::SUBDOMAIN_EMPTY;
+		if ( ! preg_match($this->_route_regex, $uri, $matches))
+			return FALSE;
 
-		if( in_array(self::SUBDOMAIN_WILDCARD, $this->_subdomain) OR in_array($subdomain, $this->_subdomain) )
+		$params = array();
+		foreach ($matches as $key => $value)
 		{
-			if ( ! preg_match($this->_route_regex, $uri, $matches))
-				return FALSE;
-
-			$params = array();
-			foreach ($matches as $key => $value)
+			if (is_int($key))
 			{
-				if (is_int($key))
-				{
-					// Skip all unnamed keys
-					continue;
-				}
+				// Skip all unnamed keys
+				continue;
+			}
 
-				// Set the value for all matched keys
+			// Set the value for all matched keys
+			$params[$key] = $value;
+		}
+
+		foreach ($this->_defaults as $key => $value)
+		{
+			if ( ! isset($params[$key]) OR $params[$key] === '')
+			{
+				// Set default values for any key that was not matched
 				$params[$key] = $value;
 			}
-
-			foreach ($this->_defaults as $key => $value)
-			{
-				if ( ! isset($params[$key]) OR $params[$key] === '')
-				{
-					// Set default values for any key that was not matched
-					$params[$key] = $value;
-				}
-			}
-
-			if ($this->_filters)
-			{
-				foreach ($this->_filters as $callback)
-				{
-					// Execute the filter
-					$return = call_user_func($callback, $uri, $this, $params);
-
-					if ($return === FALSE)
-					{
-						// Filter has aborted the match
-						return FALSE;
-					}
-					elseif (is_array($return))
-					{
-						// Filter has modified the parameters
-						$params = $return;
-						
-						// fix for pagination on lambda routes
-						$this->_uri = Arr::get($params, 'uri', '');
-					}
-				}
-			}
-	
-			return $params;
 		}
-		
-		return FALSE;
-	}
 
-	/**
-	 * Set one or more subdomains to execute this route
-	 *
-	 *     Route::set('default', '(<controller>(/<action>(/<id>)))')
-	 *         ->subdomains(array(Route::SUBDOMAIN_EMPTY, 'www1', 'foo', 'bar'))
-	 *         ->defaults(array(
-	 *             'controller' => 'welcome',
-	 *         ));
-	 *
-	 * @param   array    name(s) of subdomain(s) to apply in route
-	 * @return Route
-	 */      
-	public function subdomains(array $name)
-	{
-		$this->_subdomain = $name ;
+		if ($this->_filters)
+		{
+			foreach ($this->_filters as $callback)
+			{
+				// Execute the filter
+				$return = call_user_func($callback, $uri, $this, $params);
 
-		return $this ;
+				if ($return === FALSE)
+				{
+					// Filter has aborted the match
+					return FALSE;
+				}
+				elseif (is_array($return))
+				{
+					// Filter has modified the parameters
+					$params = $return;
+					
+					// fix for pagination on lambda routes
+					$this->_uri = Arr::get($params, 'uri', '');
+				}
+			}
+		}
+
+		return $params;
 	}
     
 } // End Route
