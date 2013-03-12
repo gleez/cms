@@ -19,23 +19,6 @@ class Gleez_Request extends Kohana_Request {
 	 * @var  string  request Redirect URL for ajax requests
 	 */
 	public static $_redirect_url;
-	
-	/**
-	 * Add subdomain support
-	 * Thanks to jean@webmais.net.br
-	 *
-	 * @param   string      $uri  URI of the request
-	 * @param   HTTP_Cache  $cache
-	 * @param   array       $injected_routes An array of routes to use, for testing
-	 * @return  void
-	 * @link    https://github.com/jeanmask/subdomain
-	 */
-	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
-	{
-		self::$subdomain = Request::catch_subdomain();
-
-		return parent::factory($uri, $cache, $injected_routes);
-	}
 
 	/**
 	 * Redirects as the request response. If the URL does not include a
@@ -184,41 +167,6 @@ class Gleez_Request extends Kohana_Request {
 		return FALSE;
 	}
 	
-	/**
-	 * Checks subdomain support
-	 *
-	 * @param   string  $base_url
-	 * @param   mixed   $host
-	 * @return  boolean|string
-	 */
-	public static function catch_subdomain($base_url = NULL, $host = NULL)
-	{
-		if($base_url === NULL) $base_url = parse_url(Kohana::$base_url, PHP_URL_HOST);
-	
-		if($host === NULL)
-		{
-			if( Kohana::$is_cli ) return FALSE;
-	
-			$host = $_SERVER['HTTP_HOST'];
-		}
-	
-		if(empty($base_url) OR empty($host) OR in_array($host, Route::$localhosts) OR Valid::ip($host))
-		{
-			return FALSE;
-		}
-	
-		$sub_pos = (int)strpos($host, $base_url) - 1;
-		
-		if($sub_pos > 0)
-		{
-			$subdomain = substr($host,0,$sub_pos);
-			
-			if( !empty($subdomain) ) return $subdomain;
-		}
-		
-		return Route::SUBDOMAIN_EMPTY;
-	}
-
 	/**
 	 * Returns whether this request is GET
 	 * Thanks to nike-17@ya.ru
