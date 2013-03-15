@@ -1,30 +1,29 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Add plural support to i18n 
+ * Add plural support to i18n
  *
- * @package	Gleez
- * @category	Html
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package   Gleez\I18n
+ * @author    Sandeep Sangamreddi - Gleez
+ * @copyright (c) 2013 Gleez Technologies
+ * @license   http://gleezcms.org/license
  */
 class Gleez_I18n extends Kohana_I18n{
-        
-        /**
-         * This method is borrowed from the s7ncms code:
-         */
-        public static function get_plural($string, $count)
+
+	/**
+	 * This method is borrowed from the s7ncms code:
+	 */
+	public static function get_plural($string, $count)
 	{
 		// Load the translation table
 		$table = I18n::load(I18n::$lang);
 
-		$key = I18n::get_plural_key(I18n::$lang, $count);
-		
+		$key = Gleez_I18n::get_plural_key(I18n::$lang, $count);
+
 		// Return the translated string if it exists
 		return isset($table[$string][$key]) ? $table[$string][$key]: $string;
 	}
-        
-        /**
+
+	/**
 	 * This method is borrowed from the Gallery3 code:
 	 * http://apps.sourceforge.net/trac/gallery/browser/gallery3/trunk/core/libraries/I18n.php?rev=20787#L217
 	 *
@@ -46,7 +45,7 @@ class Gleez_I18n extends Kohana_I18n{
 	 * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
 	 */
 	private static function get_plural_key($lang, $count) {
-		
+
 		// Data from CLDR 1.6 (http://unicode.org/cldr/data/common/supplemental/plurals.xml).
 		// Docs: http://www.unicode.org/cldr/data/charts/supplemental/language_plural_rules.html
 		switch ($lang) {
@@ -242,28 +241,33 @@ class Gleez_I18n extends Kohana_I18n{
 if ( ! function_exists('__'))
 {
 	/**
-	* Translate strings to the page language or a given language. The PHP function
-	* [strtr](http://php.net/strtr) is used for replacing parameters.
-	*
-	*    __('Welcome back, :user', array(':user' => $username));
-	*
-	* [!!] The target language is defined by [I18n::$lang].
-	*      
-	* @uses    I18n::get
-	* @param   string  text to translate
-	* @param   array   values to replace in the translated text
-	*                  An associative array of replacements to make after translation. Incidences
-	*                  of any key in this array are replaced with the corresponding value. Based
-	*                  on the first character of the key, the value is escaped and/or themed:
-	*                  - !variable: inserted as is
-	*                  - :variable: inserted as is
-	*                  - @variable: escape plain text to HTML (HTML::entities)
-	*                  - %variable: escape text and theme as a placeholder for user-submitted
-	*                  content (HTML::entities + theme_placeholder)
-	*      
-	* @param   string  source language
-	* @return  string
-	*/
+	 * Translate strings to the page language or a given language
+	 *
+	 * The PHP function [strtr](http://php.net/strtr) is used for replacing parameters.
+	 * <code>
+	 *  __('Welcome back, :user', array(':user' => $username));
+	 * </code>
+	 *
+	 * [!!] The target language is defined by [I18n::$lang].
+	 *
+	 * @param   string  $string Text to translate
+	 * @param   array   $values Values to replace in the translated text. [Optional]
+	 *                          An associative array of replacements to make after translation.
+	 *                          Incidences of any key in this array are replaced with the corresponding value.
+	 *                          Based on the first character of the key, the value is escaped and/or themed:
+	 *                          - !variable: inserted as is
+	 *                          - :variable: inserted as is
+	 *                          - @variable: escape plain text to HTML (HTML::chars)
+	 *                          - %variable: escape text and theme as a placeholder for user-submitted
+	 *                          - ^variable: escape text and uppercase the first character of each word in a string
+	 *                          - ~variable: escape text and make a string's first character uppercase
+	 *                          content (HTML::chars + theme_placeholder)
+	 * @param   string  $lang   Source language [Optional]
+	 * @return  string
+	 *
+	 * @uses    I18n::get
+	 * @uses    HTML::chars
+	 */
 	function __($string, array $values = NULL, $lang = 'en-us')
 	{
 		if ($lang !== I18n::$lang)
@@ -285,24 +289,29 @@ if ( ! function_exists('__'))
 				switch ($key[0])
 				{
 					case '@':
-						//case ':':
-						// Escaped only.
+						// Escaped only
 						$values[$key] = HTML::chars($value);
 					break;
-                                
 					case '%':
-					default:
-						// Escaped and placeholder.
+						// Escaped and placeholder
 						$values[$key] = '<em class="placeholder">' . HTML::chars($value) . '</em>';
 					break;
-                                
+					case '^':
+						// Escaped and uppercase the first character of each word in a string
+						$values[$key] = ucwords(HTML::chars($value));
+					break;
+					case '~':
+						// Escaped and make a string's first character uppercase
+						$values[$key] = ucfirst(HTML::chars($value));
+					break;
 					case '!':
 					case ':':
-						// Pass-through.
+					default:
+						// Pass-through
 				}
 			}
 		}
-        
+
 		return strtr($string, $values);
 	}
 }

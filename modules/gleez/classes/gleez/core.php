@@ -2,32 +2,37 @@
 /**
  * Gleez Core class
  *
- * @package   Gleez
- * @category  Core
- * @version   0.9.9.0
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Core
+ * @version    0.9.9.1
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Core {
 
-	/** @var string Release version */
-	const VERSION = '0.9.9.0';
+	/** string Release version */
+	const VERSION = '0.9.9.1';
 
-	/** @var string Release codename */
+	/** string Release codename */
 	const CODENAME = 'Turdus obscurus';
 
-	/** @var boolean Installed? */
+	/**
+	 * Gleez installed?
+	 * @var boolean
+	 */
 	public static $installed = FALSE;
 
-	/** @var string Theme name */
+	/**
+	 * Default theme name
+	 * @var string
+	 */
 	public static $theme = 'fluid';
 
-	/** @var string Application language */
-	public static $locale = '';
-
-	/** @var boolean Has [Gleez::init] been called? */
-	protected static $_ginit = FALSE;
+	/**
+	 * Has [Gleez::_ginit] been called?
+	 * @var boolean
+	 */
+    protected static $_ginit = FALSE;
 
 	/**
 	 * Runs the Gleez environment
@@ -40,25 +45,37 @@ class Gleez_Core {
 			return;
 		}
 
-		// Gleez is now initialized
+		/**
+		 * Gleez is now initialized?
+		 * @var boolean
+		 */
 		self::$_ginit = TRUE;
 
-		// Set default cookie salt
+		/**
+		 * Default cookie salt
+		 * @var string
+		 */
 		Cookie::$salt = Kohana::$config->load('cookie.salt');
 
-		// Set default cookie lifetime
+		/**
+		 * Default cookie lifetime
+		 * @var string
+		 */
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
 
-                // Check database config file exist or not
-                Gleez::$installed = file_exists(APPPATH.'config/database.php');
-            
-                if (Gleez::$installed)
-                {
-                        // Database config reader and writer
-                        Kohana::$config->attach(new Config_Database);
-                }
+		/**
+		 * Check database config file exist or not
+		 * @var boolean
+		 */
+		Gleez::$installed = file_exists(APPPATH.'config/database.php');
 
-		// I18n settins
+		if (Gleez::$installed)
+		{
+			// Database config reader and writer
+			Kohana::$config->attach(new Config_Database);
+		}
+
+		// I18n settings
 		self::_set_locale();
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
@@ -66,14 +83,17 @@ class Gleez_Core {
 			Kohana_Exception::$error_view = 'errors/stack';
 		}
 
-		// Disable the kohana powred headers
+		/**
+		 * Disable the kohana powered headers
+		 * @var boolean
+		 */
 		Kohana::$expose = FALSE;
 
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
 		 * properly installed and send to the installer.
 		 */
-		if (!Gleez::$installed)
+		if ( ! Gleez::$installed)
 		{
 			Session::$default = 'cookie';
 			Kohana_Exception::$error_view = 'kohana/error';
@@ -111,13 +131,17 @@ class Gleez_Core {
 	}
 
 	/**
-	 * APC cache. Provides an opcode based cache.
+	 * APC cache
 	 *
-	 * @param   string   $name      name of the cache
-	 * @param   mixed    $data      data to cache [Optional]
-	 * @param   integer  $lifetime  number of seconds the cache is valid for [Optional]
-	 * @return  mixed    for getting
-	 * @return  boolean  for setting
+	 * Provides an opcode based cache.
+	 *
+	 * @param   string   $name      Name of the cache
+	 * @param   mixed    $data      Data to cache [Optional]
+	 * @param   integer  $lifetime  Number of seconds the cache is valid for [Optional]
+	 * @return  mixed    For getting
+	 * @return  boolean  For setting
+	 *
+	 * @todo    add more support for more cache drivers
 	 */
 	public static function cache($name, $data = NULL, $lifetime = 3600)
 	{
@@ -212,19 +236,22 @@ class Gleez_Core {
 	}
 
 	/**
-	 * List of route types (route name used for creating alias and term/tag routes)
+	 * List of route types
 	 *
-	 *  @return array types
+	 * Route name used for creating alias and term/tag routes
+	 *
+	 * @return array types
+	 * @uses  Module::action
 	 */
 	public static function types()
 	{
 		$states = array(
-			'post' => __('Post'),
-			'page' => __('Page'),
-			'blog' => __('Blog'),
+			'post'  => __('Post'),
+			'page'  => __('Page'),
+			'blog'  => __('Blog'),
 			'forum' => __('Forum'),
-			'book' => __('Book'),
-			'user' => __('User')
+			'book'  => __('Book'),
+			'user'  => __('User')
 		);
 
 		$values = Module::action('gleez_types', $states);
@@ -233,6 +260,8 @@ class Gleez_Core {
 	}
 
 	/**
+	 * Check for maintenance_mode
+	 *
 	 * If Gleez is in maintenance mode, then force all non-admins to get routed
 	 * to a "This site is down for maintenance" page.
 	 *
@@ -257,6 +286,7 @@ class Gleez_Core {
 	 * @param   string  $file The file name
 	 * @return  string  The file path
 	 * @throws  Kohana_Exception Indicates that the file does not exist
+	 * @uses    Kohana::modules
 	 */
 	protected static function find_file_custom($file)
 	{
@@ -318,7 +348,12 @@ class Gleez_Core {
 	}
 
 	/**
-	 * I18n settins
+	 * I18n settings
+	 *
+	 * By default - English
+	 *
+	 * @uses  Cookie::get
+	 * @uses  Cookie::set
 	 */
 	protected static function _set_locale()
 	{
@@ -331,15 +366,20 @@ class Gleez_Core {
 			$locale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 		}
 
-		// If the config group `site` locale are missing or it empty
-		if ( ! in_array($locale, Kohana::$config->load('site.installed_locales')))
+		$installed_locales =
+			Kohana::$config->load('site')->offsetExists('installed_locales')
+			AND is_array(Kohana::$config->load('site.installed_locales'))
+			AND ! is_null(Kohana::$config->load('site.installed_locales'));
+
+		if ( ! $installed_locales)
 		{
-			// By default - english
-			$locale = 'en';
+		    // By default - English
+		    $locale = 'en';
 		}
 
+
 		// Setting lang
-		I18n::$lang = self::$locale = $locale;
+		I18n::$lang = $locale;
 
 		Cookie::set('locale', $locale);
 	}
