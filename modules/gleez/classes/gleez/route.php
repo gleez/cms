@@ -1,37 +1,42 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * @package    Gleez\Route
  * @version    1.0
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Route extends Kohana_Route {
-	
+
 	/**
-	 * @var  string  route name
+	 * Route name
+	 * @var string
 	 */
 	protected $_name = NULL;
 
 	/**
-	 * @var string route SUBDOMAIN
-	 */
-	protected $_subdomain ;
-
-	/**
-	 * @var  array  route filters
+	 * Route filters
+	 * @var array
 	 */
 	protected $_filters = array();
-	
+
 	/**
-	 * Add Sub-domains and filters support
-	 * 
-	 *  @see https://github.com/jeanmask/subdomain
-	 *  Thanks to jean@webmais.net.br
+	 * Creates a new route
+	 *
+	 * Routes should always be created with [Route::set]
+	 * or they will not be properly stored.
+	 *
+	 * Example:<br>
+	 * <code>
+	 *	$route = new Route($uri, $regex);
+	 * </code>
+	 *
+	 * @param  string  $uri    Route URI pattern or lambda/callback function [Optional]
+	 * @param  array   $regex  Key patterns [Optional]
 	 */
-	public function __construct($uri = NULL, $regex = NULL)
+	public function __construct($uri = NULL, array $regex = NULL)
 	{
-		if ($uri === NULL)
+		if (is_null($uri))
 		{
 			// Assume the route is from cache
 			return;
@@ -52,25 +57,31 @@ class Gleez_Route extends Kohana_Route {
 	}
 
 	/**
-	 * Saves or loads the route cache. If your routes will remain the same for
-	 * a long period of time, use this to reload the routes from the cache
-	 * rather than redefining them on every page load.
+	 * Saves or loads the route cache
 	 *
-	 *     if ( ! Route::cache())
-	 *     {
-	 *         // Set routes here
-	 *         Route::cache(TRUE);
-	 *     }
+	 * If your routes will remain the same for a long period of time,
+	 * use this to reload the routes from the cache rather than redefining
+	 * them on every page load.
 	 *
-	 * @param   boolean $save   cache the current routes
-	 * @param   boolean $append append, rather than replace, cached routes when loading
-	 * @return  void    when saving routes
-	 * @return  boolean when loading routes
+	 * Set routes:<br>
+	 * <code>
+	 *	if ( ! Route::cache())
+	 * 	{
+	 *		Route::cache(TRUE);
+	 *	}
+	 * </code>
+	 *
+	 * @param   boolean  $save    Cache the current routes [Optional]
+	 * @param   boolean  $append  Append, rather than replace, cached routes when loading [Optional]
+	 * @return  void     When saving routes
+	 * @return  boolean  When loading routes
+	 *
 	 * @uses    Kohana::cache
+	 * @uses    Arr::merge
 	 */
 	public static function cache($save = FALSE, $append = FALSE)
 	{
-		if ($save === TRUE)
+		if ($save)
 		{
 			// Cache all defined routes
 			Kohana::cache('Route::cache()', Route::$_routes);
@@ -82,7 +93,7 @@ class Gleez_Route extends Kohana_Route {
 				if ($append)
 				{
 					// Append cached routes
-					Route::$_routes += $routes;
+					Route::$_routes = Arr::merge(Route::$_routes, $routes);
 				}
 				else
 				{
@@ -101,29 +112,32 @@ class Gleez_Route extends Kohana_Route {
 		}
 	}
 
-		/**
-	 * Filters to be run before route parameters are returned:
+	/**
+	 * Route filters
 	 *
-	 *     $route->filter(
-	 *         function(Route $route, $params)
-	 *         {
-	 *             if ($params AND $params['controller'] === 'welcome')
-	 *             {
-	 *                 $params['controller'] = 'home';
-	 *             }
+	 * Filters to be run before route parameters are returned.
 	 *
-	 *             return $params;
-	 *         }
-	 *     );
+	 * Exmaple:
+	 *	$route->filter(
+	 *		function(Route $route, $params)
+	 *		{
+	 *			if ($params AND $params['controller'] === 'welcome')
+	 *			{
+	 *				$params['controller'] = 'home';
+	 *			}
 	 *
-	 * To prevent a route from matching, return `FALSE`. To replace the route
-	 * parameters, return an array.
+	 *			return $params;
+	 *		}
+	 *	);
+	 *
+	 * To prevent a route from matching, return `FALSE`.
+	 * To replace the route parameters, return an array.
 	 *
 	 * [!!] Default parameters are added before filters are called!
 	 *
+	 * @param   array   $callback  Callback string, array, or closure
+	 * @return  Route
 	 * @throws  Kohana_Exception
-	 * @param   array   $callback   callback string, array, or closure
-	 * @return  $this
 	 */
 	public function filter($callback)
 	{
@@ -136,34 +150,42 @@ class Gleez_Route extends Kohana_Route {
 
 		return $this;
 	}
-	
+
 	/**
-	 * Fix for pagination on lambda routes; add subdomain support
-	 * 
+	 * Fix for pagination on lambda routes
+	 *
 	 * Tests if the route matches a given URI. A successful match will return
 	 * all of the routed parameters as an array. A failed match will return
 	 * boolean FALSE.
 	 *
-	 *     // Params: controller = users, action = edit, id = 10
-	 *     $params = $route->matches('users/edit/10');
+	 * // Params: controller = users, action = edit, id = 10<br>
+	 * <code>
+	 *	$params = $route->matches('users/edit/10');
+	 * </code>
 	 *
-	 * This method should almost always be used within an if/else block:
+	 * This method should almost always be used within an if/else block:<br>
+	 * <code>
+	 *	if ($params = $route->matches($uri))
+	 *	{
+	 *		// Parse the parameters
+	 *	}
+	 * </code>
 	 *
-	 *     if ($params = $route->matches($uri))
-	 *     {
-	 *         // Parse the parameters
-	 *     }
+	 * @param   string  $uri  URI to match
+	 * @return  array   On success
+	 * @return  FALSE   On failure
 	 *
-	 * @param   string  URI to match
-	 * @return  array   on success
-	 * @return  FALSE   on failure
+	 * @uses    Arr::get
 	 */
-	public function matches($uri, $subdomain = NULL)
+	public function matches($uri)
 	{
 		if ( ! preg_match($this->_route_regex, $uri, $matches))
+		{
 			return FALSE;
+		}
 
 		$params = array();
+
 		foreach ($matches as $key => $value)
 		{
 			if (is_int($key))
@@ -201,7 +223,7 @@ class Gleez_Route extends Kohana_Route {
 				{
 					// Filter has modified the parameters
 					$params = $return;
-					
+
 					// fix for pagination on lambda routes
 					$this->_uri = Arr::get($params, 'uri', '');
 				}
@@ -210,5 +232,5 @@ class Gleez_Route extends Kohana_Route {
 
 		return $params;
 	}
-    
-} // End Route
+
+}
