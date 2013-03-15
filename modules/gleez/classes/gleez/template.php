@@ -2,80 +2,137 @@
 /**
  * Abstract template class for automatic templating.
  *
- * @package   Gleez
- * @category  Template
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Template
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
-abstract class Gleez_Template extends Controller{
+abstract class Gleez_Template extends Controller {
 
-	/** @var string Page template */
+	/**
+	 * Page template
+	 * @var string
+	 */
 	public $template = 'template';
 
-	/** @var boolean Auto render template */
+	/**
+	 * Auto render template?
+	 * @var boolean
+	 */
 	public $auto_render = TRUE;
 
-	/** @var boolean Turn debugging on? */
+	/**
+	 * Turn debugging on?
+	 * @var boolean
+	 */
 	public $debug = FALSE;
 
-	/** @var string Doctype declaration */
-	public $doctype = FALSE;
+	/**
+	 * The site name
+	 * @var string
+	 */
+	public $site_name;
 
-	/** @var string The site name */
-	public $_site_name;
-
-	/** @var string The page title */
+	/**
+	 * The page title
+	 * @var string
+	 */
 	public $title = NULL;
 
-	/** @var string The delimiter page header and site name */
-	public $_title_separator;
+	/**
+	 * The delimiter page header and site name
+	 * @var string
+	 */
+	public $title_separator;
 
-	/** @var array The sidebar content */
+	/**
+	 * The sidebar content
+	 * @var array
+	 */
 	protected $_regions = array();
 
-	/** @var boolean Is ajax request */
+	/**
+	 * Is ajax request?
+	 * @var boolean
+	 */
 	protected $_ajax = FALSE;
 
-	/** @var  boolean  is internal request */
+	/**
+	 * is internal request?
+	 * @var boolean
+	 */
 	protected $_internal = FALSE;
 
-	/** @var Kohana_Config The configuration settings */
+	/**
+	 * The configuration settings
+	 * @var Kohana_Config
+	 */
 	protected $_config;
 
-	/** @var object The Auth Object */
+	/**
+	 * The Auth Object
+	 * @var object
+	 */
 	protected $_auth;
 
-	/** @var object The Widgets Object */
+	/**
+	 * The Widgets Object
+	 * @var object
+	*/
 	protected $_widgets;
 
-	/** @var Format An Format instance  */
+	/**
+	 * An Format instance
+	 * @var Format
+	 */
 	protected $_format;
 
-	/** @var array The destination url */
+	/**
+	 * The destination url
+	 * @var array
+	 */
 	protected $dest;
 
-	/** @var array The destination url */
+	/**
+	 * The destination url
+	 * @var array
+	 */
 	protected $redirect;
 
-	/** @var string Current page class */
+	/**
+	 * Current page class
+	 * @var string
+	 */
 	protected $_page_class;
 
-	/** @var string Current page id, defaults to controller name */
+	/**
+	 * Current page id, defaults to controller name
+	 * @var string
+	 */
 	protected $_page_id;
 
-	/** @var array Tabs navigation */
+	/**
+	 * Tabs navigation
+	 * @var array
+	 */
 	protected $_tabs;
 
-	/** @var array Profiling */
+	/**
+	 * Profiling
+	 * @var array
+	 */
 	protected $_benchmark;
 
-	/** @var string Hold the response format for this request */
+	/**
+	 * Hold the response format for this request
+	 * @var string
+	 */
 	protected $_response_format;
 
 	/**
-	 * @var array List all supported formats for this controller
+	 * List all supported formats for this controller
 	 * (accept-type => path to format template)
+	 * @var array
 	 */
 	protected $_accept_formats = array(
 		'text/html'             => 'html',
@@ -89,9 +146,9 @@ abstract class Gleez_Template extends Controller{
 	);
 
 	/**
-	 * Enable/Disable sidebars for this request, ex: add or edit page requires no sidebars.
-	 *
-	 * @var bool
+	 * Enable sidebars for this request?
+	 * For example: add or edit page don't requires sidebars
+	 * @var boolean
 	 */
 	protected $_sidebars = TRUE;
 
@@ -106,14 +163,14 @@ abstract class Gleez_Template extends Controller{
 		// Execute parent::before first
 		parent::before();
 
-		if (Kohana::$profiling === TRUE)
+		if (Kohana::$profiling)
 		{
 			// Start a new benchmark
 			$this->_benchmark = Profiler::start('Gleez', 'Gleez Controller');
 		}
 
 		// Test whether the current request is the first request
-		if (!$this->request->is_initial())
+		if ( ! $this->request->is_initial())
 		{
 			$this->_internal   = TRUE;
 			$this->auto_render = FALSE;
@@ -140,75 +197,85 @@ abstract class Gleez_Template extends Controller{
 
 		if ($this->auto_render)
 		{
-				// Throw exception if none of the accept-types are supported
-				if (!$accept_types = array_filter($accept_types))
-				{
-					throw new Http_Exception_415('Unsupported accept-type', 415);
-				}
+			// Throw exception if none of the accept-types are supported
+			if ( ! $accept_types = array_filter($accept_types))
+			{
+				throw new Http_Exception_415('Unsupported accept-type', 415);
+			}
 
-				// Initiate a Format instance
-				$this->_format = Format::instance();
-				// Load the template
-				$this->template         = View::factory($this->template);
-				$this->_title_separator = $this->_config->get('title_separator', ' | ');
-				$this->_widgets         = Widgets::instance();
-				$this->template->_admin = Theme::$is_admin;
+			// Initiate a Format instance
+			$this->_format = Format::instance();
+
+			// Load the template
+			$this->template         = View::factory($this->template);
+
+			$this->title_separator = $this->_config->get('title_separator', ' | ');
+			$this->_widgets         = Widgets::instance();
+			$this->template->_admin = Theme::$is_admin;
 
 				//set the destination & redirect url
-				$this->desti    = array(
-					'destination' => $this->request->uri()
-				);
-				$this->redirect = ($this->request->query('destination') !== NULL) ? $this->request->query('destination') : array();
+			$this->desti = array(
+				'destination' => $this->request->uri()
+			);
 
-				// Bind the generic page variables
-				$this->template->set('site_name', $this->_config->get('site_name', __('Gleez CMS')))
-								->set('site_slogan', $this->_config->get('site_slogan', __('Innovate IT')))
-								->set('site_url', URL::site(null, TRUE))
-								->set('site_logo', $this->_config->get('site_logo', false))
-								->set('sidebar_left', array())
-								->set('sidebar_right', array())
-								->set('column_class', '')
-								->set('main_column', 12)
-								->set('head_title', $this->title)
-								->set('title', $this->title)
-								->set('front', FALSE)
-								->set('mission', FALSE)
-								->set('tabs', FALSE)
-								->set('_user', $this->_auth->get_user());
+			$this->redirect = ($this->request->query('destination') !== NULL) ? $this->request->query('destination') : array();
 
-				// Page Title
-				$this->title = ucwords($this->request->controller());
+			// Bind the generic page variables
+			$this->template->set('site_name',      $this->_config->get('site_name', __('Gleez CMS')))
+					->set('site_slogan',   $this->_config->get('site_slogan', __('Innovate IT')))
+					->set('site_url',      URL::site(null, TRUE))
+					->set('site_logo',     $this->_config->get('site_logo', false))
+					->set('sidebar_left',  array())
+					->set('sidebar_right', array())
+					->set('column_class',  '')
+					->set('main_column',   12)
+					->set('head_title',    $this->title)
+					->set('title',         $this->title)
+					->set('front',         FALSE)
+					->set('mission',       FALSE)
+					->set('tabs',          FALSE)
+					->set('_user',         $this->_auth->get_user());
 
-				// Assign the default css files
-				Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
-				Assets::css('font-awesome', 'media/css/font-awesome.min.css', array('weight' => -13));
-				Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
-				Assets::css('style', 'media/css/style.css', array('default'), array('weight' => 1));
-				Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
+			// Page Title
+			$this->title = ucwords($this->request->controller());
 
-				// Set default server headers
-				$this->_set_default_server_headers();
+			// Assign the default css files
+			$this->_set_default_css();
 
-				// Set default meta data and media
-				$this->_set_default_meta_links();
-				$this->_set_default_meta_tags();
+			// Assign the default js files
+			$this->_set_default_js();
 
-				/**
-				 * Make your view template available to all your other views
-				 * so easily you could access template variables
-				 */
-				View::bind_global('site_name', $this->template->site_name);
-				View::bind_global('site_url', $this->template->site_url);
-				View::bind_global('template', $this->template);
+			// Set default server headers
+			$this->_set_default_server_headers();
 
-				if (Kohana::$environment === Kohana::DEVELOPMENT)
-				{
-					Kohana::$log->add(LOG::DEBUG, 'Executing Controller `:controller` action `:action`', array(
-						':controller' => $this->request->controller(),
-						':action' => $this->request->action()
-					));
-				}
+			// Set default meta data and media
+			$this->_set_default_meta_links();
+			$this->_set_default_meta_tags();
+
+			$ua = $this->_config->get('google_ua', FALSE);
+
+			// Google static
+			if ($ua AND Kohana::PRODUCTION === Kohana::$environment)
+			{
+				Assets::google_stats($ua);
 			}
+
+			/**
+			 * Make your view template available to all your other views
+			 * so easily you could access template variables
+			 */
+			View::bind_global('site_name', $this->template->site_name);
+			View::bind_global('site_url', $this->template->site_url);
+			View::bind_global('template', $this->template);
+		}
+
+		if (Kohana::$environment === Kohana::DEVELOPMENT)
+		{
+			Kohana::$log->add(LOG::DEBUG, 'Executing Controller `:controller` action `:action`', array(
+				':controller' => $this->request->controller(),
+				':action' => $this->request->action()
+			));
+		}
 	}
 
 	/**
@@ -218,7 +285,7 @@ abstract class Gleez_Template extends Controller{
 	 */
 	public function after()
 	{
-		if ($this->auto_render === TRUE)
+		if ($this->auto_render)
 		{
 			// Controller name as the default page id if none set
 			empty($this->_page_id) AND $this->_page_id = $this->request->controller();
@@ -226,12 +293,12 @@ abstract class Gleez_Template extends Controller{
 			// Load left and right sidebars if available
 			$this->_set_sidebars();
 
-			// set appropriate column css class
+			// Set appropriate column css class
 			$this->_set_column_class();
 
 			// Do some CSS magic to page class
 			$classes   = array();
-			$classes[] = Gleez::$locale;
+			$classes[] = I18n::$lang;
 			$classes[] = $this->request->controller();
 			$classes[] = $this->request->action();
 			$classes[] = $this->request->controller() . '-' . $this->request->action();
@@ -240,7 +307,7 @@ abstract class Gleez_Template extends Controller{
 			$classes[] = ($this->_auth->logged_in()) ? 'logged-in' : 'not-logged-in';
 
 			// Special check for frontpage and frontpage title
-			if (!$uri = @preg_replace("#(/p\d+)+$#uD", '', rtrim($this->request->uri(), '/')) OR $uri === $this->_config->front_page)
+			if ( ! $uri = @preg_replace("#(/p\d+)+$#uD", '', rtrim($this->request->uri(), '/')) OR $uri === $this->_config->front_page)
 			{
 				// Set front variable true for themers
 				$this->template->front = TRUE;
@@ -249,7 +316,7 @@ abstract class Gleez_Template extends Controller{
 				// Dont show title on homepage
 				$this->title           = FALSE;
 
-				$this->template->mission = $this->_config->get('site_mission', FALSE);
+				$this->template->mission = __($this->_config->get('site_mission', ''));
 			}
 
 			View::set_global('is_front', $this->template->front);
@@ -266,19 +333,19 @@ abstract class Gleez_Template extends Controller{
 
 			// Set pimary menu
 			$pimary_menu = Menu::links('main-menu', array(
-				'class' => 'menus nav'
+					'class' => 'menus nav'
 			));
 
 			// Bind the generic page variables
-			$this->template->set('lang', Gleez::$locale)
-							->set('page_id', $this->_page_id)
-							->set('page_class', $page_class)
-							->set('primary_menu', $pimary_menu)
-							->set('title', $this->title)
-							->set('mission', $this->template->mission)
-							->set('content', $this->response->body())
-							->set('messages', Message::display())
-							->set('profiler', FALSE);
+			$this->template->set('lang', I18n::$lang)
+					->set('page_id', $this->_page_id)
+					->set('page_class', $page_class)
+					->set('primary_menu', $pimary_menu)
+					->set('title', $this->title)
+					->set('mission', $this->template->mission)
+					->set('content', $this->response->body())
+					->set('messages', Message::display())
+					->set('profiler', FALSE);
 
 			if (count($this->_tabs) > 0)
 			{
@@ -335,8 +402,6 @@ abstract class Gleez_Template extends Controller{
 
 	/**
 	 * Set the page title.
-	 *
-	 * @return  void
 	 */
 	protected function _set_head_title()
 	{
@@ -352,27 +417,26 @@ abstract class Gleez_Template extends Controller{
 			$head_title = array(
 				$this->template->site_name
 			);
+
 			if ($this->template->site_slogan)
 			{
 				$head_title[] = $this->template->site_slogan;
 			}
 		}
 
-		$this->template->head_title = implode($this->_title_separator, $head_title);
+		$this->template->head_title = implode($this->title_separator, $head_title);
 	}
 
 	/**
-	 * Set the default server headers.
-	 *
-	 * @return  void
+	 * Set the default server headers
 	 */
 	protected function _set_default_server_headers()
 	{
-		$headers                    = $this->_config->get('headers', array());
+		$headers = $this->_config->get('headers', array());
 		$headers['X-Gleez-Version'] = 'Gleez CMS v ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')';
 
 		$xmlrpc = $this->_config->get('xmlrpc', NULL);
-		if (!is_null($xmlrpc))
+		if ( ! is_null($xmlrpc))
 		{
 			$headers['X-Pingback'] = URL::site($xmlrpc, TRUE);
 		}
@@ -381,24 +445,25 @@ abstract class Gleez_Template extends Controller{
 	}
 
 	/**
-	 * Set the server headers.
+	 * Set the server headers
 	 *
-	 * @param   array $headers  An associative array of server headers
-	 * @return  void
+	 * @param  array $headers  An associative array of server headers
 	 */
 	protected function _set_server_headers($headers)
 	{
-		if (is_array($headers) AND !empty($headers))
+		if (is_array($headers) AND ! empty($headers))
 		{
 			$this->response->headers($headers);
 		}
 	}
 
 	/**
-	 * Set the default meta links (using configuration settings).
+	 * Set the default meta links
 	 *
-	 * @return  void
+	 * Used configuration settings.
+	 *
 	 * @uses    Meta::links
+	 * @uses    Arr::get
 	 */
 	protected function _set_default_meta_links()
 	{
@@ -415,10 +480,12 @@ abstract class Gleez_Template extends Controller{
 	}
 
 	/**
-	 * Set the default meta tags (using configuration settings).
+	 * Set the default meta tags
 	 *
-	 * @return  void
+	 * Using configuration settings.
+	 *
 	 * @uses    Meta::tags
+	 * @uses    Arr::get
 	 */
 	protected function _set_default_meta_tags()
 	{
@@ -427,20 +494,24 @@ abstract class Gleez_Template extends Controller{
 
 		if ($tags)
 		{
-			foreach ($tags as $name => $value)
+			foreach ($tags as $handle => $value)
 			{
 				$conditional = NULL;
+
 				if (is_array($value))
 				{
 					$conditional = Arr::get($value, 'conditional');
 					$value       = Arr::get($value, 'value', '');
 				}
-				$attributes = array();
+
+				$attrs = array();
+
 				if (isset($conditional))
 				{
-					$attributes['conditional'] = $conditional;
+					$attrs['conditional'] = $conditional;
 				}
-				Meta::tags($name, $value, $attributes);
+
+				Meta::tags($handle, $value, $attrs);
 			}
 		}
 	}
@@ -469,19 +540,19 @@ abstract class Gleez_Template extends Controller{
 		$sidebar_left  = $this->template->sidebar_left;
 		$sidebar_right = $this->template->sidebar_right;
 
-		if (!empty($sidebar_left) AND !empty($sidebar_right))
+		if ( ! empty($sidebar_left) AND ! empty($sidebar_right))
 		{
 			$this->template->column_class = 'main-both';
 			$this->template->main_column  = 6;
 		}
 		else
 		{
-			if (!empty($sidebar_left))
+			if ( ! empty($sidebar_left))
 			{
 				$this->template->column_class = 'main-left';
 				$this->template->main_column  = 9;
 			}
-			if (!empty($sidebar_right))
+			if ( ! empty($sidebar_right))
 			{
 				$this->template->column_class = 'main-right';
 				$this->template->main_column  = 9;
@@ -489,6 +560,29 @@ abstract class Gleez_Template extends Controller{
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Set default CSS
+	 *
+	 * @uses  Assets::css
+	 */
+	protected function _set_default_css()
+	{
+		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
+		Assets::css('font-awesome', 'media/css/font-awesome.min.css', array('weight' => -13));
+		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
+		Assets::css('style', 'media/css/style.css', array('default'), array('weight' => 1));
+	}
+
+	/**
+	 * Set default JavaScript
+	 *
+	 * @uses  Assets::js
+	 */
+	protected function _set_default_js()
+	{
+		Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
 	}
 
 	/**
@@ -505,19 +599,19 @@ abstract class Gleez_Template extends Controller{
 
 		if (Request::post_max_size_exceeded())
 		{
-			Message::error(__('Max filesize of :max exceeded.', array(
-					':max' => ini_get('post_max_size') . 'B'
-			)));
+			Message::error(__('Max filesize of :max exceeded.',
+				array(':max' => ini_get('post_max_size') . 'B')
+			));
 			return FALSE;
 		}
 
 		// @todo use $this->request->post()
 		if ($submit)
 		{
-			if (!isset($_POST[$submit]))
+			if ( ! isset($_POST[$submit]))
 			{
-					Message::error(__('This form has altered. Please try submitting it again.'));
-					return FALSE;
+				Message::error(__('This form has altered. Please try submitting it again.'));
+				return FALSE;
 			}
 		}
 
@@ -543,7 +637,7 @@ abstract class Gleez_Template extends Controller{
 				Message::error(__('The security field can\'t be empty.'));
 				return FALSE;
 			}
-			else if (!Captcha::valid($captcha))
+			elseif ( ! Captcha::valid($captcha))
 			{
 				Message::error(__('The security answer was wrong.'));
 				return FALSE;
@@ -561,6 +655,7 @@ abstract class Gleez_Template extends Controller{
 	protected function _set_profiler_stats()
 	{
 		$queries = 0;
+
 		if (Kohana::$profiling)
 		{
 			// DB queries
