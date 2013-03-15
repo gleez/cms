@@ -583,6 +583,17 @@ abstract class Gleez_Template extends Controller {
 	protected function _set_default_js()
 	{
 		Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
+
+
+		// Google js
+		if (Kohana::PRODUCTION === Kohana::$environment)
+		{
+			$ua = $this->_config->get('google_ua');
+			if ( ! is_null($ua))
+			{
+				Assets::google_stats($ua);
+			}
+		}
 	}
 
 	/**
