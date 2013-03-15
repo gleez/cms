@@ -94,7 +94,12 @@ return array(
 
   /** @var array Installed locales */
   'installed_locales' => array(
+    'de',
     'en',
+    'es',
+    'fr',
+    'he',
+    'nl',
     'ru',
     'zh',
   ),
@@ -114,4 +119,6 @@ return array(
   /** @var string Default session type */
   'session_type' => 'db'
 
+  /** @var string Define Google User Agent ID */
+  'google_ua' => 'UA-12345678-9'
 );
