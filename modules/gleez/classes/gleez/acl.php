@@ -379,7 +379,7 @@ class Gleez_ACL {
 	 * @uses    User::active_user
 	 * @uses    Module::event
 	 */
-	public static function post($action = 'view', ORM $post, Model_User $user = NULL, $misc = NULL)
+	public static function post($action = 'view', $post, Model_User $user = NULL, $misc = NULL)
 	{
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
@@ -390,10 +390,15 @@ class Gleez_ACL {
 			return FALSE;
 		}
 
-		if ( ! $post->loaded())
+		if ($post instanceof ORM AND ! $post->loaded())
 		{
 			// If the post was not loaded, we return access denied.
 			throw new HTTP_Exception_404('Attempt to non-existent post.');
+		}
+
+		if ( ! $post instanceof ORM)
+		{
+			$post = (object) $post;
 		}
 
 		// If no user object is supplied, the access check is for the current user.
