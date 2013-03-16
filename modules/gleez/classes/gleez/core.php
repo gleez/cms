@@ -32,7 +32,7 @@ class Gleez_Core {
 	 * Has [Gleez::_ginit] been called?
 	 * @var boolean
 	 */
-    protected static $_ginit = FALSE;
+        protected static $_ginit = FALSE;
 
 	/**
 	 * Runs the Gleez environment
@@ -366,10 +366,8 @@ class Gleez_Core {
 			$locale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 		}
 
-		$installed_locales =
-			Kohana::$config->load('site')->offsetExists('installed_locales')
-			AND is_array(Kohana::$config->load('site.installed_locales'))
-			AND ! is_null(Kohana::$config->load('site.installed_locales'));
+                //Check if the locale is available or not
+		$installed_locales = in_array($locale, Kohana::$config->load('site.installed_locales'));
 
 		if ( ! $installed_locales)
 		{
