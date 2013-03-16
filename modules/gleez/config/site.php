@@ -21,7 +21,7 @@ return array(
   'site_url' => 'www.example.com',
 
   /** @var string Site mission */
-  'site_mission' => 'Innovate IT',
+  'site_mission' => '',
 
   /** @var string Site title seperator */
   'title_separator' => ' :: ',
@@ -101,6 +101,9 @@ return array(
     'zh',
   ),
 
+  /** @var string Blocked ips */
+  'blocked_ips' =>  NULL, //default to null, comma seperated ip addresse(s) to block
+  
   /** @var string Default timezone */
   'timezone' => 'Asia/Kolkata',
 

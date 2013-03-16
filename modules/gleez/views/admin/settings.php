@@ -37,7 +37,7 @@
 
 	<div class="control-group <?php echo isset($errors['site_mission']) ? 'error': ''; ?>">
 	    <?php echo Form::label('site_mission', __('Mission'), array('class' => 'control-label')) ?>
-	    <?php echo Form::textarea('site_mission', $post['site_mission'], array('class' => 'textarea span12', 'rows' => 5)) ?>
+	    <?php echo Form::textarea('site_mission', $post['site_mission'], array('class' => 'textarea span12', 'rows' => 6)) ?>
 	</div>
 
         <div class="control-group <?php echo isset($errors['site_logo']) ? 'error': ''; ?>">
@@ -77,9 +77,15 @@
 
 	<div class="control-group <?php echo isset($errors['offline_message']) ? 'error': ''; ?>">
 	    <?php echo Form::label('offline_message', __('Offline Message'), array('class' => 'control-label')) ?>
-	    <?php echo Form::textarea('offline_message', $post['offline_message'], array('class' => 'textarea span12', 'rows' => 5)) ?>
+	    <?php echo Form::textarea('offline_message', $post['offline_message'], array('class' => 'textarea span12', 'rows' => 3)) ?>
         </div>
 
+	<div class="control-group <?php echo isset($errors['blocked_ips']) ? 'error': ''; ?>">
+	    <?php echo Form::label('blocked_ips', __("Blocked IP addresses"), array('class' => 'control-label')) ?>
+	    <?php echo Form::textarea('blocked_ips', $post['blocked_ips'], array('class' => 'textarea span12', 'rows' => 3)) ?>
+	    <span class="help-block"><?php echo __("Comma seperated ip's for multiple addresses"); ?></span>
+        </div>
+	
 	<div class="control-group <?php echo isset($errors['timezone']) ? 'error': ''; ?>">
 	    <?php echo Form::label('time_zone', __('Time Zone'), array('class' => 'wrap')) ?>
 	    <?php echo Form::select('timezone', $timezones, $post['timezone'], array('class' => 'span12 time-zone')); ?>
