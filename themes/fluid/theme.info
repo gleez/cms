@@ -13,7 +13,7 @@
 
 ; Regions
 [regions]
-  left        = Left
-  right       = Right
+  left        = Left Sidebar
+  right       = Right Sidebar
   footer      = Footer
   dashboard   = Dashboard
