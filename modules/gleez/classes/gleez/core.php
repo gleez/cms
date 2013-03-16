@@ -280,6 +280,23 @@ class Gleez_Core {
 	}
 
 	/**
+	 * Check to see if an IP address has been blocked.
+	 *
+	 * @throws  HTTP_Exception_403
+	 */
+	public static function is_denied()
+	{
+		$blocked_ips = Kohana::$config->load('site.blocked_ips', NULL);
+		$ip          = Request::$client_ip;
+
+		if (!empty($blocked_ips) AND in_array($ip, preg_split("/[\s,]+/",$blocked_ips)))
+		{
+			Kohana::$log->add(LOG::INFO, 'Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
+			throw new HTTP_Exception_403('Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
+		}
+	}
+        
+	/**
 	 * This function searches for the file that first matches the specified file
 	 * name and returns its path.
 	 *

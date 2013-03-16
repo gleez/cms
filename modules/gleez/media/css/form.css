@@ -399,3 +399,9 @@ div.widget .widget-content > form{
 #widgets tr.region-title--1 td {
     color: red;
 }
+
+label small, .help-block {
+  color: #999999;
+  font-weight: normal;
+  line-height: 1;
+}

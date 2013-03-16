@@ -74,6 +74,9 @@ class Gleez_Request extends Kohana_Request {
 	{
 		if( Gleez::$installed )
 		{
+			//Check Blocked IP Address
+			Gleez::is_denied();
+			
 			//Check Maintenance Mode
 			Gleez::maintenance_mode();
 		}
