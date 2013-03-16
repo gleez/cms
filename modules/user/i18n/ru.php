@@ -9,23 +9,30 @@
 */
 return array
 (
+    // %
+    "%title successfully updated!" => '%title успешно обновлён!',
 	// A
 	'Administer permissions' => 'Администрирование полномочий',
 	'Administer users' => 'Администрирование пользователей',
 	'Access profiles' => 'Доступ к профилям',
 	'Access to all profiles' => 'Доступ ко всем профилям',
 	// B
+	'Birthday' => 'День рождения',
 	// C
 	'Change own username' => 'Смена собственного логина',
 	'Create One.' => 'Создать один.',
 	// D
+    'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
 	// E
 	'Edit profile' => 'Правка профиля',
+    'Edit Account' => 'Правка аккаунта',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
+	'Female' => 'Женский',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
+	'Gender' => 'Пол',
 	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
 	// H
 	// I
@@ -36,6 +43,8 @@ return array
 	'Login with :provider' => 'Войсти с помощью :provider',
 	'Login with any of these providers:' => 'Войти с помощью одного их этих провайдеров:',
 	// M
+    'Mail' => 'Почта',
+    'Male' => 'Мужской',
 	'Managing user authority' => 'Управление аутентификацией пользователей',
 	'My Account' => 'Мой аккаунт',
 	// N
@@ -61,9 +70,11 @@ return array
 	'The username must be less than :param2 characters long.' => 'Имя пользователя должно быть не менее :param2 символов.',
 	'This account is blocked' => 'Этот аккаунт заблокирован',
 	// U
+    'Update Profile' => 'Обновить профиль пользователя',
 	'Users management' => 'Управление пользователями',
 	'user roles page' => 'странице пользовательских ролей',
 	'Username/Email' => 'Имя пользователя/Email',
+    'Username' => 'Имя пользователя',
 	// V
 	// W
 	'Warning! Give to trusted roles only; this permission has security implications.' => 'Внимание! Предоставляйте это только доверенным ролям; данные полномочия имеют последствия для безопасности.',
@@ -72,5 +83,6 @@ return array
 	'You must provide an email address.' => 'Вы долны предоставить email адрес.',
 	'You must provide a password.' => 'Вы долны предоставить пароль.',
 	'You must provide a username.' => 'Вы долны предоставить имя пользователя.',
+    'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
 	// Z
 );
