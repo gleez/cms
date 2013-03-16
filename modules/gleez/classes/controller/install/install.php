@@ -79,15 +79,15 @@ class Controller_Install_Install extends Controller_Template {
 			__('Finish')
 		);
 
-		!file_exists(APPPATH . "cache") && mkdir(APPPATH . "cache");
-		!file_exists(APPPATH . "config") && mkdir(APPPATH . "config");
-		!file_exists(APPPATH . "logs") && mkdir(APPPATH . "logs");
-		!file_exists(APPPATH . "uploads") && mkdir(APPPATH . "uploads");
-		!file_exists(APPPATH . "media") && mkdir(APPPATH . "media");
-		!file_exists(APPPATH . "media/pictures") && mkdir(APPPATH . "media/pictures");
-		!file_exists(DOCROOT . "media") && mkdir(DOCROOT . "media");
-		!file_exists(DOCROOT . "media/css") && mkdir(DOCROOT . "media/css");
-		!file_exists(DOCROOT . "media/js") && mkdir(DOCROOT . "media/js");
+		!file_exists(APPPATH . "cache") && System::mkdir(APPPATH . "cache");
+		!file_exists(APPPATH . "config") && System::mkdir(APPPATH . "config");
+		!file_exists(APPPATH . "logs") && System::mkdir(APPPATH . "logs");
+		!file_exists(APPPATH . "uploads") && System::mkdir(APPPATH . "uploads");
+		!file_exists(APPPATH . "media") && System::mkdir(APPPATH . "media");
+		!file_exists(APPPATH . "media/pictures") && System::mkdir(APPPATH . "media/pictures");
+		!file_exists(DOCROOT . "media") && System::mkdir(DOCROOT . "media");
+		!file_exists(DOCROOT . "media/css") && System::mkdir(DOCROOT . "media/css");
+		!file_exists(DOCROOT . "media/js") && System::mkdir(DOCROOT . "media/js");
 
 		$view = new View('install/systemcheck');
 
