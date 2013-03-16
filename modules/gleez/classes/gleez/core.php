@@ -280,11 +280,11 @@ class Gleez_Core {
 	}
 
 	/**
-	 * Check to see if an IP address has been blocked.
+	 * Check to see if an IP address has been blocked and deny access to blocked IP addresses
 	 *
 	 * @throws  HTTP_Exception_403
 	 */
-	public static function is_denied()
+	public static function block_ips()
 	{
 		$blocked_ips = Kohana::$config->load('site.blocked_ips', NULL);
 		$ip          = Request::$client_ip;
