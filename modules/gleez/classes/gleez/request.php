@@ -11,11 +11,6 @@
 class Gleez_Request extends Kohana_Request {
 
 	/**
-	 * @var  string  request Subdomain
-	 */
-	public static $subdomain;
-
-	/**
 	 * @var  string  request Redirect URL for ajax requests
 	 */
 	public static $_redirect_url;
