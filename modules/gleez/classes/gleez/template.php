@@ -252,14 +252,6 @@ abstract class Gleez_Template extends Controller {
 			$this->_set_default_meta_links();
 			$this->_set_default_meta_tags();
 
-			$ua = $this->_config->get('google_ua', FALSE);
-
-			// Google static
-			if ($ua AND Kohana::PRODUCTION === Kohana::$environment)
-			{
-				Assets::google_stats($ua);
-			}
-
 			/**
 			 * Make your view template available to all your other views
 			 * so easily you could access template variables
@@ -584,11 +576,10 @@ abstract class Gleez_Template extends Controller {
 	{
 		Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
 
-
-		// Google js
-		if (Kohana::PRODUCTION === Kohana::$environment)
+		// Google js only in production and not in admin section
+		if (Kohana::PRODUCTION === Kohana::$environment AND Theme::$is_admin === FALSE)
 		{
-			$ua = $this->_config->get('google_ua');
+			$ua = $this->_config->get('google_ua', NULL);
 			if ( ! is_null($ua))
 			{
 				Assets::google_stats($ua);

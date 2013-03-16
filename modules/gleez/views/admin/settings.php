@@ -55,6 +55,11 @@
 	    <?php echo Form::select('theme', Theme::Avaliable(), $post['theme'], array('class' => 'span12')); ?>
 	</div>
 
+	<div class="control-group <?php echo isset($errors['admin_theme']) ? 'error': ''; ?>">
+	    <?php echo Form::label('admin_theme', __('Admin Theme'), array('class' => 'control-label')) ?>
+	    <?php echo Form::select('admin_theme', Theme::Avaliable(), $post['admin_theme'], array('class' => 'span12')); ?>
+	</div>
+	
     </div>
 
     <div id="settings-right"  class="span6">
@@ -105,9 +110,9 @@
 	    <?php echo Form::input('front_page', $post['front_page'], array('class' => 'text span12')); ?>
 	</div>
 
-	<div class="control-group <?php echo isset($errors['admin_theme']) ? 'error': ''; ?>">
-	    <?php echo Form::label('admin_theme', __('Admin Theme'), array('class' => 'control-label')) ?>
-	    <?php echo Form::select('admin_theme', Theme::Avaliable(), $post['admin_theme'], array('class' => 'span12')); ?>
+	<div class="control-group <?php echo isset($errors['google_ua']) ? 'error': ''; ?>">
+	    <?php echo Form::label('google_ua', __('Google Analytics'), array('class' => 'control-label')) ?>
+	    <?php echo Form::input('google_ua', $post['google_ua'], array('class' => 'text span12', 'placeholder' => 'UA-12345678-9')); ?>
 	</div>
 	
     </div>
