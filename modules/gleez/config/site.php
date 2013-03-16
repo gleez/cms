@@ -119,7 +119,7 @@ return array(
   'reset_password_expiration' => 86400,
 
   /** @var string Default session type */
-  'session_type' => 'db'
+  'session_type' => 'db',
 
   /** @var string Define Google User Agent ID */
   'google_ua' => 'UA-12345678-9'
