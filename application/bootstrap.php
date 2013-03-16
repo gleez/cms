@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 // -- Environment setup --------------------------------------------------------
 
@@ -21,32 +21,32 @@ else
 /**
  * Set the default time zone.
  *
- * @see  http://kohanaframework.org/guide/using.configuration
- * @see  http://php.net/timezones
+ * @link  http://kohanaframework.org/guide/using.configuration
+ * @link  http://php.net/timezones
  */
 date_default_timezone_set('Asia/Kolkata');
 
 /**
  * Set the default locale.
  *
- * @see  http://kohanaframework.org/guide/using.configuration
- * @see  http://php.net/setlocale
+ * @link  http://kohanaframework.org/guide/using.configuration
+ * @link  http://php.net/setlocale
  */
 setlocale(LC_ALL, 'en_US.utf-8');
 
 /**
  * Enable the Kohana auto-loader.
  *
- * @see  http://kohanaframework.org/guide/using.autoloading
- * @see  http://php.net/spl_autoload_register
+ * @link  http://kohanaframework.org/guide/using.autoloading
+ * @link  http://php.net/spl_autoload_register
  */
 spl_autoload_register(array('Kohana', 'auto_load'));
 
 /**
  * Enable the Kohana auto-loader for unserialization.
  *
- * @see  http://php.net/spl_autoload_call
- * @see  http://php.net/manual/var.configuration.php#unserialize-callback-func
+ * @link  http://php.net/spl_autoload_call
+ * @link  http://php.net/manual/var.configuration.php#unserialize-callback-func
  */
 ini_set('unserialize_callback_func', 'spl_autoload_call');
 
@@ -86,7 +86,6 @@ Kohana::init(array(
 	'index_file' => FALSE,
 	'caching'    => Kohana::$environment === Kohana::PRODUCTION,
 	'profile'    => Kohana::$environment !== Kohana::PRODUCTION,
-	//'cache_life' => 3600,
 ));
 
 
@@ -113,7 +112,7 @@ Kohana::modules(array(
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	 'userguide'   => MODPATH.'userguide',  // User guide and API documentation
-   //'mango'       => MODPATH.'mango',      // Mango Reader
+	//'mango'       => MODPATH.'mango',      // Mango Reader
 	));
 
 /**
@@ -127,8 +126,23 @@ Kohana::$log->attach(new Gleez_Log_File(APPPATH.'logs'));
 Upload::$default_directory = APPPATH.'uploads';
 
 /**
- * Set the routes. Each route must have a minimum of a name, a URI and a set of
- * defaults for the URI.
+ * Set the routes
+ *
+ * Each route must have a minimum of a name,
+ * a URI and a set of defaults for the URI.
+ *
+ * Example:<br>
+ * <code>
+ *	Route::set('frontend/page', 'page(/<action>)')
+ *		->defaults(array(
+ *			'controller' => 'page',
+ *			'action' => 'view',
+ *	));
+ * </code>
+ *
+ * @uses  Path::lookup
+ * @uses  Route::cache
+ * @uses  Route::set
  */
 if ( ! Route::cache())
 {
