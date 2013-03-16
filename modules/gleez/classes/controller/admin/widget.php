@@ -76,6 +76,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		foreach ($widget_regions as $region => $title)
 		{
+			$widget_regions[$region] = __($title);
 			Assets::tabledrag('widgets','match','sibling','widget-region-select','widget-region-'.$region,NULL,FALSE);
 			Assets::tabledrag('widgets', 'order', 'sibling', 'widget-weight', 'widget-weight-' . $region);
 		}
