@@ -15,6 +15,7 @@ return array
 	':pcre has not been compiled with UTF-8 support.' => ':pcre собран без поддержки UTF-8.',
 	// A
 	'A text format contains filters that change the user input, for example stripping out malicious HTML or making URLs clickable. Filters are executed from top to bottom and the order is important, since one filter may prevent another filter from doing its job. For example, when URLs are converted into links before disallowed HTML tags are removed, all links may be removed. When this happens, the order of filters may need to be re-arranged.' => 'Форматы текста содержат фильтры, которые изменяют данные, введенные пользователем, например очищают от вредоносных HTML-тегов или блокируют URL-адреса. Фильтры выполняются сверху вниз и важен их порядок, так как один фильтр может предотвратить работу другого фильтра. Например, если фильтр преобразования URL-адресов  в ссылки стоит перед фильтром запрещающим HTML теги, все ссылки могут быть удалены. Если это происходит, возможно понадобится переопределить порядок фильтров.',
+	'Account' => 'Аккаунт',
 	'Activated: %names' => 'Активировано: %names',
 	'Add Item for %menu' => 'Добавление пункта для %menu',
 	'Add Link' => 'Добавить ссылку',
@@ -46,6 +47,7 @@ return array
 	'Author' => 'Автор',
 	// B
 	'Before you start using it...' => 'Перед тем, как начать использовать...',
+	'Blocked IP addresses' => 'Заблокированные IP адреса',
 	'Body' => 'Содержимое',
 	'Book' => 'Книга',
 	'Bulk Actions' => 'Массовые действия',
@@ -66,6 +68,7 @@ return array
 	'Could not select the database' => 'Не удалось выбрать базу данных',
 	'Couldn\'t create application/config/database.php' => 'Не удалось создать application/config/database.php',
 	'Character Type (CTYPE)' => 'Character Type (CTYPE)',
+	'Create an Account' => 'Зарегистрироваться',
 	'Create pages' => 'Создание страниц',
 	'Customize &mdash; :modules_url to add cool features!' => 'Используйте :modules_url &mdash; для добавления новых возможностей!',
 	// D
@@ -127,6 +130,7 @@ return array
 	// I
 	'Icon' => 'Иконка',
 	'Iconv Extension' => 'Расширение Iconv',
+	'Innovate IT' => 'Иновационные информационные технологии',
 	'Install' => 'Установка',
 	'Installed'=> 'Установлено',
 	'Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host.' => 'Установка Gleez очень проста. Всё что нам сейчас нужно будет знать, так это &mdash; параметры доступа к базе данных MySQL и место для хранения ваших конфигурационных файлов. Всё остальное за вас сделает установщик.',
@@ -141,6 +145,8 @@ return array
 	'List Terms' => 'Список терминов',
 	'Load Average' => 'Средняя нагрузка',
 	'Logo' => 'Логотип',
+	'Log In' => 'Войти',
+	'Logout' => 'Выйти',
 	// M
 	'Maintenance Mode' => 'Режим обслуживания',
 	'Managing the text formats of editor' => 'Управление тестовыми форматами редактора',
@@ -199,6 +205,7 @@ return array
 	'Post List' => 'Список публикаций',
 	'Power up your Gleez CMS by adding more modules! Each module provides new cool features.' => 'Улучшите ваш Gleez CMS добавлением дополнительных модулей! Каждый модуль предоставляет интересные возможжности.',
 	'Promote to front page' => 'Разместить на главной странице',
+	'Profile' => 'Профиль',
 	'PCRE UTF-8' => 'PCRE UTF-8',
 	'Permalink: %slug' => 'Постоянная ссылка: %slug',
 	'PHP MySQL' => 'PHP MySQL',
