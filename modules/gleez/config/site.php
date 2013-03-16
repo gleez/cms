@@ -122,5 +122,5 @@ return array(
   'session_type' => 'db',
 
   /** @var string Define Google User Agent ID */
-  'google_ua' => 'UA-12345678-9'
+  'google_ua' => ''
 );
