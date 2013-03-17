@@ -129,8 +129,6 @@ class Controller_User extends Template {
             ->set('errors',       array())
             ->set('use_username', $config->get('username'))
             ->set('providers',    array_filter($config->get('providers')))
-            ->set('destin',       $destin)
-            ->set('params',       $params)
             ->set('post',         $user);
 
         if($this->valid_post('login'))
