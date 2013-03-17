@@ -20,10 +20,11 @@ return array
 	'Birthday' => 'День рождения',
 	// C
 	'Change own username' => 'Смена собственного логина',
-	'Create One.' => 'Создать один.',
+	'Create One.' => 'Создать аккаунт.',
 	// D
     'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
+	"Don't have an account?" => 'Нет аккаунта?',
 	// E
 	'Edit profile' => 'Правка профиля',
     'Edit Account' => 'Правка аккаунта',
@@ -39,9 +40,8 @@ return array
 	// J
 	// K
 	// L
-	'Login' => 'Логин',
+	'Login' => 'Вход',
 	'Login with :provider' => 'Войсти с помощью :provider',
-	'Login with any of these providers:' => 'Войти с помощью одного их этих провайдеров:',
 	// M
     'Mail' => 'Почта',
     'Male' => 'Мужской',
@@ -62,6 +62,9 @@ return array
 	// R
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
+	'Sign In' => 'Авторизация',
+	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
+	'Sign in using your registered account:' => 'Войдите используя ваш зарегистрированный аккаунт:',
 	'Stay Signed in' => 'Оставаться в системе',
 	// T
 	'The ability to change own username' => 'Возможность изменять собственное имя пользователя (логин)',
