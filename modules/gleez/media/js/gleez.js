@@ -251,7 +251,7 @@ jQuery.noConflict();
     $('html').addClass('js');
 
     $(function() {
-        $("a[rel='tooltip']").tooltip();
+        $("[rel='tooltip']").tooltip();
     });
 
     // 'js enabled' cookie.
