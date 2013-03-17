@@ -5,7 +5,7 @@ var Gleez = Gleez || { 'settings': {}, 'behaviors': {}, 'locale': {} };
 jQuery.noConflict();
 
 (function ($) {
-    
+
     Gleez.attachBehaviors = function (context, settings) {
         context = context || document;
         settings = settings || Gleez.settings;
@@ -16,7 +16,7 @@ jQuery.noConflict();
             }
         });
     };
-    
+
     Gleez.detachBehaviors = function (context, settings, trigger) {
         context = context || document;
         settings = settings || Gleez.settings;
@@ -28,7 +28,7 @@ jQuery.noConflict();
             }
         });
     };
-    
+
     /**
      * Translate strings to the page language or a given language.
      *
@@ -103,18 +103,18 @@ jQuery.noConflict();
         attach: function (context, settings) {
             id = 'title';
             var title = $('#' + id), titleprompt = $('#' + id + '-prompt-text');
-            
+
             if ( title.val() != '' )
                 titleprompt.css('visibility', 'hidden');
-            
+
             if ( title.val() == '' )
                 titleprompt.css('display', 'block');
-            
+
             titleprompt.click(function(){
                 $(this).css('visibility', 'hidden');
                 title.focus();
             });
-            
+
             title.blur(function(){
                 if ( this.value == '' )
                     titleprompt.css('display', 'block');
@@ -126,7 +126,7 @@ jQuery.noConflict();
             });
         }
     };
-    
+
     /**
      * Encodes a Gleez path for use in a URL.
      *
@@ -136,7 +136,7 @@ jQuery.noConflict();
         uri = uri || location.href;
         return encodeURIComponent(item).replace(/%2F/g, '/');
     };
-    
+
     /**
      * Get the text selection in a textarea.
     */
@@ -170,7 +170,7 @@ jQuery.noConflict();
         {
             statusCode = "\n" + Gleez.t("An AJAX HTTP request terminated abnormally.");
         }
-        
+
         statusCode += "\n" + Gleez.t("Debugging information follows.");
         pathText = "\n" + Gleez.t("Path: !uri", {'!uri': uri} );
         statusText = '';
@@ -246,9 +246,13 @@ jQuery.noConflict();
             return '<em class="placeholder">' + Gleez.checkPlain(str) + '</em>';
         }
     };
-    
+
     // Class indicating that JS is enabled; used for styling purpose.
     $('html').addClass('js');
+
+    $(function() {
+        $("[rel='tooltip']").tooltip();
+    });
 
     // 'js enabled' cookie.
     document.cookie = 'has_js=1; path=/';
