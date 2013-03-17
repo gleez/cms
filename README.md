@@ -39,10 +39,22 @@ Gleez has an official website: [http://gleezcms.org](http://gleezcms.org) and Fa
 
 We create the documentation together with the community and other Gleez users/developers. Below are the pages that are already created.
 
-* [Installation](Installation) &mdash; About installation
-* [Developers](Developers) &mdash; Developers TODO
-* [Translation](Translation) &mdash; About I18n
-* [Widgets](Widgets) &mdash; How to add new widgets
+### Index
+
+#### D
+* [Developers](wiki/Developers) &mdash; Developers TODO
+
+#### I
+* [Installation](wiki/Installation) &mdash; About installation
+
+#### L
+* [License](wiki/License) &mdash; Gleez CMS License
+
+#### T
+* [Translation](wiki/Translation) &mdash; About I18n
+
+#### W
+* [Widgets](wiki/Widgets) &mdash; How to add new widgets
 
 
 ## Contributors
