@@ -110,6 +110,8 @@ class Controller_User extends Template {
      */
     public function action_login()
     {
+        Assets::css('user', 'media/css/user.css', array('weight' => 2));
+
         // If user already signed-in
         if($this->_auth->logged_in())
         {
@@ -117,16 +119,19 @@ class Controller_User extends Template {
             $this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
         }
 
-        $this->title = __('Login');
-        $config = Kohana::$config->load('auth');
+        $this->title = __('Sign In');
+        $user        = ORM::factory('user');
+        $config      = Kohana::$config->load('auth');
+        $destin      = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
+        $params      = array('action' => 'login');
 
         $view = View::factory('user/login')
-            ->set('errors', array())
+            ->set('errors',       array())
             ->set('use_username', $config->get('username'))
-            ->set('providers', array_filter($config->get('providers')))
-            ->bind('post', $user);
-
-        $user = ORM::factory('user');
+            ->set('providers',    array_filter($config->get('providers')))
+            ->set('destin',       $destin)
+            ->set('params',       $params)
+            ->set('post',         $user);
 
         if($this->valid_post('login'))
         {
@@ -300,7 +305,7 @@ class Controller_User extends Template {
 
                 // If the post data validates using the rules setup in the user model
                 Message::success(__("%title successfully changed your password.
-					We hope you feel safer now.", array('%title' => $user->name)));
+                    We hope you feel safer now.", array('%title' => $user->name)));
 
                 // redirect to the user account
                 $this->request->redirect('user/profile');
