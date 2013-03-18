@@ -316,40 +316,47 @@ class Controller_User extends Template {
         $this->response->body( View::factory('user/password')->set('errors', $errors)  );
     }
 
+    /**
+     * Upload photo
+     *
+     * @uses  Arr::merge
+     */
     public function action_photo()
     {
         // The user is not logged in
         if( ! $this->_auth->logged_in())
         {
-            $this->request->redirect( Route::get('user')->uri(array('action' => 'login')) );
+            $this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
         }
 
+        $config = Kohana::$config->load('media');
         $user = $this->_auth->get_user();
         $this->title =  __('Upload Photo');
-        $errors = FALSE;
-        $view = View::factory('user/photo')->set('user', $user);
+
+        $view = View::factory('user/photo')
+                            ->set('user', $user);
 
         // Form submitted
-        if( $this->valid_post('user_edit'))
+        if ($this->valid_post('user_edit'))
         {
             try
             {
-                $post = array_merge($this->request->post(), $_FILES);
+                $post = Arr::merge($this->request->post(), $_FILES);
                 $user->values($post)->save();
 
                 // If the post data validates using the rules setup in the user model
-                Message::success(__("%title successfully updated!", array('%title' => $user->nick)));
+                Message::success(__('Photo successfully uploaded!', array('%title' => $user->nick)));
 
-                // redirect to the user account
-                $this->request->redirect('user/profile');
+                // Redirect to the user account
+                $this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
             }
             catch(ORM_Validation_Exception $e)
             {
-                $view->errors = $e->errors('models');
+                $view->errors = $e->errors('models', TRUE);
             }
         }
 
-        $this->response->body( $view );
+        $this->response->body($view);
     }
 
     /*
