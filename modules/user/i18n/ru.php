@@ -9,9 +9,13 @@
 */
 return array
 (
-    // %
-    "%title successfully updated!" => '%title успешно обновлён!',
+	// :
+	':nick joined.' => ':nick присоединился.',
+	// %
+	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
+	'About' => 'О пользователе',
+	'Activity' => 'Активность',
 	'Administer permissions' => 'Администрирование полномочий',
 	'Administer users' => 'Администрирование пользователей',
 	'Access profiles' => 'Доступ к профилям',
@@ -19,15 +23,19 @@ return array
 	// B
 	'Birthday' => 'День рождения',
 	// C
+	'Change Avatar' => 'Сменить аватар',
 	'Change own username' => 'Смена собственного логина',
 	'Create One.' => 'Создать аккаунт.',
+	'Change Password' => 'Сменить пароль',
+	'Change your avatar' => 'Сменить ваш аватар',
 	// D
-    'Display Name' => 'Отображаемое имя',
+	'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
 	"Don't have an account?" => 'Нет аккаунта?',
 	// E
 	'Edit profile' => 'Правка профиля',
-    'Edit Account' => 'Правка аккаунта',
+	'Edit Account' => 'Правка аккаунта',
+	'Email' => 'Email',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
@@ -38,13 +46,15 @@ return array
 	// H
 	// I
 	// J
+	'Joined on' => 'Участник с',
 	// K
 	// L
+	'Last Active' => 'Последняя активность',
 	'Login' => 'Вход',
 	'Login with :provider' => 'Войсти с помощью :provider',
 	// M
-    'Mail' => 'Почта',
-    'Male' => 'Мужской',
+	'Mail' => 'Почта',
+	'Male' => 'Мужской',
 	'Managing user authority' => 'Управление аутентификацией пользователей',
 	'My Account' => 'Мой аккаунт',
 	// N
@@ -73,19 +83,24 @@ return array
 	'The username must be less than :param2 characters long.' => 'Имя пользователя должно быть не менее :param2 символов.',
 	'This account is blocked' => 'Этот аккаунт заблокирован',
 	// U
-    'Update Profile' => 'Обновить профиль пользователя',
+	'Update Profile' => 'Обновить профиль пользователя',
+	'Upload Photo' => 'Загрузить фотографию',
+	'Uploading Photos' => 'Загрузка фотографии',
 	'Users management' => 'Управление пользователями',
 	'user roles page' => 'странице пользовательских ролей',
 	'Username/Email' => 'Имя пользователя/Email',
-    'Username' => 'Имя пользователя',
+	'Username' => 'Имя пользователя',
 	// V
+	'Visits' => 'Посещений',
 	// W
 	'Warning! Give to trusted roles only; this permission has security implications.' => 'Внимание! Предоставляйте это только доверенным ролям; данные полномочия имеют последствия для безопасности.',
+	'Welcome to Gleez!' => 'Добро пожаловать в Gleez!',
+	'Welcome, %title!' => 'Добро пожаловать, %title!',
 	// X
 	// Y
 	'You must provide an email address.' => 'Вы долны предоставить email адрес.',
 	'You must provide a password.' => 'Вы долны предоставить пароль.',
 	'You must provide a username.' => 'Вы долны предоставить имя пользователя.',
-    'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
+	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
 	// Z
 );
