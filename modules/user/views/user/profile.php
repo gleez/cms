@@ -1,16 +1,20 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<div class="row">
+<div class="row" itemscope itemtype="http://schema.org/Person">
 
 	<div id="Panel" class="span3">
 		<div id="photo" class="well">
 			<div class="Photo">
-				<?php echo ( ! empty($account->picture)) ? HTML::resize($account->picture, array('alt' => $account->nick, 'height' => 150, 'width' => 150, 'type' => 'ratio')) : ''; ?>
+				<?php if ($is_owner): ?>
+					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>'; ?>
+				<?php else: ?>
+					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : ''; ?>
+				<?php endif; ?>
 			</div>
 
-			<?php if( $user->id === $account->id ): ?>
+			<?php if ($is_owner): ?>
 				<ul class="nav nav-list">
-					<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Picture'), array('id' => 'add-pic')) ?></li>
+					<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
 					<li><?php echo HTML::anchor('user/edit', '<i class="icon-pencil"></i>'.__('Edit Account')) ?></li>
 					<li><?php echo HTML::anchor('user/password', '<i class="icon-cog"></i>'.__('Change Password')) ?></li>
 				</ul>
@@ -19,15 +23,22 @@
 
 		<div class="well about">
 			<h4><i class="icon-user"></i> <?php echo __('About'); ?></h4>
-			<dl class="dl-horizontallll">
+			<dl>
 				<dt><?php echo __('Name'); ?></dt>
-				<dd><?php echo $account->nick; ?></dd>
-				<dt><?php echo __('Joined'); ?></dt>
-				<dd><?php echo date('F Y', $account->created); ?></dd>
+				<dd itemprop="name"><?php echo $user->nick; ?></dd>
+				<dt><?php echo __('Birthday'); ?></dt>
+				<dd itemprop="birthDate"><?php echo date('M d, Y', $user->dob); ?></dd>
+				<dt><?php echo __('Joined on'); ?></dt>
+				<dd><?php echo date('M d, Y', $user->created); ?></dd>
+				<dt><?php echo __('Email'); ?></dt>
+				<?php if ($is_owner OR User::is_admin()): ?>
+					<dd><?php echo Text::auto_link_emails($user->mail); ?></dd>
+				<?php endif; ?>
 				<dt><?php echo __('Visits'); ?></dt>
-				<dd><?php echo $account->logins; ?></dd>
+				<dd><?php echo $user->logins; ?></dd>
 				<dt><?php echo __('Last Active'); ?></dt>
-				<dd><?php echo date('M jS, Y', $account->login); ?> @ <?php echo date('h:i a', $account->login); ?></dd>
+				<dd><?php echo date('M d, Y', $user->login); ?> @ <?php echo date('h:i a', $user->login); ?></dd>
+				<?php if (User::is_admin()): ?>
 				<dt><?php echo __('Roles'); ?></dt>
 				<dd>
 					<ul class="user-roles">
@@ -36,8 +47,7 @@
 						<?php endforeach; ?>
 					</ul>
 				</dd>
-				<dt><?php echo __('Age'); ?></dt>
-				<dd><?php echo date('y', abs(time()-$user->dob))-70; ?></dd>
+				<?php endif; ?>
 			</dl>
 		</div>
 	</div>
@@ -47,9 +57,9 @@
 		<ul class="nav nav-list">
 			<li class="Item activity " id="activity_1">
 				<div class="ItemContent Activity">
-					<div class="Title"><?php echo __(':nick joined.', array(':nick' => $account->nick) ); ?></div>
-					<div class="Excerpt">Welcome to Gleez!</div>
-					<div class="Meta"><span class="DateCreated"><?php echo Date::fuzzy_span($account->created); ?></span></div>
+					<div class="Title"><?php echo __(':nick joined.', array(':nick' => $user->nick)); ?></div>
+					<div class="Excerpt"><?php echo __('Welcome to Gleez!') ?></div>
+					<div class="Meta"><span class="DateCreated"><?php echo __(Date::fuzzy_span($user->created)); ?></span></div>
 				</div>
 			</li>
 		</ul>
@@ -60,7 +70,7 @@
 <div class="modal hide fade" id="upload-photo">
 	<div class="modal-header">
 		<a class="close" data-dismiss="modal">×</a>
-		<h3><?php echo __('Upload Photo'); ?></h3>
+		<h3><?php echo __('Uploading Photos'); ?></h3>
 	</div>
 	<div class="modal-data"></div>
 </div>
