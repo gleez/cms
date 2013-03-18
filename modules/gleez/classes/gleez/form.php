@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Form helper class
  *
@@ -10,150 +10,234 @@
 class Gleez_Form extends Kohana_Form {
 
 	/**
-	 * Creates a form input. If no type is specified, a "text" type input will
-	 * be returned.
+	 * Creates a form input
+	 *
+	 * If no type is specified, a "text" type input will be returned.
+	 *
+	 * Example:<br>
 	 * <code>
 	 *   echo Form::input('username', $username);
 	 * </code>
 	 *
-	 * @param   string  input name
-	 * @param   string  input value
-	 * @param   array   html attributes
-	 * @param   string  input url (autocomplete url)
-	 * @param   bool    smart smart results listing
-	 * @return  string
+	 * @param   string  $name   Input name
+	 * @param   string  $value  Input value [Optional]
+	 * @param   array   $attrs  HTML attributes [Optional]
+	 * @param   string  $url    Input url (autocomplete url) [Optional]
+	 * @param   boolean $smart  Smart smart results listing [Optional]
+	 * @return  string  HTML form input
+	 *
 	 * @uses    HTML::attributes
+	 * @uses    Assets::js
+	 * @uses    URL::site
 	 */
-	public static function input($name, $value = NULL, array $attributes = NULL, $url = FALSE, $smart = TRUE)
+	public static function input($name, $value = NULL, array $attrs = NULL, $url = '', $smart = TRUE)
 	{
 		// Set the input name
-		$attributes['name'] = $name;
+		$attrs['name'] = $name;
 
 		// Set the input value
-		$attributes['value'] = $value;
+		$attrs['value'] = $value;
 
-		if ( ! isset($attributes['type']))
+		if ( ! isset($attrs['type']))
 		{
 			// Default type is text
-			$attributes['type'] = 'text';
+			$attrs['type'] = 'text';
 		}
 
 		$out = '';
 
-		if( $attributes['type'] === 'text' AND $url )
+		if ($attrs['type'] === 'text' AND ! empty($url))
 		{
-			$attributes['class'] = isset($attributes['class']) ? $attributes['class'].' form-autocomplete' : 'form-autocomplete';
-			$attributes['id'] = $name;
+			$attrs['class'] = isset($attrs['class']) ? $attrs['class'].' form-autocomplete' : 'form-autocomplete';
+			$attrs['id'] = $name;
+
 			// Assign the autocomplete js file
 			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
 
-			$attributes['data-autocomplete-path'] = URL::site($url, TRUE);
-			$attributes['data-autocomplete-smart'] = $smart;
+			$attrs['data-autocomplete-path'] = URL::site($url, TRUE);
+			$attrs['data-autocomplete-smart'] = $smart;
 		}
 
-		$out .= '<input'.HTML::attributes($attributes).' />';
+		$out .= '<input'.HTML::attributes($attrs).'>';
 
 		return $out;
 	}
 
 	/**
-	 * Creates CSRF token input.
+	 * Creates CSRF token input
 	 *
-	 * @param   string  $id      e.g. uid
-	 * @param   string  $action  optional action
+	 * @param   string  $id      ID e.g. uid [Optional]
+	 * @param   string  $action  Action [Optional]
 	 * @return  string
+	 *
+	 * @uses    CSRF::token
 	 */
-	public static function csrf($id = '', $action = '') {
+	public static function csrf($id = '', $action = '')
+	{
 		return Form::hidden('token', CSRF::token($id, $action));
 	}
 
 	/**
-	 * Creates weight select field.
+	 * Creates weight select field
 	 *
-	 * @param   string   input name
-	 * @param   int      selected option int
-	 * @param   array    html attributes
-	 * @param   int      delta
+	 * @param   string   $name      Input name
+	 * @param   integer  $selected  Selected option int [Optional]
+	 * @param   array    $attrs     HTML attributes [Optional]
+	 * @param   integer  $delta     Delta [Optional]
 	 * @return  string
+	 *
 	 * @uses    Form::select
 	 */
-	public static function weight($name, $selected = 0, array $attributes = NULL, $delta = 15) {
+	public static function weight($name, $selected = 0, array $attrs = NULL, $delta = 15)
+	{
+		$options = array();
 
 		for ($n = (-1 * $delta); $n <= $delta; $n++)
 		{
 			$options[$n] = $n;
 		}
-		return Form::select($name, $options, $selected, $attributes);
+
+		return Form::select($name, $options, $selected, $attrs);
 	}
 
 	/**
-	 * create a form field for filtering
+	 * Create a form field for filtering
 	 *
-	 * @param string  $column
-	 * @param array  $filtervals
-	 * @return string
-	 */
-	public static function filter($column, $filtervals)
-	{
-		return Form::input("filter[$column]", Arr::get($filtervals, $column), array('style' => 'width:100%'));
-	}
-
-	/**
-	 * Creates a submit form input.
-	 *
-	 *     echo Form::submit(NULL, 'Login');
-	 *
-	 * @param   string  input name
-	 * @param   string  input value
-	 * @param   array   html attributes
+	 * @param   string $column  Column
+	 * @param   array  $vals    Filter values
+	 * @param   array  $attrs   Filter attributes [Optional]
 	 * @return  string
-	 * @uses    Form::input
+	 *
+	 * @uses    Arr::get
 	 */
-	public static function submit($name, $value, array $attributes = NULL)
+	public static function filter($column, array $vals, array $attrs = array())
 	{
-		$attributes['type'] = 'submit';
+		if ( ! isset($attrs['style']))
+		{
+			// Default type is text
+			$attrs['style'] = 'width: 100%';
+		}
 
-		return Form::input($name, $value, $attributes);
+		return Form::input("filter[$column]", Arr::get($vals, $column), $attrs);
 	}
 
 	/**
-	 * create a 'new x button'
+	 * Creates a submit form input
 	 *
-	 * @param string  $name
-	 * @param string  $title. (default: null)
-	 * @param string  $url.   (default: null)
-	 * @return void
-	 */
-	public static function newButton($name, $title = null, $url = null)
-	{
-		$url = ($url) ? $url : Request::current()->uri(array('action' => 'add'));
-		$title = ($title) ? $title : HTML::sprite_img('add') . __('add :object', array(':object' => __($name)));
-
-		return HTML::anchor($url, $title, array('class' => 'button positive'));
-	}
-
-	/**
-	 * Generates an opening HTML form tag.
+	 * Example:<br>
+	 * <code>
+	 * 	echo Form::submit(NULL, 'Login');
+	 * </code>
 	 *
-	 *     // Form will submit back to the current page using POST
-	 *     echo Form::open();
-	 *
-	 *     // Form will submit to 'search' using GET
-	 *     echo Form::open('search', array('method' => 'get'));
-	 *
-	 *     // When "file" inputs are present, you must include the "enctype"
-	 *     echo Form::open(NULL, array('enctype' => 'multipart/form-data'));
-	 *
-	 * @param   mixed   form action, defaults to the current request URI, or [Request] class to use
-	 * @param   array   html attributes
+	 * @param   string  $name   Input name
+	 * @param   string  $value  Input value
+	 * @param   array   $attrs  HTML attributes [Optional]
 	 * @return  string
-	 * @uses    Request::instance
-	 * @uses    URL::site
+	 */
+	public static function submit($name, $value, array $attrs = array())
+	{
+		$attrs['type'] = 'submit';
+
+		return Form::input($name, $value, $attrs);
+	}
+
+	/**
+	 * Creates a button
+	 *
+	 * Example:<br>
+	 * <code>
+	 * 	echo Form::button('login', 'Login', array('class' => 'pull-right'));
+	 * </code>
+	 *
+	 * @param   string  $name     Button name
+	 * @param   string  $caption  Button caption
+	 * @param   array   $attrs    HTML attributes [Optional]
+	 * @return  string
+	 *
 	 * @uses    HTML::attributes
-	 * @uses    ACL::csrf
-	 * @uses    ACL::key
 	 */
-	public static function open($action = NULL, array $attributes = NULL)
+	public static function button($name, $caption, array $attrs = array())
+	{
+		// Set the button name
+		$attrs['name'] = $name;
+
+		// Set the button type
+		if ( ! isset($attrs['type']))
+		{
+			// Default type is button
+			$attrs['type'] = 'button';
+		}
+
+		$out = '<button '.HTML::attributes($attrs).'>'.$caption.'</button>';
+
+		return $out;
+	}
+
+	/**
+	 * Create a 'new x button'
+	 *
+	 * @param   string  $name   Button name
+	 * @param   string  $title  Button title [Optional]
+	 * @param   string  $url    Button URL [Optional]
+	 * @return  string
+	 *
+	 * @uses    HTML::anchor
+	 * @uses    HTML::sprite_img
+	 * @uses    Request::uri
+	 */
+	public static function newButton($name, $title = NULL, $url = NULL)
+	{
+		if (is_null($url))
+		{
+			$url = Request::current()->uri(array('action' => 'add'));
+		}
+
+		if (is_null($title))
+		{
+			$title = HTML::sprite_img('add') . __('add :object', array(':object' => __($name)));
+		}
+
+		$out = HTML::anchor($url, $title, array('class' => 'button positive'));
+
+		return $out;
+	}
+
+	/**
+	 * Generates an opening HTML form tag
+	 *
+	 * #### Usage
+	 *
+	 * Form will submit back to the current page using POST:<br>
+	 * <code>
+	 * 	echo Form::open();
+	 * </code>
+	 *
+	 * Form will submit to 'search' using GET:<br>
+	 * <code>
+	 *	echo Form::open('search', array('method' => 'get'));
+	 * </code>
+	 *
+	 * When "file" inputs are present, you must include the "enctype":<br>
+	 * <code>
+	 * 	echo Form::open(NULL, array('enctype' => 'multipart/form-data'));
+	 * </code>
+	 *
+	 * @param   mixed  $action  Form action, defaults to the current request URI, or Request class to use [Optional]
+	 * @param   array  $attrs   HTML attributes [Optional]
+	 * @return  string
+	 *
+	 * @see     Request
+	 *
+	 * @uses    Request::uri
+	 * @uses    URL::site
+	 * @uses    URL::is_remote
+	 * @uses    URL::explode
+	 * @uses    HTML::attributes
+	 * @uses    Assets::css
+	 * @uses    CSRF::key
+	 * @uses    CSRF::token
+	 */
+	public static function open($action = NULL, array $attrs = NULL)
 	{
 		if ($action instanceof Request)
 		{
@@ -166,70 +250,73 @@ class Gleez_Form extends Kohana_Form {
 			// Allow empty form actions (submits back to the current url).
 			$action = '';
 		}
-		elseif (strpos($action, '://') === FALSE)
+		elseif ( ! URL::is_remote($action))
 		{
+
 			// Make the URI absolute
 			$action = URL::site($action);
 		}
 
 		// Add the form action to the attributes
-		$attributes['action'] = $action;
+		$attrs['action'] = $action;
 
-		//dynamically sets destination url to from action if exists in url
-		if($desti = Request::current()->query('destination') AND ! empty($desti) )
+		// Dynamically sets destination url to from action if exists in url
+		if ($desti = Request::current()->query('destination') AND ! empty($desti))
 		{
-			//properly parse the path and query
+			// Properly parse the path and query
 			$url = URL::explode($action);
 
 			//On seriously malformed URLs, parse_url() may return FALSE.
-			if( isset($url['path']) AND is_array($url['query_params']) )
+			if (isset($url['path']) AND is_array($url['query_params']))
 			{
 				//add destination param
 				$url['query_params']['destination'] = $desti;
 
 				//set the form action parameter
-				$attributes['action'] = $url['path'].URL::query($url['query_params']);
+				$attrs['action'] = $url['path'].URL::query($url['query_params']);
 			}
 		}
 
 		// Only accept the default character set
-		$attributes['accept-charset'] = Kohana::$charset;
+		$attrs['accept-charset'] = Kohana::$charset;
 
 		if ( ! isset($attributes['method']))
 		{
 			// Use POST method
-			$attributes['method'] = 'post';
+			$attrs['method'] = 'post';
 		}
 
-		$out = "<form".HTML::attributes($attributes).">\n";
+		$out = '<form'.HTML::attributes($attrs).'>'.PHP_EOL;
 
-		if( Gleez::$installed )
+		if (Gleez::$installed)
 		{
 			// Assign the global form css file
 			Assets::css('form', 'media/css/form.css', array('weight' => 2));
 
-			$action  = md5($action.CSRF::key());
-			$out 	.= Form::hidden('_token', CSRF::token(false, $action))."\n";
-			$out 	.= Form::hidden('_action', $action)."\n";
+			$action  = md5($action . CSRF::key());
+			$out 	.= Form::hidden('_token', CSRF::token(FALSE, $action)).PHP_EOL;
+			$out 	.= Form::hidden('_action', $action).PHP_EOL;
 		}
 
 		return $out;
 	}
 
 	/**
-	 * Creates a multiselect form input.
+	 * Creates a multiselect form input
 	 *
-	 * @param   string   input name
-	 * @param   array    available options
-	 * @param   array    selected options
-	 * @param   array    html attributes
+	 * @param   string  $name      Input name
+	 * @param   array   $options   Available options [Optional]
+	 * @param   array   $selected  Selected options [Optional]
+	 * @param   array   $attrs     HTML attributes [Optional]
 	 * @return  string
+	 *
+	 * @uses    HTML::attributes
 	 */
-	public static function multiselect($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
+	public static function multiselect($name, array $options = array(), $selected = NULL, array $attrs = NULL)
 	{
 		// Set the input name
-		$attributes['name'] = $name;
-		$attributes['multiple'] = 'multiple';
+		$attrs['name'] = $name;
+		$attrs['multiple'] = 'multiple';
 
 		if (empty($options))
 		{
@@ -267,7 +354,7 @@ class Gleez_Form extends Kohana_Form {
 					}
 
 					// Compile the options into a string
-					$_options = "\n".implode("\n", $_options)."\n";
+					$_options = PHP_EOL.implode(PHP_EOL, $_options).PHP_EOL;
 
 					$options[$value] = '<optgroup'.HTML::attributes($group).'>'.$_options.'</optgroup>';
 				}
@@ -291,95 +378,99 @@ class Gleez_Form extends Kohana_Form {
 			}
 
 			// Compile the options into a single string
-			$options = "\n".implode("\n", $options)."\n";
+			$options = PHP_EOL.implode(PHP_EOL, $options).PHP_EOL;
 		}
 
-		return '<select'.HTML::attributes($attributes).'>'.$options.'</select>';
+		return '<select'.HTML::attributes($attrs).'>'.$options.'</select>';
 	}
 
-        public static function radios($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
-        {
-		if ( !isset($attributes['class']))
-		{
-			$attributes['class'] = 'radio';
-		}
-		else
-		{
-			$attributes['class'] .= ' radio';
-		}
-
-		$output = '';
-
-                foreach ($options as $k => $v)
-                {
-                        $output .= Form::label($name, Form::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attributes);
-                }
-		return $output;
-        }
-
-	public static function checkboxes($name, array $options = NULL, array $selected = NULL, array $attributes = NULL)
+	/**
+	 * Creates form radios
+	 *
+	 * @param   string  $name      Radios name
+	 * @param   array   $options   Radios options [Optional]
+	 * @param   mixed   $selected  Selected radio [Optional]
+	 * @param   array   $attrs     Additional attributes [Optional]
+	 * @return  string
+	 *
+	 * @uses  Text::plain
+	 */
+	public static function radios($name, array $options = array(), $selected = NULL, array $attrs = array())
 	{
-		if ( !isset($attributes['class']))
+		if ( ! isset($attrs['class']))
 		{
-			$attributes['class'] = ' checkbox';
+			$attrs['class'] = 'radio';
 		}
 		else
 		{
-			$attributes['class'] .= ' checkbox';
+			$attrs['class'] .= ' radio';
 		}
 
-		if ($selected == NULL) $selected = array();
+		$out = '';
 
-		$output = '';
+		foreach ($options as $k => $v)
+		{
+			$out .= Form::label($name, Form::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attrs);
+		}
 
-                foreach ($options as $k => $v)
-                {
-                        $output .= Form::label($name, Form::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attributes);
-                }
-                return $output;
+		return $out;
 	}
 
-	public static function mycheckbox($name, $option = NULL, $value = 0, $selected = NULL, array $attributes = NULL)
+	/**
+	 * Creates form checkboxes
+	 *
+	 * @param   string  $name      Checkboxes name
+	 * @param   array   $options   Checkboxes options [Optional]
+	 * @param   array   $selected  Selected checkboxes [Optional]
+	 * @param   array   $attrs     Additional attributes [Optional]
+	 * @return  string
+	 */
+	public static function checkboxes($name, array $options = array(), array $selected = array(), array $attrs = array())
 	{
-		if ( !isset($attributes['class']))
+		if ( ! isset($attrs['class']))
 		{
-			$attributes['class'] = ' checkbox';
+			$attrs['class'] = ' checkbox';
 		}
 		else
 		{
-			$attributes['class'] .= ' checkbox';
+			$attrs['class'] .= ' checkbox';
 		}
 
 		$output = '';
-		$output .= Form::hidden($name, 0);
-		$output .= Form::label($name, Form::checkbox( $name, $value, ( (($selected != 0) AND ($selected == $value)) ? TRUE : FALSE ) ).Text::plain($option), $attributes);
+
+		foreach ($options as $k => $v)
+		{
+			$output .= Form::label($name, Form::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attrs);
+		}
 
 		return $output;
 	}
 
 	/**
-	 * Creates a select form input with raw labels.
+	 * Creates a select form input with raw labels
 	 *
-	 *     echo Form::select('country', $countries, $country);
+	 * Example:<br>
+	 * <code>
+	 * 	echo Form::select('country', $countries, $country);
+	 * </code>
 	 *
-	 * [!!] Support for multiple selected options was added in v3.0.7.
-	 *
-	 * @param   string   input name
-	 * @param   array    available options
-	 * @param   mixed    selected option string, or an array of selected options
-	 * @param   array    html attributes
+	 * @param   string  $name      Input name
+	 * @param   array   $options   Available options [Optional]
+	 * @param   mixed   $selected  Selected option string, or an array of selected options [Optional]
+	 * @param   array   $attrs     HTML attributes
 	 * @return  string
+	 *
 	 * @uses    HTML::attributes
 	 */
-	public static function rawselect($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
+	public static function rawselect($name, array $options = NULL, $selected = NULL, array $attrs = array())
 	{
 		// Set the input name
-		$attributes['name'] = $name;
+		$attrs['name'] = $name;
 
 		if (is_array($selected))
 		{
 			// This is a multi-select, god save us!
-			$attributes['multiple'] = 'multiple';
+			$attrs['multiple'] = 'multiple';
 		}
 
 		if ( ! is_array($selected))
@@ -432,7 +523,7 @@ class Gleez_Form extends Kohana_Form {
 					}
 
 					// Compile the options into a string
-					$_options = "\n".implode("\n", $_options)."\n";
+					$_options = PHP_EOL.implode(PHP_EOL, $_options).PHP_EOL;
 
 					$options[$value] = '<optgroup'.HTML::attributes($group).'>'.$_options.'</optgroup>';
 				}
@@ -456,10 +547,9 @@ class Gleez_Form extends Kohana_Form {
 			}
 
 			// Compile the options into a single string
-			$options = "\n".implode("\n", $options)."\n";
+			$options = PHP_EOL.implode(PHP_EOL, $options).PHP_EOL;
 		}
 
-		return '<select'.HTML::attributes($attributes).'>'.$options.'</select>';
+		return '<select'.HTML::attributes($attrs).'>'.$options.'</select>';
 	}
-
-}// End Form
+}
