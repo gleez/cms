@@ -25,9 +25,10 @@ return array
 	// C
 	'Change Avatar' => 'Сменить аватар',
 	'Change own username' => 'Смена собственного логина',
-	'Create One.' => 'Создать аккаунт.',
 	'Change Password' => 'Сменить пароль',
 	'Change your avatar' => 'Сменить ваш аватар',
+	'Close' => 'Закрыть',
+	'Create One.' => 'Создать аккаунт.',
 	// D
 	'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
@@ -67,6 +68,8 @@ return array
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
 	'Permissions saved successfully!' => 'Полномочия успешно сохранены!',
+	'Photo' => 'Фотография',
+	'Photo successfully uploaded!' => 'Фотография успешно загружена',
 	'Profile %title' => 'Профиль %title',
 	// Q
 	// R
@@ -84,7 +87,7 @@ return array
 	'This account is blocked' => 'Этот аккаунт заблокирован',
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',
-	'Upload Photo' => 'Загрузить фотографию',
+	'Upload' => 'Загрузить',
 	'Uploading Photos' => 'Загрузка фотографии',
 	'Users management' => 'Управление пользователями',
 	'user roles page' => 'странице пользовательских ролей',
@@ -101,6 +104,7 @@ return array
 	'You must provide an email address.' => 'Вы долны предоставить email адрес.',
 	'You must provide a password.' => 'Вы долны предоставить пароль.',
 	'You must provide a username.' => 'Вы долны предоставить имя пользователя.',
+	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
 	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
 	// Z
 );
