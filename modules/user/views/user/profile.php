@@ -8,7 +8,7 @@
 				<?php if ($is_owner): ?>
 					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>'; ?>
 				<?php else: ?>
-					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : ''; ?>
+					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>'; ?>
 				<?php endif; ?>
 			</div>
 
@@ -67,9 +67,9 @@
 
 </div>
 
-<div class="modal hide fade" id="upload-photo">
+<div class="modal hide fade in" id="upload-photo" role="dialog" tabindex="-1" aria-hidden="true">
 	<div class="modal-header">
-		<a class="close" data-dismiss="modal">×</a>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		<h3><?php echo __('Uploading Photos'); ?></h3>
 	</div>
 	<div class="modal-data"></div>

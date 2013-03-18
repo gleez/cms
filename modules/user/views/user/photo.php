@@ -1,32 +1,31 @@
-<?php defined('SYSPATH') or die('No direct script access.'); ?>
+<?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<?php echo Form::open( Route::get('user')->uri( array('id' => $user->id, 'action' => 'photo') ), array('class' => 'form-horizontal', 'enctype' => 'multipart/form-data') ) ?>
+<?php echo Form::open(Route::get('user')->uri(array('id' => $user->id, 'action' => 'photo')), array('class' => 'form-horizontal', 'enctype' => 'multipart/form-data')); ?>
 
-<div class="modal-body">
-	<?php if ( ! empty($errors)): ?>
-		<div id="formerrors" class="errorbox">
-			<h3>Ooops!</h3>
-			<ol>
-				<?php foreach($errors as $field => $message): ?>
-					<li>
-						<?php echo $field .': '.$message ?>
-					</li>
-				<?php endforeach ?>
-			</ol>
+	<div class="modal-body">
+		<?php include Kohana::find_file('views', 'errors/partial'); ?>
+
+		<div class="control-group <?php echo isset($errors['picture']) ? 'error': ''; ?>">
+			<?php echo Form::label('photo', __('Photo'), array('class' => 'control-label')) ?>
+			<div class="controls">
+				<?php print Form::file('picture', array('class' => 'input-file')); ?>
+			</div>
 		</div>
-	<?php endif ?>
 
-        <div class="control-group <?php echo isset($errors['picture']) ? 'error': ''; ?>">
-                <?php echo Form::label('photo', __('Photo:'), array('class' => 'control-label')) ?>
-                <?php print Form::file('picture', array('class' => 'input-file')); ?>
-        </div>
-</div>
+		<div class="modal-body-text">
+			<p><?php echo __('Your picture will be changed proportionally to the size of :w&times;:h', array(':w' => 150, ':h' => 150)); ?></p>
+			<?php /** @todo Show info about supported formats.. */ ?>
+		</div>
 
-<div id="status"></div>
-<div class="progress progress-success progress-striped active hide">	<div class="bar" style="width: 0%;"></div> </div>
+		<div id="status"></div>
+		<div class="progress progress-success progress-striped active hide">
+			<div class="bar" style="width: 0%;"></div>
+		</div>
+	</div>
 
-<div class="modal-footer">
-	<?php echo Form::submit('user_edit', __('Upload Photo'), array('class' => 'btn btn-primary')) ?>
-</div>
+	<div class="modal-footer">
+		<?php echo Form::submit('user_edit', __('Upload'), array('class' => 'btn btn-primary')) ?>
+		<button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo __('Close') ?></button>
+	</div>
 
-<?php echo Form::close() ?>
+<?php echo Form::close(); ?>
