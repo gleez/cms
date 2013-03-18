@@ -110,8 +110,6 @@ class Controller_User extends Template {
      */
     public function action_login()
     {
-        Assets::css('user', 'media/css/user.css', array('weight' => 2));
-
         // If user already signed-in
         if($this->_auth->logged_in())
         {
@@ -122,8 +120,6 @@ class Controller_User extends Template {
         $this->title = __('Sign In');
         $user        = ORM::factory('user');
         $config      = Kohana::$config->load('auth');
-        $destin      = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
-        $params      = array('action' => 'login');
 
         $view = View::factory('user/login')
             ->set('errors',       array())
@@ -139,7 +135,7 @@ class Controller_User extends Template {
                 $user->login($this->request->post());
 
                 // If the post data validates using the rules setup in the user model
-                Message::success(__('Login: %title Successful!', array('%title' => $user->name)));
+                Message::success(__('Welcome, %title!', array('%title' => $user->name)));
                 Kohana::$log->add(LOG::INFO, 'User :name logged in.', array(':name' => $user->name) );
 
                 // redirect to the user account
@@ -168,7 +164,7 @@ class Controller_User extends Template {
     }
 
     /**
-     * View: User account information
+     * View user account information
      */
     public function action_profile()
     {
@@ -184,15 +180,15 @@ class Controller_User extends Template {
     }
 
     /**
-     * View: User account information
+     * View user account information
      */
     public function action_view()
     {
-        $id = (int) $this->request->param('id', 0);
-        $user = ORM::factory('user', $id);
+        $id      = (int) $this->request->param('id', 0);
+        $user    = ORM::factory('user', $id);
         $account = FALSE;
 
-        if( ! $user->loaded())
+        if ( ! $user->loaded())
         {
             Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent user');
 
@@ -200,16 +196,16 @@ class Controller_User extends Template {
             $this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
         }
 
-        if($this->_auth->logged_in() AND $user->id > 1)
+        if ($this->_auth->logged_in() AND $user->id > 1)
         {
             $account = Auth::instance()->get_user();
         }
 
-        if($account AND $account->id == $user->id)
+        if ($account AND $account->id == $user->id)
         {
             $this->title = __('My Account');
         }
-        elseif($account AND ((ACL::check('access profiles') AND $user->status) OR ACL::check('administer users')))
+        elseif ($account AND ((ACL::check('access profiles') AND $user->status) OR ACL::check('administer users')))
         {
             $this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
         }
@@ -221,9 +217,11 @@ class Controller_User extends Template {
             throw new HTTP_Exception_403('Attempt to access without required privileges.');
         }
 
+        $is_owner = ($user->id === $account->id) ? TRUE : FALSE;
+
         $view = View::factory('user/profile')
-            ->set('account', $user)
-            ->set('user', $account);
+                ->set('user',     $user)
+                ->set('is_owner', $is_owner);
 
         $this->response->body($view);
     }
