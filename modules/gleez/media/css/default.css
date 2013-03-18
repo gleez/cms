@@ -1,9 +1,7 @@
 body a [class^="icon-"], a [class*=" icon-"] {
   text-decoration: none;
 }
-.input-prepend .add-on, .input-prepend .btn {
-   /* margin-right: -4px*/;
-}
+
 .navbar .nav .active > a, .navbar .nav .active > a:hover, .navbar .nav > li > a:hover {
     background-color:transparent; /* IE8 bug*/
     text-decoration: none;
@@ -36,7 +34,6 @@ body a [class^="icon-"], a [class*=" icon-"] {
 }
 .nav .dropdown-menu li a:hover {
     color: #FFFFFF;
-    /*background-color: #369bd7;*/
     text-decoration: none;
 }
 .well{
@@ -44,7 +41,6 @@ body a [class^="icon-"], a [class*=" icon-"] {
   border: 1px solid rgba(236, 240, 242, 0.25);
 }
 form .well{
-  /*background-color: #F3F3F3;*/
   background-color: #F5F5F5;
   border: 1px solid #FFFFFF;
   -webkit-border-radius: 5px;
@@ -148,18 +144,8 @@ form .well{
     line-height:1.131em;
     margin:5px 0;
 }
-/*.folded .row > #row-content{
-    width: 1170px;
-}
-.folded .row-fluid > #row-content{
-    width: 100%;
-}
-.folded #right, .folded #left{
-    display: none;
-}*/
+
 p.empty_page, td.dataTables_empty {
-  /*border: 1px solid #ddd;
-  border-width: 1px 0;*/
   font-size: 14px;
   text-align: center;
   padding: 32px;
@@ -175,6 +161,7 @@ p.empty_page, td.dataTables_empty {
   height: auto;
   width: 40px;
 }
+
 #progress-range{
   width: 250px;
   margin-top:2px;
@@ -229,8 +216,6 @@ i.icon-none, a.icon-none{
 }
 
 .accordion-heading .brand {
-  /*float: left;
-  color: #999999;*/
   color: #454545;
 }
 .accordion-heading a.pull-right {
@@ -250,6 +235,12 @@ body.view .accordion-body > .accordion-inner{
 body.view .accordion-body > .accordion-inner table{
   margin-bottom: 2px;
 }
+
+.modal-body-text {
+    width: 100%;
+    padding: 1em 0;
+}
+
 /*----------------------------------Table-------------------------------------*/
 
 .table th, .table td {
@@ -346,19 +337,7 @@ div.Popup h1 {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00A0D1', endColorstr='#008DB8', GradientType=0);
     color: #FFFFFF;
 }
-a.Close {
-	position: absolute;
-	top: 15px;
-	right: 20px;
-	line-height: 1;
-	color: #000;
-	cursor: pointer;
-	font-family: arial;
-	font-size: 22px;
-	font-weight: bold;
-	padding: 0;
-        text-decoration: none;
-}
+
 div.Popup .Footer {
 	border: none;
 	background: none;
@@ -401,11 +380,9 @@ div.Popup form {
 /*================= Widget =======================*/
 .widget {
 	position: relative;
-	/*clear: both;*/
 	width: auto;
 	margin-bottom: 1.7em;
-	/*overflow: hidden;*/
-        z-index: 10;
+	z-index: 10;
 }
 
 .widget-header {
@@ -429,28 +406,26 @@ div.Popup form {
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	-webkit-background-clip: padding-box;
-}	
+}
 
 .widget-header h3 {
 		position: relative;
 		top: 2px;
 		left: 5px;
 		display: inline-block;
-		/*margin-right: 3em;*/
 		font-size: 16px;
 		font-weight: normal;
-		/*color: #0088CC;*/
 		line-height: 18px;
 		text-shadow: 1px 1px 2px rgba(255,255,255,.5);
-                text-transform: capitalize;
+		text-transform: capitalize;
 }
 .widget-header [class^="icon-"], .widget-header [class*=" icon-"] {
-                display: inline-block;
-                margin-left: 10px;
-                margin-right: -2px;
-                font-size: 16px;
-                color: #555;
-                vertical-align: middle;
+		display: inline-block;
+		margin-left: 10px;
+		margin-right: -2px;
+		font-size: 16px;
+		color: #555;
+		vertical-align: middle;
 }
 .widget-content {
 	padding: 15px;
@@ -472,7 +447,7 @@ div.Popup form {
 .widget-nopad .widget-content {
 	padding: 0;
 }
-/* Widget Content Clearfix */	
+/* Widget Content Clearfix */
 .widget-content:before,
 .widget-content:after {
     content:"";
@@ -516,10 +491,10 @@ div.Popup form {
 }
 
 /* Widget Box */
-.widget-box {	
+.widget-box {
 }
-.widget-box .widget-content {	
-	background: #E3E3E3;	
+.widget-box .widget-content {
+	background: #E3E3E3;
 	background: #FFF;
 }
 
@@ -529,11 +504,11 @@ div.Popup form {
 }
 .widget-content ul.menus{
 	margin: 0;
-	list-style: none;	
+	list-style: none;
 }
-.widget-content ul.menus li { 
-	float: left; 
-	position: relative;  
+.widget-content ul.menus li {
+	float: left;
+	position: relative;
 	width: 100%;
         margin: 0;
         padding: 0;
@@ -551,12 +526,7 @@ div.Popup form {
     border-bottom: 1px solid #DDDDDD;
     border-top: 1px solid #FFFFFF;
 }
-.widget-content > ul > li ul, .widget-content > ul > li ul ul, .widget-content > ul > li ul ul ul {
-    /*position: relative;*/
-}
-.widget-content ul.menus .dropdown:hover .dropdown-menu {
-    /*display: block;*/
-}
+
 .widget-content ul.menus li .sub-menu{
     border: medium none;
     box-shadow: none;
@@ -672,15 +642,15 @@ body.widget{
 */
 
 .shortcuts {
-	text-align: center;	
+	text-align: center;
 }
 
-.shortcuts .shortcut { 
+.shortcuts .shortcut {
 	width: 22.50%;
 	display: inline-block;
 	/*padding: 12px 0;*/
 	margin: 0 .9% 1em;
-	vertical-align: top;	
+	vertical-align: top;
 	text-decoration: none;
 	background: #F3F3F3;
 	border-radius: 5px;
@@ -799,7 +769,7 @@ table .progress {
     width: 48.717948718%;
     *width: 48.6647572286383%;
   }
-  
+
 }
 
 @media (max-width: 979px) {
