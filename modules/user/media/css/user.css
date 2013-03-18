@@ -1,3 +1,15 @@
+.empty-photo {
+        width: 150px;
+        height: 150px;
+}
+
+.empty-photo i {
+        margin: 0 auto;
+        display: block;
+        width: 1em;
+        position: relative;
+        top: 70px;
+}
 
 .user-login form
 {
@@ -50,7 +62,7 @@ form #auth-providers .provider
 #oauth-providers .oprovider {
         list-style: none;
         display: inline;
-        font-size: 12px !important;  
+        font-size: 12px !important;
         text-decoration: none;
         cursor: pointer;
         border: medium none !important;
@@ -104,12 +116,12 @@ form #auth-providers .provider
 #oauth-providers .google{
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
         background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */ 
+        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
 }
 #oauth-providers li.live{
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ddeff0', endColorstr='#85DCE2'); /* for IE */
         background: -webkit-gradient(linear, left top, left bottom, from(#ddeff0), to(#85DCE2)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #ddeff0, #85DCE2) repeat scroll 0 0 transparent; /* for firefox 3.6+ */ 
+        background: -moz-linear-gradient(center top , #ddeff0, #85DCE2) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
         color: #3C6B9C;
 }
 #post-provider-buttons{
