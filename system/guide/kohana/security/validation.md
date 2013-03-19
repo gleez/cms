@@ -153,7 +153,7 @@ First, we need a [View] that contains the HTML form, which will be placed in `ap
         <li><?php echo $message ?></li>
     <?php endforeach ?>
     <?php endif ?>
-
+    </ul>
     <dl>
         <dt><?php echo Form::label('username', 'Username') ?></dt>
         <dd><?php echo Form::input('username', $post['username']) ?></dd>
