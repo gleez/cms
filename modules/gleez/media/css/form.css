@@ -1,3 +1,7 @@
+.form-horizontal .form-actions {
+    padding-left: 1em;
+}
+
 .admin-page-list fieldset {
     background-color: #FFFFFF;
     border: 1px solid #DADCE0;
@@ -144,7 +148,7 @@ form span.req{
 
 
 /* Error message at the top of the form */
-#formerrors{ 
+#formerrors{
 	background: #c20f2e; color: #fff; margin: 0 0 1.5em 0; padding: 1px 1.5em;
        /* CSS3 */
        border-radius: 4px;
@@ -157,7 +161,7 @@ form span.req{
        -moz-box-shadow: 0 0 10px rgba(0,0,0,.25);
 }
 #formerrors ol{ margin: 0 0 1.5em 0; padding: 0; }
-#formerrors ol li{ 
+#formerrors ol li{
 	margin: 0 0 3px 1.5em; padding: 7px; background: #a20d27; position: relative; font-size: .85em;
        /* CSS3 */
        border-radius: 4px;
