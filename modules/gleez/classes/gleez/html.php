@@ -81,7 +81,7 @@ class Gleez_HTML extends Kohana_HTML {
 	{
 		if (strlen($file) <= 1)
 		{
-			return;
+			return '';
 		}
 
 		if (isset($attributes['width']))
@@ -337,6 +337,7 @@ class Gleez_HTML extends Kohana_HTML {
 	 * @return  string  An HTML-prepared image
 	 *
 	 * @uses    Route::uri
+	 * @uses    HTML::image
 	 */
 	public static function sprite_img($class, $title = NULL)
 	{
