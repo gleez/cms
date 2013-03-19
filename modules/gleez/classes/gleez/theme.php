@@ -1,20 +1,17 @@
 <?php defined("SYSPATH") or die("No direct script access.");
 
 /**
- * Theme helper for adding content to views.
- *
+ * Theme helper for adding content to views
  *
  * This is the API for handling themes.
+ * Code taken from Gallery3.
  *
- * Note: by design, this class does not do any permission checking.
+ * @package    Gleez\Theme
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
  *
- * Code taken from Gallery3
- *
- * @package   Gleez
- * @category  Theme
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2012 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @todo       This class does not do any permission checking
  */
 class Gleez_Theme {
 
@@ -67,10 +64,10 @@ class Gleez_Theme {
         }
 
         /**
-         * Gets info abou theme
+         * Gets info about theme
          *
          * @param   string        $theme_name   Theme name
-         * @return  \ArrayObject  An array containinig information about theme
+         * @return  \ArrayObject  An array containing information about theme
          */
         public static function get_info($theme_name)
         {
@@ -79,15 +76,24 @@ class Gleez_Theme {
                 $theme_info->title       = __($theme_info->title);
                 $theme_info->description = __($theme_info->description);
 
+                // Add i18n support
+                if (isset($theme_info->regions) AND ! empty($theme_info->regions))
+                {
+                        foreach ($theme_info->regions as $name => $title)
+                        {
+                                $theme_info->regions[$name] = __($title);
+                        }
+                }
+
                 return $theme_info;
         }
 
         /**
-         * Gets list of avaliable themes
+         * Gets list of available themes
          *
-         * @return  array  Avaliable themes aray
+         * @return  array  Available themes array
          */
-        public static function avaliable()
+        public static function available()
         {
                 $themes = array();
 
