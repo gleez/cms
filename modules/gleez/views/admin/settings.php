@@ -52,14 +52,14 @@
 
 	<div class="control-group <?php echo isset($errors['theme']) ? 'error': ''; ?>">
 	    <?php echo Form::label('theme', __('Site Theme'), array('class' => 'wrap')) ?>
-	    <?php echo Form::select('theme', Theme::Avaliable(), $post['theme'], array('class' => 'span12')); ?>
+	    <?php echo Form::select('theme', Theme::available(), $post['theme'], array('class' => 'span12')); ?>
 	</div>
 
 	<div class="control-group <?php echo isset($errors['admin_theme']) ? 'error': ''; ?>">
 	    <?php echo Form::label('admin_theme', __('Admin Theme'), array('class' => 'control-label')) ?>
-	    <?php echo Form::select('admin_theme', Theme::Avaliable(), $post['admin_theme'], array('class' => 'span12')); ?>
+	    <?php echo Form::select('admin_theme', Theme::available(), $post['admin_theme'], array('class' => 'span12')); ?>
 	</div>
-	
+
     </div>
 
     <div id="settings-right"  class="span6">
@@ -85,7 +85,7 @@
 	    <?php echo Form::textarea('blocked_ips', $post['blocked_ips'], array('class' => 'textarea span12', 'rows' => 3)) ?>
 	    <span class="help-block"><?php echo __("Comma seperated ip's for multiple addresses"); ?></span>
         </div>
-	
+
 	<div class="control-group <?php echo isset($errors['timezone']) ? 'error': ''; ?>">
 	    <?php echo Form::label('time_zone', __('Time Zone'), array('class' => 'wrap')) ?>
 	    <?php echo Form::select('timezone', $timezones, $post['timezone'], array('class' => 'span12 time-zone')); ?>
@@ -120,7 +120,7 @@
 	    <?php echo Form::label('google_ua', __('Google Analytics'), array('class' => 'control-label')) ?>
 	    <?php echo Form::input('google_ua', $post['google_ua'], array('class' => 'text span12', 'placeholder' => 'UA-12345678-9')); ?>
 	</div>
-	
+
     </div>
 
 </div>
