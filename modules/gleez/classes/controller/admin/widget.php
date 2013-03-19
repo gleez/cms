@@ -76,7 +76,6 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		foreach ($widget_regions as $region => $title)
 		{
-			$widget_regions[$region] = __($title);
 			Assets::tabledrag('widgets','match','sibling','widget-region-select','widget-region-'.$region,NULL,FALSE);
 			Assets::tabledrag('widgets', 'order', 'sibling', 'widget-weight', 'widget-weight-' . $region);
 		}
@@ -125,7 +124,6 @@ class Controller_Admin_Widget extends Controller_Admin {
 		{
 			$widget_regions = $theme->regions;
 		}
-
 		// Add a last region for disabled blocks.
 		$widget_regions = Arr::merge($widget_regions, array(self::$WIDGET_REGION_NONE => self::$WIDGET_REGION_NONE));
 
