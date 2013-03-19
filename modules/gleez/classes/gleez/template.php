@@ -1,9 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Abstract template class for automatic templating.
+ * Abstract template class for automatic templating
  *
  * @package    Gleez\Template
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -91,7 +93,7 @@ abstract class Gleez_Template extends Controller {
 	 * The destination url
 	 * @var array
 	 */
-	protected $dest;
+	protected $_desti;
 
 	/**
 	 * The destination url
@@ -213,8 +215,8 @@ abstract class Gleez_Template extends Controller {
 			$this->_widgets         = Widgets::instance();
 			$this->template->_admin = Theme::$is_admin;
 
-				//set the destination & redirect url
-			$this->desti = array(
+			//set the destination & redirect url
+			$this->_desti = array(
 				'destination' => $this->request->uri()
 			);
 
@@ -299,13 +301,13 @@ abstract class Gleez_Template extends Controller {
 			$classes[] = ($this->_auth->logged_in()) ? 'logged-in' : 'not-logged-in';
 
 			// Special check for frontpage and frontpage title
-			if ( ! $uri = @preg_replace("#(/p\d+)+$#uD", '', rtrim($this->request->uri(), '/')) OR $uri === $this->_config->front_page)
+			if ($this->is_frontpage())
 			{
 				// Set front variable true for themers
 				$this->template->front = TRUE;
-				// Dont show title on homepage
+				// Don't show title on homepage
 				$this->template->title = FALSE;
-				// Dont show title on homepage
+				// Don't show title on homepage
 				$this->title           = FALSE;
 
 				$this->template->mission = __($this->_config->get('site_mission', ''));
@@ -314,6 +316,7 @@ abstract class Gleez_Template extends Controller {
 			View::set_global('is_front', $this->template->front);
 			View::set_global('is_admin', $this->template->_admin);
 
+			$classes[] = $this->template->_admin ? 'backend' : 'frontend';
 			$classes[]  = ($this->template->front) ? 'front' : 'not-front';
 			$page_class = implode(' ', array_unique(array_map('trim', $classes)));
 
@@ -323,8 +326,8 @@ abstract class Gleez_Template extends Controller {
 			// Allow module and theme developers to override
 			Module::event('template', $this);
 
-			// Set pimary menu
-			$pimary_menu = Menu::links('main-menu', array(
+			// Set primary menu
+			$primary_menu = Menu::links('main-menu', array(
 					'class' => 'menus nav'
 			));
 
@@ -332,7 +335,7 @@ abstract class Gleez_Template extends Controller {
 			$this->template->set('lang', I18n::$lang)
 					->set('page_id', $this->_page_id)
 					->set('page_class', $page_class)
-					->set('primary_menu', $pimary_menu)
+					->set('primary_menu', $primary_menu)
 					->set('title', $this->title)
 					->set('mission', $this->template->mission)
 					->set('content', $this->response->body())
@@ -393,7 +396,7 @@ abstract class Gleez_Template extends Controller {
 	}
 
 	/**
-	 * Set the page title.
+	 * Set the page title
 	 */
 	protected function _set_head_title()
 	{
@@ -428,6 +431,8 @@ abstract class Gleez_Template extends Controller {
 		$headers['X-Gleez-Version'] = 'Gleez CMS v ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')';
 
 		$xmlrpc = $this->_config->get('xmlrpc', NULL);
+
+		/** @var $xmlrpc string|NULL */
 		if ( ! is_null($xmlrpc))
 		{
 			$headers['X-Pingback'] = URL::site($xmlrpc, TRUE);
@@ -509,12 +514,13 @@ abstract class Gleez_Template extends Controller {
 	}
 
 	/**
-	 * Add sidebars.
+	 * Add sidebars
+	 *
 	 * This method is chainable.
 	 */
 	protected function _set_sidebars()
 	{
-		if( $this->_sidebars !== FALSE )
+		if ($this->_sidebars !== FALSE)
 		{
 			$this->template->sidebar_left  = $this->_widgets->render('left');
 			$this->template->sidebar_right = $this->_widgets->render('right');
@@ -524,7 +530,8 @@ abstract class Gleez_Template extends Controller {
 	}
 
 	/**
-	 * Add sidebar column class.
+	 * Add sidebar column class
+	 *
 	 * This method is chainable.
 	 */
 	protected function _set_column_class()
@@ -588,27 +595,40 @@ abstract class Gleez_Template extends Controller {
 	}
 
 	/**
-	 * Returns true if the post has a valid CSRF
+	 * Returns TRUE if the POST has a valid CSRF
 	 *
-	 * @return  bool
+	 * Usage:<br>
+	 * <code>
+	 * 	if ($this->valid_post('upload_photo')) { ... }
+	 * </code>
+	 *
+	 * @param   string|NULL  $submit Submit value [Optional]
+	 * @return  boolean  Return TRUE if it's valid $_POST
+	 *
+	 * @uses    Request::is_post
+	 * @uses    Request::post_max_size_exceeded
+	 * @uses    Request::get_post_max_size
+	 * @uses    Request::post
+	 * @uses    Message::error
+	 * @uses    CSRF::valid
+	 * @uses    Captcha::valid
 	 */
-	public function valid_post($submit = FALSE)
+	public function valid_post($submit = NULL)
 	{
-		if ($this->request->method() !== HTTP_Request::POST)
+		if ( ! $this->request->is_post())
 		{
 			return FALSE;
 		}
 
 		if (Request::post_max_size_exceeded())
 		{
-			Message::error(__('Max filesize of :max exceeded.',
-				array(':max' => ini_get('post_max_size') . 'B')
+			Message::error(__('Max file size of :max Bytes exceeded!',
+				array(':max' => Request::get_post_max_size())
 			));
 			return FALSE;
 		}
 
-		// @todo use $this->request->post()
-		if ($submit)
+		if ($this->request->post($submit))
 		{
 			if ( ! isset($_POST[$submit]))
 			{
@@ -620,10 +640,10 @@ abstract class Gleez_Template extends Controller {
 		$_token  = $this->request->post('_token');
 		$_action = $this->request->post('_action');
 
-		$has_csrf = !empty($_token) AND !empty($_action);
+		$has_csrf = ! empty($_token) AND ! empty($_action);
 		$valid_csrf = $has_csrf AND CSRF::valid($_token, $_action);
 
-		if ($has_csrf AND !$valid_csrf)
+		if ($has_csrf AND ! $valid_csrf)
 		{
 			// CSRF was submitted but expired
 			Message::error(__('This form has expired. Please try submitting it again.'));
@@ -636,7 +656,7 @@ abstract class Gleez_Template extends Controller {
 			if (empty($captcha))
 			{
 				// CSRF was not entered
-				Message::error(__('The security field can\'t be empty.'));
+				Message::error(__('The security code can\'t be empty.'));
 				return FALSE;
 			}
 			elseif ( ! Captcha::valid($captcha))
@@ -652,7 +672,7 @@ abstract class Gleez_Template extends Controller {
 	/**
 	 * Set the profiler stats into template.
 	 *
-	 * @return  void
+	 * @uses  Profiler::groups
 	 */
 	protected function _set_profiler_stats()
 	{
@@ -683,4 +703,17 @@ abstract class Gleez_Template extends Controller {
 		$this->template = strtr((string) $this->template, $total);
 	}
 
+	/**
+	 * Is frontpage?
+	 *
+	 * @return boolean
+	 *
+	 * @uses  Request::uri
+	 */
+	public function is_frontpage()
+	{
+		$uri = preg_replace("#(/p\d+)+$#uD", '', rtrim($this->request->uri(), '/'));
+
+		return (empty($uri) OR ($uri === $this->_config->front_page));
+	}
 }
