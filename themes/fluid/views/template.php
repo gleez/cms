@@ -27,7 +27,7 @@
 					</a>
 
 					<a href="<?php echo $site_url ?>" title="<?php echo $site_name ?>" class="brand">
-						<img class="logo" title="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" alt="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" src="<?php echo Url::site('media/logo.png')?>">
+						<img class="logo" title="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" alt="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" src="<?php echo URL::site('media/logo.png')?>">
 					</a>
 
 					<div class="nav-collapse">
@@ -43,14 +43,10 @@
 									</a>
 
 									<ul class="dropdown-menu">
-										<?php if (User::is_admin()): ?>
-											<li><a href="<?php echo URL::site('/admin') ?>"><i class="icon-dashboard"></i> <?php echo __('Dashboard') ?></a></li>
-											<li class="divider"></li>
-										<?php endif; ?>
 										<li><a href="<?php echo URL::site('/user/profile') ?>"><i class="icon-cog"></i> <?php echo __('Profile') ?></a></li>
 										<li><a href="<?php echo URL::site("/user/edit") ?>"><i class="icon-pencil"></i> <?php echo __('Account') ?></a></li>
 										<li class="divider"></li>
-										<li><a rel="tooltip" href="<?php echo URL::site('/user/logout'); ?>" data-original-title="Logout"><i class="icon-off"></i> <?php echo __('Logout') ?></a></li>
+										<li><a rel="tooltip" href="<?php echo URL::site('/user/logout'); ?>" data-original-title="<?php echo __('Logout') ?>"><i class="icon-off"></i> <?php echo __('Logout') ?></a></li>
 									</ul>
 								</li>
 							<?php else:?>
