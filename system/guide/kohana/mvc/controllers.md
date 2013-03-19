@@ -17,7 +17,7 @@ Some examples of controller names and file locations:
 
 	// classes/controller/foobar.php
 	class Controller_Foobar extends Controller {
-	
+
 	// classes/controller/admin.php
 	class Controller_Admin extends Controller {
 
@@ -25,20 +25,20 @@ Controllers can be in sub-folders:
 
 	// classes/controller/baz/bar.php
 	class Controller_Baz_Bar extends Controller {
-	
+
 	// classes/controller/product/category.php
 	class Controller_Product_Category extends Controller {
-	
+
 [!!] Note that controllers in sub-folders can not be called by the default route, you will need to define a route that has a [directory](routing#directory) param or sets a default value for directory.
 
 Controllers can extend other controllers.
 
 	// classes/controller/users.php
 	class Controller_Users extends Controller_Template
-	
+
 	// classes/controller/api.php
 	class Controller_Api extends Controller_REST
-	
+
 [!!] [Controller_Template] is an example controller provided in Kohana.
 
 You can also have a controller extend another controller to share common things, such as requiring you to be logged in to use all of those controllers.
@@ -46,16 +46,16 @@ You can also have a controller extend another controller to share common things,
 	// classes/controller/admin.php
 	class Controller_Admin extends Controller {
 		// This controller would have a before() that checks if the user is logged in
-	
+
 	// classes/controller/admin/plugins.php
 	class Controller_Admin_Plugins extends Controller_Admin {
 		// Because this controller extends Controller_Admin, it would have the same logged in check
-		
+
 ## $this->request
 
 Every controller has the `$this->request` property which is the [Request] object that called the controller.  You can use this to get information about the current request, as well as set the response body via `$this->response->body($ouput)`.
 
-Here is a partial list of the properties and methods available to `$this->request`.  These can also be accessed via `Request::instance()`, but `$this->request` is provided as a shortcut.  See the [Request] class for more information on any of these. 
+Here is a partial list of the properties and methods available to `$this->request`.  These can also be accessed via `Request::instance()`, but `$this->request` is provided as a shortcut.  See the [Request] class for more information on any of these.
 
 Property/method | What it does
 --- | ---
@@ -88,7 +88,7 @@ A very basic action method that simply loads a [view](mvc/views) file.
 Parameters are accessed by calling `$this->request->param('name')` where `name` is the name defined in the route.
 
 	// Assuming Route::set('example','<controller>(/<action>(/<id>(/<new>)))');
-	
+
 	public function action_foobar()
 	{
 		$id = $this->request->param('id');
@@ -129,7 +129,7 @@ A user login action.
 			// Try to login
 			if (Auth::instance()->login($this->request->post('username'), $this->request->post('password')))
 			{
-				Request::current()->redirect('home');
+				$this->request->redirect('home', 303);
 			}
 
 			$view->errors = 'Invalid email or password';
@@ -158,7 +158,7 @@ You can check what action has been requested (via `$this->request->action`) and 
 				$this->request->redirect('admin/login');
 			}
 		}
-		
+
 		public function action_login() {
 			...
 
@@ -173,7 +173,7 @@ In general, you should not have to change the `__construct()` function, as anyth
 	{
 		// You must call parent::__construct at some point in your function
 		parent::__construct($request, $response);
-		
+
 		// Do whatever else you want
 	}
 
