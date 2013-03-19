@@ -1,14 +1,13 @@
 <?php defined("SYSPATH") or die("No direct script access.") ?>
-    
+
     <div class="row">
-        
+
         <?php if ($sidebar_left): echo '<div id="left" class="span3">'. $sidebar_left .'</div>'; endif; ?>
-        
+
         <div id="row-content" class="span<?php echo $main_column; ?>">
-            
-            <?php //if ($messages): echo '<div id="messages">'. $messages .'</div>'; endif; ?>
-            <?php echo '<div id="messages" class="messages span10">'. $messages .'</div>'; ?>
-            
+
+            <div id="messages" class="messages span10"><?php echo $messages ?></div>
+
             <div id="pageContent" class="well">
                 <?php if ($title): ?>
                     <header id="overview" class="jumbotron subhead">
@@ -24,10 +23,10 @@
                         </div>
                     </header>
                 <?php endif; ?>
-            
+
                 <div id="content"><?php echo $content; ?></div>
             </div>
         </div>
-        
+
         <?php if ($sidebar_right): echo '<div id="right" class="span3">'. $sidebar_right .'</div>'; endif; ?>
     </div>
