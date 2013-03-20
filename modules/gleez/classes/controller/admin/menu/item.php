@@ -327,8 +327,9 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
    *
    * @param   array   $tree
    * @param   integr  $level
+   * @param   integr  $parent
    */
-  private function calculate_mptt($tree, $level = 2)
+  private function calculate_mptt($tree, $parent = 0, $level = 2)
   {
     foreach ($tree as $id => $val)
     {
