@@ -750,6 +750,7 @@ class Gleez_Assets_Core {
 		if(isset(Assets::$js) OR isset(Assets::$codes) OR isset(Assets::$settings))
 		{
 			Assets::js('jquery', 'media/js/jquery-1.9.1.min.js', NULL, FALSE, array('weight' => -20));
+			Assets::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
 			Assets::js('jquery_ui', 'media/js/jquery-ui-1.10.1.custom.min.js',array('jquery'),FALSE,array('weight' => -15));
 			Assets::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
 			Assets::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
