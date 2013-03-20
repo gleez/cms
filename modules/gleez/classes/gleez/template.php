@@ -628,7 +628,7 @@ abstract class Gleez_Template extends Controller {
 			return FALSE;
 		}
 
-		if ( ! is_null($submit)
+		if ( ! is_null($submit) )
 		{
 			if ( ! isset($_POST[$submit]))
 			{
