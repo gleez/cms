@@ -250,6 +250,18 @@ body.view .accordion-body > .accordion-inner table{
 .table tbody tr td .progress{
   margin-bottom: 0;
 }
+
+.table td.action,
+table td.action {
+  width: 5.5em;
+}
+
+.table td.action .btn-min,
+table td.action .btn-min {
+  float: left;
+  margin: 1px;
+}
+
 .clickable { cursor: pointer; }
 
 /*----------------------------------Popups-------------------------------------*/
