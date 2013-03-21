@@ -82,7 +82,6 @@ return array
 	// R
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
-	'Sign In' => 'Авторизация',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
 	'Sign in using your registered account:' => 'Войдите используя ваш зарегистрированный аккаунт:',
 	'Stay Signed in' => 'Оставаться в системе',
