@@ -1,44 +1,56 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * An adaptation of tagging
+ *
+ * @package    Gleez\Tagging
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
+ */
 class Model_Tagging extends ORM {
 
-	protected $_table_columns = array(
-					'post_id' => array( 'type' => 'int' ),
-					'tag_id'  => array( 'type' => 'int' ),
-					'author'  => array( 'type' => 'int' ),
-					'type'    => array( 'type' => 'string' ),
-					'created' => array( 'type' => 'int' ),
-					);
-	
 	/**
 	 * Table name
 	 * @var string
 	 */
 	protected $_table_name = 'posts_tags';
-        
-        protected $_belongs_to = array('user' => array('foreign_key' => 'author'),
-                                       'tags'  => array('foreign_key' => 'tag_id'),
-				       'posts' => array('foreign_key' => 'post_id')
-                                       );
-	
+
 	/**
-	 * Auto fill create and update columns
-	*/
-	protected $_created_column = array('column' => 'created', 'format' => TRUE);
-	
-	/**
-	 * Updates or Creates the record depending on loaded()
-	 *
-	 * @chainable
-	 * @param  Validation $validation Validation object
-	 * @return ORM
+	 * Table columns
+	 * @var array
 	 */
-	public function save(Validation $validation = NULL)
-	{
-                //$this->author = User::active_user()->id;
-	
-		return parent::save( $validation );
-	}
-	
-	
-} // End Tagging Model
+	protected $_table_columns = array(
+		'post_id' => array( 'type' => 'int' ),
+		'tag_id'  => array( 'type' => 'int' ),
+		'author'  => array( 'type' => 'int' ),
+		'type'    => array( 'type' => 'string' ),
+		'created' => array( 'type' => 'int' ),
+	);
+
+	/**
+	 * "Belongs to" relationships
+	 * @var array
+	 */
+	protected $_belongs_to = array(
+		'user' => array(
+			'foreign_key' => 'author'
+		),
+		'tags' => array(
+			'foreign_key' => 'tag_id'
+		),
+		'posts' => array(
+			'foreign_key' => 'post_id'
+		)
+	);
+
+
+	/**
+	 * Auto-update columns for creation
+	 * @var string
+	 */
+	protected $_created_column = array(
+		'column' => 'created',
+		'format' => TRUE
+	);
+
+}
