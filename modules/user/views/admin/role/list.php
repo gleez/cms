@@ -6,6 +6,7 @@
 
 <?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add New Role'), array('class' => 'btn btn-danger pull-right')) ?>
 
+<div class='clearfix'></div><br />
     <table id="role-admin-list" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -24,16 +25,18 @@
             	<?php echo HTML::chars($role->description) ?>
             </td>
             <td><span class="status-<?php echo $role->special == 1 ? 'active' : 'blocked' ?>">
-            	<?php echo $role->special == 1 ? __('Yes') : __('No') ?>
+            	<?php echo $role->special == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-cancel"></i>'; ?>
             </td>
 
             <td class="action">
 		<?php if($role->special): ?>
-                 <?php echo __('Edit | Delete') ?>
+			<i class="icon-pencil"></i>  <i class="icon-remove"></i>
 		<?php else: ?>
-                 <?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'edit', 'id' => $role->id)), __("Edit"), array('class'=>'action-edit', 'title'=> __('Edit Role'))) ?>
-                 <?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'delete', 'id' => $role->id)), __("Delete"), array('class'=>'action-delete', 'title'=> __('Delete Role'))) ?>
+			<?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'edit', 'id' => $role->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit Role'))) ?>
+			<?php echo HTML::anchor(Route::get('admin/role')->uri(array('action' => 'delete', 'id' => $role->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete Role'))) ?>
             	<?php endif ?>
+		<?php echo HTML::anchor(Route::get('admin/permission')->uri(array('action' => 'role', 'id' => $role->id)), '<i class="icon-lock"></i>', array('class'=>'action-edit', 'title'=> __('Edit Permissions'))) ?>
+
 		</td>
           </tr>
           <?php endforeach ?>
