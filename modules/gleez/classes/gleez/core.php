@@ -3,18 +3,21 @@
  * Gleez Core class
  *
  * @package    Gleez\Core
- * @version    0.9.9.1
+ * @version    0.9.9.2
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Core {
 
-	/** string Release version */
-	const VERSION = '0.9.9.1';
+	/** Release version */
+	const VERSION = '0.9.9.2';
 
-	/** string Release codename */
+	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
+
+	/** Default message for maintenance mode */
+	const MAINTENANCE_MESSAGE = "This site is down for maintenance";
 
 	/**
 	 * Gleez installed?
@@ -266,16 +269,18 @@ class Gleez_Core {
 	 * to a "This site is down for maintenance" page.
 	 *
 	 * @throws  HTTP_Exception_503
+	 * @uses    Request::initial
 	 */
 	public static function maintenance_mode()
 	{
-		$maintenance_mode = Kohana::$config->load('site.maintenance_mode', false);
+		$maintenance_mode = Kohana::$config->load('site.maintenance_mode', FALSE);
+		$message = Kohana::$config->load('site.offline_message', Gleez::MAINTENANCE_MESSAGE);
 		$request          = Request::initial();
 
 		if ($maintenance_mode AND ($request instanceof Request) AND ($request->controller() != 'user' AND $request->action() != 'login') AND !ACL::check('administer site') AND $request->controller() != 'media')
 		{
 			Kohana::$log->add(LOG::INFO, 'Site running in Maintenance Mode');
-			throw new HTTP_Exception_503('Site running in Maintenance Mode');
+			throw new HTTP_Exception_503(__($message));
 		}
 	}
 
@@ -295,7 +300,7 @@ class Gleez_Core {
 			throw new HTTP_Exception_403('Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
 		}
 	}
-        
+
 	/**
 	 * This function searches for the file that first matches the specified file
 	 * name and returns its path.
