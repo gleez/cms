@@ -4,8 +4,8 @@
 *
 * @package   User\I18n
 * @author    Sergey Yakovlev - Gleez
-* @copyright (c) 2013 Gleez Technologies
-* @license   http://gleezcms.org/license
+* @copyright (c) 2011-2013 Gleez Technologies
+* @license   http://gleezcms.org/license Gleez CMS License
 */
 return array
 (
@@ -62,7 +62,6 @@ return array
 	'Minimum password length &mdash; :count characters' => 'Минимальная длина пароля &mdash; :count символа(ов)',
 	'My Account' => 'Мой аккаунт',
 	// N
-	'Name' => 'Имя',
 	'New password' => 'Новый пароль',
 	'New password (again)' => 'Повторите пароль',
 	// O
