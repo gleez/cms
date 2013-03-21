@@ -214,9 +214,14 @@ class Gleez_Menu {
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
-			$title .= '<span>' . Text::plain($item['title']) . '</span>';
+			$title .= Text::plain($item['title']).$caret;
+			
+			if($item['descp'] AND !empty($item['descp']))
+			{
+				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
+			}
 	
-			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title.$caret, $attributes);
+			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title, $attributes);
 		
 			if ( $has_children )
 			{
