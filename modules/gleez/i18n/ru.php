@@ -1,12 +1,12 @@
 <?php defined("SYSPATH") OR die("No direct script access.");
 /**
- * Localized strings into Russian
- *
- * @package   Gleez\I18n
- * @author    Sergey Yakovlev - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
- */
+* Localized strings into Russian
+*
+* @package   User\I18n
+* @author    Sergey Yakovlev - Gleez
+* @copyright (c) 2011-2013 Gleez Technologies
+* @license   http://gleezcms.org/license Gleez CMS License
+*/
 return array
 (
 	// :
@@ -23,11 +23,13 @@ return array
 	'Add Menu' => 'Добавить меню',
 	'Add New Item' => 'Добавить новый пункт',
 	'Add new menus to your site, edit existing menus, and rename and reorganize menu links.' => 'Добавляйте новые меню на ваш сайт, редактируйте существующие, переименовывайте их и реорганизовайте ссылки.',
+	'Add New Term' => 'Добавить новый термин',
 	'Add New Vocabulary' => 'Добавить новый словарь',
 	'add :object' => 'добавить :object',
 	'Add Page' => 'Добавить страницу',
 	'Add Post' => 'Добавить публикацию',
 	'Add Term' => 'Добавить термин',
+	'Add Term for %vocab' => 'Добавить термин для %vocab',
 	'Additional' => 'Дополнительно',
 	'Add Widget' => 'Добавить виджет',
 	'Add widget' => 'Добавить виджет',
@@ -41,6 +43,7 @@ return array
 	'An error occured deleting menu item :term.' => 'Ошибка при удалении пункта меню :term.',
 	'An error occured deleting page, :post.' => 'Ошибка при удалении страницы :post.',
 	'An error occured deleting post, %post.' => 'Ошибка при удалении публикации %post.',
+	'An error occured deleting term %term.' => 'Ошибка при удалении термина %post.',
 	'Are you sure you want to delete %title?' => 'Вы уверены, что хотите удалить %title?',
 	'Application Directory' => 'Каталог приложения',
 	'Apply' => 'Применить',
@@ -89,6 +92,7 @@ return array
 	'Delete Menu :title' => 'Удаление меню :title',
 	'Delete Menu Item :name' => 'Удаление пункта меню :name',
 	'Delete Pages' => 'Удалить страницы',
+	'Deleting Term %name' => 'Удаление термина %name',
 	'Demote from front page' => 'Убрать с главной страницы',
 	'Description' => 'Описание',
 	'Did something go wrong? Try the :github.' => 'Что-то пошло не так? Попробуйте обратиться к :github.',
@@ -103,6 +107,7 @@ return array
 	'Edit Item :name' => '	Правка пункта :name',
 	'Edit Menu' => 'Изменить меню',
 	'Edit Menu: :name' => 'Правка меню: :name',
+	'Edit Term %name'  => 'Правка термина :name',
 	'Enabled' => 'Включено',
 	'Enter title here' => 'Введите здесь заголовок',
 	'Error' => 'Ошибка',
@@ -176,6 +181,7 @@ return array
 	'Move to Trash' => 'Перенести в корзину',
 	'MySQL Version' => 'Версия MySQL',
 	// N
+	'Name' => 'Название',
 	'Neither :request_uri, :php_self, or :path_info is available' => 'Не доступно ни одно значение: :request_uri, :php_self, или :path_info',
 	'Next' => 'Далее',
 	'No' => 'Нет',
@@ -187,6 +193,7 @@ return array
 	'No Pages!' => 'Нет страниц!',
 	'No Posts!' => 'Нет материалов!',
 	'No roles may use this format' => 'Ни одна роль не может использовать этот формат',
+	'No Terms!' => 'Нет терминов!',
 	'No Widgets in this region' => 'В этом регионе нет виджетов',
 	'none' => 'нет',
 	'Not implemented yet!' => 'Ещё не реализовано!',
@@ -250,7 +257,8 @@ return array
 	'Site running in maintenance mode!' => 'Сайт запущен в режиме обслуживания!',
 	'Site Theme' => 'Тема сайта',
 	'Site Title' =>  'Название сайта',
-	'Slug' => 'Имя',
+	'Slug' => 'Короткая ссылка',
+	'Slug for %slug' => 'Ссылка для %slug',
 	'Standard PHP Library (SPL)' => 'Стандартная библиотека PHP (SPL)',
 	'Start using Gleez' => 'Начать использовать Gleez',
 	'Statistics' => 'Статистика',
@@ -262,12 +270,19 @@ return array
 	// T
 	'Table Prefix' => 'Префикс таблиц',
 	'Tag ":tag" Not Found' => 'Тег ":tag" не найден',
+	'Tag name can\'t be empty.' => 'Название тега не может быть пустым.',
 	'Tagged with :tag' => 'Помечено как :tag',
 	'Tagline' => 'Слоган',
 	'Tags' => 'Теги',
 	'Taxonomy is for categorizing content. Terms are grouped into vocabularies. For example, a vocabulary called "Fruit" would contain the terms "Apple" and "Banana".' => 'Таксономия нужна для категоризации контента. Термины таксономии (категории) сгруппированы по словарям. Например, словарь называющийся "Фрукты" будет содержать термины "Яблоко" и "Банан".',
 	'Teaser' => 'Анонс',
 	'Term ":term" Not Found' => 'Категория ":term" не найдена',
+	'Term doesn\'t exists!' => 'Термин не найден!',
+	'Term %name saved successful!' => 'Термин %name успешно сохранён!',
+	'Terms order could not be saved.' => 'Порядок терминов не был сохранён.',
+	'Terms order has been saved.' => 'Порядок терминов сохранён.',
+	'There are no Terms that have been created for %vocab.' => 'Нет ни одного термина, который был бы создан для %vocab.',
+	'Terms for %vocab' => 'Термины словаря %vocab',
 	'Text format' => 'Формат текста',
 	'Text Format doesn\'t exists!' => 'Формат текста не найден!',
 	'Text formats' => 'Форматы текста',
@@ -299,12 +314,13 @@ return array
 	'The update has not been performed!' => 'Обновление не выполнено!',
 	'The username :param1 does not exist' => 'Пользователь :param1 не найден',
 	'The Widget settings have been updated.' => 'Настройки виджетов успешно обновлены.',
-	'There are no Comments.' => 'Тут нет комментариев.',
-	'There are no Formats.' => 'Тут нет фоматов.',
-	'There are no Menu Items.' => 'Тут нет пунктов меню.',
-	'There are no Menus.' => 'Тут нет меню.',
+	'There are no Comments.' => 'Пока нет комментариев.',
+	'There are no Formats.' => 'Пока нет фоматов.',
+	'There are no Menu Items.' => 'Пока нет пунктов меню.',
+	'There are no Menus.' => 'Пока нет меню.',
 	'There are no Pages that have been published.' => 'Нет опубликованных страниц.',
-	'There are no Posts.' => 'Тут нет материалов.',
+	'There are no Posts.' => 'Пока нет материалов.',
+	'There are no Terms.' => 'Пока нет терминов.',
 	'This action cannot be undone.' => 'Это действие отменить будет нельзя.',
 	'This form has altered. Please try submitting it again.' => 'Данные изменились. Пожалуйста попробуйте отправить форму ещё раз.',
 	'This form has expired. Please try submitting it again.' => 'Данные устарели. Пожалуйста попробуйте отправить форму ещё раз.',
@@ -327,6 +343,7 @@ return array
 	'View, edit, and delete your site\'s pages.' => 'Просматривайте, редактируйте и удаляйте страницы вашего сайта',
 	'View, edit, and delete your site\'s posts.' => 'Просматривайте, редактируйте и удаляйте материалы вашего сайта',
 	'Vocabulary' => 'Словарь',
+	'Vocabulary doesn\'t exists!' => 'Словарь не найден!',
 	// W
 	'We\'ve created an account for you to use:' => 'Мы создали для Вас аккаунт со следующими данными:',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
