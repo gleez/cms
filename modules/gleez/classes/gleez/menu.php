@@ -479,7 +479,7 @@ class Gleez_Menu {
 	
 			if (isset($value['children']))
 			{
-				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $params, $image, $children);
+				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $descp, $params, $image, $children);
 			}
 		}
 	
