@@ -7,7 +7,7 @@
 <div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
 	<?php echo Form::label('name', __('Name'), array('class' => 'control-label')); ?>
 	<div class="controls">
-		<?php echo Form::input('name', $post->rawname, array('class' => 'input-xlarge')); ?>
+		<?php echo Form::input('name', $post->rawname, array('class' => 'span3')); ?>
 	</div>
 </div>
 
@@ -21,7 +21,7 @@
 <div class="control-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
 	<?php echo Form::label('path', __('Slug'), array('class' => 'nowrap control-label')) ?>
 	<div class="controls">
-		<?php echo Form::input('path', $path, array('class' => 'input-xlarge slug')); ?>
+		<?php echo Form::input('path', $path, array('class' => 'span3 slug')); ?>
 		<span class="help-block"><?php echo __('Slug for %slug', array('%slug' => $site_url)); ?></span>
 	</div>
 </div>
@@ -29,7 +29,7 @@
 <div class="control-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
 	<?php echo Form::label('description', __('Description'), array('class' => 'control-label')); ?>
 	<div class="controls">
-		<?php echo Form::textarea('description', $post->description, array('class' => 'input-xlarge', 'rows' => 10)) ?>
+		<?php echo Form::textarea('description', $post->description, array('class' => 'span3', 'rows' => 5)) ?>
 	</div>
 </div>
 

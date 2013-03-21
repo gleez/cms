@@ -105,12 +105,12 @@ class Controller_Admin_Term extends Controller_Admin {
 		$this->title = __('Add Term for %vocab', array('%vocab' => $vocab->name));
 
 		$terms = $vocab->select_list('id', 'name', '--');
-		$action = Route::get('admin/term')->uri(array('action' =>'edit', 'id' => $term->id));
+		$action = Route::get('admin/term')->uri(array('action' =>'add', 'id' => $vocab->id));
 
 		$view = View::factory('admin/term/form')
 					->bind('vocab',  $vocab)
 					->bind('post',   $post)
-					->set('parms',   $action)
+					->set('action',  $action)
 					->set('terms',   $terms)
 					->set('path',    FALSE)
 					->bind('errors', $errors);
