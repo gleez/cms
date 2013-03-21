@@ -39,12 +39,12 @@
 	</head>
 	<body>
 		<h1 class="text_2"><span><?php echo __('Sorry, we\'re down for maintenance!'); ?></span></h1>
-		
+
 		<p class="reasons_small">
 			<small><?php echo __('Fortunately only for a short while. No need to scream, things are under control. Just doing a bit of maintenance.'); ?></small><br/>
       <small><?php echo __('Code:'); ?> <?php echo $code ?></small><br/>
       <small><?php echo __('Message:'); ?> <?php echo HTML::chars($message); ?></small>
 		</p>
-                
+
 	</body>
 </html>
