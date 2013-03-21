@@ -46,12 +46,12 @@
 										<li><a href="<?php echo URL::site('/user/profile') ?>"><i class="icon-cog"></i> <?php echo __('Profile') ?></a></li>
 										<li><a href="<?php echo URL::site("/user/edit") ?>"><i class="icon-pencil"></i> <?php echo __('Account') ?></a></li>
 										<li class="divider"></li>
-										<li><a rel="tooltip" href="<?php echo URL::site('/user/logout'); ?>" data-original-title="<?php echo __('Logout') ?>"><i class="icon-off"></i> <?php echo __('Logout') ?></a></li>
+										<li><a href="<?php echo URL::site('/user/logout'); ?>"><i class="icon-off"></i> <?php echo __('Sign Out') ?></a></li>
 									</ul>
 								</li>
 							<?php else:?>
-								<li><a href="<?php echo URL::site('/user/register'); ?>"><?php echo __('Create an Account')?></a></a></li>
-								<li><a href="<?php echo URL::site('/user/login'); ?>"><i class="icon-white icon-chevron-left"></i><?php echo __('Log In') ?></a></li>
+								<li><a href="<?php echo URL::site('/user/register'); ?>"><?php echo __('Sign Up')?></a></a></li>
+								<li><a href="<?php echo URL::site('/user/login'); ?>"><i class="icon-white icon-chevron-left"></i><?php echo __('Sign In') ?></a></li>
 							<?php endif;?>
 						</ul>
 
