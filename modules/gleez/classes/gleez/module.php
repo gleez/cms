@@ -144,7 +144,7 @@ class Gleez_Module {
                 $messages = array();
 
                 $installer_class = ucfirst($module_name).'_Installer';
-                if (method_exists($installer_class, "can_activate"))
+                if (is_callable( array($installer_class, "can_activate") ))
                 {
                         $messages = call_user_func(array(
                                 $installer_class,
@@ -181,7 +181,7 @@ class Gleez_Module {
                 Module::_add_to_path($module_name);
 
                 $installer_class = ucfirst($module_name).'_Installer';
-                if (method_exists($installer_class, "install"))
+                if (is_callable( array($installer_class, "install") ))
                 {
                         call_user_func_array(array(
                                 $installer_class,
@@ -247,7 +247,7 @@ class Gleez_Module {
         {
                 $version_before  = module::get_version($module_name);
                 $installer_class = ucfirst($module_name).'_Installer';
-                if (method_exists($installer_class, "upgrade"))
+                if (is_callable( array($installer_class, "upgrade") ))
                 {
                         call_user_func_array(array(
                                 $installer_class,
@@ -299,7 +299,7 @@ class Gleez_Module {
                 Module::_add_to_path($module_name);
                 $installer_class = ucfirst($module_name).'_Installer';
 
-                if (method_exists($installer_class, "activate"))
+                if (is_callable( array($installer_class, "activate")  ))
                 {
                         call_user_func_array(array(
                                 $installer_class,
@@ -335,7 +335,7 @@ class Gleez_Module {
         static function deactivate($module_name)
         {
                 $installer_class = ucfirst($module_name).'_Installer';
-                if (method_exists($installer_class, "deactivate"))
+                if (is_callable( array($installer_class, "deactivate") ))
                 {
                         call_user_func_array(array(
                                 $installer_class,
@@ -368,7 +368,7 @@ class Gleez_Module {
         static function uninstall($module_name)
         {
                 $installer_class = ucfirst($module_name).'_Installer';
-                if (method_exists($installer_class, "uninstall"))
+                if (is_callable( array($installer_class, "uninstall") ))
                 {
                         call_user_func(array(
                                 $installer_class,
@@ -502,9 +502,13 @@ class Gleez_Module {
                                 continue;
                         }
                         $class = "{$name}_Event";
-                        if (method_exists($class, $function))
+                        if (is_callable( array($class, $function) ))
                         {
-                                call_user_func_array(array( $class, $function ), $args);
+                                try
+                                {
+                                       call_user_func_array(array( $class, $function ), $args); 
+                                }
+                                catch(Exception $e){}
                         }
                 }
 
@@ -527,9 +531,13 @@ class Gleez_Module {
 			$args = $filterargs;
 			array_unshift( $args, $return );
 
-                        if (method_exists($class, $function))
+                        if (is_callable( array($class, $function) ))
                         {
-                                $return = call_user_func_array(array( $class, $function ), $args);
+                                try
+                                {
+                                        $return = call_user_func_array(array( $class, $function ), $args);
+                                }
+                                catch(Exception $e){}
                         }
 		}
 
