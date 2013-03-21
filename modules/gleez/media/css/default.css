@@ -783,6 +783,23 @@ table .progress {
   }
 
 }
+/* Hide the text associated with menu item.*/
+.menus li a span.menu-descp {
+  display: none;
+  font-size: 0;
+  visibility: hidden;
+}
+/* Un comment this to show descp text below navrab menu item
+ * 
+  .navbar .menus li a span.menu-descp {
+    color: #CCC;
+    display: block;
+    font-size: 11px;
+    padding-left: 1px;
+    text-shadow: 0 0 0 transparent, 0 1px 0 black;
+    visibility: visible;
+  }
+*/
 
 @media (max-width: 979px) {
 	.shortcuts .shortcut {
