@@ -1,19 +1,42 @@
+; Gleez Fluid Theme
+;
+; Author:     Gleez Team
+; Copyright:  (c) 2011-2013 Gleez Technologies
+; License    http://gleezcms.org/license
+;
+; This file format fully consistent with the ini-file
 ; Empty strings and strings beginning with ; symbols ignored
-  name        = "fluid"
-  title       = "Fluid Theme"
-  description = "A crisp and distinctive, tableless, fluid width administration theme"
-  version     = 1
-  license     = http://gleezcms.org/license
-  themeURL    = https://github.com/gleez/cms/tree/master/themes/fluid
-  depends     =
-  author      = "Gleez Team"
-  authorURL   = http://www.gleeztech.com/
-  site        = 1
-  admin       = 0
+; For more information see http://php.net/manual/en/function.parse-ini-file.php
+;
 
+;
+; Theme info
+;
+name        = "fluid"
+title       = "Fluid Theme"
+description = "A crisp and distinctive, tableless, fluid width administration theme"
+version     = 1.0.1
+license     = http://gleezcms.org/license
+themeURL    = https://github.com/gleez/cms/tree/master/themes/fluid
+depends     =
+author      = "Gleez Team"
+authorURL   = http://www.gleeztech.com/
+site        = 1
+admin       = 0
+
+;
 ; Regions
+;
+; format:
+; [regions]
+;   REGION_NAME = REGION TITLE
+;
+; Don't write here titles regions using national character encoding
+; or non-english language. Region titles must be localized into your
+; language using __() method
+;
 [regions]
-  left        = Left Sidebar
-  right       = Right Sidebar
-  footer      = Footer
-  dashboard   = Dashboard
+	left        = Left Sidebar
+	right       = Right Sidebar
+	footer      = Footer
+	dashboard   = Dashboard
