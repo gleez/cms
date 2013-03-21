@@ -71,7 +71,7 @@ class Gleez_Menu {
 			(
 				'title'    => $title,
 				'url'      => $url,
-				'children' => ($children instanceof Menu) ? $children->_items : NULL,
+				'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
 				'access'   => TRUE,
 				'params'   => $params,
 				'image'    => $image
@@ -110,9 +110,9 @@ class Gleez_Menu {
 	 * @param   booleen  $parent_id  true/false
 	 * @return  void
 	 */
-	public function set_title($target_id, $title, $parent = FALSE)
+	public function set_title($target_id, $title, $parent_id = FALSE)
 	{
-		if ( $parent )
+		if ( $parent_id )
 		{
 			$this->_items = self::_change_title_url($target_id, $this->_items, $title);
 		}
@@ -134,7 +134,7 @@ class Gleez_Menu {
 	 */
 	public function set_url($target_id, $url, $parent_id = FALSE)
 	{
-		if ( $parent )
+		if ( $parent_id )
 		{
 			$this->_items = self::_change_title_url($target_id, $this->_items, $url, 'url');
 		}
@@ -458,7 +458,7 @@ class Gleez_Menu {
 					(
 						'title'    => $title,
 						'url'      => $url,
-						'children' => ($children instanceof Menu) ? $children->_items : NULL,
+						'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
 						'access'   => TRUE,
 						'params'   => $params,
 						'image'    => $image
