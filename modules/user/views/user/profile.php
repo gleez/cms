@@ -69,7 +69,7 @@
 
 <div class="modal hide fade in" id="upload-photo" role="dialog" tabindex="-1" aria-hidden="true">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<?php echo Form::button('close_window', '&times;', array('class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')); ?>
 		<h3><?php echo __('Uploading Photos'); ?></h3>
 	</div>
 	<div class="modal-data"></div>

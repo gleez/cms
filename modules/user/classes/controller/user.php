@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_User extends Template {
 
@@ -19,6 +19,9 @@ class Controller_User extends Template {
      * The before() method is called before controller action
      *
      * @uses  Assets::css
+     * @uses  Auth::get_user
+     * @uses  Request::uri
+     * @uses  Request::action
      */
     public function before()
     {
@@ -107,6 +110,10 @@ class Controller_User extends Template {
 
     /**
      * Sign In
+     *
+     * @uses  Request::redirect
+     * @uses  Route::get
+     * @uses  Message::success
      */
     public function action_login()
     {
@@ -139,7 +146,7 @@ class Controller_User extends Template {
                 Kohana::$log->add(LOG::INFO, 'User :name logged in.', array(':name' => $user->name) );
 
                 // redirect to the user account
-                $this->request->redirect(isset($_GET['destination']) ? $_GET['destination'] :'');
+                $this->request->redirect(isset($_GET['destination']) ? $_GET['destination'] :'', 200);
 
             }
             catch (Validation_Exception $e)
@@ -153,18 +160,25 @@ class Controller_User extends Template {
 
     /**
      * Log Out
+     *
+     * @uses  Auth::logout
+     * @uses  Request::redirect
+     * @uses  Route::get
      */
     public function action_logout()
     {
         // Sign out the user
         Auth::instance()->logout();
 
-        // redirect to the user account and then the signin page if logout worked as expected
-        $this->request->redirect('user/profile');
+        // Redirect to the user account and then the signin page if logout worked as expected
+        $this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
     }
 
     /**
      * View user account information
+     *
+     * @uses  Request::redirect
+     * @uses  Route::get
      */
     public function action_profile()
     {
@@ -181,6 +195,12 @@ class Controller_User extends Template {
 
     /**
      * View user account information
+     *
+     * @throws  HTTP_Exception_403
+     *
+     * @uses    Auth::get_user
+     * @uses    ACL::check
+     * @uses    Text::ucfirst
      */
     public function action_view()
     {
@@ -279,20 +299,33 @@ class Controller_User extends Template {
         $this->response->body($view);
     }
 
+    /**
+     * Change password
+     *
+     * @uses  Request::redirect
+     * @uses  Route::get
+     * @uses  Auth::get_user
+     * @uses  Message::success
+     */
     public function action_password()
     {
         // The user is not logged in
         if( ! $this->_auth->logged_in())
         {
-            $this->request->redirect( Route::get('user')->uri(array('action' => 'login')) );
+            $this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 200);
         }
 
         $user = Auth::instance()->get_user();
         $this->title =  __('Change Password');
-        $errors = FALSE;
+		$destination = Request::initial()->uri();
+		$params = array('action' => $this->request->action());
+
+        $view = View::factory('user/password')
+				->set('destination', $destination)
+				->set('params', $params);
 
         // Form submitted
-        if( $this->valid_post('change_pass') )
+        if ($this->valid_post('change_pass'))
         {
             try
             {
@@ -300,26 +333,26 @@ class Controller_User extends Template {
                 $user->change_pass($this->request->post());
 
                 // If the post data validates using the rules setup in the user model
-                Message::success(__("%title successfully changed your password.
-                    We hope you feel safer now.", array('%title' => $user->name)));
+                Message::success(__('Password successfully changed! We hope you feel safer now.'));
 
-                // redirect to the user account
-                $this->request->redirect('user/profile');
+                // Redirect to the user account
+                $this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
 
             }
             catch (ORM_Validation_Exception $e)
             {
-                $errors =  $e->errors('models');
+                $view->errors =  $e->errors('models', TRUE);
             }
         }
 
-        $this->response->body( View::factory('user/password')->set('errors', $errors)  );
+        $this->response->body($view);
     }
 
     /**
      * Upload photo
      *
      * @uses  Arr::merge
+     * @uses  Message::success
      */
     public function action_photo()
     {
