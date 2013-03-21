@@ -37,7 +37,7 @@ if ( ! Route::cache())
 		'time'       => NULL,
 	));
 
-	Route::set('admin/permission', 'admin/permissions(/<action>)', array(
+	Route::set('admin/permission', 'admin/permissions(/<action>)(/<id>)', array(
 		'id' => '\d+',
 		'action' => 'list|role'
 	))
