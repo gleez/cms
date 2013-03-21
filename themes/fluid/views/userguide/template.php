@@ -1,10 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $l = substr(I18n::$lang, 0, 2) ?>" lang="<?php echo $l ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link type="image/x-icon" href="<?php echo URL::site('/media/favicon.ico', TRUE) ?>" rel="shortcut icon">
 
-<title><?php echo $title ?> | Kohana <?php echo __('User Guide'); ?></title>
-<link type="image/x-icon" href="<?php echo URL::site('media/favicon.ico', TRUE);?>" rel="shortcut icon" />
+<title><?php echo $title ?> | Gleez CMS <?php echo 'User Guide'; ?></title>
+
 <?php foreach ($styles as $style => $media) echo HTML::style($style, array('media' => $media), NULL, TRUE), "\n" ?>
 
 <?php foreach ($scripts as $script) echo HTML::script($script, NULL, NULL, TRUE), "\n" ?>
@@ -15,29 +16,31 @@
 </head>
 <body>
 
-	<div id="header">
+	<div id="kodoc-header">
 		<div class="container">
 			<a href="http://gleezcms.org/" id="logo">
                                 <img class="logo" title="Gleez CMS Light, Simple, Flexible Content Management System" alt="Gleez CMS Light, Simple, Flexible Content Management System" src="/media/logo.png"></a>
 			</a>
-			<div id="menu">
+			<div id="kodoc-menu">
 				<ul>
 					<li class="guide first">
-						<a href="<?php echo Route::url('docs/guide') ?>"><?php echo __('User Guide') ?></a>
+						<a href="<?php echo Route::url('docs/guide') ?>">User Guide</a>
 					</li>
+					<?php if (Kohana::$config->load('userguide.api_browser')): ?>
 					<li class="api">
-						<a href="<?php echo Route::url('docs/api') ?>"><?php echo __('API Browser') ?></a>
+						<a href="<?php echo Route::url('docs/api') ?>">API Browser</a>
 					</li>
+					<?php endif ?>
 				</ul>
 			</div>
 		</div>
 	</div>
-
-	<div id="content">
+	
+	<div id="kodoc-content">
 		<div class="wrapper">
 			<div class="container">
 				<div class="span-22 prefix-1 suffix-1">
-					<ul id="breadcrumb">
+					<ul id="kodoc-breadcrumb">
 						<?php foreach ($breadcrumb as $link => $title): ?>
 							<?php if (is_string($link)): ?>
 							<li><?php echo HTML::anchor($link, $title, NULL, NULL, TRUE) ?></li>
@@ -48,14 +51,14 @@
 					</ul>
 				</div>
 				<div class="span-6 prefix-1">
-					<div id="topics">
+					<div id="kodoc-topics">
 						<?php echo $menu ?>
 					</div>
 				</div>
-				<div id="body" class="span-16 suffix-1 last">
+				<div id="kodoc-body" class="span-16 suffix-1 last">
 					<?php echo $content ?>
 
-					<?php if (Kohana::$environment === Kohana::PRODUCTION AND empty($hide_disqus)): ?>
+					<?php if ($show_comments): ?>
 					<div id="disqus_thread" class="clear"></div>
 					<script type="text/javascript">
 						var disqus_identifier = '<?php echo HTML::chars(Request::current()->uri()) ?>';
@@ -65,7 +68,7 @@
 							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 							})();
 					</script>
-					<noscript><?php echo __('Please enable JavaScript to view the :anchor_open comments powered by Disqus.:anchor_close', array(':anchor_open' => '<a href="http://disqus.com/?ref_noscript=kohana">', ':anchor_close' => '</a>')); ?></noscript>
+					<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=kohana">comments powered by Disqus.</a></noscript>
 					<a href="http://disqus.com" class="dsq-brlink">Documentation comments powered by <span class="logo-disqus">Disqus</span></a>
 					<?php endif ?>
 				</div>
@@ -73,7 +76,7 @@
 		</div>
 	</div>
 
-	<div id="footer">
+	<div id="kodoc-footer">
 		<div class="container">
 			<div class="span-12">
 			<?php if (isset($copyright)): ?>
@@ -83,7 +86,7 @@
 			<?php endif ?>
 			</div>
 			<div class="span-12 last right">
-			<p>Powered by <?php echo HTML::anchor('http://kohanaframework.org/', 'Kohana') ?> v<?php echo Kohana::VERSION ?></p>
+			<p>Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez CMS') ?> v <?php echo Gleez::VERSION ?></p>
 			</div>
 		</div>
 	</div>
