@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_Auth_User extends ORM {
 
@@ -50,13 +50,12 @@ class Model_Auth_User extends ORM {
 	/**
 	 * A user has many tokens and roles
 	 *
-	 * @var array Relationhips
+	 * @var array Relationships
 	 */
 	protected $_has_many = array(
 		'user_tokens' => array('model' => 'user_token'),
 		'roles'       => array('model' => 'role', 'through' => 'roles_users'),
 		'identities'  => array('model' => 'identity'),
-		// @see http://ygamretuta.me/2011/11/27/kohana-3-2-creating-a-basic-friends-system/
 		'friends'     => array('model' => 'user', 'through' => 'buddies', 'foreign_key' => 'buddy_id', 'far_key' => 'user_id'),
 		'requests'    => array('model' => 'user', 'through' => 'buddy_requests', 'foreign_key' => 'request_from', 'far_key' => 'request_to'),
 	);
@@ -125,8 +124,9 @@ class Model_Auth_User extends ORM {
 			'name'         => __('Username'),
 			'mail'         => __('Email'),
 			'pass'         => __('Password'),
+			'pass_confirm' => __('Password Confirm'),
 			'nick'         => __('Display Name'),
-			'old_pass'     => __('Old Password'),
+			'old_pass'     => __('Current password'),
 			'gender'       => __('Gender'),
 			'dob'          => __('Birthday'),
 		);
@@ -150,7 +150,7 @@ class Model_Auth_User extends ORM {
 		if( $field === 'rawurl' )
 			return Route::get('user')->uri( array( 'id' => $this->id ) );
 
-			// Model specefic links; view, edit, delete url's.
+			// Model specific links; view, edit, delete url's.
 				if( $field === 'url' )
 			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
 
@@ -367,9 +367,10 @@ class Model_Auth_User extends ORM {
 	 * Validates login information from an array, and optionally redirects
 	 * after a successful login.
 	 *
-	 * @param   array    values to check
-	 * @param   string   URI or URL to redirect to
-	 * @return  boolean
+	 * @param   array          $array    Values to check
+	 * @param   boolean|string $redirect URI or URL to redirect to
+	 * @throws  Validation_Exception
+	 * @return  boolean|$this
 	 */
 	public function login(array $array, $redirect = FALSE)
 	{
@@ -378,8 +379,8 @@ class Model_Auth_User extends ORM {
 
 		$array = Validation::factory($array);
 
-		//important to check isset to avoid unecessary routing
-				if( isset( $array['name'] ) )
+		//important to check isset to avoid unnecessary routing
+		if( isset( $array['name'] ) )
 		{
 			$login_name = $this->unique_key($array['name']);
 
@@ -392,11 +393,11 @@ class Model_Auth_User extends ORM {
 
 			$array->label('password', $labels['pass']);
 			$array->rules('password', $rules['pass']);
-				}
+		}
 
 		// Get the remember login option
 		$remember = isset($array['remember']);
-				Module::event('user_login_validate', $array);
+		Module::event('user_login_validate', $array);
 
 		if ($array->check())
 		{
@@ -429,12 +430,10 @@ class Model_Auth_User extends ORM {
 			}
 		}
 		else
-				{
+		{
 			Kohana::$log->add( Log::ERROR, 'User Login error');
-						throw new Validation_Exception($array, 'Validation has failed for login');
-				}
-
-		return FALSE;
+			throw new Validation_Exception($array, 'Validation has failed for login');
+		}
 	}
 
 	public function change_pass($values, $expected = NULL )
