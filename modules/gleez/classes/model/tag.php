@@ -173,8 +173,8 @@ class Model_Tag extends ORM {
 	 * Check by triggering error if name exists.
 	 * Validation callback.
 	 *
-	 * @param   Validation  Validation object
-	 * @param   string      Field name
+	 * @param   Validation  $validation Validation object
+	 * @param   string      $field      Field name
 	 */
 	public function tag_available(Validation $validation, $field)
 	{
