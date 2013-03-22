@@ -36,5 +36,11 @@ return array(
 	 * Maximum size of POST data that PHP will accept (eg. '200K', '5MiB', '1M', '500B')
 	 * @var string
 	 */
-	'post_max_size' => '2M'
+	'post_max_size' => '2M',
+
+	/**
+	 * Image quality
+	 * @var integer
+	 */
+	'quality' => 85,
 );
