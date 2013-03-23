@@ -4,8 +4,8 @@
 	<?php echo __('The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.', array(':menus' => 'admin/menu')); ?>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/menu')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Menu'), array('class' => 'btn btn-danger pull-right')) ?>
-<div class='clearfix'></div><br/>
+<?php echo HTML::anchor(Route::get('admin/menu')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Menu'), array('class' => 'btn btn-danger pull-right')); ?>
+<div class='clearfix'></div><br>
 
 <table id="menu1-admin-list" class="table table-striped table-bordered">
       <thead>
@@ -14,19 +14,19 @@
           <th colspan="4"><?php echo __('Actions') ?></th>
         </tr>
       </thead>
-      
+
         <?php foreach ($menus as $i => $menu): ?>
-        
+
           <tr id="menu1-row-<?php echo $menu->id ?>" >
-          
+
             <td id="menu-<?php echo $menu->name ?>">
               <?php echo HTML::chars($menu->title) ?>
-	      
+
 	       <div class="description">
 			<?php echo HTML::chars($menu->descp) ?>
 	       </div>
             </td>
-            
+
             <td class="action1">
 		 <?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), '<i class="icon-th-list"></i>', array('class'=>'action-list', 'title'=>__('List Links'))) ?>
 	    </td>
@@ -42,5 +42,5 @@
           </tr>
           <?php endforeach ?>
 </table>
-    
+
   <?php echo $pagination ?>

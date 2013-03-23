@@ -125,7 +125,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors();
+				$errors = $e->errors('models', TRUE);
 			}
 		}
 
