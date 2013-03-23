@@ -153,7 +153,7 @@ First, we need a [View] that contains the HTML form, which will be placed in `ap
         <li><?php echo $message ?></li>
     <?php endforeach ?>
     <?php endif ?>
-
+    </ul>
     <dl>
         <dt><?php echo Form::label('username', 'Username') ?></dt>
         <dd><?php echo Form::input('username', $post['username']) ?></dd>
@@ -200,7 +200,7 @@ Next, we need a controller and action to process the registration, which will be
                 $user->register($this->request->post());
 
                 // Always redirect after a successful POST to prevent refresh warnings
-                $this->request->redirect('user/profile');
+                $this->request->redirect('user/profile', 303);
             }
 
             // Validation failed, collect the errors

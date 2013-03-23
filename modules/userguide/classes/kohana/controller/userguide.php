@@ -374,7 +374,7 @@ abstract class Kohana_Controller_Userguide extends Controller_Template {
 		return $markdown;
 	}
 	
-	// Get the list of modules from the config, and reverses it so it displays in the order the modules are added, but move Kohana to the top.
+	// Get the list of modules from the config, and reverses it so it displays in the order the modules are added, but move Gleez to the top.
 	protected function _modules()
 	{
 		$modules = array_reverse(Kohana::$config->load('userguide.modules'));
@@ -384,6 +384,13 @@ abstract class Kohana_Controller_Userguide extends Controller_Template {
 			$kohana = $modules['kohana'];
 			unset($modules['kohana']);
 			$modules = array_merge(array('kohana' => $kohana), $modules);
+		}
+		
+		if (isset($modules['gleez']))
+		{
+			$gleez = $modules['gleez'];
+			unset($modules['gleez']);
+			$modules = array_merge(array('gleez' => $gleez), $modules);
 		}
 		
 		// Remove modules that have been disabled via config

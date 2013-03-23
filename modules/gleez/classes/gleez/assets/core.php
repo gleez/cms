@@ -24,10 +24,10 @@
  *   Assets::codes('alert', 'alert(\'test\')', NULL, FALSE, array('weight' => -10));
  *
  *   Assets::settings('settings', 'settings');
- *     
+ *
  *   Assets::group('head', 'keywords', '<meta name="keywords" content="one,two,three,four,five" />');
  *   Assets::group('head', 'description', '<meta name="description" content="Description of webpage here" />');
- *     
+ *
  * In your view file:<br>
  *   <html>
  *     <head>
@@ -90,12 +90,12 @@ class Gleez_Assets_Core {
 	 * @param   string  $src     Asset source [Optional]
 	 * @param   mixed   $deps    Dependencies [Optional]
 	 * @param   array   $attrs   An array of attributes for the <link> element [Optional]
-	 * @param   array   $format  Format that be returned [Optional]
+	 * @param   string  $format  Format that be returned [Optional]
 	 * @return  mixed   Setting returns asset array, getting returns asset HTML
 	 */
 	public static function css($handle = NULL, $src = NULL, $deps = NULL, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		if( Kohana::$environment === Kohana::PRODUCTION )
+		if(Kohana::$environment === Kohana::PRODUCTION)
 		{
 			$format = Assets::FORMAT_FILENAME;
 		}
@@ -125,7 +125,7 @@ class Gleez_Assets_Core {
 		{
 			unset($attrs['weight']);
 		}
-	
+
 		return Assets::$css[$handle] = array(
 			'src'    => $src,
 			'deps'   => (array) $deps,
@@ -138,7 +138,7 @@ class Gleez_Assets_Core {
 	 * Get a single CSS asset
 	 *
 	 * @param   string  $handle  Asset name
-	 * @param   array   $format  Format that be returned [Optional]
+	 * @param   string  $format  Format that be returned [Optional]
 	 * @return  string  Asset HTML
 	 * @throws  Exception
 	 * @uses    HTML::style
@@ -170,7 +170,7 @@ class Gleez_Assets_Core {
 	/**
 	 * Get all CSS assets, sorted by dependencies
 	 *
-	 * @param   array   $format  Format that be returned [Optional]
+	 * @param   string  $format  Format that be returned [Optional]
 	 * @return  string  Asset HTML
 	 * @throws  Exception
 	 */
@@ -181,6 +181,8 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
+		$assets = array();
+
 		foreach (Assets::_sort(Assets::$css) as $handle => $data)
 		{
 			$assets[] = Assets::get_css($handle, $format);
@@ -189,7 +191,7 @@ class Gleez_Assets_Core {
 		switch ($format)
 		{
 			case Assets::FORMAT_TAG:
-				return implode(PHP_EOL, $assets)."\n";
+				return implode(PHP_EOL, $assets).PHP_EOL;
 			break;
 
 			case Assets::FORMAT_FILENAME:
@@ -227,7 +229,7 @@ class Gleez_Assets_Core {
 	 * @param   mixed   $deps    Dependencies [Optional]
 	 * @param   boolean $footer  Whether to show in header or footer [Optional]
 	 * @param   array   $attrs   An array of attributes for the <script> element [Optional]
-	 * @param   array   $format  Format that be returned [Optional]
+	 * @param   string  $format  Format that be returned [Optional]
 	 * @return  mixed   Setting returns asset array, getting returns asset HTML
 	 */
 	public static function js($handle, $src = NULL, $deps = NULL, $footer = FALSE, $attrs = NULL, $format = Assets::FORMAT_TAG)
@@ -263,12 +265,12 @@ class Gleez_Assets_Core {
 			'weight' => (int) $weight,
 		);
 	}
-	
+
 	/**
 	 * Get a single javascript asset
 	 *
 	 * @param   string  $handle  Asset name
-	 * @param   array   $format  Format that be returned [Optional]
+	 * @param   string  $format  Format that be returned [Optional]
 	 * @return  string  Asset HTML
 	 * @throws  Exception
 	 * @uses    HTML::script
@@ -301,7 +303,7 @@ class Gleez_Assets_Core {
 	 * Get all javascript assets of section (header or footer)
 	 *
 	 * @param   boolean  $footer  FALSE for head, TRUE for footer
-	 * @param   array    $format  Format that be returned [Optional]
+	 * @param   string   $format  Format that be returned [Optional]
 	 * @return  string   Asset HTML
 	 * @throws  Exception
 	 */
@@ -348,7 +350,7 @@ class Gleez_Assets_Core {
 				throw new Exception("Unknown format: $format.");
 		}
 	}
-	
+
 	/**
 	 * Remove a javascript asset, or all
 	 *
@@ -409,7 +411,7 @@ class Gleez_Assets_Core {
 		{
 			unset($attrs['weight']);
 		}
-	
+
 		return Assets::$codes[$handle] = array(
 			'code'   => $code,
 			'deps'   => (array) $deps,
@@ -438,7 +440,7 @@ class Gleez_Assets_Core {
 		return "<script".HTML::attributes(array('type' => 'text/javascript')).'>
 		<!--//--><![CDATA['.PHP_EOL.$asset['code'].PHP_EOL.'<!--//-->]]></script>';
 	}
-	
+
 	/**
 	 * Get all javascript codes of section (header or footer)
 	 *
@@ -476,7 +478,7 @@ class Gleez_Assets_Core {
 
 		return implode(PHP_EOL, $sorted)."\n";
 	}
-	
+
 	/**
 	 * Remove a javascript code, or all codes
 	 *
@@ -516,7 +518,7 @@ class Gleez_Assets_Core {
 	 * @return  mixed    Setting returns asset array, getting returns asset HTML
 	 */
 	public static function settings($handle, $code = NULL)
-	{	
+	{
 		return Assets::$settings[$handle] = $code;
 	}
 
@@ -535,7 +537,7 @@ class Gleez_Assets_Core {
 
 		unset(Assets::$settings[$handle]);
 	}
-	
+
 	/**
 	 * Group wrapper
 	 *
@@ -544,7 +546,7 @@ class Gleez_Assets_Core {
 	 * @param   string  $content  Asset content [Optional]
 	 * @param   mixed   $deps     Dependencies [Optional]
 	 * @param   array   $attrs    An array of attributes [Optional]
-	 * @return  mixed    Setting returns asset array, getting returns asset content
+	 * @return  mixed   Setting returns asset array, getting returns asset content
 	 */
 	public static function group($group, $handle = NULL, $content = NULL, $deps = NULL, $attrs = NULL)
 	{
@@ -565,7 +567,7 @@ class Gleez_Assets_Core {
 		{
 			unset($attrs['weight']);
 		}
-	
+
 		return Assets::$groups[$group][$handle] = array(
 			'content' => $content,
 			'deps'    => (array) $deps,
@@ -573,7 +575,7 @@ class Gleez_Assets_Core {
 			'weight'  => (int) $weight,
 		);
 	}
-	
+
 	/**
 	 * Get a single group asset
 	 *
@@ -590,7 +592,7 @@ class Gleez_Assets_Core {
 
 		return Assets::$groups[$group][$handle]['content'];
 	}
-	
+
 	/**
 	 * Get all of a groups assets, sorted by dependencies
 	 *
@@ -604,14 +606,16 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
-		foreach (Assets::_sort(Assets::$groups[$groups]) as $handle => $data)
+		$assets = array();
+
+		foreach (Assets::_sort(Assets::$groups[$group]) as $handle => $data)
 		{
 			$assets[] = Assets::get_group($group, $handle);
 		}
 
 		return implode(PHP_EOL, $assets);
 	}
-	
+
 	/**
 	 * Remove a group asset, all of a groups assets, or all group assets
 	 *
@@ -634,7 +638,7 @@ class Gleez_Assets_Core {
 
 		unset(Assets::$groups[$group][$handle]);
 	}
-	
+
 	/**
 	 * Sorts assets based on dependencies
 	 *
@@ -649,7 +653,7 @@ class Gleez_Assets_Core {
 		while (count($assets) > 0)
 		{
 			foreach ($assets as $key => $value)
-			{		
+			{
 				// No dependencies anymore, add it to sorted
 				if (empty($assets[$key]['deps']))
 				{
@@ -666,11 +670,11 @@ class Gleez_Assets_Core {
 							unset($assets[$key]['deps'][$k]);
 							continue;
 						}
-						
+
 						// This dependency hasn't been sorted yet
 						if ( ! isset($sorted[$v]))
 							continue;
-							
+
 						// This dependency is taken care of, remove from list
 						unset($assets[$key]['deps'][$k]);
 					}
@@ -695,7 +699,7 @@ class Gleez_Assets_Core {
 	{
 		$a_weight = (is_array($a) AND isset($a['weight'])) ? $a['weight'] : 0;
 		$b_weight = (is_array($b) AND isset($b['weight'])) ? $b['weight'] : 0;
-  
+
 		if ($a_weight == $b_weight)
 		{
 			return 0;
@@ -736,6 +740,7 @@ class Gleez_Assets_Core {
 	}
 
 	/**
+	 * Initial JavaScript setting
 	 * @uses    URL::base
 	 * @uses    JSON::encode
 	 * @return  array
@@ -745,14 +750,12 @@ class Gleez_Assets_Core {
 		if(isset(Assets::$js) OR isset(Assets::$codes) OR isset(Assets::$settings))
 		{
 			Assets::js('jquery', 'media/js/jquery-1.9.1.min.js', NULL, FALSE, array('weight' => -20));
+			Assets::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
 			Assets::js('jquery_ui', 'media/js/jquery-ui-1.10.1.custom.min.js',array('jquery'),FALSE,array('weight' => -15));
 			Assets::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
 			Assets::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 
-			$data = array_merge(
-				array(array('basePath' => URL::base(TRUE))),
-				Assets::$settings
-			);
+			$data = Arr::merge(array(array('basePath' => URL::base(TRUE))), Assets::$settings);
 
 			$code = 'jQuery.extend(Gleez.settings, ' . JSON::encode(call_user_func_array('array_merge_recursive', $data)) . ');';
 
@@ -774,16 +777,16 @@ class Gleez_Assets_Core {
 	public static function editor($name, $width=NULL, $height=NULL, $controls=NULL)
 	{
 		$default_controls = 'bold italic underline strikethrough subscript superscript style | bullets numbering | outdent indent | alignleft center alignright justify | undo redo | rule image link unlink | cut copy paste pastetext | print source removeformat';
-	
+
 		// Add the core javascipt and css files
 		Assets::js('cleditor', 'media/js/cleditor.js', array('jquery'), FALSE, array('weight' => 7));
 		Assets::js('cleditorimage', 'media/js/jquery.cleditor.extimage.js', array('cleditor'), FALSE, array('weight' => 8));
 		Assets::css('cleditor', 'media/css/cleditor.css');
-	
+
 		$width    = empty($width)    ? '500' : $width;
 		$height   = empty($height)   ? '250' : $height;
 		$controls = empty($controls) ? $default_controls : $controls;
-	
+
 		Assets::codes('cleditors', 'jQuery(document).ready(function(){
 			jQuery("'.$name.'").cleditor({
 					width:"'.$width.'",
@@ -793,10 +796,29 @@ class Gleez_Assets_Core {
 			});'
 		);
 	}
-	
+
+	/**
+	 * Paste google stats code
+	 *
+	 * @param  string  $ua  User Agent ID
+	 */
+	public static function google_stats($ua)
+	{
+		Assets::codes('google-stats',
+			"var _gaq = _gaq || [];".PHP_EOL.
+			"_gaq.push(['_setAccount', '".$ua."']);".PHP_EOL.
+			"_gaq.push(['_trackPageview']);".PHP_EOL.
+			"(function() {".PHP_EOL.
+			"var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;".PHP_EOL.
+			"ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';".PHP_EOL.
+			"var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);".PHP_EOL.
+			"})();"
+		);
+	}
+
 	/**
 	 * Enforce static usage
-	 */	
+	 */
 	private function __contruct() {}
 	private function __clone() {}
 
@@ -822,7 +844,7 @@ class Gleez_Assets_Core {
 		// If no files to compile, no tag necessary
 		if (empty($files))
 		{
-			return;
+			return '';
 		}
 
 		// Get filename to save compiled files to
@@ -880,8 +902,12 @@ class Gleez_Assets_Core {
 	}
 
 	/**
-	 * @param  string  $file  File name
-	 * @param  string  $tupe  File type [Optional]
+	 * Get file path
+	 *
+	 * @param   string  $file  File name
+	 * @param   string  $type  File type [Optional]
+	 * @return  array
+	 * @uses    Kohana::find_file
 	 */
 	protected static function _get_file_path($file, $type = EXT)
 	{
@@ -907,13 +933,13 @@ class Gleez_Assets_Core {
 
 		foreach($files as $file)
 		{
-			$raw_file = self::_get_file_path( $file, $type);
+			$raw_file = self::_get_file_path($file, $type);
 
 			// Check if this file was the most recently modified
 			$last_modified = max(filemtime($raw_file), $last_modified);
 		}
 
-		return "{$path}/{$type}/{$type}-" . md5(implode("|", $files)) . "-{$last_modified}.{$type}";
+		return $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
 	}
 
 }

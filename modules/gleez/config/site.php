@@ -21,7 +21,7 @@ return array(
   'site_url' => 'www.example.com',
 
   /** @var string Site mission */
-  'site_mission' => 'Innovate IT',
+  'site_mission' => '',
 
   /** @var string Site title seperator */
   'title_separator' => ' :: ',
@@ -83,11 +83,13 @@ return array(
         'http_equiv' => TRUE,
         'value' => 'IE=edge,chrome=1'
       ),
-      'charset'         => 'text/html; charset=UTF-8',
+      'charset'         => 'utf-8',
       'generator'       => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
       'author'          => 'Gleez',
       'copyright'       => 'Copyright Gleez 2011-2013. All rights reserved.',
       'robots'          => 'index, follow, noodp',
+      'keywords'        => 'cms, cmf, gleez, kohana, php framework, site building',
+      'description'     => 'Light, Simple, Flexible Content Management System',
       'viewport'        => 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
     ),
   ),
@@ -99,6 +101,9 @@ return array(
     'zh',
   ),
 
+  /** @var string Blocked ips */
+  'blocked_ips' =>  NULL, //default to null, comma seperated ip addresse(s) to block
+  
   /** @var string Default timezone */
   'timezone' => 'Asia/Kolkata',
 
@@ -112,6 +117,8 @@ return array(
   'reset_password_expiration' => 86400,
 
   /** @var string Default session type */
-  'session_type' => 'db'
+  'session_type' => 'db',
 
+  /** @var string Define Google Analytics ID */
+  'google_ua' => NULL
 );

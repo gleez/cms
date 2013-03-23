@@ -124,7 +124,6 @@ class Controller_Admin_Widget extends Controller_Admin {
 		{
 			$widget_regions = $theme->regions;
 		}
-
 		// Add a last region for disabled blocks.
 		$widget_regions = Arr::merge($widget_regions, array(self::$WIDGET_REGION_NONE => self::$WIDGET_REGION_NONE));
 

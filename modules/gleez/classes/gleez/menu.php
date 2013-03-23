@@ -54,16 +54,17 @@ class Gleez_Menu {
 	 * @param   string   Unique id
 	 * @param   string   Title of link
 	 * @param   string   URL (address) of link
+	 * @param   string   Additional text of link
 	 * @param   array    Params of the item to handle logic
 	 * @param   string   Parent Id of the link
 	 * @param   Menu     Instance of class that contain children
 	 * @return  Menu
 	 */
-	public function add($id, $title, $url, array $params = NULL, $image = NULL, $parent_id = FALSE, Menu $children = NULL)
+	public function add($id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, $parent_id = FALSE, Menu $children = NULL)
 	{
 		if( $parent_id )
 		{
-			$this->_items = self::_add_child($parent_id, $this->_items, $id, $title, $url, $params, $image, $children);
+			$this->_items = self::_add_child($parent_id, $this->_items, $id, $title, $url, $descp, $params, $image, $children);
 		}
 		else
 		{
@@ -71,8 +72,9 @@ class Gleez_Menu {
 			(
 				'title'    => $title,
 				'url'      => $url,
-				'children' => ($children instanceof Menu) ? $children->_items : NULL,
+				'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
 				'access'   => TRUE,
+				'descp'	   => $descp,
 				'params'   => $params,
 				'image'    => $image
 			);
@@ -110,9 +112,9 @@ class Gleez_Menu {
 	 * @param   booleen  $parent_id  true/false
 	 * @return  void
 	 */
-	public function set_title($target_id, $title, $parent = FALSE)
+	public function set_title($target_id, $title, $parent_id = FALSE)
 	{
-		if ( $parent )
+		if ( $parent_id )
 		{
 			$this->_items = self::_change_title_url($target_id, $this->_items, $title);
 		}
@@ -134,7 +136,7 @@ class Gleez_Menu {
 	 */
 	public function set_url($target_id, $url, $parent_id = FALSE)
 	{
-		if ( $parent )
+		if ( $parent_id )
 		{
 			$this->_items = self::_change_title_url($target_id, $this->_items, $url, 'url');
 		}
@@ -212,9 +214,14 @@ class Gleez_Menu {
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
-			$title .= '<span>' . Text::plain($item['title']) . '</span>';
+			$title .= Text::plain($item['title']).$caret;
+			
+			if($item['descp'] AND !empty($item['descp']))
+			{
+				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
+			}
 	
-			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title.$caret, $attributes);
+			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title, $attributes);
 		
 			if ( $has_children )
 			{
@@ -316,12 +323,12 @@ class Gleez_Menu {
 			if(count($stack) > 0)
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'Adding :title to :parent', array( ':title' => $item['title'], ':parent' => $stack[count($stack) - 1]['title']) );
-				$menu->add($item['name'], $item['title'], $item['url'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
+				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
                         }
 			else
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'No parent for :title ', array( ':title' => $item['title']) );
-				$menu->add($item['name'], $item['title'], $item['url'], $item['params'], $item['image']);
+				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image']);
 			}
 		        
 			$stack[] = &$item;
@@ -384,12 +391,12 @@ class Gleez_Menu {
 			if(count($stack) > 0)
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'Adding :title to :parent', array( ':title' => $item['title'], ':parent' => $stack[count($stack) - 1]['title']) );
-				$menu->add($item['name'], $item['title'], $item['url'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
+				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
                         }
 			else
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'No parent for :title ', array( ':title' => $item['title']) );
-				$menu->add($item['name'], $item['title'], $item['url'], $item['params'], $item['image']);
+				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image']);
 			}
 		        
 			$stack[] = &$item;
@@ -444,11 +451,13 @@ class Gleez_Menu {
 	 * @param   string   $id       The new id of menu
 	 * @param   string   $title    The new title
 	 * @param   string   $url      The new url
+	 * @param   string   $descp    The additional text of url
 	 * @param   array    $params   The new params
+	 * @param   string   $image    The image or icon of url
 	 * @param   menu     $children The new children
 	 * @return  array
 	 */
-	private static function _add_child($needle, array $array, $id, $title, $url, array $params = NULL, $image = NULL, Menu $children = NULL)
+	private static function _add_child($needle, array $array, $id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, Menu $children = NULL)
 	{ 
 		foreach ($array as $key => $value)
 		{
@@ -458,8 +467,9 @@ class Gleez_Menu {
 					(
 						'title'    => $title,
 						'url'      => $url,
-						'children' => ($children instanceof Menu) ? $children->_items : NULL,
+						'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
 						'access'   => TRUE,
+						'descp'	   => $descp,
 						'params'   => $params,
 						'image'    => $image
 					);
@@ -469,7 +479,7 @@ class Gleez_Menu {
 	
 			if (isset($value['children']))
 			{
-				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $params, $image, $children);
+				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $descp, $params, $image, $children);
 			}
 		}
 	

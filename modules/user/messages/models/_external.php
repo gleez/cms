@@ -1,8 +1,16 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
-        'pass_confirm' => 'The values you entered in the password fields did not match.',
-        'old_pass' => array(
-             'check_password' => 'The values you entered in the password fields did not match.',
-        ),
+	'pass' => array(
+		'not_empty' => 'You must provide a password.',
+		'min_length' => 'Password must be at least :param2 characters long.',
+	),
+	'pass_confirm' => array (
+		'not_empty' => 'You must confirm password.',
+		'matches' => 'Password Confirm must be the same as Password.',
+	),
+	'old_pass' => array(
+		'not_empty' => 'You must provide old password.',
+		'check_password' => 'The values you entered in the password fields didn\'t match.',
+	),
 );

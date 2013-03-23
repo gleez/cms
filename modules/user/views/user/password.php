@@ -1,34 +1,33 @@
-<?php defined('SYSPATH') or die('No direct script access.'); ?>
+<?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-	<?php if ( isset($errors['_external']) ): ?>
-		<div id="formerrors" class="errorbox">
-			<h3>Ooops!</h3>
-			<ol>
-				<?php foreach($errors['_external'] as $field => $message): ?>
-					<li>	
-						<?php echo $message; ?>
-					</li>
-				<?php endforeach ?>
-			</ol>
-		</div>
-	<?php endif ?>
+<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-<?php echo Form::open(Route::get('user')->uri(array('action' => 'password')). URL::query( array('destination' => Request::initial()->uri()) )) ?>
+<?php echo Form::open(Route::get('user')->uri($params).URL::query(array('destination' => Request::initial()->uri($destination))), array('class' => 'form-horizontal')); ?>
 
 <div class="control-group <?php echo isset($errors['_external']['old_pass']) ? 'error': ''; ?>">
-	<?php echo Form::label('old_pass', 'Current password:', array('class' => 'wrap')) ?>
-   	<?php echo Form::password('old_pass', NULL, array('class' => 'text small')); ?>
+	<?php echo Form::label('old_pass', __('Current password'), array('class' => 'control-label')) ?>
+	<div class="controls">
+		<?php echo Form::password('old_pass', NULL, array('class' => 'span4')); ?>
+	</div>
 </div>
 
 <div class="control-group <?php echo isset($errors['_external']['pass']) ? 'error': ''; ?>">
-	<?php echo Form::label('pass', 'New password: ', array('class' => 'wrap')) ?>
-   	<?php echo Form::password('pass', NULL, array('class' => 'text small')); ?>
+	<?php echo Form::label('pass', __('New password'), array('class' => 'control-label')) ?>
+	<div class="controls">
+		<?php echo Form::password('pass', NULL, array('class' => 'span4')); ?>
+		<span class="help-block"><?php echo __('Minimum password length &mdash; :count characters', array(':count' => 4)) ?></span>
+	</div>
 </div>
 
 <div class="control-group <?php echo isset($errors['_external']['pass_confirm']) ? 'error': ''; ?>">
-	<?php echo Form::label('pass_confirm', 'New password (again): ', array('class' => 'wrap')) ?>
-   	<?php echo Form::password('pass_confirm', NULL, array('class' => 'text small')); ?>
+	<?php echo Form::label('pass_confirm', __('New password (again)'), array('class' => 'control-label')) ?>
+	<div class="controls">
+		<?php echo Form::password('pass_confirm', NULL, array('class' => 'span4')); ?>
+		<span class="help-block"><?php echo __('Confirm new password') ?></span>
+	</div>
 </div>
 
-<?php echo Form::submit('change_pass', __('Submit'), array('class' => 'btn btn-primary')) ?>
+<div class="form-actions">
+	<?php echo Form::submit('change_pass', __('Save'), array('class' => 'btn btn-primary pull-right')); ?>
+</div>
 <?php echo Form::close() ?>

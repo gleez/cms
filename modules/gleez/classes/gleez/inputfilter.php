@@ -228,7 +228,7 @@ class Gleez_InputFilter {
 			$callback = explode('::', $callback, 2);
 		}
         
-                if ( $callback )
+                if ( $callback AND is_callable($callback))
 		{
                         try
                         {

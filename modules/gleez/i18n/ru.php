@@ -265,6 +265,7 @@ return array
 	'Site Title' =>  'Название сайта',
 	'Slug' => 'Короткое имя',
 	'Slug for %slug' => 'Короткое имя для %slug',
+	'Some of your modules are out of date. :upgrade_url' => 'Некоторые ваши модули устарели. :upgrade_url',
 	'Standard PHP Library (SPL)' => 'Стандартная библиотека PHP (SPL)',
 	'Start using Gleez' => 'Начать использовать Gleez',
 	'Statistics' => 'Статистика',
@@ -339,6 +340,7 @@ return array
 	// U
 	'Unavailable' => 'Не доступно',
 	'Updated' => 'Обновлено',
+	'Upgrade now!' => 'Обновить сейчас!',
 	'Unpublish' => 'Снять с публикации',
 	'URI Determination' => 'URI определения',
 	'User' => 'Пользователь',

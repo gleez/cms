@@ -10,6 +10,8 @@
  */
 if ( ! Route::cache())
 {
+// -- Gleez media routes -------------------------------------------------------
+
 	// Image resize
 	Route::set('resize', 'media/imagecache/<type>/<dimensions>(/<file>)', array(
 		'dimensions' => '\d+x\d+',
@@ -36,7 +38,8 @@ Gleez::ready();
 
 if ( ! Route::cache())
 {
-	/** Gleez backend routes */
+// -- Gleez backend routes -----------------------------------------------------
+
 	Route::set('admin/module', 'admin/modules(/<action>)')
 	->defaults(array(
 		'directory'  => 'admin',
@@ -167,7 +170,8 @@ if ( ! Route::cache())
 		'controller' => 'dashboard',
 	));
 
-	/** Gleez frontend routes */
+// -- Gleez frontend routes ----------------------------------------------------
+
 	Route::set('autocomplete', 'autocomplete/<action>(/<type>)(/<string>)', array(
 		'string'     => '([A-Za-z0-9\-\,\s]+)',
 		'action'     => 'index|user|nick|tag|post',
@@ -291,7 +295,7 @@ if ( class_exists('ACL') && ! ACL::cache() )
 		'create page' => array(
 			'title' => __('Create pages'),
 			'restrict access' => FALSE,
-			'description' => __(''),
+			'description' => __('The ability to create pages'),
 		),
 		'edit own page' => array(
 			'title' => __('Edit own page'),

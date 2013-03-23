@@ -2,46 +2,56 @@
 /**
  * Admin Tag Controller
  *
- * @package   Gleez\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Admin\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_Admin_Tag extends Controller_Admin {
 
+	/**
+	 * The before() method is called before controller action.
+	 */
 	public function before()
 	{
-		ACL::Required('administer tags');
+		ACL::required('administer tags');
+
 		parent::before();
 	}
 
+	/**
+	 * List tags
+	 */
 	public function action_list()
 	{
-		$this->title    = __('Tags');
-		$view           = View::factory('admin/tag/list')
-						->bind('pagination', $pagination)
-						->bind('tags', $tags);
+		$this->title = __('Tags');
+		$view = View::factory('admin/tag/list')
+				->bind('pagination', $pagination)
+				->bind('tags', $tags);
 
-		$tag       = ORM::factory('tag');
-		$total      = $tag->count_all();
+		$tag = ORM::factory('tag');
+		$total = $tag->count_all();
 
 		if ($total == 0)
 		{
 			Kohana::$log->add(Log::INFO, 'No tags found');
-			$this->response->body( View::factory('admin/tag/none') );
+			$this->response->body(View::factory('admin/tag/none'));
+
 			return;
 		}
 
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items' => $total,
+			'total_items'    => $total,
 			'items_per_page' => 25,
-			));
+		));
 
-		$tags  = $tag->order_by('name', 'ASC')->limit($pagination->items_per_page)
-							->offset($pagination->offset)->find_all();
+		$tags = $tag->order_by('name', 'ASC')
+					->limit($pagination->items_per_page)
+					->offset($pagination->offset)
+					->find_all();
 
-                $this->response->body($view);
+		$this->response->body($view);
 	}
 
 	public function action_add()

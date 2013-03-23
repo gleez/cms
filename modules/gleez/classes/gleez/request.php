@@ -2,40 +2,22 @@
 /**
  * Extending Kohana Request and response wrapper
  *
- * @package     Gleez
- * @category    Controller
- * @author      Sandeep Sangamreddi - Gleez
- * @copyright   (c) 2013 Gleez Technologies
- * @license     http://gleezcms.org/license
+ * @package    Gleez\Request
+ * @version    1.1
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
 class Gleez_Request extends Kohana_Request {
 
-	/**
-	 * @var  string  request Subdomain
-	 */
-	public static $subdomain;
+	/** Default maximum size of POST data */
+	const DEFAULT_POST_MAX_SIZE = '1M';
 
 	/**
-	 * @var  string  request Redirect URL for ajax requests
+	 * Request Redirect URL for ajax requests
+	 * @var string
 	 */
 	public static $_redirect_url;
-	
-	/**
-	 * Add subdomain support
-	 * Thanks to jean@webmais.net.br
-	 *
-	 * @param   string      $uri  URI of the request
-	 * @param   HTTP_Cache  $cache
-	 * @param   array       $injected_routes An array of routes to use, for testing
-	 * @return  void
-	 * @link    https://github.com/jeanmask/subdomain
-	 */
-	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
-	{
-		self::$subdomain = Request::catch_subdomain();
-
-		return parent::factory($uri, $cache, $injected_routes);
-	}
 
 	/**
 	 * Redirects as the request response. If the URL does not include a
@@ -60,7 +42,7 @@ class Gleez_Request extends Kohana_Request {
 			// Stop execution
 			return;
 		}
-	
+
 		$referrer = $this->uri();
 
 		if (strpos($referrer, '://') === FALSE)
@@ -88,28 +70,36 @@ class Gleez_Request extends Kohana_Request {
 		// Stop execution
 		exit;
 	}
-	
+
 	/**
 	 * Overwrite to check and set maintainance mode
+	 *
+	 * @return  Response
+	 *
+	 * @uses    Gleez::block_ips
+	 * @uses    Gleez::maintenance_mode
 	 */
 	public function execute()
 	{
-		if( Gleez::$installed )
+		if (Gleez::$installed)
 		{
-			//Check Maintenance Mode
+			// Deny access to blocked IP addresses
+			Gleez::block_ips();
+
+			// Check Maintenance Mode
 			Gleez::maintenance_mode();
 		}
-	
+
 		return parent::execute();
 	}
-	
+
 	/**
 	 * Fix for pagination on lambda routes
-	 * 
+	 *
 	 * Process URI
 	 *
 	 * @param   string  $uri     URI
-	 * @param   array   $routes  Route
+	 * @param   array   $routes  Route [Optional]
 	 * @return  array
 	 */
 	public static function process_uri($uri, $routes = NULL)
@@ -139,13 +129,14 @@ class Gleez_Request extends Kohana_Request {
 
 		return NULL;
 	}
-	
+
 	/**
 	 * Checks whether the request called by bot/crawller by useragent string
 	 * Preg is faster than for loop
 	 *
+	 * @return boolean
+	 *
 	 * @todo use Request::$user_agent but it is null
-	 * @return bool
 	 */
 	public static function is_crawler()
 	{
@@ -156,12 +147,12 @@ class Gleez_Request extends Kohana_Request {
 			'Google|Charlotte t|Yahoo! Slurp China|Sogou web spider|YodaoBot|MSRBOT|AbachoBOT|'.
 			'Sogou head spider|AltaVista|IDBot|Sosospider|Yahoo! Slurp|'.
 			'Java VM|DotBot|LiteFinder|Yeti|Rambler|Scrubby|Baiduspider|accoona';
-	
+
 		if (isset($_SERVER['HTTP_USER_AGENT']))
 		{
 			return (preg_match("/$crawlers/i", $_SERVER['HTTP_USER_AGENT']) > 0);
 		}
-		
+
 		return FALSE;
 	}
 
@@ -169,13 +160,14 @@ class Gleez_Request extends Kohana_Request {
 	 * Checks whether the request called by mobile device by useragent string
 	 * Preg is faster than for loop
 	 *
+	 * @return boolean
+	 *
 	 * @todo use Request::$user_agent but it is null
-	 * @return bool
 	 */
 	public static function is_mobile()
 	{
 		$devices = 'android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos';
-		
+
 		if (isset($_SERVER['HTTP_USER_AGENT']))
 		{
 			return (preg_match("/$devices/i", $_SERVER['HTTP_USER_AGENT']) > 0);
@@ -183,47 +175,16 @@ class Gleez_Request extends Kohana_Request {
 
 		return FALSE;
 	}
-	
-	/**
-	 * Checks subdomain support
-	 *
-	 * @param   string  $base_url
-	 * @param   mixed   $host
-	 * @return  boolean|string
-	 */
-	public static function catch_subdomain($base_url = NULL, $host = NULL)
-	{
-		if($base_url === NULL) $base_url = parse_url(Kohana::$base_url, PHP_URL_HOST);
-	
-		if($host === NULL)
-		{
-			if( Kohana::$is_cli ) return FALSE;
-	
-			$host = $_SERVER['HTTP_HOST'];
-		}
-	
-		if(empty($base_url) OR empty($host) OR in_array($host, Route::$localhosts) OR Valid::ip($host))
-		{
-			return FALSE;
-		}
-	
-		$sub_pos = (int)strpos($host, $base_url) - 1;
-		
-		if($sub_pos > 0)
-		{
-			$subdomain = substr($host,0,$sub_pos);
-			
-			if( !empty($subdomain) ) return $subdomain;
-		}
-		
-		return Route::SUBDOMAIN_EMPTY;
-	}
 
 	/**
 	 * Returns whether this request is GET
+	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 *      $this->request->is_get();
+	 * Example:<br>
+	 * <code>
+	 *	$this->request->is_get();
+	 * </code>
 	 *
 	 * @return  boolean
 	 * @link    https://github.com/kohana/core/pull/286
@@ -232,12 +193,16 @@ class Gleez_Request extends Kohana_Request {
 	{
 		return ($this->method() === Request::GET);
 	}
-      
+
 	/**
 	 * Returns whether this request is POST
+	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 *      $this->request->is_post();
+	 * Example:<br>
+	 * <code>
+	 *	$this->request->is_post();
+	 * </code>
 	 *
 	 * @return  boolean
 	 * @link    https://github.com/kohana/core/pull/286
@@ -246,12 +211,16 @@ class Gleez_Request extends Kohana_Request {
 	{
 		return ($this->method() === Request::POST);
 	}
-      
+
 	/**
 	 * Returns whether this request is PUT
+	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 *      $this->request->is_put();
+	 * Example:<br>
+	 * <code>
+	 *	$this->request->is_put();
+	 * </code>
 	 *
 	 * @return  boolean
 	 * @link    https://github.com/kohana/core/pull/286
@@ -260,12 +229,16 @@ class Gleez_Request extends Kohana_Request {
 	{
 		return ($this->method() === Request::PUT);
 	}
-      
+
 	/**
 	 * Returns whether this request is DELETE
+	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 *      $this->request->is_delete();
+	 * Example:<br>
+	 * <code>
+	 *	$this->request->is_delete();
+	 * </code>
 	 *
 	 * @return  boolean
 	 * @link    https://github.com/kohana/core/pull/286
@@ -274,5 +247,57 @@ class Gleez_Request extends Kohana_Request {
 	{
 		return ($this->method() === Request::DELETE);
 	}
-	
+
+	/**
+	 * Determines if a file larger than the post_max_size has been uploaded
+	 *
+	 * PHP does not handle this situation gracefully on its own, so this method
+	 * helps to solve that problem.
+	 *
+	 * @return  boolean
+	 *
+	 * @uses    Arr::get
+	 * @link    http://php.net/post-max-size
+	 */
+	public static function post_max_size_exceeded()
+	{
+		// Make sure the request method is POST
+		if ( ! Request::current()->is_post())
+		{
+			return FALSE;
+		}
+
+		// Error occurred if method is POST, and content length is too long
+		return (Arr::get($_SERVER, 'CONTENT_LENGTH') > Request::get_post_max_size());
+	}
+
+	/**
+	 * Gets POST max size in bytes
+	 *
+	 * @return  float
+	 *
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
+	 * @uses    Kohana_Num::bytes
+	 * @link    http://php.net/post-max-size
+	 */
+	public static function get_post_max_size()
+	{
+		$config = Kohana::$config->load('media');
+
+		// Set post_max_size default value if it not exists
+		if (is_null($config->get('post_max_size')))
+		{
+			$config->set('post_max_size', Request::DEFAULT_POST_MAX_SIZE);
+		}
+
+		// Get the post_max_size in bytes from php.ini
+		$php_settings = Num::bytes(ini_get('post_max_size'));
+
+		// Get the post_max_size in bytes from `config/media`
+		$gleez_settings = Num::bytes($config->get('post_max_size'));
+
+		return ($gleez_settings <= $php_settings) ? $gleez_settings : $php_settings;
+	}
+
 }

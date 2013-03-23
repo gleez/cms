@@ -5,10 +5,10 @@
  * Provides generic methods for generating various HTML
  * tags and making output HTML safe.
  *
- * @package    Gleez\Helpers	
+ * @package    Gleez\Helpers\HTML
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_HTML extends Kohana_HTML {
 
@@ -21,6 +21,43 @@ class Gleez_HTML extends Kohana_HTML {
 	 * @var  string  Current route
 	 */
 	public static $current_route;
+
+	/**
+	 * Creates a style sheet link element
+	 *
+	 * Example:<br>
+	 * <code>
+	 *	echo HTML::style('media/css/screen.css');
+	 * <code>
+	 *
+	 * Note: Gleez by default use HTML5. In HTML5 attribute `type` not needed
+	 *
+	 * @param   string  $file       File name
+	 * @param   array   $attrs      Default attributes [Optional]
+	 * @param   mixed   $protocol   Protocol to pass to `URL::base()` [Optional]
+	 * @param   boolean $index      Include the index page [Optional]
+	 * @return  string
+	 *
+	 * @uses    URL::base
+	 * @uses    URL::is_absolute
+	 * @uses    HTML::attributes
+	 */
+	public static function style($file, array $attrs = NULL, $protocol = NULL, $index = FALSE)
+	{
+		if ( ! URL::is_absolute($file))
+		{
+			// Add the base URL
+			$file = URL::site($file, $protocol, $index);
+		}
+
+		// Set the stylesheet link
+		$attrs['href'] = $file;
+
+		// Set the stylesheet rel
+		$attrs['rel'] = 'stylesheet';
+
+		return '<link'.HTML::attributes($attrs).'>';
+	}
 
 	/**
 	 * Creates a resized image link to resize images on fly with caching
@@ -39,12 +76,13 @@ class Gleez_HTML extends Kohana_HTML {
 	 *
 	 * @uses    URL::base
 	 * @uses    URL::site
+	 * @uses    URL::is_remote
 	 */
 	public static function resize($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
 		if (strlen($file) <= 1)
 		{
-			return;
+			return '';
 		}
 
 		if (isset($attributes['width']))
@@ -67,7 +105,7 @@ class Gleez_HTML extends Kohana_HTML {
 			$type = 'crop';
 		}
 
-		if (strpos($file, '://') === FALSE)
+		if (URL::is_remote($file) === FALSE)
 		{
 			if( isset($width) AND isset($height) )
 			{
@@ -90,6 +128,7 @@ class Gleez_HTML extends Kohana_HTML {
 	 * @param  array  $links       Links
 	 * @param  array  $attributes  Attributes, for example CSS class [Optional]
 	 * @return string Prepared HTML
+	 *
 	 * @uses   Request::uri
 	 */
 	public static function links($links, $attributes = array('class' => 'links'))
@@ -153,10 +192,11 @@ class Gleez_HTML extends Kohana_HTML {
 	/**
 	 * Print out a themed set of tabs
 	 *
-	 * @param  array  $tabs        Tabs
-	 * @param  array  $attributes  Attributes, for example CSS class [Optional]
-	 * @return string Prepared HTML
-	 * @uses   Request::uri
+	 * @param   array  $tabs        Tabs
+	 * @param   array  $attributes  Attributes, for example CSS class [Optional]
+	 * @return  string Prepared HTML
+	 *
+	 * @uses    Request::uri
 	 */
 	public static function tabs($tabs, $attributes = array('class' => 'tabs'))
 	{
@@ -266,12 +306,14 @@ class Gleez_HTML extends Kohana_HTML {
 	/**
 	 * Cleans HTML with HTML Purifier
 	 *
-	 * @param  string  $html  Dirty html
-	 * @return string
-	 * @link   http://htmlpurifier.org/ HTMLPurifier
+	 * @param   string  $html  Dirty html
+	 * @return  string
+	 *
+	 * @link    http://htmlpurifier.org/ HTMLPurifier
 	 */
 	public static function purify($html)
 	{
+		// @todo
 		require_once Kohana::find_file('vendor', 'htmlpurifier/library/HTMLPurifier.includes');
 
 		// config
@@ -294,7 +336,9 @@ class Gleez_HTML extends Kohana_HTML {
 	 * @param   mixed   $class  Image class name
 	 * @param   string  $title  Image title [Optional]
 	 * @return  string  An HTML-prepared image
+	 *
 	 * @uses    Route::uri
+	 * @uses    HTML::image
 	 */
 	public static function sprite_img($class, $title = NULL)
 	{
