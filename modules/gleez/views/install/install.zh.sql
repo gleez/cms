@@ -198,7 +198,7 @@ CREATE TABLE {modules} (
   name varchar(128) NOT NULL,
   active tinyint(4) NOT NULL DEFAULT '0',
   weight int(11) NOT NULL DEFAULT '0',
-  version decimal(10,0) NOT NULL DEFAULT '0',
+  version decimal(10,2) NOT NULL DEFAULT '0',
   path varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
