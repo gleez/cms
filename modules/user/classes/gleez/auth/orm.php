@@ -296,12 +296,13 @@ class Gleez_Auth_ORM extends Auth {
 	 */
 	public function check_password($password)
 	{
-		$user = $this->get_user();
+		$user_model = $this->get_user();
+		$user = $user_model->original_values();
 
 		if ( ! $user)
 			return FALSE;
 
-		return ($this->hash($password) === $user->pass);
+		return ($this->hash($password) === $user['pass']);
 	}
 
 	/**

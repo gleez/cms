@@ -11,6 +11,6 @@ return array(
 	),
 	'old_pass' => array(
 		'not_empty' => 'You must provide old password.',
-		'check_password' => 'The values you entered in the password fields didn\'t match.',
+		'check_password' => 'Old password is incorrect.',
 	),
 );
