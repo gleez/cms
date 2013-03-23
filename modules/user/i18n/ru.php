@@ -45,7 +45,7 @@ return array
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
 	'Gender' => 'Пол',
-	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
+	'Gleez users and group management' => 'Управление пользователями и группами в Gleez.',
 	// H
 	// I
 	// J
