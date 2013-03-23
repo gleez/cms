@@ -114,6 +114,7 @@ return array
 	'You must provide an email address.' => 'Вы долны ввести email адрес.',
 	'You must provide old password.' => 'Вы должны ввести текущий пароль.',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
+	'User Account' => 'Аккаунт пользователя',
 	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
 	// Z
 );
