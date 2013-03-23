@@ -25,9 +25,6 @@
  *
  *   Assets::settings('settings', 'settings');
  *
- *   Assets::group('head', 'keywords', '<meta name="keywords" content="one,two,three,four,five" />');
- *   Assets::group('head', 'description', '<meta name="description" content="Description of webpage here" />');
- *
  * In your view file:<br>
  *   <html>
  *     <head>
