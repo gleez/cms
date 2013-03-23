@@ -20,7 +20,7 @@ return array(
 	'_external' => array(
 		'pass_confirm' => 'The values you entered in the password fields did not match.',
 		'old_pass' => array(
-			'check_password' => 'The values you entered in the password fields did not match.',
+			'check_password' => 'Old password is incorrect.',
 		),
 	),
 );
