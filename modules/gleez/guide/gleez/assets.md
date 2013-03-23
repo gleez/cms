@@ -14,37 +14,34 @@ assets according to what is needed for the respective action.
 **/application/controllers/base.php**
 
 	abstract class Controller_Base extends Template {
-	
+
 		public function action_before()
 		{
 			// Setup default styles, javascript, and groups
 			Assets::css('global', 'assets/css/global.css', array('grid', 'reset'), array('media' => 'screen'));
 			Assets::css('reset', 'assets/css/reset.css');
 			Assets::css('grid', 'assets/css/grid.css', 'reset');
-			
+
 			Assets::js('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
 			Assets::js('global', 'assets/js/global.js', array('jquery'));
 			Assets::js('stats', 'assets/js/stats.js', NULL, TRUE);
-			
-			Assets::group('head', 'keywords', '<meta name="keywords" content="'.$this->keywords.'" />');
-			Assets::group('head', 'description', '<meta name="description" content="'.$this->description.'" />');
 		}
-	
+
 	}
 
 **/application/controllers/blog.php**
 
 	class Controller_Blog extends Template {
-		
+
 		public function action_index()
 		{
 			// Add CSS for the blog index
 			Assets::css('blog', 'assets/css/blog.css', array('global'));
-			
+
 			// We don't need 'global.js' on this page, so don't load it.
 			Assets::remove_js('global');
 		}
-		
+
 	}
 
 Then you would output the assets in your template somewhere
@@ -78,21 +75,19 @@ For instance, jQuery UI is dependant on jQuery to work. If jQuery is included so
 jQuery UI and have it show up before jQuery in the source. So by providing dependencies, we can make sure that never happens.
 
 	Assets::js('jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js', array('jquery'));
-	
+
 ### Other Functions
 
-Getting a single asset
+#### Getting a single asset
 
 	$global = Assets::js('global');
 	// returns <script src="/assets/js/global.js"></script>
-	
-	echo Assets::group('head', 'keywords');
 
-Removing assets
+#### Removing assets
 
 	Assets::remove_css('grid');
-	
+
 	// Remove all CSS
 	Assets::remove_css();
-	
+
 	Assets::remove_group('head');
