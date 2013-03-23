@@ -76,6 +76,7 @@ class Gleez_HTML extends Kohana_HTML {
 	 *
 	 * @uses    URL::base
 	 * @uses    URL::site
+	 * @uses    URL::is_remote
 	 */
 	public static function resize($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
@@ -104,7 +105,7 @@ class Gleez_HTML extends Kohana_HTML {
 			$type = 'crop';
 		}
 
-		if (strpos($file, '://') === FALSE)
+		if (URL::is_remote($file) === FALSE)
 		{
 			if( isset($width) AND isset($height) )
 			{
