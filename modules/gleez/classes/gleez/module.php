@@ -5,7 +5,7 @@
  * @package   Gleez\Modules
  * @author    Sandeep Sangamreddi - Gleez
  * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @license   http://gleezcms.org/license  Gleez CMS License
  *
  * @todo      [!!] This class does not do any permission checking
  */
@@ -72,7 +72,10 @@ class Gleez_Module {
 
         /**
          * Check to see if a module is active
+         *
          * @param string $module_name
+         *
+         * @return boolean
          */
         static function is_active($module_name)
         {
@@ -110,8 +113,8 @@ class Gleez_Module {
 
                         if ($upgrade)
                         {
-                                Message::warn(__('Some of your modules are out of date. <a href=":upgrade_url">
-                                        Upgrade now!</a>', array(':upgrade_url' => URL::site('admin/modules/upgrade')) ));
+                                Message::warn(__('Some of your modules are out of date. :upgrade_url',
+                                    array(':upgrade_url' => HTML::anchor(Route::get('admin/module')->uri(array('action' => 'upgrade')), __('Upgrade now!')))));
                         }
 
                         // Lock certain modules
@@ -506,7 +509,7 @@ class Gleez_Module {
                         {
                                 try
                                 {
-                                       call_user_func_array(array( $class, $function ), $args); 
+                                       call_user_func_array(array( $class, $function ), $args);
                                 }
                                 catch(Exception $e){}
                         }
