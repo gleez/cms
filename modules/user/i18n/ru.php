@@ -65,6 +65,7 @@ return array
 	'New password' => 'Новый пароль',
 	'New password (again)' => 'Повторите пароль',
 	// O
+	'Old password is incorrect.' => 'Текущий пароль введён неверно',
 	// P
 	'Password' => 'Пароль',
 	'Password or username is incorrect.' => 'Пароль или имя пользователя не верны.',
