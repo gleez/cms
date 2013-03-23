@@ -13,7 +13,7 @@ class Controller_Resize extends Controller {
 	{
 		$this->image_folder = DOCROOT . 'media';
 
-		ACL::Required('access content');
+		//ACL::Required('access content');
 		parent::before();
 	}
 
