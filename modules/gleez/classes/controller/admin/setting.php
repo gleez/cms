@@ -19,6 +19,7 @@ class Controller_Admin_Setting extends Controller_Admin {
       Message::success(__('Site running in maintenance mode!'));
     }
 
+    $action = Route::get('admin/setting')->uri();
     $view = View::factory('admin/settings')
                 ->set('date_time_formats',  Date::date_time_formats(1))
                 ->set('date_formats',       Date::date_formats(1))
@@ -26,6 +27,7 @@ class Controller_Admin_Setting extends Controller_Admin {
                 ->set('date_weekdays',      Date::weeekdays())
                 ->set('timezones',          Date::timezones())
                 ->bind('title',             $this->title)
+                ->set('action',             $action)
                 ->set('post',               $config);
 
     if ($this->valid_post('settings'))
