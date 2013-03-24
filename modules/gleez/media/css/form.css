@@ -409,3 +409,7 @@ label small, .help-block {
   font-weight: normal;
   line-height: 1;
 }
+
+.select-icons, ul.select2-results > li{
+    text-transform: capitalize;
+}
