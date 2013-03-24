@@ -270,12 +270,12 @@ class Controller_User extends Template {
 
         $male   = (isset($user->gender) AND $user->gender == 1) ? TRUE : FALSE;
         $female = (isset($user->gender) AND $user->gender == 2) ? TRUE : FALSE;
-		$action = Route::get('user')->uri(array('action' => $this->request->action(), 'id' => $user->id));
+        $action = Route::get('user')->uri(array('action' => $this->request->action(), 'id' => $user->id));
 
         $view = View::factory('user/edit')
                 ->set('user',   $user)
                 ->set('male',   $male)
-				->set('action', $action)
+                ->set('action', $action)
                 ->set('female', $female);
 
         // Form submitted
@@ -326,12 +326,12 @@ class Controller_User extends Template {
 
         $user = Auth::instance()->get_user();
         $this->title =  __('Change Password');
-		$destination = Request::initial()->uri();
-		$params = array('action' => $this->request->action());
+        $destination = Request::initial()->uri();
+        $params = array('action' => $this->request->action());
 
         $view = View::factory('user/password')
-				->set('destination', $destination)
-				->set('params', $params);
+                ->set('destination', $destination)
+                ->set('params', $params);
 
         // Form submitted
         if ($this->valid_post('change_pass'))
