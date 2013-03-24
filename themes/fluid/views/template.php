@@ -43,6 +43,10 @@
 									</a>
 
 									<ul class="dropdown-menu">
+										<?php if (User::is_admin()): ?>
+											<li><a href="<?php echo URL::site('/admin') ?>"><i class="icon-dashboard"></i> <?php echo __('Dashboard') ?></a></li>
+											<li class="divider"></li>
+										<?php endif; ?>
 										<li><a href="<?php echo URL::site('/user/profile') ?>"><i class="icon-cog"></i> <?php echo __('Profile') ?></a></li>
 										<li><a href="<?php echo URL::site("/user/edit") ?>"><i class="icon-pencil"></i> <?php echo __('Account') ?></a></li>
 										<li class="divider"></li>
