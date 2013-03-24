@@ -45,7 +45,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
-class Gleez_Assets_Core {
+class Gleez_Assets {
 
 	/** Format that compile can return */
 	const FORMAT_TAG = 'tag';
@@ -813,6 +813,16 @@ class Gleez_Assets_Core {
 		);
 	}
 
+	/**
+	 * Use select2 jquery plugin
+	 * @link http://ivaynberg.github.com/select2/index.html
+	 */
+	public static function select2()
+	{
+		Assets::js('select2', 'media/js/select2.min.js', array('jquery'), FALSE, array('weight' => 8));
+		Assets::css('select2', 'media/css/select2.css');
+	}
+	
 	/**
 	 * Enforce static usage
 	 */

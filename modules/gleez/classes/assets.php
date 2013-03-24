@@ -1,3 +1,3 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Assets extends Gleez_Assets_Core {}
+class Assets extends Gleez_Assets {}
