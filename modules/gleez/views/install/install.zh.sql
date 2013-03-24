@@ -417,10 +417,11 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
 (5, 'menu/user-menu', '用户菜单', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0),
 (6, 'admin/donate', '捐赠', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(7, 'admin/welcome', '欢迎', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0),
+(7, 'admin/welcome', '欢迎', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0),
 (8, 'admin/info', '系统', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0),
 (9, 'user/login', '登录', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(10, 'comment/recent', '评论', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0);
+(10, 'comment/recent', '评论', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
+(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0);
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
