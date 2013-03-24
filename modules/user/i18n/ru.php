@@ -48,6 +48,7 @@ return array
 	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
 	// H
 	// I
+	'Instructions to reset your password are being sent to your email address.' => 'Инструкции для сброса вашего пароля были высланы на ваш email адрес',
 	// J
 	'Joined on' => 'Участник с',
 	// K
@@ -81,6 +82,8 @@ return array
 	'Profile %title' => 'Профиль %title',
 	// Q
 	// R
+	'Reset password' => 'Сброс пароля',
+	'Reset' => 'Сброс',
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
