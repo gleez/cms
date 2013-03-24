@@ -31,11 +31,21 @@ class Widget_Admin extends Widget {
                         case 'info':
                                 return $this->system_info();
                         break;
+                        case 'shortcut':
+                                return $this->shortcut();
+                        break;
                         default:
                                 return;
                 }
 	}
 
+	public function shortcut()
+	{
+		$menus = Menu::items('management')->get_items();
+		unset($menus['administer']);
+		return View::factory('widgets/shortcuts')->set(array( 'items' => $menus ))->render();
+	}
+	
 	public function donate()
 	{
 		return View::factory('widgets/static')->set(array(
