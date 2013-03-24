@@ -247,7 +247,15 @@ class Controller_User extends Template {
     }
 
     /**
-     * Edit own account
+     * User profile and account editor
+	 *
+	 * @uses  Request::redirect
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Auth::get_user
+	 * @uses  Message::success
+	 * @uses  Arr::merge
+	 * @uses  Arr::get
      */
     public function action_edit()
     {
@@ -262,11 +270,12 @@ class Controller_User extends Template {
 
         $male   = (isset($user->gender) AND $user->gender == 1) ? TRUE : FALSE;
         $female = (isset($user->gender) AND $user->gender == 2) ? TRUE : FALSE;
+		$action = Route::get('user')->uri(array('action' => $this->request->action(), 'id' => $user->id));
 
         $view = View::factory('user/edit')
                 ->set('user',   $user)
-                ->set('params', array('action' => $this->request->action(), 'id' => $user->id))
                 ->set('male',   $male)
+				->set('action', $action)
                 ->set('female', $female);
 
         // Form submitted
@@ -288,7 +297,7 @@ class Controller_User extends Template {
                 Message::success(__("%title successfully updated!", array('%title' => $user->nick)));
 
                 // redirect to the user account
-                $this->request->redirect( Route::get('user')->uri(array('action' => 'profile')), 200 );
+                $this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
             }
             catch (ORM_Validation_Exception $e)
             {
