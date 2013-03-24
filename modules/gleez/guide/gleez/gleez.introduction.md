@@ -55,6 +55,7 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Wordpress [(http://wordpress.org)](http://wordpress.org)
 * Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
 * jQuery [(http://jquery.com/)](http://jquery.com/)
-* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)]
+* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
+* Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
 
 We've lifted some codes from these applications and felt this is palce for giving credit to them as demanded!
