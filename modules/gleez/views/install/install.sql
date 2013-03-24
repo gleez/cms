@@ -417,10 +417,11 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
 (5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0),
 (6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0),
+(7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0),
 (8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0),
 (9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0);
+(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
+(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0);
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
