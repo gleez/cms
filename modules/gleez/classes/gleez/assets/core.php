@@ -180,7 +180,7 @@ class Gleez_Assets_Core {
 
 		$assets = array();
 
-		foreach (Assets::_sort(Assets::$css) as $handle => $data)
+		foreach (self::_sort(Assets::$css) as $handle => $data)
 		{
 			$assets[] = Assets::get_css($handle, $format);
 		}
@@ -311,7 +311,7 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
-		Assets::_init_js();
+		self::_init_js();
 
 		$assets = array();
 
@@ -328,7 +328,7 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
-		foreach (Assets::_sort($assets) as $handle => $data)
+		foreach (self::_sort($assets) as $handle => $data)
 		{
 			$sorted[] = Assets::get_js($handle, $format);
 		}
@@ -336,7 +336,7 @@ class Gleez_Assets_Core {
 		switch ($format)
 		{
 			case Assets::FORMAT_TAG:
-				return implode(PHP_EOL, $sorted)."\n";
+				return implode(PHP_EOL, $sorted).PHP_EOL;
 			break;
 
 			case Assets::FORMAT_FILENAME:
@@ -451,7 +451,7 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
-		Assets::_init_js();
+		self::_init_js();
 
 		$assets = array();
 
@@ -468,12 +468,12 @@ class Gleez_Assets_Core {
 			return FALSE;
 		}
 
-		foreach (Assets::_sort($assets) as $handle => $data)
+		foreach (self::_sort($assets) as $handle => $data)
 		{
 			$sorted[] = Assets::get_codes($handle);
 		}
 
-		return implode(PHP_EOL, $sorted)."\n";
+		return implode(PHP_EOL, $sorted).PHP_EOL;
 	}
 
 	/**
@@ -605,7 +605,7 @@ class Gleez_Assets_Core {
 
 		$assets = array();
 
-		foreach (Assets::_sort(Assets::$groups[$group]) as $handle => $data)
+		foreach (self::_sort(Assets::$groups[$group]) as $handle => $data)
 		{
 			$assets[] = Assets::get_group($group, $handle);
 		}
