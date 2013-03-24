@@ -202,7 +202,7 @@ class Gleez_System {
 			
 			"icon-magic" => 'magic',
 			"icon-magnet" => 'magnet',
-			"icon-marker" => 'map-marker',
+			"icon-map-marker" => 'map-marker',
 			"icon-minus" => 'minus',
 			"icon-minus-sign" => 'minus-sign',
 			"icon-mobile-phone" => 'mobile-phone',
@@ -291,7 +291,7 @@ class Gleez_System {
 			"icon-align-left" => 'align-left',
 			"icon-align-center" => 'align-center',
 			"icon-align-right" => 'align-right',
-			"icon-justify" => 'align-justify',
+			"icon-align-justify" => 'align-justify',
 			"icon-indent-left" => 'indent-left',
 			"icon-indent-right" => 'indent-right',
 			
@@ -366,7 +366,7 @@ class Gleez_System {
 			"icon-resize-small" => 'resize-small',
 			
 			"icon-phone" => 'phone',
-			"icon-sign" => 'phone-sign',
+			"icon-phone-sign" => 'phone-sign',
 			"icon-facebook" => 'facebook',
 			"icon-facebook-sign" => 'facebook-sign',
 			
