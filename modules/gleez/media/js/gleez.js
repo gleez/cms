@@ -215,6 +215,21 @@ jQuery.noConflict();
         return str;
     };
 
+    // Chekc select2 plugin is loaded
+    if ($.fn.select2)
+    {
+        $(".select-icons").select2({
+            formatResult: format_icon,
+            formatSelection: format_icon,
+            escapeMarkup: function(m) { return m; }
+        });
+    }
+    
+    function format_icon(icon) {
+        if (!icon.id) return icon.text; // optgroup
+        return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
+    }
+    
     Gleez.theme = function (func) {
       for (var i = 1, args = []; i < arguments.length; i++) {
         args.push(arguments[i]);
