@@ -41,7 +41,7 @@
 	<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
 		<?php echo Form::label('image', __('Icon'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::rawselect('image', Menu::icons(), $post->image, array('class' => 'input-large')); ?>
+			<?php echo Form::rawselect('image', System::icons(), $post->image, array('class' => 'input-large')); ?>
 		</div>
 	</div>
 
