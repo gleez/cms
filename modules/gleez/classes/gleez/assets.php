@@ -819,7 +819,7 @@ class Gleez_Assets {
 	 */
 	public static function select2()
 	{
-		Assets::js('select2', 'media/js/select2.min.js', array('jquery'), FALSE, array('weight' => 8));
+		Assets::js('select2', 'media/js/select2.min.js', array('jquery'), FALSE, array('weight' => -10));
 		Assets::css('select2', 'media/css/select2.css');
 	}
 	
