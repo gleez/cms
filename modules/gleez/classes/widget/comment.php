@@ -62,7 +62,7 @@ class Widget_Comment extends Widget {
 			$cache->set('recent_comments', $comments, DATE::HOUR);
 		}
 	
-		return View::factory('widgets/comment/list')->set('comments', $comments);
+		return View::factory('widgets/comment/list')->set('comments', $comments)->render();
         }
 
 }

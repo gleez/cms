@@ -378,7 +378,18 @@ abstract class Gleez_Widgets {
 	{
 		$zebra = $id = FALSE;
 
-		if( empty($widget->content) || !$widget->content) return;
+		//Remove empty strings if content is string instead of view object
+		if(is_string($widget->content))
+		{
+			//@todo needs a better way
+			$widget->content = trim($widget->content);
+		}
+	
+		//Don't render any widget if the content is null or empty
+		if(empty($widget->content) OR !$widget->content OR is_null($widget->content))
+		{
+			return;
+		}
 
 		if( $region )
 		{
