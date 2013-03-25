@@ -587,9 +587,10 @@ abstract class Gleez_Template extends Controller {
 		if (Kohana::PRODUCTION === Kohana::$environment AND Theme::$is_admin === FALSE)
 		{
 			$ua = $this->_config->get('google_ua', NULL);
+
 			if ( ! is_null($ua))
 			{
-				Assets::google_stats($ua);
+				Assets::google_stats($ua, $this->_config->get('site_url'));
 			}
 		}
 	}
