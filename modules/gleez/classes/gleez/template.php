@@ -72,8 +72,8 @@ abstract class Gleez_Template extends Controller {
 	protected $_config;
 
 	/**
-	 * The Auth Object
-	 * @var object
+	 * The Auth instance
+	 * @var Auth
 	 */
 	protected $_auth;
 
