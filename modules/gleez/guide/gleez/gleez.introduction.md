@@ -10,8 +10,7 @@ But creating this CMS quickly would have been nearly impossible without its foun
 * **Modules** - code that extends the functionalities of Gleez. Kohana just calls them "Modules", others call it "Plugins"(Wordpress) or "Modules"(Drupal), but it's a more general term. Everything you can use for Gleez is an Extension.
 * **Widgets** - the mini content boxes of a page. Others call it "Modules"(Joomla), "Blocks"(Drupal), and also "Widgets"(Wordpress)
 * **Events** - functions or methods that execute on certain events during the runtime of Gleez. Others call it "Plugins"(Joomla), "Hooks"(Drupal)
-* **Helpers** - classes with static methods for many useful functions
-* **Libraries** - classes that can be instantiated to aid in programming
+* **Vendors** - 3rd party libraries that can be instantiated to aid in programming
 * **Themes** - the look and layout of a Gleez site. Themes dictate the layout of contents in a Gleez page. It is very similar to Joomla's Template system.
 
 **What is Kohana 3?**
@@ -37,11 +36,15 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Website Navigation and Web Pages, 
 * Users, User Groups, and Permissions
 * Contents or Articles for News or Blogging
-* Content Categories
 * Content Blocks or Widgets
+* Content Categories
+* Content Comments
+* Content Tagging
 * Extensions, Modules or Plugins
 * Themes and Layouts
-* Other Details like SEO, Media, etc.
+* oAuth2 login via Google/Facebook/Windows
+* Resize images on fly with caching
+* Other Details like SEO, Media, etc..
 
 **Frameworks & Libraries**
 
@@ -51,6 +54,7 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
 * Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
+* Cleditor jQuery plugin [(http://premiumsoftware.net/cleditor/)](http://premiumsoftware.net/cleditor/)
 
 **Credits**
 
