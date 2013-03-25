@@ -15,6 +15,7 @@ return array
 	':pcre has not been compiled with UTF-8 support.' => ':pcre собран без поддержки UTF-8.',
 	// (
 	'(No subject)' => '(Нет темы)',
+	'none' => 'нет',
 	// A
 	'A text format contains filters that change the user input, for example stripping out malicious HTML or making URLs clickable. Filters are executed from top to bottom and the order is important, since one filter may prevent another filter from doing its job. For example, when URLs are converted into links before disallowed HTML tags are removed, all links may be removed. When this happens, the order of filters may need to be re-arranged.' => 'Форматы текста содержат фильтры, которые изменяют данные, введенные пользователем, например очищают от вредоносных HTML-тегов или блокируют URL-адреса. Фильтры выполняются сверху вниз и важен их порядок, так как один фильтр может предотвратить работу другого фильтра. Например, если фильтр преобразования URL-адресов  в ссылки стоит перед фильтром запрещающим HTML теги, все ссылки могут быть удалены. Если это происходит, возможно понадобится переопределить порядок фильтров.',
 	'Account' => 'Аккаунт',
@@ -227,7 +228,6 @@ return array
 	'Post List' => 'Список публикаций',
 	'Power up your Gleez CMS by adding more modules! Each module provides new cool features.' => 'Улучшите ваш Gleez CMS добавлением дополнительных модулей! Каждый модуль предоставляет интересные возможжности.',
 	'Powered by :gleez' => 'Создано с помощью :gleez',
-	'Private' => 'Личное',
 	'Profile' => 'Профиль',
 	'Promote this Post' => 'Выделить материал',
 	'Promote to front page' => 'Разместить на главной странице',
