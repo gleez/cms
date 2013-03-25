@@ -44,6 +44,20 @@ class Controller_User extends Template {
 
 	/**
 	 * Register a new user
+	 *
+	 * @uses    Auth::logged_in
+	 * @uses    Auth::instance
+	 * @uses    Auth::login
+	 * @uses    Request::redirect
+	 * @uses    Request::action
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    Config_Group::load
+	 * @uses    Config::get
+	 * @uses    Captcha::instance
+	 * @uses    Message::success
+	 *
+	 * @throws  HTTP_Exception_403
 	 */
 	public function action_register()
 	{
@@ -64,13 +78,21 @@ class Controller_User extends Template {
 		if( ! $config->register)
 		{
 			// If user registration disabled, we return access denied.
-			throw new HTTP_Exception_404('User registration not allowed');
+			throw new HTTP_Exception_403(__('User registration not allowed'), 403);
 		}
+
+		$action = Route::get('user')->uri(array('action' => $this->request->action()));
+
+		$male = (isset($post->gender) && $post->gender == 1) ? TRUE : FALSE;
+		$female = (isset($post->gender) && $post->gender == 2) ? TRUE : FALSE;
 
 		// Load the view
 		$view = View::factory('user/register')
 			->set('errors', array())
 			->set('config', $config)
+			->set('action', $action)
+			->bind('male', $male)
+			->bind('female', $female)
 			->bind('post', $post);
 
 		if($config->get('use_captcha', FALSE))
@@ -91,7 +113,7 @@ class Controller_User extends Template {
 				// sign the user in
 				Auth::instance()->login($post->name, $post->pass);
 
-				Message::success(__("Account created: %title Successful", array('%title' => $post->nick)));
+				Message::success(__('Account %title created successful!', array('%title' => $post->nick)));
 
 				if( ! $this->_internal)
 				{
@@ -142,7 +164,7 @@ class Controller_User extends Template {
 				$user->login($this->request->post());
 
 				// If the post data validates using the rules setup in the user model
-				Message::success(__('Welcome, %title!', array('%title' => $user->name)));
+				Message::success(__('Welcome, %title!', array('%title' => $user->nick)));
 				Kohana::$log->add(LOG::INFO, 'User :name logged in.', array(':name' => $user->name) );
 
 				// redirect to the user account
@@ -460,12 +482,14 @@ class Controller_User extends Template {
 			// Try to reset the password
 			if($this->_user->reset_password($post = $this->request->post()))
 			{
-				Message::success(__('Instructions to reset your password are being sent to your email address.'));
-				Kohana::$log->add(LOG::INFO, 'Password reset instructions mailed to :name at :email.');
-				$this->request->redirect('');
+				Message::success(__('Instructions to reset your password are being sent to your email address %mail.', array('%mail' => $_POST['mail'])));
+				Kohana::$log->add(LOG::INFO, 'Password reset instructions mailed to :name at :mail.',
+					array(':name' => $this->_user->name, ':mail' => $_POST['mail'])
+				);
+				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$errors = $post->errors('models/mail');
+			$errors = $post->errors('models/mail', TRUE);
 		}
 
 		$this->response->body($view);
