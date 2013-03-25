@@ -67,6 +67,11 @@ form .captcha label.captchal{
 .user-register .register-column .inside{
 	padding: 5px;
 }
+
+.user-register .register-right .inside {
+	padding: 10px;
+}
+
 .user-register .register-column h3{
     box-shadow: 0 1px 0 #FFFFFF;
     text-shadow: 0 1px 0 #FFFFFF;
@@ -84,22 +89,26 @@ form .captcha label.captchal{
 	list-style: none;
 }
 .user-register li.facebook{
-	background: url('../images/facebook-24.png') no-repeat;
-	height: 32px;
+	background: url('../images/facebook-24.png') 0 10px no-repeat;
+	height: 35px;
 }
 .user-register li.google{
-	background: url('../images/google-24.png') no-repeat;
-	height: 32px;
+	background: url('../images/google-24.png') 0 10px no-repeat;
+	height: 35px;
 }
 .user-register li.live{
-	background: url('../images/windows-24.png') no-repeat;
-	height: 32px;
+	background: url('../images/windows-24.png') 0 10px no-repeat;
+	height: 35px;
+}
+.user-register li.twitter{
+	background: url('../images/twitter-24.png') 0 10px no-repeat;
+	height: 35px;
 }
 .user-register li.base{
-	background: url('../images/gleez-24.png') no-repeat;
-	height: 32px;
+	background: url('../images/gleez-24.png') 0 10px no-repeat;
+	height: 35px;
 }
-.user-register .provider A {
+.user-register .provider a {
 	margin-left: 3em;
 	vertical-align: middle;
 	background: none;
@@ -125,7 +134,6 @@ form .captcha label.captchal{
 	margin-bottom: 1px
 }
 .user-register .captcha-image{
-	margin-left: 140px;
 	display: block;
 }
 
