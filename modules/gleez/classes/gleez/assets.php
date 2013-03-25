@@ -797,25 +797,28 @@ class Gleez_Assets {
 	/**
 	 * Paste google stats code
 	 *
+	 * Note: `"\t"` and `PHP_EOL` needed only for convenient output
 	 * @param  string  $ua  User Agent ID
+	 * @param  string  $site  Site URL without protocol, eg. gleez.com
+	 *
+	 * @link   https://www.google.com/analytics/
 	 */
-	public static function google_stats($ua)
+	public static function google_stats($ua, $site)
 	{
 		Assets::codes('google-stats',
-			"var _gaq = _gaq || [];".PHP_EOL.
-			"_gaq.push(['_setAccount', '".$ua."']);".PHP_EOL.
-			"_gaq.push(['_trackPageview']);".PHP_EOL.
-			"(function() {".PHP_EOL.
-			"var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;".PHP_EOL.
-			"ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';".PHP_EOL.
-			"var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);".PHP_EOL.
-			"})();"
+			"\t"."(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){".PHP_EOL.
+			"\t"."(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),".PHP_EOL.
+			"\t"."m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)".PHP_EOL.
+			"\t"."})(window,document,'script','//www.google-analytics.com/analytics.js','ga');".PHP_EOL.
+			"\t"."ga('create', '".$ua."', '".$site."');".PHP_EOL.
+			"\t"."ga('send', 'pageview');"
 		);
 	}
 
 	/**
-	 * select2 jquery plugin
-	 * @link http://ivaynberg.github.com/select2/index.html
+	 * Select2 jQuery plugin
+	 *
+	 * @link  http://ivaynberg.github.com/select2/index.html
 	 */
 	public static function select2()
 	{
@@ -824,8 +827,9 @@ class Gleez_Assets {
 	}
 
 	/**
-	 * dataTables jquery plugin
-	 * @link http://datatables.net/
+	 * DataTables jQuery plugin
+	 *
+	 * @link  http://datatables.net/
 	 */
 	public static function datatables()
 	{
@@ -833,7 +837,7 @@ class Gleez_Assets {
 		Assets::js('datatables-bootstrap', 'media/js/jquery.dataTables.bootstrap.js', array('bootstrap'), FALSE, array('weight' => 5));
 		Assets::css('datatables', 'media/css/select2.css', array('bootstrap'));
 	}
-	
+
 	/**
 	 * Enforce static usage
 	 */
