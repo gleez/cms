@@ -43,9 +43,17 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Themes and Layouts
 * Other Details like SEO, Media, etc.
 
-**Credits**
+**Frameworks & Libraries**
 
 * Kohana    [(http://kohanaframework.org)](http://kohanaframework.org)
+* Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
+* jQuery [(http://jquery.com/)](http://jquery.com/)
+* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
+* Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
+* DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
+
+**Credits**
+
 * Drupal    [(http://www.drupal.org)](http://www.drupal.org)
 * Gallery3  [(http://gallery.menalto.com)](http://gallery.menalto.com)
 * Kerkness  [(http://kerkness.ca/wiki/doku.php)](http://kerkness.ca/wiki/doku.php)
@@ -53,9 +61,5 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * s7nCMS    [(http://code.google.com/p/s7ncms/)](http://code.google.com/p/s7ncms/)
 * Kohanut   [(http://kohanut.com/)](http://kohanut.com/)
 * Wordpress [(http://wordpress.org)](http://wordpress.org)
-* Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
-* jQuery [(http://jquery.com/)](http://jquery.com/)
-* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
-* Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
 
 We've lifted some codes from these applications and felt this is palce for giving credit to them as demanded!
