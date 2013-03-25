@@ -253,7 +253,7 @@ class Gleez_Route extends Kohana_Route {
 		// Encode all params
 		if (is_array($params))
 		{
-			$params = array_map('urlencode', $params);
+			//$params = array_map('urlencode', $params);
 		}
 		
 		// Start with the routed URI

@@ -814,13 +814,24 @@ class Gleez_Assets {
 	}
 
 	/**
-	 * Use select2 jquery plugin
+	 * select2 jquery plugin
 	 * @link http://ivaynberg.github.com/select2/index.html
 	 */
 	public static function select2()
 	{
 		Assets::js('select2', 'media/js/select2.min.js', array('jquery'), FALSE, array('weight' => -10));
-		Assets::css('select2', 'media/css/select2.css');
+		Assets::css('select2','media/css/select2.css');
+	}
+
+	/**
+	 * dataTables jquery plugin
+	 * @link http://datatables.net/
+	 */
+	public static function datatables()
+	{
+		Assets::js('datatables', 'media/js/jquery.dataTables.min.js', array('jquery'), FALSE, array('weight' => -10));
+		Assets::js('datatables-bootstrap', 'media/js/jquery.dataTables.bootstrap.js', array('bootstrap'), FALSE, array('weight' => 5));
+		Assets::css('datatables', 'media/css/select2.css', array('bootstrap'));
 	}
 	
 	/**
