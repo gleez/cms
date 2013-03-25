@@ -34,9 +34,8 @@ form #auth-providers .provider
 }
 .provider A:link, .provider A:active, .provider A:visited
 {
-        width: 35px;
-        height: 35px;
-        font-size: 0px;
+        height: 3em;
+        line-height: 3em;
         display: inline-block;
         text-decoration: none;
         color: inherit;
@@ -85,7 +84,7 @@ form #auth-providers .provider
     padding: 2px 0 2px 20px;
 }
 
-#oauth-providers li A.base{
+#oauth-providers li a.base{
         background-image: url('../images/gleez-16.png');
         background-repeat: no-repeat;
 }
@@ -97,7 +96,7 @@ form #auth-providers .provider
         background-image: url('../images/google-16.png');
         background-repeat: no-repeat;
 }
-#oauth-providers A.live {
+#oauth-providers a.live {
         color: #3C6B9C;
         background-image: url('../images/windows-16.png');
         background-repeat: no-repeat;
