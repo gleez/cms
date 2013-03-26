@@ -34,7 +34,7 @@
 						'action' => 'configure'
 					);
 
-					echo HTML::anchor(Route::get('admin/format')->uri($route_param), __('Configure'), array('class' => 'action-list', 'title' => __('Configure')));
+					echo HTML::anchor(Route::get('admin/format')->uri($route_param), '<i class="icon-cog"></i>', array('class' => 'action-list', 'title' => __('Configure')));
 				?>
 			</td>
 		</tr>
