@@ -25,19 +25,19 @@
             </td>
 
             <td class="action">
-		<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), __('List Terms'), array('class'=>'action-list', 'title'=>__('List Terms'))) ?>
+		<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), '<i class="icon-th-list"></i>', array('class'=>'action-list', 'title'=>__('List Terms'))) ?>
 	    </td>
 	    
 	    <td class="action">
-		<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id )), __('Add Term'), array('class'=>'action-add', 'title'=>__('Add Term'))) ?>
+		<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id )), '<i class="icon-plus"></i>', array('class'=>'action-add', 'title'=>__('Add Term'))) ?>
 	    </td>
 	    
 	    <td class="action">
-	       <?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id )), __('Edit'), array('class'=>'action-edit', 'title'=>__('Edit Vocab'))) ?>
+	       <?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id )), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=>__('Edit Vocab'))) ?>
 	    </td>
 	    
 	    <td class="action">
-	       <?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id )), __('Delete'), array('class'=>'action-delete', 'title'=>__('Delete Vocab'))) ?>
+	       <?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id )), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete Vocab'))) ?>
             </td>
 	    
           </tr>
