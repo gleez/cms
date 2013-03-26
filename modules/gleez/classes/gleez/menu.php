@@ -184,8 +184,12 @@ class Gleez_Menu {
 			// Add first, last and parent classes to the list of links to help out themers.
 			if ($_i == 1)          $classes[] = 'first';
 			if ($_i == $num_items) $classes[] = 'last';
-			if ( $has_children )   $classes[] = 'parent dropdown';
-			if ( $has_children )   $attributes[] = 'dropdown-toggle';
+			if ( $has_children )
+			{
+				$classes[] = 'parent dropdown';
+				$attributes[] = 'dropdown-toggle';
+				if($i == 2) $classes[] = 'dropdown-submenu';
+			}
 		
 			// Check if the menu item URI is or contains the current URI
 			if (HTML::is_active($item['url']))
@@ -207,10 +211,12 @@ class Gleez_Menu {
 			$id = HTML::attributes(array('id' => 'menu-'.$key));
 			
 			//Twitter bootstrap attributes
-			if ( $has_children )   $attributes['data-toggle'] = 'dropdown';
-			if ( $has_children )   $item['url'] = '#';
-			if ( $has_children )   $caret = '<b class="caret"></b>';
-			if ( $has_children )   $caret .= ' <span class="icon"></span>';
+			if ($has_children)
+			{
+				$attributes['data-toggle'] = 'dropdown';
+				$item['url'] = '#';
+				$caret = ($i == 2) ? '': '<b class="caret"></b>';
+			}
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
@@ -225,7 +231,7 @@ class Gleez_Menu {
 		
 			if ( $has_children )
 			{
-				$menu .= $this->render(array('class' => 'dropdown-menu sub-menu'),  $item['children']);
+				$menu .= $this->render(array('class' => 'dropdown-menu'),  $item['children']);
 			}
 			
 			$_i++;
