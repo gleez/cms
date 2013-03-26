@@ -52,8 +52,8 @@
                 <td> <?php echo HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')) ?> </td>
 		<td> <?php echo Date::date($post->created); ?> </td>
 		<td class="action">
-		    <?php echo HTML::anchor($post->edit_url.URL::query($destination), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit'))) ?>
-		    <?php echo HTML::anchor($post->delete_url.URL::query($destination), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete'))) ?>
+		    <?php echo HTML::anchor($post->edit_url.URL::query($destination), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit'))) ?>
+		    <?php echo HTML::anchor($post->delete_url.URL::query($destination), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete'))) ?>
 		</td>
 
 	    </tr>

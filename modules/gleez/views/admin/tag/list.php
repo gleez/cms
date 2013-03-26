@@ -28,8 +28,8 @@
 					<?php echo HTML::chars($tag->type) ?>
 				</td>
 				<td class="action">
-					<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit Tag'))); ?>
-					<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete Tag'))); ?>
+					<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit Tag'))); ?>
+					<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete Tag'))); ?>
 				</td>
 			</tr>
 		<?php endforeach ?>

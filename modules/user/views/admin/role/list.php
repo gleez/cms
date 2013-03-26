@@ -25,7 +25,7 @@
             	<?php echo HTML::chars($role->description) ?>
             </td>
             <td><span class="status-<?php echo $role->special == 1 ? 'active' : 'blocked' ?>">
-            	<?php echo $role->special == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-cancel"></i>'; ?>
+            	<?php echo $role->special == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>'; ?>
             </td>
 
             <td class="action">

@@ -44,11 +44,11 @@
 						</td>
 						<td class="action">
 							<?php
-								echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'edit', 'id'=> $widget->id)), __('Configure'), array('class'=>'action-edit', 'title'=>__('Configure')));
+								echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'edit', 'id'=> $widget->id)), '<i class="icon-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
 
 								if ($static)
 								{
-									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), __('Delete'), array('class'=>'action-delete', 'title'=>__('Delete')));
+									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), ' <i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete')));
 								}
 
 								unset($static);

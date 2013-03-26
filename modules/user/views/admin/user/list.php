@@ -6,6 +6,7 @@
 
 <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add New User'), array('class' => 'btn btn-danger pull-right')) ?>
 
+<div class='clearfix'></div><br />
     <table id="user-admin-list" class="table table-striped table-bordered">
       <thead>
         <tr>
@@ -41,13 +42,13 @@
 		</ul>
             </td>
             <td><span class="status-<?php echo $user->status == 1 ? 'active' : 'blocked' ?>">
-		  <?php echo $user->status == 1 ? __('Active') : __('Blocked') ?>
+		  <?php echo $user->status == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>' ?>
 		</span>
             </td>
 
             <td class="action">
-               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), __('Edit'), array('class'=>'action-edit', 'title'=> __('Edit User'))) ?>
-               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), __('Delete'), array('class'=>'action-delete', 'title'=> __('Delete User'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit User'))) ?>
+               <?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete User'))) ?>
             </td>
           </tr>
           <?php endforeach ?>
