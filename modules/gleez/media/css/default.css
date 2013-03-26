@@ -688,16 +688,6 @@ body.widget{
 	font-weight: 400;
 	color: #666;
 }
-/*-------------- Icons ------------------*/
-.widget-header .icon-admin-shortcut:before {  content: "\f02e"; }
-.widget-header .icon-menu-project:before {  content: "\f05b"; }
-.widget-header .icon-menu-management:before {  content: "\f013"; }
-.widget-header .icon-user-login:before { content: "\f023"; }
-.widget-header .icon-menu-main-menu:before { content: "\f079"; }
-.widget-header .icon-admin-welcome:before {  content: "\f024"; }
-.widget-header .icon-admin-donate:before {  content: "\f06b"; }
-.widget-header .icon-static-donate:before {  content: "\f06b"; }
-.widget-header .icon-admin-info:before {  content: "\f08d"; }
 
 table .progress {
   height: 8px;
