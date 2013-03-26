@@ -298,17 +298,20 @@ class Gleez_ACL {
 
 	/**
 	 * Checks whether the role(s) have some permission(s)
+	 * Added cache support for performance
 	 *
 	 * @since   2.0
 	 * @param   array    $roles  An array of roles as id => name
 	 * @return  boolean  FALSE If the role(s) doesn't have any permission
 	 * @return  array    Role(s) with permission(s) as array
 	 */
-	public static function role_can($roles)
+	public static function role_can( array $roles)
 	{
 		$perms = array();
 
-		if (is_array($roles))
+		$cache = Cache::instance('roles');
+		
+		if( ! $perms = $cache->get('roles'))
 		{
 			$result = DB::select('rid', 'permission')
 						->from('permissions')
@@ -325,6 +328,9 @@ class Gleez_ACL {
 			{
 				$perms[$row->rid][$row->permission] = ACL::ALLOW;
 			}
+			
+			//set the cache
+			$cache->set('roles', $perms, DATE::DAY);
 		}
 
 		return $perms;
