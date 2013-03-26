@@ -211,6 +211,7 @@ class Gleez_Core {
 		Cache::instance('feeds')->delete_all();
 		Cache::instance('page')->delete_all();
 		Cache::instance('blog')->delete_all();
+                Cache::instance('roles')->delete_all();
 
 		// For each cache instance
 		foreach (Cache::$instances as $group => $instance)
@@ -253,7 +254,6 @@ class Gleez_Core {
 			'page'  => __('Page'),
 			'blog'  => __('Blog'),
 			'forum' => __('Forum'),
-			'book'  => __('Book'),
 			'user'  => __('User')
 		);
 
