@@ -26,6 +26,7 @@
 				<?php echo Form::input('title', $widget->title, array('class' => 'input-large')); ?>
 			</div>
 
+	
 			<div class="control-group <?php echo isset($errors['region']) ? 'error': ''; ?>">
 				<?php echo Form::label('region', __('Region'), array('class' => 'control-label')) ?>
 				<?php echo Form::select('region', $regions, $widget->region, array('class' => 'input-large')); ?>
@@ -52,7 +53,14 @@
 		</div>
 
 		<div class="span6">
-
+			
+			<div class="control-group <?php echo isset($errors['icon']) ? 'error': ''; ?>">
+				<?php echo Form::label('icon', __('Icon'), array('class' => 'control-label')) ?>
+				<div class="controls">
+					<?php echo Form::select('icon', System::icons(), $widget->icon, array('class' => 'input-large select-icons')); ?>
+				</div>
+			</div>
+		
 			<div class="control-group <?php echo isset($errors['show_title']) ? 'error': ''; ?>">
 				<?php $show_title_off = (isset($widget->show_title) AND $widget->show_title == 0) ? TRUE : FALSE; ?>
 				<?php $show_title_on = (isset($widget->show_title) AND $widget->show_title == 1) ? TRUE : FALSE; ?>
@@ -63,7 +71,7 @@
 					<?php echo Form::label('show_title', Form::radio('show_title', 1, $show_title_on).__('Show'), array('class' => 'radio inline')) ?>
 				</div>
 			</div>
-
+	
 			<div class="control-group <?php echo isset($errors['visibility']) ? 'error': ''; ?>">
 				<?php $visible_off = (isset($widget->status) AND $widget->visibility == 0) ? TRUE : FALSE; ?>
 				<?php $visible_on  = (isset($widget->status) AND $widget->visibility == 1) ? TRUE : FALSE; ?>
@@ -99,6 +107,6 @@
 
 	<div class="clearfix"></div>
 
-	<?php echo Form::hidden('widget', $widget->name ) ?>
-	<?php echo Form::submit('widget', __('Save'), array('class' => 'btn btn-primary btn-large')) ?>
-<?php echo Form::close() ?>
+	<?php echo Form::hidden('widget', $widget->name ); ?>
+	<?php echo Form::submit('widget', __('Save'), array('class' => 'btn btn-primary btn-large')); ?>
+<?php echo Form::close(); ?>

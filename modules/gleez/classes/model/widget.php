@@ -29,14 +29,15 @@ class Model_Widget extends ORM {
 		'roles'      => array( 'type' => 'string' ),
 		'body'       => array( 'type' => 'string' ),
 		'format'     => array( 'type' => 'int' ),
+		'icon'       => array( 'type' => 'string' ),
 	);
 
 	/**
 	 * Ignored columns
 	 * @var array
 	 */
-	protected $_ignored_columns = array('
-		config',
+	protected $_ignored_columns = array(
+		'config',
 		'visible',
 		'content'
 	);

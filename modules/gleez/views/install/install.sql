@@ -404,24 +404,25 @@ CREATE TABLE {widgets} (
   `show_title` tinyint(1) DEFAULT '1',
   `body` longtext,
   `format` tinyint(3) NOT NULL DEFAULT '1',
+  `icon` varchar(255) DEFAULT 'icon-none',
   PRIMARY KEY (`id`),
   KEY `fk_name` (`name`),
   KEY `fk_module` (`module`),
   KEY `fk_status` (`status`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`) VALUES
-(1, 'static/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1),
-(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0),
-(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0),
-(4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
-(5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0),
-(6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0),
-(8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0),
-(9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0);
+INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
+(1, 'static/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1, 'icon-gift'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
+(5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
+(6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
+(7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
+(8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
+(9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
+(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
