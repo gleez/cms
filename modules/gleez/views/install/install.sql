@@ -421,7 +421,7 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
 (8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
 (9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
-(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
 (11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
 
 DROP TABLE IF EXISTS {identities};
