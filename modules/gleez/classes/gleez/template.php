@@ -588,7 +588,7 @@ abstract class Gleez_Template extends Controller {
 		{
 			$ua = $this->_config->get('google_ua', NULL);
 
-			if ( ! is_null($ua))
+			if ( ! is_null($ua) AND ! empty($ua) )
 			{
 				Assets::google_stats($ua, $this->_config->get('site_url'));
 			}
