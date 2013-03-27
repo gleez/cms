@@ -21,6 +21,7 @@ class Model_Auth_User extends ORM {
 		'name'              => array( 'type' => 'string' ),
 		'pass'              => array( 'type' => 'string' ),
 		'mail'              => array( 'type' => 'string' ),
+		'homepage'          => array( 'type' => 'string' ),
 		'nick'              => array( 'type' => 'string' ),
 		'gender'            => array( 'type' => 'int' ),
 		'dob'               => array( 'type' => 'int' ),
@@ -92,6 +93,9 @@ class Model_Auth_User extends ORM {
 				array('email'),
 				array(array($this, 'unique'), array('mail', ':value')),
 			),
+			'homepage' => array(
+				array('url'),
+			),
 		);
 	}
 
@@ -123,6 +127,7 @@ class Model_Auth_User extends ORM {
 		return array(
 			'name'         => __('Username'),
 			'mail'         => __('Email'),
+			'homepage'     => __('Home Page'),
 			'pass'         => __('Password'),
 			'pass_confirm' => __('Password Confirm'),
 			'nick'         => __('Display Name'),
