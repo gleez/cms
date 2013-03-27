@@ -154,6 +154,13 @@ abstract class Gleez_Template extends Controller {
 	 */
 	protected $_sidebars = TRUE;
 
+        /**
+         * Datatable Object.
+         *
+         * @var object
+         */
+        protected $_datatables;
+        
 	/**
 	 * Loads the template View object, if it is direct request
 	 *
@@ -357,21 +364,18 @@ abstract class Gleez_Template extends Controller {
 			// And finally the profiler stats
 			$this->_set_profiler_stats();
 
-			// Set header content-type to response format with utf-8
-			$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
-
 			// Assign the template as the request response and render it
 			$this->response->body($this->template);
 		}
 		elseif ($this->_ajax)
 		{
-			// Set header content-type to response format with utf-8
-			$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
-
 			$output = $this->response->body();
 
 			if ($this->_response_format === 'application/json')
 			{
+                                //check for dataTables request
+                                if ($this->request->query('sEcho') !== NULL) return;
+                                
 				$output = JSON::encode($output);
 			}
 
@@ -379,9 +383,6 @@ abstract class Gleez_Template extends Controller {
 		}
 		elseif ($this->_internal)
 		{
-			// Set header content-type to response format with utf-8
-			$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
-
 			$output = $this->response->body();
 			$this->response->body($output);
 		}
@@ -392,6 +393,9 @@ abstract class Gleez_Template extends Controller {
 			Profiler::stop($this->_benchmark);
 		}
 
+                // Set header content-type to response format with utf-8
+                $this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
+                
 		parent::after();
 	}
 
