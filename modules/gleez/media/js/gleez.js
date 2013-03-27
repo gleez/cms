@@ -232,6 +232,21 @@ jQuery.noConflict();
         if (!icon.id) return icon.text; // optgroup
         return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
     }
+
+    Gleez.dataTables = function()
+    {
+        if (!$.fn.DataTable) return;
+        
+        $.fn.dataTable.defaults = {
+            "aaSorting": [[ 0, 'desc' ]]
+        ,   "sPaginationType": "bootstrap"
+        ,   "bProcessing": true
+        ,   "bServerSide": true
+        ,   "bDeferRender": true
+        ,   "sCookiePrefix": "gleez_datatable_"
+        ,   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
+        };
+    }
     
     Gleez.theme = function (func) {
       for (var i = 1, args = []; i < arguments.length; i++) {
@@ -264,6 +279,10 @@ jQuery.noConflict();
             return '<em class="placeholder">' + Gleez.checkPlain(str) + '</em>';
         }
     };
+
+    $(document).on('attach.datatable', function (e) {
+	Gleez.dataTables();
+    });
 
     //Attach all behaviors.
     $(function () {
