@@ -42,7 +42,7 @@
 		</ul>
             </td>
             <td><span class="status-<?php echo $user->status == 1 ? 'active' : 'blocked' ?>">
-		  <?php echo $user->status == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>' ?>
+		  <?php echo $user->status == 1 ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>'; ?>
 		</span>
             </td>
 

@@ -586,7 +586,7 @@ abstract class Gleez_Template extends Controller {
 	 */
 	protected function _set_default_js()
 	{
-		Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => 5));
+		Assets::js('bootstrap', 'media/js/bootstrap.min.js', array('jquery'), FALSE, array('weight' => -8));
 
 		// Google js only in production and not in admin section
 		if (Kohana::PRODUCTION === Kohana::$environment AND Theme::$is_admin === FALSE)

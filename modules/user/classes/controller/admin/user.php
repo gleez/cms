@@ -27,30 +27,17 @@ class Controller_Admin_User extends Controller_Admin {
 
 	public function action_list()
 	{
-		//$this->debug = TRUE;
-		$this->title    = __('Users');
-		$view           = View::factory('admin/user/list')
-						->bind('pagination', $pagination)
-						->bind('users', $users);
-
-		$user       = ORM::factory('user');
-		$total      = $user->count_all();
-
-		if ($total == 0)
+		if( Request::is_datatables() )
 		{
-			Kohana::$log->add(Log::INFO, 'No users found');
-			$this->response->body( View::factory('admin/user/none') );
-			return;
+			$posts = ORM::factory('user');
+			
+			$this->_datatables = $posts->dataTables( array('name', 'mail', 'created', 'login', 'status') );
 		}
 
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items' => $total,
-			'items_per_page' => 35,
-			));
-
-		$users  = $user->order_by('created', 'DESC')->limit($pagination->items_per_page)
-							->offset($pagination->offset)->find_all();
+		$this->title    = __('Users');
+		$view           = View::factory('admin/user/dlist')
+						->bind('datatables', $this->_datatables)
+						->set('url', Route::url('admin/user', array('action' => 'list'), TRUE));
 
                 $this->response->body($view);
 	}

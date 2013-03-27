@@ -214,8 +214,8 @@ jQuery.noConflict();
         }
         return str;
     };
-
-    // Chekc select2 plugin is loaded
+    
+    // Check select2 plugin is loaded
     if ($.fn.select2)
     {
         $(window).on('load', function () {
@@ -233,19 +233,67 @@ jQuery.noConflict();
         return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
     }
 
-    Gleez.dataTables = function()
+    Gleez.dataTable = function()
     {
-        if (!$.fn.DataTable) return;
+        if (!$.fn.dataTable) return;
         
-        $.fn.dataTable.defaults = {
-            "aaSorting": [[ 0, 'desc' ]]
-        ,   "sPaginationType": "bootstrap"
-        ,   "bProcessing": true
-        ,   "bServerSide": true
-        ,   "bDeferRender": true
-        ,   "sCookiePrefix": "gleez_datatable_"
-        ,   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
-        };
+
+        
+        $('[data-toggle="datatable"]').each(function (i, table) {
+            var $table = $(table)
+            ,   columns = []
+            ,   aaSorting
+            ,   aoColumns
+            ,   source = $table.data('target') || false;
+            
+            //dont't init if it's already initialised
+            if ( $.fn.DataTable.fnIsDataTable( table ) ) return;
+            
+            //exit if no url
+            if(source == false) return;
+            
+            //use data sortable value to disable sorting/searching for a column
+            $('thead th', $(table)).each(function(){
+                var obj   = $(this).data("aocolumns");
+                
+                if(obj && obj != undefined){
+                    columns.push(obj);
+                }else{
+                    columns.push(null);
+                }
+            })
+
+            var oTable = $table.dataTable({
+                "aoColumns": columns
+            ,   "aaSorting": $(this).data("aasorting")
+            ,   "sPaginationType": "bootstrap"
+            ,   "bProcessing": true
+            ,   "bServerSide": true
+            ,   "bDeferRender": true
+            ,   "sCookiePrefix": "gleez_datatable_"
+            ,   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
+            ,   "sAjaxSource": source
+            ,   "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
+			oSettings.jqXHR = $.ajax( {
+				"url":  sUrl,
+				"data": aoData,
+				"success": function (json) {
+					$(oSettings.oInstance).trigger('xhr', oSettings);
+					fnCallback( json );
+				},
+				"dataType": "json",
+				"cache": false,
+				"type": oSettings.sServerMethod,
+				"error": function (xhr, error, thrown) {
+				    //var ierror = Gleez.informError(xhr, false, true);
+				    var errorText = '<div class="empty_page alert alert-block"><i class="icon-info-sign"></i>'+error.responseText+'</div>';
+				    $(oSettings.oInstance).parent().html(errorText);
+				}
+			} );
+		}
+            });
+        })
+        
     }
     
     Gleez.theme = function (func) {
@@ -281,20 +329,22 @@ jQuery.noConflict();
     };
 
     $(document).on('attach.datatable', function (e) {
-	Gleez.dataTables();
+	Gleez.dataTable();
     });
 
     //Attach all behaviors.
     $(function () {
         $(document).trigger('attach', Gleez.settings);
     });
+
+    $(function () {
+        $(window).on('load', function () {
+            $("[rel='tooltip']").tooltip();
+        })
+    });
     
     // Class indicating that JS is enabled; used for styling purpose.
     $('html').addClass('js');
-
-    $(function() {
-        $("[rel='tooltip']").tooltip();
-    });
 
     // 'js enabled' cookie.
     document.cookie = 'has_js=1; path=/';
