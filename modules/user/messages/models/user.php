@@ -23,4 +23,7 @@ return array(
 			'check_password' => 'Old password is incorrect.',
 		),
 	),
+	'homepage' => array (
+		'url' => ':field must be a valid address with the http:// or https:// prefix',
+	),
 );
