@@ -834,8 +834,9 @@ class Gleez_Assets {
 	public static function datatables()
 	{
 		Assets::js('datatables', 'media/js/jquery.dataTables.min.js', array('jquery'), FALSE, array('weight' => -10));
-		Assets::js('datatables-bootstrap', 'media/js/jquery.dataTables.bootstrap.js', array('bootstrap'), FALSE, array('weight' => 5));
-		Assets::css('datatables', 'media/css/select2.css', array('bootstrap'));
+		Assets::js('datatables-bootstrap', 'media/js/jquery.dataTables.bootstrap.js', array('bootstrap'), FALSE, array('weight' => -6));
+		Assets::css('datatables', 'media/css/jquery.dataTables.css', array('bootstrap'));
+		Assets::css('datatables-bootstrap', 'media/css/jquery.dataTables.bootstrap.css', array('bootstrap'));
 	}
 
 	/**
