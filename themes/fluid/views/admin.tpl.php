@@ -7,7 +7,7 @@
 
 		<div id="row-content" class="span<?php echo $main_column; ?>">
 
-			<?php echo '<div id="messages" class="messages span10">'. $messages .'</div>'; ?>
+			<?php echo '<div id="messages" class="messages span9">'. $messages .'</div>'; ?>
 
 			<div id="pageContent" class="well">
 				<?php if ($title): ?>

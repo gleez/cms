@@ -6,7 +6,7 @@
 
         <div id="row-content" class="span<?php echo $main_column; ?>">
 
-            <div id="messages" class="messages span10"><?php echo $messages ?></div>
+            <div id="messages" class="messages span9 offset1"><?php echo $messages ?></div>
 
             <div id="pageContent" class="well">
                 <?php if ($title): ?>
