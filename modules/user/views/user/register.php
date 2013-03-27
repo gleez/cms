@@ -1,18 +1,21 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<?php echo Form::open($action, array('class' => 'form-horizontal')); ?>
-
-	<?php include Kohana::find_file('views', 'errors/partial'); ?>
-
-	<div class="register-left register-column">
-		<h3 class='hndle'><?php echo __('Fill in the information below to register'); ?></h3>
-
+<div class="signin-form row-fluid">
+	<div class="span6">
+		<?php echo Form::open($action, array('class' => 'form-horizontal1')); ?>
+		
+		<div class="box corner-all">
+			<div class="box-header grd-teal color-white corner-top">
+				<span><?php echo __('Fill in the information below to register'); ?></span>
+			</div>
+		<?php include Kohana::find_file('views', 'errors/partial'); ?>
+		<div class="box-body bg-white">
 		<div class="inside">
 			<?php if ($config->username): ?>
 				<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
 					<?php echo Form::label('name', __('Username'), array('class' => 'control-label')) ?>
 					<div class="controls">
-						<?php echo Form::input('name', $post->name, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Username for login'))); ?>
+						<?php echo Form::input('name', $post->name, array('class' => 'span10',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Username for login'))); ?>
 					</div>
 				</div>
 			<?php endif ?>
@@ -20,14 +23,14 @@
 			<div class="control-group <?php echo isset($errors['mail']) ? 'error': ''; ?>">
 				<?php echo Form::label('mail', __('E-mail'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::input('mail', $post->mail, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Will be private'))); ?>
+					<?php echo Form::input('mail', $post->mail, array('class' => 'span10',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Will be private'))); ?>
 				</div>
 			</div>
 
 			<div class="control-group <?php echo isset($errors['pass']) ? 'error': ''; ?>">
 				<?php echo Form::label('pass', __('Password'), array('class' => 'control-label')); ?>
 				<div class="controls">
-					<?php echo Form::password('pass', NULL, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Try to come up with a complex password'))); ?>
+					<?php echo Form::password('pass', NULL, array('class' => 'span10',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Try to come up with a complex password'))); ?>
 				</div>
 			</div>
 
@@ -35,7 +38,7 @@
 				<div class="control-group <?php echo isset($errors['pass_confirm']) ? 'error': ''; ?>">
 					<?php echo Form::label('pass_confirm', __('Confirm Password'), array('class' => 'control-label')) ?>
 					<div class="controls">
-						<?php echo Form::password('pass_confirm', NULL, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Repeat entered password'))); ?>
+						<?php echo Form::password('pass_confirm', NULL, array('class' => 'span10',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Repeat entered password'))); ?>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -44,7 +47,7 @@
 				<div class="control-group <?php echo isset($errors['nick']) ? 'error': ''; ?>">
 					<?php echo Form::label('nick', __('Display Name'), array('class' => 'control-label')) ?>
 					<div class="controls">
-						<?php echo Form::input('nick', $post->nick, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Will be public'))); ?>
+						<?php echo Form::input('nick', $post->nick, array('class' => 'span10',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Will be public'))); ?>
 					</div>
 				</div>
 			<?php endif ?>
@@ -60,9 +63,9 @@
 			<div class="control-group <?php echo isset($errors['dob']) ? 'error': ''; ?>">
 				<?php echo Form::label('dob', __('Birthday'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::select('month', Date::months(Date::MONTHS_SHORT), '', array('class' => 'span1 inline')); ?>
-					<?php echo Form::select('days',  Date::days(Date::DAY), '', array('class' => 'span1 inline')); ?>
-					<?php echo Form::select('years', Date::years(date('Y') - 95, date('Y') - 5), date('Y') - 5, array('class' => 'input-small inline')); ?>
+					<?php echo Form::select('month', Date::months(Date::MONTHS_SHORT), '', array('class' => 'span4 inline')); ?>
+					<?php echo Form::select('days',  Date::days(Date::DAY), '', array('class' => 'span3 inline')); ?>
+					<?php echo Form::select('years', Date::years(date('Y') - 95, date('Y') - 5), date('Y') - 5, array('class' => 'span4 inline')); ?>
 				</div>
 			</div>
 
@@ -70,19 +73,25 @@
 				<div class="control-group captcha <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
 					<?php echo Form::label('_captcha', __('Security code'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::input('_captcha', '', array('class' => 'input-medium')); ?>
+						<?php echo Form::input('_captcha', '', array('class' => 'input-medium',  'rel' => 'tooltip', 'data-placement' => 'top', 'title' => __('Please enter the code from the image.')) ); ?>
 						<br><span class="captcha-image"><?php echo $captcha; ?></span>
 					</div>
 					<div class="clearfix"></div><br>
 				</div>
 			<?php endif; ?>
 		</div>
-		<?php echo Form::submit('register', __('Register new account'), array('class' => 'btn btn-danger btn-large')) ?>
-		<div class="clearfix"></div><br>
+		<?php echo Form::submit('register', __('Register new account'), array('class' => 'btn btn-danger btn-block btn-large')) ?>
+		</div>
+		</div>
+		<?php echo Form::close(); ?>
 	</div>
 
-	<div class="register-right register-column">
-		<h3 class='hndle'><?php echo __('Already have an account? Choose how you would like to sign in'); ?></h3>
+	<div class="span6">
+		<div class="box corner-all">
+			<div class="box-header grd-green color-white corner-top">
+				<span><?php echo __("Already have an account?"); ?></span>
+			</div>
+		<div class="box-body bg-white">
 		<div class="inside">
 			<p><?php echo __('You can sign in from any of the following services:'); ?></p>
 			<ul id="providers">
@@ -106,7 +115,7 @@
 			<small><?php echo __("If you don't use any of these services, you can create an account."); ?></small>
 			<small><?php echo __('Fast, safe & secure way!'); ?></small>
 		</div>
+		</div>
+		</div>
 	</div>
-	<div class="clearfix"></div><br>
-
-<?php echo Form::close(); ?>
+</div>
