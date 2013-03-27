@@ -218,14 +218,17 @@ jQuery.noConflict();
     // Chekc select2 plugin is loaded
     if ($.fn.select2)
     {
-        $(".select-icons").select2({
-            formatResult: format_icon,
-            formatSelection: format_icon,
-            escapeMarkup: function(m) { return m; }
-        });
+        $(window).on('load', function () {
+            $(".select-icons").select2({
+                formatResult: Gleez.theme_icon,
+                formatSelection: Gleez.theme_icon,
+                escapeMarkup: function(m) { return m; }
+            });
+        })
     }
     
-    function format_icon(icon) {
+    //icon theme for select2 plugin
+    Gleez.theme_icon = function(icon) {
         if (!icon.id) return icon.text; // optgroup
         return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
     }
@@ -262,6 +265,11 @@ jQuery.noConflict();
         }
     };
 
+    //Attach all behaviors.
+    $(function () {
+        $(document).trigger('attach', Gleez.settings);
+    });
+    
     // Class indicating that JS is enabled; used for styling purpose.
     $('html').addClass('js');
 
