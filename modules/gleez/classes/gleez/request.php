@@ -176,6 +176,22 @@ class Gleez_Request extends Kohana_Request {
 		return FALSE;
 	}
 
+        /**
+	 * Whether or not current request is DataTables
+	 * 
+	 * @static
+	 * @access	public
+	 * @param	mixed	NULL|Request
+	 * 
+	 * @return	boolean
+	 */
+	public static function is_datatables(Request $request = NULL)
+	{
+		$request = ($request) ? $request : Request::current();
+		
+		return (bool) $request->query('sEcho');
+	}
+	
 	/**
 	 * Returns whether this request is GET
 	 *
