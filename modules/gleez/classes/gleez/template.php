@@ -243,7 +243,8 @@ abstract class Gleez_Template extends Controller {
 					->set('front',         FALSE)
 					->set('mission',       FALSE)
 					->set('tabs',          FALSE)
-					->set('_user',         $this->_auth->get_user());
+					->set('_user',         $this->_auth->get_user())
+                                        ->bind('datatables',   $this->_datatables);
 
 			// Page Title
 			$this->title = ucwords($this->request->controller());
