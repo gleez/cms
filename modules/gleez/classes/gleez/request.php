@@ -17,7 +17,7 @@ class Gleez_Request extends Kohana_Request {
 	 * Request Redirect URL for ajax requests
 	 * @var string
 	 */
-	public static $_redirect_url;
+	public static $redirect_url;
 
 	/**
 	 * Redirects as the request response. If the URL does not include a
@@ -35,14 +35,6 @@ class Gleez_Request extends Kohana_Request {
 	 */
 	public function redirect($url = '', $code = 302)
 	{
-		// Check whether the current request is ajax request
-                if ( $this->is_ajax() )
-                {
-			self::$_redirect_url = $url;
-			// Stop execution
-			return;
-		}
-
 		$referrer = $this->uri();
 
 		if (strpos($referrer, '://') === FALSE)
@@ -56,6 +48,14 @@ class Gleez_Request extends Kohana_Request {
 			$url = URL::site($url, TRUE, Kohana::$index_file);
 		}
 
+		// Check whether the current request is ajax request
+                if ( $this->is_ajax() )
+                {
+			self::$redirect_url = $url;
+			// Stop execution
+			return;
+		}
+	
 		if (($response = $this->response()) === NULL)
 		{
 			$response = $this->create_response();
