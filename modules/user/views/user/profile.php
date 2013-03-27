@@ -34,6 +34,10 @@
 				<?php if ($is_owner OR User::is_admin()): ?>
 					<dd><?php echo Text::auto_link_emails($user->mail); ?></dd>
 				<?php endif; ?>
+				<?php if ($user->homepage): ?>
+					<dt><?php echo __('Home Page'); ?></dt>
+					<dd><?php echo Text::auto_link($user->homepage); ?></dd>
+				<?php endif; ?>
 				<dt><?php echo __('Visits'); ?></dt>
 				<dd><?php echo $user->logins; ?></dd>
 				<dt><?php echo __('Last Active'); ?></dt>
