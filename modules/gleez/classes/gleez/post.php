@@ -40,6 +40,7 @@ class Gleez_Post extends ORM_Versioned {
 		'password' => array( 'type' => 'string' ),
 		'comment'  => array( 'type' => 'int' ),
 		'lang'     => array( 'type' => 'string' ),
+		'layout'   => array( 'type' => 'string' ),
 	);
 
 	/**
@@ -94,8 +95,6 @@ class Gleez_Post extends ORM_Versioned {
 		'path',
 		'categories',
 		'ftags',
-		'fbook',
-		'fbook_pid',
 		'content'
 	);
 
@@ -104,6 +103,13 @@ class Gleez_Post extends ORM_Versioned {
 	 * @var string
 	 */
 	protected $_post_type  = 'post';
+	
+	/**
+	 * Post table name
+	 * @var string
+	 */
+	protected $_table_name = 'posts';
+
 
 	/**
 	 * Rules for the post model
