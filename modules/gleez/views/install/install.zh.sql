@@ -405,24 +405,25 @@ CREATE TABLE {widgets} (
   `show_title` tinyint(1) DEFAULT '1',
   `body` longtext,
   `format` tinyint(3) NOT NULL DEFAULT '1',
+  `icon` varchar(255) DEFAULT 'icon-none',
   PRIMARY KEY (`id`),
   KEY `fk_name` (`name`),
   KEY `fk_module` (`module`),
   KEY `fk_status` (`status`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`) VALUES
-(1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, '如果您使用Gleez的，我们请您捐赠，以确保未来能够发展。', 1),
-(2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0),
-(3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0),
-(4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0),
-(5, 'menu/user-menu', '用户菜单', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0),
-(6, 'admin/donate', '捐赠', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(7, 'admin/welcome', '欢迎', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0),
-(8, 'admin/info', '系统', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0),
-(9, 'user/login', '登录', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(10, 'comment/recent', '评论', 'gleez', NULL, 0, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0),
-(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0);
+INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
+(1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, '如果您使用Gleez的，我们请您捐赠，以确保未来能够发展。', 1, 'icon-gift'),
+(2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
+(5, 'menu/user-menu', '用户菜单', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
+(6, 'admin/donate', '捐赠', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
+(7, 'admin/welcome', '欢迎', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
+(8, 'admin/info', '系统', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
+(9, 'user/login', '登录', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
+(10, 'comment/recent', '评论', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
