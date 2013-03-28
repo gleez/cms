@@ -2,29 +2,17 @@
 
 class Model_Page extends Post {
         
+	/**
+	 * Post table name
+	 * @var string
+	 */
         protected $_table_name = 'posts';
-	protected $_post_type = 'page';
 	
-	protected $_table_columns = array(
-					'id'       => array( 'type' => 'int' ),
-					'version'  => array( 'type' => 'int' ),
-					'author'   => array( 'type' => 'int' ),
-					'title'    => array( 'type' => 'string' ),
-					'body'     => array( 'type' => 'string' ),
-					'teaser'   => array( 'type' => 'string' ),
-					'status'   => array( 'type' => 'string' ),
-					'promote'  => array( 'type' => 'int' ),
-					'moderate' => array( 'type' => 'int' ),
-					'sticky'   => array( 'type' => 'int' ),
-					'type'     => array( 'type' => 'string' ),
-					'format'   => array( 'type' => 'int' ),
-					'created'  => array( 'type' => 'int' ),
-					'updated'  => array( 'type' => 'int' ),
-					'pubdate'  => array( 'type' => 'int' ),
-					'password' => array( 'type' => 'string' ),
-					'comment'  => array( 'type' => 'int' ),
-					'lang' 	   => array( 'type' => 'string' ),
-        );
+	/**
+	 * Post type
+	 * @var string
+	 */
+	protected $_post_type = 'page';
         
 	public function save(Validation $validation = NULL)
 	{
