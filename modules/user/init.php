@@ -80,7 +80,7 @@ if ( ! Route::cache())
  *
  * @uses ACL Used to define the privileges
  */
-if ( class_exists('ACL') && ! ACL::cache() )
+if ( ! ACL::cache() )
 {
 	ACL::set('user', array(
 		'administer permissions' => array(
