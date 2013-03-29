@@ -53,8 +53,14 @@ class Controller_Admin_Menu extends Controller_Admin {
 	public function action_add()
 	{
 		$this->title = __('Add Menu');
-		$view = View::factory('admin/menu/form')->bind('post', $post)->bind('errors', $errors);
+
+		$view = View::factory('admin/menu/form')
+				->bind('post', $post)
+				->bind('action', $action)
+				->bind('errors', $errors);
+
 		$post = ORM::factory('menu');
+		$action = Route::get('admin/menu')->uri(array('action' => 'add'));
 
 		if ($this->valid_post('menu'))
 		{
@@ -104,8 +110,13 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 		}
 
-		$this->title = __( 'Edit Menu: :name', array(':name' => $post->name) );
-		$view = View::factory('admin/menu/form')->bind('post', $post)->bind('errors', $errors);
+		$this->title = __('Edit Menu: :name', array(':name' => $post->name));
+		$action = Route::get('admin/menu')->uri(array('action' => 'edit', $id => $id));
+
+		$view = View::factory('admin/menu/form')
+					->bind('post',    $post)
+					->bind('action',  $action)
+					->bind('errors',  $errors);
 
 		if ($this->valid_post('menu'))
 		{
