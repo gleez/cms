@@ -45,3 +45,47 @@ table.table thead .sorting_desc_disabled { background: url('../images/datatables
 table.dataTable th:active {
 	outline: none;
 }
+
+div.dataTables_filter {
+	height: 26px;
+	margin: 0;
+}
+
+table.dataTable {
+    border-collapse: separate;
+    clear: left !important;
+    margin: 0 auto;
+    width: 100%;
+    background-color: transparent;
+    border-spacing: 0;
+    max-width: 100%;
+}
+
+table.dataTable thead th, table thead th {
+    border-color: #E1E1E1;
+    color: #3D3D3D;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap;
+    padding:8px;
+}
+
+table.dataTable td {
+    padding:8px;
+}
+table thead tr, table thead tr:hover {
+    background: -moz-linear-gradient(center top , #FCFCFC 0%, #F7F7F7 100%) repeat scroll 0 0 transparent;
+}
+table.dataTable tr {
+    font-size: 12px;
+    height: 24px;
+    line-height: 24px;
+}
+table.dataTable td.dataTables_empty {
+    color: #777777;
+    font-size: 14px;
+    padding: 32px;
+    text-align: center;
+}
