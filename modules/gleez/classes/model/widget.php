@@ -76,4 +76,29 @@ class Model_Widget extends ORM {
 		return parent::save($validation);
 	}
 
+	/**
+	 * Reading data from inaccessible properties
+	 *
+	 * @param   string  $field
+	 * @return  mixed
+	 *
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  System::icons
+	 */
+	public function __get($field)
+	{
+		switch ($field)
+		{
+			case 'edit_url':
+				return Route::get('admin/widget')->uri(array('id' => $this->id, 'action' => 'edit'));
+			break;
+			case 'icons':
+				return System::icons();
+			break;
+		}
+
+		return parent::__get($field);
+	}
+
 }
