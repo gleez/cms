@@ -692,6 +692,15 @@ body.widget{
 table .progress {
   height: 8px;
 }
+#admin-list-users td.status{
+  text-align: center;
+}
+#admin-list-users span.status-active{
+  color: green;
+}
+#admin-list-users span.status-blocked{
+  color: red;
+}
 
 @media (max-width: 767px) {
   #dashboard-widgets-wrap {
