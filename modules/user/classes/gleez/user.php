@@ -34,34 +34,34 @@ class Gleez_User {
 		return ( ! Auth::instance()->get_user() ? TRUE : FALSE );
 	}
 
-  /**
-   * Check if current user is admin
-   *
-   * @return  boolean TRUE if current user is admin
-   */
-  public static function is_admin()
-  {
-    if(User::is_guest())
-    {
-      return FALSE;
-    }
-
-    $user = Auth::instance()->get_user();
-
-    // To reduce the number of SQL queries, we cache the user's roles in a static variable.
-    if ( ! isset(User::$roles[$user->id]))
-    {
-      // @todo fetch and save in session to avoid recursive lookups
-      User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
-    }
-
-    if(in_array('admin', User::$roles[$user->id]) OR  array_key_exists(4, User::$roles[$user->id]))
-    {
-      return TRUE;
-    }
-
-    return FALSE;
-  }
+	/**
+	 * Check if current user is admin
+	 *
+	 * @return  boolean TRUE if current user is admin
+	 */
+	public static function is_admin()
+	{
+		if(User::is_guest())
+		{
+		  return FALSE;
+		}
+	    
+		$user = Auth::instance()->get_user();
+	    
+		// To reduce the number of SQL queries, we cache the user's roles in a static variable.
+		if ( ! isset(User::$roles[$user->id]))
+		{
+		  // @todo fetch and save in session to avoid recursive lookups
+		  User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
+		}
+	    
+		if(in_array('admin', User::$roles[$user->id]) OR  array_key_exists(4, User::$roles[$user->id]))
+		{
+		  return TRUE;
+		}
+      
+		return FALSE;
+	}
 
 	/**
 	 * Generates a default anonymous $user object.
@@ -282,4 +282,22 @@ class Gleez_User {
 		}
 	}
 
+	/**
+	 * Themed list of roles to print
+	 *
+	 * @param object $user The user object
+	 *
+	 * @return string html to display
+	 */
+	public static function roles(ORM $user)
+	{
+		$roles = '<ul class="user-roles">';
+		foreach ($user->roles() as $role)
+		{
+            		$roles .= '<li>'. Text::plain($role->name) . '</li>';
+		}
+		$roles .= '</ul>';
+		
+		return $roles;
+	}
 }
