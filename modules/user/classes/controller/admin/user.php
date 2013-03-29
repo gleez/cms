@@ -35,7 +35,7 @@ class Controller_Admin_User extends Controller_Admin {
 		}
 
 		$this->title    = __('Users');
-		$view           = View::factory('admin/user/dlist')
+		$view           = View::factory('admin/user/list')
 						->bind('datatables', $this->_datatables)
 						->set('url', Route::url('admin/user', array('action' => 'list'), TRUE));
 
