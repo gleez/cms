@@ -4,8 +4,7 @@
 	<?php echo __('Add new menus to your site, edit existing menus, and rename and reorganize menu links.') ?>
 </div>
 
-<?php $parms = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add');
-	echo Form::open(Route::get('admin/menu')->uri($parms), array('id'=>'menu-form ', 'class'=>'menu-form form form-horizontal well')) ?>
+<?php echo Form::open($action, array('id'=>'menu-form ', 'class'=>'menu-form form form-horizontal well')); ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
