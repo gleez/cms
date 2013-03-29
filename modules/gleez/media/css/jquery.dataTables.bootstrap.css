@@ -50,7 +50,13 @@ div.dataTables_filter {
 	height: 26px;
 	margin: 0;
 }
+table.table-bordered {
 
+    border-color: #E1E1E1 #E1E1E1 #E1E1E1 -moz-use-text-color;
+}
+table.table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-child(2n+1) th {
+    background-color: #E9E9E9;
+}
 table.dataTable {
     border-collapse: separate;
     clear: left !important;
@@ -74,6 +80,7 @@ table.dataTable thead th, table thead th {
 
 table.dataTable td {
     padding:8px;
+    border-color: #E1E1E1;
 }
 table thead tr, table thead tr:hover {
     background: -moz-linear-gradient(center top , #FCFCFC 0%, #F7F7F7 100%) repeat scroll 0 0 transparent;
