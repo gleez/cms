@@ -233,12 +233,15 @@ jQuery.noConflict();
         return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
     }
 
+    /**
+     * Common function to support without writing js, see admin/user/list
+     *
+     * @todo add i18 support and minor events
+     */
     Gleez.dataTable = function()
     {
         if (!$.fn.dataTable) return;
-        
 
-        
         $('[data-toggle="datatable"]').each(function (i, table) {
             var $table = $(table)
             ,   columns = []
