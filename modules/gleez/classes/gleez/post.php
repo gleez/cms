@@ -103,7 +103,7 @@ class Gleez_Post extends ORM_Versioned {
 	 * @var string
 	 */
 	protected $_post_type  = 'post';
-	
+
 	/**
 	 * Post table name
 	 * @var string
@@ -162,6 +162,7 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Validation callback
 	 *
+	 * @param   string      $name        Validation name
 	 * @param   Validation  $validation  Validation object
 	 * @param   string      $field       Field name
 	 * @uses    Valid::numeric
@@ -394,6 +395,8 @@ class Gleez_Post extends ORM_Versioned {
 	 * @uses  Text::markup
 	 * @uses  HTML::links
 	 * @uses  Path::load
+	 * @uses  Route::get
+	 * @uses  Route::uri
 	 */
 	public function __get($field)
 	{
