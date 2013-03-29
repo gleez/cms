@@ -30,8 +30,8 @@ class Controller_Admin_User extends Controller_Admin {
 		if( Request::is_datatables() )
 		{
 			$posts = ORM::factory('user');
-			
-			$this->_datatables = $posts->dataTables( array('name', 'mail', 'created', 'login', 'status') );
+			//@todo fix dummy id column for roles to match the column order
+			$this->_datatables = $posts->dataTables( array('name', 'mail', 'created', 'login', 'id', 'status') );
 		}
 
 		$this->title    = __('Users');

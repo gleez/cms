@@ -207,6 +207,18 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
+	 * Override the count_all method
+	 *
+	 * @see  Gleez_ORM_Core::count_all
+	 */
+	public function count_all()
+	{
+		$this->where($this->_object_name.'.id', '!=', 1);
+
+		return parent::count_all();
+	}
+	
+	/**
 	 * Complete the login for a user by incrementing the logins and saving login timestamp
 	 *
 	 * @return void
