@@ -35,7 +35,7 @@ class Gleez_Core {
 	 * Has [Gleez::_ginit] been called?
 	 * @var boolean
 	 */
-        protected static $_ginit = FALSE;
+	protected static $_ginit = FALSE;
 
 	/**
 	 * Runs the Gleez environment
@@ -201,6 +201,9 @@ class Gleez_Core {
 
 	/**
 	 * Delete all known cache's we set
+	 *
+	 * @uses  Cache::instance
+	 * @uses  Cache::delete_all
 	 */
 	public static function cache_delete()
 	{
@@ -211,7 +214,7 @@ class Gleez_Core {
 		Cache::instance('feeds')->delete_all();
 		Cache::instance('page')->delete_all();
 		Cache::instance('blog')->delete_all();
-                Cache::instance('roles')->delete_all();
+		Cache::instance('roles')->delete_all();
 
 		// For each cache instance
 		foreach (Cache::$instances as $group => $instance)
@@ -223,10 +226,12 @@ class Gleez_Core {
 	/**
 	 * Replaces troublesome characters with underscores.
 	 *
-	 *   // Sanitize a cache id
-	 *   $id = $this->_sanitize_id($id);
+	 * Sanitize a cache id:<br>
+	 * <code>
+	 * 	$id = $this->_sanitize_id($id);
+	 * </code>
 	 *
-	 * @param   string   $id  id of cache to sanitize
+	 * @param   string   $id  ID of cache to sanitize
 	 * @return  string
 	 */
 	protected static function _sanitize_id($id)
@@ -244,8 +249,8 @@ class Gleez_Core {
 	 *
 	 * Route name used for creating alias and term/tag routes
 	 *
-	 * @return array types
-	 * @uses  Module::action
+	 * @return  array  types
+	 * @uses    Module::action
 	 */
 	public static function types()
 	{
@@ -274,7 +279,7 @@ class Gleez_Core {
 	public static function maintenance_mode()
 	{
 		$maintenance_mode = Kohana::$config->load('site.maintenance_mode', FALSE);
-		$message = Kohana::$config->load('site.offline_message', Gleez::MAINTENANCE_MESSAGE);
+		$message          = Kohana::$config->load('site.offline_message', Gleez::MAINTENANCE_MESSAGE);
 		$request          = Request::initial();
 
 		if ($maintenance_mode AND ($request instanceof Request) AND ($request->controller() != 'user' AND $request->action() != 'login') AND !ACL::check('administer site') AND $request->controller() != 'media')
@@ -294,9 +299,9 @@ class Gleez_Core {
 		$blocked_ips = Kohana::$config->load('site.blocked_ips', NULL);
 		$ip          = Request::$client_ip;
 
-		if (!empty($blocked_ips) AND in_array($ip, preg_split("/[\s,]+/",$blocked_ips)))
+		if ( ! empty($blocked_ips) AND in_array($ip, preg_split("/[\s,]+/",$blocked_ips)))
 		{
-			Kohana::$log->add(LOG::INFO, 'Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
+			Kohana::$log->add(LOG::INFO, 'Attempt to access with banned ip address: (:ip).', array(':ip' => $ip));
 			throw new HTTP_Exception_403('Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
 		}
 	}
@@ -388,7 +393,7 @@ class Gleez_Core {
 			$locale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 		}
 
-                //Check if the locale is available or not
+		//Check if the locale is available or not
 		$installed_locales = in_array($locale, Kohana::$config->load('site.installed_locales'));
 
 		if ( ! $installed_locales)
@@ -396,7 +401,6 @@ class Gleez_Core {
 		    // By default - English
 		    $locale = 'en';
 		}
-
 
 		// Setting lang
 		I18n::$lang = $locale;
