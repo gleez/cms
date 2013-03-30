@@ -88,12 +88,11 @@ class Controller_User extends Template {
 
 		// Load the view
 		$view = View::factory('user/register')
-			->set('errors', array())
-			->set('config', $config)
-			->set('action', $action)
-			->bind('male', $male)
-			->bind('female', $female)
-			->bind('post', $post);
+			->set('config',  $config)
+			->set('action',  $action)
+			->set('post',    $post)
+			->bind('male',   $male)
+			->bind('female', $female);
 
 		if($config->get('use_captcha', FALSE))
 		{
@@ -134,8 +133,10 @@ class Controller_User extends Template {
 	 * Sign In
 	 *
 	 * @uses  Request::redirect
+	 * @uses  Request::post
 	 * @uses  Route::get
 	 * @uses  Message::success
+	 * @uses  Log::add
 	 */
 	public function action_login()
 	{
@@ -150,11 +151,17 @@ class Controller_User extends Template {
 		$user        = ORM::factory('user');
 		$config      = Kohana::$config->load('auth');
 
+		// Create form action
+		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
+		$params      = array('action' => 'login');
+		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
+
 		$view = View::factory('user/login')
 			->set('errors',       array())
 			->set('use_username', $config->get('username'))
 			->set('providers',    array_filter($config->get('providers')))
-			->set('post',         $user);
+			->set('post',         $user)
+			->set('action',       $action);
 
 		if($this->valid_post('login'))
 		{
@@ -253,8 +260,7 @@ class Controller_User extends Template {
 		}
 		else
 		{
-			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges for username :name',
-				array(':name' => $user->name ));
+			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges.');
 
 			throw new HTTP_Exception_403('Attempt to access without required privileges.');
 		}
