@@ -253,8 +253,8 @@ class Controller_User extends Template {
 		}
 		else
 		{
-			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges. Username :name',
-				array(':name' => $account->name ));
+			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges for username :name',
+				array(':name' => $user->name ));
 
 			throw new HTTP_Exception_403('Attempt to access without required privileges.');
 		}
