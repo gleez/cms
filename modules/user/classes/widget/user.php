@@ -48,12 +48,19 @@ class Widget_User extends Widget {
 		if( Auth::instance()->logged_in() !== FALSE OR Request::current()->controller() === 'user')
                         return;
 
+		// Create form action
+		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
+		$params      = array('action' => 'login');
+		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
+		
 		$config = Kohana::$config->load('auth');
                 return View::factory('user/login')
-				->set('errors', array())
+				->set('register',     $config->get('register'))
 				->set('use_username', $config->get('username'))
-				->set('providers', array_filter($config->get('providers')) )
-				->set('post', ORM::factory('user'));
+				->set('providers',    array_filter($config->get('providers')))
+				->set('action',       $action)
+				->set('post', ORM::factory('user'))
+				->render();
         }
 
 }
