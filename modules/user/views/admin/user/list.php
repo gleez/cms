@@ -29,7 +29,7 @@
 
 <div class='clearfix'></div><br />
 
-	<table id = "admin-list-users" class="table table-striped table-bordered" data-toggle="datatable" data-lengthchange="false" data-target="<?php echo $url?>" data-sorting='[["2", "desc"]]'>
+	<table id = "admin-list-users" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["2", "desc"]]'>
 		<thead>
 			<tr>
 				<th width="20%" class="sorting_desc"><?php echo __("Username"); ?></th>
