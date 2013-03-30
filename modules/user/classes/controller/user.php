@@ -88,12 +88,11 @@ class Controller_User extends Template {
 
 		// Load the view
 		$view = View::factory('user/register')
-			->set('errors', array())
-			->set('config', $config)
-			->set('action', $action)
-			->bind('male', $male)
-			->bind('female', $female)
-			->bind('post', $post);
+			->set('config',  $config)
+			->set('action',  $action)
+			->set('post',    $post)
+			->bind('male',   $male)
+			->bind('female', $female);
 
 		if($config->get('use_captcha', FALSE))
 		{
