@@ -247,6 +247,10 @@ jQuery.noConflict();
             ,   columns = []
             ,   aaSorting
             ,   aoColumns
+            ,   bPaginate = $table.data('paginate') || true
+            ,   bInfo  = $table.data('info') || true
+            ,   bFilter  = $table.data('filter') || true
+            ,   bLengthChange = $table.data('lengthchange') || true
             ,   source = $table.data('target') || false;
             
             //dont't init if it's already initialised
@@ -257,7 +261,7 @@ jQuery.noConflict();
             
             //use data sortable value to disable sorting/searching for a column
             $('thead th', $(table)).each(function(){
-                var obj   = $(this).data("aocolumns");
+                var obj   = $(this).data("columns");
                 
                 if(obj && obj != undefined){
                     columns.push(obj);
@@ -268,13 +272,17 @@ jQuery.noConflict();
 
             var oTable = $table.dataTable({
                 "aoColumns": columns
-            ,   "aaSorting": $(this).data("aasorting")
+            ,   "aaSorting": $(this).data("sorting")
             ,   "sPaginationType": "bootstrap"
             ,   "bProcessing": true
             ,   "bServerSide": true
             ,   "bDeferRender": true
+            ,   "bLengthChange": bLengthChange
+            ,   "bPaginate": bPaginate
+            ,   "bFilter ": bFilter 
+            ,   "bInfo ": bInfo
             ,   "sCookiePrefix": "gleez_datatable_"
-            ,   "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
+            ,   "sDom": "<'table_head'<'length'l><'filter'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
             ,   "sAjaxSource": source
             ,   "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
 			oSettings.jqXHR = $.ajax( {

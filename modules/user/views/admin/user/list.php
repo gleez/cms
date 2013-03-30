@@ -29,16 +29,16 @@
 
 <div class='clearfix'></div><br />
 
-	<table id = "admin-list-users" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-aasorting='[["2", "desc"]]'>
+	<table id = "admin-list-users" class="table table-striped table-bordered" data-toggle="datatable" data-lengthchange="false" data-target="<?php echo $url?>" data-sorting='[["2", "desc"]]'>
 		<thead>
 			<tr>
 				<th width="20%" class="sorting_desc"><?php echo __("Username"); ?></th>
 				<th width="23%" class="sorting_desc"><?php echo __("Email"); ?></th>
-				<th width="15%" data-aocolumns='{"bSearchable":false}'><?php echo __("First Visit"); ?></th>
-                                <th width="15%" data-aocolumns='{"bSearchable":false}'><?php echo __("Last Visit"); ?></th>
-				<th width="12%" data-aocolumns='{"bSortable":false, "bSearchable":false}'><?php echo __('Roles') ?></th>
-				<th width="8%" data-aocolumns='{"bSearchable":false, "sClass": "status"}'><?php echo __("Status"); ?></th>
-				<th width="6%" data-aocolumns='{"bSortable":false, "bSearchable":false}'></th>
+				<th width="15%" data-columns='{"bSearchable":false}'><?php echo __("First Visit"); ?></th>
+                                <th width="15%" data-columns='{"bSearchable":false}'><?php echo __("Last Visit"); ?></th>
+				<th width="12%" data-columns='{"bSortable":false, "bSearchable":false}'><?php echo __('Roles') ?></th>
+				<th width="8%" data-columns='{"bSearchable":false, "sClass": "status"}'><?php echo __("Status"); ?></th>
+				<th width="6%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 			</tr>
 		</thead>
 		<tbody>
