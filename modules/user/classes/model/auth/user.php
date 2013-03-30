@@ -694,7 +694,7 @@ class Model_Auth_User extends ORM {
 	 * @return  boolean
 	 *
 	 * @uses    Config::load
-	 * @uses    Validation::factor
+	 * @uses    Validation::factory
 	 * @uses    Validation::rule
 	 * @uses    Auth::instance
 	 * @uses    Auth::hash
