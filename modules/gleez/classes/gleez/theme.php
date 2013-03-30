@@ -1,5 +1,4 @@
 <?php defined("SYSPATH") or die("No direct script access.");
-
 /**
  * Theme helper for adding content to views
  *
@@ -38,29 +37,32 @@ class Gleez_Theme {
         public static function load_themes()
         {
                 $config = Kohana::$config->load('site');
+                $modules = Kohana::modules();
+
+                //set admin theme based on path info
+                $path = Request::detect_uri();
+                Theme::$is_admin = ( $path == "/admin" || !strncmp($path, "/admin/", 7) );
 
                 if (self::$is_admin)
                 {
                         // Load the admin theme
                         self::$admin_theme_name = $config->get('admin_theme', self::$admin_theme_name);
-                        $array                  = array(
-                                self::$admin_theme_name => THEMEPATH . self::$admin_theme_name
-                        );
+                        $theme = THEMEPATH . self::$admin_theme_name;
                 }
                 else
                 {
                         // Load the site theme
                         self::$site_theme_name = $config->get('theme', self::$site_theme_name);
-                        $array                 = array(
-                                self::$site_theme_name => THEMEPATH . self::$site_theme_name
-                        );
+                        $theme = THEMEPATH . self::$site_theme_name;
                 }
 
-                // Merging array of modules
-                Kohana::modules(Arr::merge($array, Kohana::modules()));
+                // set modules with active theme
+                array_unshift($modules, $theme);
+                
+                Kohana::modules($modules);
 
                 // Clean up
-                unset($array);
+                unset($modules, $theme);
         }
 
         /**
@@ -116,4 +118,28 @@ class Gleez_Theme {
                 return $themes;
         }
 
+        public static function set_admin_theme()
+        {
+                $config = Kohana::$config->load('site');
+                $modules = Kohana::modules();
+
+                // Load the theme info from config
+                self::$admin_theme_name = $config->get('admin_theme', self::$admin_theme_name);
+                self::$site_theme_name = $config->get('theme', self::$site_theme_name);
+
+                //unset base site theme while in admin
+                if (($key = array_search(THEMEPATH . self::$site_theme_name.DIRECTORY_SEPARATOR, $modules)) !== false)
+                {
+                        unset($modules[$key]);
+                        $modules = array_values($modules); // reindex
+                }
+
+                // set modules with active theme
+                array_unshift($modules, THEMEPATH . self::$admin_theme_name);
+                
+                Kohana::modules($modules);
+
+                // Clean up
+                unset($modules);
+        }
 }
