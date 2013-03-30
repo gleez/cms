@@ -137,33 +137,48 @@ class Model_Auth_User extends ORM {
 		);
 	}
 
+	/**
+	 * Reading data from inaccessible properties
+	 *
+	 * @param   string  $field
+	 * @return  mixed
+	 *
+	 * @uses  HTML::chars
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Path::load
+	 */
 	public function __get($field)
 	{
-		if( $field === 'name' OR $field === 'mail' )
+		$nick = parent::__get('nick');
+
+		switch ($field)
 		{
-			return HTML::chars( parent::__get($field) );
+			case 'name':
+			case 'mail':
+				return HTML::chars(parent::__get($field));
+			break;
+			case 'nick':
+				// Return the best version of the user's name.
+				// Either their specified nick name, or fall back to the user name.
+				return empty($nick) ? HTML::chars($this->name) : HTML::chars($nick);
+			break;
+			case 'rawurl':
+				return Route::get('user')->uri(array('id' => $this->id));
+			break;
+			case 'url':
+				// Model specific links; view, edit, delete url's.
+				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
+			break;
+			case 'edit_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('user')->uri(array('id' => $this->id, 'action' => 'edit'));
+			break;
+			case 'delete_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('user')->uri(array('id' => $this->id, 'action' => 'delete'));
+			break;
 		}
-
-		// Return the best version of the user's name. Either their specified
-		// nick name, or fall back to the user name.
-		if( $field === 'nick' )
-		{
-			$nick = parent::__get('nick');
-			return empty($nick) ? HTML::chars( $this->name ) : HTML::chars($nick);
-		}
-
-		if( $field === 'rawurl' )
-			return Route::get('user')->uri( array( 'id' => $this->id ) );
-
-			// Model specific links; view, edit, delete url's.
-				if( $field === 'url' )
-			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
-
-				if( $field === 'edit_url' )
-			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'edit' ) );
-
-				if( $field === 'delete_url' )
-			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'delete' ) );
 
 		return parent::__get($field);
 	}
@@ -217,7 +232,7 @@ class Model_Auth_User extends ORM {
 
 		return parent::count_all();
 	}
-	
+
 	/**
 	 * Complete the login for a user by incrementing the logins and saving login timestamp
 	 *
@@ -278,11 +293,11 @@ class Model_Auth_User extends ORM {
 
 	/**
 	 * Triggers an error if the email does not exist.
+	 *
 	 * Validation callback.
 	 *
-	 * @param   object  Validate
-	 * @param   string  field name
-	 * @return  void
+	 * @param   Validation  $validation  Validate
+	 * @param   string      $field       Field name
 	 */
 	public function email_not_available(Validation $validation, $field)
 	{
@@ -295,8 +310,8 @@ class Model_Auth_User extends ORM {
 	/**
 	 * Tests if a unique key value exists in the database.
 	 *
-	 * @param   mixed    the value to test
-	 * @param   string   field name
+	 * @param   mixed   $value  The value to test
+	 * @param   string  $field  Field name [Optional]
 	 * @return  boolean
 	 */
 	public function unique_key_exists($value, $field = NULL)
@@ -318,8 +333,8 @@ class Model_Auth_User extends ORM {
 	/**
 	 * Allows a model use both email and username as unique identifiers for login
 	 *
-	 * @param   string  unique value
-	 * @return  string  field name
+	 * @param   string  $value  Unique value
+	 * @return  boolean
 	 */
 	public function unique_key($value)
 	{
@@ -329,14 +344,14 @@ class Model_Auth_User extends ORM {
 	/**
 	 * Password validation for plain passwords.
 	 *
-	 * @param array $values
-	 * @return Validation
+	 * @param   array  $values
+	 * @return  Validation
 	 */
 	public static function get_password_validation($values)
 	{
 		return Validation::factory($values)
-			->rule('pass', 'min_length', array(':value', 4))
-			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
+					->rule('pass', 'min_length', array(':value', 4))
+					->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
 	}
 
 	/**
@@ -344,7 +359,13 @@ class Model_Auth_User extends ORM {
 	 *
 	 * @param   string  $file Uploaded file
 	 * @return  NULL|string   File path
+	 *
 	 * @uses    System::mkdir Making dir for uploading photo
+	 * @uses    Message::error
+	 * @uses    Kohana_log::add
+	 * @uses    Text::plain
+	 * @uses    Upload::valid
+	 * @uses    Upload::save
 	 */
 	public function upload_photo($file)
 	{
@@ -365,7 +386,7 @@ class Model_Auth_User extends ORM {
 			}
 		}
 
-		// check if there is an uploaded file
+		// Check if there is an uploaded file
 		if (Upload::valid($file))
 		{
 			$filename = uniqid().preg_replace('/\s+/u', '-', $file['name']);
@@ -665,54 +686,82 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Reset password: step 1.
+	 * ## Reset password: step 1.
+	 *
 	 * The form where a user enters the email address he signed up with.
 	 *
-	 * @param   array    values to check
+	 * @param   array  $data  Values to check
 	 * @return  boolean
+	 *
+	 * @uses    Config::load
+	 * @uses    Validation::factory
+	 * @uses    Validation::rule
+	 * @uses    Auth::instance
+	 * @uses    Auth::hash
+	 * @uses    Email::factory
+	 * @uses    Email::subject
+	 * @uses    Email::to
+	 * @uses    Email::message
+	 * @uses    Email::send
 	 */
 	public function reset_password(array & $data)
 	{
 		$labels = $this->labels();
 		$rules  = $this->rules();
 
+		$config = Kohana::$config->load('site');
+
 		$data = Validation::factory($data)
 				->rule('mail', 'not_empty')
-				->rule('mail', 'min_length', array(':value', 4) )
-				->rule('mail', 'max_length', array(':value', 254) )
-				->rule('mail', 'email' )
-				->rule('mail', array($this, 'email_not_available'), array(':validation', ':field') );
+				->rule('mail', 'min_length', array(':value', 4))
+				->rule('mail', 'max_length', array(':value', 254))
+				->rule('mail', 'email')
+				->rule('mail', array($this, 'email_not_available'), array(':validation', ':field'));
 
 		if ( ! $data->check())
+		{
 			return FALSE;
+		}
 
 		// Load user data
 		$this->where('mail', '=', $data['mail'])->find();
 
 		// Invalid user
-		if ( ! $this->_loaded ) return FALSE;
+		if ( ! $this->_loaded )
+		{
+			return FALSE;
+		}
 
-		// Create e-mail body with reset password link
-		//Token consists of email and the last_login field.
-		//So as soon as the user logs in again, the reset link expires automatically
+		// Token consists of email and the last_login field.
+		// So as soon as the user logs in again, the reset link expires automatically
 		$time = time();
 		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.$time.'+'.(int)$this->login);
+		$url = URL::site(
+			Route::get('user/reset')->uri(
+				array(
+					'action' => 'confirm_password',
+					'id'     => $this->id,
+					'token'  => $token,
+					'time'   => $time)
+				),
+				TRUE // Protocol
+		);
 
+		// Create e-mail body with reset password link
 		$body = View::factory('email/confirm_reset_password', $this->as_array())
-			->set('time', $time)
-			->set('url', URL::site(
-				Route::get('user/reset')->uri(array('action' => 'confirm_password',
-									'id' => $this->id,
-									'token' => $token,
-									'time'  => $time
-									)),
-				TRUE // Add protocol to URL
-			));
+					->set('time',     $time)
+					->set('url',      $url)
+					->set('config',   $config);
 
 		// Create an email message
 		$email = Email::factory()
-				->subject(__('Gleez - Reset password for :name', array(':name' => $this->nick)) )
-				->to( $this->mail, $this->nick )
+				->subject(__(':site - Reset password for :name',
+					array(
+						':name' => $this->nick,
+						':site' => $config->site_name
+					)
+				))
+				->to($this->mail, $this->nick)
 				->message($body);
 
 		// Send the message

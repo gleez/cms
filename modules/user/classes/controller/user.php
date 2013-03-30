@@ -157,7 +157,7 @@ class Controller_User extends Template {
 		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
 
 		$view = View::factory('user/login')
-			->set('errors',       array())
+			->set('register',     $config->get('register'))
 			->set('use_username', $config->get('username'))
 			->set('providers',    array_filter($config->get('providers')))
 			->set('post',         $user)

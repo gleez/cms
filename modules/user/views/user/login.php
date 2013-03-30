@@ -24,28 +24,37 @@
 			</div>
 		</div>
 
-		<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
-		<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-danger')); ?>
-
-		<ul>
-			<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?></li>
-			<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.'))) ); ?></li>
-		</ul>
+		<div class="control-group clearfix">
+			<div class="span6">
+				<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
+			</div>
+			<div class="span6 clearfix">
+				<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-danger')); ?>
+			</div>
+			<div class="span10">
+				<ul>
+					<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?></li>
+					<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.'))) ); ?></li>
+				</ul>
+			</div>
+		</div>
 
 		<?php if ($providers): ?>
-			<ul id="auth-providers">
-				<?php echo __('Sign in using social network:');?> <br>
+			<div class="control-group clearfix">
+				<p><?php echo __('Sign in using social network:');?></p>
+				<ul id="auth-providers">
 					<?php foreach ($providers as $provider => $key): ?>
 						<li class="provider <?php echo $provider; ?>">
 							<?php
-								$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
+							$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
 
-								echo HTML::anchor($url, ucfirst($provider), array('id' => $provider, 'title' =>__('Login with :provider', array(':provider' => $provider))));
+							echo HTML::anchor($url, ucfirst($provider), array('id' => $provider, 'title' =>__('Login with :provider', array(':provider' => $provider))));
 							?>
 						</li>
 					<?php endforeach; ?>
-				<br><small><?php echo __('Fast, safe & secure way!');?></small>
-			</ul>
+					<br><small><?php echo __('Fast, safe & secure way!');?></small>
+				</ul>
+			</div>
 		<?php endif; ?>
 
 	<?php echo Form::close() ?>
