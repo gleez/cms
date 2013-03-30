@@ -1,13 +1,9 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
 <div class="account-container">
-	<?php
-		$destin = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
-		$params = array('action' => 'login');
-		include Kohana::find_file('views', 'errors/partial');
-	?>
+	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<?php echo Form::open(Route::get('user')->uri($params).URL::query(array('destination' => $destin)), array('class' => 'row-fluid')); ?>
+	<?php echo Form::open($action, array('class' => 'row-fluid')); ?>
 		<p><?php echo __('Sign in using your registered account:'); ?></p>
 
 		<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
