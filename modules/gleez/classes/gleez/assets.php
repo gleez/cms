@@ -867,7 +867,7 @@ class Gleez_Assets {
 		// If no files to compile, no tag necessary
 		if (empty($files))
 		{
-			return '';
+			return;
 		}
 
 		// Get filename to save compiled files to
@@ -935,7 +935,7 @@ class Gleez_Assets {
 	protected static function _get_file_path($file, $type = EXT)
 	{
 		// @todo need to overwrite the assets set and get to fix this
-		$file = str_replace(array('media/', '.'.$type), array('', ''), $file);
+		$file = str_replace(array('media/', '.'.$type), '', $file);
 
 		return Kohana::find_file('media', $file, $type);
 	}
@@ -962,7 +962,22 @@ class Gleez_Assets {
 			$last_modified = max(filemtime($raw_file), $last_modified);
 		}
 
-		return $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
+		if(Theme::$is_admin == TRUE)
+		{
+			$path = $path.DIRECTORY_SEPARATOR.'admin';
+		}
+		
+		//set unqiue filename based on criteria
+		$filename = $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
+		$directory   = dirname($filename);
+		
+		if (!is_dir($directory))
+		{
+			// Recursively create the directories needed for the file
+			System::mkdir($directory, 0777, TRUE);
+		}
+		
+		return $filename;
 	}
 
 }
