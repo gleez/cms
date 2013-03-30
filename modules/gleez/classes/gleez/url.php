@@ -83,9 +83,9 @@ class Gleez_URL extends Kohana_URL {
 		}
 
 		//allow admin theme to serve its own media assets
-		if(Theme::$is_admin)
+		if(Theme::$is_admin == TRUE)
                 {
-			$path = str_replace(array('media', 'media/admin'), 'media/admin', $path);
+			$path = str_replace(array('media', 'media/admin', 'media/admin/admin'), 'media/admin', $path);
                 }
 		
 		// Concat the URL
