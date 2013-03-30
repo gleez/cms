@@ -306,11 +306,12 @@ class Model_Comment extends ORM {
 	/**
 	 * Make sure the user has permission to do the action on this object
 	 *
-	 * @param   string  $action The action view|edit|delete default view [Optional]
-	 * @param   Object  $user   The user object to check permission, defaults to logded in user [Optional]
-	 * @param   string  $misc   The misc element usually id|slug for logging purpose [Optional]
-	 * @throws  Exception  Throws Gleez Exception if fails
-	 *
+	 * @param   boolean|string     $action The action view|edit|delete default view [Optional]
+	 * @param   Model_User|Object  $user   The user object to check permission, defaults to logged in user [Optional]
+	 * @param   string             $misc   The misc element usually id|slug for logging purpose [Optional]
+	 * @throws  HTTP_Exception_404
+	 * @throws  HTTP_Exception_403
+	 * @return  Post
 	 */
 	public function access($action = FALSE, Model_User $user = NULL, $misc = NULL)
 	{
