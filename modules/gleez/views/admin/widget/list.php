@@ -25,7 +25,7 @@
 					<td colspan="4"><em><?php echo __('No Widgets in this region'); ?></em></td>
 				</tr>
 				<?php foreach ($widgets[$region] as $i => $widget): ?>
-					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">				
+					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">
 						<?php
 							$split_name = explode('/', $widget->name);
 							$static = ($split_name AND $split_name[0] == 'static') ? TRUE : FALSE;
@@ -44,7 +44,7 @@
 						</td>
 						<td class="action">
 							<?php
-								echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'edit', 'id'=> $widget->id)), '<i class="icon-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
+								echo HTML::anchor($widget->edit_url, '<i class="icon-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
 
 								if ($static)
 								{
