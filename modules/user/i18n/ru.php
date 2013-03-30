@@ -10,12 +10,14 @@
 return array
 (
 	// :
+	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Аккаунт :prov',
 	':site Account' => 'Аккаунт :site',
 	// %
 	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
+	'A request to reset the password for your account has been made at !site.' => 'С сайта !site был осуществлен запрос на сброс пароля для вашей учётной записи.',
 	'About' => 'О пользователе',
 	'Account %title created successful!' => 'Пользователь %title успешно создан!',
 	'Activity' => 'Активность',
@@ -23,8 +25,10 @@ return array
 	'Administer users' => 'Администрирование пользователей',
 	'Access profiles' => 'Доступ к профилям',
 	'Access to all profiles' => 'Доступ ко всем профилям',
+	'After logging in, you will be redirected, so you can change your password. We do not encourage you to lose your password again. Be aware that this behaviour can be dangerous.' => 'После входа в систему вы будете перенаправлены для того чтоб изменить свой пароль. Мы не рекомендуем вам терять свой пароль повторно. Эта ситуация потенциально опасна.',
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	// B
+	'Best Regards' => 'С наилучшими пожеланиями',
 	'Birthday' => 'День рождения',
 	// C
 	'Change Avatar' => 'Сменить аватар',
@@ -53,7 +57,10 @@ return array
 	// G
 	'Gender' => 'Пол',
 	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
+	'Go to' => 'Перейти',
 	// H
+	'Hello :name!' => 'Здраствуйте :name!',
+	'Home Page' => 'Домашняя страница',
 	// I
 	"If you don't use any of these services, you can create an account." => "Если вы не используете ни один из этих сервисов, вы можете зарегистрировать аккаунт.",
 	'Instructions to reset your password are being sent to your email address %mail.' => 'Инструкции для сброса вашего пароля были высланы на ваш email адрес %mail.',
@@ -96,6 +103,7 @@ return array
 	'Register new account' => 'Зарегистрировать новый аккаунт',
 	'Repeat entered password' => 'Повторите введенный пароль',
 	'Reset password' => 'Сброс пароля',
+	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	'Reset' => 'Сброс',
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
@@ -111,6 +119,7 @@ return array
 	'The values you entered in the password fields didn\'t match.' => 'Значения введённые вами в поля для паролей не совпадают.',
 	'This account is blocked' => 'Этот аккаунт заблокирован',
 	"This email don't exists." => 'Этот email адрес не обнаружен.',
+	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Это одноразовая ссылка и она может быть использована одни раз. Срок действия ссылки один день и ничего не произойдёт если она за это время не используется.',
 	'Try to come up with a complex password' => 'Постарайтесь придумать сложный пароль',
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',
@@ -134,6 +143,7 @@ return array
 	// X
 	// Y
 	'You can sign in from any of the following services:' => 'Вы можете авторизоваться с помощью одного из этих сервисов:',
+	'You may now log in to !uri_brief clicking on this link or copying and pasting it in your browser.' => 'Теперь вы можете войти на сайт нажав на ссылку !uri_brief или скопировав и вставив её в адресную строку браузера',
 	'You must confirm password.' => 'Вы должны подтвердить пароль.',
 	'You must provide a password.' => 'Вы должны ввести пароль.',
 	'You must provide a username.' => 'Вы должны ввести имя пользователя.',
