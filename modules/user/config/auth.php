@@ -75,7 +75,7 @@ return array
 	),
 
 	/**
-	 * Use confirm password field in registraion?
+	 * Use confirm password field in registration?
 	 * @var  boolean
 	 */
 	'confirm_pass' => TRUE,
