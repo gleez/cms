@@ -44,7 +44,7 @@ form #auth-providers .provider {
 .google a { background: url('../images/google-32.png') no-repeat; }
 .live a { background: url('../images/windows-32.png') no-repeat; }
 .twitter a { background: url('../images/twitter-32.png') no-repeat; }
-.github a { background: url('../images/twitter-32.png') no-repeat; }
+.github a { background: url('../images/github-32.png') no-repeat; }
 
 #oauth-providers, ul#post-provider-buttons {
         padding:0px;
