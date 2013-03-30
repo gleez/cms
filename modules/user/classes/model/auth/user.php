@@ -137,33 +137,48 @@ class Model_Auth_User extends ORM {
 		);
 	}
 
+	/**
+	 * Reading data from inaccessible properties
+	 *
+	 * @param   string  $field
+	 * @return  mixed
+	 *
+	 * @uses  HTML::chars
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Path::load
+	 */
 	public function __get($field)
 	{
-		if( $field === 'name' OR $field === 'mail' )
+		$nick = parent::__get('nick');
+
+		switch ($field)
 		{
-			return HTML::chars( parent::__get($field) );
+			case 'name':
+			case 'mail':
+				return HTML::chars(parent::__get($field));
+			break;
+			case 'nick':
+				// Return the best version of the user's name.
+				// Either their specified nick name, or fall back to the user name.
+				return empty($nick) ? HTML::chars($this->name) : HTML::chars($nick);
+			break;
+			case 'rawurl':
+				return Route::get('user')->uri(array('id' => $this->id));
+			break;
+			case 'url':
+				// Model specific links; view, edit, delete url's.
+				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
+			break;
+			case 'edit_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('user')->uri(array('id' => $this->id, 'action' => 'edit'));
+			break;
+			case 'delete_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('user')->uri(array('id' => $this->id, 'action' => 'delete'));
+			break;
 		}
-
-		// Return the best version of the user's name. Either their specified
-		// nick name, or fall back to the user name.
-		if( $field === 'nick' )
-		{
-			$nick = parent::__get('nick');
-			return empty($nick) ? HTML::chars( $this->name ) : HTML::chars($nick);
-		}
-
-		if( $field === 'rawurl' )
-			return Route::get('user')->uri( array( 'id' => $this->id ) );
-
-			// Model specific links; view, edit, delete url's.
-				if( $field === 'url' )
-			return ($path = Path::load($this->rawurl) ) ? $path['alias'] : $this->rawurl;
-
-				if( $field === 'edit_url' )
-			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'edit' ) );
-
-				if( $field === 'delete_url' )
-			return Route::get('user')->uri( array( 'id' => $this->id, 'action' => 'delete' ) );
 
 		return parent::__get($field);
 	}
@@ -217,7 +232,7 @@ class Model_Auth_User extends ORM {
 
 		return parent::count_all();
 	}
-	
+
 	/**
 	 * Complete the login for a user by incrementing the logins and saving login timestamp
 	 *
