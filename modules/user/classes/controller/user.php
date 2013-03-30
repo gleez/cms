@@ -78,7 +78,7 @@ class Controller_User extends Template {
 		if( ! $config->register)
 		{
 			// If user registration disabled, we return access denied.
-			throw new HTTP_Exception_403(__('User registration not allowed'), 403);
+			throw new HTTP_Exception_403(__('User registration not allowed'));
 		}
 
 		$action = Route::get('user')->uri(array('action' => $this->request->action()));
