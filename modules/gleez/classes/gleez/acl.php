@@ -310,8 +310,9 @@ class Gleez_ACL {
 		$perms = array();
 
 		$cache = Cache::instance('roles');
+		$hash = sha1('roles-'. serialize($roles));
 		
-		if( ! $perms = $cache->get('roles'))
+		if( ! $perms = $cache->get($hash))
 		{
 			$result = DB::select('rid', 'permission')
 						->from('permissions')
@@ -330,7 +331,7 @@ class Gleez_ACL {
 			}
 			
 			//set the cache
-			$cache->set('roles', $perms, DATE::DAY);
+			$cache->set($hash, $perms, DATE::DAY);
 		}
 
 		return $perms;
