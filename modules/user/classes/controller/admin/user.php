@@ -9,37 +9,60 @@
  */
 class Controller_Admin_User extends Controller_Admin {
 
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 */
 	public function before()
 	{
-		if($this->request->action() == 'index' )
-		{
-			//$this->request->action('list');
-		}
-		ACL::Required('administer users');
+		ACL::required('administer users');
+
 		parent::before();
 	}
 
-	public function action_index()
-	{
-		$view = 'test';
-		$this->response->body($view);
-	}
-
+	/**
+	 * List users
+	 *
+	 * @uses  Request::is_datatables
+	 */
 	public function action_list()
 	{
-		if( Request::is_datatables() )
+		$is_datatables = Request::is_datatables();
+
+		if ($is_datatables)
 		{
 			$posts = ORM::factory('user');
+
 			//@todo fix dummy id column for roles to match the column order
-			$this->_datatables = $posts->dataTables( array('name', 'mail', 'created', 'login', 'id', 'status') );
+			$this->_datatables = $posts->dataTables(array('name', 'mail', 'created', 'login', 'id', 'status'));
+
+			foreach ($this->_datatables->result() as $user)
+			{
+				$this->_datatables->add_row(
+					array(
+						Text::plain($user->name),
+						Text::plain($user->mail),
+						date('M d, Y',$user->created),
+						($user->login > 0) ? date('M d, Y',$user->login) : __('Never'),
+						User::roles($user),
+						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
+						HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit User'))) .
+								HTML::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), '<i class="icon-trash"></i>', array('class'=>'action-edit', 'title'=> __('Delete User')))
+					)
+				);
+			}
 		}
 
-		$this->title    = __('Users');
-		$view           = View::factory('admin/user/list')
-						->bind('datatables', $this->_datatables)
-						->set('url', Route::url('admin/user', array('action' => 'list'), TRUE));
+		$this->title = __('Users');
+		$url         = Route::url('admin/user', array('action' => 'list'), TRUE);
 
-                $this->response->body($view);
+		$view = View::factory('admin/user/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('url',           $url);
+
+		$this->response->body($view);
 	}
 
 	public function action_add()
