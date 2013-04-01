@@ -37,30 +37,8 @@ Gleez has an official website: [http://gleezcms.org](http://gleezcms.org) and Fa
 
 ## Documentation
 
-We create the documentation together with the community and other Gleez users/developers. Below are the pages that are already created.
-
-### Index
-
-#### D
-* [Developers](wiki/Developers) &mdash; Developers TODO
-
-#### I
-* [Installation](wiki/Installation) &mdash; About installation
-
-#### L
-* [License](wiki/License) &mdash; Gleez CMS License
-
-#### M
-* [Modules](wiki/Modules) &mdash; Gleez Modules HowTo
-
-#### S
-* [Schema Changes](wiki/Schema-Changes) &mdash; How to change the database schema, if you have version 0.9.9.2 or higher
-
-#### T
-* [Translation](wiki/Translation) &mdash; About I18n
-
-#### W
-* [Widgets](wiki/Widgets) &mdash; How to add new widgets
+We create the documentation together with the community and other Gleez users/developers.
+The latest documentation is available on the [Gleez Wiki](https://github.com/gleez/cms/wiki).
 
 
 ## Contributors
