@@ -50,6 +50,12 @@ We create the documentation together with the community and other Gleez users/de
 #### L
 * [License](wiki/License) &mdash; Gleez CMS License
 
+#### M
+* [Modules](wiki/Modules) &mdash; Gleez Modules HowTo
+
+#### S
+* [Schema Changes](wiki/Schema-Changes) &mdash; How to change the database schema, if you have version 0.9.9.2 or higher
+
 #### T
 * [Translation](wiki/Translation) &mdash; About I18n
 
