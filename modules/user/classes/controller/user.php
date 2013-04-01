@@ -141,7 +141,7 @@ class Controller_User extends Template {
 	public function action_login()
 	{
 		// If user already signed-in
-		if($this->_auth->logged_in())
+		if ($this->_auth->logged_in())
 		{
 			// redirect to the user account
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
@@ -163,7 +163,7 @@ class Controller_User extends Template {
 			->set('post',         $user)
 			->set('action',       $action);
 
-		if($this->valid_post('login'))
+		if ($this->valid_post('login'))
 		{
 			try
 			{
@@ -211,7 +211,7 @@ class Controller_User extends Template {
 	 */
 	public function action_profile()
 	{
-		if( ! $this->_auth->logged_in())
+		if ( ! $this->_auth->logged_in())
 		{
 			// No user is currently logged in
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
