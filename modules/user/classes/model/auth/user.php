@@ -288,7 +288,7 @@ class Model_Auth_User extends ORM {
 	 *
 	 * Validation callback.
 	 *
-	 * @param   Validation  $validation And Validation object
+	 * @param   Validation  $validation An validation object
 	 * @param   string      $field      Field name
 	 */
 	public function email_available(Validation $validation, $field)
