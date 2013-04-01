@@ -30,7 +30,7 @@ CREATE TABLE {posts} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `posts` (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
-(1, 0, 0, 'Welcome to Gleez - Content Management System!', 'What Is GleezCMS?\r\n\r\nGleezCMS is a user-friendly website content management system. With GleezCMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser! \r\n\r\nWith an emphasis on security and functionality, GleezCMS is a professional and robust system suitable for any business or organization website. Built on the PHP programming language and the MySQL database, GleezCMS delivers superb performance on any size website.\r\n\r\nDownload:\r\nwww.gleezcms.org', 'What Is GleezCMS?\r\n\r\nGleezCMS is a user-friendly website content management system. With GleezCMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
+(1, 0, 0, 'Welcome to Gleez - Content Management System!', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser! \r\n\r\nWith an emphasis on security and functionality, Gleez CMS is a professional and robust system suitable for any business or organization website. Built on the PHP programming language and the MySQL database, Gleez CMS delivers superb performance on any size website.\r\n\r\nDownload:\r\nwww.gleezcms.org', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
 
 DROP TABLE IF EXISTS {tags};
 CREATE TABLE {tags} (
@@ -57,6 +57,7 @@ CREATE TABLE {terms} (
   scp int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 INSERT INTO `terms` (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
 (1, 'Pages', 'Use to group pages on similar topics into categories.', NULL, 'page', 0, 1, 2, 1, 1);
 
@@ -344,8 +345,8 @@ CREATE TABLE {roles} (
 
 INSERT INTO `roles` (`id`, `name`, `description`, `special`) VALUES
 (1, 'Anonymous', 'Guests can only view content. Anyone browsing the site who is not signed in is considered to be a "Guest".', 1),
-(2, 'login', 'Login privileges, pending account confirmation', 1),
-(3, 'user', 'Member privileges, granted after account confirmation', 1),
+(2, 'login', 'Login privileges, pending account confirmation.', 1),
+(3, 'user', 'Member privileges, granted after account confirmation.', 1),
 (4, 'admin', 'Administrative user, has access to everything.', 1);
 
 DROP TABLE IF EXISTS {roles_users};
