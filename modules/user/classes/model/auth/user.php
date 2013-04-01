@@ -64,10 +64,13 @@ class Model_Auth_User extends ORM {
 	protected $_ignored_columns = array('password', 'old_pass');
 
 	/**
-	 * Rules for the user model. Because the password is _always_ a hash
-	 * when it's set,you need to run an additional not_empty rule in your controller
-	 * to make sure you didn't hash an empty string. The password rules
-	 * should be enforced outside the model or with a model helper method.
+	 * ## Rules for the user model
+	 *
+	 * Because the password is _always_ a hash  when it's set,you need to run
+	 * an additional not_empty rule in your controller to make sure you didn't
+	 * hash an empty string.
+	 *
+	 * The password rules should be enforced outside the model or with a model helper method.
 	 *
 	 * @return array Rules
 	 */
@@ -100,14 +103,19 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Filters to run when data is set in this model. The password filter
-	 * automatically hashes the password when it's set in the model.
+	 * Filters to run when data is set in this model
+	 *
+	 * The password filter automatically hashes the password when
+	 * it's set in the model.
 	 *
 	 * @return array Filters
 	 */
 	public function filters()
 	{
 		return array(
+			TRUE => array(
+				array('trim'), // Clean the leading and trailing spaces
+			),
 			'pass' => array(
 				array(array(Auth::instance(), 'hash'))
 			),
@@ -176,7 +184,7 @@ class Model_Auth_User extends ORM {
 			break;
 			case 'delete_url':
 				// Model specific links; view, edit, delete url's.
-				return Route::get('user')->uri(array('id' => $this->id, 'action' => 'delete'));
+				return Route::get('admin/user')->uri(array('id' => $this->id, 'action' => 'delete'));
 			break;
 		}
 
@@ -260,12 +268,12 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Does the reverse of unique_key_exists() by triggering error if username exists.
+	 * Does the reverse of unique_key_exists() by triggering error if username exists
+	 *
 	 * Validation callback.
 	 *
-	 * @param   Validation  Validation object
-	 * @param   string      Field name
-	 * @return  void
+	 * @param   Validation  $validation And Validation object
+	 * @param   string      $field      Field name
 	 */
 	public function username_available(Validation $validation, $field)
 	{
@@ -276,12 +284,12 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Does the reverse of unique_key_exists() by triggering error if email exists.
+	 * Does the reverse of unique_key_exists() by triggering error if email exists
+	 *
 	 * Validation callback.
 	 *
-	 * @param   Validation  Validation object
-	 * @param   string      Field name
-	 * @return  void
+	 * @param   Validation  $validation And Validation object
+	 * @param   string      $field      Field name
 	 */
 	public function email_available(Validation $validation, $field)
 	{
@@ -292,12 +300,12 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Triggers an error if the email does not exist.
+	 * Triggers an error if the email does not exist
 	 *
 	 * Validation callback.
 	 *
-	 * @param   Validation  $validation  Validate
-	 * @param   string      $field       Field name
+	 * @param   Validation  $validation And Validation object
+	 * @param   string      $field      Field name
 	 */
 	public function email_not_available(Validation $validation, $field)
 	{
@@ -322,12 +330,14 @@ class Model_Auth_User extends ORM {
 			$field = $this->unique_key($value);
 		}
 
-		return (bool) DB::select(array('COUNT("*")', 'total_count'))
-			->from($this->_table_name)
-			->where($field, '=', $value)
-			->where($this->_primary_key, '!=', $this->pk())
-			->execute($this->_db)
-			->get('total_count');
+		$result = DB::select(array('COUNT("*")', 'total_count'))
+					->from($this->_table_name)
+					->where($field, '=', $value)
+					->where($this->_primary_key, '!=', $this->pk())
+					->execute($this->_db)
+					->get('total_count');
+
+		return (bool) $result;
 	}
 
 	/**
@@ -335,6 +345,7 @@ class Model_Auth_User extends ORM {
 	 *
 	 * @param   string  $value  Unique value
 	 * @return  boolean
+	 * @uses    Valid::email
 	 */
 	public function unique_key($value)
 	{
@@ -576,10 +587,11 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Sign-up: step 1.
+	 * ## Sign-up: step 1
+	 *
 	 * Validates sign-up information and creates a new user with the "login" role only.
 	 *
-	 * @param   array    values to check
+	 * @param   array  $data  Values to check
 	 * @return  boolean
 	 */
 	public function signup(array $data)
@@ -594,9 +606,9 @@ class Model_Auth_User extends ORM {
 			$this->add('roles', 2);
 		}
 
-		//Create e-mail body with reset password link
-		//Token consists of email and the last_login field.
-		//So as soon as the user logs in again, the reset link expires automatically
+		// Create e-mail body with reset password link
+		// Token consists of email and the last_login field.
+		// So as soon as the user logs in again, the reset link expires automatically
 		$token = Auth::instance()->hash($this->mail.'+'.$this->pass.'+'.(int)$this->login);
 
 		$body = View::factory('email/confirm_signup', $this->as_array())
@@ -621,12 +633,13 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * Sign-up: step 2.
+	 * ## Sign-up: step 2
+	 *
 	 * Confirms a user sign-up by validating the confirmation link.
 	 * Adds the "user" role to the user.
 	 *
-	 * @param   integer  user id
-	 * @param   string   confirmation token
+	 * @param   integer  $id     User id
+	 * @param   string   $token  Confirmation token
 	 * @return  boolean
 	 */
 	public function confirm_signup($id, $token)
@@ -686,7 +699,7 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
-	 * ## Reset password: step 1.
+	 * ## Reset password: step 1
 	 *
 	 * The form where a user enters the email address he signed up with.
 	 *
@@ -774,9 +787,9 @@ class Model_Auth_User extends ORM {
 	 * Reset password: step 2a.
 	 * Validates the confirmation link for a password reset.
 	 *
-	 * @param   integer  user id
-	 * @param   string   confirmation token
-	 * @param   integer  timestamp
+	 * @param   integer  $id     User id
+	 * @param   string   $token  Confirmation token
+	 * @param   integer  $time   UNIX timestamp
 	 * @return  boolean
 	 */
 	public function confirm_reset_password_link($id, $token, $time)
@@ -811,11 +824,12 @@ class Model_Auth_User extends ORM {
 
 
 	/**
-	 * Reset password: step 2b.
+	 * ## Reset password: step 2b
+	 *
 	 * Validates and saves a new password.
 	 * Also adds the "user" role to the user, in case his sign-up wasn't confirmed yet.
 	 *
-	 * @param   array    values to check
+	 * @param   array  $data  Values to check
 	 * @return  boolean
 	 */
 	public function confirm_reset_password_form(array & $data)
