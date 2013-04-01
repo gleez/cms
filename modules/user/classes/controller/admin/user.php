@@ -22,9 +22,14 @@ class Controller_Admin_User extends Controller_Admin {
 	}
 
 	/**
-	 * List users
+	 * Displays a list of all users
 	 *
 	 * @uses  Request::is_datatables
+	 * @uses  ORM::dataTables
+	 * @uses  Text::plain
+	 * @uses  User::roles
+	 * @uses  HTML::anchor
+	 * @uses  Route::url
 	 */
 	public function action_list()
 	{
@@ -34,16 +39,16 @@ class Controller_Admin_User extends Controller_Admin {
 		{
 			$users = ORM::factory('user');
 
-			//@todo fix dummy id column for roles to match the column order
+			// @todo fix dummy id column for roles to match the column order
 			$this->_datatables = $users->dataTables(array('name', 'mail', 'created', 'login', 'id', 'status'));
 
 			foreach ($this->_datatables->result() as $user)
 			{
 				$this->_datatables->add_row(
 					array(
-						Text::plain($user->name),
+						HTML::anchor($user->rawurl, Text::plain($user->nick)),
 						Text::plain($user->mail),
-						date('M d, Y',$user->created),
+						date('M d, Y', $user->created),
 						($user->login > 0) ? date('M d, Y',$user->login) : __('Never'),
 						User::roles($user),
 						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
@@ -77,7 +82,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$post = ORM::factory('user');
 		$all_roles = ORM::factory('role')->where('id', '>', 1)->find_all()->as_array('name', 'description');
 
-		if( $this->valid_post('user') )
+		if ($this->valid_post('user'))
 		{
 			try
 			{
@@ -97,7 +102,7 @@ class Controller_Admin_User extends Controller_Admin {
 					$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')));
 
 			}
-                        catch (ORM_Validation_Exception $e)
+			catch (ORM_Validation_Exception $e)
 			{
 				$errors =  $e->errors('models');
 			}
@@ -112,7 +117,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 		$post = ORM::factory('user', (int) $id);
 
-		if(!$post->loaded() OR $id === 1)
+		if ( ! $post->loaded() OR $id === 1)
 		{
 			Message::error( __('User: doesn\'t exists!') );
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
@@ -149,7 +154,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$post->save();
 
 				//make sure to add an empty if none of the roles checked to avoid errros
-				if(empty($_POST['roles']))
+				if (empty($_POST['roles']))
 				{
 					$_POST['roles'] = array();
 				}
@@ -166,7 +171,7 @@ class Controller_Admin_User extends Controller_Admin {
 				}
 
 				//always make sure login role is added if it's not there
-				if(!in_array('login', array_keys($_POST['roles'])))
+				if ( ! in_array('login', array_keys($_POST['roles'])))
 				{
 					$post->add('roles', ORM::factory('role')->where('name', '=', 'login')->find());
 				}
@@ -205,7 +210,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 		}
-		elseif($user->id < 2)
+		elseif ($user->id < 2)
 		{
 			Message::error(__('User: can\'t delete system user'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
