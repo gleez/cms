@@ -23,7 +23,10 @@ class Gleez_Request extends Kohana_Request {
 	 * Redirects as the request response. If the URL does not include a
 	 * protocol, it will be converted into a complete URL.
 	 *
-	 *     $request->redirect($url);
+	 * Example:<br>
+	 * <code>
+	 *   $request->redirect($url);
+	 * </code>
 	 *
 	 * [!!] No further processing can be done after this method is called!
 	 *
@@ -49,13 +52,13 @@ class Gleez_Request extends Kohana_Request {
 		}
 
 		// Check whether the current request is ajax request
-                if ( $this->is_ajax() )
-                {
+		if ($this->is_ajax())
+		{
 			self::$redirect_url = $url;
 			// Stop execution
 			return;
 		}
-	
+
 		if (($response = $this->response()) === NULL)
 		{
 			$response = $this->create_response();
@@ -176,22 +179,20 @@ class Gleez_Request extends Kohana_Request {
 		return FALSE;
 	}
 
-        /**
+	/**
 	 * Whether or not current request is DataTables
-	 * 
-	 * @static
-	 * @access	public
-	 * @param	mixed	NULL|Request
-	 * 
-	 * @return	boolean
+	 *
+	 * @param   mixed  Request  Request [Optional]
+	 * @return  boolean
+	 * @uses    Request::current
 	 */
 	public static function is_datatables(Request $request = NULL)
 	{
 		$request = ($request) ? $request : Request::current();
-		
+
 		return (bool) $request->query('sEcho');
 	}
-	
+
 	/**
 	 * Returns whether this request is GET
 	 *
@@ -199,7 +200,7 @@ class Gleez_Request extends Kohana_Request {
 	 *
 	 * Example:<br>
 	 * <code>
-	 *	$this->request->is_get();
+	 *   $this->request->is_get();
 	 * </code>
 	 *
 	 * @return  boolean
@@ -217,7 +218,7 @@ class Gleez_Request extends Kohana_Request {
 	 *
 	 * Example:<br>
 	 * <code>
-	 *	$this->request->is_post();
+	 *   $this->request->is_post();
 	 * </code>
 	 *
 	 * @return  boolean
@@ -235,7 +236,7 @@ class Gleez_Request extends Kohana_Request {
 	 *
 	 * Example:<br>
 	 * <code>
-	 *	$this->request->is_put();
+	 *   $this->request->is_put();
 	 * </code>
 	 *
 	 * @return  boolean
@@ -253,7 +254,7 @@ class Gleez_Request extends Kohana_Request {
 	 *
 	 * Example:<br>
 	 * <code>
-	 *	$this->request->is_delete();
+	 *   $this->request->is_delete();
 	 * </code>
 	 *
 	 * @return  boolean

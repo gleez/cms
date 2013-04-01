@@ -21,6 +21,7 @@ return array
 	'About' => 'О пользователе',
 	'Account %title created successful!' => 'Пользователь %title успешно создан!',
 	'Activity' => 'Активность',
+	'Add New User' => 'Добавить нового пользователя',
 	'Administer permissions' => 'Администрирование полномочий',
 	'Administer users' => 'Администрирование пользователей',
 	'Access profiles' => 'Доступ к профилям',
@@ -53,9 +54,11 @@ return array
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
 	'Fill in the information below to register' => 'Для регистрации заполните регистрационную анкету ниже',
+	'First Visit' => 'Первое посещение',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
 	'Gender' => 'Пол',
+	'Gleez CMS allows users to register, login, log out, maintain user profiles, etc. Users of the site may not use their own names to post content until they have signed up for a user account.' => 'Gleez CMS позволяет пользователям регистрироваться, проходить авторизацию, управлять профилями пользователей и т.п. Пользователи сайта не смогут использовать свои собственные имена для размещения материалов, пока они не зарегистрировали учетную запись пользователя. ',
 	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
 	'Go to' => 'Перейти',
 	// H
@@ -69,6 +72,8 @@ return array
 	// K
 	// L
 	'Last Active' => 'Последняя активность',
+	'Last Visit' => 'Последнее посещение',
+	'Loading data from server' => 'Загрузка ',
 	'Login' => 'Вход',
 	'Login with :provider' => 'Войсти с помощью :provider',
 	// M
@@ -152,5 +157,6 @@ return array
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
 	'User Account' => 'Аккаунт пользователя',
 	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
+	'Users' => 'Пользователи',
 	// Z
 );
