@@ -154,33 +154,34 @@ abstract class Gleez_Template extends Controller {
 	 */
 	protected $_sidebars = TRUE;
 
-        /**
-         * Datatable Object.
-         *
-         * @var object
-         */
-        protected $_datatables;
-        
-        /**
-         * An array of form error messages to be displayed to the user.
-         *
-         * @var array
-         */
-        protected $_errors = array();
-	
-        /**
-         * If JSON is going to be delivered to the client,
-         * this property will hold the values being sent.
-         *
-         * @var array
-         */
-        protected $_json;
-	
-        /**
-         * @var bool Allows overriding 'FormSaved' property to send with JSON.
-         */
-        protected $_formsaved = FALSE;
-	
+	/**
+	 * Datatable Object.
+	 *
+	 * @var object
+	 */
+	protected $_datatables;
+
+	/**
+	 * An array of form error messages to be displayed to the user.
+	 *
+	 * @var array
+	 */
+	protected $_errors = array();
+
+	/**
+	 * If JSON is going to be delivered to the client,
+	 * this property will hold the values being sent.
+	 *
+	 * @var array
+	 */
+	protected $_json;
+
+	/**
+	 * Allows overriding 'FormSaved' property to send with JSON.
+	 * @var boolean
+	 */
+	protected $_formsaved = FALSE;
+
 	/**
 	 * Loads the template View object, if it is direct request
 	 *
@@ -264,7 +265,7 @@ abstract class Gleez_Template extends Controller {
 					->set('mission',       FALSE)
 					->set('tabs',          FALSE)
 					->set('_user',         $this->_auth->get_user())
-                                        ->bind('datatables',   $this->_datatables);
+					->bind('datatables',   $this->_datatables);
 
 			// Page Title
 			$this->title = ucwords($this->request->controller());
@@ -394,9 +395,9 @@ abstract class Gleez_Template extends Controller {
 
 			if ($this->_response_format === 'application/json')
 			{
-                                //check for dataTables request
-                                if ($this->request->query('sEcho') !== NULL) return;
-                                
+				// Check for dataTables request
+				if ($this->request->query('sEcho') !== NULL) return;
+
 				$output = JSON::encode($output);
 			}
 
@@ -414,9 +415,9 @@ abstract class Gleez_Template extends Controller {
 			Profiler::stop($this->_benchmark);
 		}
 
-                // Set header content-type to response format with utf-8
-                $this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
-                
+		// Set header content-type to response format with utf-8
+		$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
+
 		parent::after();
 	}
 
