@@ -30,7 +30,7 @@ CREATE TABLE {posts} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `posts` (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
-(1, 0, 0, '欢迎使用 Gleez 内容管理系统！', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！\r\n\r\n注重安全性和功能性的Gleez CMS是一个专业的、强大的系统，适用于任何企业或组织的网站。由PHP编程语言和MySQL数据库打造，Gleez CMS对任何规模的网站都提供卓越的性能。\r\n\r\n下载：\r\nwww.gleezcms.org', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'zh');
+(1, 0, 0, 'Добро пожаловать в Gleez - Систему Управления Сщдержимым!', 'Что такое Gleez CMS?\r\n\r\nGleez CMS это дружественная система управления содержимым сайта. С Gleez CMS вы можете легко создавать динамические веб-сайты в течение нескольких минут с владея одной лишь мышкой! Поддерживайте ваш веб-контент, навигацию или например ограничивайте группы или конкретного пользователя в доступе из любой точки мира с помощью всего лишь веб-браузера! \r\n\r\nС упором на безопасность и функциональность, Gleez CMS является профессиональной и надежной системой, подходящей для любого предприятия или организации веб-сайта. Построенная на языке программирования PHP с использованием СУБД MySQL, Gleez CMS обеспечивает превосходную производительность для любого размер сайта.\r\n\r\nСкачать:\r\nwww.gleezcms.org', 'Что такое Gleez CMS?\r\n\r\nGleez CMS это дружественная система управления содержимым сайта. С Gleez CMS вы можете легко создавать динамические веб-сайты в течение нескольких минут с владея одной лишь мышкой! Поддерживайте ваш веб-контент, навигацию или например ограничивайте группы или конкретного пользователя в доступе из любой точки мира с помощью всего лишь веб-браузера!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'ru');
 
 DROP TABLE IF EXISTS {tags};
 CREATE TABLE {tags} (
@@ -59,7 +59,7 @@ CREATE TABLE {terms} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `terms` (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, '页面', '用来将主题相似的页面分成一组。', NULL, 'page', 0, 1, 2, 1, 1);
+(1, 'Страницы', 'Используйте для группирования страниц на схожие темы в категории.', NULL, 'page', 0, 1, 2, 1, 1);
 
 DROP TABLE IF EXISTS {comments};
 CREATE TABLE {comments} (
@@ -148,9 +148,9 @@ INSERT INTO `config` (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'site_favicon', 's:18:"/media/favicon.ico";'),
 ('site', 'site_logo', 's:15:"/media/logo.png";'),
 ('site', 'site_name', 's:9:"Gleez CMS";'),
-('site', 'site_slogan', 's:49:"Light, Simple, Flexible Content Management System";'),
+('site', 'site_slogan', 's:99:"Лёгкая, простая, гибкая система управления содержимым";'),
 ('site', 'theme', 's:5:"fluid";'),
-('site', 'timezone', 's:12:"Asia/Kolkata";'),
+('site', 'timezone', 's:13:"Europe/Moscow";'),
 ('site', 'time_format', 's:5:"H:i:s";'),
 ('site', 'gleez_private_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";');
 
@@ -173,27 +173,27 @@ CREATE TABLE {menus} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, '主菜单', 'main-menu', '许多网站使用主菜单来显示网站的主要部分，通常在顶部的导航栏中。', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
-(2, '管理', 'management', '管理菜单包含用于管理任务的链接。', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
-(3, '导航', 'navigation', '导航菜单包含网站的访问者所用的链接。一些模块自动添加链接到导航菜单。', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
-(4, '用户菜单', 'user-menu', "用户菜单包含与用户帐户相关的链接，以及“退出”链接。", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
-(8, '首页', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
-(10, '页面', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
-(11, '添加页面', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, '管理', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(13, '菜单', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(14, '输入格式', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(15, '设置', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(16, '路径别名', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(17, '部件', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(18, '分类', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(19, '标签', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(20, '模块', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(21, '用户', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(22, '角色', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
-(24, '页面', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
-(25, '评论', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(26, '登录', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
+(1, 'Главное меню', 'main-menu', 'Основное меню используемое в большинстве сайтов, распологающееся в верхней части сайта.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
+(2, 'Управление', 'management', 'В этом меню находятся ссылки навигации по консоли администратора.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
+(3, 'Навигация', 'navigation', 'Меню навигации содержит ссылки предназначенные для посетителей сайта. Некоторые модули могут добавить к этому меню свои пункты в автоматическом режиме.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
+(4, 'Меню пользователя', 'user-menu', "Содержит ссылки имеющие отношение к аккаунту пользователя а так-же ссылку 'Выход'.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
+(8, 'Главная', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
+(10, 'Страницы', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
+(11, 'Добавить страницу', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
+(12, 'Администрирование', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(13, 'Меню', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(14, 'Форматы', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
+(15, 'Настройки', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
+(16, 'Синонимы', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
+(17, 'Виджеты', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
+(18, 'Таксономия', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
+(19, 'Теги', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
+(20, 'Модули', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(21, 'Пользователи', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
+(22, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(24, 'Страницы', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
+(25, 'Комментарии', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
+(26, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
@@ -344,10 +344,11 @@ CREATE TABLE {roles} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `roles` (`id`, `name`, `description`, `special`) VALUES
-(1, 'Anonymous', '访客只可以查看内容。任何没有登录的访客都被视为“匿名”。', 1),
-(2, 'login', '登录权限，需要确认账户。', 1),
-(3, 'user', '用户权限，确认账户后授予。', 1),
-(4, 'admin', '管理员，可以使用一切功能。', 1);
+(1, 'Anonymous', 'Гости могут только просматривать контент. Любой неавторизованный пользователь просматривающий сайт считается гостем.', 1),
+(2, 'login', 'Роль для зарегистрированных, не заблокированных пользователей, а так же для ожидающих подтверждения регистрации новых участников.', 1),
+(3, 'user', 'Роль участника, назначаемая после подтверждения регистрации.', 1),
+(4, 'admin', 'Роль администраторов, пользователей имеющих доступ ко всему.', 1);
+
 
 DROP TABLE IF EXISTS {roles_users};
 CREATE TABLE {roles_users} (
@@ -416,17 +417,17 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
-(1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, '如果您使用Gleez的，我们请您捐赠，以确保未来能够发展。', 1, 'icon-gift'),
-(2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
-(4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
-(5, 'menu/user-menu', '用户菜单', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
-(6, 'admin/donate', '捐赠', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
-(7, 'admin/welcome', '欢迎', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
-(8, 'admin/info', '系统', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
-(9, 'user/login', '登录', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
-(10, 'comment/recent', '评论', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
-(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
+(1, 'static/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'Если вы используете Gleez CMS! Мы просим вас пожертвовать для обеспечения возможности будущего развития.', 1, 'icon-gift'),
+(2, 'menu/main-menu', 'Главное меню', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', 'Управление', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(4, 'menu/navigation', 'Навигация', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
+(5, 'menu/user-menu', 'Меню пользователя', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
+(6, 'admin/donate', 'Пожертвование', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
+(7, 'admin/welcome', 'Добро пожаловать', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
+(8, 'admin/info', 'Система', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
+(9, 'user/login', 'Авторизация', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
+(10, 'comment/recent', 'Комментарии', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(11, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
