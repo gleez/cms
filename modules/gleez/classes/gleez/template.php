@@ -161,6 +161,26 @@ abstract class Gleez_Template extends Controller {
          */
         protected $_datatables;
         
+        /**
+         * An array of form error messages to be displayed to the user.
+         *
+         * @var array
+         */
+        protected $_errors = array();
+	
+        /**
+         * If JSON is going to be delivered to the client,
+         * this property will hold the values being sent.
+         *
+         * @var array
+         */
+        protected $_json;
+	
+        /**
+         * @var bool Allows overriding 'FormSaved' property to send with JSON.
+         */
+        protected $_formsaved = FALSE;
+	
 	/**
 	 * Loads the template View object, if it is direct request
 	 *
