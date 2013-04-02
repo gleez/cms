@@ -67,6 +67,10 @@
 				</div>
 			</li>
 		</ul>
+		<h3><?php echo __('Bio'); ?></h3>
+		<div class="ItemContent">
+			<?php echo Text::plain($user->bio); ?>
+		</div>
 	</div>
 
 </div>
