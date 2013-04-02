@@ -30,8 +30,8 @@
 				<dd itemprop="birthDate"><?php echo date('M d, Y', $user->dob); ?></dd>
 				<dt><?php echo __('Joined on'); ?></dt>
 				<dd><?php echo date('M d, Y', $user->created); ?></dd>
-				<dt><?php echo __('Email'); ?></dt>
 				<?php if ($is_owner OR User::is_admin()): ?>
+					<dt><?php echo __('Email'); ?></dt>
 					<dd><?php echo Text::auto_link_emails($user->mail); ?></dd>
 				<?php endif; ?>
 				<?php if ($user->homepage): ?>
