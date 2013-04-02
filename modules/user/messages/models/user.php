@@ -26,4 +26,7 @@ return array(
 	'homepage' => array (
 		'url' => ':field must be a valid address with the http:// or https:// prefix',
 	),
+	'bio' => array (
+		'max_length' => 'Bio must be less than :param2 characters long.',
+	),
 );

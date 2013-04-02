@@ -22,6 +22,7 @@ class Model_Auth_User extends ORM {
 		'pass'              => array( 'type' => 'string' ),
 		'mail'              => array( 'type' => 'string' ),
 		'homepage'          => array( 'type' => 'string' ),
+		'bio'               => array( 'type' => 'string' ),
 		'nick'              => array( 'type' => 'string' ),
 		'gender'            => array( 'type' => 'int' ),
 		'dob'               => array( 'type' => 'int' ),
@@ -99,6 +100,9 @@ class Model_Auth_User extends ORM {
 			'homepage' => array(
 				array('url'),
 			),
+			'bio' => array(
+				array('max_length', array(':value', 1024)),
+			),
 		);
 	}
 
@@ -136,6 +140,7 @@ class Model_Auth_User extends ORM {
 			'name'         => __('Username'),
 			'mail'         => __('Email'),
 			'homepage'     => __('Home Page'),
+			'bio'          => __('Bio'),
 			'pass'         => __('Password'),
 			'pass_confirm' => __('Password Confirm'),
 			'nick'         => __('Display Name'),
