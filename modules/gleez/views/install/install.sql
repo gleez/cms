@@ -97,6 +97,7 @@ CREATE TABLE {users} (
   pass varchar(128) NOT NULL DEFAULT '',
   mail varchar(254) NOT NULL DEFAULT '',
   homepage varchar(255) DEFAULT NULL,
+  bio varchar(800) DEFAULT NULL,
   nick varchar(255) DEFAULT NULL,
   gender tinyint(4) DEFAULT NULL,
   dob int(11) NOT NULL DEFAULT '0',
