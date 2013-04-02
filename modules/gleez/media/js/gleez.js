@@ -282,7 +282,7 @@ jQuery.noConflict();
             ,   "bFilter ": bFilter 
             ,   "bInfo ": bInfo
             ,   "sCookiePrefix": "gleez_datatable_"
-            ,   "sDom": "<'table_head'<'length'l><'filter'f>r>t<'row-fluid'<'span4'i><'span8'p>>"
+            ,   "sDom": "<'table_head'lfr>t<'row-fluid'<'span4'i><'span8'p>>"
             ,   "sAjaxSource": source
             ,   "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
 			oSettings.jqXHR = $.ajax( {
