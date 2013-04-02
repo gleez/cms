@@ -18,6 +18,8 @@ return array
 	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
 	'A request to reset the password for your account has been made at !site.' => 'С сайта !site был осуществлен запрос на сброс пароля для вашей учётной записи.',
+	'Bio' => 'Биография',
+	'Bio must be less than :param2 characters long.' => 'Адрес должен быть не больше :param2 символов.',
 	'About' => 'О пользователе',
 	'Account %title created successful!' => 'Пользователь %title успешно создан!',
 	'Activity' => 'Активность',
@@ -59,7 +61,7 @@ return array
 	// G
 	'Gender' => 'Пол',
 	'Gleez CMS allows users to register, login, log out, maintain user profiles, etc. Users of the site may not use their own names to post content until they have signed up for a user account.' => 'Gleez CMS позволяет пользователям регистрироваться, проходить авторизацию, управлять профилями пользователей и т.п. Пользователи сайта не смогут использовать свои собственные имена для размещения материалов, пока они не зарегистрировали учетную запись пользователя. ',
-	'Gleez users and group management.' => 'Управление пользователями и группами в Gleez.',
+	'Gleez users and group management' => 'Управление пользователями и группами в Gleez',
 	'Go to' => 'Перейти',
 	// H
 	'Hello :name!' => 'Здраствуйте :name!',
@@ -84,8 +86,10 @@ return array
 	'Minimum password length &mdash; :count characters' => 'Минимальная длина пароля &mdash; :count символа(ов)',
 	'My Account' => 'Мой аккаунт',
 	// N
+	'Name' => 'Имя',
 	'New password' => 'Новый пароль',
 	'New password (again)' => 'Повторите пароль',
+	'No more than 800 characters' => 'Не более 800 символов',
 	// O
 	'Old password is incorrect.' => 'Текущий пароль введён неверно',
 	// P
