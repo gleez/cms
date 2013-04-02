@@ -74,7 +74,7 @@ class Gleez_Theme {
         public static function get_info($theme_name)
         {
                 $info_file               = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
-                $theme_info              = new ArrayObject(parse_ini_file($info_file, true), ArrayObject::ARRAY_AS_PROPS);
+                $theme_info              = (object) parse_ini_file($info_file, true);
                 $theme_info->title       = __($theme_info->title);
                 $theme_info->description = __($theme_info->description);
 
@@ -93,9 +93,10 @@ class Gleez_Theme {
         /**
          * Gets list of available themes
          *
+         * @param   boolean $title returns only title if its true or full object
          * @return  array  Available themes array
          */
-        public static function available()
+        public static function available($title = TRUE)
         {
                 $themes = array();
 
@@ -110,8 +111,9 @@ class Gleez_Theme {
                                 {
                                         continue;
                                 }
+                                
                                 $theme               = Theme::get_info($theme_name);
-                                $themes[$theme_name] = $theme->name;
+                                $themes[$theme_name] = ($title === TRUE) ? $theme->title : $theme;
                         }
                 }
 
