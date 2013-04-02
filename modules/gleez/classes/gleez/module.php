@@ -435,7 +435,16 @@ class Gleez_Module {
                                 {
                                         self::$active[$module->name]   = $module;
                                         $_cache_active[$module->name]  = $module->as_array();
-                                        $kohana_modules[$module->name] = MODPATH . $module->name;
+                                        
+                                        //try to get module path from db if it set
+                                        if(!empty($module->path) AND is_dir($module->path))
+                                        {
+                                                $kohana_modules[$module->name] = $module->path;
+                                        }
+                                        else
+                                        {
+                                                $kohana_modules[$module->name] = MODPATH . $module->name;
+                                        }
                                 }
                         }
 
@@ -449,7 +458,7 @@ class Gleez_Module {
                         $data['active']  = $_cache_active;
                         $data['kohana_modules'] = $kohana_modules;
 
-                        $cache->set('load_modules', $data, Date::HOUR); //we're using apc cache for simple data
+                        $cache->set('load_modules', $data, Date::DAY);
                         unset($data, $_cache_modules, $_cache_active);
                         Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
                 }
