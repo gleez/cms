@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined("SYSPATH") OR die("No direct script access.");
 /**
  * Admin User Controller
  *
@@ -46,14 +46,14 @@ class Controller_Admin_User extends Controller_Admin {
 			{
 				$this->_datatables->add_row(
 					array(
-						HTML::anchor($user->rawurl, Text::plain($user->nick)),
-						Text::plain($user->mail),
+						HTML::anchor($user->url, Text::plain($user->nick)),
+						Text::auto_link($user->mail),
 						date('M d, Y', $user->created),
 						($user->login > 0) ? date('M d, Y',$user->login) : __('Never'),
 						User::roles($user),
 						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
 						HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit User'))) .
-						HTML::anchor(Route::get('admin/user')->uri(array('action' => 'delete', 'id' => $user->id)), '<i class="icon-trash"></i>', array('class'=>'action-edit', 'title'=> __('Delete User')))
+						HTML::anchor($user->delete_url, '<i class="icon-trash"></i>', array('class'=>'action-edit', 'title'=> __('Delete User')))
 					)
 				);
 			}
@@ -70,36 +70,44 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Add new user
+	 */
 	public function action_add()
 	{
 		$this->title = __('Add User');
 		$view = View::factory('admin/user/form')
 						->bind('all_roles', $all_roles)
 						->set('user_roles', array())
-						->bind('errors', $errors)
-						->bind('post', $post);
+						->bind('errors',    $errors)
+						->bind('post',      $post);
 
 		$post = ORM::factory('user');
-		$all_roles = ORM::factory('role')->where('id', '>', 1)->find_all()->as_array('name', 'description');
+		$all_roles = ORM::factory('role')
+					->where('id', '>', 1)
+					->find_all()
+					->as_array('name', 'description');
 
 		if ($this->valid_post('user'))
 		{
 			try
 			{
-				#Affects the sanitized vars to the user object
+				// Affects the sanitized vars to the user object
 				$post->values($_POST);
 
-				#Create the User
+				// Create the User
 				$post->save();
 
-				#Add the login role to the user
+				// Add the login role to the user
 				$login_role = new Model_Role(array('name' =>'login'));
 				$post->add('roles',$login_role);
 
 				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')));
+				{
+					$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
+				}
 
 			}
 			catch (ORM_Validation_Exception $e)
@@ -111,6 +119,9 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Edit user
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -119,19 +130,21 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ( ! $post->loaded() OR $id === 1)
 		{
-			Message::error( __('User: doesn\'t exists!') );
+			Message::error(__('User: doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
 
 			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')));
+			{
+				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
+			}
 		}
 
 		$user_roles = $post->roles->find_all()->as_array('id', 'name');
 
 		$all_roles = ORM::factory('role')
-				->where('id', '>', 1)
-				->find_all()
-				->as_array('name', 'description');
+					->where('id', '>', 1)
+					->find_all()
+					->as_array('name', 'description');
 
 		$this->title = __('Edit User %name', array('%name' => $post->nick));
 
@@ -140,12 +153,12 @@ class Controller_Admin_User extends Controller_Admin {
 					->set('all_roles', $all_roles)
 					->set('post', $post);
 
-		if ( $this->valid_post('user') )
+		if ($this->valid_post('user'))
 		{
 			try
 			{
 				// password can be empty - it will be ignored in save.
-				if ((empty($_POST['pass']) || (trim($_POST['pass']) == '')) )
+				if ((empty($_POST['pass']) || (trim($_POST['pass']) == '')))
 				{
 					unset($_POST['pass']);
 				}
@@ -153,13 +166,13 @@ class Controller_Admin_User extends Controller_Admin {
 				$post->values($_POST);
 				$post->save();
 
-				//make sure to add an empty if none of the roles checked to avoid errros
+				// Make sure to add an empty if none of the roles checked to avoid errros
 				if (empty($_POST['roles']))
 				{
 					$_POST['roles'] = array();
 				}
 
-				// roles have to be added separately, and all users have to have the login role
+				// Roles have to be added separately, and all users have to have the login role
 				// you first have to remove the items, otherwise add() will try to add duplicates
 				// could also use array_diff, but this is much simpler
 				DB::delete('roles_users')->where('user_id', '=', $id)->execute();
@@ -170,7 +183,7 @@ class Controller_Admin_User extends Controller_Admin {
 					$post->add('roles', ORM::factory('role')->where('name', '=', $role)->find());
 				}
 
-				//always make sure login role is added if it's not there
+				// Always make sure login role is added if it's not there
 				if ( ! in_array('login', array_keys($_POST['roles'])))
 				{
 					$post->add('roles', ORM::factory('role')->where('name', '=', 'login')->find());
@@ -193,7 +206,9 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->response->body($view);
 	}
 
-	/** Delete user */
+	/**
+	 * Delete user
+	 */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
