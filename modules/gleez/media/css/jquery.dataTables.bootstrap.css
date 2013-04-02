@@ -76,7 +76,7 @@ table.table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-chi
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
 	filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-	height: 33px;
+	height: 35px;
 	line-height: 33px;
 	padding: 0 3px;
 	margin: 15px 0 0 0;
@@ -91,6 +91,7 @@ table.dataTable thead th, table thead th {
     text-align: left;
     white-space: nowrap;
     padding:8px;
+    background: none;
 }
 
 table.dataTable td {
