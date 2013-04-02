@@ -49,6 +49,13 @@
 		</div>
 	</div>
 
+	<div class="control-group <?php echo isset($errors['bio']) ? 'error': ''; ?>">
+		<?php echo Form::label('bio', __('Bio'), array('class' => 'control-label')) ?>
+		<div class="controls">
+			<?php echo Form::textarea('bio', $user->bio, array('class' => 'input-large',  'rel' => 'tooltip', 'data-placement' => 'right', 'title' => __('Will be public'))); ?>
+		</div>
+	</div>
+
 	<?php echo Form::submit('user_edit', __('Update Profile'), array('class' => 'btn btn-primary pull-right')) ?>
 	<div class="clearfix"></div><br>
 <?php echo Form::close() ?>
