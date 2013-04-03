@@ -34,7 +34,7 @@
 					<?php foreach ($filters as $name => $filter): ?>
 						<tr id="filter-row-<?php echo $name ?>" class="draggable <?php echo Text::alternate("odd", "even") ?>">
 							<td>
-								<?php echo __(':title', array(':title' => HTML::chars($filter['title']))); ?>
+								<?php echo __(':title', array(':title' => HTML::chars($filter->title))); ?>
 							</td>
 							<td class="tabledrag-hide" >
 								<?php echo Form::weight('filters['.$name.'][weight]', 0, array('class' => 'filter-order-weight')) ?>
@@ -59,21 +59,22 @@
 			<?php echo Form::label('settings', __('Filter Settings'), array('class' => 'control-label')) ?>
 			<div class="tabbable tabs-left table-bordered">
 				<ul class="nav nav-tabs">
-					<?php foreach ($filters as $name => $filter): ?>
-						<?php if( ! empty($filter['settings']) ): ?>
-							<li><?php echo HTML::anchor('#'.URL::title($filter['title']), __($filter['title']), array('data-toggle' => 'tab')); ?></li>
+					<?php foreach($filters as $name => $filter): ?>
+						<?php $settings = $filter->settings; if( !empty($settings) ):?><?php //echo Debug::vars($filter); ?>
+							<li><a href="#<?php echo URL::title($filter->title)?>" data-toggle="tab"><?php echo $filter->title; ?></a></li>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</ul>
-
+		
 				<div class="tab-content">
-					<?php foreach ($filters as $name => $filter): ?>
-						<?php if( ! empty($filter['settings'])): ?>
-							<div class="tab-pane"  id="<?php echo URL::title($filter['title'])?>">
-								<?php foreach($filter['settings'] as $key => $value): ?>
-									<div class="control-group">
-										<?php echo Form::label('edit-filters', str_replace('_', ' ', ucfirst($key)), array('class' => 'control-label')) ?>
-										<?php echo Form::input('filters['.$name.'][settings]['.$key.']', $value, array('class' => 'span5')) ?>
+					<?php foreach($filters as $name => $filter): ?>
+						<?php $settings = $filter->settings; if( !empty($settings) ):?>
+							<div class="tab-pane"  id="<?php echo URL::title($filter->title)?>">
+								<?php foreach($filter->settings as $key => $value): ?>
+								   <div class="control-group">
+									<?php echo Form::label('edit-filters', str_replace('_', ' ', ucfirst($key)), array('class' => 'control-label')) ?>
+									<?php echo Form::input('filters['.$name.'][settings]['.$key.']', $value, array('class' => 'span5')) ?>
+									<div class="description"><?php //echo Text::plain($filter->description) ?></div>
 								   </div>
 								<?php endforeach; ?>
 							</div>

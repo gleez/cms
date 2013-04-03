@@ -8,7 +8,6 @@
         ?>
 
 	<div class="row-fluid meta">
-
 		<div class="span6">
 			<?php if ($config->use_submitted): ?>
 				<span class="author">

@@ -50,13 +50,12 @@
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
-				<?php $formats = Inputfilter::formats(); ?>
 
 				<div class="control-group format-wrapper <?php echo isset($errors['format']) ? 'error': ''; ?>">
 					<div class="controls">
 						<div class="input-prepend">
 							<span class="add-on"><?php echo __('Text format') ?></span>
-							<?php echo Form::select('format', $formats, $post->format, array('class' => 'input-large')); ?>
+							<?php echo Form::select('format', Filter::formats(), $post->format, array('class' => 'input-large')); ?>
 						</div>
 					</div>
 				</div>
