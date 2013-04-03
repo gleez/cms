@@ -30,7 +30,7 @@ return array
 				),
 				'url'		    => array(
 					'name'        => 'url',
-					'weight'      => 2,
+					'weight'      => -2,
 					'status'      => TRUE,
 					'settings'    => array('url_length' => 72)
 				),
