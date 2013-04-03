@@ -387,6 +387,10 @@ if ( ! Filter::cache() )
                 ->title(__('Adds Initialcaps'))
                 ->description(__('Adds <span class="initial"> tag around the initial letter of each paragraph'));
 
+        Filter::set('markdown',  array('prepare callback' => FALSE, 'process callback' => 'Text::markdown') )
+                ->title(__('Markdown'))
+                ->description(__('Allows content to be submitted using Markdown, a simple plain-text syntax that is filtered into valid HTML.'));
+        
 	// Cache the Filters in production
 	Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
