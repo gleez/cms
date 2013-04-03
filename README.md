@@ -27,7 +27,7 @@ Gleez has an official website: [http://gleezcms.org](http://gleezcms.org) and Fa
 
 ## Demos
 
-*[http://demo.gleezcms.org](http://demo.gleezcms.org)
+* [http://demo.gleezcms.org](http://demo.gleezcms.org)
 
 ## Documentation
 
