@@ -173,7 +173,7 @@ ul.menu {
       font-family:Arial,sans-serif;
       font-size:15px;
       font-weight:bold;
-      
+
       height:30px;
       list-style-type:none;
       padding:0;
@@ -368,7 +368,7 @@ ul.links li {
 .box-table-a td
 {
 	padding: 8px;
-	background: #e8edff; 
+	background: #e8edff;
 	border-bottom: 1px solid #fff;
 	color: #669;
 	border-top: 1px solid transparent;
@@ -403,7 +403,7 @@ ul.links li {
 .box-table-b td
 {
 	padding: 8px;
-	background: #e8edff; 
+	background: #e8edff;
 	border-right: 1px solid #aabcfe;
 	border-left: 1px solid #aabcfe;
 	color: #669;
@@ -432,7 +432,7 @@ ul.links li {
 }
 .hor-zebra .odd
 {
-	background: #e8edff; 
+	background: #e8edff;
 }
 
 
@@ -606,7 +606,7 @@ ul.links li {
 
 .newspaper-b .odd
 {
-	background: #F4FFD8; 
+	background: #F4FFD8;
 }
 
 .newspaper-b th{
