@@ -2,15 +2,17 @@
 /**
  * Admin Page Controller
  *
- * @package   Gleez\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license Gleez CMS License
+ * @package    Gleez\Admin\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Page extends Controller_Admin {
 
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
 	 */
 	public function before()
 	{
@@ -20,7 +22,9 @@ class Controller_Admin_Page extends Controller_Admin {
 	}
 
 	/**
-	 * The after() method is called after controller action.
+	 * The after() method is called after controller action
+	 *
+	 * @uses  Route::url
 	 */
 	public function after()
 	{
@@ -35,12 +39,16 @@ class Controller_Admin_Page extends Controller_Admin {
 	}
 
 	/**
-	 * Page management dashboard, display Page statistics
+	 * Page management dashboard
+	 *
+	 * Displays Page statistics
 	 */
 	public function action_index()
 	{
 		$this->title = __('Page Statistics');
-		$view = View::factory('admin/page/stats')->bind('stats', $stats);
+
+		$view = View::factory('admin/page/stats')
+				->bind('stats', $stats);
 
 		$categories = ORM::factory('term')->where('type', '=', 'page')->find_all();
 		$tags       = ORM::factory('tag')->where('type', '=', 'page')->find_all();
@@ -58,25 +66,35 @@ class Controller_Admin_Page extends Controller_Admin {
 
 	/**
 	 * Setting the display of pages
+	 *
+	 * @uses  Arr::merge
+	 * @uses  Config::load
+	 * @uses  Message::success
 	 */
 	public function action_settings()
 	{
-		$post = Kohana::$config->load('page');
 		$this->title = __('Page Settings');
-		$view = View::factory('admin/page/settings')->bind('vocabs', $vocabs)->set('post', $post);
 
-		$vocabs[] = __('none');
-		$vocabs += ORM::factory('term')->where('lft', '=', 1)->find_all()->as_array('id', 'name');
+		$post     = Kohana::$config->load('page');
+		$action   = Route::url('admin/page', array('action' =>'settings'));
+		$vocabs   = array(__('none'));
+
+		$view = View::factory('admin/page/settings')
+					->set('vocabs',  $vocabs)
+					->set('post',    $post)
+					->set('action',  $action);
+
+		$vocabs = Arr::merge($vocabs, ORM::factory('term')->where('lft', '=', 1)->find_all()->as_array('id', 'name'));
 
 		if ($this->valid_post('page_settings'))
 		{
 			unset($_POST['page_settings'], $_POST['_token'], $_POST['_action']);
 
-			$cats = $post->get('catgeory', array());
+			$cats = $post->get('category', array());
 
 			foreach ($_POST as $key => $value)
 			{
-				if ($key == 'catgeory')
+				if ($key == 'category')
 				{
 					$terms = array_diff($cats, $value);
 					if ($terms)
@@ -93,7 +111,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 			if ( ! $this->_internal)
 			{
-				$this->request->redirect(Route::url('admin/page', array('action' =>'settings')));
+				$this->request->redirect(Route::url('admin/page', array('action' =>'settings')), 200);
 			}
 		}
 
@@ -105,6 +123,8 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		$this->title = __('Page List');
+
 		$posts = ORM::factory('page')
 				->where('type', '=', 'page');
 
@@ -113,7 +133,7 @@ class Controller_Admin_Page extends Controller_Admin {
 		if ($total == 0)
 		{
 			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body( View::factory('page/none'));
+			$this->response->body(View::factory('admin/page/none'));
 			return;
 		}
 
@@ -135,8 +155,6 @@ class Controller_Admin_Page extends Controller_Admin {
 		{
 			$posts->order_by('updated', 'DESC');
 		}
-
-		$this->title = __('Page List');
 
 		$view = View::factory('admin/page/list')
 				->bind('pagination', $pagination)
