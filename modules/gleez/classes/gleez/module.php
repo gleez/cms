@@ -358,8 +358,6 @@ class Gleez_Module {
 
                 Module::load_modules(TRUE);
 
-                Widgets::deregister($module_name);
-
                 Kohana::$log->add(LOG::INFO, 'Deactivated module :module_name', array(':module_name' => $module_name) );
         }
 
@@ -386,6 +384,9 @@ class Gleez_Module {
                 }
 
                 Module::load_modules(TRUE);
+        
+                //remove widgets when the module is uninstalled
+                Widget::uninstall($module_name);
 
                 Kohana::$log->add(LOG::INFO, 'Uninstalled module :module_name', array(':module_name' => $module_name) );
         }
