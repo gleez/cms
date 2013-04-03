@@ -63,6 +63,11 @@ div#pageContent {
     text-align: justify;
 }
 
+ul.page-stats,
+ul.page-stats ul {
+	list-style: none;
+}
+
 .marketing h1 {
     font-size: 36px;
     font-weight: 300;
