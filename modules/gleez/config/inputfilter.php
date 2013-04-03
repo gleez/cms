@@ -86,5 +86,20 @@ return array
 			// Comma separated list
 			'roles' => array('admin'),
 		),
+		// #4
+		4 => array(
+			'name'    => __('Markdown'),
+			'weight'  => 1,
+			'filters' => array(
+				'markdown'	       => array(
+					'name'         =>'markdown',
+					'weight'       => 0,
+					'status'       => TRUE,
+					'settings'     => array()
+				),
+			),
+			// Comma separated list
+			'roles' => array(),
+		),
 	)
 );
