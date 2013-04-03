@@ -352,5 +352,41 @@ if ( ! ACL::cache() )
 	));
 
 	/** Cache the module specific permissions in production */
-	ACL::cache(Kohana::$environment === Kohana::PRODUCTION);
+	ACL::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
+}
+
+if ( ! Filter::cache() )
+{
+        Filter::set('html',  array('prepare callback' => FALSE, 'process callback' => 'Text::html') )
+                ->title( __('Limit allowed HTML tags') )
+                ->description( __('Limit Allowed HTML tags') )
+                ->settings( array(
+                                'html_nofollow' => TRUE,
+                                'allowed_html'  => '<a> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd>'
+                ));
+
+        Filter::set('htmlcorrector',  array('prepare callback' => FALSE, 'process callback' => 'Text::htmlcorrector') )
+                ->title(__('Correct faulty and chopped off HTML'));
+
+        Filter::set('autop',  array('prepare callback' => FALSE, 'process callback' => 'Text::autop') )
+                ->title(__('Convert line breaks into HTML'))
+                ->description(__('Lines and paragraphs break automatically.'));
+        
+        Filter::set('plain',  array('prepare callback' => FALSE, 'process callback' => 'Text::plain') )
+                ->title(__('Display any HTML as plain text'))
+                ->description(__('No HTML tags allowed.'));
+
+        Filter::set('url',  array('prepare callback' => FALSE, 'process callback' => 'Text::autolink') )
+                ->title(__('Convert URLs into links'))
+                ->description(__('Web page addresses and e-mail addresses turn into links automatically.'))
+                ->settings( array(
+                                'url_length' => 72
+                ));
+        
+        Filter::set('initialcaps',  array('prepare callback' => FALSE, 'process callback' => 'Text::initialcaps') )
+                ->title(__('Adds Initialcaps'))
+                ->description(__('Adds <span class="initial"> tag around the initial letter of each paragraph'));
+
+	// Cache the Filters in production
+	Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }

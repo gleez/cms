@@ -6,12 +6,12 @@
  * Note: by design, this class does not do any permission checking.
  *
  * @package	Gleez
- * @category	Input Filter
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @category	Input HTML Filter
+ * @author      Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
-class Gleez_InputFilter {
+class Gleez_HTMLFilter {
         
         /**
 	 * Allowed elements.
@@ -142,7 +142,7 @@ class Gleez_InputFilter {
                 $this->_text  = $text;
 		$this->_config = $config;
         
-		Kohana::$log->add(Log::DEBUG, 'Input Filter Library initialized');
+		Kohana::$log->add(Log::DEBUG, 'HTML Filter Library initialized');
         }
         
         public function __destruct()
@@ -185,65 +185,8 @@ class Gleez_InputFilter {
 	 */
 	public static function factory($text, $format = 1, $filter = NULL)
 	{
-                return new InputFilter($text, $format, $filter);
+                return new HTMLFilter($text, $format, $filter);
 	}
-
-        /**
-         * Returns all available formats
-         *
-         */
-	public static function formats()
-	{
-		$config = Kohana::$config->load('inputfilter');
-	
-		$formats = array();
-		foreach($config->formats as $id => $format)
-		{
-			$formats[$id] = $format['name'];
-		}
-	
-		return $formats;
-	}
-	
-        /**
-         * Returns all available filters
-         *
-         */
-	public static function filters()
-	{
-		$filters =  new stdClass;
-		Module::event('filter_info', $filters);
-		
-		return $filters->list;
-	}
-        
-        public static function callback($callback, $text, $format, $filter)
-        {
-                $args = func_get_args();
-                array_shift($args);
-        
-                if (is_string($callback) AND strpos($callback, '::') !== FALSE)
-		{
-			// Make the static callback into an array
-			$callback = explode('::', $callback, 2);
-		}
-        
-                if ( $callback AND is_callable($callback))
-		{
-                        try
-                        {
-                            return  call_user_func_array($callback, $args);
-                        }
-                        catch (Exception $e)
-                        {
-                                Kohana::$log->add(Log::ERROR, __('Filter callback :class for :filter',
-                                                        array(':class' => $e->getMessage(), 'filter' => $filter['name'])));
-                                return $text;
-                        }
-                }
-        
-                return $text;
-        }
         
         /**
          * Checks whether a string is valid UTF-8.
@@ -618,6 +561,5 @@ class Gleez_InputFilter {
                 
                 return $uri;
         }
-
-
+        
 }

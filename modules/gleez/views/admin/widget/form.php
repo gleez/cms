@@ -93,11 +93,10 @@
 					<?php echo Form::textarea('body', $widget->body, array('class' => 'textarea medium nowrap', 'rows' => 5)) ?>
 				</div>
 
-				<?php $formats = Inputfilter::formats(); ?>
 				<div class="control-group <?php echo isset($errors['format']) ? 'error': ''; ?>">
 					<div class="controls">
 						<?php echo Form::label('format', __('Text format'), array('class' => 'control-label')) ?>
-						<?php echo Form::select('format', $formats, $widget->format, array('class' => 'input-large')); ?>
+						<?php echo Form::select('format', Filter::formats(), $widget->format, array('class' => 'input-large')); ?>
 					</div>
 				</div>
 			<?php endif ?>

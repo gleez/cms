@@ -119,7 +119,7 @@ abstract class Gleez_Text extends Kohana_Text {
                 {
                         $body_content .= $dom_document->saveXML($child_node);
                 }
-//Message::debug($body_content);
+
 		return preg_replace('|<([^> ]*)/>|i', '<$1 />', $body_content);
         }
 
@@ -174,8 +174,8 @@ abstract class Gleez_Text extends Kohana_Text {
 	{
 		// Auto link emails first to prevent problems with "www.domain.com@example.com"
 		return Autolink::filter($text);
-		//return parent::auto_link($text);
 	}
+	
 	/**
 	 * Replace runs of multiple whitespace characters with a single space.
 	 *
@@ -287,7 +287,7 @@ abstract class Gleez_Text extends Kohana_Text {
 		
                 $text = (is_string($textObj->text)) ? $textObj->text : $text;
 		
-                $text = self::filters($textObj); //run all filters
+                $text = Filter::process($textObj); //run all filters
 		
                 // Store in cache with a minimum expiration time of 1 day.
                 if ($cache)
@@ -297,57 +297,13 @@ abstract class Gleez_Text extends Kohana_Text {
                 
                 return $text;
         }
-        
-	/**
-	 * Core function to run all enabled filters by the format id on given string 
-	 */
-	static function filters($text)
-	{
-		$config = Kohana::$config->load('inputfilter');
-		if(!array_key_exists($text->format, $config->get('formats') ) OR !isset($text->format))
-		{
-			//make sure a valid format id exists, if not set default format id
-			$text->format = (int) $config->get('default_format', 1);
-		}
-
-	
-		$filters = $config->formats[$text->format]['filters'];
-		$filter_info = InputFilter::filters();
-	
-		//sort filters by weight
-		$filters = Arr::array_sort($filters, 'weight');
-	
-		// Give filters the chance to escape HTML-like data such as code or formulas.
-		foreach ($filters as $name => $filter)
-		{
-			if ($filter['status'] AND !empty($filter_info[$name]['prepare callback']))
-			{
-				$text->text = InputFilter::callback( $filter_info[$name]['prepare callback'],
-									$text->text, $text->format, $filter
-								);
-			}
-		}
-	
-		// Perform filtering
-		foreach ($filters as $name => $filter)
-		{
-			if ($filter['status'] AND !empty($filter_info[$name]['process callback']))
-			{
-				$text->text = InputFilter::callback( $filter_info[$name]['process callback'],
-									$text->text, $text->format, $filter
-								);
-			}
-		}
-		
-		return $text->text;
-	}
 	
 	/**
 	 * HTML filter. Provides filtering of input into accepted HTML.
 	 */
-	static function html($text, $format, $filter) {
+	public static function html($text, $format, $filter) {
 		
-		$text = (string) InputFilter::factory($text, $format, $filter)->render();
+		$text = (string) HTMLFilter::factory($text, $format, $filter)->render();
 	
 		if ($filter['settings']['html_nofollow'])
 		{
@@ -365,7 +321,7 @@ abstract class Gleez_Text extends Kohana_Text {
 				}
 			}
 			$text = self::dom_serialize($html_dom);
-		}//Message::debug($text);
+		}
 	
 		return trim($text);
 	}

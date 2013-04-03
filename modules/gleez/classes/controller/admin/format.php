@@ -64,26 +64,26 @@ class Controller_Admin_Format extends Controller_Admin {
 
 		// Get required format
 		$format = $this->_format->get($id);
-
-		if (is_null($format))
+                $config = Kohana::$config->load('inputfilter');
+        
+                if (is_null($format))
 		{
 			Message::error(__('Text Format doesn\'t exists!'));
-
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent format id :id', array(':id' => $id));
-
+			
 			if ( ! $this->_internal)
 			{
 				$this->request->redirect(Route::get('admin/format')->uri(), 404);
 			}
 		}
-
-		$all_roles = ORM::factory('role')
-						->find_all()
-						->as_array('id', 'name');
-
-		$filters = InputFilter::filters();
-
-		$enabled_filters = $format['filters'];
+	
+                $fallback_format = (int) $config->default_format;
+                $formats = $this->_format->get_all();
+                $formats[$id]['id'] = $id;
+        
+                $all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+                $filters = Filter::all();
+                $enabled_filters = $formats[$id]['filters'];
 
 		// Form attributes
 		$params = array('id' => $id, 'action' => 'configure');
