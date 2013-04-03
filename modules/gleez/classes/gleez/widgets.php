@@ -288,18 +288,55 @@ abstract class Gleez_Widgets {
 	}
 
 	/**
-	 * Register the widget into database during module install
+	 * Install the widget into database during module install
+	 * Defaults to inactive widget
+	 *
+	 * @param array    $widget  A widget array unique name and title are required
+	 * @param string   $module  The name of the module for this widget
+	 *
+	 * @return void
 	 */
-	public static function register($widget) {}
+	public static function install(array $widget, $module)
+	{
+		if(isset($widget['name']) AND isset($widget['title']))
+		{
+			// name must be unique
+			$values['name']   = @strtolower($widget['name']);
+			$values['title']  = (string) $widget['title'];
+			$values['module'] = (string) $module;
+			$values['status'] = 0;
+			$values['region'] = '-1';
+			
+			try
+			{
+				DB::insert('widgets', array_keys($values))->values(array_values($values))->execute();
+				Kohana::$log->add(LOG::DEBUG, 'Insert widget where module: :module', array(
+						':module' => $module
+				));
+			}
+			catch (Database_Exception $e)
+			{
+				Kohana::$log->add(LOG::DEBUG, __('Unable to Insert widgets, Error :error', array(
+						':error' => $e->getMessage()
+				)));
+			}
+		}
+	}
 
 	/**
 	 * Remove the widget from database during module uninstall
+	 *
+	 * @param string   $module  The name of the module for this widget
+	 *
+	 * @return void
 	 */
-	public static function deregister($module)
+	public static function uninstall($module)
 	{
 		try
 		{
 			DB::delete('widgets')->where('module', '=', $module)->execute();
+			Cache::instance('widgets')->delete_all();
+			
 			Kohana::$log->add(LOG::DEBUG, 'Deleted widgets where module: :module', array(
 					':module' => $module
 			));
