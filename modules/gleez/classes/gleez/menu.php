@@ -6,61 +6,63 @@
  * of an unordered list. You can add any attributes you'd like to
  * the list, and each list item has special classes to help you style it.
  *
- * @package	Gleez
- * @category	Menu
+ * @package    Gleez\Menu
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Menu {
 
-	// Associative array of list items
+	/**
+	 * Associative array of list items
+	 * @var array
+	 */
 	protected $_items = array();
-	
-	// Associative array of attributes for list
+
+	/**
+	 * Associative array of attributes for list
+	 * @var array
+	 */
 	protected $_attrs = array();
-	
+
 	// Current URI
 	protected $_current;
-        
-        /**
+
+	/**
 	 * Creates and returns a new menu object
 	 *
-	 * @chainable
-	 * @param   array   Array of list items (instead of using add() method)
+	 * @param   array  $items  Array of list items (instead of using add() method) [Optional]
 	 * @return  Menu
 	 */
 	public static function factory(array $items = NULL)
 	{
 		return new Menu($items);
 	}
-        
-        /**
+
+	/**
 	 * Constructor, globally sets $items array
 	 *
-	 * @param   array   Array of list items (instead of using add() method)
-	 * @return  void
+	 * @param   array  $items  Array of list items (instead of using add() method) [Optional]
 	 */
-	public function __construct( array $items = NULL )
+	public function __construct(array $items = NULL)
 	{
 		$this->_items   = $items;
-		//$this->_current = trim(URL::site(Request::current()->uri()), '/');
 	}
-       
-        /**
+
+	/**
 	 * Add's a new list item to the menu. if parent_id is passed will add as child
 	 *
-	 * @chainable
-	 * @param   string   Unique id
-	 * @param   string   Title of link
-	 * @param   string   URL (address) of link
-	 * @param   string   Additional text of link
-	 * @param   array    Params of the item to handle logic
-	 * @param   string   Parent Id of the link
-	 * @param   Menu     Instance of class that contain children
+	 * @param   string  $id         Unique id
+	 * @param   string  $title      Title of link
+	 * @param   string  $url        URL (address) of link
+	 * @param   string  $descp      Additional text of link [Optional]
+	 * @param   array   $params     Params of the item to handle logic [Optional]
+	 * @param   string  $image      Menu icon [Optional]
+	 * @param   string  $parent_id  Parent Id of the link [Optional]
+	 * @param   Menu    $children   Instance of class that contain children [Optional]
 	 * @return  Menu
 	 */
-	public function add($id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, $parent_id = FALSE, Menu $children = NULL)
+	public function add($id, $title, $url, $descp = '', array $params = NULL, $image = NULL, $parent_id = NULL, Menu $children = NULL)
 	{
 		if( $parent_id )
 		{
@@ -79,28 +81,28 @@ class Gleez_Menu {
 				'image'    => $image
 			);
 		}
-	
+
 		return $this;
 	}
 
 	/**
 	 * Remove an item from the menu
 	 *
-	 * @param   string   Id of link
-	 * @param   string   Parent Id of link
-	 * @return  void
+	 * @param   string   $target_id  Id of link
+	 * @param   boolean  $parent_id  Parent Id of link [Optional]
+	 * @return  Menu
 	 */
 	public function remove($target_id, $parent_id = FALSE)
 	{
-		if( $parent_id )
+		if ($parent_id)
 		{
 			$this->_items = self::_remove_child($target_id, $this->_items);
 		}
-		else if ( isset( $this->_items[$target_id] ) )
+		else if (isset( $this->_items[$target_id]))
 		{
 			unset($this->_items[$target_id]);
 		}
-	
+
 		return $this;
 	}
 
@@ -109,8 +111,8 @@ class Gleez_Menu {
 	 *
 	 * @param   string   $target_id  Id of link item
 	 * @param   string   $title      New Title for the item
-	 * @param   booleen  $parent_id  true/false
-	 * @return  void
+	 * @param   boolean  $parent_id  Parent Id of link [Optional]
+	 * @return  Menu
 	 */
 	public function set_title($target_id, $title, $parent_id = FALSE)
 	{
@@ -122,7 +124,7 @@ class Gleez_Menu {
 		{
 			$this->_items[$target_id]['title'] = (string)$title;
 		}
-	
+
 		return $this;
 	}
 
@@ -131,8 +133,8 @@ class Gleez_Menu {
 	 *
 	 * @param   string   $target_id  Id of link
 	 * @param   string   $url      	 New url of the item
-	 * @param   booleen  $parent_id  true/false
-	 * @return  void
+	 * @param   boolean  $parent_id  Parent Id of link [Optional]
+	 * @return  MENU
 	 */
 	public function set_url($target_id, $url, $parent_id = FALSE)
 	{
@@ -144,43 +146,43 @@ class Gleez_Menu {
 		{
 			$this->_items[$target_id]['url'] = (string)$url;
 		}
-	
+
 		return $this;
 	}
-	
+
 	/**
 	 * Renders the HTML output for the menu
 	 *
-	 * @param   array   $attrs  Associative array of html attributes
-	 * @param   array   $items  The parent item's array, only used internally
-	 * 
+	 * @param   array   $attrs  Associative array of html attributes [Optional]
+	 * @param   array   $items  The parent item's array, only used internally [Optional]
+	 *
 	 * @return  string  HTML unordered list
 	 */
 	public function render(array $attrs = NULL, array $items = NULL)
 	{
 		static $i;
-	
+
 		$items = empty($items) ? $this->_items : $items;
 		$attrs = empty($attrs) ? $this->_attrs : $attrs;
-	
+
 		if( empty( $items ) ) return;
-	
+
 		$i++;
 		HTML::$current_route = URL::site(Request::current()->uri());
-	
+
 
 		$attrs['class'] = empty($attrs['class']) ? 'level-'.$i : $attrs['class'].' level-'.$i;
 		$menu = '<ul'.HTML::attributes($attrs).'>';
 		$num_items = count($items);
 		$_i = 1;
-	
+
 		foreach ($items as $key => $item)
 		{
 			$has_children = count($item['children']);
 			$classes = NULL;
 			$attributes  = array();
 			$caret = NULL;
-		
+
 			// Add first, last and parent classes to the list of links to help out themers.
 			if ($_i == 1)          $classes[] = 'first';
 			if ($_i == $num_items) $classes[] = 'last';
@@ -190,14 +192,14 @@ class Gleez_Menu {
 				$attributes[] = 'dropdown-toggle';
 				if($i == 2) $classes[] = 'dropdown-submenu';
 			}
-		
+
 			// Check if the menu item URI is or contains the current URI
 			if (HTML::is_active($item['url']))
 			{
 				$classes[] = 'active';
 				$attributes[] = 'active';
 			}
-	
+
 			if ( ! empty($classes))
 			{
 				$classes = HTML::attributes(array('class' => implode(' ', $classes)));
@@ -207,9 +209,9 @@ class Gleez_Menu {
 			{
 				$attributes = array('class' => implode(' ', $attributes));
 			}
-	
+
 			$id = HTML::attributes(array('id' => 'menu-'.$key));
-			
+
 			//Twitter bootstrap attributes
 			if ($has_children)
 			{
@@ -221,29 +223,29 @@ class Gleez_Menu {
 			//set title
 			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
 			$title .= Text::plain($item['title']).$caret;
-			
+
 			if($item['descp'] AND !empty($item['descp']))
 			{
 				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
 			}
-	
+
 			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title, $attributes);
-		
+
 			if ( $has_children )
 			{
 				$menu .= $this->render(array('class' => 'dropdown-menu'),  $item['children']);
 			}
-			
+
 			$_i++;
 			$menu .= '</li> ';
 		}
-	
+
 		$menu .= '</ul>';
 		$i--;
-	
+
 		return $menu;
 	}
-	
+
 	/**
 	 * Renders the HTML output for menu without any attributes or active item
 	 *
@@ -260,7 +262,7 @@ class Gleez_Menu {
 			return $e->getMessage();
 		}
 	}
-	
+
 	/**
 	 * Nicely outputs contents of $this->items for debugging info
 	 *
@@ -280,23 +282,23 @@ class Gleez_Menu {
 	{
 		return $this->_items;
 	}
-	
+
 	/**
 	 * Static method to display menu based on its unique name
 	 *
 	 * @param   string   $name The name of the menu
-	 * @param   array    $attr The css class or id array
+	 * @param   array    $attr The css class or id array [Optional]
 	 * @return  string
 	 */
-	public static function links( $name, $attr = array('class' =>'menus') )
+	public static function links($name, $attr = array('class' =>'menus'))
 	{
 		$cache = Cache::instance('menus');
-	
+
 		if( ! $items = $cache->get($name) )
 		{
 			$_menu = DB::select()->from('menus')->where('name', '=', (string)$name )->execute()->current();
 			if( ! $_menu) return;
-		
+
 			$items = DB::select()->from('menus')
 					->where('lft', '>', $_menu['lft'])
 					->where('rgt', '<', $_menu['rgt'])
@@ -305,17 +307,17 @@ class Gleez_Menu {
 					->order_by('lft', 'ASC')
 					->execute()
 					->as_array();
-		
+
 			if ( count($items) === 0) return;
 
-			//set the cache
+			// Set the cache
 			$cache->set($name, $items, DATE::DAY);
 		}
 
-		//Initiate Menu Object
+		// Initiate Menu Object
 		$menu = Menu::factory();
-	
-		// start with an empty $right stack
+
+		// Start with an empty $right stack
 		$stack = array();
 
 		foreach( $items as &$item)
@@ -325,28 +327,26 @@ class Gleez_Menu {
 			{
 				array_pop($stack);
 			}
-			
+
 			if(count($stack) > 0)
 			{
-				//Kohana::$log->add(LOG::DEBUG, 'Adding :title to :parent', array( ':title' => $item['title'], ':parent' => $stack[count($stack) - 1]['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
-                        }
+			}
 			else
 			{
-				//Kohana::$log->add(LOG::DEBUG, 'No parent for :title ', array( ':title' => $item['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image']);
 			}
-		        
+
 			$stack[] = &$item;
 		}
-	
-		//unset the stack array to freeup memory
+
+		// unset the stack array to freeup memory
 		unset( $stack );
 
 		// Enable developers to override menu
 		Module::event('menus', $menu);
 		Module::event("menus_{$name}", $menu);
-	
+
 		return $menu->render( $attr );
 	}
 
@@ -356,15 +356,15 @@ class Gleez_Menu {
 	 * @param   string   $name The name of the menu
 	 * @return  object   Menu
 	 */
-	public static function items( $name )
+	public static function items($name)
 	{
 		$cache = Cache::instance('menus');
-	
+
 		if( ! $items = $cache->get($name) )
 		{
 			$_menu = DB::select()->from('menus')->where('name', '=', (string)$name )->execute()->current();
 			if( ! $_menu) return;
-		
+
 			$items = DB::select()->from('menus')
 					->where('lft', '>', $_menu['lft'])
 					->where('rgt', '<', $_menu['rgt'])
@@ -373,7 +373,7 @@ class Gleez_Menu {
 					->order_by('lft', 'ASC')
 					->execute()
 					->as_array();
-		
+
 			if ( count($items) === 0) return;
 
 			//set the cache
@@ -382,7 +382,7 @@ class Gleez_Menu {
 
 		//Initiate Menu Object
 		$menu = Menu::factory();
-	
+
 		// start with an empty $right stack
 		$stack = array();
 
@@ -393,38 +393,38 @@ class Gleez_Menu {
 			{
 				array_pop($stack);
 			}
-			
+
 			if(count($stack) > 0)
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'Adding :title to :parent', array( ':title' => $item['title'], ':parent' => $stack[count($stack) - 1]['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
-                        }
+			}
 			else
 			{
 				//Kohana::$log->add(LOG::DEBUG, 'No parent for :title ', array( ':title' => $item['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image']);
 			}
-		        
+
 			$stack[] = &$item;
 		}
-	
+
 		//unset the stack array to freeup memory
 		unset( $stack );
 
 		// Enable developers to override menu
 		Module::event('menus_items', $menu);
 		Module::event("menus_items_{$name}", $menu);
-	
+
 		return $menu;
 	}
-	
+
 	/**
-	 * private method to change menu based on its unique name
+	 * Private method to change menu based on its unique name
 	 *
 	 * @param   string   $needle The name of the menu
 	 * @param   array    $array  The array of items
 	 * @param   string   $string The new value
-	 * @param   string   $op     The action title/url to change
+	 * @param   string   $op     The action title/url to change [Optional]
 	 * @return  array
 	 */
 	private static function _change_title_url($needle, array $array, $string, $op = 'title')
@@ -436,16 +436,16 @@ class Gleez_Menu {
 			{
 				if($op == 'title') $array[$key]['title'] = (string)$string;
 				if($op == 'url')   $array[$key]['url']   = (string)$string;
-				
+
 				return $array;
 			}
-	
+
 			if (isset($value['children']))
 			{
 				$array[$key]['children'] = self::_change_title_url($needle, $value['children'], $string, $op);
 			}
 		}
-	
+
 		return $array;
 	}
 
@@ -464,31 +464,31 @@ class Gleez_Menu {
 	 * @return  array
 	 */
 	private static function _add_child($needle, array $array, $id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, Menu $children = NULL)
-	{ 
+	{
 		foreach ($array as $key => $value)
 		{
 			if ($key == $needle)
 			{
 				$array[$key]['children'][$id] = array
-					(
-						'title'    => $title,
-						'url'      => $url,
-						'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
-						'access'   => TRUE,
-						'descp'	   => $descp,
-						'params'   => $params,
-						'image'    => $image
-					);
-				
+				(
+					'title'    => $title,
+					'url'      => $url,
+					'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
+					'access'   => TRUE,
+					'descp'	   => $descp,
+					'params'   => $params,
+					'image'    => $image
+				);
+
 				return $array;
 			}
-	
+
 			if (isset($value['children']))
 			{
 				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $descp, $params, $image, $children);
 			}
 		}
-	
+
 		return $array;
 	}
 
@@ -506,17 +506,17 @@ class Gleez_Menu {
 			if ($key == $needle)
 			{
 				unset($array[$key]);
-			
+
 				return $array;
 			}
-	
+
 			if (isset($value['children']))
 			{
 				$array[$key]['children'] = self::_remove_child($needle, $value['children']);
 			}
 		}
-	
+
 		return $array;
 	}
-	
+
 }
