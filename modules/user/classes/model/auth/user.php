@@ -117,9 +117,6 @@ class Model_Auth_User extends ORM {
 	public function filters()
 	{
 		return array(
-			TRUE => array(
-				array('trim'), // Clean the leading and trailing spaces
-			),
 			'pass' => array(
 				array(array(Auth::instance(), 'hash'))
 			),
