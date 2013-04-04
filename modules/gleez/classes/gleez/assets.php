@@ -92,7 +92,9 @@ class Gleez_Assets {
 	 */
 	public static function css($handle = NULL, $src = NULL, $deps = NULL, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		if(Kohana::$environment === Kohana::PRODUCTION)
+		$config = Kohana::$config->load('media');
+		
+		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
 		}
@@ -231,7 +233,9 @@ class Gleez_Assets {
 	 */
 	public static function js($handle, $src = NULL, $deps = NULL, $footer = FALSE, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		if (Kohana::$environment === Kohana::PRODUCTION)
+		$config = Kohana::$config->load('media');
+		
+		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
 		}
