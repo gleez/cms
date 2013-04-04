@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<div class="row" itemscope itemtype="http://schema.org/Person">
+<div class="row-fluid" itemscope itemtype="http://schema.org/Person">
 
-	<div id="Panel" class="span3">
+	<div id="Panel" class="span4">
 		<div id="photo" class="well">
 			<div class="Photo">
 				<?php if ($is_owner): ?>
@@ -56,7 +56,7 @@
 		</div>
 	</div>
 
-	<div id="Profile" class="span6">
+	<div id="Profile" class="span8">
 		<h3><?php echo __('Activity'); ?></h3>
 		<ul class="nav nav-list">
 			<li class="Item activity " id="activity_1">
