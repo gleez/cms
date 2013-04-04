@@ -8,13 +8,13 @@
 
 <div class="content">
 	<?php echo Form::open(Route::get('admin/page')->uri($params).URL::query($destination), array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
-		<fieldset>
+		<div class="thumbnail">
 			<legend><?php echo __('Bulk Actions'); ?></legend>
 			<div class="control-group edit-operation <?php echo isset($errors['operation']) ? 'error': ''; ?>">
 				<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'page'), '', array('class' => 'input-xlarge')); ?>
-				<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-danger btn-small')); ?>
+				<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
 			</div>
-		</fieldset>
+		</div><br>
 		<table class="table table-striped table-bordered" id="posts-admin-list">
 			<thead>
 				<tr>
