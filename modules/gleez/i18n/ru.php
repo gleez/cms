@@ -180,6 +180,7 @@ return array
 	'Maintenance Mode' => 'Режим обслуживания',
 	'Managing the text formats of editor' => 'Управление тестовыми форматами редактора',
 	'Make sticky' => 'Прикрепить',
+	'Markdown' => 'Маркдаун',
 	'Max file size of :max Bytes exceeded!' => 'Превышен максимальный размер файла :max байт!',
 	'Menu: :name deleted successful!' => 'Меню: :name успешно удалено!',
 	'Menu: %name saved successful!' => 'Меню: %name успешно сохранено!',
@@ -255,7 +256,7 @@ return array
 	'Promote this Post' => 'Выделить материал',
 	'Promote to front page' => 'Разместить на главной странице',
 	'Publication' => 'Публикация',
-	'Publish' => 'Опубликовать',
+	'Publish' => 'Опубликовано',
 	// Q
 	// R
 	'Read only' => 'Только чтение',
@@ -332,7 +333,7 @@ return array
 	'The configured :modules directory does not exist or does not contain required files.' => 'Настроенный каталог для модулей :modules не существует или не содержит требуемых файлов.',
 	'The configured :system directory does not exist or does not contain required files.' => 'Настроенный каталог для системы :system не существует или не содержит требуемых файлов.',
 	'The date :param1 is invalid' => ':param1 &mdash; не корректная дата',
-	'The delete has been performed!' => 'Удаление выполнено!',
+	'The delete has been performed!' => 'Удаление успешно выполнено!',
 	'The directory :config_dir does not exist or is not writable. We\'re having trouble creating a place for your CMS. Can you help? Please create a directory called "config" using :mkdir in your gleez directory, then run :chmod. That should fix it.' => 'Каталог :config_dir не существует или не доступен для записи. Нам не удается создать место для вашей CMS. Не могли бы Вы помочь? Пожалуйста создайте папку под названием "config" используя :mkdir в Вашей Gleez-директории и используйте команду :chmod. Это должно исправить ситуацию.',
 	'The main parameters of the site set up here.' => 'Основные параметры сайта настраиваются здесь.',
 	'The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.' => 'Мастер меню предоставляет интерфейс для управления меню. Меню представляет собой иерархическую коллекцию ссылок, которые могут быть как внутренними, так и внешними по отношению к сайту, и как правило, используется для навигации.',
