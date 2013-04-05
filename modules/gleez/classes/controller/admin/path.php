@@ -17,29 +17,34 @@ class Controller_Admin_Path extends Controller_Admin {
 
 	public function action_list()
 	{
-		$this->title    = __('Path Aliases');
-		$view           = View::factory('admin/path/list')
-						->bind('pagination', $pagination)
-						->bind('paths', $paths);
+		$is_datatables = Request::is_datatables();
 
-		$path       = ORM::factory('path');
-		$total      = $path->count_all();
-
-		if ($total == 0)
+		if ($is_datatables)
 		{
-			Kohana::$log->add(Log::INFO, 'No paths found');
-			$this->response->body( View::factory('admin/path/none') );
-			return;
+			$paths       = ORM::factory('path');
+			$this->_datatables = $paths->dataTables(array('source', 'alias'));
+			
+			foreach ($this->_datatables->result() as $path)
+			{
+				$this->_datatables->add_row(
+					array(
+						Text::plain($path->source),
+						Text::plain($path->alias),
+
+						HTML::anchor(Route::get('admin/path')->uri(array('action' => 'edit', 'id' => $path->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit Alias'))) .
+						HTML::anchor(Route::get('admin/path')->uri(array('action' => 'delete', 'id' => $path->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete Alias')))
+					)
+				);
+			}
 		}
 
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items' => $total,
-			'items_per_page' => 25,
-			));
+		$this->title = __('Path Aliases');
+		$url         = Route::url('admin/path', array('action' => 'list'), TRUE);
 
-		$paths  = $path->order_by('source', 'ASC')->limit($pagination->items_per_page)
-							  ->offset($pagination->offset)->find_all();
+		$view = View::factory('admin/path/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('url',           $url);
 
                 $this->response->body($view);
 	}

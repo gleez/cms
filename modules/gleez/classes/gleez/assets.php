@@ -92,7 +92,9 @@ class Gleez_Assets {
 	 */
 	public static function css($handle = NULL, $src = NULL, $deps = NULL, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		if(Kohana::$environment === Kohana::PRODUCTION)
+		$config = Kohana::$config->load('media');
+		
+		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
 		}
@@ -231,7 +233,9 @@ class Gleez_Assets {
 	 */
 	public static function js($handle, $src = NULL, $deps = NULL, $footer = FALSE, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		if (Kohana::$environment === Kohana::PRODUCTION)
+		$config = Kohana::$config->load('media');
+		
+		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
 		}
@@ -748,7 +752,6 @@ class Gleez_Assets {
 		{
 			Assets::js('jquery', 'media/js/jquery-1.9.1.min.js', NULL, FALSE, array('weight' => -20));
 			Assets::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
-			Assets::js('jquery_ui', 'media/js/jquery-ui-1.10.1.custom.min.js',array('jquery'),FALSE,array('weight' => -15));
 			Assets::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
 			Assets::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 
