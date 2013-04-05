@@ -12,11 +12,13 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 * Users, User Groups, and Permissions
 * Contents or Articles for News or Blogging
 * Content Categories
+* Content Comments
+* Content Tagging
 * Content Blocks or Widgets
 * Extensions, Modules or Plugins
 * Themes and Layouts
 * Input formats like Markdown, HTML etc
-* Shotcodes
+* Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
 * Other Details like SEO, Media, etc.
