@@ -188,14 +188,14 @@ form span.req{
 /* Animated throbber */
 html.js input.form-autocomplete {
   background-image: url('../images/throbber.gif');
-  background-position: 100% 7px; /* LTR */
+  background-position: 100% 8px; /* LTR */
   background-repeat: no-repeat;
 }
-html.js input.form-autocomplete.ui-autocomplete-loading{
-  background-position: 100% -13px; /* LTR */
+html.js input.form-autocomplete.throbbing{
+  background-position: 100% -12px; /* LTR */
 }
 ul.ui-autocomplete{
-	padding: 0;
+    padding: 0;
 }
 ul.ui-autocomplete li.ui-autocomplete-header {
     /*background: url("../images/search-header-bg.gif") repeat-x scroll center bottom transparent;*/

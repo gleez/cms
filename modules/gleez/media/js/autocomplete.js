@@ -14,19 +14,24 @@
     Gleez.searchItems = function(element, query, process) {
 	// Get the desired term and construct the autocomplete URL for it.
         var term = Gleez.autocompleteExtractLast(query);
+	$(element).addClass('throbbing');
 	
 	$.ajax({
 	    url: $(element).data('autocompletePath') + '/' + encodeURIComponent(term),
-	    dataType: "JSON",
+	    dataType: 'json',
 	    //async: false,
 	    success: function(results){
-		var items = new Array;
-		$.map(results, function(data, item){
-		    items.push(data);
-		});
-		process(items);
+		if (typeof results.status == 'undefined' || results.status != 0) {
+		    var items = new Array;
+		    // Gleez returns an object array, but we need a string array.
+		    $.map(results, function(data, item){
+			items.push(data);
+		    });
+		    process(items);
+		    $(element).removeClass('throbbing'); 
+		}
 	    }
-	});
+	}, 300);
     };
 
     Gleez.autocompleteSplit = function(val) {
