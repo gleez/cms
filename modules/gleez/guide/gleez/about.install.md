@@ -4,23 +4,30 @@ To install Gleez, follow these instructions:
 
 ## Installing using the zip
 
-1.  Download the [latest zip file](http://gleezcms.org/download), and extract it onto your server.
-
-2.  We need to make `application/logs` and `application/cache`, and `application/tmp` folders writable, Using an ftp client you can usually right-click on each folder, click on permisions, and mark as group and world writable.  If you have command-line access you can run the following commands:
-
-   ~~~
-   chmod 777 application/logs
-   chmod 777 application/cache
-   chmod 777 application/tmp
-   ~~~
+1. Download the [latest version](https://github.com/gleez/cms/archive/master.zip) of Gleez CMS.
+2. Create a database called `gleezcms`, and a database user with access to that database in [phpMyAdmin](http://www.phpmyadmin.net/), [Adminer](http://www.adminer.org/) or equivalent.
+3. Upload the contents of the `gleezcms` folder to your server.
+4. <u>If your operating system is based on access rights, such as Linux or UNIX</u>
+  * Files should have permissions set to 644 and folders should be set to 755, except...
+  * Set `/application/cache` and its sub-folders to 777
+  * Set `/application/logs` and its sub-folders to 777
+  * Set `/application/media` and its sub-folders to 777
+  * Set `/application/config` and its sub-folders to 777
+  * Set `/media` and its sub-folders to 777
+5. Go to `http://example.com/` and follow the steps
+6. When finished, change the admin password.
 
 [!!] Depending on your platform, the installation's subdirs may have lost their permissions thanks to zip extraction. Chmod them all to 755 by running `find . -type d -exec chmod 0755 {} \;` from the root of your gleez installation.
 
-3.  You will need to create a empty database, and a database user with access to that database.
+## Git Clone Installation
 
-4.  Now point your browser to `base_url`, and click follow the instructions. If you get no errors, then Gleez is installed!
-
-5. Test your site by opening the URL you set as the `base_url` in your favorite browser.
+~~~
+git clone https://github.com/gleez/cms.git gleezcms
+cd gleezcms
+git submodule init
+git submodule update
+~~~
+Follow from step 2 of the above instructions
 
 
 ## Setting up a production environment

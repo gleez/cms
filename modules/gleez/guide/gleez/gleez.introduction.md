@@ -33,18 +33,20 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 
 Gleez provides the user interface to manage many aspects of a website like the following:
 
-* Website Navigation and Web Pages, 
+* Website Navigation and Web Pages
 * Users, User Groups, and Permissions
 * Contents or Articles for News or Blogging
-* Content Blocks or Widgets
 * Content Categories
 * Content Comments
 * Content Tagging
+* Content Blocks or Widgets
 * Extensions, Modules or Plugins
 * Themes and Layouts
+* Input formats like Markdown, HTML etc
+* Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
-* Other Details like SEO, Media, etc..
+* Other Details like SEO, Media, etc.
 
 **Frameworks & Libraries**
 
@@ -55,6 +57,8 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
 * Cleditor jQuery plugin [(http://premiumsoftware.net/cleditor/)](http://premiumsoftware.net/cleditor/)
+* PHP Markdown [(http://michelf.ca/projects/php-markdown/)](http://michelf.ca/projects/php-markdown/)
+* PHPMailer [(https://github.com/Synchro/PHPMailer/)](https://github.com/Synchro/PHPMailer/)
 
 **Credits**
 
