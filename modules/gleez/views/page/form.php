@@ -99,7 +99,7 @@
 								<div class="control-group <?php echo isset($errors['author_name']) ? 'error': ''; ?>">
 									<?php echo Form::label('author_name', __('Author'), array('class' => 'control-label') ) ?>
 									<div class="controls">
-										<?php echo Form::input('author_name', $author,array('class' => 'span11'), 'autocomplete/user'); ?>
+										<?php echo Form::input('author_name', $author,array('class' => 'span11', 'data-items' => 10, 'data-provide' => 'typeahead'), 'autocomplete/user'); ?>
 									</div>
 								</div>
 							<?php endif; ?>
