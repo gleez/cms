@@ -157,11 +157,14 @@ class Controller_Admin_Page extends Controller_Admin {
 		}
 
 		$view = View::factory('admin/page/list')
-				->bind('pagination', $pagination)
-				->set('destination', array('destination' => $this->request->uri()))
-				->set('actions',     Post::bulk_actions(TRUE, 'page'))
-				->set('params',      array('action' => 'list'))
-				->set('posts',       $posts->find_all());
+				->bind('pagination',  $pagination)
+				->bind('destination', $destination)
+				->bind('action',      $form_action)
+				->set('actions',      Post::bulk_actions(TRUE, 'page'))
+				->set('posts',        $posts->find_all());
+
+		$destination = array('destination' => $this->request->uri());
+		$form_action = Route::get('admin/page')->uri(array('action' => 'list')).URL::query(array('destination' => $this->request->uri()));
 
 		$dest = ($this->request->query('destination') !== NULL) ?
 					array('destination' => $this->request->query('destination')) : array();
