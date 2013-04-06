@@ -8,6 +8,7 @@
 	$use_tags          = (isset($post['use_tags'])    AND $post['use_tags'] == 1) ? TRUE : FALSE;
 	$use_submitted     = (isset($post['use_submitted']) AND $post['use_submitted'] == 1) ? TRUE : FALSE;
 	$comment_anonymous = (isset($post['comment_anonymous']) AND $post['comment_anonymous'] == 1) ? TRUE : FALSE;
+	$use_cache         = (isset($post['use_cache']) AND $post['use_cache'] == 1) ? TRUE : FALSE;
 
 	$comment1 = (isset($post['comment']) && $post['comment'] == 0) ? TRUE : FALSE;
 	$comment2 = (isset($post['comment']) && $post['comment'] == 1) ? TRUE : FALSE;
@@ -51,6 +52,7 @@
 			echo Form::hidden('use_category',      0);
 			echo Form::hidden('use_tags',          0);
 			echo Form::hidden('use_submitted',     0);
+			echo Form::hidden('use_cache',         0);
 			echo Form::hidden('comment_anonymous', 0);
 		?>
 		<div class="controls">
@@ -61,6 +63,7 @@
 			<?php echo Form::label('use_category',      Form::checkbox('use_category', TRUE, $use_category).__('Enable Category'), array('class' => 'checkbox')) ?>
 			<?php echo Form::label('use_tags',          Form::checkbox('use_tags', TRUE, $use_tags).__('Enable tag cloud'), array('class' => 'checkbox')) ?>
 			<?php echo Form::label('use_submitted',     Form::checkbox('use_submitted', TRUE, $use_submitted).__('Show Submitted Info'), array('class' => 'checkbox')) ?>
+			<?php echo Form::label('use_cache',         Form::checkbox('use_cache', TRUE, $use_cache).__('Enable Page Cache'), array('class' => 'checkbox')) ?>
 			<?php echo Form::label('comment_anonymous', Form::checkbox('comment_anonymous', TRUE, $comment_anonymous).__('Allow anonymous commenting (with contact information)'), array('class' => 'checkbox')) ?>
 		</div>
 	</div>
