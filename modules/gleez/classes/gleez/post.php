@@ -376,6 +376,8 @@ class Gleez_Post extends ORM_Versioned {
 		}
 
 		$source = $this->rawurl;
+		Cache::instance($this->type)
+				->delete($this->type.'-'.$this->id);
 		parent::delete();
 
 		// Delete the path aliases associated with this object
@@ -757,9 +759,11 @@ class Gleez_Post extends ORM_Versioned {
 	 */
 	public static function dcache($id, $type, $config)
 	{
-		$cache = Cache::instance($type);
+		$cache     = Cache::instance($type);
+		$use_cache = (bool) $config->get('use_cache', FALSE);
+		$post      = ($use_cache) ? $cache->get("$type-$id", FALSE) : FALSE;
 
-		if( ! $post = $cache->get("$type-$id"))
+		if( $post == FALSE OR is_null($post) )
 		{
 			$post = ORM::factory($type, $id);
 
@@ -768,7 +772,7 @@ class Gleez_Post extends ORM_Versioned {
 				throw new HTTP_Exception_404('Attempt to non-existent post.');
 			}
 
-			$post->content = View::factory('page/body')->set('config', $config)->bind('post', $post);
+			$post->content = View::factory("$type/body")->set('config', $config)->bind('post', $post);
 
 			$data = array();
 			$data['author']  = (int)$post->author;
@@ -780,7 +784,10 @@ class Gleez_Post extends ORM_Versioned {
 			$data['type']    = $post->type;
 			$data['content'] = (string) $post->content;
 
-			$cache->set("$type-$id", (object) $data, DATE::WEEK);
+			if( $use_cache )
+			{
+				$cache->set("$type-$id", (object) $data, DATE::WEEK);
+			}
 		}
 
 		return $post;
