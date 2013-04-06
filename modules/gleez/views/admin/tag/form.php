@@ -28,7 +28,7 @@
 
 <div class="control-group <?php echo isset($errors['tag']) ? 'error': ''; ?>">
  	<?php echo Form::label('name', __('Tag: ')) ?>
- 	<?php print Form::input('name', $post->name, array('class' => 'text small')); ?>
+ 	<?php echo Form::input('name', $post->name, array('class' => 'text small')); ?>
 </div>
 
 <div class="control-group <?php echo isset($errors['type']) ? 'error': ''; ?>">
@@ -42,6 +42,6 @@
 	<?php echo Form::input('path', $path, array('class' => 'text small slug')); ?>
 </div>
 
-<?php echo Form::button('tag', __('Submit'), array('class' => 'btn btn-primary')) ?>
+<?php echo Form::submit('tag', __('Submit'), array('class' => 'btn btn-primary')) ?>
 
 <?php echo Form::close() ?>
