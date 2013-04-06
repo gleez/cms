@@ -34,6 +34,9 @@ div#pageContent {
     margin-top: 10px;
 }
 
+.post-list{
+    margin-bottom: 2em;
+}
 
 .post div.meta span {
     line-height: 3.5;
