@@ -6,18 +6,44 @@
     $(document).on('attach.autocomplete', function (e) {
 	$('input.form-autocomplete', e.target).typeahead({
 	    source: function(query, process){
-		Gleez.searchItems(this.$element, query, process);
+		Gleez.searchItems(this, query, process);
 	    },
+	    updater: function (item) {
+		var terms = Gleez.autocompleteSplit(this.query);
+		// Remove the current input.
+		terms.pop();
+		// Add the selected item.
+		terms.push(item);
+
+		return terms.join(", ");
+	    },
+	    matcher: function (item) {
+		var term = Gleez.autocompleteExtractLast(this.query);
+		return ~item.toLowerCase().indexOf(term.toLowerCase())
+	    },
+	    highlighter: function (item) {
+		var term = Gleez.autocompleteExtractLast(this.query);
+		var query = term.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+		return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+		  return '<strong>' + match + '</strong>'
+		})
+	    }
 	});
     });
 
-    Gleez.searchItems = function(element, query, process) {
+    Gleez.searchItems = function(object, query, process) {
 	// Get the desired term and construct the autocomplete URL for it.
         var term = Gleez.autocompleteExtractLast(query);
-	$(element).addClass('throbbing');
+	
+	if (!term || term.length < object.options.minLength) {
+	    return object.shown ? object.hide() : object
+	}
+	
+	//adding throbbing animation during search
+	$(object.$element).addClass('throbbing');
 	
 	$.ajax({
-	    url: $(element).data('autocompletePath') + '/' + encodeURIComponent(term),
+	    url: $(object.$element).data('url') + '/' + encodeURIComponent(term),
 	    dataType: 'json',
 	    //async: false,
 	    success: function(results){
@@ -27,11 +53,23 @@
 		    $.map(results, function(data, item){
 			items.push(data);
 		    });
+		    //process the items
 		    process(items);
-		    $(element).removeClass('throbbing'); 
+		    
+		    //remove the throbbing class
+		    $(object.$element).removeClass('throbbing');
+		    
+		    //set the width of the list
+		    object.$menu
+		    .insertAfter(object.$element)
+		    .css({
+		      width: object.$element.innerWidth() + 'px',
+		    })
 		}
 	    }
 	}, 300);
+	
+	return true;
     };
 
     Gleez.autocompleteSplit = function(val) {
