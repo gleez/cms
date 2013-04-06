@@ -54,8 +54,8 @@ class Gleez_Form extends Kohana_Form {
 			// Assign the autocomplete js file
 			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
 
-			$attrs['data-autocomplete-path'] = URL::site($url, TRUE);
-			$attrs['data-autocomplete-smart'] = $smart;
+			$attrs['data-url'] = URL::site($url, TRUE);
+			//$attrs['data-autocomplete-smart'] = $smart;
 		}
 
 		$out .= '<input'.HTML::attributes($attrs).'>';
