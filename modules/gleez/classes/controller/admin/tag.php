@@ -56,10 +56,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 	public function action_add()
 	{
-		$this->title = __('Add Tag');
-		$view = View::factory('admin/tag/form')->bind('errors', $errors)->bind('post', $post);
-
 		$post = ORM::factory('tag');
+		$action = Route::get('admin/tag')->uri(array('action' => 'add'));
 
 		if( $this->valid_post('tag') )
 		{
@@ -75,17 +73,22 @@ class Controller_Admin_Tag extends Controller_Admin {
 			}
                         catch (ORM_Validation_Exception $e)
 			{
-				$errors =  $e->errors('models');
+				$this->_errors =  $e->errors('models');
 			}
 		}
 
+		$view = View::factory('admin/tag/form')
+				->set('post',   $post)
+				->set('action', $action)
+				->set('errors', $this->_errors)
+				->set('path', 	FALSE);
+		
 		$this->response->body($view);
 	}
 
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
-
 		$post = ORM::factory('tag', (int) $id);
 
 		if( !$post->loaded() )
@@ -99,7 +102,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 
 		$this->title = __('Edit Tag %name', array('%name' => $post->name));
-		$view = View::factory('admin/tag/form')->bind('errors', $errors)->bind('post', $post);
+		$action = Route::get('admin/tag')->uri(array('action' => 'edit', $id => $id));
 
 		if ( $this->valid_post('tag') )
 		{
@@ -115,17 +118,22 @@ class Controller_Admin_Tag extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors();
+				$this->_errors = $e->errors();
 			}
 		}
 
+		$view = View::factory('admin/tag/form')
+					->set('post',    $post)
+					->set('action',  $action)
+					->set('errors',  $this->_errors)
+					->set('path', 	 $post->url);
+		
 		$this->response->body($view);
 	}
 
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
-
 		$tag = ORM::factory('tag', $id);
 
 		if ( ! $tag->loaded())
