@@ -238,7 +238,7 @@ if ( ! Route::cache())
  *
  * @uses ACL Used to define the privileges
  */
-if ( ! ACL::cache() )
+if ( ! ACL::cache())
 {
 	ACL::set('comment', array(
 		'administer comment' => array(
@@ -422,6 +422,5 @@ if ( ! Filter::cache())
 		->description(__('Allows content to be submitted using Markdown, a simple plain-text syntax that is filtered into valid HTML.'));
 
 	// Cache the Filters in production
-	//Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
-        Filter::cache(Kohana::$environment === Kohana::PRODUCTION);
+	Filter::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
