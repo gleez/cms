@@ -184,7 +184,7 @@ if ( ! Route::cache())
 	Route::set('page', 'page(/<action>)(/<id>)(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+',
-		'action'     => 'index|list|view|add|edit|delete|term'
+		'action'     => 'index|list|view|add|edit|delete|term|tag'
 	))
 	->defaults(array(
 		'controller' => 'page',
@@ -392,5 +392,6 @@ if ( ! Filter::cache() )
                 ->description(__('Allows content to be submitted using Markdown, a simple plain-text syntax that is filtered into valid HTML.'));
         
 	// Cache the Filters in production
-	Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
+	//Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
+        Filter::cache(Kohana::$environment === Kohana::PRODUCTION);
 }
