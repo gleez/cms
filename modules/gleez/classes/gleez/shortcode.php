@@ -13,12 +13,11 @@
  * [shortcode foo="bar" baz="bing" /]
  * [shortcode foo="bar"]content[/shortcode]
  *
- * @package	Gleez
- * @category	Input Filter
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://wordpress.org/about/license
- * @license	http://gleezcms.org/license
+ * @package	Gleez\Shortcode
+ * @author      Sandeep Sangamreddi - Gleez
+ * @copyright   (c) 2011-2013 Gleez Technologies
+ * @license     http://wordpress.org/about/license
+ * @license     http://gleezcms.org/license Gleez CMS License
  */
 abstract class Gleez_Shortcode {
 
