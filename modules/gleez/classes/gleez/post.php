@@ -17,6 +17,9 @@ class Gleez_Post extends ORM_Versioned {
 	/** Special tag for stopping widgets setting */
 	const NO_WIDGETS_TAG = '<!--nowidgets-->';
 
+	/** Special tag for stopping teaser setting */
+	const TEASER_TAG = '<!--break-->';
+	
 	/**
 	 * Table columns
 	 * @var array
@@ -262,8 +265,8 @@ class Gleez_Post extends ORM_Versioned {
 		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
 
 		// Always save only raw text, unformated text
-		$this->teaser  = empty($this->teaser)  ? Text::limit_words( $this->rawbody, 105, ' ...')  : $this->rawteaser;
-		$this->body = $this->rawbody;
+		$this->teaser  = $this->_teaser();
+		$this->body    = $this->rawbody;
 
 		parent::save( $validation );
 
@@ -285,6 +288,33 @@ class Gleez_Post extends ORM_Versioned {
 		return $this;
 	}
 
+	/**
+	 * Get teaser from the body either by delimiter or size
+	 *
+	 * @param   integer  $size  defaults to 105 words
+	 * 
+	 * @return  string  teaser
+	 */
+	private function _teaser($size = 105)
+	{
+		// Find where the delimiter is in the body
+		$delimiter = strpos($this->rawbody, self::TEASER_TAG);
+
+		// If the size is zero, and there is no delimiter, the entire body is teaser.
+		if ($size == 0 AND $delimiter === FALSE)
+		{
+			return $this->rawbody;
+		}
+		
+		// If a valid delimiter has been specified, use it to chop off the teaser.
+		if ($delimiter !== FALSE)
+		{
+			return substr($this->rawbody, 0, $delimiter);
+		}
+
+		return Text::limit_words($this->rawbody, $size, ' ...');
+	}
+	
 	/**
 	 * Adds or deletes terms
 	 *
@@ -714,7 +744,7 @@ class Gleez_Post extends ORM_Versioned {
 
 		// We found special tag, so dont set widgets!
 		// Just return the content
-		if (strpos($content, NO_WIDGETS_TAG) !== FALSE)
+		if (strpos($content, self::NO_WIDGETS_TAG) !== FALSE)
 		{
 			return $content;
 		}
