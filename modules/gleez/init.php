@@ -24,7 +24,7 @@ if ( ! Route::cache())
 	));
 
 	// Static file serving (CSS, JS, images)
-	Route::set('media', 'media(/<type>)/<file>', array('file' => '.+', 'type' => 'admin') )
+	Route::set('media', 'media(/<type>)/<file>', array('file' => '.+', 'type' => 'admin'))
 	->defaults(array(
 		'controller' => 'media',
 		'action'     => 'serve',
@@ -227,8 +227,6 @@ if ( ! Route::cache())
 	->defaults(array(
 		'controller' => 'welcome'
 	));
-
-	//Route::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
 /**
@@ -355,42 +353,74 @@ if ( ! ACL::cache() )
 	ACL::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
 }
 
-if ( ! Filter::cache() )
+/**
+ *
+ *
+ * @uses  Text::html
+ * @uses  Text::htmlcorrector
+ * @uses  Text::autop
+ * @uses  Text::plain
+ * @uses  Text::autolink
+ * @uses  Text::initialcaps
+ * @uses  Text::markdown
+ */
+if ( ! Filter::cache())
 {
-        Filter::set('html',  array('prepare callback' => FALSE, 'process callback' => 'Text::html') )
-                ->title( __('Limit allowed HTML tags') )
-                ->description( __('Limit Allowed HTML tags') )
-                ->settings( array(
-                                'html_nofollow' => TRUE,
-                                'allowed_html'  => '<a> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd>'
-                ));
+		Filter::set('html',  array(
+				'prepare callback' => FALSE,
+				'process callback' => 'Text::html'
+		))
+		->title(__('Limit allowed HTML tags'))
+		->description(__('Limit Allowed HTML tags'))
+		->settings(array(
+			'html_nofollow' => TRUE,
+			'allowed_html'  => '<a> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd>'
+		));
 
-        Filter::set('htmlcorrector',  array('prepare callback' => FALSE, 'process callback' => 'Text::htmlcorrector') )
-                ->title(__('Correct faulty and chopped off HTML'));
+		Filter::set('htmlcorrector',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::htmlcorrector'
+		))
+		->title(__('Correct faulty and chopped off HTML'));
 
-        Filter::set('autop',  array('prepare callback' => FALSE, 'process callback' => 'Text::autop') )
-                ->title(__('Convert line breaks into HTML'))
-                ->description(__('Lines and paragraphs break automatically.'));
-        
-        Filter::set('plain',  array('prepare callback' => FALSE, 'process callback' => 'Text::plain') )
-                ->title(__('Display any HTML as plain text'))
-                ->description(__('No HTML tags allowed.'));
+		Filter::set('autop',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::autop'
+		))
+		->title(__('Convert line breaks into HTML'))
+		->description(__('Lines and paragraphs break automatically.'));
 
-        Filter::set('url',  array('prepare callback' => FALSE, 'process callback' => 'Text::autolink') )
-                ->title(__('Convert URLs into links'))
-                ->description(__('Web page addresses and e-mail addresses turn into links automatically.'))
-                ->settings( array(
-                                'url_length' => 72
-                ));
-        
-        Filter::set('initialcaps',  array('prepare callback' => FALSE, 'process callback' => 'Text::initialcaps') )
-                ->title(__('Adds Initialcaps'))
-                ->description(__('Adds <span class="initial"> tag around the initial letter of each paragraph'));
+		Filter::set('plain',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::plain'
+		))
+		->title(__('Display any HTML as plain text'))
+		->description(__('No HTML tags allowed.'));
 
-        Filter::set('markdown',  array('prepare callback' => FALSE, 'process callback' => 'Text::markdown') )
-                ->title(__('Markdown'))
-                ->description(__('Allows content to be submitted using Markdown, a simple plain-text syntax that is filtered into valid HTML.'));
-        
+		Filter::set('url',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::autolink'
+		))
+		->title(__('Convert URLs into links'))
+		->description(__('Web page addresses and e-mail addresses turn into links automatically.'))
+		->settings( array(
+			'url_length' => 72
+		));
+
+		Filter::set('initialcaps',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::initialcaps'
+		))
+		->title(__('Adds Initialcaps'))
+		->description(__('Adds <span class="initial"> tag around the initial letter of each paragraph'));
+
+		Filter::set('markdown',  array(
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::markdown'
+		))
+		->title(__('Markdown'))
+		->description(__('Allows content to be submitted using Markdown, a simple plain-text syntax that is filtered into valid HTML.'));
+
 	// Cache the Filters in production
 	//Filter::cache(FALSE, Kohana::$environment === Kohana::PRODUCTION);
         Filter::cache(Kohana::$environment === Kohana::PRODUCTION);
