@@ -39,7 +39,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 		$pagination = Pagination::factory(array(
 				'current_page'   => array('source'=>'route', 'key'=>'page'),
 				'total_items'    => $total,
-				'items_per_page' => 5,
+				'items_per_page' => 15,
 				));
 
 		$menus  = $menus->limit($pagination->items_per_page)->offset($pagination->offset)->find_all();
@@ -52,13 +52,6 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 */
 	public function action_add()
 	{
-		$this->title = __('Add Menu');
-
-		$view = View::factory('admin/menu/form')
-				->bind('post', $post)
-				->bind('action', $action)
-				->bind('errors', $errors);
-
 		$post = ORM::factory('menu');
 		$action = Route::get('admin/menu')->uri(array('action' => 'add'));
 
@@ -79,14 +72,19 @@ class Controller_Admin_Menu extends Controller_Admin {
 				{
 					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 				}
-
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
+		$this->title = __('Add Menu');
 
+		$view = View::factory('admin/menu/form')
+				->bind('post', $post)
+				->bind('action', $action)
+				->bind('errors', $this->_errors);
+		
 		$this->response->body($view);
 	}
 
@@ -111,12 +109,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 		}
 
 		$this->title = __('Edit Menu: :name', array(':name' => $post->name));
-		$action = Route::get('admin/menu')->uri(array('action' => 'edit', $id => $id));
-
-		$view = View::factory('admin/menu/form')
-					->bind('post',    $post)
-					->bind('action',  $action)
-					->bind('errors',  $errors);
+		$action = Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $id));
 
 		if ($this->valid_post('menu'))
 		{
@@ -136,10 +129,15 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
+		$view = View::factory('admin/menu/form')
+					->bind('post',    $post)
+					->bind('action',  $action)
+					->bind('errors',  $this->_errors);
+		
 		$this->response->body($view);
 	}
 
