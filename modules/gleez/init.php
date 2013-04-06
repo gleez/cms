@@ -354,7 +354,7 @@ if ( ! ACL::cache() )
 }
 
 /**
- *
+ * Load the filter cache
  *
  * @uses  Text::html
  * @uses  Text::htmlcorrector
