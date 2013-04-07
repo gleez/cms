@@ -775,7 +775,6 @@ class Gleez_Assets {
 	{
 		// Add the core javascipt and css files
 		Assets::css('bootstrap-wysihtml5', 'media/css/bootstrap-wysihtml5.css', array('bootstrap'));
-		Assets::css('editor', 'media/css/editor.css', array('bootstrap-wysihtml5'));
 		Assets::js('wysihtml5', 'media/js/wysihtml5-0.4.0pre.min.js', array('jquery'), FALSE, array('weight' => 8));
 		Assets::js('bootstrap-wysihtml5', 'media/js/bootstrap-wysihtml5-0.0.2.min.js', array('wysihtml5'), FALSE, array('weight' => 9));
 
