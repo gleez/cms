@@ -752,7 +752,6 @@ class Gleez_Assets {
 		{
 			Assets::js('jquery', 'media/js/jquery-1.9.1.min.js', NULL, FALSE, array('weight' => -20));
 			Assets::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
-			Assets::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
 			Assets::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 
 			$data = Arr::merge(array(array('basePath' => URL::base(TRUE))), Assets::$settings);
