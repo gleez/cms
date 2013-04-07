@@ -186,7 +186,7 @@ return array
 	'Menu %name created successful!' => 'Меню %name успешно созданно!',
 	'Menu doesn\'t exists!' => 'Меню не найдено!',
 	'Menu Item %name saved successful!' => 'Пункт меню %name успешно сохранён!',
-	'Menu Item :name deleted successful!' => 'Пункт меню :name успешно удалён!',
+	'Menu Item %name deleted successful!' => 'Пункт меню :name успешно удалён!',
 	'Menu Item %name updated successful!' => 'Пункт меню %name успешно обновлён!',
     "Menu item doesn't exists!" => 'Пункт меню не найден!',
 	'Menu Items doesn\'t exists!' => 'Пунктов меню не обнаружнено!',
