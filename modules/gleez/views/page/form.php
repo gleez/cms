@@ -11,7 +11,7 @@
 
 			<div class="control-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
 				<div class="controls">
-					<?php echo Form::input('title', $post->rawtitle, array('class' => 'span6', 'placeholder' => __('Enter title here'))); ?>
+					<?php echo Form::input('title', $post->rawtitle, array('class' => 'span12', 'placeholder' => __('Enter title here'))); ?>
 				</div>
 			</div>
 
@@ -19,7 +19,7 @@
 				<div class="control-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
 					<?php echo Form::label('path', __('Permalink: %slug', array('%slug' => $site_url )), array('class' => 'control-label')) ?>
 					<div class="controls">
-						<?php echo Form::input('path', $path, array('class' => 'span6 slug')); ?>
+						<?php echo Form::input('path', $path, array('class' => 'span12 slug')); ?>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -28,7 +28,7 @@
 				<div class="control-group <?php echo isset($errors['ftags']) ? 'error': ''; ?>">
 					<?php echo Form::label('ftags', __('Tags'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::input('ftags', $tags, array('class' => 'span6'), 'autocomplete/tag/page'); ?>
+						<?php echo Form::input('ftags', $tags, array('class' => 'span12'), 'autocomplete/tag/page'); ?>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -37,7 +37,7 @@
 				<div class="control-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::textarea('excerpt', $post->rawteaser, array('class' => 'textarea medium excerpt', 'rows' => 5)) ?>
+						<?php echo Form::textarea('excerpt', $post->rawteaser, array('class' => 'textarea span12 excerpt', 'rows' => 5)) ?>
 					</div>
 				</div>
 			<?php endif; ?>
@@ -45,7 +45,7 @@
 			<div class="control-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
 				<?php echo Form::label('content', __(''), array('class' => 'control-label') ) ?>
 				<div class="controls">
-					<?php echo Form::textarea('body', $post->rawbody, array('class' => 'textarea', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
+					<?php echo Form::textarea('body', $post->rawbody, array('class' => 'textarea span12', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
 				</div>
 			</div>
 
