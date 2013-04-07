@@ -57,7 +57,6 @@ return array
 	'Before you start using it...' => 'Перед тем, как начать использовать...',
 	'Blocked IP addresses' => 'Заблокированные IP адреса',
 	'Body' => 'Содержимое',
-	'Book' => 'Книга',
 	'Bulk Actions' => 'Массовые действия',
 	// C
 	'Cache Directory' => 'Каталог кэша',
@@ -126,6 +125,7 @@ return array
 	'Show Submitted Info' => 'Включить информацию о дате публикации',
 	'Enable tag cloud' => 'Включить облако тегов',
 	'Enabled' => 'Включено',
+	'Enter text...' => 'Введите текст...',
 	'Enter title here' => 'Введите здесь заголовок',
 	'Error' => 'Ошибка',
 	'Excerpt' => 'Анонс',
