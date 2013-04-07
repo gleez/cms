@@ -1,73 +1,55 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Page Controller
+ * Gleez Page Controller
  *
- * @package   Gleez\Controller
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Page extends Template {
 
-	/** @var array Form Destination */
-	protected $_form_destination = NULL;
-
-	/** @var array Form Action */
-	protected $_form_action = NULL;
-
-	/** @var array Form Parameters */
-	protected $_form_params = NULL;
+	/**
+	 * Gleez Editor instance
+	 * @var Editor
+	 */
+	public $editor;
 
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  Request::param
+	 * @uses  Request::action
+	 * @uses  ACL::required
 	 */
 	public function before()
 	{
 		$id = $this->request->param('id', FALSE);
 
-		// Set form destination
-		$this->_form_destination = ( ! is_null($this->request->query('destination')))
-			? array('destination' => $this->request->query('destination'))
-			: array();
-
-		// Set from action
-		$this->_form_action = array('action' => $this->request->action());
-
-		// Set from params
-		switch (Arr::get($this->_form_action, 'action'))
-		{
-			case 'edit':
-				$this->_form_params = array('id' => $id, 'action' => 'edit');
-			break;
-
-			default:
-				$this->_form_params = array('action' => 'add');
-			break;
-		}
-
-		if ($id AND in_array('index', $this->_form_action))
+		if ($id AND $this->request->action() == 'index')
 		{
 			$this->request->action('view');
 		}
 
-		if ( ! $id AND in_array('index', $this->_form_action))
+		if ( ! $id AND $this->request->action() == 'index')
 		{
 			$this->request->action('list');
 		}
 
 		ACL::required('access content');
+
 		parent::before();
 	}
 
 	/**
-	 * The after() method is called after controller action.
+	 * The after() method is called after controller action
 	 */
 	public function after()
 	{
-		if(in_array('add', $this->_form_action) OR in_array('edit', $this->_form_action))
+		if($this->request->action() == 'add' OR $this->request->action() == 'edit')
 		{
 			// Add RichText Support
-			Assets::editor('.textarea', '99.9%', '300');
+			Assets::editor();
 
 			// Flag to disable left/right sidebars
 			$this->_sidebars = FALSE;
@@ -216,15 +198,20 @@ class Controller_Page extends Template {
 		$this->title = __('Add Page');
 		$config = Kohana::$config->load('page');
 
+		// Set form destination
+		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
+		// Set form action
+		$action = Route::get('page')->uri(array('action' => 'add')).URL::query($destination);
+
 		$view = View::factory('page/form')
+					->set('destination', $destination)
+					->set('action',      $action)
 					->set('config',      $config)
-					->set('destination', $this->_form_destination)
 					->set('created',     FALSE)
 					->set('author',      FALSE)
 					->set('path',        FALSE)
 					->set('tags',        isset($_POST['ftags']) ? $_POST['ftags'] : FALSE)
-					->set('params',      $this->_form_params)
-					->bind('errors',     $errors)
+					->bind('errors',     $this->_errors)
 					->bind('terms',      $terms)
 					->bind('post',       $post);
 
@@ -259,7 +246,7 @@ class Controller_Page extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models');
+				$this->_errors = $e->errors('models');
 			}
 		}
 
@@ -285,15 +272,20 @@ class Controller_Page extends Template {
 		$this->title = $post->title;
 		$config = Kohana::$config->load('page');
 
+		// Set form destination
+		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
+		// Set form action
+		$action = Route::get('page')->uri(array('id' => $id, 'action' => 'edit')).URL::query($this->_form_destination);
+
 		$view = View::factory('page/form')
-				->set('destination',  $this->_form_destination)
+				->set('destination',  $destination)
+				->set('action',       $action)
 				->set('config',       $config)
 				->set('path',         FALSE)
-				->set('params',       $this->_form_params)
 				->set('created',      date('Y-m-d H:i:s O', $post->created))
 				->set('author',       $post->user->name)
 				->set('tags',         Tags::implode($post->tags_form))
-				->bind('errors',      $errors)
+				->bind('errors',      $this->_errors)
 				->bind('terms',       $terms)
 				->bind('post',        $post);
 
@@ -330,7 +322,7 @@ class Controller_Page extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 

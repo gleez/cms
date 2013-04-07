@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-	echo Form::open(Route::get('page')->uri($params).URL::query($destination), array('id'=>'page-form', 'class'=>'post-form form'));
+	echo Form::open($action, array('id'=>'page-form', 'class'=>'post-form form'));
 
 	include Kohana::find_file('views', 'errors/partial');
 ?>
-	
+
 	<div class="row-fluid">
 
 		<div id="post-body" class="span9">
-		
+
 			<div class="control-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
 				<div class="controls">
 					<?php echo Form::input('title', $post->rawtitle, array('class' => 'span6', 'placeholder' => __('Enter title here'))); ?>
@@ -45,7 +45,7 @@
 			<div class="control-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
 				<?php echo Form::label('content', __(''), array('class' => 'control-label') ) ?>
 				<div class="controls">
-					<?php echo Form::textarea('body', $post->rawbody, array('class' => 'textarea full', 'rows' => 15)) ?>
+					<?php echo Form::textarea('body', $post->rawbody, array('class' => 'textarea', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
 				</div>
 			</div>
 
@@ -72,12 +72,12 @@
 						<div id="minor-publishing">
 							<div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
-								<?php echo Form::select('status', Post::status(), $post->status, array('class' => 'span11')); ?> 
+								<?php echo Form::select('status', Post::status(), $post->status, array('class' => 'span11')); ?>
 							</div>
 
 							<div class="control-group <?php echo isset($errors['sticky']) ? 'error': ''; ?>">
 								<?php
-									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE; 
+									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE;
 									$promote = (isset($post->promote) AND $post->promote == 1) ? TRUE : FALSE;
 								?>
 								<div class="controls">
@@ -144,7 +144,7 @@
 									$post->comment = $config->comment;
 								}
 
-								$comment1 = (isset($post->comment) AND $post->comment == 0) ? TRUE : FALSE; 
+								$comment1 = (isset($post->comment) AND $post->comment == 0) ? TRUE : FALSE;
 								$comment2 = (isset($post->comment) AND $post->comment == 1) ? TRUE : FALSE;
 								$comment3 = (isset($post->comment) AND $post->comment == 2) ? TRUE : FALSE;
 							?>
