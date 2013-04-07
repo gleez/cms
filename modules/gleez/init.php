@@ -236,15 +236,17 @@ if ( ! Route::cache())
  * Note: Parameter `restrict access` indicates that these privileges have serious
  * implications for safety.
  *
- * @uses ACL Used to define the privileges
+ * @uses  ACL::cache
+ * @uses  ACL::set
+ * @uses  ACL::cache
  */
 if ( ! ACL::cache())
 {
 	ACL::set('comment', array(
 		'administer comment' => array(
-			'title' => __('administer comments'),
+			'title' => __('Administer comments'),
 			'restrict access' => TRUE,
-			'description' => __('Administer comments and comment settings'),
+			'description' => __('Administer comments and comments settings'),
 		),
 		'access comment' => array(
 			'title' => __('Access comments'),
@@ -356,6 +358,8 @@ if ( ! ACL::cache())
 /**
  * Load the filter cache
  *
+ * @uses  Filter::cache
+ * @uses  Filter::set
  * @uses  Text::html
  * @uses  Text::htmlcorrector
  * @uses  Text::autop
@@ -367,8 +371,8 @@ if ( ! ACL::cache())
 if ( ! Filter::cache())
 {
 		Filter::set('html',  array(
-				'prepare callback' => FALSE,
-				'process callback' => 'Text::html'
+			'prepare callback' => FALSE,
+			'process callback' => 'Text::html'
 		))
 		->title(__('Limit allowed HTML tags'))
 		->description(__('Limit Allowed HTML tags'))
