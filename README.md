@@ -36,6 +36,8 @@ Gleez has an official website: [http://gleezcms.org](http://gleezcms.org) and Fa
 We create the documentation together with the community and other Gleez users/developers.
 The latest documentation is available on the [Gleez Wiki](https://github.com/gleez/cms/wiki).
 
+* [Installation](https://github.com/gleez/cms/wiki/Installation)
+* [Developers](https://github.com/gleez/cms/wiki/Developers)
 
 ## Contributors
 
