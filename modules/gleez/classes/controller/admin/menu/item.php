@@ -228,7 +228,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				$name = $menu->title;
 				$menu->delete();
 				Cache::instance('menus')->delete_all();
-				Message::success(__('Menu Item :name deleted successful!', array(':name' => $name)));
+				Message::success(__('Menu Item %name deleted successful!', array('%name' => $name)));
 
 				if ( ! $this->_internal)
 				{
