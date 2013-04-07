@@ -2,7 +2,7 @@
 /**
 * Localized strings into Russian
 *
-* @package   User\I18n
+* @package   Gleez\I18n
 * @author    Sergey Yakovlev - Gleez
 * @copyright (c) 2011-2013 Gleez Technologies
 * @license   http://gleezcms.org/license Gleez CMS License
@@ -17,6 +17,7 @@ return array
 	'(No subject)' => '(Нет темы)',
 	// A
 	'A text format contains filters that change the user input, for example stripping out malicious HTML or making URLs clickable. Filters are executed from top to bottom and the order is important, since one filter may prevent another filter from doing its job. For example, when URLs are converted into links before disallowed HTML tags are removed, all links may be removed. When this happens, the order of filters may need to be re-arranged.' => 'Форматы текста содержат фильтры, которые изменяют данные, введенные пользователем, например очищают от вредоносных HTML-тегов или блокируют URL-адреса. Фильтры выполняются сверху вниз и важен их порядок, так как один фильтр может предотвратить работу другого фильтра. Например, если фильтр преобразования URL-адресов  в ссылки стоит перед фильтром запрещающим HTML теги, все ссылки могут быть удалены. Если это происходит, возможно понадобится переопределить порядок фильтров.',
+	'Access comments' => 'Доступ к комментариям',
 	'Account' => 'Аккаунт',
 	'Actions' => 'Действия',
 	'Activated: %names' => 'Активировано: %names',
@@ -37,6 +38,7 @@ return array
 	'admin password' => 'пароль администратора',
 	'Admin Theme' => 'Тема консоли управления',
 	'Administer' => 'Администрирование',
+	'Administer comments' => 'Управление комментариями',
 	'Administer formats' => 'Управление форматами',
 	'All pages except those listed' => 'На всех страницах исключая перечисленные',
 	'All roles may use this format' => 'Все роли могут использовать этот формат',
@@ -112,10 +114,11 @@ return array
 	'E-mail address' => 'E-mail адрес',
 	'Edit' => 'Изменить',
 	'Edit %widget widget' => 'Правка виджета %widget',
+	'Edit :name menu' => 'Правка меню :name',
 	'Edit Item' => 'Изменить пункт',
 	'Edit Item :name' => '	Правка пункта :name',
 	'Edit Menu' => 'Правка меню',
-	'Edit :name menu' => 'Правка меню :name',
+	'Edit own comments' => 'Правка собственных комментариев',
 	'Edit Term %name'  => 'Правка термина :name',
 	'Enable authors' => 'Включить подпись автора',
 	'Enable captcha' => 'Включить защитный код',
@@ -249,6 +252,7 @@ return array
 	'Plain Text' => 'Простой текст',
 	'Post doesn\'t exists!' => 'Публикация не найдена',
 	'Posts' => 'Публикации',
+	'Post comments' => 'Публикация комментариев',
 	'Post List' => 'Список публикаций',
 	'Power up your Gleez CMS by adding more modules! Each module provides new cool features.' => 'Улучшите ваш Gleez CMS добавлением дополнительных модулей! Каждый модуль предоставляет интересные возможжности.',
 	'Powered by :gleez' => 'Создано с помощью :gleez',
@@ -287,6 +291,7 @@ return array
 	'Site running in maintenance mode!' => 'Сайт запущен в режиме обслуживания!',
 	'Site Theme' => 'Тема сайта',
 	'Site Title' =>  'Название сайта',
+	'Skip comment approval' => 'Пропуск одобрения комментария',
 	'Slug' => 'Короткое имя',
 	'Slug for %slug' => 'Короткое имя для %slug',
 	'Standard PHP Library (SPL)' => 'Стандартная библиотека PHP (SPL)',
