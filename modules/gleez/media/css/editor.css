@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/*------------------------------------------------------------------
+
+[Editor Stylesheet]
+
+	Project:      Gleez Editor
+	Version:      0.1.0
+	Author:       Gleez Team
+	Copyright:    (c) 2011-2013 Gleez Technologies
+	License:      http://gleezcms.org/license  Gleez CMS License
+
+-------------------------------------------------------------------*/
+
+.wysihtml5-sandbox {
+	width: 600px;
+}
