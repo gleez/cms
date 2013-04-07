@@ -2,28 +2,39 @@
 /**
  * Admin Menu Controller
  *
- * @package   Gleez\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Admin\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Menu extends Controller_Admin {
 
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
 	 */
 	public function before()
 	{
 		ACL::required('administer menu');
+
 		parent::before();
 	}
 
 	/**
 	 * List menus
+	 *
+	 * @uses  ORM::reset
+	 * @uses  ORM::count_all
+	 * @uses  ORM::limit
+	 * @uses  Log::add
 	 */
 	public function action_list()
 	{
-		$view = View::factory('admin/menu/list')->bind('pagination', $pagination)->bind('menus', $menus);
+		$view = View::factory('admin/menu/list')
+			->bind('pagination', $pagination)
+			->bind('menus', $menus);
+
 		$this->title = __('Menus');
 
 		$menus  = ORM::factory('menu')->where('lft', '=', 1);
@@ -37,10 +48,10 @@ class Controller_Admin_Menu extends Controller_Admin {
 		}
 
 		$pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'route', 'key'=>'page'),
-				'total_items'    => $total,
-				'items_per_page' => 15,
-				));
+			'current_page'   => array('source'=>'route', 'key'=>'page'),
+			'total_items'    => $total,
+			'items_per_page' => 15,
+		));
 
 		$menus  = $menus->limit($pagination->items_per_page)->offset($pagination->offset)->find_all();
 
@@ -49,6 +60,15 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 	/**
 	 * Add menu
+	 *
+	 * @uses  Request::redirect
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  DB::insert
+	 * @uses  ORM::save
+	 * @uses  ORM::make_root
+	 * @uses  Message::success
+	 * @uses  Cache::delete
 	 */
 	public function action_add()
 	{
@@ -62,9 +82,10 @@ class Controller_Admin_Menu extends Controller_Admin {
 			{
 				$post->make_root();
 				DB::insert('widgets', array('name', 'title', 'module'))
-					->values(array('menu/'.$post->name, $post->title, 'gleez'))->execute();
+					->values(array('menu/'.$post->name, $post->title, 'gleez'))
+					->execute();
 
-				Message::success(__('Menu: %name saved successful!', array('%name' => $post->name)));
+				Message::success(__('Menu %name created successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
@@ -78,18 +99,27 @@ class Controller_Admin_Menu extends Controller_Admin {
 				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
-		$this->title = __('Add Menu');
+		$this->title = __('Creating a Menu');
 
 		$view = View::factory('admin/menu/form')
 				->bind('post', $post)
 				->bind('action', $action)
 				->bind('errors', $this->_errors);
-		
+
 		$this->response->body($view);
 	}
 
 	/**
 	 * Edit menu
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Log::add
+	 * @uses  Request::redirect
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Cache::delete
+	 * @uses  ORM::save
 	 */
 	public function action_edit()
 	{
@@ -98,7 +128,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 		if (! $post->loaded())
 		{
-			Message::error(__('Menu: doesn\'t exists!'));
+			Message::error(__('Menu doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent Menu');
 
 			// Redirect to listing
@@ -108,7 +138,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 		}
 
-		$this->title = __('Edit Menu: :name', array(':name' => $post->name));
+		$this->title = __('Edit :name menu', array(':name' => $post->title));
 		$action = Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $id));
 
 		if ($this->valid_post('menu'))
@@ -117,7 +147,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			try
 			{
 				$post->save();
-				Message::success(__('Menu: %name saved successful!', array('%name' => $post->title)));
+				Message::success(__('Menu %name saved successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
@@ -137,19 +167,30 @@ class Controller_Admin_Menu extends Controller_Admin {
 					->bind('post',    $post)
 					->bind('action',  $action)
 					->bind('errors',  $this->_errors);
-		
+
 		$this->response->body($view);
 	}
 
 	/**
 	 * Delete menu
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Request::redirect
+	 * @uses  Request::uri
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Cache::delete
+	 * @uses  ORM::delete
+	 * @uses  DB::delete
+	 * @uses  Log::add
 	 */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
 		$menu = ORM::factory('menu', $id);
 
-		if (! $menu->loaded())
+		if ( ! $menu->loaded())
 		{
 			Message::error(__('Menu doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
@@ -161,11 +202,12 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 		}
 
-		$this->title = __('Delete Menu :title', array(':title' => $menu->name ));
+		$this->title = __('Delete Menu :title', array(':title' => $menu->title));
+		$action =  Route::url('admin/menu', array('action' => 'delete', 'id' => $menu->id));
 
 		$view = View::factory('form/confirm')
-									 ->set('action', Route::url('admin/menu', array('action' => 'delete', 'id' => $menu->id) ))
-									 ->set('title', $menu->name);
+			->set('action',$action)
+			->set('title', $menu->title);
 
 
 		// If deletion is not desired, redirect to list
@@ -184,15 +226,15 @@ class Controller_Admin_Menu extends Controller_Admin {
 				Cache::instance('menus')->delete($menu->name);
 
 				$menu->delete();
-				Message::success(__('Menu: :name deleted successful!', array(':name' => $name)));
+				Message::success(__('Menu %name deleted successful!', array('%name' => $name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/menu')->uri());
+					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 			}
 			catch (Exception $e)
 			{
-				Message::error(__('An error occured deleting menu %menu', array('%menu' => $menu->name)));
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting menu :term, id: :id, :message',
+				Message::error(__('An error occurred deleting menu %menu', array('%menu' => $menu->name)));
+				Kohana::$log->add(Log::ERROR, 'Error occurred deleting menu :term, id: :id, :message',
 					array(
 						':id'      => $menu->id,
 						':term'    => $menu->name,
@@ -202,7 +244,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 				if ( ! $this->_internal)
 				{
-					$this->request->redirect(Route::get('admin/menu')->uri(), 400);
+					$this->request->redirect(Route::get('admin/menu')->uri(), 503);
 				}
 			}
 		}
