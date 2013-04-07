@@ -93,7 +93,7 @@ class Gleez_Assets {
 	public static function css($handle = NULL, $src = NULL, $deps = NULL, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
 		$config = Kohana::$config->load('media');
-		
+
 		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
@@ -234,7 +234,7 @@ class Gleez_Assets {
 	public static function js($handle, $src = NULL, $deps = NULL, $footer = FALSE, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
 		$config = Kohana::$config->load('media');
-		
+
 		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
 			$format = Assets::FORMAT_FILENAME;
@@ -763,35 +763,69 @@ class Gleez_Assets {
 		}
 	}
 
-	/*
+	/**
 	 * Rich text editor
 	 *
-	 * By default Gleez uses CLEditor - WYSIWYG HTML Editor
-	 * @link   http://premiumsoftware.net/cleditor  CLEditor
+	 * By default Gleez uses Bootstrap-wysihtml5 - WYSIWYG HTML Editor
+	 * @link  https://github.com/jhollingworth/bootstrap-wysihtml5  Bootstrap-wysihtml
+	 * @link  https://github.com/xing/wysihtml5  wysihtml5
 	 *
-	 * @param 	string  $name      CSS class identifier of the textarea
-	 * @param 	string  $width     The width of the textarea [Optional]
-	 * @param 	string  $height    The height of the textarea [Optional]
-	 * @param 	string  $controls  The buttons of the textarea [Optional]
+	 * @param  string   $name   CSS class or ID of editable area [Optional]
 	 */
-	public static function editor($name, $width=NULL, $height=NULL, $controls=NULL)
+	public static function editor($name = '.textarea')
 	{
-		$default_controls = 'bold italic underline strikethrough subscript superscript style | bullets numbering | outdent indent | alignleft center alignright justify | undo redo | rule image link unlink | cut copy paste pastetext | print source removeformat';
-
 		// Add the core javascipt and css files
-		Assets::js('cleditor', 'media/js/cleditor.js', array('jquery'), FALSE, array('weight' => 7));
-		Assets::js('cleditorimage', 'media/js/jquery.cleditor.extimage.js', array('cleditor'), FALSE, array('weight' => 8));
-		Assets::css('cleditor', 'media/css/cleditor.css');
+		Assets::css('bootstrap-wysihtml5', 'media/css/bootstrap-wysihtml5.css', array('bootstrap'));
+		Assets::js('wysihtml5', 'media/js/wysihtml5-0.4.0pre.min.js', array('jquery'), FALSE, array('weight' => 8));
+		Assets::js('bootstrap-wysihtml5', 'media/js/bootstrap-wysihtml5.js', array('wysihtml5'), FALSE, array('weight' => 9));
 
-		$width    = empty($width)    ? '500' : $width;
-		$height   = empty($height)   ? '250' : $height;
-		$controls = empty($controls) ? $default_controls : $controls;
+		$events = '"events": {';
 
-		Assets::codes('cleditors', 'jQuery(document).ready(function(){
-			jQuery("'.$name.'").cleditor({
-					width:"'.$width.'",
-					height:"'.$height.'",
-					controls: "'.$controls.'",
+		// @todo Add useful functionality and disable environment check
+		if (Kohana::$environment === Kohana::DEVELOPMENT)
+		{
+			/**
+			 * Wysihtml5 exposes a number of events
+			 *
+			 * @link  https://github.com/xing/wysihtml5/wiki/Events  Wysihtml5 Events
+			 */
+			$events .=
+				'
+					"load": function() {
+						console.log("Gleez Editor loaded...");
+					},
+					"blur": function() {
+						console.log("Gleez Editor blured...");
+					},
+					"focus": function() {
+						console.log("Gleez Editor receives focus...");
+					},
+					"change": function() {
+						console.log("Gleez Editor changed...");
+					},
+					"paste": function() {
+						console.log("User pastes or drops content...");
+					},
+					"change_view": function() {
+						console.log("Gleez Editor switched between source and rich text view...");
+					}
+				';
+		}
+
+		$events .= '}';
+
+		// @todo Maybe controls should be configurable
+		Assets::codes('editor', 'jQuery(document).ready(function(){
+					jQuery("'.$name.'").wysihtml5({
+						'.$events.',
+						"font-styles": true,
+						"emphasis":    true,
+						"lists":       true,
+						"html":        true,
+						"link":        true,
+						"image":       true,
+						"color":       true,
+						"stylesheets": ["/media/css/editor.css"]
 				});
 			});'
 		);
@@ -805,6 +839,8 @@ class Gleez_Assets {
 	 * @param  string  $site  Site URL without protocol, eg. gleez.com
 	 *
 	 * @link   https://www.google.com/analytics/
+	 *
+	 * @todo   DON'T WORK
 	 */
 	public static function google_stats($ua, $site)
 	{
@@ -969,17 +1005,17 @@ class Gleez_Assets {
 		{
 			$path = $path.DIRECTORY_SEPARATOR.'admin';
 		}
-		
+
 		//set unqiue filename based on criteria
 		$filename = $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
 		$directory   = dirname($filename);
-		
+
 		if (!is_dir($directory))
 		{
 			// Recursively create the directories needed for the file
 			System::mkdir($directory, 0777, TRUE);
 		}
-		
+
 		return $filename;
 	}
 
