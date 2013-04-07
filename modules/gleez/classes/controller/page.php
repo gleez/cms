@@ -10,12 +10,6 @@
 class Controller_Page extends Template {
 
 	/**
-	 * Gleez Editor instance
-	 * @var Editor
-	 */
-	public $editor;
-
-	/**
 	 * The before() method is called before controller action
 	 *
 	 * @uses  Request::param
@@ -275,7 +269,7 @@ class Controller_Page extends Template {
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
 		// Set form action
-		$action = Route::get('page')->uri(array('id' => $id, 'action' => 'edit')).URL::query($this->_form_destination);
+		$action = Route::get('page')->uri(array('id' => $id, 'action' => 'edit')).URL::query($destination);
 
 		$view = View::factory('page/form')
 				->set('destination',  $destination)
