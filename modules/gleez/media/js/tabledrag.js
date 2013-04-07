@@ -1,22 +1,25 @@
-// $Id: tabledrag.js,v 1.42 2010/09/11 00:03:41 webchick Exp $
-(function ($) {
-
 /**
  * Drag and drop table rows with field manipulation.
  *
- * Using the drupal_add_tabledrag() function, any table with weights or parent
+ * Using the Assets::tabledrag() method, any table with weights or parent
  * relationships may be made into draggable tables. Columns containing a field
  * may optionally be hidden, providing a better user experience.
  *
  * Created tableDrag instances may be modified with custom behaviors by
  * overriding the .onDrag, .onDrop, .row.onSwap, and .row.onIndent methods.
- * See blocks.js for an example of adding additional functionality to tableDrag.
+ * See widgets.js for an example of adding additional functionality to tableDrag.
+ *
+ * Most code is copied verbatim from Drupal core, misc/tabledrag.js.
+ * @todo https://github.com/wadmiraal/jquery-tabledrag
  */
+(function ($) {
+
+
 Gleez.behaviors.tableDrag = {
   attach: function (context, settings) {
     for (var base in settings.tableDrag) {
       $('#' + base, context).once('tabledrag', function () {
-        // Create the new tableDrag instance. Save in the Drupal variable
+        // Create the new tableDrag instance. Save in the Gleez variable
         // to allow other scripts access to the object.
         Gleez.tableDrag[base] = new Gleez.tableDrag(this, settings.tableDrag[base]);
       });
