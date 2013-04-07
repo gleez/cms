@@ -50,6 +50,7 @@ class Gleez_Form extends Kohana_Form {
 		{
 			$attrs['class'] = isset($attrs['class']) ? $attrs['class'].' form-autocomplete' : 'form-autocomplete';
 			$attrs['id'] = $name;
+			$attrs['autocomplete'] = "off";
 
 			// Assign the autocomplete js file
 			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
