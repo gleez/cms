@@ -1,7 +1,7 @@
 # Set environment variables (Optional)
-#SetEnv KOHANA_ENV production
-#SetEnv KOHANA_BASE /
-#SetEnv BASE_URL http://www.example.com
+# SetEnv KOHANA_ENV production
+# SetEnv KOHANA_BASE /
+# SetEnv BASE_URL http://www.example.com
 
 # Turn on URL rewriting
 RewriteEngine On
@@ -16,7 +16,7 @@ RewriteBase /
 </Files>
 
 # Protect application and system files from being viewed
-RewriteRule ^(?:application|modules|system)\b.* index.php/$0 [L]
+RewriteRule ^(?:application|modules|themes|system)\b.* index.php/$0 [L]
 
 # Allow any files or directories that exist to be displayed directly
 RewriteCond %{REQUEST_FILENAME} !-f
