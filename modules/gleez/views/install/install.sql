@@ -29,7 +29,7 @@ CREATE TABLE {posts} (
   KEY `post_author` (`author`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `posts` (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
+INSERT INTO {posts} (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
 (1, 0, 0, 'Welcome to Gleez - Content Management System!', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser! \r\n\r\nWith an emphasis on security and functionality, Gleez CMS is a professional and robust system suitable for any business or organization website. Built on the PHP programming language and the MySQL database, Gleez CMS delivers superb performance on any size website.\r\n\r\nDownload:\r\nwww.gleezcms.org', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
 
 DROP TABLE IF EXISTS {tags};
@@ -58,7 +58,7 @@ CREATE TABLE {terms} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `terms` (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
+INSERT INTO {terms} (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
 (1, 'Pages', 'Use to group pages on similar topics into categories.', NULL, 'page', 0, 1, 2, 1, 1);
 
 DROP TABLE IF EXISTS {comments};
@@ -87,7 +87,7 @@ CREATE TABLE {comments} (
   KEY comment_post_type (post_id, `type`),
   KEY comment_type (`type`),
   KEY comment_post_id  (`post_id`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+  CONSTRAINT {comments_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {users};
@@ -123,7 +123,7 @@ CREATE TABLE {users} (
   UNIQUE KEY `hash` (`hash`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `users` (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `url`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
+INSERT INTO {users} (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `url`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
 (1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', '', NULL, 0, 0, 0, 0, 1, NULL, '', '', '', NULL, NULL),
 (2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, NULL, '', '', 'webmaster@gleez.com', NULL, NULL);
 
@@ -135,7 +135,7 @@ CREATE TABLE {config} (
   PRIMARY KEY (`group_name`,`config_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `config` (`group_name`, `config_key`, `config_value`) VALUES
+INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'admin_theme', 's:5:"fluid";'),
 ('site', 'date_first_day', 's:1:"1";'),
 ('site', 'date_format', 's:9:"l, F j, Y";'),
@@ -173,7 +173,7 @@ CREATE TABLE {menus} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
+INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
 (1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
 (2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
 (3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
@@ -207,7 +207,7 @@ CREATE TABLE {modules} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `modules` (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
+INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
 (1, 'gleez', 1, 0, '2', ''),
 (2, 'user', 1, 0, '2', '');
 
@@ -228,7 +228,7 @@ CREATE TABLE {paths} (
   KEY id_lang_path (lang,`source`,id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `paths` (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
+INSERT INTO {paths} (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
 (NULL, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
 (NULL, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL);
 
@@ -241,7 +241,7 @@ CREATE TABLE {permissions} (
   KEY permission (permission)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `permissions` (`rid`, `permission`, `module`) VALUES
+INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (1, 'access content', 'content'),
 (1, 'access profiles', 'user'),
 (3, 'access content', 'content'),
@@ -303,7 +303,7 @@ CREATE TABLE {posts_versions} (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   KEY `post_author` (`author`),
-  CONSTRAINT `posts_versions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_versions_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_tags};
@@ -315,8 +315,8 @@ CREATE TABLE {posts_tags} (
   created int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (post_id,tag_id),
   KEY fk_tag_id (tag_id),
-  CONSTRAINT `posts_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `posts_tags_ibfk_2` FOREIGN KEY (`tag_id`)  REFERENCES `tags`  (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_tags_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {posts_tags_ibfk_2} FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_terms};
@@ -330,8 +330,8 @@ CREATE TABLE {posts_terms} (
   KEY fk_term_id (term_id),
   KEY `type` (`type`),
   KEY posts_terms_ibfk_1 (post_id,`type`),
-  CONSTRAINT `posts_terms_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `posts_terms_ibfk_2` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_terms_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {posts_terms_ibfk_2} FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {roles};
@@ -344,7 +344,7 @@ CREATE TABLE {roles} (
   UNIQUE KEY uniq_name (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `roles` (`id`, `name`, `description`, `special`) VALUES
+INSERT INTO {roles} (`id`, `name`, `description`, `special`) VALUES
 (1, 'Anonymous', 'Guests can only view content. Anyone browsing the site who is not signed in is considered to be a "Guest".', 1),
 (2, 'login', 'Login privileges, pending account confirmation.', 1),
 (3, 'user', 'Member privileges, granted after account confirmation.', 1),
@@ -356,11 +356,11 @@ CREATE TABLE {roles_users} (
   role_id int(11) unsigned NOT NULL,
   PRIMARY KEY (user_id,role_id),
   KEY fk_role_id (role_id),
-  CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+  CONSTRAINT {roles_users_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {roles_users_ibfk_2} FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `roles_users` (`user_id`, `role_id`) VALUES
+INSERT INTO {roles_users} (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 2),
 (2, 3),
@@ -389,7 +389,7 @@ CREATE TABLE {user_tokens} (
   PRIMARY KEY (id),
   UNIQUE KEY uniq_token (token),
   KEY fk_user_id (user_id),
-  CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  CONSTRAINT {user_tokens_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {widgets};
@@ -441,7 +441,7 @@ CREATE TABLE {identities} (
   KEY `provider` (`provider`),
   KEY `provider_id` (`provider`, `provider_id`),
   UNIQUE KEY `user_provider_id` (`user_id`, `provider`, `provider_id`),
-  CONSTRAINT `identities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  CONSTRAINT {identities_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {sitemaps};
@@ -465,8 +465,8 @@ CREATE TABLE IF NOT EXISTS {buddies} (
     PRIMARY KEY (`user_id`,`buddy_id`),
     KEY `buddy_fk_1` (`user_id`),
     KEY `buddy_fk_2` (`buddy_id`),
-    CONSTRAINT `buddy_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `buddy_ibfk_2` FOREIGN KEY (`buddy_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    CONSTRAINT {buddy_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {buddy_ibfk_2} FOREIGN KEY (`buddy_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {buddy_requests};
@@ -480,6 +480,6 @@ CREATE TABLE IF NOT EXISTS {buddy_requests} (
     PRIMARY KEY (`id`),
     KEY `buddy_requests_fk_1` (`request_from`),
     KEY `buddy_requests_fk_2` (`request_to`),
-    CONSTRAINT `buddy_requests_ibfk_1` FOREIGN KEY (`request_from`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `buddy_requests_ibfk_2` FOREIGN KEY (`request_to`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    CONSTRAINT {buddy_requests_ibfk_1} FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {buddy_requests_ibfk_2} FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
