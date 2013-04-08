@@ -369,4 +369,22 @@ class Gleez_HTML extends Kohana_HTML {
 		return HTML::image(Route::get('media')->uri(array('file' => 'images/spacer.gif')), $attr);
 	}
 
+	/**
+	 * Create a iconic button
+	 *
+	 * Example:
+	 * <code>
+	 *   echo HTML::icon('/paths/edit/1', 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
+	 * </code>
+	 *
+	 * @param   string  $url    URL
+	 * @param   string  $icon   FontAwesome like icon  class
+	 * @param   array   $attrs  Attributes, for example CSS class or title [Optional]
+	 * @return  string
+	 */
+	public static function icon($url, $icon, array $attrs = array())
+	{
+		return HTML::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
+	}
+
 }
