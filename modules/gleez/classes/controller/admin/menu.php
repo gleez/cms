@@ -138,7 +138,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			}
 		}
 
-		$this->title = __('Edit :name menu', array(':name' => $post->title));
+		$this->title = __('Edit %name menu', array('%name' => $post->title));
 		$action = Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $id));
 
 		if ($this->valid_post('menu'))
