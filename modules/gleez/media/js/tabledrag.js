@@ -97,6 +97,42 @@ Gleez.tableDrag = function (table, tableSettings) {
   // as event handlers do not have direct access to the tableDrag object.
   $(document).bind('mousemove', function (event) { return self.dragRow(event, self); });
   $(document).bind('mouseup', function (event) { return self.dropRow(event, self); });
+  
+  // To stimulate MouseEvent in touch screen devices
+  $(document).bind('touchmove', function(event) {
+    if ($("body").hasClass("drag")) {
+      if (event.originalEvent.touches && event.originalEvent.touches.length) {
+        var touch = event.originalEvent.touches[0];
+      } else if (event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+        var touch = event.originalEvent.changedTouches[0];
+      }
+
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent('mousemove', true, true, window, 1,
+            touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+            false, false, false, false, 0/*left*/, null);
+      touch.target.dispatchEvent(simulatedEvent);
+      event.preventDefault();
+    }
+  });
+
+  $(document).bind('touchend', function(event) {
+    if ($("body").hasClass("drag")) {
+      if (event.originalEvent.touches && event.originalEvent.touches.length) {
+        var touch = event.originalEvent.touches[0];
+      } else if (event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+        var touch = event.originalEvent.changedTouches[0];
+      }
+
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent('mouseup', true, true, window, 1,
+                    touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+                    false, false, false, false, 0/*left*/, null);
+      touch.target.dispatchEvent(simulatedEvent);
+      event.preventDefault();
+    }
+  });
+
 };
 
 /**
@@ -424,6 +460,23 @@ Gleez.tableDrag.prototype.makeDraggable = function (item) {
         return false;
     }
   });
+
+  // To stimulate MouseEvent in touch screen devices
+  handle.bind('touchstart', function(event) {
+    if (event.originalEvent.touches && event.originalEvent.touches.length) {
+       var touch = event.originalEvent.touches[0];
+    } else if (event.originalEvent.changedTouches && event.originalEvent.changedTouches.length) {
+       var touch = event.originalEvent.changedTouches[0];
+    }
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent('mousedown', true, true, window, 1,
+                                 touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+                                 false, false, false, false, 0/*left*/, null);
+    touch.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+  });
+
 };
 
 /**
@@ -572,7 +625,8 @@ Gleez.tableDrag.prototype.getMouseOffset = function (target, event) {
  */
 Gleez.tableDrag.prototype.findDropTargetRow = function (x, y) {
   var rows = $(this.table.tBodies[0].rows).not(':hidden');
-  for (var n = 0; n < rows.length; n++) {
+  //for (var n = 0; n < rows.length; n++) {
+  for (var n = 0, len = rows.length; n < len; ++n) {
     var row = rows[n];
     var indentDiff = 0;
     var rowY = $(row).offset().top;
