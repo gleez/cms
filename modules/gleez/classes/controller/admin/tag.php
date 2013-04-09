@@ -24,34 +24,37 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_list()
 	{
-		$this->title = __('Tags');
-		$view = View::factory('admin/tag/list')
-				->bind('pagination', $pagination)
-				->bind('tags', $tags);
+		$is_datatables = Request::is_datatables();
 
-		$tag = ORM::factory('tag');
-		$total = $tag->count_all();
-
-		if ($total == 0)
+		if ($is_datatables)
 		{
-			Kohana::$log->add(Log::INFO, 'No tags found');
-			$this->response->body(View::factory('admin/tag/none'));
+			$tags       = ORM::factory('tag');
+			$this->_datatables = $tags->dataTables(array('name', 'id', 'type'));
+			
+			foreach ($this->_datatables->result() as $tag)
+			{
+				$this->_datatables->add_row(
+					array(
+						Text::plain($tag->name),
+						HTML::anchor($tag->url, $tag->url),
+						Text::plain($tag->type),
 
-			return;
+						HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit Tag'))) .
+						HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete Tag')))
+					)
+				);
+			}
 		}
+		
+		$this->title = __('Tags');
+		$url         = Route::url('admin/tag', array('action' => 'list'), TRUE);
 
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items'    => $total,
-			'items_per_page' => 25,
-		));
+		$view = View::factory('admin/tag/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('url',           $url);
 
-		$tags = $tag->order_by('name', 'ASC')
-					->limit($pagination->items_per_page)
-					->offset($pagination->offset)
-					->find_all();
-
-		$this->response->body($view);
+                $this->response->body($view);
 	}
 
 	public function action_add()
