@@ -21,7 +21,7 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td colspan="7" class="dataTables_empty"><?php echo __("Loading data from server"); ?></td>
+				<td colspan="3" class="dataTables_empty"><?php echo __("Loading data from server"); ?></td>
 			</tr>
 		</tbody>
 	</table>
