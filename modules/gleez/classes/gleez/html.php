@@ -23,6 +23,59 @@ class Gleez_HTML extends Kohana_HTML {
 	public static $current_route;
 
 	/**
+	 * Create HTML link anchors. Note that the title is not escaped, to allow
+	 * HTML elements within links (images, etc).
+	 *
+	 *     echo HTML::anchor('/user/profile', 'My Profile');
+	 *
+	 * @param   string  $uri        URL or URI string
+	 * @param   string  $title      link text
+	 * @param   array   $attributes HTML anchor attributes
+	 * @param   mixed   $protocol   protocol to pass to URL::base()
+	 * @param   boolean $index      include the index page
+	 * @return  string
+	 * @uses    URL::base
+	 * @uses    URL::site
+	 * @uses    HTML::attributes
+	 */
+	public static function anchor($uri, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = TRUE)
+	{
+		if ($title === NULL)
+		{
+			// Use the URI as the title
+			$title = $uri;
+		}
+
+		if ($uri === '')
+		{
+			// Only use the base URL
+			$uri = URL::base($protocol, $index);
+		}
+		else
+		{
+			if (strpos($uri, '://') !== FALSE)
+			{
+				if (HTML::$windowed_urls === TRUE AND empty($attributes['target']))
+				{
+					// Make the link open in a new window
+					$attributes['target'] = '_blank';
+				}
+			}
+			//elseif ($uri[0] !== '#')
+			elseif (strpos($uri, '#') !== FALSE)
+			{
+				// Make the URI absolute for non-id anchors
+				$uri = URL::site($uri, $protocol, $index);
+			}
+		}
+
+		// Add the sanitized link to the attributes
+		$attributes['href'] = $uri;echo Debug::vars($uri);
+
+		return '<a'.HTML::attributes($attributes).'>'.$title.'</a>';
+	}
+
+	/**
 	 * Creates a style sheet link element
 	 *
 	 * Example:<br>
@@ -301,33 +354,6 @@ class Gleez_HTML extends Kohana_HTML {
 		}
 
 		return $compiled;
-	}
-
-	/**
-	 * Cleans HTML with HTML Purifier
-	 *
-	 * @param   string  $html  Dirty html
-	 * @return  string
-	 *
-	 * @link    http://htmlpurifier.org/ HTMLPurifier
-	 */
-	public static function purify($html)
-	{
-		// @todo
-		require_once Kohana::find_file('vendor', 'htmlpurifier/library/HTMLPurifier.includes');
-
-		// config
-		$purifier_cfg = HTMLPurifier_Config::createDefault();
-		$purifier_cfg->set('AutoFormat.AutoParagraph', true);
-		$purifier_cfg->set('AutoFormat.RemoveEmpty', true);
-		$purifier_cfg->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
-
-		$purifier = new HTMLPurifier($purifier_cfg);
-		$clean = $purifier->purify($html);
-
-		unset($purifier, $purifier_cfg);
-
-		return $clean;
 	}
 
 	/**
