@@ -30,9 +30,9 @@ class Controller_Admin_Page extends Controller_Admin {
 	{
 		// Tabs
 		$this->_tabs =  array(
-			array('link' => Route::url('admin/page', array('action' =>'index')), 'text' => __('Statistics')),
-			array('link' => Route::url('admin/page', array('action' =>'list')), 'text' => __('List')),
-			array('link' => Route::url('admin/page', array('action' =>'settings')),'text' => __('Settings')),
+			array('link' => Route::get('admin/page')->uri( array('action' =>'index')), 'text' => __('Statistics')),
+			array('link' => Route::get('admin/page')->uri( array('action' =>'list')), 'text' => __('List')),
+			array('link' => Route::get('admin/page')->uri( array('action' =>'settings')),'text' => __('Settings')),
 		);
 
 		parent::after();
