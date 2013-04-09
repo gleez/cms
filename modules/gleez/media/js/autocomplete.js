@@ -25,7 +25,7 @@
 		var term = Gleez.autocompleteExtractLast(this.query);
 		var query = term.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
 		return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-		  return '<strong>' + match + '</strong>'
+		    return '<strong>' + match + '</strong>'
 		})
 	    }
 	});
@@ -42,32 +42,42 @@
 	//adding throbbing animation during search
 	$(object.$element).addClass('throbbing');
 	
+	//the url from to retrive suggestions
+	var url = $(object.$element).data('url') + '/' + encodeURIComponent(term);
+	
 	$.ajax({
-	    url: $(object.$element).data('url') + '/' + encodeURIComponent(term),
+	    url: url,
 	    dataType: 'json',
 	    //async: false,
-	    success: function(results){
-		if (typeof results.status == 'undefined' || results.status != 0) {
-		    var items = new Array;
-		    // Gleez returns an object array, but we need a string array.
-		    $.map(results, function(data, item){
-			items.push(data);
-		    });
-		    //process the items
-		    process(items);
-		    
-		    //remove the throbbing class
-		    $(object.$element).removeClass('throbbing');
-		    
-		    //set the width of the list
-		    object.$menu
-		    .insertAfter(object.$element)
-		    .css({
-		      width: object.$element.innerWidth() + 'px',
-		    })
-		}
+	}, 300)
+	.done(function(results, textStatus, jqXHR){
+	    if (typeof results.status == 'undefined' || results.status != 0) {
+		var items = new Array;
+		// Gleez returns an object array, but we need a string array.
+		$.map(results, function(data, item){
+		    items.push(data);
+		});
+		//process the items
+		process(items);
+		
+		//remove the throbbing class
+		$(object.$element).removeClass('throbbing');
+		
+		//set the width of the list
+		object.$menu
+		.insertAfter(object.$element)
+		.css({
+		  width: object.$element.innerWidth() + 'px',
+		})
 	    }
-	}, 300);
+	})
+	.fail(function (jqXHR, textStatus, errorThrown) {
+	    
+	    //remove the throbbing class
+	    $(object.$element).removeClass('throbbing');
+	    
+	    alert(Gleez.ajaxError(jqXHR, url));
+	});
 	
 	return true;
     };
