@@ -265,9 +265,12 @@ class Controller_Install_Install extends Controller_Template {
 			$password = $this->add_user();
 			chmod(APPPATH.'config/database.php', 0444);
 
+			$admin_user = Route::get('admin/user')->uri( array('action' => 'edit', 'id' => 2));
+			$admin_url = Route::get('user')->uri( array('action' => 'login')).URL::query(array('destination' => $admin_user));
+		
 			$this->template->title = __('Success!');
 			$this->template->_activity = __('100');
-			$this->template->content = View::factory('install/finalize', array('password' => $password) );
+			$this->template->content = View::factory('install/finalize', array('password' => $password, 'admin_url' => $admin_url) );
 		}
 		else
 		{
@@ -391,11 +394,12 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
 
-    $sql_file = MODPATH . "gleez/views/install/install.".I18n::lang().".sql";
+		$sql_file = MODPATH . "gleez/views/install/install.".I18n::lang().".sql";
 
-    if ( ! file_exists($sql_file)) {
-      $sql_file = MODPATH . "gleez/views/install/install.sql";
-    }
+		if ( ! file_exists($sql_file))
+		{
+			$sql_file = MODPATH . "gleez/views/install/install.sql";
+		}
 
 		foreach (file($sql_file) as $line) {
 			$buf .= trim($line);
@@ -420,16 +424,18 @@ class Controller_Install_Install extends Controller_Template {
 		$config = $this->_session->get('database_data');
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
+		$prefix = trim($config["table_prefix"]);
 
 		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
-		$sql = "UPDATE `config` SET `config_value` = '$skey' WHERE `config`.`group_name` = 'site' AND `config`.`config_key` = 'gleez_private_key'";
+		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysql_query($sql);
 
 		$password = Text::random('alnum', 8);
 		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
-		mysql_query("UPDATE `users` SET `pass` = '$pass' WHERE `id` = 2");
+		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
 
 		return $password;
 	}
 }
+

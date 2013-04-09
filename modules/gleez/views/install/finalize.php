@@ -12,9 +12,10 @@
   <?php echo __('password: :password', array(':password' => '<strong>'.$password.'</strong>')); ?>
   <br/>
   <br/>
-  <?php echo __('Save this information in a safe place, or change your :profile right away!', array(':profile' => HTML::anchor(URL::site('user/login?destination=admin/users/edit/2'), __('admin password')) )); ?>
+  <?php echo __('Save this information in a safe place, or change your :profile right away!', array(':profile' => HTML::anchor($admin_url, __('admin password')) )); ?>
 </p>
 
 <p>
-<h4><?php echo HTML::anchor(URL::base(), __('Start using Gleez')) ?></h4>
+<h4><?php echo HTML::anchor(Route::get('default')->uri(), __('Start using Gleez')) ?></h4>
 </p>
+
