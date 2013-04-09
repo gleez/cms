@@ -70,7 +70,7 @@ class Gleez_HTML extends Kohana_HTML {
 		}
 
 		// Add the sanitized link to the attributes
-		$attributes['href'] = $uri;echo Debug::vars($uri);
+		$attributes['href'] = $uri;
 
 		return '<a'.HTML::attributes($attributes).'>'.$title.'</a>';
 	}
