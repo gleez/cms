@@ -721,6 +721,7 @@ class Gleez_Assets {
 	 */
 	public static function tabledrag($table_id, $action, $relationship, $group, $subgroup = NULL, $source = NULL, $hidden = TRUE, $limit = 0)
 	{
+		Assets::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
 		Assets::js('tabledrag', 'media/js/tabledrag.js');
 		Assets::css('tabledrap', 'media/css/tabledrag.css');
 
