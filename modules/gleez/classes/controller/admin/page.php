@@ -76,7 +76,7 @@ class Controller_Admin_Page extends Controller_Admin {
 		$this->title = __('Page Settings');
 
 		$post     = Kohana::$config->load('page');
-		$action   = Route::url('admin/page', array('action' =>'settings'));
+		$action   = Route::get('admin/page')->uri(array('action' =>'settings'));
 		$vocabs   = array(__('none'));
 
 		$view = View::factory('admin/page/settings')
@@ -111,7 +111,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 			if ( ! $this->_internal)
 			{
-				$this->request->redirect(Route::url('admin/page', array('action' =>'settings')), 200);
+				$this->request->redirect(Route::get('admin/page')->uri(array('action' =>'settings')), 200);
 			}
 		}
 
