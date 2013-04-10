@@ -142,7 +142,7 @@ class Controller_Admin_Page extends Controller_Admin {
 						Form::checkbox('posts['.$page->id.']', $page->id, isset($_POST['posts'][$page->id])),
 						HTML::anchor($page->url, $page->title),
 						HTML::anchor($page->user->url, $page->user->nick),
-						__(ucfirst($page->status)),
+						HTML::label(__(ucfirst($page->status)), $page->status),
 						date('M d, Y', $page->updated),
 						HTML::icon($page->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
 						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page')))
