@@ -413,4 +413,20 @@ class Gleez_HTML extends Kohana_HTML {
 		return HTML::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
 	}
 
+	/**
+	 * Create a bootstrap label
+	 *
+	 * Example:
+	 * <code>
+	 *   echo HTML::label(__('Publish'), 'info');
+	 * </code>
+	 *
+	 * @param   string  $text    Text
+	 * @param   string  $label   bootstrap label  class
+	 * @return  string
+	 */
+	public static function label($text, $label = 'default')
+	{
+		return '<span class="label label-'.$label.'">'.$text.'</span>';
+	}
 }
