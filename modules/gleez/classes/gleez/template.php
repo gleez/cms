@@ -594,11 +594,13 @@ abstract class Gleez_Template extends Controller {
 	 */
 	protected function _set_default_css()
 	{
+                $theme = (Theme::$is_admin) ? $this->_config->get('admin_theme', 'fluid') : $this->_config->get('theme', 'fluid');
+                
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
 		Assets::css('editor', 'media/css/editor.css', array('default'), array('weight' => 1));
-		Assets::css('style', 'media/css/style.css', array('default'), array('weight' => 2));
+		Assets::css('theme', 'media/css/style.css', array('default'), array('weight' => 2));
 	}
 
 	/**
