@@ -125,6 +125,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	{
 		$url         = Route::url('admin/page', array('action' => 'list'), TRUE);
 		$redirect    = Route::get('admin/page')->uri(array('action' => 'list'));
+		$form_action = Route::get('admin/page')->uri(array('action' => 'bulk'));
 		$destination = '?destination='.$redirect;
 		
 		$is_datatables = Request::is_datatables();
@@ -155,10 +156,21 @@ class Controller_Admin_Page extends Controller_Admin {
 		$view = View::factory('admin/page/list')
 				->bind('datatables',   $this->_datatables)
 				->set('is_datatables', $is_datatables)
-				->set('action',        $redirect)
+				->set('action',        $form_action)
 				->set('actions',       Post::bulk_actions(TRUE, 'page'))
 				->set('url',           $url);
 
+		$this->response->body($view);
+	}
+
+	/**
+	 * Perform bulk actions
+	 */
+	public function action_bulk()
+	{
+		$redirect    = Route::get('admin/page')->uri(array('action' => 'list'));
+
+		$this->title = __('Bulk Actions');
 		$post = $this->request->post();
 
 		// If deletion is not desired, redirect to list
@@ -186,10 +198,10 @@ class Controller_Admin_Page extends Controller_Admin {
 		{
 			if ( ! isset($post['posts']) OR ( ! is_array($post['posts']) OR ! count(array_filter($post['posts']))))
 			{
-				$view->errors = array(__('No items selected.'));
+				Message::error(__('No pages selected.'));
 				if ( ! $this->_internal)
 				{
-					$this->request->redirect($this->request->uri());
+					$this->request->redirect($redirect);
 				}
 			}
 
@@ -214,7 +226,7 @@ class Controller_Admin_Page extends Controller_Admin {
 				Message::success(__('The update has been performed!'));
 				if ( ! $this->_internal)
 				{
-					$this->request->redirect($this->request->uri());
+					$this->request->redirect($redirect);
 				}
 			}
 			catch( Exception $e)
@@ -222,10 +234,11 @@ class Controller_Admin_Page extends Controller_Admin {
 				Message::error(__('The update has not been performed!'));
 			}
 		}
-
-		$this->response->body($view);
+		
+		//always redirect to list, if no action performed
+		$this->request->redirect($redirect);
 	}
-
+	
 	/**
 	 * Bulk updates
 	 *
