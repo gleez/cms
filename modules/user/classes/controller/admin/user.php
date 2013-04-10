@@ -52,8 +52,8 @@ class Controller_Admin_User extends Controller_Admin {
 						($user->login > 0) ? date('M d, Y',$user->login) : __('Never'),
 						User::roles($user),
 						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
-						HTML::anchor(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit User'))) .
-						HTML::anchor($user->delete_url, '<i class="icon-trash"></i>', array('class'=>'action-edit', 'title'=> __('Delete User')))
+						HTML::icon(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), 'icon-edit',  array('class'=>'action-edit', 'title'=> __('Edit User'))) . '&nbsp;' .
+						HTML::icon($user->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete User')))
 					)
 				);
 			}
