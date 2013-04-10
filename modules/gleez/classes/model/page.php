@@ -20,10 +20,12 @@ class Model_Page extends Post {
 		$this->status  = empty($this->status)  ? $config->get('default_status', 'draft') : $this->status;
 	
 		if( !$config->use_comment )
+		{
 			$this->comment = empty($this->comment) ? $config->get('comment', 0) : $this->comment;
+		}
 		
 		if( !$config->use_excerpt ) $this->teaser = FALSE;
-        
+
 		return parent::save($validation);
 	}
 
@@ -32,6 +34,7 @@ class Model_Page extends Post {
 		$this->type = $this->_post_type;
 		return parent::values($values, $expected);
 	}
+	
 	public function find($id = NULL)
 	{
 		$this->where($this->_object_name.'.type', '=', $this->_post_type);
