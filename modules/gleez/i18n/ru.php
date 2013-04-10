@@ -55,7 +55,7 @@ return array
 	'An error occurred deleting menu item %term.' => 'Произошла ошибка при удалении пункта меню %term.',
 	'An error occurred deleting page, :post.' => 'Произошла ошибка при удалении страницы :post.',
 	'An error occurred deleting post, %post.' => 'Произошла ошибка при удалении публикации %post.',
-	'An error occurred deleting term %term.' => 'Произошла ошибка при удалении термина %post.',
+	'An error occurred deleting term %term.' => 'Произошла ошибка при удалении термина %term.',
 	'Are you sure you want to delete %title?' => 'Вы уверены, что хотите удалить %title?',
 	'Application Directory' => 'Каталог приложения',
 	'Apply' => 'Применить',
