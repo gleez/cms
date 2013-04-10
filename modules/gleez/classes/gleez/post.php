@@ -802,20 +802,20 @@ class Gleez_Post extends ORM_Versioned {
 				throw new HTTP_Exception_404('Attempt to non-existent post.');
 			}
 
-			$post->content = View::factory("$type/body")->set('config', $config)->bind('post', $post);
-
-			$data = array();
-			$data['author']  = (int)$post->author;
-			$data['status']  = $post->status;
-			$data['title']   = $post->title;
-			$data['comment'] = $post->comment;
-			$data['url']     = $post->url;
-			$data['id']      = (int)$post->id;
-			$data['type']    = $post->type;
-			$data['content'] = (string) $post->content;
+			$post->content = View::factory("$type/body")->set('config', $config)->bind('post', $post)->render();
 
 			if( $use_cache )
 			{
+				$data = array();
+				$data['author']  = (int)$post->author;
+				$data['status']  = $post->status;
+				$data['title']   = $post->title;
+				$data['comment'] = $post->comment;
+				$data['url']     = $post->url;
+				$data['id']      = (int)$post->id;
+				$data['type']    = $post->type;
+				$data['content'] = (string) $post->content;
+			
 				$cache->set("$type-$id", (object) $data, DATE::WEEK);
 			}
 		}
