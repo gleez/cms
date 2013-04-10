@@ -123,53 +123,42 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		$url         = Route::url('admin/page', array('action' => 'list'), TRUE);
+		$redirect    = Route::get('admin/page')->uri(array('action' => 'list'));
+		$destination = '?destination='.$redirect;
+		
+		$is_datatables = Request::is_datatables();
+		$pages = ORM::factory('page');
+
+		if ($is_datatables)
+		{
+			$this->_datatables = $pages->dataTables(array('id', 'title', 'author', 'status', 'updated'));
+
+			foreach ($this->_datatables->result() as $page)
+			{
+				$this->_datatables->add_row(
+					array(
+						Form::checkbox('posts['.$page->id.']', $page->id, isset($_POST['posts'][$page->id])),
+						HTML::anchor($page->url, $page->title),
+						HTML::anchor($page->user->url, $page->user->nick),
+						__(ucfirst($page->status)),
+						date('M d, Y', $page->updated),
+						HTML::icon($page->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
+						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page')))
+					)
+				);
+			}
+		}
+
 		$this->title = __('Page List');
-
-		$posts = ORM::factory('page')
-				->where('type', '=', 'page');
-
-		$total = $posts->reset(FALSE)->count_all();
-
-		if ($total == 0)
-		{
-			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body(View::factory('admin/page/none'));
-			return;
-		}
-
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items'    => $total,
-			'items_per_page' => 30,
-		));
-
-		$posts->limit($pagination->items_per_page)->offset($pagination->offset);
-
-		// and apply sorting
-		if (Arr::get($_GET, 'sort') AND array_key_exists($_GET['sort'], $posts->list_columns()))
-		{
-			$order = (Arr::get($_GET, 'order', 'asc') == 'asc') ? 'asc' : 'desc';
-			$posts->order_by(Arr::get($_GET, 'sort'), $order);
-		}
-		else
-		{
-			$posts->order_by('updated', 'DESC');
-		}
-
+		
 		$view = View::factory('admin/page/list')
-				->bind('pagination',  $pagination)
-				->bind('destination', $destination)
-				->bind('action',      $form_action)
-				->set('actions',      Post::bulk_actions(TRUE, 'page'))
-				->set('posts',        $posts->find_all());
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('action',        $redirect)
+				->set('actions',       Post::bulk_actions(TRUE, 'page'))
+				->set('url',           $url);
 
-		$destination = array('destination' => $this->request->uri());
-		$form_action = Route::get('admin/page')->uri(array('action' => 'list')).URL::query(array('destination' => $this->request->uri()));
-
-		$dest = ($this->request->query('destination') !== NULL) ?
-					array('destination' => $this->request->query('destination')) : array();
-		$route = Route::get('admin/page')->uri(array('action' => 'list'));
-		$redirect = empty($dest) ? $route : $this->request->query('destination') ;
 		$post = $this->request->post();
 
 		// If deletion is not desired, redirect to list

@@ -1,47 +1,42 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<div class="help">
-	<p><?php echo __('View, edit, and delete your site\'s pages.'); ?></p>
-</div>
-
-<?php include Kohana::find_file('views', 'errors/partial'); ?>
-
-<div class="content">
-	<?php echo Form::open($action, array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
-		<div class="thumbnail">
-				<legend><?php echo __('Bulk Actions'); ?></legend>
-				<div class="control-group edit-operation <?php echo isset($errors['operation']) ? 'error': ''; ?>">
-					<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'page'), '', array('class' => 'input-xlarge')); ?>
-					<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
-				</div>
-		</div><br>
-		<table class="table table-striped table-bordered" id="posts-admin-list">
-			<thead>
-				<tr>
-					<th> # </th>
-					<th><?php echo __('Title'); ?>&nbsp;<?php echo URL::sortAnchor('title'); ?> </th>
-					<th><?php echo __('Author'); ?>&nbsp;<?php echo URL::sortAnchor('author'); ?></th>
-					<th><?php echo __('Status'); ?>&nbsp;<?php echo URL::sortAnchor('status'); ?></th>
-					<th colspan="2"><?php echo __('Updated'); ?>&nbsp;<?php echo URL::sortAnchor('created'); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($posts as $post): ?>
-					<tr id="post-row-<?php echo $post->id ?>" class="<?php echo Text::alternate("odd", "even"); ?>">
-						<td><?php echo Form::checkbox('posts['.$post->id.']', $post->id, isset($_POST['posts'][$post->id])); ?></td>
-						<td><?php echo HTML::anchor($post->url, $post->title, array('class'=>'action-view')); ?></td>
-						<td><?php echo HTML::anchor($post->user->url, $post->user->nick, array()); ?></td>
-						<td class="status"><span class="label label-<?php echo $post->status; ?>"><?php echo __(ucfirst($post->status)); ?></span></td>
-						<td><?php echo Date::date($post->updated); ?></td>
-						<td class="action">
-							<?php echo HTML::anchor($post->edit_url.URL::query($destination), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit'))) ?>
-							<?php echo HTML::anchor($post->delete_url.URL::query($destination), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete'))) ?>
-						</td>
+<?php if ($is_datatables): ?>
+	<?php echo $datatables->render(); ?>
+<?php else:?>
+	<?php Assets::datatables(); ?>
+	<div class="help">
+		<p><?php echo __('View, edit, and delete your site\'s pages.'); ?></p>
+	</div>
+	
+	<?php include Kohana::find_file('views', 'errors/partial'); ?>
+	
+	<div class="content">
+		<?php echo Form::open($action, array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
+			<div class="thumbnail">
+					<legend><?php echo __('Bulk Actions'); ?></legend>
+					<div class="control-group edit-operation <?php echo isset($errors['operation']) ? 'error': ''; ?>">
+						<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'page'), '', array('class' => 'input-xlarge')); ?>
+						<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
+					</div>
+			</div><br>
+			<table id = "admin-list-pages" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>
+				<thead>
+					<tr>
+						<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>
+						<th width="45%"><?php echo __('Title'); ?></th>
+						<th width="20%" data-columns='{"bSearchable":false}'><?php echo __('Author'); ?></th>
+						<th width="10%" data-columns='{"bSearchable":false, "sClass": "status"}'><?php echo __('Status'); ?></th>
+						<th width="12%" data-columns='{"bSearchable":false}'><?php echo __('Updated'); ?></th>
+						<th width="8%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 					</tr>
-				<?php endforeach ?>
-			</tbody>
-		</table>
-	<?php echo Form::close(); ?>
-</div>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="6" class="dataTables_empty"><?php echo __("Loading data from server"); ?></td>
+					</tr>
+				</tbody>
+			</table>
+		<?php echo Form::close(); ?>
+	</div>
 
-<?php echo $pagination ?>
+<?php endif; ?>
