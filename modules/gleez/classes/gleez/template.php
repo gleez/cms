@@ -600,7 +600,7 @@ abstract class Gleez_Template extends Controller {
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
 		Assets::css('editor', 'media/css/editor.css', array('default'), array('weight' => 1));
-		Assets::css('theme', 'media/css/style.css', array('default'), array('weight' => 2));
+		Assets::css('theme', "media/css/{$theme}.css", array('default'), array('weight' => 2));
 	}
 
 	/**
