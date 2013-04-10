@@ -213,6 +213,13 @@ abstract class Gleez_Template extends Controller {
 			$this->auto_render = FALSE;
 		}
 
+		// Test whether the current request is datatables request
+		if (Request::is_datatables())
+		{
+			$this->_ajax       = TRUE;
+			$this->auto_render = FALSE;
+		}
+                
 		$this->response->headers('X-Powered-By', 'Gleez CMS ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')');
 
 		$this->_config = Kohana::$config->load('site');
