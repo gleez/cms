@@ -265,7 +265,7 @@ class Gleez_Post extends ORM_Versioned {
 		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
 
 		// Always save only raw text, unformated text
-		$this->teaser  = $this->_teaser();
+		$this->teaser  = empty($this->teaser) ? $this->_teaser() : $this->teaser;
 		$this->body    = $this->rawbody;
 
 		parent::save( $validation );
@@ -295,7 +295,7 @@ class Gleez_Post extends ORM_Versioned {
 	 * 
 	 * @return  string  teaser
 	 */
-	private function _teaser($size = 105)
+	protected function _teaser($size = 105)
 	{
 		// Find where the delimiter is in the body
 		$delimiter = strpos($this->rawbody, self::TEASER_TAG);
