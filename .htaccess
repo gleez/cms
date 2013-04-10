@@ -1,13 +1,13 @@
 # Set environment variables (Optional)
-# SetEnv KOHANA_ENV production
+# SetEnv KOHANA_ENV production # production|development|etc.
 # SetEnv KOHANA_BASE /
 # SetEnv BASE_URL http://www.example.com
 
-# Turn on URL rewriting
-RewriteEngine On
+# Use UTF-8 encoding for anything served text/plain or text/html
+AddDefaultCharset utf-8
 
-# Installation directory
-RewriteBase /
+# Force UTF-8 for a number of file formats
+AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 # Protect hidden files from being viewed
 <Files .*>
@@ -15,12 +15,41 @@ RewriteBase /
 	Deny From All
 </Files>
 
-# Protect application and system files from being viewed
-RewriteRule ^(?:application|modules|themes|system)\b.* index.php/$0 [L]
+# Start rewrite engine
+<IfModule mod_rewrite.c>
+	# If your web host doesn't allow the FollowSymlinks option, you may need to
+	# comment it out and use `Options +SymLinksIfOwnerMatch`, but be aware of the
+	# performance impact: http://goo.gl/Mluzd
+	Options +FollowSymlinks
+	# Options +SymLinksIfOwnerMatch
 
-# Allow any files or directories that exist to be displayed directly
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+	# Turn on URL rewriting
+	RewriteEngine On
 
-# Rewrite all other URLs to index.php/URL
-RewriteRule .* index.php/$0 [PT]
+	# Installation directory
+	RewriteBase /
+
+	# Protect application and system files from being viewed
+	RewriteRule ^(?:application|modules|themes|system)\b.* index.php/$0 [L]
+
+	# Allow any files or directories that exist to be displayed directly
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+
+	# Rewrite all other URLs to index.php/URL
+	RewriteRule .* index.php/$0 [PT]
+</IfModule>
+
+
+<IfModule mod_headers.c>
+	# Better website experience for IE users
+	Header set X-UA-Compatible "IE=Edge,chrome=1"
+	<FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
+		Header unset X-UA-Compatible
+	</FilesMatch>
+
+	# Webfont access
+	<FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff)$">
+		Header set Access-Control-Allow-Origin "*"
+	</FilesMatch>
+</IfModule>
