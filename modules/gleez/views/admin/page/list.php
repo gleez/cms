@@ -19,7 +19,7 @@
 						<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
 					</div>
 			</div><br>
-			<table id ="admin-list-pages" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>
+			<table id ="posts-admin-list" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>
 				<thead>
 					<tr>
 						<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>
