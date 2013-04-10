@@ -203,7 +203,7 @@ class Gleez_Post extends ORM_Versioned {
 			}
 		}
 		// Make sure we have an valid author id set, or a guest id
-		elseif ($name == 'autor')
+		elseif ($name == 'author')
 		{
 			if ( ! empty($this->author_name) AND ! ($account = User::lookup_by_name($this->author_name)))
 			{
