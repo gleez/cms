@@ -62,7 +62,7 @@ class Gleez_HTML extends Kohana_HTML {
 				}
 			}
 			//elseif ($uri[0] !== '#')
-			elseif (strpos($uri, '#') !== FALSE)
+			elseif (strpos($uri, '#') !== 0)
 			{
 				// Make the URI absolute for non-id anchors
 				$uri = URL::site($uri, $protocol, $index);
