@@ -225,7 +225,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 		}
-		elseif ($user->id < 2)
+		elseif ($user->id < 3)
 		{
 			Message::error(__('User: can\'t delete system user'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
