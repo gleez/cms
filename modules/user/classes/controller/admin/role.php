@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined("SYSPATH") OR die("No direct script access.");
 /**
  * Admin Role Controller
  *
@@ -9,7 +9,11 @@
  */
 class Controller_Admin_Role extends Controller_Admin {
 
-
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 */
 	public function before()
 	{
 		ACL::required('administer users');
@@ -17,33 +21,49 @@ class Controller_Admin_Role extends Controller_Admin {
 		parent::before();
 	}
 
+	/**
+	 * List user roles
+	 *
+	 * @uses  Request::is_datatables
+	 * @uses  ORM::dataTables
+	 */
 	public function action_list()
 	{
-		$this->title = __('Roles');
-		$view = View::factory('admin/role/list')
-				->bind('pagination', $pagination)
-				->bind('roles', $roles);
+		$is_datatables = Request::is_datatables();
 
-		$role       = ORM::factory('role');
-		$total      = $role->count_all();
-
-		if ($total == 0)
+		if ($is_datatables)
 		{
-			Kohana::$log->add(Kohana::INFO, 'No roles found');
-			$this->request->response = View::factory('admin/role/none');
-			return;
+			$roles = ORM::factory('role');
+			$this->_datatables = $roles->dataTables(array('name', 'description', 'special'));
+
+			foreach ($this->_datatables->result() as $role)
+			{
+				$this->_datatables->add_row(
+					Text::plain($role->name),
+					Text::plain($role->description),
+					Text::plain($role->special),
+
+					$role->special
+						? '<i class="icon-pencil"></i>&nbsp;<i class="icon-remove"></i>'
+						: HTML::icon($role->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Role'))),
+						  HTML::icon($role->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Role'))),
+						  HTML::icon($role->perm_url, 'icon-lock', array('class'=>'action-edit', 'title'=> __('Edit Permissions')))
+				);
+			}
 		}
 
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items' => $total,
-			'items_per_page' => 5,
-			));
+		$this->title = __('Roles');
+		$add_url = Route::get('admin/role')->uri(array('action' =>'add'));
+		$url = Route::url('admin/role', array('action' => 'list'), TRUE);
 
-		$roles  = $role->order_by('name', 'ASC')->limit($pagination->items_per_page)
-						->offset($pagination->offset)->find_all();
+		$view = View::factory('admin/role/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('add_url',       $add_url)
+				->set('url',           $url);
 
-				$this->response->body($view);
+
+		$this->response->body($view);
 	}
 
 	public function action_add()
