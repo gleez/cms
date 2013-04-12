@@ -9,16 +9,33 @@
  */
 class Model_Auth_Role extends ORM {
 
+	/**
+	 * Table columns
+	 * @var array
+	 */
 	protected $_table_columns = array(
-					'id' => array( 'type' => 'int' ),
-					'name' => array( 'type' => 'string' ),
-					'description' => array( 'type' => 'string' ),
-					'special' => array( 'type' => 'int' ),
-					);
+		'id'          => array( 'type' => 'int' ),
+		'name'        => array( 'type' => 'string' ),
+		'description' => array( 'type' => 'string' ),
+		'special'     => array( 'type' => 'int' ),
+	);
 
-	// Relationships
-	protected $_has_many = array('users' => array('through' => 'roles_users'));
+	/**
+	 * A role has many users
+	 *
+	 * @var array Relationships
+	 */
+	protected $_has_many = array(
+		'users' => array(
+			'through' => 'roles_users'
+		)
+	);
 
+	/**
+	 * Rules for the role model
+	 *
+	 * @return array Rules
+	 */
 	public function rules()
 	{
 		return array(
@@ -35,8 +52,36 @@ class Model_Auth_Role extends ORM {
 
 	public function find_all($id = NULL)
 	{
-		//$this->where($this->_object_name.'.id', '>', 1);
 		return parent::find_all($id);
 	}
 
-} // End Auth Role Model
+	/**
+	 * Reading data from inaccessible properties
+	 *
+	 * @param   string  $field
+	 * @return  mixed
+	 *
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 */
+	public function __get($field)
+	{
+		switch ($field)
+		{
+			case 'edit_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('admin/role')->uri(array('action' => 'edit', 'id' => $this->id));
+			break;
+			case 'delete_url':
+				// Model specific links; view, edit, delete url's.
+				return Route::get('admin/role')->uri(array('action' => 'delete', 'id' => $this->id));
+			break;
+			case 'perm_url':
+				return Route::get('admin/permission')->uri(array('action' => 'role', 'id' => $this->id));
+			break;
+		}
+
+		return parent::__get($field);
+	}
+
+}
