@@ -418,7 +418,7 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
-(1, 'static/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'Если вы используете Gleez CMS! Мы просим вас пожертвовать для обеспечения возможности будущего развития.', 1, 'icon-gift'),
+(1, 'static/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'Если вы используете Gleez CMS, мы просим вас пожертвовать для обеспечения возможности будущего развития.', 1, 'icon-gift'),
 (2, 'menu/main-menu', 'Главное меню', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
 (3, 'menu/management', 'Управление', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
 (4, 'menu/navigation', 'Навигация', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
