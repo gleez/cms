@@ -710,6 +710,8 @@ abstract class Gleez_Template extends Controller {
 	 * Set the profiler stats into template.
 	 *
 	 * @uses  Profiler::groups
+	 * @link  http://php.net/manual/en/function.number-format.php  number_format
+	 * @link  http://php.net/manual/en/function.get-included-files.php  get_included_files
 	 */
 	protected function _set_profiler_stats()
 	{
@@ -729,9 +731,9 @@ abstract class Gleez_Template extends Controller {
 
 		// Get the total memory and execution time
 		$total = array(
-			'{memory_usage}'     => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024 / 1024, 2) . 'MB',
+			'{memory_usage}'     => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024 / 1024, 2) . '&nbsp;' . __('MB'),
 			'{gleez_version}'    => Gleez::VERSION,
-			'{execution_time}'   => number_format(microtime(TRUE) - KOHANA_START_TIME, 3) . ' seconds',
+			'{execution_time}'   => number_format(microtime(TRUE) - KOHANA_START_TIME, 3) . '&nbsp;' . __('seconds'),
 			'{included_files}'   => count(get_included_files()),
 			'{database_queries}' => $queries
 		);
