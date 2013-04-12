@@ -45,10 +45,10 @@ class Controller_Admin_Role extends Controller_Admin {
 						$role->special ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>',
 	
 						$role->special
-							? '<i class="icon-pencil"></i>&nbsp;<i class="icon-remove"></i>'
-							: HTML::icon($role->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Role'))) . '&nbsp;' .
-							  HTML::icon($role->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Role'))),
-							  HTML::icon($role->perm_url, 'icon-lock', array('class'=>'action-edit', 'title'=> __('Edit Permissions')))
+							? HTML::icon($role->perm_url, 'icon-lock', array('class'=>'icon-large', 'title'=> __('Edit Permissions')))
+							: HTML::icon($role->edit_url, 'icon-edit', array('class'=>'icon-large', 'title'=> __('Edit Role'))) . '&nbsp;' .
+							  HTML::icon($role->delete_url, 'icon-trash', array('class'=>'icon-large', 'title'=> __('Delete Role'))) . '&nbsp;' .
+							  HTML::icon($role->perm_url, 'icon-lock', array('class'=>'icon-large', 'title'=> __('Edit Permissions')))
 					)
 				);
 			}
