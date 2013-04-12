@@ -39,11 +39,6 @@ The latest documentation is available on the [Gleez Wiki](https://github.com/gle
 * [Installation](https://github.com/gleez/cms/wiki/Installation)
 * [Developers](https://github.com/gleez/cms/wiki/Developers)
 
-## Contributors
+***
 
-- [Sandeep Sangamreddi](https://github.com/sandeepone) - Code, Idea, Design
-- [Sergey Yakovlev](https://github.com/sergeyklay) - Code, Russian i18n
-- [dishuostec](https://github.com/dishuostec) - Code, Chinese i18n
-- [Calemsw](https://github.com/Calemsw) - Italian i18n
-
-Now that you're here, why not start contributing as well? :)
+[License](https://github.com/gleez/cms/wiki/License) | [Contributors](https://github.com/gleez/cms/wiki/Contributors)

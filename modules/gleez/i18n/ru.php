@@ -24,6 +24,7 @@ return array
 	'Add Alias' => 'Добавить синоним',
 	'Add Item for %menu' => 'Добавление пункта для %menu',
 	'Add Link' => 'Добавить ссылку',
+	'Add Menu' => 'Добавить меню',
 	'Add New Item' => 'Добавить новый пункт',
 	'Add new menus to your site, edit existing menus, and rename and reorganize menu links.' => 'Добавляйте новые меню на ваш сайт, редактируйте существующие, переименовывайте их и реорганизовайте ссылки.',
 	'Add New Term' => 'Добавить новый термин',
@@ -173,6 +174,7 @@ return array
 	// I
 	'Icon' => 'Иконка',
 	'Iconv Extension' => 'Расширение Iconv',
+	'If you use Gleez, we ask that you donate to ensure future development is possible.' => 'Если вы используете Gleez, мы просим вас пожертвовать для обеспечения возможности будущего развития.',
 	'Innovate IT' => 'Иновационные информационные технологии',
 	'Install' => 'Установка',
 	'Installed'=> 'Установлено',
@@ -201,6 +203,7 @@ return array
 	'Make sticky' => 'Прикрепить',
 	'Markdown' => 'Маркдаун',
 	'Max file size of :max Bytes exceeded!' => 'Превышен максимальный размер файла :max байт!',
+	'MB' => 'МБ',
 	'Menu %name deleted successful!' => 'Меню %name успешно удалено!',
 	'Menu %name created successful!' => 'Меню %name успешно созданно!',
 	'Menu doesn\'t exists!' => 'Меню не найдено!',
@@ -286,6 +289,7 @@ return array
 	'Region' => 'Регион',
 	'Reflection API' => 'Reflection API',
 	'Remove stickiness' => 'Открепить',
+	'Rendered in {execution_time}, using {memory_usage} of memory.' => 'Рендеринг за {execution_time}, используя {memory_usage} памяти.',
 	'Right Sidebar' => 'Правая колонка',
 	'Roles' => 'Роли',
 	// S
@@ -294,6 +298,7 @@ return array
 	'Save Filters' => 'Сохранить фильтры',
 	'Save this information in a safe place, or change your :profile right away!' => 'Сохраните эту информацию в безопасном месте, или измените Ваш :profile прямо сейчас!',
 	'Save Widgets' => 'Сохранить виджеты',
+	'seconds' => 'сек.',
 	'Settings' => 'Настройки',
 	'settings' => 'настройки',
 	'Security' => 'Защитный код',
@@ -402,6 +407,7 @@ return array
 	'Vocabulary' => 'Словарь',
 	'Vocabulary doesn\'t exists!' => 'Словарь не найден!',
 	// W
+	'We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.' => 'Мы не любим изобретать колесо. Но если колеса нет или оно квадратное, мы не боимся изобрести одно круглое.',
 	'We\'ve created an account for you to use:' => 'Мы создали для Вас аккаунт со следующими данными:',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
 	'Week Starts On' => 'Неделя начинается с',

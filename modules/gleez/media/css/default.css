@@ -126,7 +126,7 @@ form .well{
     color: #999999;
     font-weight: normal;
 }
-.text-centered, td.text-centered, th.text-centered {
+.text-centered, td.text-centered, th.text-centered, div.text-centered {
     text-align:center;
 }
 .text-left, td.text-left, th.text-left{
@@ -156,8 +156,8 @@ p.empty_page, td.dataTables_empty {
   color:#0084FF;
   background-color:transparent;
   box-shadow: none;
-  margin: none;
-  padding: none;
+  margin: 0;
+  padding: 0;
   height: auto;
   width: 40px;
 }
@@ -645,7 +645,6 @@ div.widget.widget-admin-shortcut .widget-content{
 body.widget{
   overflow: visible;
   margin: 0;
-  position: none;
   z-index: 0;
   clear: none;
   position: relative !important;
@@ -661,7 +660,6 @@ body.widget{
 .shortcuts .shortcut {
 	width: 22.50%;
 	display: inline-block;
-	/*padding: 12px 0;*/
 	margin: 0 .9% 1em;
 	vertical-align: top;
 	text-decoration: none;
