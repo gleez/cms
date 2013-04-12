@@ -16,7 +16,7 @@
 		<tr>
 			<th width="20%" class="sorting_desc"><?php echo __("Name"); ?></th>
 			<th width="60%" class="sorting_desc"><?php echo __("Description"); ?></th>
-			<th width="10%" data-columns='{""bSearchable":false}'><?php echo __("Special"); ?></th>
+			<th width="10%" data-columns='{"bSearchable":false, "sClass": "status"}'><?php echo __("Special"); ?></th>
 			<th width="10%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 		</tr>
 		</thead>
