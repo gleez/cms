@@ -13,13 +13,12 @@ return array
 	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Аккаунт :prov',
+	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	':site Account' => 'Аккаунт :site',
 	// %
 	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
 	'A request to reset the password for your account has been made at !site.' => 'С сайта !site был осуществлен запрос на сброс пароля для вашей учётной записи.',
-	'Bio' => 'Биография',
-	'Bio must be less than :param2 characters long.' => 'Адрес должен быть не больше :param2 символов.',
 	'About' => 'О пользователе',
 	'Account %title created successful!' => 'Пользователь %title успешно создан!',
 	'Activity' => 'Активность',
@@ -32,6 +31,8 @@ return array
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
+	'Bio' => 'Биография',
+	'Bio must be less than :param2 characters long.' => 'Адрес должен быть не больше :param2 символов.',
 	'Birthday' => 'День рождения',
 	// C
 	'Change Avatar' => 'Сменить аватар',
@@ -112,8 +113,8 @@ return array
 	'Register new account' => 'Зарегистрировать новый аккаунт',
 	'Repeat entered password' => 'Повторите введенный пароль',
 	'Reset password' => 'Сброс пароля',
-	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	'Reset' => 'Сброс',
+	'Roles allow you to fine tune the security and administration of Gleez CMS. A role defines a group of users that have certain privileges as defined in user permissions. Examples of roles include: anonymous user, authenticated user, moderator, administrator and so on. In this area you will define the role names of the various roles.' => 'Роли позволяют точно настроить безопасность и управление Gleez CMS. Роль определяет группу пользователей, которые имеют некоторые привилегии, определенные в пользовательских привилегиях. Например, роли могут быть использованы для следующих групп пользователей: анонимный пользователь, авторизованный пользователь, модератор, администратор и т.д. Здесь вы можете назначать имена ролям и управлять ими.',
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
 	'Security code' => 'Защитный код',
