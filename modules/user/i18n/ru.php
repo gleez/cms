@@ -22,6 +22,7 @@ return array
 	'About' => 'О пользователе',
 	'Account %title created successful!' => 'Пользователь %title успешно создан!',
 	'Activity' => 'Активность',
+	'Add New Role' => 'Добавить новую роль',
 	'Add New User' => 'Добавить нового пользователя',
 	'Administer permissions' => 'Администрирование полномочий',
 	'Administer users' => 'Администрирование пользователей',
