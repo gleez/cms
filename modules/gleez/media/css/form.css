@@ -421,3 +421,7 @@ label small, .help-block {
 .select-icons, ul.select2-results > li{
     text-transform: capitalize;
 }
+
+.redactor_textarea {
+	border: 1px solid #ddd;
+}
