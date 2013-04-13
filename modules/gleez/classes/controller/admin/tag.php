@@ -10,7 +10,9 @@
 class Controller_Admin_Tag extends Controller_Admin {
 
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
 	 */
 	public function before()
 	{
@@ -21,6 +23,14 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 	/**
 	 * List tags
+	 *
+	 * @uses  Request::is_datatables
+	 * @uses  ORM::dataTables
+	 * @uses  Text::plain
+	 * @uses  HTML::anchor
+	 * @uses  HTML::icon
+	 * @uses  Route::url
+	 * @uses  Route::get
 	 */
 	public function action_list()
 	{
@@ -28,9 +38,9 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 		if ($is_datatables)
 		{
-			$tags       = ORM::factory('tag');
+			$tags = ORM::factory('tag');
 			$this->_datatables = $tags->dataTables(array('name', 'id', 'type'));
-			
+
 			foreach ($this->_datatables->result() as $tag)
 			{
 				$this->_datatables->add_row(
@@ -39,13 +49,13 @@ class Controller_Admin_Tag extends Controller_Admin {
 						HTML::anchor($tag->url, $tag->url),
 						Text::plain($tag->type),
 
-						HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'edit', 'id' => $tag->id)), '<i class="icon-edit"></i>', array('class'=>'action-edit', 'title'=> __('Edit Tag'))) .
-						HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'delete', 'id' => $tag->id)), '<i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=> __('Delete Tag')))
+						HTML::icon($tag->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
+						HTML::icon($tag->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Tag')))
 					)
 				);
 			}
 		}
-		
+
 		$this->title = __('Tags');
 		$url         = Route::url('admin/tag', array('action' => 'list'), TRUE);
 
@@ -54,29 +64,40 @@ class Controller_Admin_Tag extends Controller_Admin {
 				->set('is_datatables', $is_datatables)
 				->set('url',           $url);
 
-                $this->response->body($view);
+		$this->response->body($view);
 	}
 
+	/**
+	 * Add new tag
+	 *
+	 * @uses  Message::success
+	 * @uses  Route::url
+	 * @uses  Route::get
+	 * @uses  Request::redirect
+	 */
 	public function action_add()
 	{
+		$this->title = __('Add New Tag');
 		$post = ORM::factory('tag');
 		$action = Route::get('admin/tag')->uri(array('action' => 'add'));
 
-		if( $this->valid_post('tag') )
+		if ($this->valid_post('tag'))
 		{
+			$post->values($_POST);
 			try
 			{
-				$post->values($_POST)->save();
-
-				Message::success(__('Tag: %name saved successful!', array('%name' => $post->name)));
+				$post->save();
+				Message::success(__('Tag %name saved successful!', array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/tag')->uri(array('action' => 'list')));
+				{
+					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
+				}
 
 			}
-                        catch (ORM_Validation_Exception $e)
+			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors =  $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -89,51 +110,72 @@ class Controller_Admin_Tag extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Edit tag
+	 *
+	 * @uses  Message::success
+	 * @uses  Message::error
+	 * @uses  Route::url
+	 * @uses  Route::get
+	 * @uses  Request::redirect
+	 * @uses  Log::add
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
-		$post = ORM::factory('tag', (int) $id);
+		$post = ORM::factory('tag', $id);
 
-		if( !$post->loaded() )
+		if( ! $post->loaded())
 		{
-			Message::error( __('Tag: doesn\'t exists!') );
+			Message::error(__('Tag doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
 
 			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/tag')->uri(array('action' => 'list')));
+			{
+				$this->request->redirect(Route::get('admin/tag')->uri(), 404);
+			}
 		}
 
-
 		$this->title = __('Edit Tag %name', array('%name' => $post->name));
-		$action = Route::get('admin/tag')->uri(array('action' => 'edit', $id => $id));
 
-		if ( $this->valid_post('tag') )
+		if ($this->valid_post('tag'))
 		{
+			$post->values($_POST);
 			try
 			{
-				$post->values($_POST)->save();
+				$post->save();
 
-				Message::success(__('Tag: %name saved successful!', array('%name' => $post->name)));
+				Message::success(__('Tag %name saved successful!', array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/tag')->uri(array('action' => 'list')));
-
+				{
+					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
+				}
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
 		$view = View::factory('admin/tag/form')
 					->set('post',    $post)
-					->set('action',  $action)
+					->set('action',  $post->edit_url)
 					->set('errors',  $this->_errors)
 					->set('path', 	 $post->url);
 		
 		$this->response->body($view);
 	}
 
+	/**
+	 * Delete tag
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Route::url
+	 * @uses  Route::get
+	 * @uses  Request::redirect
+	 */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -141,42 +183,51 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 		if ( ! $tag->loaded())
 		{
-			Message::error(__('Tag: doesn\'t exists!'));
+			Message::error(__('Tag doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
 
 			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/tag')->uri( array('action' => 'list') ));
+			{
+				$this->request->redirect(Route::get('admin/tag')->uri(), 404);
+			}
 		}
 
-		$this->title = __('Delete Tag :title', array(':title' => $tag->name ));
+		$this->title = __('Delete Tag %title', array('%title' => $tag->name ));
 
 		$view = View::factory('form/confirm')
-				->set('action', Route::url('admin/tag', array('action' => 'delete', 'id' => $tag->id) ))
-				->set('title', $tag->name);
+				->set('action', $tag->delete_url)
+				->set('title',  $tag->name);
 
 		// If deletion is not desired, redirect to list
-                if ( isset($_POST['no']) AND $this->valid_post() )
-                        $this->request->redirect(Route::get('admin/tag')->uri());
+		if (isset($_POST['no']) AND $this->valid_post())
+		{
+			$this->request->redirect(Route::get('admin/tag')->uri());
+		}
 
 		// If deletion is confirmed
-                if ( isset($_POST['yes']) AND $this->valid_post() )
-                {
+		if (isset($_POST['yes']) AND $this->valid_post())
+		{
 			try
 			{
 				$tag->delete();
-				Message::success(__('Tag: :name deleted successful!', array(':name' => $tag->name)));
+				Message::success(__('Tag %name deleted successful!', array('%name' => $tag->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/tag')->uri( array('action' => 'list') ));
+				{
+					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
+				}
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting tag id: :id, :message',
+				Kohana::$log->add(Log::ERROR, 'Error occurred deleting tag id: :id, :message',
 							array(':id' => $tag->id, ':message' => $e->getMessage()));
-				Message::error('An error occured deleting tag, :tag.',array(':tag' => $tag->name));
+
+				Message::error('An error occurred deleting tag %tag!',array('%tag' => $tag->name));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/tag')->uri( array('action' => 'list') ));
+				{
+					$this->request->redirect(Route::get('admin/tag')->uri(), 503);
+				}
 			}
 		}
 
