@@ -23,13 +23,20 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 * Resize images on fly with caching
 * Other Details like SEO, Media, etc.
 
-## Site
+## Demo
 
-Gleez has an official website: [http://gleezcms.org](http://gleezcms.org) and Facebook page: [https://www.facebook.com/gleezcms](https://www.facebook.com/gleezcms)
+[http://demo.gleezcms.org](http://demo.gleezcms.org)
 
-## Demos
+**User**
 
-* [http://demo.gleezcms.org](http://demo.gleezcms.org)
++ Username: demo
++ Password: demo
+
+**Admin**
+
++ Username: demoadmin
++ Password: demoadmin
+
 
 ## Documentation
 
@@ -41,4 +48,4 @@ The latest documentation is available on the [Gleez Wiki](https://github.com/gle
 
 ***
 
-[License](https://github.com/gleez/cms/wiki/License) | [Contributors](https://github.com/gleez/cms/wiki/Contributors)
+[Official Website](http://gleezcms.org) | [Facebook Page](https://www.facebook.com/gleezcms) | [License](https://github.com/gleez/cms/wiki/License) | [Contributors](https://github.com/gleez/cms/wiki/Contributors)
