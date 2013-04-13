@@ -5,7 +5,7 @@
  * @package    Gleez\Tags
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Tag extends ORM {
 
@@ -40,6 +40,19 @@ class Model_Tag extends ORM {
 		'path',
 		'action'
 	);
+
+	/**
+	 * Labels for fields in this model
+	 *
+	 * @return  array  Array of labels
+	 */
+	public function labels()
+	{
+		return array(
+			'name' => __('Tag'),
+			'type'  => __('Type'),
+		);
+	}
 
 	/**
 	 * Rules for the post model
@@ -154,14 +167,15 @@ class Model_Tag extends ORM {
 				return Route::get($this->type)->uri(array('action' => 'tag', 'id' => $this->id));
 			break;
 			case 'edit_url':
+				// Model specific links; view, edit, delete url's.
 				return Route::get('admin/tag')->uri(array('id' => $this->id, 'action' => 'edit'));
 			break;
 			case 'delete_url':
+				// Model specific links; view, edit, delete url's.
 				return Route::get('admin/tag')->uri(array('id' => $this->id, 'action' => 'delete'));
 			break;
 			case 'url':
 			case 'link':
-				// Model specefic links; view, edit, delete url's.
 				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
 			break;
 		}
