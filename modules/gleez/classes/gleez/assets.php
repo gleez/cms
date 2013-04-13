@@ -766,67 +766,25 @@ class Gleez_Assets {
 	/**
 	 * Rich text editor
 	 *
-	 * By default Gleez uses Bootstrap-wysihtml5 - WYSIWYG HTML Editor
-	 * @link  https://github.com/jhollingworth/bootstrap-wysihtml5  Bootstrap-wysihtml
-	 * @link  https://github.com/xing/wysihtml5  wysihtml5
+	 * By default Gleez uses redactor-js - jQuery based WYSIWYG-editor
+	 * @link  https://github.com/dybskiy/redactor-js
+	 * @link  http://redactorjs.com/
 	 *
-	 * @param  string   $name   CSS class or ID of editable area [Optional]
+	 * For I18n support see http://imperavi.com/redactor/docs/languages/
+	 *
+	 * @param  string  $name  CSS class or ID of editable area [Optional]
+	 * @param  string  $lang  Language  [Optional]
 	 */
-	public static function editor($name = '.textarea')
+	public static function editor($name = '.textarea', $lang = 'en')
 	{
-		// Add the core javascipt and css files
-		Assets::css('bootstrap-wysihtml5', 'media/css/bootstrap-wysihtml5.css', array('bootstrap'));
-		Assets::js('wysihtml5', 'media/js/wysihtml5-0.4.0pre.min.js', array('jquery'), FALSE, array('weight' => 8));
-		Assets::js('bootstrap-wysihtml5', 'media/js/bootstrap-wysihtml5-0.0.2.min.js', array('wysihtml5'), FALSE, array('weight' => 9));
+		Assets::js('redactor', 'media/js/redactor.min.js', array('jquery'), FALSE, array('weight' => 15));
+		Assets::js('redactor/lang', 'media/js/redactor/langs/'.$lang.'.js', array('jquery'), FALSE, array('weight' => 16));
 
-		$events = '"events": {';
-
-		// @todo Add useful functionality and disable environment check
-		if (Kohana::$environment === Kohana::DEVELOPMENT)
-		{
-			/**
-			 * Wysihtml5 exposes a number of events
-			 *
-			 * @link  https://github.com/xing/wysihtml5/wiki/Events  Wysihtml5 Events
-			 */
-			$events .=
-				'
-					"load": function() {
-						console.log("Gleez Editor loaded...");
-					},
-					"blur": function() {
-						console.log("Gleez Editor blured...");
-					},
-					"focus": function() {
-						console.log("Gleez Editor receives focus...");
-					},
-					"change": function() {
-						console.log("Gleez Editor changed...");
-					},
-					"paste": function() {
-						console.log("User pastes or drops content...");
-					},
-					"change_view": function() {
-						console.log("Gleez Editor switched between source and rich text view...");
-					}
-				';
-		}
-
-		$events .= '}';
-
-		// @todo Maybe controls should be configurable
 		Assets::codes('editor', 'jQuery(document).ready(function(){
-					jQuery("'.$name.'").wysihtml5({
-						'.$events.',
-						"font-styles": true,
-						"emphasis":    true,
-						"lists":       true,
-						"html":        true,
-						"link":        true,
-						"image":       true,
-						"color":       true,
-						"stylesheets": []
-				});
+					jQuery("'.$name.'").redactor({
+						lang: "'.$lang.'",
+						minHeight: 300
+					});
 			});'
 		);
 	}
