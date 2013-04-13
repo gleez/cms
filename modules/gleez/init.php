@@ -45,9 +45,8 @@ if ( ! Route::cache())
 		'controller' => 'modules',
 	));
 
-	Route::set('admin/page', 'admin/pages(/<action>(/<id>))(/p<page>)', array(
+	Route::set('admin/page', 'admin/pages(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'page'       => '\d+',
 		'action'     => 'index|list|settings|reset|confirm|bulk'
 	))
 	->defaults(array(
@@ -90,9 +89,8 @@ if ( ! Route::cache())
 		'action'     => 'list',
 	));
 
-	Route::set('admin/path', 'admin/paths(/<action>(/<id>))(/p<page>)', array(
+	Route::set('admin/path', 'admin/paths(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'page'       => '\d+',
 		'action'     => 'list|add|edit|delete'
 	))
 	->defaults(array(
@@ -101,9 +99,8 @@ if ( ! Route::cache())
 		'action'     => 'list',
 	));
 
-	Route::set('admin/tag', 'admin/tags(/<action>(/<id>))(/p<page>)', array(
+	Route::set('admin/tag', 'admin/tags(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'page'       => '\d+',
 		'action'     => 'list|add|edit|delete'
 	))
 	->defaults(array(
