@@ -43,7 +43,7 @@ class Controller_Page extends Template {
 		if($this->request->action() == 'add' OR $this->request->action() == 'edit')
 		{
 			// Add RichText Support
-			Assets::editor();
+			Assets::editor('.textarea', I18n::$lang);
 
 			// Flag to disable left/right sidebars
 			$this->_sidebars = FALSE;
