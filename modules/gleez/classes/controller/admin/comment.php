@@ -74,7 +74,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 
 		$view = View::factory('admin/comment/list')
 				->set('bulk_actions', $bulk_actions)
-				->set('destination',  $this->desti)
+				->set('destination',  $this->_desti)
 				->bind('pagination',  $pagination)
 				->set('posts',        $posts->find_all());
 
