@@ -61,7 +61,7 @@ There are a few things you'll want to do with your application before moving int
 
 ## Putting Gleez in a subfolder
 
-If Gleez is not in the root of the server we need to change some files.  Lets say we are putting kohanut in a subfolder called "subfolder"
+If Gleez is not in the root of the server we need to change some files.  Lets say we are putting gleez in a subfolder called "subfolder"
 
 In **.htaccess**
 
@@ -73,7 +73,8 @@ In **application/bootstrap.php**
    
     'base_url'   => '/',
     -- change to --
-    'base_url'   => '/subfolder',
+    'base_url'   => 'http://example.com/subfolder/',
 
+Please use full aboslute url in base_url when running in subfolder, madatory.
 If you put Gleez in a subfolder, the links on all your pages will probably be broken, especially if you move a site that is already made. You could probably fix it by adding a [<base\>](http://w3schools.com/tags/tag_base.asp) tag.
 
