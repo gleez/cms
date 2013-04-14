@@ -12,7 +12,7 @@
 abstract class Gleez_Widgets {
 
 	/**
-	 * Widgets instances
+	 * Widgets instance
 	 *
 	 * @var array
 	 */
@@ -33,34 +33,39 @@ abstract class Gleez_Widgets {
 	protected $_regions = array();
 
 	/**
-	 * count of widgets inside a region
+	 * Count of widgets inside a region
 	 *
 	 * @var string
 	 */
 	protected $_widget_count = array();
 
 	/**
-	 * status of Widgets, if it's already loaded from the database
+	 * Status of Widgets, if it's already loaded from the database
 	 *
 	 * @var string
 	 */
 	protected $_loaded = FALSE;
 
 	/**
-	 * @var  string  region name right/left etc
+	 * Region name right|left etc
+	 *
+	 * @var string
 	 */
 	protected $_region;
 
 	/**
-	 * @var  string  render style html/json etc
+	 * Render style html|json etc
+	 *
+	 * @var string
 	 */
 	protected $_format;
 
 	/**
 	 * Singleton pattern
+	 *
 	 * @param  string  $region  Region. By default `right`. [Optional]
 	 * @param  string  $format  Format. By default `html`. [Optional]
-	 * @return Region
+	 * @return Widgets instance
 	 */
 	public static function instance($region = 'right', $format = 'html')
 	{	
@@ -75,7 +80,8 @@ abstract class Gleez_Widgets {
 	/**
 	 * Constructor, globally sets region and format
 	 *
-	 * @return  void
+	 * @param $region
+	 * @param $format
 	 */
 	public function __construct($region, $format)
 	{
@@ -95,10 +101,11 @@ abstract class Gleez_Widgets {
 	/**
 	 * Add's a new widget to the widgets
 	 *
-	 * @chainable
-	 * @param   string   widget region
-	 * @param   string   Unique widget name
-	 * @param   string   widget object
+
+	 * @param   string  $region  Widget region
+	 * @param   string  $name    Unique widget name
+	 * @param   string  $widget  Widget object
+	 * @throws  Kohana_Exception
 	 * @return  Widget
 	 */
 	public function add($region, $name, $widget)
@@ -126,11 +133,14 @@ abstract class Gleez_Widgets {
 	}
 
 	/**
-	 * Retrieves a named widget.
+	 * Retrieves a named widget
 	 *
-	 *     $widget = $region->get('login');
+	 * Example:<br>
+	 * <code>
+	 *   $widget = $region->get('login');
+	 * </code>
 	 *
-	 * @param   string  widget name
+	 * @param   string  $name  Widget name
 	 * @return  Widget
 	 */
 	public function get($name)
@@ -143,57 +153,80 @@ abstract class Gleez_Widgets {
 	/**
 	 * Remove a widget from the widgets or region from regions
 	 *
-	 *	$widget = $region->remove('right'); // removes right sidebar
+	 * Removes right sidebar:<br>
+	 * <code>
+	 *   $widget = $region->remove('right');
+	 * </code>
 	 *
-	 *      $widget = $region->remove(FALSE, 'login'); // removes login widget
+	 * Removes login widget:<br>
+	 * <code>
+	 *   $widget = $region->remove(FALSE, 'login');
+	 * </code>
 	 *	
-	 * @param   string   region name
-	 * @param   string   widget name
-	 * @return  void
+	 * @param   string  $region  Region name [Optional]
+	 * @param   string  $widget  Widget name [Optional]
 	 */
-	public function remove($region = FALSE, $widget = FALSE)
+	public function remove($region = NULL, $widget = NULL)
 	{
-		if($region)
+		if ( ! is_null($region))
 		{
-			if( isset($this->_regions[$region]) ) unset($this->_regions[$region]);
+			if (isset($this->_regions[$region]))
+			{
+				unset($this->_regions[$region]);
+			}
 		}
-	
-		if($widget)
+
+		if ( ! is_null($widget))
 		{
-			if( isset($this->_widgets[$widget]) ) unset($this->_widgets[$widget]);
+			if (isset($this->_widgets[$widget]))
+			{
+				unset($this->_widgets[$widget]);
+			}
 		}
 	}
 
 	/**
-	 * sets/gets region.
+	 * Sets or gets region
 	 *
-	 *     $widget = $region->region('right'); // Sets region to right sidebar
-	 *     
-	 * @chainable
-	 * @param   string  region name
+	 * Sets region to right sidebar:<br>
+	 * <code>
+	 *   $widget = $region->region('right');
+	 * </code>
+	 *
+	 * @param   string  $region  Region name [Optional]
 	 * @return  Region
 	 */
 	public function region($region = NULL)
 	{
-		if($region === NULL) return $this->_region;
-		if($region) $this->_region = $region;
+		if (is_null($region))
+		{
+			return $this->_region;
+		}
+
+		$this->_region = $region;
 	
 		return $this;
 	}
 
 	/**
-	 * sets/gets format.
+	 * Sets or gets format
 	 *
-	 *     $widget = $region->format('html'); //Sets format to html output
-	 *     
-	 * @chainable
-	 * @param   string  format name
+	 * Sets format to html output:<br>
+	 * <code>
+	 *   $widget = $region->format('html');
+	 * </code>
+	 *
+	 * @param   string  $format  Format name [Optional]
 	 * @return  Region
 	 */
 	public function format($format = NULL)
 	{
-		if($format === NULL) return $this->_format;
-		if($format) $this->_format = $format;
+		if (is_null($format))
+		{
+			return $this->_format;
+		}
+
+		$this->_format = $format;
 
 		return $this;
 	}
@@ -201,7 +234,7 @@ abstract class Gleez_Widgets {
 	/**
 	 * Renders the HTML output of widgets
 	 *
-	 * @return   string
+	 * @return string
 	 */
 	public function __toString()
 	{
@@ -218,50 +251,69 @@ abstract class Gleez_Widgets {
 	/**
 	 * Renders the HTML output for the widgets
 	 *
+	 * @param   string  $region  Theme region [Optional]
+	 * @param   string  $format  Widget format [Optional]
 	 * @return  string  HTML widgets
+	 * @return  boolean If widget not exists
 	 */
-	public function render($region = FALSE, $format =  FALSE)
+	public function render($region = NULL, $format = NULL)
 	{
 		//set region, respect $this->region();
-		if($region) $this->region($region);
+		if ( ! is_null($region))
+		{
+			$this->region($region);
+		}
 
 		//set format, respect $this->format();
-		if($format) $this->format($format);
+		if ( ! is_null($format))
+		{
+			$this->format($format);
+		}
 	
-		if ( ! isset($this->_regions[$this->_region]) OR $this->_regions[$this->_region] === NULL )
-			return false;
+		if ( ! isset($this->_regions[$this->_region]) OR is_null($this->_regions[$this->_region]))
+		{
+			return FALSE;
+		}
 
 		$response = array();
+
 		foreach ($this->_regions[$this->_region] as $id => $name)
 		{
 			$response[] = $this->get_widget($name, TRUE, $this->_region, $this->_format);
 		}
 
-		return trim( implode("\n\n", $response) );
+		return trim(implode(PHP_EOL.PHP_EOL, $response));
 	}
 
 	/**
 	 * Returns the named widget
 	 *
-	 * @chainable
-	 * @param   name	string  name of the widget
-	 * @param   visible	bool    visibility permisson from widget or FALSE to skip
-	 * @param   region	string  The name of the region ex:left, right or FALSE for all regions
-	 * @param   format	bool    The format of the output ex:xhtml, html or FALSE for object
+	 * @param   string   $name     Name of the widget
+	 * @param   boolean  $visible  Visibility permission from widget or FALSE to skip
+	 * @param   boolean  $region   The name of the region ex:left, right or FALSE for all regions
+	 * @param   boolean  $format   The format of the output ex:xhtml, html or FALSE for object
 	 * 
-	 * @return  mixed   object/string  Widget widget/HTML widget
+	 * @return  object  Widget widget
+	 * @return  string  HTML widget
 	 */
 	public function get_widget($name, $visible = FALSE, $region = FALSE, $format =  FALSE)
 	{
 		$response = FALSE;
-		if ( ! $widget = $this->get($name) ) return;
+
+		if ( ! $widget = $this->get($name))
+		{
+			return $response;
+		}
+
 		($visible == TRUE) ? $this->is_visible($widget) : $widget->visible == TRUE;
 
 		// Enable developers to override widget
 		Module::event('widget', $widget);
+
+		// @todo member has protected access
 		Module::event("widget_{$widget->name}", $widget);
 	
-		if ( $widget->status AND $widget->visible ) 
+		if ($widget->status AND $widget->visible)
 		{
 			try
 			{
@@ -289,16 +341,15 @@ abstract class Gleez_Widgets {
 
 	/**
 	 * Install the widget into database during module install
+	 *
 	 * Defaults to inactive widget
 	 *
-	 * @param array    $widget  A widget array unique name and title are required
-	 * @param string   $module  The name of the module for this widget
-	 *
-	 * @return void
+	 * @param  array   $widget  A widget array unique name and title are required
+	 * @param  string  $module  The name of the module for this widget
 	 */
 	public static function install(array $widget, $module)
 	{
-		if(isset($widget['name']) AND isset($widget['title']))
+		if (isset($widget['name']) AND isset($widget['title']))
 		{
 			// name must be unique
 			$values['name']   = @strtolower($widget['name']);
@@ -326,9 +377,7 @@ abstract class Gleez_Widgets {
 	/**
 	 * Remove the widget from database during module uninstall
 	 *
-	 * @param string   $module  The name of the module for this widget
-	 *
-	 * @return void
+	 * @param  string  $module  The name of the module for this widget
 	 */
 	public static function uninstall($module)
 	{
@@ -349,17 +398,23 @@ abstract class Gleez_Widgets {
 		}
 	}
 
-	/*
+
+	/**
 	 * Load the widgets from database
+	 *
+	 * @return $this|array|string
 	 */
 	protected function load()
 	{
-		//if the widgets have been loaded already, just return it.
-		if ($this->_loaded) return $this->_widgets;
+		// if the widgets have been loaded already, just return it.
+		if ($this->_loaded)
+		{
+			return $this->_widgets;
+		}
 	
 		$cache = Cache::instance('widgets');
 
-		if( ! $widgets = $cache->get('widgets'))
+		if ( ! $widgets = $cache->get('widgets'))
 		{
 			$_widgets = ORM::factory('widget')
 					->where('status', '=', '1')
@@ -368,6 +423,7 @@ abstract class Gleez_Widgets {
 					->find_all();
 
 			$widgets = array();
+
 			foreach($_widgets as $_widget)
 			{
 				$widgets[] = (object)$_widget->as_array();
@@ -383,6 +439,7 @@ abstract class Gleez_Widgets {
 		}
 
 		$this->_loaded = TRUE;
+
 		return $this;
 	}
 
