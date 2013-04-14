@@ -54,6 +54,14 @@ class Controller_Page extends Template {
 
 	/**
 	 * List of pages
+	 *
+	 * @uses  ACL::check
+	 * @uses  Config::load
+	 * @uses  Config_Group::get
+	 * @uses  URL::canonical
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Meta::links
 	 */
 	public function action_list()
 	{
@@ -81,18 +89,18 @@ class Controller_Page extends Template {
 
 		$this->title = __('Pages');
 		$view = View::factory('page/list')
-					->set('teaser', TRUE)
-					->set('config', $config)
+					->set('teaser',      TRUE)
+					->set('config',      $config)
 					->bind('pagination', $pagination)
-					->bind('posts', $posts);
+					->bind('posts',      $posts);
 
 		$url = Route::get('page')->uri();
 		$pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'cms', 'key'=>'page'),
-				'total_items'    => $total,
-				'items_per_page' => $config->get('items_per_page', 15),
-				'uri'            => $url,
-				));
+			'current_page'   => array('source'=>'cms', 'key'=>'page'),
+			'total_items'    => $total,
+			'items_per_page' => $config->get('items_per_page', 15),
+			'uri'            => $url,
+		));
 
 		$posts = $posts->order_by('sticky', 'DESC')
 					->order_by('created', 'DESC')
@@ -102,17 +110,27 @@ class Controller_Page extends Template {
 
 		$this->response->body($view);
 
-		// Set the canocial and shortlink for search engines
+		// Set the canonical and shortlink for search engines
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array(), TRUE ), array('rel' => 'shortlink'));
+			Meta::links(Route::url('page', array(), TRUE), array('rel' => 'shortlink'));
 		}
 	}
 
 	/**
 	 * Page view
 	 *
+	 * @uses    ACL::post
+	 * @uses    ACL::check
+	 * @uses    Post::dcache
+	 * @uses    Auth::logged_in
+	 * @uses    Meta::links
+	 * @uses    URL::canonical
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    User::providers
+	 * @uses    Comment::form
 	 * @throws  HTTP_Exception_404
 	 */
 	public function action_view()
@@ -122,36 +140,36 @@ class Controller_Page extends Template {
 
 		$post = Post::dcache($id, 'page', $config);
 
-		if( ! ACL::post('view', $post))
+		if ( ! ACL::post('view', $post))
 		{
 			// If the post was not loaded, we return access denied.
 			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 
-		if(ACL::post('edit', $post))
+		if (ACL::post('edit', $post))
 		{
 			$this->_tabs[] =  array('link' => $post->url, 'text' => __('View'));
-			$this->_tabs[] = array('link' => $post->type.'/edit/'.$post->id, 'text' => __('Edit'));
+			$this->_tabs[] = array('link' => $post->edit_url, 'text' => __('Edit'));
 		}
 
-		if(ACL::post('delete', $post))
+		if (ACL::post('delete', $post))
 		{
-			$this->_tabs[] =  array('link' => $post->type.'/delete/'.$post->id, 'text' => __('Delete'));
+			$this->_tabs[] =  array('link' => $post->delete_url, 'text' => __('Delete'));
 		}
 
-		if(($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
+		if (($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
 		   AND ACL::check('access comment'))
 		{
 			// Determine pagination offset
-			$p = ( (int) $this->request->param('page', 0) ) ? '/p'.$this->request->param('page', 0) : FALSE;
+			$p = ((int) $this->request->param('page', 0)) ? '/p'.$this->request->param('page', 0) : FALSE;
 
 			// Handle comment listing
 			$comments = Request::factory('comments/page/public/'.$id.$p)->execute()->body();
 		}
 
-		if($post->comment == Comment::COMMENT_OPEN AND ACL::check('post comment'))
+		if ($post->comment == Comment::COMMENT_OPEN AND ACL::check('post comment'))
 		{
-			if($this->_auth->logged_in() OR ($config->comment_anonymous AND ! $this->_auth->logged_in()))
+			if ($this->_auth->logged_in() OR ($config->comment_anonymous AND ! $this->_auth->logged_in()))
 			{
 				// Handle comment posting
 				$comment_form = Comment::form($this, $post);
@@ -159,26 +177,27 @@ class Controller_Page extends Template {
 		}
 
 		// show site and other provider login buttons
-		if($post->comment == Comment::COMMENT_OPEN AND $config->use_provider_buttons)
+		if ($post->comment == Comment::COMMENT_OPEN AND $config->use_provider_buttons)
 		{
 			$provider_buttons = User::providers();
 		}
 
 		$this->title = $post->title;
+
 		$view = View::factory('page/post')
-				->set('title', $this->title)
-				->set('page', $post->content)
-				->bind('comments', $comments)
-				->bind('comment_form', $comment_form)
+				->set('title',             $this->title)
+				->set('page',              $post->content)
+				->bind('comments',         $comments)
+				->bind('comment_form',     $comment_form)
 				->bind('provider_buttons', $provider_buttons);
 
 		$this->response->body($view);
 
-		// Set the canocial and shortlink for search engines
-		if($this->auto_render)
+		// Set the canonical and shortlink for search engines
+		if ($this->auto_render)
 		{
-			Meta::links( URL::canonical($post->url), array('rel' => 'canonical'));
-			Meta::links( Route::url('page', array('id' => $post->id) ), array('rel' => 'shortlink'));
+			Meta::links(URL::canonical($post->url), array('rel' => 'canonical'));
+			Meta::links($post->rawurl, array('rel' => 'shortlink'));
 		}
 	}
 

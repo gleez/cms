@@ -269,6 +269,7 @@ return array
 	'Page Settings updated!' => 'Настройки страниц обновлены!',
 	'Page specific settings, default status, tags, comments etc.' => 'Специфичные настройки для страниц, статус по умолчанию, теги, комментарии и т.д.',
 	'Page Statistics' => 'Статистика страниц',
+	'Pages' => 'Страницы',
 	'Parent' => 'Родитель',
 	'Pass' => 'OK',
 	'Password' => 'Пароль',
