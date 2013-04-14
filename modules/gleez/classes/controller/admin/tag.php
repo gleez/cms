@@ -5,7 +5,7 @@
  * @package    Gleez\Admin\Controller
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Tag extends Controller_Admin {
 
@@ -27,7 +27,6 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 * @uses  Request::is_datatables
 	 * @uses  ORM::dataTables
 	 * @uses  Text::plain
-	 * @uses  HTML::anchor
 	 * @uses  HTML::icon
 	 * @uses  Route::url
 	 * @uses  Route::get
@@ -192,7 +191,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 			}
 		}
 
-		$this->title = __('Delete Tag %title', array('%title' => $tag->name ));
+		$this->title = __('Delete Tag %title', array('%title' => $tag->name));
 
 		$view = View::factory('form/confirm')
 				->set('action', $tag->delete_url)
