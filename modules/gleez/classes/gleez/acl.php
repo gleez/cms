@@ -22,7 +22,7 @@
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license Gleez CMS License
  *
  * @todo       Implement their own exceptions (eg. ACL_Exception)
  */
@@ -219,10 +219,10 @@ class Gleez_ACL {
 	 * </code>
 	 *
 	 * @since     2.0
-	 * @param     string      $perm_name  Permession name
+	 * @param     string      $perm_name  Permission name
 	 * @param     Model_User  $user       User object [Optional]
 	 * @param     callable    $callback   A callable function that execute if it is defined [Optional]
-	 * @param     array       $args       The callback's arguments
+	 * @param     array       $args       The callback arguments
 	 * @return    boolean
 	 * @throws    HTTP_Exception_403 If the user doesn't have permission
 	 * @throws    Exception          if the `$callback` is a not valid callback
@@ -259,7 +259,7 @@ class Gleez_ACL {
 	 *
 	 * If the user is not given, used currently active user
 	 *
-	 * @param   string      $perm_name  Permession name
+	 * @param   string      $perm_name  Permission name
 	 * @param   Model_User  $user       User object [Optional]
 	 * @return  boolean
 	 * @uses    User::active_user
@@ -347,6 +347,7 @@ class Gleez_ACL {
 	 * @param  string  $perm_name  Permission name
 	 * @param  string  $route      Route name [Optional]
 	 * @param  array   $uri        Additional route params [Optional]
+	 * @throws HTTP_Exception_403
 	 * @uses   Request::redirect()
 	 * @uses   Route::get()
 	 */
@@ -379,7 +380,7 @@ class Gleez_ACL {
 	 *
 	 * @param   string     $action  The action `view|edit|delete` default `view`
 	 * @param   ORM        $post    The post object
-	 * @param   Model_User $user    The user object to check permission, defaults to logded in user
+	 * @param   Model_User $user    The user object to check permission, defaults to loaded in user
 	 * @param   string     $misc    The misc element usually `id|slug` for logging purpose
 	 * @return  boolean
 	 * @throws  HTTP_Exception_404
@@ -480,7 +481,7 @@ class Gleez_ACL {
 	 *
 	 * @param   string     $action   The action `view|edit|delete` default `view`
 	 * @param   ORM        $comment  The comment object
-	 * @param   Model_User $user     The user object to check permission, defaults to logded in user
+	 * @param   Model_User $user     The user object to check permission, defaults to loaded in user
 	 * @param   string     $misc     The misc element usually `id|slug` for logging purpose
 	 * @return  boolean
 	 * @throws  HTTP_Exception_404
