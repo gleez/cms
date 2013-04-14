@@ -811,7 +811,10 @@ class Gleez_Post extends ORM_Versioned {
 				$data['status']  = $post->status;
 				$data['title']   = $post->title;
 				$data['comment'] = $post->comment;
-				$data['url']     = $post->url;
+				$data['rawurl']      = $post->rawurl;
+				$data['url']         = $post->url;
+				$data['edit_url']    = $post->edit_url;
+				$data['delete_url']  = $post->delete_url;
 				$data['id']      = (int)$post->id;
 				$data['type']    = $post->type;
 				$data['content'] = (string) $post->content;
