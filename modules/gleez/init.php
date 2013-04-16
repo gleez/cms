@@ -235,7 +235,6 @@ if ( ! Route::cache())
  *
  * @uses  ACL::cache
  * @uses  ACL::set
- * @uses  ACL::cache
  */
 if ( ! ACL::cache())
 {
