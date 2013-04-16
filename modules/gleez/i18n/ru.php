@@ -20,6 +20,7 @@ return array
 	'Access comments' => 'Доступ к комментариям',
 	'Account' => 'Аккаунт',
 	'Actions' => 'Действия',
+	'activate Google Chrome Frame' => 'активируйте фрейм Google Chrome',
 	'Activated: %names' => 'Активировано: %names',
 	'Add Alias' => 'Добавить синоним',
 	'Add Item for %menu' => 'Добавление пункта для %menu',
@@ -219,7 +220,7 @@ return array
 	'Menu Item %name saved successful!' => 'Пункт меню %name успешно сохранён!',
 	'Menu Item %name deleted successful!' => 'Пункт меню :name успешно удалён!',
 	'Menu Item %name updated successful!' => 'Пункт меню %name успешно обновлён!',
-    "Menu item doesn't exists!" => 'Пункт меню не найден!',
+	"Menu item doesn't exists!" => 'Пункт меню не найден!',
 	'Menu Items doesn\'t exists!' => 'Пунктов меню не обнаружнено!',
 	'Menu Items order could not be saved.' => 'Порядок пунктов меню не может быть сохранён.',
 	'Menu Items order has been saved.' => 'Порядок пунктов меню успешно сохранён.',
@@ -258,6 +259,7 @@ return array
 	'Only the listed pages' => 'Только на перечисленных страницах',
 	'Operations' => 'Операции',
 	'Order' => 'Порядок',
+	'outdated' => 'устаревший',
 	// P
 	'Page' => 'Страница',
 	'Page: :title created' => 'Страница: :title создана',
@@ -414,6 +416,7 @@ return array
 	'Unavailable' => 'Не доступно',
 	'Updated' => 'Обновлено',
 	'Unpublish' => 'Снять с публикации',
+	'upgrade your browser' => 'обновите ваш браузер',
 	'URI Determination' => 'URI определения',
 	'URL Path' => 'URL путь',
 	'User' => 'Пользователь',
@@ -426,6 +429,7 @@ return array
 	'Vocabulary' => 'Словарь',
 	'Vocabulary doesn\'t exists!' => 'Словарь не найден!',
 	// W
+	'Warning!' => 'Осторожно!',
 	'We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.' => 'Мы не любим изобретать колесо. Но если колеса нет или оно квадратное, мы не боимся изобрести одно круглое.',
 	'We\'ve created an account for you to use:' => 'Мы создали для Вас аккаунт со следующими данными:',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
@@ -443,6 +447,7 @@ return array
 	// X
 	// Y
 	'Yes' => 'Да',
+	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Вы используете :out браузер. Пожалуйста :url или :frame чтоб расширить возможности браузера',
 	'Your Gleez install is complete!' => 'Ваша установка Gleez завершена!',
 	// Z
 );
