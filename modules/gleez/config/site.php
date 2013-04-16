@@ -23,7 +23,7 @@ return array(
   /** @var string Site mission */
   'site_mission' => '',
 
-  /** @var string Site title seperator */
+  /** @var string Site title separator */
   'title_separator' => ' :: ',
 
   /** @var string Default active site theme */
@@ -103,7 +103,7 @@ return array(
   ),
 
   /** @var string Blocked ips */
-  'blocked_ips' =>  NULL, //default to null, comma seperated ip addresse(s) to block
+  'blocked_ips' =>  NULL, //default to null, comma separated ip-addresses to block
   
   /** @var string Default timezone */
   'timezone' => 'Asia/Kolkata',
