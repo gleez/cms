@@ -208,7 +208,7 @@ class Controller_Install_Install extends Controller_Template {
 			'pass' => '',
 			'hostname' => 'localhost',
 			'database' => 'gleezcms',
-			'table_prefix' => ''
+			'table_prefix' => 'gl_'
 		);
 
 		if (isset($_POST['db']))

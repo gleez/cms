@@ -50,6 +50,20 @@ class Model_Auth_Role extends ORM {
 		);
 	}
 
+	/**
+	 * Labels for fields in this model
+	 *
+	 * @return array Labels
+	 */
+	public function labels()
+	{
+		return array(
+			'name'        => __('Name'),
+			'description' => __('Description'),
+			'special'     => __('Special Role'),
+		);
+	}
+
 	public function find_all($id = NULL)
 	{
 		return parent::find_all($id);
