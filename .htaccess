@@ -1,5 +1,6 @@
 # Set environment variables (Optional)
-# SetEnv KOHANA_ENV production # production|development|etc.
+# SetEnv KOHANA_ENV development
+# SetEnv KOHANA_ENV production
 # SetEnv KOHANA_BASE /
 # SetEnv BASE_URL http://www.example.com
 
