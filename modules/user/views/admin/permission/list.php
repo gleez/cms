@@ -33,7 +33,7 @@
 		<tbody>
 	
 		<?php foreach ($permissions as $key => $access_names): ?>
-			<tr id="permission-group" class="<?php echo Text::alternate("odd", "even") ?>">
+			<tr class="permission-group">
 				<td class="permission-key" width="30%" colspan="<?php echo $count +1 ?>">
 					<?php echo ucwords(Text::plain($key)) ?>
 				</td>
@@ -68,5 +68,6 @@
 		</tbody>
 		
 	</table>
-	<?php echo Form::submit('permissions', __('Save Permissions'), array('class' => 'btn btn-primary btn-large')) ?>
+	<?php echo Form::submit('permissions', __('Save Permissions'), array('class' => 'btn btn-primary pull-right')) ?>
+	<div class="clearfix"></div><br>
 	<?php echo Form::close() ?>
