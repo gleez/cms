@@ -137,12 +137,12 @@ class Gleez_Arr extends Kohana_Arr {
 	}
 
 	/**
-	 * Unpack string from serialized array
+	 * Unpack string from array
 	 *
 	 * Gets an array, (if `$serialize` is TRUE  unserialize it into normal array)
 	 * and arranges the key values into string separated by `$sep`
 	 *
-	 * @param   mixed    $array      Serialized array
+	 * @param   mixed    $array      Array
 	 * @param   boolean  $serialize  Serialize string? [Optional]
 	 * @param   string   $sep        Separator [Optional]
 	 * @return  string
@@ -158,7 +158,7 @@ class Gleez_Arr extends Kohana_Arr {
 	}
 
 	/**
-	 * Pack string to serialized array
+	 * Pack string to array
 	 *
 	 * Gets a string divide the string based by using the symbol `$sep` creates an array,
 	 * where each substring - a single element of the array and serialize this array to a string
