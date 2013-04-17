@@ -68,35 +68,57 @@ class Controller_Admin_Role extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Add new role
+	 *
+	 * @uses  Message::success
+	 * @uses  Log:add
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 */
 	public function action_add()
 	{
+		$action = Route::get('admin/role')->uri(array('action' => 'add'));
+
 		$view = View::factory('admin/role/form')
-					->set('errors', array() )
-					->bind('post', $post);
+					->set('action',  $action)
+					->bind('post',   $post)
+					->bind('errors', $this->_errors);
 
 		$this->title = __('Add Role');
-		$post = ORM::factory('role')->values($_POST);
+		$post = ORM::factory('role');
 
-		if( $this->valid_post('role') )
+		if ($this->valid_post('role'))
 		{
+			$post->values($_POST);
 			try
 			{
 				$post->save();
-				Message::success(__('Role: :name saved successful!', array(':name' => $post->name)));
+				Message::success(__('Role %name saved successful!', array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/role')->uri());
-
+				{
+					$this->request->redirect(Route::get('admin/role')->uri(), 200);
+				}
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors = $e->errors('permissions');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
-				$this->response->body($view);
+		$this->response->body($view);
 	}
 
+	/**
+	 * Add new role
+	 *
+	 * @uses  Message::success
+	 * @uses  Message::error
+	 * @uses  Log:add
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -105,18 +127,22 @@ class Controller_Admin_Role extends Controller_Admin {
 
 		if(!$post->loaded())
 		{
-			Message::error(__("Role: doesn't exists!"));
+			Message::error(__("Role doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent role');
 
 			if ( ! $this->_internal)
+			{
 				$this->request->redirect(Route::get('admin/role')->uri());
+			}
 		}
 
-		$this->title = __('Edit role :name', array(':name' => $post->name));
+		$this->title = __('Edit role %name', array('%name' => $post->name));
+		$action = Route::get('admin/role')->uri(array('id' => $post->id, 'action' => 'edit'));
 
 		$view = View::factory('admin/role/form')
-					->set('errors', array())
-					->bind('post', $post);
+					->set('action', $action)
+					->set('errors', $this->_errors)
+					->bind('post',  $post);
 
 		if ( $this->valid_post('role') )
 		{
@@ -126,19 +152,20 @@ class Controller_Admin_Role extends Controller_Admin {
 			{
 				$post->save();
 
-				Message::success(__('Role: :name saved successful!', array(':name' => $post->name)));
+				Message::success(__('Role %name updated successful!', array('%name' => $post->name)));
 
 				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/role')->uri());
-
+				{
+					$this->request->redirect(Route::get('admin/role')->uri(), 200);
+				}
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors = $e->errors();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
-				$this->response->body($view);
+		$this->response->body($view);
 	}
 
 	public function action_delete()
