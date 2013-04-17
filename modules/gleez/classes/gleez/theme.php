@@ -55,6 +55,21 @@ class Gleez_Theme {
                         self::$site_theme_name = $config->get('theme', self::$site_theme_name);
                         $theme = THEMEPATH . self::$site_theme_name;
                 }
+        
+                // Admins can override the site theme, temporarily. This lets us preview themes.
+                if (User::is_admin() AND isset($_GET['theme']) AND $override = $_GET['theme'])
+                {
+                        if (file_exists(THEMEPATH . $override))
+                        {
+                                self::$site_theme_name  = $override;
+                                self::$admin_theme_name = $override;
+                                $theme = THEMEPATH . self::$site_theme_name;
+                        }
+                        else
+                        {
+                                Kohana::$log->add(LOG::ERROR, 'Missing override site theme: :theme', array(':theme' => $override));
+                        }
+                }
 
                 // set modules with active theme
                 array_unshift($modules, $theme);
