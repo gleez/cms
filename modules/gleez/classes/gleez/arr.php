@@ -139,16 +139,22 @@ class Gleez_Arr extends Kohana_Arr {
 	/**
 	 * Unpack string from serialized array
 	 *
-	 * Gets an array, for example stored in the database as a serialized string
-	 * unserialize it into normal array and arranges the key values into separate strings
+	 * Gets an array, (if `$serialize` is TRUE  unserialize it into normal array)
+	 * and arranges the key values into string separated by `$sep`
 	 *
-	 * @param   mixed  $string  Serialized array
-	 * @param   string $sep     Separator [Optional]
+	 * @param   mixed    $array      Serialized array
+	 * @param   boolean  $serialize  Serialize string? [Optional]
+	 * @param   string   $sep        Separator [Optional]
 	 * @return  string
 	 */
-	public static function unpack_string($string, $sep = PHP_EOL)
+	public static function unpack_string($array, $serialize = FALSE, $sep = PHP_EOL)
 	{
-		return implode($sep, unserialize($string));
+		if ($serialize)
+		{
+			$array = unserialize($array);
+		}
+
+		return implode($sep, $array);
 	}
 
 	/**
@@ -157,12 +163,15 @@ class Gleez_Arr extends Kohana_Arr {
 	 * Gets a string divide the string based by using the symbol `$sep` creates an array,
 	 * where each substring - a single element of the array and serialize this array to a string
 	 *
-	 * @param   string    $string  String
-	 * @param   string    $sep     Separator [Optional]
-	 * @param   int|NULL  $maxlen  Max length of substrings for trimming their [Optional]
+	 * @param   string    $string     String
+	 * @param   boolean   $serialize  Serialize array? [Optional]
+	 * @param   string    $sep        Separator [Optional]
+	 * @param   int|NULL  $maxlen     Max length of substrings for trimming their [Optional]
 	 * @return  string    Serialized array
+	 *
+	 * @uses    Text::limit_chars
 	 */
-	public static function pack_string($string, $sep = PHP_EOL, $maxlen = NULL)
+	public static function pack_string($string, $serialize = FALSE, $sep = PHP_EOL, $maxlen = NULL)
 	{
 		$options = explode($sep, $string);
 
@@ -181,7 +190,7 @@ class Gleez_Arr extends Kohana_Arr {
 			}
 		}
 
-		return serialize($result);
+		return $serialize ? serialize($result) : $result;
 	}
         
 }
