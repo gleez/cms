@@ -24,6 +24,7 @@ return array
 	'Activity' => 'Активность',
 	'Add New Role' => 'Добавить новую роль',
 	'Add New User' => 'Добавить нового пользователя',
+	'Add Role' => 'Добавить роль',
 	'Administer permissions' => 'Администрирование полномочий',
 	'Administer users' => 'Администрирование пользователей',
 	'Access profiles' => 'Доступ к профилям',
@@ -46,11 +47,13 @@ return array
 	'Confirm Password' => 'Повторите пароль',
 	'Confirm new password' => 'Подтвердите новый пароль',
 	// D
+	'Description of Role must be less than :param2 characters long' => 'Описание роли должно быть менее :param2 символов',
 	'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
 	"Don't have an account?" => 'Нет аккаунта?',
 	// E
 	'Edit profile' => 'Правка профиля',
+	'Edit role %name' => 'Правка роли %name',
 	'Edit Account' => 'Правка аккаунта',
 	'E-mail' => 'E-mail',
 	'Email' => 'Email',
@@ -89,6 +92,8 @@ return array
 	'My Account' => 'Мой аккаунт',
 	// N
 	'Name' => 'Имя',
+	'Name of Role must be at least :param2 characters long' => 'Имя роли должно быть не менее :param2 символов',
+	'Name of Role must be less than :param2 characters long' => 'Имя роли должно быть менее :param2 символов',
 	'New password' => 'Новый пароль',
 	'New password (again)' => 'Повторите пароль',
 	'No more than 800 characters' => 'Не более 800 символов',
@@ -115,12 +120,17 @@ return array
 	'Repeat entered password' => 'Повторите введенный пароль',
 	'Reset password' => 'Сброс пароля',
 	'Reset' => 'Сброс',
+	'Role %name saved successful!' => 'Роль %name успешно создана!',
+	'Role %name updated successful!' => 'Роль %name успешно обновлена!',
+	"Role doesn't exists!" => "Роль не найдена!",
+	'Role name must not be empty' => 'Имя роли не должно быть пустым',
 	'Roles allow you to fine tune the security and administration of Gleez CMS. A role defines a group of users that have certain privileges as defined in user permissions. Examples of roles include: anonymous user, authenticated user, moderator, administrator and so on. In this area you will define the role names of the various roles.' => 'Роли позволяют точно настроить безопасность и управление Gleez CMS. Роль определяет группу пользователей, которые имеют некоторые привилегии, определенные в пользовательских привилегиях. Например, роли могут быть использованы для следующих групп пользователей: анонимный пользователь, авторизованный пользователь, модератор, администратор и т.д. Здесь вы можете назначать имена ролям и управлять ими.',
 	// S
 	'Save Permissions' => 'Сохранить полномочия',
 	'Security code' => 'Защитный код',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
 	'Sign in using your registered account:' => 'Войдите используя ваш зарегистрированный аккаунт:',
+	'Special Role' => 'Особая роль',
 	'Stay Signed in' => 'Оставаться в системе',
 	// T
 	'The ability to change own username' => 'Возможность изменять собственное имя пользователя (логин)',
