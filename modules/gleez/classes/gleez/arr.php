@@ -13,20 +13,16 @@ class Gleez_Arr extends Kohana_Arr {
 	 */
 	public static function multi_implode($glue, $pieces)
 	{
-		$string = '';
-
-		if(is_array($pieces))
-		{
-			reset($pieces);
-
-			while(list($key,$value) = each($pieces))
-			{
-				$string.=$glue.self::multi_implode($glue, $value);
-			}
-		}
-		else
+		if( ! is_array($pieces))
 		{
 			return $pieces;
+		}
+
+		$string = '';
+
+		foreach ($pieces as $key => $value)
+		{
+			$string.=$glue.self::multi_implode($glue, $value);
 		}
 
 		return trim($string, $glue);
