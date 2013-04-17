@@ -267,17 +267,16 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 */
 	protected $_datatables;
 	
-        /**
+	/**
 	 * Ignored columns
 	 * @var array
 	 */
-        protected $_ignored_columns = array();
+	protected $_ignored_columns = array();
         
 	/**
 	 * Constructs a new model and loads a record if given
 	 *
-	 * @param   mixed $id Parameter for find or object to load
-	 * @return  void
+	 * @param  mixed $id  Parameter for find or object to load [Optional]
 	 */
 	public function __construct($id = NULL)
 	{
@@ -1344,8 +1343,10 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 	/**
 	 * Insert a new object to the database added event support
-	 * @param  Validation $validation Validation object
-	 * @return ORM
+	 *
+	 * @param   Validation $validation Validation object [Optional]
+	 * @return  ORM
+	 * @throws  Kohana_Exception
 	 */
 	public function create(Validation $validation = NULL)
 	{

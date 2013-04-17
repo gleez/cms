@@ -135,5 +135,53 @@ class Gleez_Arr extends Kohana_Arr {
 		
 		return $path;
 	}
+
+	/**
+	 * Unpack string from serialized array
+	 *
+	 * Gets an array, for example stored in the database as a serialized string
+	 * unserialize it into normal array and arranges the key values into separate strings
+	 *
+	 * @param   mixed  $string  Serialized array
+	 * @param   string $sep     Separator [Optional]
+	 * @return  string
+	 */
+	public static function unpack_string($string, $sep = PHP_EOL)
+	{
+		return implode($sep, unserialize($string));
+	}
+
+	/**
+	 * Pack string to serialized array
+	 *
+	 * Gets a string divide the string based by using the symbol `$sep` creates an array,
+	 * where each substring - a single element of the array and serialize this array to a string
+	 *
+	 * @param   string    $string  String
+	 * @param   string    $sep     Separator [Optional]
+	 * @param   int|NULL  $maxlen  Max length of substrings for trimming their [Optional]
+	 * @return  string    Serialized array
+	 */
+	public static function pack_string($string, $sep = PHP_EOL, $maxlen = NULL)
+	{
+		$options = explode($sep, $string);
+
+		$result = array();
+
+		foreach ($options as $option)
+		{
+			if( ! $option = trim($option))
+			{
+				continue;
+			}
+
+			if ( ! is_null($maxlen))
+			{
+				$result[] = Text::limit_chars($option, $maxlen);
+			}
+		}
+
+		return serialize($result);
+	}
         
 }
