@@ -13,20 +13,16 @@ class Gleez_Arr extends Kohana_Arr {
 	 */
 	public static function multi_implode($glue, $pieces)
 	{
-		$string = '';
-
-		if(is_array($pieces))
-		{
-			reset($pieces);
-
-			while(list($key,$value) = each($pieces))
-			{
-				$string.=$glue.self::multi_implode($glue, $value);
-			}
-		}
-		else
+		if( ! is_array($pieces))
 		{
 			return $pieces;
+		}
+
+		$string = '';
+
+		foreach ($pieces as $key => $value)
+		{
+			$string.=$glue.self::multi_implode($glue, $value);
 		}
 
 		return trim($string, $glue);
@@ -63,7 +59,7 @@ class Gleez_Arr extends Kohana_Arr {
 	{
 		$new_array = $sortable_array = array();
 
-		if (count($array) > 0)
+		if ($array)
 		{
 			foreach ($array as $k => $v)
 			{
@@ -173,12 +169,12 @@ class Gleez_Arr extends Kohana_Arr {
 	 * @param   string    $string     String
 	 * @param   boolean   $serialize  Serialize array? [Optional]
 	 * @param   string    $sep        Separator [Optional]
-	 * @param   int|NULL  $maxlen     Max length of substrings for trimming their [Optional]
+	 * @param   int|NULL  $maxlen     Max length of substring for trimming [Optional]
 	 * @return  string    Serialized array
 	 *
 	 * @uses    Text::limit_chars
 	 */
-	public static function pack_string($string, $serialize = FALSE, $sep = PHP_EOL, $maxlen = NULL)
+	public static function pack_string($string, $serialize = FALSE, $sep = PHP_EOL, $maxlen = 0)
 	{
 		$options = explode($sep, $string);
 
@@ -186,14 +182,9 @@ class Gleez_Arr extends Kohana_Arr {
 
 		foreach ($options as $option)
 		{
-			if( ! $option = trim($option))
+			if($option = trim($option))
 			{
-				continue;
-			}
-
-			if ( ! is_null($maxlen))
-			{
-				$result[] = Text::limit_chars($option, $maxlen);
+				$result[] = $maxlen ? Text::limit_chars($option, $maxlen) : $option;
 			}
 		}
 
