@@ -43,7 +43,7 @@ class Gleez_User {
 	{
 		if(User::is_guest())
 		{
-		  return FALSE;
+			return FALSE;
 		}
 	    
 		$user = Auth::instance()->get_user();
@@ -51,13 +51,13 @@ class Gleez_User {
 		// To reduce the number of SQL queries, we cache the user's roles in a static variable.
 		if ( ! isset(User::$roles[$user->id]))
 		{
-		  // @todo fetch and save in session to avoid recursive lookups
-		  User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
+			// @todo fetch and save in session to avoid recursive lookups
+			User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
 		}
 	    
 		if(in_array('admin', User::$roles[$user->id]) OR  array_key_exists(4, User::$roles[$user->id]))
 		{
-		  return TRUE;
+			return TRUE;
 		}
       
 		return FALSE;
