@@ -104,33 +104,40 @@ class Gleez_Arr extends Kohana_Arr {
                 
                 return $new_array;
         }
-        
+
+	/**
+	 * Search value in an array and gets array of values
+	 *
+	 * @param   $needle    The searched value
+	 * @param   $haystack  The array
+	 * @return  array
+	 */
 	public static function search_in_array($needle, $haystack)
 	{
-		# Settings
+		// Settings
 		$path = array ();
    
-		# Loop
-		foreach ($haystack as $key => $value )
+		// Loop
+		foreach ($haystack as $key => $value)
 		{
-			# Check for val
+			// Check for val
 			if ($key == $needle)
 			{
-				# Add to path
+				// Add to path
 				$path[$key] = $key;
 			}
-			else if (is_array ($value))
+			else if (is_array($value))
 			{
-				# Fetch subs
-				$sub = self::search_in_array ($needle, $value);
+				// Fetch subs
+				$sub = self::search_in_array($needle, $value);
            
-				# Check if there are subs
+				// Check if there are subs
 				if (count ($sub) > 0)
 				{
-					# Add to path
+					// Add to path
 					$path[$key] = $sub;
 				}
-			}//Message::success( Kohana::debug( $key ));
+			}
 		}
 		
 		return $path;
