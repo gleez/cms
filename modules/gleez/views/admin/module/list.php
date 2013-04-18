@@ -4,7 +4,7 @@
 	<p><?php echo __('Power up your Gleez CMS by adding more modules! Each module provides new cool features.'); ?></p>
 </div>
 
-<?php echo Form::open(Route::get('admin/module')->uri(array('action' => 'confirm')), array('id'=>'module-form', 'class'=>'form')); ?>
+<?php echo Form::open($action, array('id'=>'module-form', 'class'=>'form')); ?>
 
 	<table class="table table-striped table-bordered" id="admin-modules">
 		<thead>
@@ -20,14 +20,23 @@
 			<tr class="<?php echo Text::alternate("odd", "even"); ?>">
 				<td>
 					<?php if ($module_info->locked): ?>
-						<?php echo Form::checkbox($module_name, TRUE, $module_info->active, array('disabled'=>TRUE)); ?>
+						<?php echo Form::checkbox($module_name, TRUE, $module_info->active, array('disabled')); ?>
 					<?php else: ?>
 						<?php echo Form::checkbox($module_name, TRUE, $module_info->active); ?>
 					<?php endif ?>
 				</td>
 				<td><?php echo $module_info->name; ?></td>
 				<td><?php echo $module_info->version; ?></td>
-				<td><?php echo __($module_info->description); ?></td>
+				<td>
+					<p><?php echo __($module_info->description); ?></p>
+					<p class="pull-right">
+						<?php echo __($module_info->author); ?>
+						<?php if ($setting = Module::get($module_info->name)->setting): ?>
+							&nbsp;|&nbsp;
+							<?php echo __(HTML::anchor(URL::site($setting), __('Settings'))); ?>
+						<?php endif; ?>
+					</p>
+				</td>
 			</tr>
 			<?php endforeach ?>
 		</tbody>
