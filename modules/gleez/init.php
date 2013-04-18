@@ -43,6 +43,7 @@ if ( ! Route::cache())
 	->defaults(array(
 		'directory'  => 'admin',
 		'controller' => 'modules',
+		'action'     => 'list',
 	));
 
 	Route::set('admin/page', 'admin/pages(/<action>(/<id>))', array(
