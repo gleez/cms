@@ -402,41 +402,55 @@ class Gleez_Module {
 	}
 
 	/**
-	 * Load the active modules.  This is called at bootstrap time.
+	 * Load the active modules
 	 *
-	 * @param bool $reset reset true to clear the cache
+	 * This is called at bootstrap time
+	 *
+	 * @param  boolean  $reset  Reset true to clear the cache.
+	 *
+	 * @uses   Cache::get
+	 * @uses   Log::add
+	 * @uses   Arr::merge
 	 */
-	static function load_modules( $reset = TRUE )
+	static function load_modules($reset = TRUE)
 	{
-		self::$modules  = array();
-		self::$active   = array();
-		$kohana_modules = array();
-		$cache = Cache::instance('modules');
+		Module::$modules = array();
+		Module::$active  = array();
 
-		if( $reset === FALSE AND $data = $cache->get('load_modules') AND isset($data['kohana_modules']) )
+		$kohana_modules  = array();
+		$cache           = Cache::instance('modules');
+		$data            = $cache->get('load_modules', FALSE);
+
+		if ($reset === FALSE AND $data AND isset($data['kohana_modules']) )
 		{
-			//db has to be inisiated @todo fix this bug
+			// db has to be initiated @todo fix this bug
 			Database::instance(NULL);
 
-			//use data from cache
-			self::$modules  = $data['modules'];
-			self::$active   = $data['active'];
-			$kohana_modules = $data['kohana_modules'];
+			// use data from cache
+			Module::$modules = $data['modules'];
+			Module::$active  = $data['active'];
+			$kohana_modules  = $data['kohana_modules'];
 
 			unset($data);
 			Kohana::$log->add(LOG::DEBUG, 'Modules Loaded FROM Cache');
 		}
 		else
 		{
-			$modules = ORM::factory('module')->order_by('weight','ASC')->order_by('name','ASC')->find_all();
+			$modules = ORM::factory('module')
+						->order_by('weight','ASC')
+						->order_by('name','ASC')
+						->find_all();
 
 			$_cache_modules = $_cache_active = array();
 			foreach ($modules as $module)
 			{
-				self::$modules[$module->name]  = $module;
-				$_cache_modules[$module->name] = $module->as_array();
+				Module::$modules[$module->name] = $module;
+				$_cache_modules[$module->name]  = $module->as_array();
 
-				if ( ! $module->active ) continue;
+				if ( ! $module->active)
+				{
+					continue;
+				}
 
 				if ($module->name == 'gleez')
 				{
@@ -444,11 +458,11 @@ class Gleez_Module {
 				}
 				else
 				{
-					self::$active[$module->name]   = $module;
+					Module::$active[$module->name] = $module;
 					$_cache_active[$module->name]  = $module->as_array();
 
-					//try to get module path from db if it set
-					if(!empty($module->path) AND is_dir($module->path))
+					// try to get module path from db if it set
+					if( ! empty($module->path) AND is_dir($module->path))
 					{
 						$kohana_modules[$module->name] = $module->path;
 					}
@@ -460,10 +474,10 @@ class Gleez_Module {
 			}
 
 			// put gleez last in the module list to match core.modules
-			self::$active['gleez']  = $gleez;
-			$_cache_active['gleez'] = $gleez->as_array();
+			Module::$active['gleez'] = $gleez;
+			$_cache_active['gleez']  = $gleez->as_array();
 
-			//set cache for performance
+			// set cache for performance
 			$data = array();
 			$data['modules'] = $_cache_modules;
 			$data['active']  = $_cache_active;
@@ -474,7 +488,7 @@ class Gleez_Module {
 			Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
 		}
 
-		Kohana::modules( array_merge($kohana_modules, Kohana::modules()) );
+		Kohana::modules(Arr::merge($kohana_modules, Kohana::modules()));
 	}
 
 	/**
@@ -568,12 +582,14 @@ class Gleez_Module {
 	}
 
 	/**
-	 * Return the version of the installed module.
-	 * @param string $module_name
+	 * Return the version of the installed module
+	 *
+	 * @param   string  $name  Module name
+	 * @return  float   Module version
 	 */
-	static function get_version($module_name)
+	static function get_version($name)
 	{
-		return self::get($module_name)->version;
+		return Module::get($name)->version;
 	}
 
 }
