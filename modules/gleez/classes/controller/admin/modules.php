@@ -14,18 +14,23 @@ class Controller_Admin_Modules extends Controller_Admin {
 	 *
 	 * @uses  Gleez::cache
 	 * @uses  Module::load_modules
+	 * @uses  Module::available
 	 */
-	public function action_index()
+	public function action_list()
 	{
 		// Clear any cache for sure
+		// Note: Gleez Caching only available in production
 		Gleez::cache('load_modules', '');
 
 		// Load modules
 		Module::load_modules(TRUE);
 
 		$this->title = __('Modules');
+		$action      = Route::get('admin/module')->uri(array('action' => 'confirm'));
+
 		$view = View::factory('admin/module/list')
-				->set('available', Module::available());
+			->set('available', Module::available())
+			->set('action',    $action);
 
 		$this->response->body($view);
 	}
