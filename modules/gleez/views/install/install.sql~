@@ -29,8 +29,8 @@ CREATE TABLE {posts} (
   KEY `post_author` (`author`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `posts` (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
-(1, 0, 0, 'Добро пожаловать в Gleez - Систему Управления Сщдержимым!', 'Что такое Gleez CMS?\r\n\r\nGleez CMS это дружественная система управления содержимым сайта. С Gleez CMS вы можете легко создавать динамические веб-сайты в течение нескольких минут с владея одной лишь мышкой! Поддерживайте ваш веб-контент, навигацию или например ограничивайте группы или конкретного пользователя в доступе из любой точки мира с помощью всего лишь веб-браузера! \r\n\r\nС упором на безопасность и функциональность, Gleez CMS является профессиональной и надежной системой, подходящей для любого предприятия или организации веб-сайта. Построенная на языке программирования PHP с использованием СУБД MySQL, Gleez CMS обеспечивает превосходную производительность для любого размер сайта.\r\n\r\nСкачать:\r\nwww.gleezcms.org', 'Что такое Gleez CMS?\r\n\r\nGleez CMS это дружественная система управления содержимым сайта. С Gleez CMS вы можете легко создавать динамические веб-сайты в течение нескольких минут с владея одной лишь мышкой! Поддерживайте ваш веб-контент, навигацию или например ограничивайте группы или конкретного пользователя в доступе из любой точки мира с помощью всего лишь веб-браузера!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'ru');
+INSERT INTO {posts} (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
+(1, 0, 0, 'Welcome to Gleez - Content Management System!', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser! \r\n\r\nWith an emphasis on security and functionality, Gleez CMS is a professional and robust system suitable for any business or organization website. Built on the PHP programming language and the MySQL database, Gleez CMS delivers superb performance on any size website.\r\n\r\nDownload:\r\nwww.gleezcms.org', 'What Is Gleez CMS?\r\n\r\nGleez CMS is a user-friendly website content management system. With Gleez CMS you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'en');
 
 DROP TABLE IF EXISTS {tags};
 CREATE TABLE {tags} (
@@ -58,8 +58,8 @@ CREATE TABLE {terms} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `terms` (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Страницы', 'Используйте для группирования страниц на схожие темы в категории.', NULL, 'page', 0, 1, 2, 1, 1);
+INSERT INTO {terms} (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
+(1, 'Pages', 'Use to group pages on similar topics into categories.', NULL, 'page', 0, 1, 2, 1, 1);
 
 DROP TABLE IF EXISTS {comments};
 CREATE TABLE {comments} (
@@ -87,7 +87,7 @@ CREATE TABLE {comments} (
   KEY comment_post_type (post_id, `type`),
   KEY comment_type (`type`),
   KEY comment_post_id  (`post_id`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+  CONSTRAINT {comments_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {users};
@@ -123,7 +123,7 @@ CREATE TABLE {users} (
   UNIQUE KEY `hash` (`hash`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `users` (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `url`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
+INSERT INTO {users} (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `url`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
 (1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', '', NULL, 0, 0, 0, 0, 1, NULL, '', '', '', NULL, NULL),
 (2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, NULL, '', '', 'webmaster@gleez.com', NULL, NULL);
 
@@ -135,7 +135,7 @@ CREATE TABLE {config} (
   PRIMARY KEY (`group_name`,`config_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `config` (`group_name`, `config_key`, `config_value`) VALUES
+INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'admin_theme', 's:5:"fluid";'),
 ('site', 'date_first_day', 's:1:"1";'),
 ('site', 'date_format', 's:9:"l, F j, Y";'),
@@ -149,9 +149,9 @@ INSERT INTO `config` (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'site_favicon', 's:18:"/media/favicon.ico";'),
 ('site', 'site_logo', 's:15:"/media/logo.png";'),
 ('site', 'site_name', 's:9:"Gleez CMS";'),
-('site', 'site_slogan', 's:99:"Лёгкая, простая, гибкая система управления содержимым";'),
+('site', 'site_slogan', 's:49:"Light, Simple, Flexible Content Management System";'),
 ('site', 'theme', 's:5:"fluid";'),
-('site', 'timezone', 's:13:"Europe/Moscow";'),
+('site', 'timezone', 's:12:"Asia/Kolkata";'),
 ('site', 'time_format', 's:5:"H:i:s";'),
 ('site', 'gleez_private_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";');
 
@@ -173,28 +173,28 @@ CREATE TABLE {menus} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Главное меню', 'main-menu', 'Основное меню используемое в большинстве сайтов, располагающееся в верхней части сайта.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
-(2, 'Управление', 'management', 'В этом меню находятся ссылки навигации по консоли администратора.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
-(3, 'Навигация', 'navigation', 'Меню навигации содержит ссылки предназначенные для посетителей сайта. Некоторые модули могут добавить к этому меню свои пункты в автоматическом режиме.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
-(4, 'Меню пользователя', 'user-menu', "Содержит ссылки имеющие отношение к аккаунту пользователя а так-же ссылку 'Выход'.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
-(8, 'Главная', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
-(10, 'Страницы', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
-(11, 'Добавить страницу', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, 'Администрирование', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(13, 'Меню', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(14, 'Форматы', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(15, 'Настройки', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(16, 'Синонимы', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(17, 'Виджеты', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(18, 'Таксономия', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(19, 'Теги', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(20, 'Модули', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(21, 'Пользователи', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(22, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
-(24, 'Страницы', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
-(25, 'Комментарии', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(26, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
+INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
+(1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
+(2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
+(3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
+(4, 'User Menu', 'user-menu', "The User menu contains links related to the user's account, as well as the 'Log out' link.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
+(8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
+(10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
+(11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
+(12, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(13, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(14, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
+(15, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
+(16, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
+(17, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
+(18, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
+(19, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
+(20, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(21, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
+(22, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(24, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
+(25, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
+(26, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
@@ -208,7 +208,7 @@ CREATE TABLE {modules} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`, `setting`) VALUES
+INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
 (1, 'gleez', 1, 0, '2', NULL, 'admin'),
 (2, 'user', 1, 0, '2', NULL, 'admin/users');
 
@@ -229,7 +229,7 @@ CREATE TABLE {paths} (
   KEY id_lang_path (lang,`source`,id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `paths` (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
+INSERT INTO {paths} (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
 (NULL, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
 (NULL, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL);
 
@@ -242,7 +242,7 @@ CREATE TABLE {permissions} (
   KEY permission (permission)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `permissions` (`rid`, `permission`, `module`) VALUES
+INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (1, 'access content', 'content'),
 (1, 'access profiles', 'user'),
 (3, 'access content', 'content'),
@@ -304,7 +304,7 @@ CREATE TABLE {posts_versions} (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   KEY `post_author` (`author`),
-  CONSTRAINT `posts_versions_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_versions_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_tags};
@@ -316,8 +316,8 @@ CREATE TABLE {posts_tags} (
   created int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (post_id,tag_id),
   KEY fk_tag_id (tag_id),
-  CONSTRAINT `posts_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `posts_tags_ibfk_2` FOREIGN KEY (`tag_id`)  REFERENCES `tags`  (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_tags_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {posts_tags_ibfk_2} FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_terms};
@@ -331,8 +331,8 @@ CREATE TABLE {posts_terms} (
   KEY fk_term_id (term_id),
   KEY `type` (`type`),
   KEY posts_terms_ibfk_1 (post_id,`type`),
-  CONSTRAINT `posts_terms_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `posts_terms_ibfk_2` FOREIGN KEY (`term_id`) REFERENCES `terms` (`id`) ON DELETE CASCADE
+  CONSTRAINT {posts_terms_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {posts_terms_ibfk_2} FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {roles};
@@ -345,12 +345,11 @@ CREATE TABLE {roles} (
   UNIQUE KEY uniq_name (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `roles` (`id`, `name`, `description`, `special`) VALUES
-(1, 'Anonymous', 'Гости могут только просматривать контент. Любой неавторизованный пользователь просматривающий сайт считается гостем.', 1),
-(2, 'login', 'Роль для зарегистрированных, не заблокированных пользователей, а так же для ожидающих подтверждения регистрации новых участников.', 1),
-(3, 'user', 'Роль участника, назначаемая после подтверждения регистрации.', 1),
-(4, 'admin', 'Роль администраторов, пользователей имеющих доступ ко всему.', 1);
-
+INSERT INTO {roles} (`id`, `name`, `description`, `special`) VALUES
+(1, 'Anonymous', 'Guests can only view content. Anyone browsing the site who is not signed in is considered to be a "Guest".', 1),
+(2, 'login', 'Login privileges, pending account confirmation.', 1),
+(3, 'user', 'Member privileges, granted after account confirmation.', 1),
+(4, 'admin', 'Administrative user, has access to everything.', 1);
 
 DROP TABLE IF EXISTS {roles_users};
 CREATE TABLE {roles_users} (
@@ -358,11 +357,11 @@ CREATE TABLE {roles_users} (
   role_id int(11) unsigned NOT NULL,
   PRIMARY KEY (user_id,role_id),
   KEY fk_role_id (role_id),
-  CONSTRAINT `roles_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `roles_users_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+  CONSTRAINT {roles_users_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+  CONSTRAINT {roles_users_ibfk_2} FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `roles_users` (`user_id`, `role_id`) VALUES
+INSERT INTO {roles_users} (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 2),
 (2, 3),
@@ -391,7 +390,7 @@ CREATE TABLE {user_tokens} (
   PRIMARY KEY (id),
   UNIQUE KEY uniq_token (token),
   KEY fk_user_id (user_id),
-  CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  CONSTRAINT {user_tokens_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {widgets};
@@ -419,17 +418,17 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
-(1, 'static/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'Если вы используете Gleez CMS, мы просим вас пожертвовать для обеспечения возможности будущего развития.', 1, 'icon-gift'),
-(2, 'menu/main-menu', 'Главное меню', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', 'Управление', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
-(4, 'menu/navigation', 'Навигация', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
-(5, 'menu/user-menu', 'Меню пользователя', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
-(6, 'admin/donate', 'Пожертвование', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
-(7, 'admin/welcome', 'Добро пожаловать', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
-(8, 'admin/info', 'Система', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
-(9, 'user/login', 'Авторизация', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
-(10, 'comment/recent', 'Комментарии', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
-(11, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
+(1, 'static/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1, 'icon-gift'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
+(5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
+(6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
+(7, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
+(8, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
+(9, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
+(10, 'comment/recent', 'Comments', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(11, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
@@ -443,7 +442,7 @@ CREATE TABLE {identities} (
   KEY `provider` (`provider`),
   KEY `provider_id` (`provider`, `provider_id`),
   UNIQUE KEY `user_provider_id` (`user_id`, `provider`, `provider_id`),
-  CONSTRAINT `identities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  CONSTRAINT {identities_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {sitemaps};
@@ -467,8 +466,8 @@ CREATE TABLE IF NOT EXISTS {buddies} (
     PRIMARY KEY (`user_id`,`buddy_id`),
     KEY `buddy_fk_1` (`user_id`),
     KEY `buddy_fk_2` (`buddy_id`),
-    CONSTRAINT `buddy_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `buddy_ibfk_2` FOREIGN KEY (`buddy_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    CONSTRAINT {buddy_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {buddy_ibfk_2} FOREIGN KEY (`buddy_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {buddy_requests};
@@ -482,6 +481,6 @@ CREATE TABLE IF NOT EXISTS {buddy_requests} (
     PRIMARY KEY (`id`),
     KEY `buddy_requests_fk_1` (`request_from`),
     KEY `buddy_requests_fk_2` (`request_to`),
-    CONSTRAINT `buddy_requests_ibfk_1` FOREIGN KEY (`request_from`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `buddy_requests_ibfk_2` FOREIGN KEY (`request_to`) REFERENCES `users` (`id`) ON DELETE CASCADE
+    CONSTRAINT {buddy_requests_ibfk_1} FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {buddy_requests_ibfk_2} FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
