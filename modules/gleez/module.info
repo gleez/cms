@@ -1,3 +1,4 @@
 name = "Gleez"
 description = "Gleez CMS core application"
 version = 2
+author = "Gleez Team"

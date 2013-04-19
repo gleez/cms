@@ -15,10 +15,10 @@ return array(
   'site_favicon' => 'favicon.ico',
 
   /** @var string Site email */
-  'site_email' => 'webmaster@example.com',
+  'site_email' => 'webmaster@gleezcms.org',
 
   /** @var string Site url used for background tasks */
-  'site_url' => 'www.example.com',
+  'site_url' => 'www.gleezcms.org',
 
   /** @var string Site mission */
   'site_mission' => '',
@@ -35,8 +35,8 @@ return array(
   /** @var boolean Maintenance Mode */
   'maintenance_mode' => FALSE,
 
-  /** @var boolean Offline message in Maintenance Mode */
-  'offline_message' => FALSE,
+  /** @var string Offline message in Maintenance Mode */
+  'offline_message' => '',
 
   /** @var string Date Time Format */
   'date_time_format' => 'Y-M-d H:i:s',
@@ -59,7 +59,7 @@ return array(
   ),
 
   /** @var string XMLRPC */
-  'xmlrpc'  => 'xmlrpc',
+  'xmlrpc' => 'xmlrpc',
 
   /** @var array Meta defaults */
   'meta' => array(
@@ -75,7 +75,7 @@ return array(
       ),
       URL::site('', TRUE) => array(
         'rel'   => 'index',
-        'title' => 'Gleez'
+        'title' => 'Gleez CMS'
       ),
     ),
     'tags' => array(
@@ -85,8 +85,8 @@ return array(
       ),
       'charset'         => 'utf-8',
       'generator'       => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
-      'author'          => 'Gleez',
-      'copyright'       => 'Copyright Gleez 2011-2013. All rights reserved.',
+      'author'          => 'Gleez Team',
+      'copyright'       => 'Copyright (c) Gleez 2011-2013. All rights reserved.',
       'robots'          => 'index, follow, noodp',
       'keywords'        => 'cms, cmf, gleez, kohana, php framework, site building',
       'description'     => 'Light, Simple, Flexible Content Management System',
