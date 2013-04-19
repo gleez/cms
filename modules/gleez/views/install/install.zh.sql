@@ -208,7 +208,7 @@ CREATE TABLE {modules} (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
+INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`, `setting`) VALUES
 (1, 'gleez', 1, 0, '2', NULL, 'admin'),
 (2, 'user', 1, 0, '2', NULL, 'admin/users');
 
