@@ -146,6 +146,8 @@ return array
 	'Update Profile' => 'Обновить профиль пользователя',
 	'Upload' => 'Загрузить',
 	'Uploading Photos' => 'Загрузка фотографии',
+	'User Account' => 'Аккаунт пользователя',
+	"User doesn't exists!" => "Пользователь не найден!",
 	'User Registration' => 'Регистрация пользователя',
 	'User registration not allowed' => 'Регистрация пользователей запрещена',
 	'user roles page' => 'странице пользовательских ролей',
@@ -153,6 +155,8 @@ return array
 	'Username/Email' => 'Имя пользователя/Email',
 	'Username' => 'Имя пользователя',
 	'Username for login' => 'Имя пользователя для авторизации',
+	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
+	'Users' => 'Пользователи',
 	// V
 	'Visits' => 'Посещений',
 	// W
@@ -171,8 +175,5 @@ return array
 	'You must provide an email address.' => 'Вы долны ввести email адрес.',
 	'You must provide old password.' => 'Вы должны ввести текущий пароль.',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
-	'User Account' => 'Аккаунт пользователя',
-	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
-	'Users' => 'Пользователи',
 	// Z
 );
