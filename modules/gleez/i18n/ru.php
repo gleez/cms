@@ -176,6 +176,7 @@ return array
 	'Gleez Installer' => 'Установщик Gleez',
 	'Gleez may not work correctly with your environment.' => 'Gleez не может корректно работать в Вашем окружении.',
 	'Gleez requires :gd v2 for the Image class.' => 'Для Gleez требуется библиотека :gd версии 2.',
+	'Gleez Team' => 'Комманда Gleez',
 	'Gleez Version' => 'Версия Gleez',
 	// H
 	'Hide' => 'Спрятать',
