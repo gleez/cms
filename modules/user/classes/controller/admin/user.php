@@ -130,7 +130,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ( ! $post->loaded() OR $id === 1)
 		{
-			Message::error(__('User: doesn\'t exists!'));
+			Message::error(__("User doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
 
 			if ( ! $this->_internal)
