@@ -314,7 +314,7 @@ class Gleez_ACL {
 		// User #2 has all privileges:
 		if ($user->id == self::ID_ADMIN)
 		{
-			//return ACL::ALLOW;
+			return ACL::ALLOW;
 		}
 
 		// To reduce the number of SQL queries, we cache the user's permissions
