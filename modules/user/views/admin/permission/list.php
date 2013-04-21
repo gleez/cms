@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
 <div class="help">
-	<?php echo __('Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.', array(':user-roles' => HTML::anchor(Route::get('admin/role')->uri(), __('user roles page')))); ?>
+	<p><?php echo __('Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.', array(':user-roles' => HTML::anchor(Route::get('admin/role')->uri(), __('user roles page')))); ?></p>
 </div>
 
-<?php echo Form::open( Route::get('admin/permission')->uri()  ) ?>
+<?php echo Form::open(Route::get('admin/permission')->uri(), array('id'=>'permission-form ', 'class'=>'permission-form form')) ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
@@ -15,7 +15,7 @@
 				<?php foreach ($roles as $i => $role): ?>
 					<th class="row-checkbox">
 						<?php
-							// @todo But if they will be 30, 50...
+							// @todo But if they will be 30, 50?...
 							echo ucwords(Text::plain($role->name));
 						?>
 					</th>
