@@ -194,6 +194,29 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
+	 * Gets all permissions
+	 */
+	public function perms()
+	{
+		if (empty($this->data))
+		{
+			return array();
+		}
+		
+		$data = unserialize($this->data);
+		
+		return isset($data['permissions']) ? $data['permissions'] : array();
+	}
+	
+	/**
+	 * Gets all roles
+	 */
+	public function roles()
+	{
+		return $this->_roles();
+	}
+	
+	/**
 	 * Override the create method with defaults
 	 *
 	 * @throws  Kohana_Exception
@@ -228,82 +251,30 @@ class Model_Auth_User extends ORM {
 		return parent::update($validation);
 	}
 	
-	protected function _data()
+	/**
+	 * Override the relation add method to reset user roles
+	 */
+	public function add($alias, $far_keys, $data = NULL)
 	{
-		$data = $this->_original_values['data'];
-		$olddata =  unserialize($data);
-		$newdata = is_array($this->data) ? $this->data : array();
+		parent::add($alias, $far_keys, $data);
 		
-		if (empty($data) OR ! $olddata)
-		{
-			return empty($this->data) ? NULL : serialize($newdata);
-		}
+		//update data roles
+		$this->_set_roles();
 		
-		foreach ($newdata AS $key => $value)
-		{
-			if ($value === NULL)
-			{
-				unset($olddata[$key]);
-			}
-			elseif (!empty($key))
-			{
-				$olddata[$key] = $value;
-			}
-		}
-		
-		return empty($olddata) ? NULL : serialize($olddata);
-	}
-	
-	public function perms()
-	{
-		if (empty($this->data))
-		{
-			return array();
-		}
-		
-		$data = unserialize($this->data);
-		
-		return isset($data['permissions']) ? $data['permissions'] : array();
+		return $this;
 	}
 	
 	/**
-	 * Gets all roles
+	 * Override the relation remove method to reset user roles
 	 */
-	public function roles()
+	public function remove($alias, $far_keys = NULL)
 	{
-		return $this->_roles();
-	}
-
-	/**
-	 * Gets or sets all roles
-	 * 
-	 * This simplifies the caching the roles in data column
-	 * to improve performance
-	 * 
-	 */
-	protected function _roles()
-	{
-		if ($this->_loaded)
-		{
-			$data = empty($this->data) ? array() : unserialize($this->data);
-			if(isset($data['roles']) AND !empty($data['roles']))
-			{
-				return $data['roles'];
-			}
-			
-			if(empty($data['roles']))
-			{
-				$roles = $this->roles->find_all()->as_array('id', 'name');
-			
-				//save to data field for performance
-				$this->data = array('roles' => $roles);
-				$this->update();
-				
-				return $roles;
-			}
-		}
+		parent::remove($alias, $far_keys);
 		
-		return $this->roles->find_all()->as_array('id', 'name');
+		//update data roles
+		$this->_set_roles();
+		
+		return $this;
 	}
 	
 	/**
@@ -951,4 +922,77 @@ class Model_Auth_User extends ORM {
 		return TRUE;
 	}
 
+	/**
+	 * update user data field in the $user->data
+	 */
+	protected function _data()
+	{
+		$data = $this->_original_values['data'];
+		$olddata =  unserialize($data);
+		$newdata = is_array($this->data) ? $this->data : array();
+		
+		if (empty($data) OR ! $olddata)
+		{
+			return empty($this->data) ? NULL : serialize($newdata);
+		}
+		
+		foreach ($newdata AS $key => $value)
+		{
+			if ($value === NULL)
+			{
+				unset($olddata[$key]);
+			}
+			elseif (!empty($key))
+			{
+				$olddata[$key] = $value;
+			}
+		}
+		
+		return empty($olddata) ? NULL : serialize($olddata);
+	}
+
+	/**
+	 * Gets or sets all roles
+	 * 
+	 * This simplifies the caching the roles in data column
+	 * to improve performance
+	 * 
+	 */
+	protected function _roles()
+	{
+		if ($this->_loaded)
+		{
+			$data = empty($this->data) ? array() : unserialize($this->data);
+			if(isset($data['roles']) AND !empty($data['roles']))
+			{
+				return $data['roles'];
+			}
+		
+			if(empty($data['roles']))
+			{
+				return $this->_set_roles();
+			}
+		}
+		
+		return $this->roles->find_all()->as_array('id', 'name');
+	}
+
+	/**
+	 * update user data roles array in the $user->data
+	 */
+	protected function _set_roles()
+	{
+		if ($this->_loaded)
+		{
+			$roles = $this->roles->find_all()->as_array('id', 'name');
+		
+			//save to data field for performance
+			$this->data = array('roles' => $roles);
+			$this->update();
+			
+			return $roles;
+		}
+		
+		return array();
+	}
 }
