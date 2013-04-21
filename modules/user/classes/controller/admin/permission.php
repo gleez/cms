@@ -175,7 +175,13 @@ class Controller_Admin_Permission extends Controller_Admin {
 			{
 				Message::error(__('Permissions save failed!'));
 
-				$this->_errors = array('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
+			}
+			catch(Exception $e)
+			{
+				Message::error(__('Permissions save failed!'));
+
+				$this->_errors = array($e->getMessage()); 
 			}
 		}
 
