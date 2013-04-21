@@ -229,6 +229,7 @@ return array
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Убедитесь, что эта папка доступна для записи веб-сервером или на неё установлены права 777.',
 	'Mbstring Not Overloaded' => 'Mbstring не перегружен',
 	'Mission' => 'Миссия',
+	'Module' => 'Модуль',
 	'modules' => 'модули',
 	'Modules' => 'Модули',
 	'Modules Directory' => 'Каталог модулей',
