@@ -16,12 +16,12 @@
 		<thead>
 			<tr>
 				<th width="20%" class="sorting_desc"><?php echo __("Username"); ?></th>
-				<th width="23%" class="sorting_desc"><?php echo __("Email"); ?></th>
+				<th width="22%" class="sorting_desc"><?php echo __("Email"); ?></th>
 				<th width="15%" data-columns='{"bSearchable":false}'><?php echo __("First Visit"); ?></th>
 				<th width="15%" data-columns='{"bSearchable":false}'><?php echo __("Last Visit"); ?></th>
 				<th width="12%" data-columns='{"bSortable":false, "bSearchable":false}'><?php echo __('Roles') ?></th>
 				<th width="8%" data-columns='{"bSearchable":false, "sClass": "status"}'><?php echo __("Status"); ?></th>
-				<th width="6%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
+				<th width="8%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 			</tr>
 		</thead>
 		<tbody>
