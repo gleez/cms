@@ -64,11 +64,32 @@ class Model_Auth_Role extends ORM {
 		);
 	}
 
-	public function find_all($id = NULL)
+	/**
+	 * Override the save method to clear cache
+	 */
+	public function save(Validation $validation = NULL)
 	{
-		return parent::find_all($id);
+		parent::save( $validation );
+		
+		//cleanup the cache
+		Cache::instance('roles')->delete_all();
+		
+		return $this;
 	}
 
+	/**
+	 * Override the delete method to clear cache
+	 */
+	public function delete()
+	{
+		parent::delete();
+		
+		//cleanup the cache
+		Cache::instance('roles')->delete_all();
+		
+		return $this;
+	}
+	
 	/**
 	 * Reading data from inaccessible properties
 	 *
