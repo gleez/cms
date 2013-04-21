@@ -271,9 +271,41 @@ class Model_Auth_User extends ORM {
 	 */
 	public function roles()
 	{
-		return $this->roles->find_all();
+		return $this->_roles();
 	}
 
+	/**
+	 * Gets or sets all roles
+	 * 
+	 * This simplifies the caching the roles in data column
+	 * to improve performance
+	 * 
+	 */
+	protected function _roles()
+	{
+		if ($this->_loaded)
+		{
+			$data = empty($this->data) ? array() : unserialize($this->data);
+			if(isset($data['roles']) AND !empty($data['roles']))
+			{
+				return $data['roles'];
+			}
+			
+			if(empty($data['roles']))
+			{
+				$roles = $this->roles->find_all()->as_array('id', 'name');
+			
+				//save to data field for performance
+				$this->data = array('roles' => $roles);
+				$this->update();
+				
+				return $roles;
+			}
+		}
+		
+		return $this->roles->find_all()->as_array('id', 'name');
+	}
+	
 	/**
 	 * Override the find_all method
 	 *

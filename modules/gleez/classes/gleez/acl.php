@@ -82,11 +82,7 @@ class Gleez_ACL {
 		}
 		else
 		{
-			// Loop through each role in the object
-			foreach ($user->roles() as $role)
-			{
-				$roles[$role->id] = $role->name;
-			}
+			$roles = $user->roles();
 		}
 
 		return $roles;

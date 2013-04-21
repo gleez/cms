@@ -52,7 +52,7 @@ class Gleez_User {
 		if ( ! isset(User::$roles[$user->id]))
 		{
 			// @todo fetch and save in session to avoid recursive lookups
-			User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
+			User::$roles[$user->id] = $user->roles();
 		}
 	    
 		if(in_array('admin', User::$roles[$user->id]) OR  array_key_exists(4, User::$roles[$user->id]))
@@ -122,7 +122,7 @@ class Gleez_User {
 			if ( ! isset(User::$roles[$user->id]))
 			{
 				// @todo fetch and save in session to avoid recursive lookups
-				User::$roles[$user->id] = $user->roles->find_all()->as_array('id', 'name');
+				User::$roles[$user->id] = $user->roles();
 			}
 
 			// array_diff is not safe
@@ -294,7 +294,7 @@ class Gleez_User {
 		$roles = '<ul class="user-roles">';
 		foreach ($user->roles() as $role)
 		{
-            		$roles .= '<li>'. Text::plain($role->name) . '</li>';
+            		$roles .= '<li>'. Text::plain($role) . '</li>';
 		}
 		$roles .= '</ul>';
 		

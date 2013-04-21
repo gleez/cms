@@ -47,7 +47,7 @@
 				<dd>
 					<ul class="user-roles">
 						<?php foreach ($user->roles() as $role): ?>
-							<li><?php echo Text::plain(ucfirst($role->name) ); ?></li>
+							<li><?php echo Text::plain(ucfirst($role)); ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</dd>
