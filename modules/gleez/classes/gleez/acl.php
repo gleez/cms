@@ -257,89 +257,6 @@ class Gleez_ACL {
 	}
 
 	/**
-	 * Checks if the current user has permission to access the current request
-	 *
-	 * If the user is not given, used currently active user
-	 *
-	 * @param   string      $perm_name  Permission name
-	 * @param   Model_User  $user       User object [Optional]
-	 * @return  boolean
-	 * @uses    User::active_user
-	 */
-	public static function check($perm_name, Model_User $user = NULL)
-	{
-		// If we weren't given an auth object
-		if (is_null($user))
-		{
-			// Just get the default instance.
-			$user = User::active_user();
-		}
-
-		// User #2 has all privileges:
-		if ($user->id == self::ID_ADMIN)
-		{
-			return ACL::ALLOW;
-		}
-
-		// To reduce the number of SQL queries, we cache the user's permissions
-		// in a static variable.
-		if ( ! isset(ACL::$_perm[$user->id]))
-		{
-			$roles = self::get_user_roles($user);
-
-			if ( ! $role_permissions = ACL::role_can($roles))
-			{
-				return FALSE;
-			}
-
-			ACL::$_perm[$user->id] = call_user_func_array('array_merge', $role_permissions);
-		}
-
-		return isset(ACL::$_perm[$user->id][$perm_name]);
-	}
-
-	/**
-	 * Checks whether the role(s) have some permission(s)
-	 * Added cache support for performance
-	 *
-	 * @since   2.0
-	 * @param   array    $roles  An array of roles as id => name
-	 * @return  boolean  FALSE If the role(s) doesn't have any permission
-	 * @return  array    Role(s) with permission(s) as array
-	 */
-	public static function role_can( array $roles)
-	{
-		$perms = array();
-
-		$cache = Cache::instance('roles');
-		$hash = sha1('roles-'. serialize($roles));
-		
-		if( ! $perms = $cache->get($hash))
-		{
-			$result = DB::select('rid', 'permission')
-						->from('permissions')
-						->where('rid', 'IN', array_keys($roles))
-						->as_object(TRUE)
-						->execute();
-
-			if ( ! count($result))
-			{
-				return FALSE;
-			}
-
-			foreach ($result as $row)
-			{
-				$perms[$row->rid][$row->permission] = ACL::ALLOW;
-			}
-			
-			//set the cache
-			$cache->set($hash, $perms, DATE::DAY);
-		}
-
-		return $perms;
-	}
-
-	/**
 	 * Check permission for current user
 	 *
 	 * Checks permission and redirects if is required to URL
@@ -374,7 +291,163 @@ class Gleez_ACL {
 			);
 		}
 	}
+	
+	/**
+	 * Checks if the current user has permission to access the current request
+	 *
+	 * If the user is not given, used currently active user
+	 *
+	 * @param   string      $perm_name  Permission name
+	 * @param   Model_User  $user       User object [Optional]
+	 * @return  boolean
+	 * @uses    User::active_user
+	 */
+	public static function check($perm_name, Model_User $user = NULL)
+	{
+		// If we weren't given an auth object
+		if (is_null($user))
+		{
+			// Just get the default instance.
+			$user = User::active_user();
+		}
 
+		// User #2 has all privileges:
+		if ($user->id == self::ID_ADMIN)
+		{
+			//return ACL::ALLOW;
+		}
+
+		// To reduce the number of SQL queries, we cache the user's permissions
+		// in a static variable.
+		if ( ! isset(ACL::$_perm[$user->id]))
+		{
+			ACL::_set_permissions($user);
+		}
+
+		return isset(ACL::$_perm[$user->id][$perm_name]);
+	}
+	
+	/**
+	 * Whether role name is currently in the list of available roles.
+	 * 
+	 * If a role exists in user cache and not in roles table, will
+	 * be checked for only available roles.
+	 * 
+	 * @access public
+	 *
+	 * @param string $role Role name to look up.
+	 * @return bool
+	 */
+	public static function is_role( $role )
+	{
+		$roles = ACL::site_roles();
+		return isset( $roles[$role] );
+	}
+
+	/**
+	 * Get all the active roles
+	 * Added cache support for performance
+	 *
+	 * @since   2.0
+	 * @return  array    Role(s) all roles as array
+	 */
+	public static function site_roles()
+	{
+		$roles = array();
+
+		$cache = Cache::instance('roles');
+		
+		if( ! $roles = $cache->get('site_roles'))
+		{
+			$roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+			
+			//set the cache
+			$cache->set('site_roles', $roles, DATE::DAY);
+		}
+
+		return $roles;
+	}
+	
+	/**
+	 * Get all the enabled permissions for all roles
+	 * Added cache support for performance
+	 *
+	 * @since   2.0
+	 * @return  boolean  FALSE If the role(s) doesn't have any permission
+	 * @return  array    Role(s) with permission(s) as array
+	 */
+	public static function site_perms()
+	{
+		$perms = array();
+
+		$cache = Cache::instance('roles');
+		
+		if( ! $perms = $cache->get('site_perms'))
+		{
+			$result = DB::select('rid', 'permission')
+						->from('permissions')
+						->as_object(TRUE)
+						->execute();
+
+			foreach ($result as $row)
+			{
+				$perms[$row->rid][$row->permission] = ACL::ALLOW;
+			}
+			
+			//set the cache
+			$cache->set('site_perms', $perms, DATE::DAY);
+		}
+
+		return $perms;
+	}
+
+	/*
+	 * Sets the permissions; both role based and user based
+	 *
+	 * @param Model_User User object
+	 *
+	 * return void
+	 */
+	protected static function _set_permissions($user)
+	{
+		$user_perms = $user->perms();
+		$site_perms = ACL::site_perms();
+		$user_roles = ACL::get_user_roles($user);
+	
+		//filter out active roles
+		$roles = array_filter( array_keys( $user_roles ), array( 'ACL', 'is_role' ) );
+		ACL::$_perm[$user->id] = array();
+
+		//role based permissions
+		foreach($roles as $role)
+		{
+			if(isset($site_perms[$role]) AND is_array($site_perms[$role]))
+			{
+				ACL::$_perm[$user->id] = array_merge(
+					(array) ACL::$_perm[$user->id],
+					(array) $site_perms[$role]
+				);
+			}
+		}
+
+		//user based paermissions
+		foreach($user_perms as $perm => $val)
+		{
+			if($val == ACL::PERM_ALLOW)
+			{
+				array_merge(ACL::$_perm[$user->id], array($perm => ACL::ALLOW) );
+			}
+			elseif($val == ACL::PERM_DENY)
+			{
+				//if we deny this permission unset if it exists
+				if (isset(ACL::$_perm[$user->id][$perm]) )
+				{
+					unset(ACL::$_perm[$user->id][$perm]);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Make sure the user has permission to do certain action on this object
 	 *
