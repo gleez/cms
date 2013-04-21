@@ -13,8 +13,10 @@ return array
 	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Аккаунт :prov',
+	':role Permissions' => 'Разрешения для :role',
 	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	':site Account' => 'Аккаунт :site',
+	':user Permissions' => 'Разрешения для :user',
 	// %
 	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
@@ -30,6 +32,7 @@ return array
 	'Access profiles' => 'Доступ к профилям',
 	'Access to all profiles' => 'Доступ ко всем профилям',
 	'After logging in, you will be redirected, so you can change your password. We do not encourage you to lose your password again. Be aware that this behaviour can be dangerous.' => 'После входа в систему вы будете перенаправлены для того чтоб изменить свой пароль. Мы не рекомендуем вам терять свой пароль повторно. Эта ситуация потенциально опасна.',
+	'Allow' => 'Разрешить',
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
@@ -47,16 +50,18 @@ return array
 	'Confirm Password' => 'Повторите пароль',
 	'Confirm new password' => 'Подтвердите новый пароль',
 	// D
+	'Delete User' => 'Удалить пользователя',
 	'Description of Role must be less than :param2 characters long' => 'Описание роли должно быть менее :param2 символов',
+	'Disallow' => 'Запретить',
 	'Display Name' => 'Отображаемое имя',
 	"Don't have an account? :url" => 'Нет аккаунта? :url',
 	"Don't have an account?" => 'Нет аккаунта?',
 	// E
-	'Edit profile' => 'Правка профиля',
-	'Edit role %name' => 'Правка роли %name',
-	'Edit Account' => 'Правка аккаунта',
-	'E-mail' => 'E-mail',
-	'Email' => 'Email',
+	'Edit Account' => 'Изменить аккаунт',
+	'Edit Permission' => 'Изменить разрешения',
+	'Edit profile' => 'Изменить профиль',
+	'Edit role %name' => 'Изменить роль %name',
+	'Edit User' => 'Изменить пользователя',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
@@ -73,6 +78,7 @@ return array
 	'Home Page' => 'Домашняя страница',
 	// I
 	"If you don't use any of these services, you can create an account." => "Если вы не используете ни один из этих сервисов, вы можете зарегистрировать аккаунт.",
+	'Inherit' => 'Наследовать',
 	'Instructions to reset your password are being sent to your email address %mail.' => 'Инструкции для сброса вашего пароля были высланы на ваш email адрес %mail.',
 	// J
 	'Joined on' => 'Участник с',
@@ -109,6 +115,8 @@ return array
 	'Permission' => 'Полномочие',
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
+	'Permissions let you control what users can do on your site. User defined permission override role based permissions.' => 'Разрешения позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Пользовательские разрешения переопределяют разрешения определённые для ролей.',
+	'Permissions save failed!' => 'Разрешения сохранить не удалось!',
 	'Permissions saved successfully!' => 'Полномочия успешно сохранены!',
 	'Photo' => 'Фотография',
 	'Photo successfully uploaded!' => 'Фотография успешно загружена',
