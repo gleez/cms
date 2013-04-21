@@ -212,6 +212,61 @@ class Model_Auth_User extends ORM {
 	}
 
 	/**
+	 * Override the create method with defaults
+	 *
+	 * @throws  Kohana_Exception
+	 */
+	public function update(Validation $validation = NULL)
+	{
+		if ( ! $this->_loaded)
+		{
+			throw new Kohana_Exception('Cannot Update :model model because it is not loaded.', array(':model' => $this->_object_name));
+		}
+		
+		$this->data = $this->_data();
+		
+		return parent::update($validation);
+	}
+	
+	protected function _data()
+	{
+		$data = $this->_original_values['data'];
+		$olddata =  unserialize($data);
+		$newdata = is_array($this->data) ? $this->data : array();
+		
+		if (empty($data) OR ! $olddata)
+		{
+			return empty($this->data) ? NULL : serialize($newdata);
+		}
+		
+		foreach ($newdata AS $key => $value)
+		{
+			if ($value === NULL)
+			{
+				unset($olddata[$key]);
+			}
+			elseif (!empty($key))
+			{
+				$olddata[$key] = $value;
+			}
+		}
+		
+		return empty($olddata) ? NULL : serialize($olddata);
+	}
+	
+	public function perms()
+	{
+		if (empty($this->data))
+		{
+			return array();
+		}
+		
+		$data = unserialize($this->data);
+		
+		return isset($data['permissions']) ? $data['permissions'] : array();
+	}
+	
+	/**
 	 * Gets all roles
 	 */
 	public function roles()

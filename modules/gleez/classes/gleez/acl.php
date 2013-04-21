@@ -34,6 +34,12 @@ class Gleez_ACL {
 	/** Rule type: allow */
 	const ALLOW = TRUE;
 
+	/** Rule type: deny */
+	const PERM_DENY = 2;
+
+	/** Rule type: allow */
+	const PERM_ALLOW = 1;
+	
 	/** Guest ID */
 	const ID_GUEST = 1;
 

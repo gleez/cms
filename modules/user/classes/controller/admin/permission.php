@@ -119,4 +119,50 @@ class Controller_Admin_Permission extends Controller_Admin {
 
 		$this->response->body($view);
 	}
+	
+	public function action_user()
+	{
+		$id = (int) $this->request->param('id', 0);
+
+		$post = ORM::factory('user', $id);
+
+		if ( ! $post->loaded() OR $id === 1)
+		{
+			Message::error(__('User: doesn\'t exists!'));
+			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
+
+			if ( ! $this->_internal)
+			{
+				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
+			}
+		}
+	
+		$this->title    = __(':user Permissions', array(":user" => $post->name));
+		$view = View::factory('admin/permission/user')
+				->set('post', $post)
+				->set('oldperms', $post->perms())
+				->set('permissions', ACL::all())
+				->bind('errors', $this->_errors);
+	
+		if ($this->valid_post('permissions'))
+		{
+			$perms = array_filter($_POST['perms']);
+			$post->data = array('permissions' => $perms);
+			
+			try
+			{
+				$post->save();
+				
+				Message::success(__('Permissions: saved successful!'));
+				$this->request->redirect(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $post->id)));
+			}
+			catch(Exception $e)
+			{
+				Message::error(__('Permissions: saved failed!'));
+				$errors = array($e->getMessage());
+			}
+		}
+		
+		$this->response->body($view);
+	}
 }
