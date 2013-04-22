@@ -36,38 +36,6 @@ class Controller_Admin_Permission extends Controller_Admin {
 			->execute();
 
 		$this->response->body($view);
-
-		if ($this->valid_post('roles'))
-		{
-			$per_insert = DB::insert('permissions', array('rid', 'permission', 'module'));
-
-			foreach ($_POST['roles'] as $id => $role)
-			{
-				foreach($role as $key => $val)
-				{
-					if (isset($val['name']))
-					{
-						$per_insert->values(array($val['id'], $val['name'], $val['module']));
-					}
-				}
-			}
-
-			try
-			{
-				DB::delete('permissions')->execute();
-				$per_insert->execute();
-				Message::success(__('Permissions saved successfully!'));
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/permission')->uri());
-				}
-			}
-			catch(Validate_Exception $e)
-			{
-				$this->_errors = $e->array->errors('models', TRUE);
-			}
-		}
 	}
 
 	/**
