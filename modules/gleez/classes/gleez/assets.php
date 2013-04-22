@@ -777,6 +777,7 @@ class Gleez_Assets {
 	 */
 	public static function editor($name = '.textarea', $lang = 'en')
 	{
+		Assets::css('redactor', 'media/css/redactor.css', array('default'), array('weight' => 1));
 		Assets::js('redactor', 'media/js/redactor.min.js', array('jquery'), FALSE, array('weight' => 15));
 		Assets::js('redactor/lang', 'media/js/redactor/langs/'.$lang.'.js', array('jquery'), FALSE, array('weight' => 16));
 
