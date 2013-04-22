@@ -435,7 +435,7 @@ class Gleez_ACL {
 		{
 			if($val == ACL::PERM_ALLOW)
 			{
-				array_merge(ACL::$_perm[$user->id], array($perm => ACL::ALLOW) );
+				ACL::$_perm[$user->id] = array_merge(ACL::$_perm[$user->id], array($perm => ACL::ALLOW) );
 			}
 			elseif($val == ACL::PERM_DENY)
 			{
