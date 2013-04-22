@@ -68,6 +68,5 @@
 		</tbody>
 		
 	</table>
-	<?php echo Form::submit('permissions', __('Save Permissions'), array('class' => 'btn btn-primary pull-right')) ?>
-	<div class="clearfix"></div><br>
+
 	<?php echo Form::close() ?>
