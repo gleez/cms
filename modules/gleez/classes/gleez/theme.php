@@ -40,8 +40,8 @@ class Gleez_Theme {
                 $modules = Kohana::modules();
 
                 //set admin theme based on path info
-                $path = Request::detect_uri();
-                Theme::$is_admin = ( $path == "/admin" || !strncmp($path, "/admin/", 7) );
+                $path = ltrim(Request::detect_uri(), '/');
+                Theme::$is_admin = ( $path == "admin" || !strncmp($path, "admin/", 6) );
 
                 if (self::$is_admin)
                 {
