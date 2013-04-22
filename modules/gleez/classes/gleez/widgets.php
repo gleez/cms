@@ -360,7 +360,7 @@ abstract class Gleez_Widgets {
 			
 			try
 			{
-				DB::insert('widgets', array_keys($values))->values(array_values($values))->execute();
+				ORM::factory('widget')->values($values)->save();
 				Kohana::$log->add(LOG::DEBUG, 'Insert widget where module: :module', array(
 						':module' => $module
 				));
@@ -383,7 +383,7 @@ abstract class Gleez_Widgets {
 	{
 		try
 		{
-			DB::delete('widgets')->where('module', '=', $module)->execute();
+			ORM::factory('widget')->where('module', '=', $module)->delete();
 			Cache::instance('widgets')->delete_all();
 			
 			Kohana::$log->add(LOG::DEBUG, 'Deleted widgets where module: :module', array(

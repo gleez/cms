@@ -296,19 +296,24 @@ class Gleez_Menu {
 
 		if( ! $items = $cache->get($name) )
 		{
-			$_menu = DB::select()->from('menus')->where('name', '=', (string)$name )->execute()->current();
+			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if( ! $_menu) return;
 
-			$items = DB::select()->from('menus')
+			$_items = ORM::factory('menu')
 					->where('lft', '>', $_menu['lft'])
 					->where('rgt', '<', $_menu['rgt'])
 					->where('scp', '=', $_menu['scp'])
 					->where('active', '=', 1)
 					->order_by('lft', 'ASC')
-					->execute()
-					->as_array();
+					->find_all();
 
-			if ( count($items) === 0) return;
+			$items = array();
+			foreach($_items as $item)
+			{
+				$items[] = $item->as_array();
+			}
+
+			if (empty($items)) return;
 
 			// Set the cache
 			$cache->set($name, $items, DATE::DAY);
@@ -362,19 +367,24 @@ class Gleez_Menu {
 
 		if( ! $items = $cache->get($name) )
 		{
-			$_menu = DB::select()->from('menus')->where('name', '=', (string)$name )->execute()->current();
+			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if( ! $_menu) return;
 
-			$items = DB::select()->from('menus')
+			$_items = ORM::factory('menu')
 					->where('lft', '>', $_menu['lft'])
 					->where('rgt', '<', $_menu['rgt'])
 					->where('scp', '=', $_menu['scp'])
 					->where('active', '=', 1)
 					->order_by('lft', 'ASC')
-					->execute()
-					->as_array();
+					->find_all();
 
-			if ( count($items) === 0) return;
+			$items = array();
+			foreach($_items as $item)
+			{
+				$items[] = $item->as_array();
+			}
+			
+			if (empty($items)) return;
 
 			//set the cache
 			$cache->set($name, $items, DATE::DAY);
