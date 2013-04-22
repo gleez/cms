@@ -56,7 +56,7 @@ Gleez provides the user interface to manage many aspects of a website like the f
 * Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
 * Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
-* Cleditor jQuery plugin [(http://premiumsoftware.net/cleditor/)](http://premiumsoftware.net/cleditor/)
+* Redactor jQuery plugin [(https://github.com/dybskiy/redactor-js/)](https://github.com/dybskiy/redactor-js)
 * PHP Markdown [(http://michelf.ca/projects/php-markdown/)](http://michelf.ca/projects/php-markdown/)
 * PHPMailer [(https://github.com/Synchro/PHPMailer/)](https://github.com/Synchro/PHPMailer/)
 
