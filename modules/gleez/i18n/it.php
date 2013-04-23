@@ -20,6 +20,7 @@ return array
 	'Access comments' => 'Accedi ai commenti',
 	'Account' => 'Profilo utente',
 	'Actions' => 'Azioni',
+	'activate Google Chrome Frame' => 'attivare Google Chrome Frame',
 	'Activated: %names' => 'Attivati: %names',
 	'Add Alias' => 'Aggiungi alias',
 	'Add Item for %menu' => 'Aggiungi elemento per %menu',
@@ -175,6 +176,7 @@ return array
 	'Gleez Installer' => 'installazione di Gleez',
 	'Gleez may not work correctly with your environment.' => 'Gleez potrebbe non funzionare bene nel tuo ambiente.',
 	'Gleez requires :gd v2 for the Image class.' => 'Gleez richiede :gd v2 per elaborare le immagini.',
+	'Gleez Team' => 'Team Gleez',
 	'Gleez Version' => 'Versione Gleez',
 	// H
 	'Hide' => 'Nascosto',
@@ -227,6 +229,7 @@ return array
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Assicurati che questa cartella sia scrivibile dal webserver, o aggiungi i permessi 777 sulla cartella.',
 	'Mbstring Not Overloaded' => 'Mbstring non in overload',
 	'Mission' => 'Missione',
+	'Module' => 'Modulo',
 	'modules' => 'moduli',
 	'Modules' => 'Moduli',
 	'Modules Directory' => 'Cartella Moduli',
@@ -258,6 +261,7 @@ return array
 	'Only the listed pages' => 'Solo le pagine elencate',
 	'Operations' => 'Operazioni',
 	'Order' => 'Ordine',
+	'outdated' => 'obsoleto',
 	// P
 	'Page' => 'Pagina',
 	'Page: :title created' => 'Pagina: :title creata',
@@ -269,6 +273,7 @@ return array
 	'Page Settings updated!' => 'Impostazioni pagina aggiornate!!',
 	'Page specific settings, default status, tags, comments etc.' => 'Impostazioni pagina specifiche, stato di default, tag, commenti, ecc...',
 	'Page Statistics' => 'Statistiche pagina',
+	'Pages' => 'Pagine',
 	'Parent' => 'Padre',
 	'Pass' => 'OK',
 	'Password' => 'Password',
@@ -408,10 +413,12 @@ return array
 	'Title' => 'Titolo',
 	'Top Region' => 'Regione superiore',
 	'Total:' => 'Totale:',
+	'Type' => 'Tipo',
 	// U
 	'Unavailable' => 'Non disponibile',
 	'Updated' => 'Aggiornato',
 	'Unpublish' => 'Annulla la pubblicazione',
+	'upgrade your browser' => 'aggiorna il tuo browser',
 	'URI Determination' => 'Determinazione URI',
 	'URL Path' => 'Percorso URL',
 	'User' => 'Utente',
@@ -424,6 +431,7 @@ return array
 	'Vocabulary' => 'Vocabolario',
 	'Vocabulary doesn\'t exists!' => 'Vocabolario non esistente!',
 	// W
+	'Warning!' => 'Attenzione!',
 	'We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.' => 'Odiamo reinventare la ruota. Ma quando la ruota non esiste, o è quadrata, non abbiamo paura a inventarne una rotonda.',
 	'We\'ve created an account for you to use:' => 'Abbiamo creato un profilo utente per il tuo utilizzo:',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Benvenuto nella sezione amministrativa. Qui puoi controllare come funziona il tuo sito.',
@@ -441,6 +449,7 @@ return array
 	// X
 	// Y
 	'Yes' => 'Si',
+	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Si sta utilizzando un browser :out. Si prega di visualizzare :url o :frame per migliorare la vostra esperienza',
 	'Your Gleez install is complete!' => 'L\'installazione di Gleez &#269; completa!',
 	// Z
 );
