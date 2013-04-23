@@ -251,29 +251,29 @@ if ( ! ACL::cache())
 {
 	ACL::set('comment', array(
 		'administer comment' => array(
-			'title' => __('Administer comments'),
+			'title' => __('Administer Comments'),
 			'restrict access' => TRUE,
 			'description' => __('Administer comments and comments settings'),
 		),
 		'access comment' => array(
 			'title' => __('Access comments'),
 			'restrict access' => FALSE,
-			'description' => __(''),
+			'description' => __('Access to any published comments'),
 		),
 		'post comment' =>  array(
 			'title' => __('Post comments'),
 			'restrict access' => FALSE,
-			'description' => __(''),
+			'description' => __('Ability to publish comments'),
 		),
 		'skip comment approval' =>  array(
 			'title' => __('Skip comment approval'),
 			'restrict access' => FALSE,
-			'description' => __(''),
+			'description' => __('Ability to publish comments without approval by the moderator'),
 		),
 		'edit own comment' =>  array(
 			'title' => __('Edit own comments'),
 			'restrict access' => FALSE,
-			'description' => __(''),
+			'description' => __('Ability to editing own comments'),
 		),
 	));
 
@@ -332,27 +332,27 @@ if ( ! ACL::cache())
 			'description' => __(''),
 		),
 		'administer paths' => array(
-			'title' => __('Administer paths'),
+			'title' => __('Administer Paths'),
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
 		'administer site' => array(
-			'title' => __('Administer site'),
+			'title' => __('Administer Site'),
 			'restrict access' => TRUE,
 			'description' => __(''),
 		),
 		'administer tags' => array(
-			'title' => __('Administer tags'),
+			'title' => __('Administer Tags'),
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
 		'administer terms' => array(
-			'title' => __('Administer terms'),
+			'title' => __('Administer Terms'),
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
 		'administer formats' => array(
-			'title' => __('Administer formats'),
+			'title' => __('Administer Formats'),
 			'restrict access' => TRUE,
 			'description' => __('Managing the text formats of editor'),
 		),
