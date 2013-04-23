@@ -41,7 +41,8 @@ class Model_Menu extends ORM_MPTT {
 	{
 		return array(
 			'name' => array(
-				array('not_empty'),
+				array(array($this, 'is_valid'), array(':validation', ':field')),
+				//array('not_empty'),
 			),
 		);
 	}
@@ -61,6 +62,27 @@ class Model_Menu extends ORM_MPTT {
 	}
 	
 	/**
+	 * Validation callback
+	 *
+	 * @param   Validation  $validation  Validation object
+	 * @param   string      $field       Field name
+	 * @uses    Valid::numeric
+	 * @return  void
+	 */
+	public function is_valid(Validation $validation, $field)
+	{
+		if ( empty($this->name) AND empty($this->title) )
+		{
+			$validation->error('title', 'not_empty', array($this->title));
+		}
+		else
+		{
+			$text = empty($this->name) ? $this->title : $this->name;
+			$this->name = $this->_unique_slug(URL::title($text));
+		}
+	}
+	
+	/**
 	 * Updates or Creates the record depending on loaded()
 	 *
 	 * @param   Validation $validation Validation object
@@ -68,7 +90,6 @@ class Model_Menu extends ORM_MPTT {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		$this->name   = $this->_unique_slug(URL::title(empty($this->name) ? $this->title : $this->name));
 		$this->params = empty($this->params) ? NULL : serialize($this->params);
 
 		return parent::save( $validation );

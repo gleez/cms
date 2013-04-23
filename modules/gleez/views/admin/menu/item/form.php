@@ -15,13 +15,6 @@
 	</div>
 </div>
 
-<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-	<?php echo Form::label('name', __('Slug'), array('class' => 'control-label')) ?>
-	<div class="controls">
-		<?php echo Form::input('name', $post->name, array('class' => 'input-large')); ?>
-	</div>
-</div>
-
 <div class="control-group <?php echo isset($errors['url']) ? 'error': ''; ?>">
 	<?php echo Form::label('url', __('Link'), array('class' => 'control-label')) ?>
 	<div class="controls">
