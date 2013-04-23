@@ -53,7 +53,7 @@ class Controller_Admin_Path extends Controller_Admin {
 		}
 
 		$this->title = __('Path Aliases');
-		$add_url     = Route::url('admin/path', array('action' => 'add'));
+		$add_url     = Route::get('admin/path')->uri(array('action' =>'add'));
 		$url         = Route::url('admin/path', array('action' => 'list'), TRUE);
 
 		$view = View::factory('admin/path/list')

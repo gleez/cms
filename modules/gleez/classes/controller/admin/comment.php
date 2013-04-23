@@ -25,9 +25,9 @@ class Controller_Admin_Comment extends Controller_Admin {
 	public function after()
 	{
 		$this->_tabs =  array(
-			array('link' => Route::url('admin/comment', array('action' =>'list')), 'text' => __('Approved')),
-			array('link' => Route::url('admin/comment', array('action' =>'pending')), 'text' => __('Pending')),
-			array('link' => Route::url('admin/comment', array('action' =>'spam')), 'text' => __('Spam')),
+      array('link' => Route::get('admin/comment')->uri(array('action' =>'list')), 'text' => __('Approved')),
+      array('link' => Route::get('admin/comment')->uri(array('action' =>'pending')), 'text' => __('Pending')),
+      array('link' => Route::get('admin/comment')->uri(array('action' =>'spam')), 'text' => __('Spam')),
 		);
 
 		parent::after();
