@@ -11,14 +11,14 @@
 <div class="control-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
 	<?php echo Form::label('title', __('Title'), array('class' => 'control-label')) ?>
 	<div class="controls">
-		<?php echo Form::input('title', $post->title, array('class' => 'input-large')); ?>
+		<?php echo Form::input('title', $post->title, array('class' => 'input-xlarge')); ?>
 	</div>
 </div>
 
 <div class="control-group <?php echo isset($errors['url']) ? 'error': ''; ?>">
 	<?php echo Form::label('url', __('Link'), array('class' => 'control-label')) ?>
 	<div class="controls">
-		<?php echo Form::input('url', $post->url, array('class' => 'input-large'), 'admin/autocomplete/links'); ?>
+		<?php echo Form::input('url', $post->url, array('class' => 'input-xlarge'), 'admin/autocomplete/links'); ?>
 	</div>
 </div>
 
@@ -26,7 +26,7 @@
 	<div class="control-group <?php echo isset($errors['parent']) ? 'error': ''; ?>">
 		<?php echo Form::label('parent', __('Parent'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::select('parent', $items, $post->pid, array('class' => 'input-large')); ?>
+			<?php echo Form::select('parent', $items, $post->pid, array('class' => 'input-xlarge')); ?>
 		</div>
 	</div>
 <?php endif; ?>
@@ -34,14 +34,14 @@
 	<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
 		<?php echo Form::label('image', __('Icon'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::select('image', System::icons(), $post->image, array('class' => 'input-large select-icons')); ?>
+			<?php echo Form::select('image', System::icons(), $post->image, array('class' => 'input-xlarge select-icons')); ?>
 		</div>
 	</div>
 
 <div class="control-group <?php echo isset($errors['descp']) ? 'error': ''; ?>">
  	<?php echo Form::label('descp', __('Description'), array('class' => 'control-label')) ?>
 	<div class="controls">
-		<?php echo Form::textarea('descp', $post->descp, array('class' => 'input-large', 'rows' => 5)) ?>
+		<?php echo Form::textarea('descp', $post->descp, array('class' => 'input-xlarge', 'rows' => 3)) ?>
 	</div>
 </div>
 
