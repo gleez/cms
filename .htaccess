@@ -30,6 +30,9 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 	# Installation directory
 	RewriteBase /
 
+	RewriteCond %{THE_REQUEST} ^.*/index.php
+	RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
 	# Protect application and system files from being viewed
 	RewriteRule ^(?:application|modules|themes|system)\b.* index.php/$0 [L]
 
