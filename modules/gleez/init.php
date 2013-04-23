@@ -39,6 +39,16 @@ if ( ! Route::cache())
 {
 // -- Gleez backend routes -----------------------------------------------------
 
+	Route::set('admin/autocomplete', 'admin/autocomplete/<action>(/<string>)', array(
+		'string'     => '.+',
+		'action'     => 'index|links',
+	))
+	->defaults(array(
+		'directory'  => 'admin',
+		'controller' => 'autocomplete',
+		'action'     => 'index',
+	));
+        
 	Route::set('admin/module', 'admin/modules(/<action>)')
 	->defaults(array(
 		'directory'  => 'admin',
