@@ -4,7 +4,7 @@
 	$parms = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add', 'id' => $menu->id);
 	$items = isset($post->id) ? $post->select_list('id', 'title', '--') : $menu->select_list('id', 'title', '--');
 
-	echo Form::open(Route::get('admin/menu/item')->uri($parms), array('id'=>'menu-form', 'class'=>'form form-horizontal well')) ?>
+	echo Form::open(Route::get('admin/menu/item')->uri($parms), array('id'=>'menu-form', 'class'=>'form form-horizontal well')); ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
@@ -25,7 +25,7 @@
 <div class="control-group <?php echo isset($errors['url']) ? 'error': ''; ?>">
 	<?php echo Form::label('url', __('Link'), array('class' => 'control-label')) ?>
 	<div class="controls">
-		<?php echo Form::input('url', $post->url, array('class' => 'input-large')); ?>
+		<?php echo Form::input('url', $post->url, array('class' => 'input-large'), 'admin/autocomplete/links'); ?>
 	</div>
 </div>
 
