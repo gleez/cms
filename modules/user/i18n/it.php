@@ -13,8 +13,10 @@ return array
 	':field must be a valid address with the http:// or https:// prefix' => ':field deve essere un indirizzo valido con il prefisso http:// o https://',
 	':nick joined.' => ':nick si &#269; registrato.',
 	':prov account' => 'Profilo :prov',
+	':role Permissions' => ':role Permessi',
 	':site - Reset password for :name' => ':site - reset password per :name',
 	':site Account' => 'Profilo :site',
+	':user Permissions' => ':user Permessi',
 	// %
 	"%title successfully updated!" => '%title aggiornato con successo!',
 	// A
@@ -24,11 +26,13 @@ return array
 	'Activity' => 'Attività',
 	'Add New Role' => 'Aggiungi un nuovo ruolo',
 	'Add New User' => 'Aggiungi un nuovo utente',
+	'Add Role' => 'Aggiungi ruolo',
 	'Administer permissions' => 'Permessi di amministrazione',
 	'Administer users' => 'Amministratore',
 	'Access profiles' => 'Accedi ai profili',
 	'Access to all profiles' => 'Accedi a tutti i profili',
 	'After logging in, you will be redirected, so you can change your password. We do not encourage you to lose your password again. Be aware that this behaviour can be dangerous.' => 'Dopo il login, sarai reindirizzato, in modo da poter modificare la password. Noi non ti incoraggiamo a perdere di nuovo la tua password. Sii consapevole del fatto che questo comportamento può essere pericoloso.',
+	'Allow' => 'Permesso',
 	'Already have an account? Choose how you would like to sign in' => 'Hai già un account? Scegliere come desideri accedere',
 	// B
 	'Best Regards' => 'Cordiali Saluti',
@@ -46,12 +50,18 @@ return array
 	'Confirm Password' => 'Conferma la password',
 	'Confirm new password' => 'Conferma la nuova password',
 	// D
+	'Delete User' => 'Cancella utente',
+	'Description of Role must be less than :param2 characters long' => 'La descrizione del ruolo deve essere pi&#367; corta di :param2 caratteri',
+	'Disallow' => 'Negato',
 	'Display Name' => 'Nome visualizzato',
 	"Don't have an account? :url" => 'Non hai un profilo? :url',
 	"Don't have an account?" => 'Non hai un profilo?',
 	// E
-	'Edit profile' => 'Modifica profilo',
 	'Edit Account' => 'Modifica account',
+	'Edit Permission' => 'Modifica permessi',
+	'Edit profile' => 'Modifica profilo',
+	'Edit role %name' => 'Modifica il ruolo %name',
+	'Edit User' => 'Modifica utente',
 	'E-mail' => 'E-mail',
 	'Email' => 'Email',
 	// F
@@ -70,6 +80,7 @@ return array
 	'Home Page' => 'Home Page',
 	// I
 	'If you don\'t use any of these services, you can create an account.' => 'Se non si utilizza nessuno di questi servizi, è possibile creare un account.',
+	'Inherit' => 'Ereditato',
 	'Instructions to reset your password are being sent to your email address %mail.' => 'Le istruzioni per reimpostare la password sonon state inviate al tuo indirizzo e-mail %mail.',
 	// J
 	'Joined on' => 'Iscritto dal',
@@ -89,6 +100,8 @@ return array
 	'My Account' => 'Il mio profilo',
 	// N
 	'Name' => 'Nome',
+	'Name of Role must be at least :param2 characters long' => 'Il nome del ruolo deve essere lungo almeno :param2 caratteri',
+	'Name of Role must be less than :param2 characters long' => 'Il nome del ruolo deve essere inferiore a :param2 caratteri',
 	'New password' => 'Nuova password',
 	'New password (again)' => 'Reinserisci la nuova password',
 	'No more than 800 characters' => 'Non più di 800 caratteri',
@@ -104,6 +117,8 @@ return array
 	'Permission' => 'Permesso',
 	'Permissions' => 'Permessi',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'I permessi permettono di controllare cosa gli utenti possono fare sul tuo sito. Ogni ruolo utente (definiti in :user-roles) ha il proprio set di permessi. I poteri consentono inoltre agli utenti attendibili per condividere l\'onere amministrativo della gestione di un sito on line.',
+	'Permissions let you control what users can do on your site. User defined permission override role based permissions.' => 'I permessi permettono di controllare cosa gli utenti possono fare sul tuo sito. Le autorizzazioni per utente sovrascrivono le autorizzazioni per ruoli specifici.',
+	'Permissions save failed!' => 'Salvataggio dei permessi fallito!',
 	'Permissions saved successfully!' => 'I permessi sono stati salvati correttamente!',
 	'Photo' => 'Foto',
 	'Photo successfully uploaded!' => 'La foto è stat salvata correttamente!',
@@ -115,12 +130,17 @@ return array
 	'Repeat entered password' => 'Riperi la password inserita',
 	'Reset password' => 'Ricrea la password',
 	'Reset' => 'Reset',
+	'Role %name saved successful!' => 'Ruolo %name salvato correttamente!',
+	'Role %name updated successful!' => 'Rulo %name aggiornato correttamente!',
+	"Role doesn't exists!" => "Il ruolo non esiste!",
+	'Role name must not be empty' => 'Il nome del ruolo non deve essere vuoto',
 	'Roles allow you to fine tune the security and administration of Gleez CMS. A role defines a group of users that have certain privileges as defined in user permissions. Examples of roles include: anonymous user, authenticated user, moderator, administrator and so on. In this area you will define the role names of the various roles.' => 'I ruoli consentono di ottimizzare la sicurezza e la gestione di Gleez CMS. Un ruolo definisce un gruppo di utenti che dispongono di alcuni privilegi cos&#283; come definito dai permessi utente. Esempi di ruoli sono: utente anonimo, utente autenticato, moderatore, amministratore, ecc. In questa sezione puoi puoi definire i nomi dei vari ruoli.',
 	// S
 	'Save Permissions' => 'Salva i permessi',
 	'Security code' => 'Codice di sicurezza',
 	'Sign in using social network:' => 'Entra usando i social network:',
 	'Sign in using your registered account:' => 'Entra usando il tuo profilo registrato:',
+	'Special Role' => 'Ruolo speciale',
 	'Stay Signed in' => 'Resta connesso',
 	// T
 	'The ability to change own username' => 'Possibilit&agrave; di cambiare il proprio username',
@@ -136,6 +156,8 @@ return array
 	'Update Profile' => 'Aggiorna profilo',
 	'Upload' => 'Carica file',
 	'Uploading Photos' => 'carica foto',
+	'User Account' => 'Account utente',
+	"User doesn't exists!" => "L'utente non esiste!",
 	'User Registration' => 'Registrazione utente',
 	'User registration not allowed' => 'Registrazione utente non permessa',
 	'user roles page' => 'pagina ruoli utente',
@@ -143,6 +165,8 @@ return array
 	'Username/Email' => 'Username/Email',
 	'Username' => 'Username',
 	'Username for login' => 'username per l\'accesso',
+	'Username for logging in can\'t be changed.' => 'lo username non pu&#328; essere modificato poich&#269; utile per l\'autenticazione.',
+	'Users' => 'Utenti',
 	// V
 	'Visits' => 'Visite',
 	// W
@@ -161,8 +185,5 @@ return array
 	'You must provide an email address.' => 'Devi specificare l\'email.',
 	'You must provide old password.' => 'Devi specificare la vecchia password.',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'La tua foto verr&agrave; modificata in proporzione alle dimensioni :w&times;:h',
-	'User Account' => 'Account utente',
-	'Username for logging in can\'t be changed.' => 'lo username non pu&#328; essere modificato poich&#269; utile per l\'autenticazione.',
-	'Users' => 'Utenti',
 	// Z
 );
