@@ -37,6 +37,14 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 + Username: demoadmin
 + Password: demoadmin
 
+## Internationalization (i18n Support)
+
+The available locale(s) in Gleez are:
+
++ English
++ Chinese
++ Russian
++ Italian
 
 ## Documentation
 
