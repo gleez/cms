@@ -30,11 +30,7 @@
 				<td>
 					<p><?php echo __($module_info->description); ?></p>
 					<p class="pull-right">
-						<?php echo __($module_info->author); ?>
-						<?php if ($setting = Module::get($module_info->name)->setting): ?>
-							&nbsp;|&nbsp;
-							<?php echo __(HTML::anchor(URL::site($setting), __('Settings'))); ?>
-						<?php endif; ?>
+						<?php echo __($module_info->author) ?>
 					</p>
 				</td>
 			</tr>
