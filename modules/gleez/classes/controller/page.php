@@ -88,9 +88,12 @@ class Controller_Page extends Template {
 		$config = Kohana::$config->load('page');
 
 		$this->title = __('Pages');
+		$feed = Route::get('rss')->uri(array('controller' => 'page'));
+
 		$view = View::factory('page/list')
 					->set('teaser',      TRUE)
 					->set('config',      $config)
+					->set('feed',        $feed)
 					->bind('pagination', $pagination)
 					->bind('posts',      $posts);
 
