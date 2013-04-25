@@ -25,9 +25,9 @@ class Controller_Admin_Comment extends Controller_Admin {
 	public function after()
 	{
 		$this->_tabs =  array(
-      array('link' => Route::get('admin/comment')->uri(array('action' =>'list')), 'text' => __('Approved')),
-      array('link' => Route::get('admin/comment')->uri(array('action' =>'pending')), 'text' => __('Pending')),
-      array('link' => Route::get('admin/comment')->uri(array('action' =>'spam')), 'text' => __('Spam')),
+			array('link' => Route::get('admin/comment')->uri(array('action' =>'list')), 'text' => __('Approved')),
+			array('link' => Route::get('admin/comment')->uri(array('action' =>'pending')), 'text' => __('Pending')),
+			array('link' => Route::get('admin/comment')->uri(array('action' =>'spam')), 'text' => __('Spam')),
 		);
 
 		parent::after();
@@ -38,45 +38,52 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		$is_datatables = Request::is_datatables();
 		$posts = ORM::factory('comment')->where('status', '=', 'publish');
-		$total = $posts->reset(FALSE)->count_all();
+		$redirect    = Route::get('admin/comment')->uri(array('action' => 'list'));
+		$destination = '?destination='.$redirect;
+		
+		if ($is_datatables)
+		{
+			$this->_datatables = $posts->dataTables(array('id', 'title', 'author', 'guest_name', 'created'));
+
+			foreach ($this->_datatables->result() as $post)
+			{
+				if ($post->author == 1 AND ! is_null($post->guest_name))
+				{
+					$author = HTML::anchor($post->guest_url, $post->guest_name, array()) . __(' (not verified)');
+				}
+				else
+				{
+					$author = HTML::anchor(Route::get('user')->uri(array('action' => 'profile', 'id' => $post->author)), $post->user->nick, array());
+				}
+				
+				$this->_datatables->add_row(
+					array(
+						Form::checkbox('comments['.$post->id.']', $post->id, isset($_POST['comments'][$post->id]) ),
+						HTML::anchor($post->url, $post->title, array('class'=>'action-view','title' => Text::limit_words( $post->rawbody, 128, ' ...'))),
+						$author,
+						HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')),
+						date('M d, Y', $post->created),
+						HTML::icon($post->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
+						HTML::icon($post->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete')))
+					)
+				);
+			}
+		}
 
 		$this->title = __('Comments');
-
-		if ($total == 0)
-		{
-			Kohana::$log->add(Log::INFO, 'No comments found');
-			$this->response->body(View::factory('comment/none'));
-			return;
-		}
-
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items'    => $total,
-			'items_per_page' => 30,
-		));
-
-		$posts->limit($pagination->items_per_page)->offset($pagination->offset);
-
-		// And apply sorting
-		if (Arr::get($_GET, 'sort') AND array_key_exists($_GET['sort'], $posts->list_columns()))
-		{
-			$order = (Arr::get($_GET, 'order', 'asc') == 'asc') ? 'asc' : 'desc';
-			$posts->order_by(Arr::get($_GET, 'sort'), $order);
-		}
-		else
-		{
-			$posts->order_by('created', 'DESC');
-		}
+		$url         = Route::url('admin/comment', array('action' => 'list'), TRUE);
 
 		$bulk_actions = Comment::bulk_actions(TRUE);
 		if(isset($bulk_actions['publish'])) unset($bulk_actions['publish']);
-
+		
 		$view = View::factory('admin/comment/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
 				->set('bulk_actions', $bulk_actions)
-				->set('destination',  $this->_desti)
-				->bind('pagination',  $pagination)
-				->set('posts',        $posts->find_all());
+				->set('destination',  $destination)
+				->set('url',           $url);
 
 		$this->response->body($view);
 	}
