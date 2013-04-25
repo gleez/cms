@@ -98,11 +98,7 @@ class Gleez_Feed {
 		$encoding = is_null($encoding) ? Kohana::$charset : $encoding;
 
 		$info = Arr::merge($generator, $info);
-		$feed = '
-			<?xml version="1.0" encoding="'.$encoding.'"?>
-				<rss version="2.0">
-					<channel></channel>
-				</rss>';
+		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
 		$feed = simplexml_load_string($feed);
 
 		foreach ($info as $name => $value)
