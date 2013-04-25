@@ -20,7 +20,6 @@ class Model_Module extends ORM {
 		'weight'  => array( 'type'=>'int' ),
 		'version' => array( 'type'=>'float' ),
 		'path'    => array( 'type'=>'string' ),
-		'setting' => array( 'type'=>'string' ),
 	);
 
 }
