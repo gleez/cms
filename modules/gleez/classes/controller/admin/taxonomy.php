@@ -17,26 +17,36 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 
 	public function action_list()
 	{
-		$view = View::factory('admin/taxonomy/list')->bind('pagination', $pagination)->bind('terms', $terms);
-		$this->title = __('Vocabulary');
-
+		$is_datatables = Request::is_datatables();
 		$terms  = ORM::factory('term')->where('lft', '=', 1);
-		$total  = $terms->reset(FALSE)->count_all();
 
-		if ($total == 0)
+		if ($is_datatables)
 		{
-			Kohana::$log->add(Log::INFO, 'No terms found');
-			$this->response->body( View::factory('admin/taxonomy/none') );
-			return;
+			$this->_datatables = $terms->dataTables(array('name', 'description'));
+
+			foreach ($this->_datatables->result() as $term)
+			{
+				$this->_datatables->add_row(
+					array(
+						Text::plain($term->name).'<div class="description">'.Text::plain($term->description).'</div>',
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Terms'))),
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Term'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Vocab'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Vocab')))
+					)
+				);
+			}
 		}
 
-		$pagination = Pagination::factory(array(
-				'current_page'   => array('source'=>'route', 'key'=>'page'),
-				'total_items' => $total,
-				'items_per_page' => 25,
-				));
+		$this->title = __('Vocabulary');
+		$add_url     = Route::get('admin/taxonomy')->uri(array('action' =>'add'));
+		$url         = Route::url('admin/taxonomy', array('action' => 'list'), TRUE);
 
-		$terms  = $terms->limit($pagination->items_per_page)->offset($pagination->offset)->find_all();
+		$view = View::factory('admin/taxonomy/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('add_url',       $add_url)
+				->set('url',           $url);
 
 		$this->response->body($view);
 	}
