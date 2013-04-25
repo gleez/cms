@@ -76,11 +76,14 @@ class Controller_Feeds_Base extends Controller {
 	protected $_info;
 
 	/**
+	 * Preparing feed
+	 *
 	 * @uses  Arr::get
 	 * @uses  Config::load
 	 * @uses  Config_Group::get
 	 * @uses  URL::site
 	 * @uses  Cache:get
+	 * @uses  Feed::generator
 	 */
 	public function before()
 	{
@@ -114,7 +117,7 @@ class Controller_Feeds_Base extends Controller {
 			'title'       => $this->_config->get('site_name', 'Gleez CMS'),
 			'description' => $this->_config->get('site_mission', __('Recently added posts')),
 			'pubDate'     => time(),
-			'generator'   => 'Gleez CMS (http://gleezcms.org)',
+			'generator'   => Feed::generator(),
 			'link'        => $this->_site_url,
 			'copyright'   => '2011-'.date('Y') . ' ' . $this->_config->get('site_name', 'Gleez Technologies'),
 			'language'    => i18n::$lang,
