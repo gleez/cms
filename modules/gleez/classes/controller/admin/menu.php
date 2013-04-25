@@ -25,35 +25,41 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 * List menus
 	 *
 	 * @uses  ORM::reset
-	 * @uses  ORM::count_all
-	 * @uses  ORM::limit
-	 * @uses  Log::add
+	 * @uses  ORM::dataTables
+	 * @uses  Route::get
 	 */
 	public function action_list()
 	{
-		$view = View::factory('admin/menu/list')
-			->bind('pagination', $pagination)
-			->bind('menus', $menus);
+		$is_datatables = Request::is_datatables();
+		$menus         = ORM::factory('menu')->where('lft', '=', 1);
 
-		$this->title = __('Menus');
-
-		$menus  = ORM::factory('menu')->where('lft', '=', 1);
-		$total  = $menus->reset(FALSE)->count_all();
-
-		if ($total == 0)
+		if ($is_datatables)
 		{
-			Kohana::$log->add(Log::INFO, 'No menus found');
-			$this->response->body(View::factory('admin/menu/none'));
-			return;
+			$this->_datatables = $menus->dataTables(array('title', 'descp'));
+
+			foreach ($this->_datatables->result() as $menu)
+			{
+				$this->_datatables->add_row(
+					array(
+						Text::plain($menu->title).'<div class="description">'.Text::plain($menu->descp).'</div>',
+						HTML::icon(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
+						HTML::icon(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
+						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
+						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu')))
+					)
+				);
+			}
 		}
 
-		$pagination = Pagination::factory(array(
-			'current_page'   => array('source'=>'route', 'key'=>'page'),
-			'total_items'    => $total,
-			'items_per_page' => 15,
-		));
+		$this->title = __('Menus');
+		$add_url     = Route::get('admin/menu')->uri(array('action' =>'add'));
+		$url         = Route::url('admin/menu', array('action' => 'list'), TRUE);
 
-		$menus  = $menus->limit($pagination->items_per_page)->offset($pagination->offset)->find_all();
+		$view = View::factory('admin/menu/list')
+				->bind('datatables',   $this->_datatables)
+				->set('is_datatables', $is_datatables)
+				->set('add_url',       $add_url)
+				->set('url',           $url);
 
 		$this->response->body($view);
 	}
