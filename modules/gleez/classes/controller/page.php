@@ -88,9 +88,12 @@ class Controller_Page extends Template {
 		$config = Kohana::$config->load('page');
 
 		$this->title = __('Pages');
+		$feed = Route::get('rss')->uri(array('controller' => 'page'));
+
 		$view = View::factory('page/list')
 					->set('teaser',      TRUE)
 					->set('config',      $config)
+					->set('feed',        $feed)
 					->bind('pagination', $pagination)
 					->bind('posts',      $posts);
 
@@ -115,6 +118,11 @@ class Controller_Page extends Template {
 		{
 			Meta::links(URL::canonical($url, $pagination), array('rel' => 'canonical'));
 			Meta::links(Route::url('page', array(), TRUE), array('rel' => 'shortlink'));
+			Meta::links(URL::site('rss/page', TRUE), array(
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
+				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . __('Pages'),
+			));
 		}
 	}
 
