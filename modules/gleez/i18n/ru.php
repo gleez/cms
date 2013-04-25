@@ -13,6 +13,8 @@ return array
 	':field must not be empty' => ':field не может быть пустым',
 	':pcre has not been compiled with Unicode property support.' => ':pcre собран без поддержки Unicode.',
 	':pcre has not been compiled with UTF-8 support.' => ':pcre собран без поддержки UTF-8.',
+	':tag - Recent updates' => ':tag - Последние обновления',
+	':term - Recent updates' => ':term - Последние обновления',
 	// (
 	'(No subject)' => '(Нет темы)',
 	// A
@@ -284,6 +286,7 @@ return array
 	'Page specific settings, default status, tags, comments etc.' => 'Специфичные настройки для страниц, статус по умолчанию, теги, комментарии и т.д.',
 	'Page Statistics' => 'Статистика страниц',
 	'Pages' => 'Страницы',
+	'Pages - Recent updates' => 'Страницы - Последние обновления',
 	'Parent' => 'Родитель',
 	'Pass' => 'OK',
 	'Password' => 'Пароль',
