@@ -129,6 +129,8 @@ class Controller_Feeds_Base extends Controller {
 		);
 
 		parent::before();
+
+		$this->response->headers('Content-Type', 'text/xml');
 	}
 
 	/**
