@@ -226,9 +226,10 @@ if ( ! Route::cache())
 		'page'       => '\d+',
 		'limit'      => '\d+'
 	))
-	->defaults( array(
+	->defaults(array(
 		'directory'  => 'feeds',
 		'controller' => 'base',
+		'action'     => 'list',
 	));
 
 	Route::set('welcome', 'welcome(/<action>)(/<id>)')

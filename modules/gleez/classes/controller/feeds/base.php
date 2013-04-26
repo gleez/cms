@@ -149,49 +149,50 @@ class Controller_Feeds_Base extends Controller {
 	}
 
 	/**
+	 * Get list of items
+	 *
 	 * @uses  DB::select
 	 * @uses  Text::markup
 	 * @uses  URL::site
 	 * @uses  Cache::set
 	 */
-	public function action_index()
+	public function action_list()
 	{
 		if ($this->_items === NULL OR empty($this->_items))
 		{
+			$config = Kohana::$config->load('page');
+
 			// Cache is Empty so Re-Cache
-			$posts = DB::select(
-					array('p.id', 'id'), 'p.title', 'p.format', 'p.type',
-					array('p.teaser', 'description'),
-					array('p.pubdate', 'pubDate'),
-					array('a.alias', 'link')
-				)
-				->from(array('posts', 'p'))
-				->join(array('paths', 'a'), 'LEFT')
-				->on('a.route_controller', '=', 'p.type')
-				->on('a.route_id', '=', 'p.id')
-				->join_and('a.route_action', '=', "index")
-				->where('p.type', '!=', 'post')
-				->where('p.status', '=', 'publish')
-				->where('p.promote', '=', 1)
+			$posts = ORM::factory('post')
+				->where('status', '=', 'publish')
+				->where('promote', '=', 1)
 				->order_by('pubdate', 'DESC')
 				->limit($this->_limit)
 				->offset($this->_offset)
-				->execute()
-				->as_array();
+				->find_all();
 
-			// Encode HTML special characters in the description. and make link absolute
-			for ($i = 0, $n = count($posts); $i < $n; $i++)
+			$items = array();
+
+			foreach($posts as $post)
 			{
-				$link = is_null($posts[$i]['link']) ? $posts[$i]['type'].'/'.$posts[$i]['id'] : $posts[$i]['link'];
-				$posts[$i]['description'] = Text::markup( $posts[$i]['description'], $posts[$i]['format'] );
-				$posts[$i]['link']        = URL::site($link, TRUE);
+				$item = array();
+				$item['id']          = $post->id;
+				$item['title']       = $post->title;
+				$item['link']        = URL::site($post->url, TRUE);
+				if ($config->get('use_submitted', FALSE))
+				{
+					$item['author']  = $post->user->nick;
+				}
+				$item['description'] = $post->teaser;
+				$item['pubDate']     = $post->pubdate;
 
-				unset($posts[$i]['format'], $link );
+				$items[] = $item;
 			}
 
 			$this->_cache->set($this->_cache_key, $posts, DATE::HOUR); // 1 Hour
-			$this->_items = $posts;
+			$this->_items = $items;
 		}
+
 		if (isset($this->_items[0]))
 		{
 			$this->_info['pubDate'] = $this->_items[0]['pubDate'];
