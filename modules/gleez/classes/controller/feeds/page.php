@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Page Feed Controller
  *
@@ -10,9 +10,14 @@
 class Controller_Feeds_Page extends Controller_Feeds_Base {
 
 	/**
-	 * Get a list of pages
+	 * Get list of pages
+	 *
+	 * @uses  Config::load
+	 * @uses  Config_Group::get
+	 * @uses  URL::site
+	 * @uses  Cache::set
 	 */
-	public function action_index()
+	public function action_list()
 	{
 		if ($this->_items === NULL OR empty($this->_items))
 		{
@@ -29,15 +34,15 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			foreach($pages as $page)
 			{
 				$item = array();
-				$item['id'] = $page->id;
-				$item['title'] = $page->title;
-				$item['link'] = URL::site($page->url, TRUE);
+				$item['id']          = $page->id;
+				$item['title']       = $page->title;
+				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
 				{
-					$item['author'] = $page->user->nick;
+					$item['author']  = $page->user->nick;
 				}
 				$item['description'] = $page->teaser;
-				$item['pubDate'] = $page->pubdate;
+				$item['pubDate']     = $page->pubdate;
 
 				$items[] = $item;
 			}
@@ -51,16 +56,21 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			$this->_info['title']   = __('Pages - Recent updates');
 			$this->_info['pubDate'] = $this->_items[0]['pubDate'];
 		}
-
 	}
 
 	/**
 	 * Get a list of pages with a specific term
-	 * @throws HTTP_Exception_404
+	 *
+	 * @throws  HTTP_Exception_404
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
+	 * @uses    Cache::set
+	 * @uses    Log::add
+	 * @uses    URL::site
 	 */
 	public function action_term()
 	{
-		if ($this->_items === NULL OR empty($this->_items) )
+		if ($this->_items === NULL OR empty($this->_items))
 		{
 			$config = Kohana::$config->load('page');
 			// Cache is Empty so Re-Cache
@@ -74,7 +84,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			if ( ! $term->loaded())
 			{
 				Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page term feed');
-				throw new HTTP_Exception_404( __('Term ":term" Not Found'), array(':term' => $id));
+				throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term' => $id));
 			}
 
 			$posts = $term->posts
@@ -88,15 +98,15 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			foreach($posts as $page)
 			{
 				$item = array();
-				$item['id'] = $page->id;
-				$item['title'] = $page->title;
-				$item['link'] = URL::site($page->url, TRUE);
+				$item['id']          = $page->id;
+				$item['title']       = $page->title;
+				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
 				{
-					$item['author'] = $page->user->nick;
+					$item['author']  = $page->user->nick;
 				}
 				$item['description'] = $page->teaser;
-				$item['pubDate'] = $page->pubdate;
+				$item['pubDate']     = $page->pubdate;
 
 				$items[] = $item;
 			}
@@ -115,7 +125,13 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 
 	/**
 	 * Get a list of pages with a specific tag
-	 * @throws HTTP_Exception_404
+	 *
+	 * @throws  HTTP_Exception_404
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
+	 * @uses    Log::add
+	 * @uses    URL::site
+	 * @uses    Cache::set
 	 */
 	public function action_tag()
 	{
@@ -129,7 +145,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			if ( ! $tag->loaded())
 			{
 				Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page tag feed');
-				throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag' => $id));
+				throw new HTTP_Exception_404(__('Tag ":tag" Not Found'), array(':tag' => $id));
 			}
 
 			$posts = $tag->posts
@@ -143,15 +159,15 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 			foreach($posts as $page)
 			{
 				$item = array();
-				$item['id'] = $page->id;
-				$item['title'] = $page->title;
-				$item['link'] = URL::site($page->url, TRUE);
+				$item['id']          = $page->id;
+				$item['title']       = $page->title;
+				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
 				{
-					$item['author'] = $page->user->nick;
+					$item['author']  = $page->user->nick;
 				}
 				$item['description'] = $page->teaser;
-				$item['pubDate'] = $page->pubdate;
+				$item['pubDate']     = $page->pubdate;
 
 				$items[] = $item;
 			}
