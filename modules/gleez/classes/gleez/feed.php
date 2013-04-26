@@ -83,8 +83,6 @@ class Gleez_Feed {
 	 *
 	 * @uses    Arr::merge
 	 * @uses    URL::is_absolute
-	 *
-	 * @link    http://php.net/manual/en/function.simplexml-load-string.php
 	 */
 	public static function create(array $info, array $items, $format = NULL, $encoding = NULL)
 	{
@@ -95,11 +93,9 @@ class Gleez_Feed {
 		);
 
 		$format   = is_null($format) ? Feed::DEFAULT_FORMAT : $format;
-		$encoding = is_null($encoding) ? Kohana::$charset : $encoding;
 
 		$info = Arr::merge($generator, $info);
-		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
-		$feed = simplexml_load_string($feed);
+		$feed = Feed::prepare_xml($encoding);
 
 		foreach ($info as $name => $value)
 		{
@@ -193,6 +189,22 @@ class Gleez_Feed {
 	public static function generator()
 	{
 		return 'Gleez CMS v'. Gleez::VERSION . ' ' . '(http://gleezcms.org)';
+	}
+
+	/**
+	 * Prepare XML skeleton
+	 *
+	 * @link    http://php.net/manual/en/function.simplexml-load-string.php
+	 *
+	 * @param   string  $encoding  Define which encoding to use [Optional]
+	 * @return  SimpleXMLElement
+	 */
+	public static function prepare_xml($encoding = NULL)
+	{
+		$encoding = is_null($encoding) ? Kohana::$charset : $encoding;
+		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
+
+		return simplexml_load_string($feed);
 	}
 
 }
