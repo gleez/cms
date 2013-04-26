@@ -207,4 +207,33 @@ class Gleez_Feed {
 		return simplexml_load_string($feed);
 	}
 
+	/**
+	 * Gets prepared header for XML document
+	 *
+	 * @param   Config  $config  Site config
+	 * @return  array
+	 *
+	 * @uses    Config_Group::get
+	 * @uses    URL::site
+	 */
+	public static function info(Config $config)
+	{
+		$info = array(
+			'title'       => $config->get('site_name', 'Gleez CMS'),
+			'description' => $config->get('site_mission', __('Recently added posts')),
+			'pubDate'     => time(),
+			'generator'   => Feed::generator(),
+			'link'        => $config->get('site_url', URL::site(NULL, TRUE)),
+			'copyright'   => '2011-'.date('Y') . ' ' . $config->get('site_name', 'Gleez Technologies'),
+			'language'    => i18n::$lang,
+			'image'	      => array(
+				'link'  => $config->get('site_url', URL::site(NULL, TRUE)),
+				'url'   => URL::site('/media/images/logo.png', TRUE),
+				'title' => $config->get('site_name', 'Gleez CMS')
+			),
+		);
+
+		return $info;
+	}
+
 }
