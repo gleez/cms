@@ -29,7 +29,7 @@ if ( ! Route::cache())
 		'controller' => 'media',
 		'action'     => 'serve',
 		'file'       => NULL,
-		));
+	));
 }
 
 /** Run Gleez Components */
@@ -232,6 +232,12 @@ if ( ! Route::cache())
 		'action'     => 'list',
 	));
 
+	Route::set('contact', 'contact(/<action>)')
+	->defaults(array(
+		'controller' => 'contact',
+		'action'     => 'mail',
+	));
+
 	Route::set('welcome', 'welcome(/<action>)(/<id>)')
 	->defaults(array(
 		'controller' => 'welcome'
@@ -357,6 +363,12 @@ if ( ! ACL::cache())
 			'restrict access' => TRUE,
 			'description' => __('Managing the text formats of editor'),
 		),
+	));
+
+	ACL::set('contact', array(
+		'sending mail' => __('Sending Mails'),
+		'restrict access' => FALSE,
+		'description' => __('Ability to send messages from the site for administrators'),
 	));
 
 	/** Cache the module specific permissions in production */

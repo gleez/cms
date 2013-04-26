@@ -211,6 +211,17 @@ class Controller_Page extends Template {
 
 	/**
 	 * Page creating
+	 *
+	 * @uses  ACL::required
+	 * @uses  Config::load
+	 * @uses  Config_Group::get
+	 * @uses  Request::query
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  URL::query
+	 * @uses  ORM::select_list
+	 * @uses  Log::add
+	 * @uses  Message::success
 	 */
 	public function action_add()
 	{
@@ -251,7 +262,7 @@ class Controller_Page extends Template {
 			$view->set('captcha', $captcha);
 		}
 
-		if($this->valid_post('page'))
+		if ($this->valid_post('page'))
 		{
 			try
 			{
