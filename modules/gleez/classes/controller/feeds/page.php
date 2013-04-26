@@ -7,7 +7,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Controller_Feeds_Page extends Controller_Feeds_Base {
+class Controller_Feeds_Page extends Controller_Feeds_Template {
 
 	/**
 	 * Get list of pages
