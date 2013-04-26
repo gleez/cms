@@ -260,8 +260,8 @@ abstract class Gleez_Template extends Controller {
 			// Bind the generic page variables
 			$this->template->set('site_name',      $this->_config->get('site_name', __('Gleez CMS')))
 					->set('site_slogan',   $this->_config->get('site_slogan', __('Innovate IT')))
-					->set('site_url',      URL::site(null, TRUE))
-					->set('site_logo',     $this->_config->get('site_logo', false))
+					->set('site_url',      URL::site(NULL, TRUE))
+					->set('site_logo',     $this->_config->get('site_logo', FALSE))
 					->set('sidebar_left',  array())
 					->set('sidebar_right', array())
 					->set('column_class',  '')
