@@ -114,20 +114,8 @@ class Controller_Feeds_Template extends Controller {
 		// Fills the array elements
 		$this->_items = $this->_cache->get($this->_cache_key, array());
 
-		$this->_info = array(
-			'title'       => $this->_config->get('site_name', 'Gleez CMS'),
-			'description' => $this->_config->get('site_mission', __('Recently added posts')),
-			'pubDate'     => time(),
-			'generator'   => Feed::generator(),
-			'link'        => $this->_site_url,
-			'copyright'   => '2011-'.date('Y') . ' ' . $this->_config->get('site_name', 'Gleez Technologies'),
-			'language'    => i18n::$lang,
-			'image'	      => array(
-				'link'  => $this->_site_url,
-				'url'   => URL::site('/media/images/logo.png', TRUE),
-				'title' => $this->_config->get('site_name', 'Gleez CMS')
-			),
-		);
+		// Preparing header for XML document
+		$this->_info = Feed::info($this->_config);
 
 		parent::before();
 
