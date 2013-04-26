@@ -216,7 +216,7 @@ class Gleez_Feed {
 	 * @uses    Config_Group::get
 	 * @uses    URL::site
 	 */
-	public static function info(Config $config)
+	public static function info($config)
 	{
 		$info = array(
 			'title'       => $config->get('site_name', 'Gleez CMS'),
