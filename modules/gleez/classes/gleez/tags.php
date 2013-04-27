@@ -1,12 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- *  An adaptation of Freetag
+ * An adaptation of Freetag
  *
- * @package	Gleez
- * @category	Tags
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Tags
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Tags {
 

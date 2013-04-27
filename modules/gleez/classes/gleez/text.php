@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
+ * Text Class Helper
+ *
  * Text helper for formatting text for output for security
+ * Code taken from drupal filter module and and text class
  *
- * Code taken from drupal filter module and anqh text class
- *
- * @package	Gleez
- * @category	Text
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Helpers
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Text extends Kohana_Text {
 
@@ -22,12 +22,9 @@ abstract class Gleez_Text extends Kohana_Text {
 	 * Also validates strings as UTF-8 to prevent cross site scripting attacks
 	 * on Internet Explorer 6.
 	 *
-	 * @param $text
-	 *   The text to be checked or processed.
+	 * @param  string  $text  The text to be checked or processed.
 	 *
-	 * @return
-	 *   An HTML safe version of $text, or an empty string if $text is not
-	 *   valid UTF-8.
+	 * @return  string An HTML safe version of `$text`, or an empty string if $text is not valid UTF-8.
 	 */
 	public static function plain($text)
 	{
