@@ -17,7 +17,16 @@ class Gleez_Module {
 	 */
 	public static $modules = array();
 
+	/**
+	 * List of active modules
+	 * @var array
+	 */
 	public static $active = array();
+
+	/**
+	 * List of available modules, including uninstalled modules
+	 * @var array
+	 */
 	public static $available = array();
 
 	/**
@@ -41,7 +50,7 @@ class Gleez_Module {
 		$module->save();
 
 		Kohana::$log->add(LOG::DEBUG, ':name : version is now :version', array(
-			':name' => $name, ':version' => $version)
+				':name' => $name, ':version' => $version)
 		);
 	}
 
@@ -62,58 +71,65 @@ class Gleez_Module {
 
 	/**
 	 * Get the information about a module
-	 * @returns ArrayObject containing the module information from the module.
-	 * info file or false if not found
+	 *
+	 * @param   string  $name  Module name
+	 * @return  ArrayObject  An ArrayObject containing the module information from the module.info file
+	 * @return  boolean      FALSE if not found
 	 */
-	static function info($module_name)
+	public static function info($name)
 	{
-		$module_list = self::available();
-		return isset($module_list->$module_name) ? $module_list->$module_name : false;
+		$module_list = Module::available();
+
+		return isset($module_list->$name) ? $module_list->$name : FALSE;
 	}
 
 	/**
 	 * Check to see if a module is installed
-	 * @param string $module_name
+	 *
+	 * @param   string  $name  Module name
+	 * @return  boolean
 	 */
-	static function is_installed($module_name)
+	public static function is_installed($name)
 	{
-		return array_key_exists($module_name, self::$modules);
+		return array_key_exists($name, Module::$modules);
 	}
 
 	/**
 	 * Check to see if a module is active
 	 *
-	 * @param string $module_name
-	 *
-	 * @return boolean
+	 * @param   string  $name  Module name
+	 * @return  boolean
 	 */
-	static function is_active($module_name)
+	public static function is_active($name)
 	{
-		return array_key_exists($module_name, self::$active);
+		return array_key_exists($name, Module::$active);
 	}
 
 	/**
-	 * Return the list of available modules, including uninstalled modules.
+	 * Return the list of available modules, including uninstalled modules
+	 *
+	 * @uses  Message::warn
+	 * @uses  HTML::anchor
+	 * @uses  Route::get
+	 * @uses  Route::uri
 	 */
-	static function available()
+	public static function available()
 	{
-		if (empty(self::$available))
+		if (empty(Module::$available))
 		{
 			$upgrade = FALSE;
 			$modules = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 
 			foreach (glob(MODPATH . "*/module.info") as $file)
 			{
-				$module_name           = basename(dirname($file));
-				$modules->$module_name = new ArrayObject(
-					parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+				$name           = basename(dirname($file));
+				$modules->$name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
 
-				$m =& $modules->$module_name;
-				$m->installed    = self::is_installed($module_name);
-				$m->active       = self::is_active($module_name);
+				$m =& $modules->$name;
+				$m->active       = Module::is_active($name);
 				$m->code_version = $m->version;
-				$m->version      = self::get_version($module_name);
-				$m->locked       = false;
+				$m->version      = Module::get_version($name);
+				$m->locked       = FALSE;
 
 				if ($m->active AND $m->version != $m->code_version)
 				{
@@ -128,22 +144,24 @@ class Gleez_Module {
 			}
 
 			// Lock certain modules
-			$modules->user->locked  = true;
-			$modules->gleez->locked = true;
+			$modules->user->locked  = TRUE;
+			$modules->gleez->locked = TRUE;
 
 			$modules->ksort();
-			self::$available = $modules;
+			Module::$available = $modules;
 		}
 
-		return self::$available;
+		return Module::$available;
 	}
 
 	/**
-	 * Return a list of all the active modules in no particular order.
+	 * Return a list of all the active modules in no particular order
+	 *
+	 * @return array
 	 */
-	static function active()
+	public static function active()
 	{
-		return self::$active;
+		return Module::$active;
 	}
 
 	/**
@@ -251,9 +269,12 @@ class Gleez_Module {
 	}
 
 	/**
-	 * Upgrade a module.  This will call <module>_installer::upgrade(), which is responsible for
+	 * Upgrade a module
+	 *
+	 * This will call <module>_installer::upgrade(), which is responsible for
 	 * modifying database tables, changing module variables and calling module::set_version().
 	 * Note that after upgrading, the module must be activated before it is available for use.
+	 *
 	 * @param string $module_name
 	 */
 	static function upgrade($module_name)
@@ -437,9 +458,9 @@ class Gleez_Module {
 		else
 		{
 			$modules = ORM::factory('module')
-						->order_by('weight','ASC')
-						->order_by('name','ASC')
-						->find_all();
+				->order_by('weight','ASC')
+				->order_by('name','ASC')
+				->find_all();
 
 			$_cache_modules = $_cache_active = array();
 			foreach ($modules as $module)

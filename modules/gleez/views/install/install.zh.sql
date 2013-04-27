@@ -180,17 +180,18 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (8, '首页', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
 (10, '页面', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
 (11, '添加页面', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, '管理', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(13, '菜单', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(14, '输入格式', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(15, '设置', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(16, '路径别名', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(17, '部件', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(18, '分类', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(19, '标签', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(20, '模块', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(21, '用户', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(22, '角色', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(12, '往来', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
+(13, '管理', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(14, '菜单', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(15, '输入格式', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
+(16, '设置', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
+(17, '路径别名', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
+(18, '部件', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
+(19, '分类', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
+(20, '标签', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
+(21, '模块', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(22, '用户', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
+(23, '角色', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (24, '页面', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (25, '评论', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
 (26, '登录', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
@@ -252,6 +253,7 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (3, 'edit profile', 'user'),
 (3, 'post comment', 'comment'),
 (3, 'view own unpublished content', 'content'),
+(3, 'sending mail', 'contact'),
 (4, 'access comment', 'comment'),
 (4, 'access content', 'content'),
 (4, 'access profiles', 'user'),
@@ -275,7 +277,8 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (4, 'edit profile', 'user'),
 (4, 'post comment', 'comment'),
 (4, 'skip comment approval', 'comment'),
-(4, 'view own unpublished content', 'content');
+(4, 'view own unpublished content', 'content'),
+(4, 'sending mail', 'contact');
 
 DROP TABLE IF EXISTS {posts_versions};
 CREATE TABLE {posts_versions} (
