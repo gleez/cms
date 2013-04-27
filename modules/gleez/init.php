@@ -366,9 +366,11 @@ if ( ! ACL::cache())
 	));
 
 	ACL::set('contact', array(
-		'sending mail' => __('Sending Mails'),
-		'restrict access' => FALSE,
-		'description' => __('Ability to send messages from the site for administrators'),
+		'sending mail' => array(
+			'title' => __('Sending Mails'),
+			'restrict access' => FALSE,
+			'description' => __('Ability to send messages from the site for administrators'),
+		),
 	));
 
 	/** Cache the module specific permissions in production */
