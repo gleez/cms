@@ -369,7 +369,7 @@ if ( ! ACL::cache())
 		'sending mail' => array(
 			'title' => __('Sending Mails'),
 			'restrict access' => FALSE,
-			'description' => __('Ability to send messages from the site for administrators'),
+			'description' => __('Ability to send messages for administrators from your site'),
 		),
 	));
 
