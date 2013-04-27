@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana Cache Tagging Interface
+ * Gleez Cache Tagging Interface
  *
  * @package    Kohana/Cache
  * @category   Base
