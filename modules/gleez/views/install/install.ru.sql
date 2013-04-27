@@ -180,17 +180,18 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (8, 'Главная', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
 (10, 'Страницы', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
 (11, 'Добавить страницу', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, 'Администрирование', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(13, 'Меню', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(14, 'Форматы', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(15, 'Настройки', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(16, 'Синонимы', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(17, 'Виджеты', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(18, 'Таксономия', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(19, 'Теги', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(20, 'Модули', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(21, 'Пользователи', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(22, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(12, 'Котакты', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
+(13, 'Администрирование', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(14, 'Меню', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(15, 'Форматы', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
+(16, 'Настройки', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
+(17, 'Синонимы', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
+(18, 'Виджеты', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
+(19, 'Таксономия', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
+(20, 'Теги', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
+(21, 'Модули', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(22, 'Пользователи', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
+(23, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (24, 'Страницы', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (25, 'Комментарии', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
 (26, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
@@ -252,6 +253,7 @@ INSERT INTO `permissions` (`rid`, `permission`, `module`) VALUES
 (3, 'edit profile', 'user'),
 (3, 'post comment', 'comment'),
 (3, 'view own unpublished content', 'content'),
+(3, 'sending mail', 'contact'),
 (4, 'access comment', 'comment'),
 (4, 'access content', 'content'),
 (4, 'access profiles', 'user'),
@@ -275,7 +277,8 @@ INSERT INTO `permissions` (`rid`, `permission`, `module`) VALUES
 (4, 'edit profile', 'user'),
 (4, 'post comment', 'comment'),
 (4, 'skip comment approval', 'comment'),
-(4, 'view own unpublished content', 'content');
+(4, 'view own unpublished content', 'content'),
+(4, 'sending mail', 'contact');
 
 DROP TABLE IF EXISTS {posts_versions};
 CREATE TABLE {posts_versions} (

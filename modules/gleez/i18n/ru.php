@@ -457,7 +457,7 @@ return array
 	'User' => 'Пользователь',
 	'username: :username' => 'имя пользователя: :username',
 	// V
-	'Version' => 'Версия',
+	'Version :ver | By :author' => 'Версия :ver | Автор :author',
 	'View' => 'Просмотр',
 	'View, edit, and delete your site\'s pages.' => 'Просматривайте, редактируйте и удаляйте страницы вашего сайта',
 	'View, edit, and delete your site\'s posts.' => 'Просматривайте, редактируйте и удаляйте материалы вашего сайта',
