@@ -20,6 +20,7 @@ Name           | Required | Description
 -------------- | -------- | ---------------------------------------------------------------
 driver         | __YES__  | (_string_) The driver type to use
 default_expire | __NO__   | (_string_) The driver type to use
+prefix         | __NO__   | (_string_) The site specefic prefix key
 
 
 	'file'  => array
@@ -27,6 +28,7 @@ default_expire | __NO__   | (_string_) The driver type to use
 		'driver'             => 'file',
 		'cache_dir'          => APPPATH.'cache/.gleez_cache',
 		'default_expire'     => 3600,
+                'prefix'             => '74td75j'
 	),
 
 ## Memcache & Memcached-tag settings
@@ -65,6 +67,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
+                'prefix'            => '74td75j' //site specefic prefix key
 	),
 	'memcachetag' => array
 	(
