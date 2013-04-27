@@ -180,17 +180,18 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
 (10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
 (11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(13, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(14, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(15, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(16, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(17, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(18, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(19, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(20, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(21, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(22, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
+(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
+(13, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(14, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(15, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
+(16, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
+(17, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
+(18, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
+(19, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
+(20, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
+(21, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(22, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
+(23, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (24, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (25, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
 (26, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
@@ -252,6 +253,7 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (3, 'edit profile', 'user'),
 (3, 'post comment', 'comment'),
 (3, 'view own unpublished content', 'content'),
+(3, 'sending mail', 'contact'),
 (4, 'access comment', 'comment'),
 (4, 'access content', 'content'),
 (4, 'access profiles', 'user'),
@@ -275,7 +277,8 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (4, 'edit profile', 'user'),
 (4, 'post comment', 'comment'),
 (4, 'skip comment approval', 'comment'),
-(4, 'view own unpublished content', 'content');
+(4, 'view own unpublished content', 'content'),
+(4, 'sending mail', 'contact');
 
 DROP TABLE IF EXISTS {posts_versions};
 CREATE TABLE {posts_versions} (
