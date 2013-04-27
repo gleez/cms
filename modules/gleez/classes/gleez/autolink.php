@@ -1,12 +1,13 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
+ * AutoLink Class
+ *
  * Automatically wraps unhyperlinked uri with html anchors.
  *
- * @package	Gleez
- * @category	Html
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\HTML
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_AutoLink {
 	

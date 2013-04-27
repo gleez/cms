@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Pagination links generator.
+ * Pagination links generator
  *
- * @package    Kohana/Pagination
- * @category   Base
+ * @package    Gleez\Base
  * @author     Kohana Team
+ * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2008-2009 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license.html
  */
 class Gleez_Pagination {

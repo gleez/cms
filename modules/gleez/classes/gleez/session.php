@@ -1,12 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Base session class.
+ * Base session class
  *
- * @package	Gleez
- * @category	Session
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Session
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Session extends Kohana_Session {
         

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
+ * Breadcrumb Class
+ *
  * Automatically create breadcrumb links.
  *
- * @package	Gleez
- * @category	Html
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
- * @see	  	https://github.com/xavividal/Breadcrumbs
+ * @package    Gleez\HTML
+ * @author	   Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license
+ * @see	  	   https://github.com/xavividal/Breadcrumbs
  */
 class Gleez_Breadcrumb
 {
