@@ -38,7 +38,7 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
+class Gleez_Cache_File extends Cache{
 
 	/**
 	 * Creates a hashed filename based on the string. This is used
@@ -123,7 +123,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 */
 	public function get($id, $default = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($id));
+		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// Wrap operations in try/catch to handle notices
@@ -203,7 +203,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($id));
+		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// If lifetime is NULL
@@ -264,12 +264,26 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 */
 	public function delete($id)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($id));
+		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		return $this->_delete_file(new SplFileInfo($directory.$filename), NULL, TRUE);
 	}
 
+	/**
+	 * Delete a cache entry based on regex pattern
+	 *
+	 *     // Delete 'foo' entry from the apc group
+	 *     Cache::instance('file')->delete_pattern('foo:**:bar');
+	 *
+	 * @param   string  $pattern The cache key pattern
+	 * @return  boolean
+	 */
+	public function delete_pattern($pattern)
+	{
+		throw new Cache_Exception('Not implemented yet.');
+	}
+	
 	/**
 	 * Delete all cache entries.
 	 *
@@ -282,7 +296,7 @@ class Kohana_Cache_File extends Cache implements Cache_GarbageCollect {
 	 *
 	 * @return  boolean
 	 */
-	public function delete_all()
+	public function delete_all($mode = Cache::ALL)
 	{
 		return $this->_delete_file($this->_cache_dir, TRUE);
 	}
