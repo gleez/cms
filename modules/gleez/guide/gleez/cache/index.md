@@ -28,7 +28,7 @@ memory is limited whereas disk space is plentiful. If caching large datasets, su
 
 This module provides a simple abstracted interface to a wide selection of popular PHP cache engines. The caching API provides the basic caching methods implemented across all solutions, memory, network or disk based. Basic key / value storing is supported by all drivers, with additional tagging and garbage collection support where implemented or required.
 
-_Gleez Cache_ does not provide HTTP style caching for clients (web browsers) and/or proxies (_Varnish_, _Squid_). There are other Kohana modules that provide this functionality.
+_Gleez Cache_ does not provide HTTP style caching for clients (web browsers) and/or proxies (_Varnish_, _Squid_). There are other modules that provide this functionality.
 
 ## Choosing a cache provider
 
