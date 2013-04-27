@@ -252,6 +252,7 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (3, 'edit profile', 'user'),
 (3, 'post comment', 'comment'),
 (3, 'view own unpublished content', 'content'),
+(3, 'sending mail', 'contact'),
 (4, 'access comment', 'comment'),
 (4, 'access content', 'content'),
 (4, 'access profiles', 'user'),
@@ -275,7 +276,8 @@ INSERT INTO {permissions} (`rid`, `permission`, `module`) VALUES
 (4, 'edit profile', 'user'),
 (4, 'post comment', 'comment'),
 (4, 'skip comment approval', 'comment'),
-(4, 'view own unpublished content', 'content');
+(4, 'view own unpublished content', 'content'),
+(4, 'sending mail', 'contact');
 
 DROP TABLE IF EXISTS {posts_versions};
 CREATE TABLE {posts_versions} (
