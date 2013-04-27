@@ -141,6 +141,13 @@ To delete a specific value by its associated key:
 
 By default a `TRUE` value will be returned. However a `FALSE` value will be returned in instances where the key did not exist in the cache.
 
+#### Delete all values matching the pattern
+
+To delete all values in a specific instance:
+
+     // Delete 'foo:**' entries from the apc cache
+     Cache::instance('apc')->delete_pattern('foo:**:bar');
+     
 #### Delete all values
 
 To delete all values in a specific instance:
