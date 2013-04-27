@@ -3,15 +3,14 @@
  * Message is a class that lets you easily send messages
  * in your application (aka Flash Messages)
  *
- * @package	Gleez
- * @category	Message
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Message
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license	   http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Message {
         
-        /**
+	/**
 	 * Constants to use for the types of messages that can be set.
 	 */
 	const ERROR   	= 'error';
@@ -20,17 +19,19 @@ class Gleez_Message {
 	const NOTICE  	= 'notice';
 	const SUCCESS 	= 'success';
 	const WARN    	= 'warning';
-        const INFO    	= 'info';
+	const INFO    	= 'info';
 	const ACCESS 	= 'access';
-        const DEBUG   	= 'debug';
+	const DEBUG   	= 'debug';
 
 	/**
-	 * @var  string  default session key used for storing messages
+	 * Default session key used for storing messages
+	 * @var string
 	 */
 	public static $session_key = 'messages';
         
 	/**
-	 * @var string default view
+	 * Default view
+	 * @var string
 	 */
 	public static $default_view = 'message/basic';
 

@@ -2,10 +2,10 @@
 /**
  * Form helper class
  *
- * @package		Gleez\Helper\Form
- * @author		Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2011-2013 Gleez Technologies
- * @license		http://gleezcms.org/license
+ * @package    Gleez\Helpers
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Form extends Kohana_Form {
 

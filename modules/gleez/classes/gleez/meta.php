@@ -2,7 +2,7 @@
 /**
  * Manager for rendering meta tags (<link> and <meta>)
  *
- * @package    Gleez\Assets\Meta
+ * @package    Gleez\Meta
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
