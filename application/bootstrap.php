@@ -105,7 +105,6 @@ Kohana::$config->attach(new Config_File);
 Kohana::modules(array(
 	 'gleez'       => MODPATH.'gleez',      // Gleez Core Module
 	 'user'        => MODPATH.'user',       // User and group Administration
-	 'cache'       => MODPATH.'cache',      // Caching with multiple backends
 	 'database'    => MODPATH.'database',   // Database access
 	 'image'       => MODPATH.'image',      // Image manipulation
 	 'captcha'     => MODPATH.'captcha',    // Captcha implementation
