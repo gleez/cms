@@ -6,3 +6,6 @@
    - [HMVC](about.hmvc)
 - [Assets Manager](assets)
 - [Breadcrumb](breadcrumb)
+- [Cache](cache.index)
+  - [Configuration](cache.config)
+  - [Usage](cache.usage)

@@ -1,7 +1,7 @@
-# About Kohana Cache
+# About Gleez Cache
 
-[Kohana_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is
-supported where available natively to the cache system. Kohana Cache supports multiple 
+[Gleez_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is
+supported where available natively to the cache system. Gleez Cache supports multiple 
 instances of cache engines through a grouped singleton pattern.
 
 ## Supported cache engines
@@ -24,15 +24,15 @@ memory is limited whereas disk space is plentiful. If caching large datasets, su
 
  [!!] Cache drivers require the relevant PHP extensions to be installed. APC, eAccelerator, Memecached and Xcache all require non-standard PHP extensions.
 
-## What the Kohana Cache module does (and does not do)
+## What the Gleez Cache module does (and does not do)
 
 This module provides a simple abstracted interface to a wide selection of popular PHP cache engines. The caching API provides the basic caching methods implemented across all solutions, memory, network or disk based. Basic key / value storing is supported by all drivers, with additional tagging and garbage collection support where implemented or required.
 
-_Kohana Cache_ does not provide HTTP style caching for clients (web browsers) and/or proxies (_Varnish_, _Squid_). There are other Kohana modules that provide this functionality.
+_Gleez Cache_ does not provide HTTP style caching for clients (web browsers) and/or proxies (_Varnish_, _Squid_). There are other Kohana modules that provide this functionality.
 
 ## Choosing a cache provider
 
-Getting and setting values to cache is very simple when using the _Kohana Cache_ interface. The hardest choice is choosing which cache engine to use. When choosing a caching engine, the following criteria must be considered:
+Getting and setting values to cache is very simple when using the _Gleez Cache_ interface. The hardest choice is choosing which cache engine to use. When choosing a caching engine, the following criteria must be considered:
 
  1. __Does the cache need to be distributed?__
     This is an important consideration as it will severely limit the options available to solutions such as Memcache when a distributed solution is required.
@@ -49,9 +49,4 @@ File             | __Disk__     | Poor      | No       | No          | No  | Mar
 Memcache (tag)   | __Memory__   | Good      | No (yes) | Yes         | Yes | Generally fast distributed solution, but has a speed hit due to variable network latency and serialization
 Sqlite           | __Disk__     | Poor      | Yes      | No          | No  | Marginally faster than execution
 
-It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Kohana Cache_ as well
-
-## Minimum requirements
-
- *  Kohana 3.0.4
- *  PHP 5.2.4 or greater
+It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Gleez Cache_ as well
