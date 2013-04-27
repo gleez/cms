@@ -1,10 +1,10 @@
-# Kohana Cache usage
+# Gleez_Cache usage
 
-[Kohana_Cache] provides a simple interface allowing getting, setting and deleting of cached values. Two interfaces included in _Kohana Cache_ additionally provide _tagging_ and _garbage collection_ where they are supported by the respective drivers.
+[Gleez_Cache] provides a simple interface allowing getting, setting and deleting of cached values. Two interfaces included in _Gleez_Cache_ additionally provide _tagging_ and _garbage collection_ where they are supported by the respective drivers.
 
 ## Getting a new cache instance
 
-Creating a new _Kohana Cache_ instance is simple, however it must be done using the [Cache::instance] method, rather than the traditional `new` constructor.
+Creating a new _Gleez_Cache_ instance is simple, however it must be done using the [Cache::instance] method, rather than the traditional `new` constructor.
 
      // Create a new instance of cache using the default group
      $cache = Cache::instance();
@@ -79,7 +79,7 @@ Certain cache drivers support setting values with tags. To set a value to cache 
           $memcache->set('foo', $object, 30);
      }
 
-It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the [Cache_Tagging] interface. Kohana_Cache only applies the interface to drivers that support tagging natively as standard.
+It is possible to implement custom tagging solutions onto existing or new cache drivers by implementing the [Cache_Tagging] interface. Gleez_Cache only applies the interface to drivers that support tagging natively as standard.
 
 ### Getting a value from cache
 
@@ -197,7 +197,7 @@ When not automated, garbage collection is the responsibility of the developer. I
 
 # Interfaces
 
-Kohana Cache comes with two interfaces that are implemented where the drivers support them:
+Gleez_Cache comes with two interfaces that are implemented where the drivers support them:
 
  - __[Cache_Tagging] for tagging support on cache entries__
     - [Cache_MemcacheTag]

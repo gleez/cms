@@ -1,6 +1,6 @@
-# Kohana Cache configuration
+# Gleez Cache configuration
 
-Kohana Cache uses configuration groups to create cache instances. A configuration group can
+Gleez Cache uses configuration groups to create cache instances. A configuration group can
 use any supported driver, with successive groups using multiple instances of the same driver type.
 
 The default cache group is loaded based on the `Cache::$default` setting. It is set to the `file` driver as standard, however this can be changed within the `/application/boostrap.php` file.
@@ -25,7 +25,7 @@ default_expire | __NO__   | (_string_) The driver type to use
 	'file'  => array
 	(
 		'driver'             => 'file',
-		'cache_dir'          => APPPATH.'cache/.kohana_cache',
+		'cache_dir'          => APPPATH.'cache/.gleez_cache',
 		'default_expire'     => 3600,
 	),
 
@@ -156,7 +156,7 @@ The following example demonstrates how to add a new configuration setting, using
 		// Override the default configuration
 		'fastkv'   => array
 		(
-			'driver'         => 'apc',  // Use Memcached as the default driver
+			'driver'         => 'apc',  // Use apc as the default driver
 			'default_expire' => 1000,   // Overide default expiry
 		)
 	);
