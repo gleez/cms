@@ -1,16 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Core comment class.
+ * Comment Core Class
  *
- * @package	Gleez
- * @category	Comment
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package	   Gleez\Comment
+ * @author	   Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Comment {
         
-        // @todo our definitions for comment types and statuses
+	// @todo our definitions for comment types and statuses
 	const STATUS_UNAPPROVED = 0;
 	const STATUS_APPROVED = 1;
 	const STATUS_SPAM = 2;

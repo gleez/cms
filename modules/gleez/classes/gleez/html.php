@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * HTML helper class
+ * HTML Class Helper
  *
  * Provides generic methods for generating various HTML
  * tags and making output HTML safe.
  *
- * @package    Gleez\Helpers\HTML
+ * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_HTML extends Kohana_HTML {
 

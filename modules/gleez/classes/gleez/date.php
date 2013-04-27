@@ -2,21 +2,19 @@
 /**
  * Extend the Kohana Date helper
  *
- * @package   Gleez
- * @category  Helper
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
- * @link      http://php.net/manual/en/function.date.php
+ * @package    Gleez\Helpers
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Date extends Kohana_Date {
 
 	/**
 	 * Return month start timestamp
 	 *
-	 * @param integer Month
-	 * @param integer Year
-	 * @return integer Unix timestamp
+	 * @param   integer $month  Month
+	 * @param   integer $year   Year
+	 * @return  integer Unix timestamp
 	 */
 	public static function firstOfMonth($month, $year)
 	{
@@ -26,9 +24,9 @@ class Gleez_Date extends Kohana_Date {
 	/**
 	 * Return month end timestamp
 	 *
-	 * @param integer Month
-	 * @param integer Year
-	 * @return integer Unix timestamp
+	 * @param   integer $month  Month
+	 * @param   integer $year   Year
+	 * @return  integer Unix timestamp
 	 */
 	public static function lastOfMonth($month, $year)
 	{

@@ -1,12 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Datatables
+ * Gleez jQuery DataTables support
  * 
- * @package    Gleez/Datatables
+ * @package    Gleez\Datatables
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Datatables {
 	

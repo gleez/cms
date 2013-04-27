@@ -2,12 +2,11 @@
 /**
  * Gleez Core Utils class
  *
- * @package    Gleez
- * @category   Core/Utils
+ * @package    Gleez\Core
  * @author     Sergey Yakovlev - Gleez
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_System {
 	
