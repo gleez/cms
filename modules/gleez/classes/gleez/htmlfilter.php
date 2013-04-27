@@ -1,15 +1,16 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
+ * Input HTML Filter
+ *
  * Creates and returns an XSS safe version of string, or an empty string
  * if $string is not valid UTF-8.
  *
  * Note: by design, this class does not do any permission checking.
  *
- * @package	Gleez
- * @category	Input HTML Filter
- * @author      Sandeep Sangamreddi - Gleez
+ * @package    Gleez\HTML
+ * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_HTMLFilter {
         

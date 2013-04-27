@@ -4,8 +4,8 @@
  *
  * @package   Gleez\I18n
  * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_I18n extends Kohana_I18n{
 

@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * Filter object to clean a string.
+ * Input Filter
  *
+ * Filter object to clean a string.
  * Note: by design, this class does not do any permission checking.
  *
- * @package	Gleez
- * @category	Input Filter
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\HTML
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2012 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Filter {
 

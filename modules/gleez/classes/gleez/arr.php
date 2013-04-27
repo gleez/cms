@@ -1,5 +1,7 @@
 <?php defined("SYSPATH") OR die("No direct script access.");
 /**
+ * Array Class Helper
+ *
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
