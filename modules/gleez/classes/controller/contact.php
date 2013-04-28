@@ -59,30 +59,15 @@ class Controller_Contact extends Template {
 					->bind('errors',     $this->_errors);
 
 		// Initiate Captcha
-		if($config->get('use_captcha', FALSE))
+		if($config->get('use_captcha', FALSE) AND ! $this->_auth->logged_in())
 		{
 			$captcha = Captcha::instance();
 			$view->set('captcha', $captcha);
 		}
 
-		$form = array('name' => '', 'email' => '', 'subject' => '', 'category' => '', 'body' => '');
-		// Create validation object
-		$post = Validation::factory(empty($_POST) ? $form : $_POST)
-			->rule('name', 'not_empty')
-			->rule('name',  'min_length', array(':value', 4))
-			->rule('mail', 'not_empty')
-			->rule('mail', 'min_length', array(':value', 4))
-			->rule('mail', 'max_length', array(':value', 254))
-			->rule('mail', 'email')
-			->rule('mail', 'email_domain')
-			->rule('subject', 'not_empty')
-			->rule('subject', 'max_length', array(':value', $config->subject_length))
-			->rule('category', 'not_empty')
-			->rule('body', 'not_empty')
-			->rule('body', 'max_length', array(':value', $config->body_length));
-
 		if ($this->valid_post('contact'))
 		{
+			$post = Validation_Contact::factory($this->request->post());
 
 			if ($post->check())
 			{
@@ -101,10 +86,9 @@ class Controller_Contact extends Template {
 
 				// Create an email message
 				$email = Email::factory()
+						->to(Text::plain($post['email']), Text::plain($post['name']))
 						->subject($subject)
-						->from(Text::plain($post['mail']), Text::plain($post['name']))
-						->reply_to(Text::plain($post['mail']), Text::plain($post['name']))
-						->to($this->_config->get('site_email', 'webmaster@gleezcms.org'), __('Webmaster :site', array(':site' => $this->_config->get('site_name', 'Gleez CMS'))))
+						->from($this->_config->get('site_email', 'webmaster@gleezcms.org'), __('Webmaster :site', array(':site' => $this->_config->get('site_name', 'Gleez CMS'))))
 						->message($body);
 
 				// Send the message
