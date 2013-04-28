@@ -81,7 +81,7 @@ class Controller_Contact extends Template {
 				$body = View::factory('email/contact')
 						->set('name',   $post['name'])
 						->set('body',   $post['body'])
-						->set('config', $config)
+						->set('config', Kohana::$config->load('site'))
 						->render();
 
 				// Create an email message
