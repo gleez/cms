@@ -84,6 +84,7 @@ return array
 	'Author' => 'Автор',
 	// B
 	'Before you start using it...' => 'Перед тем, как начать использовать...',
+	'Best Regards' => 'С наилучшими пожеланиями',
 	'Blocked IP addresses' => 'Заблокированные IP адреса',
 	'Blog' => 'Блог',
 	'Body' => 'Содержимое',
@@ -363,6 +364,7 @@ return array
 	'Skip comment approval' => 'Пропуск одобрения комментария',
 	'Slug' => 'Короткая ссылка',
 	'Slug for %slug' => 'Короткое имя для %slug',
+	'Some of your modules are out of date. :upgrade_url' => 'Некоторые ваши модули устарели. :upgrade_url',
 	'Standard PHP Library (SPL)' => 'Стандартная библиотека PHP (SPL)',
 	'Start using Gleez' => 'Начать использовать Gleez',
 	'Statistics' => 'Статистика',
@@ -451,6 +453,7 @@ return array
 	'Unavailable' => 'Не доступно',
 	'Updated' => 'Обновлено',
 	'Unpublish' => 'Снять с публикации',
+	'Upgrade now!' => 'Обновить сейчас!',
 	'upgrade your browser' => 'обновите ваш браузер',
 	'URI Determination' => 'URI определения',
 	'URL Path' => 'URL путь',
