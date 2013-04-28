@@ -79,9 +79,9 @@ class Controller_Contact extends Template {
 
 				// Create the email body
 				$body = View::factory('email/contact')
-						->set('name', $post['name'])
-						->set('type', $types[$post['category']])
-						->set('body', $post['body'])
+						->set('name',   $post['name'])
+						->set('body',   $post['body'])
+						->set('config', $config)
 						->render();
 
 				// Create an email message
@@ -89,7 +89,7 @@ class Controller_Contact extends Template {
 						->to(Text::plain($post['email']), Text::plain($post['name']))
 						->subject($subject)
 						->from($this->_config->get('site_email', 'webmaster@gleezcms.org'), __('Webmaster :site', array(':site' => $this->_config->get('site_name', 'Gleez CMS'))))
-						->message($body);
+						->message($body, 'text/html'); // @todo message type should be configurable
 
 				// Send the message
 				$email->send();
