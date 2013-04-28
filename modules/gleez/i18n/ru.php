@@ -84,6 +84,7 @@ return array
 	'Author' => 'Автор',
 	// B
 	'Before you start using it...' => 'Перед тем, как начать использовать...',
+	'Best Regards' => 'С наилучшими пожеланиями',
 	'Blocked IP addresses' => 'Заблокированные IP адреса',
 	'Blog' => 'Блог',
 	'Body' => 'Содержимое',
