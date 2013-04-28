@@ -20,10 +20,10 @@
 					<?php echo Form::input('name', $user->nick, array('class' => 'input-xlarge')); ?>
 				</div>
 			</div>
-			<div class="control-group <?php echo isset($errors['mail']) ? 'error': ''; ?>">
-				<?php echo Form::label('mail', __('Email'), array('class' => 'control-label')) ?>
+			<div class="control-group <?php echo isset($errors['email']) ? 'error': ''; ?>">
+				<?php echo Form::label('email', __('E-mail'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::input('mail', $user->mail, array('class' => 'input-xlarge')); ?>
+					<?php echo Form::input('email', $user->mail, array('class' => 'input-xlarge')); ?>
 				</div>
 			</div>
 			<div class="control-group <?php echo isset($errors['subject']) ? 'error': ''; ?>">
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 			<hr>
-			<?php if ($config->use_captcha  AND ! $captcha->promoted()): ?>
+			<?php if (isset($captcha)  AND ! $captcha->promoted()): ?>
 				<div class="control-group <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
 					<?php echo Form::label('_captcha', __('Security'), array('class' => 'control-label')) ?>
 					<div class="controls">
