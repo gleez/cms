@@ -2,8 +2,6 @@
 /**
  * Array and variable validation
  *
- * Thanks biakaveron (http://brotkin.ru/?author=1)
- *
  * @package    Gleez\Security
  * @version    1.0
  * @author     Sergey Yakovlev - Gleez
@@ -11,6 +9,17 @@
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Validation extends Kohana_Validation {
+
+	/**
+	 * Creates a new Validation instance
+	 *
+	 * @param   array $array  Array to use for validation
+	 * @return  Validation|static
+	 */
+	public static function factory(array $array)
+	{
+		return new static($array);
+	}
 
 	/**
 	 * Class constructor
@@ -34,7 +43,6 @@ abstract class Gleez_Validation extends Kohana_Validation {
 		{
 			$this->rules($field, $rules);
 		}
-
 	}
 
 	/**
