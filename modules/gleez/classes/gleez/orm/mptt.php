@@ -1,12 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Modified Preorder Tree Traversal Class.
- * 
+ * Modified Preorder Tree Traversal Class
+ *
  * A port of Banks' Sprig_MPTT plus some code from BiakaVeron's ORM_MPTT module.
  * Using Transactions instead of lock.
  *
  * @package    Gleez\ORM
- * @author     Sandeep Sangamreddi
+ * @author     Sandeep Sangamreddi - Gleez
  * @author     Mathew Davies
  * @author     Kiall Mac Innes
  * @author     Paul Banks
@@ -15,43 +15,43 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-
 class Gleez_ORM_MPTT extends ORM {
 
 	/**
-	 * @access  public
-	 * @var     string  left column name
+	 * Left column name
+	 * @var string
 	 */
 	public $left_column = 'lft';
 
 	/**
-	 * @access  public
-	 * @var     string  right column name
+	 * Right column name
+	 * @var string
 	 */
 	public $right_column = 'rgt';
 
 	/**
-	 * @access  public
-	 * @var     string  level column name
+	 * Level column name
+	 * @var string
 	 */
 	public $level_column = 'lvl';
 
 	/**
-	 * @access  public
-	 * @var     string  scope column name
+	 * Scope column name
+	 * @var string
 	 */
 	public $scope_column = 'scope';
 
 	/**
-	 * @access  public
-	 * @var     string  parent column name
+	 * Parent column name
+	 * @var string
 	 */
 	public $parent_column = 'parent_id';
 
 	/**
 	 * Load the default column names
 	 *
-	 * @param   mixed  $id  Parameter for find or object to load
+	 * @param   mixed  $id  Parameter for find or object to load [Optional]
+	 * @uses    Arr::unshift
 	 */
 	public function __construct($id = NULL)
 	{
@@ -197,7 +197,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Overloaded save method.
 	 * 
-	 * @access  public
+	 * @param   Validation $validation  Validation object
 	 * @return  mixed
 	 */
 	public function save(Validation $validation = NULL)
@@ -217,9 +217,9 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Creates a new node as root, or moves a node to root
 	 *
-	 * @access  public
-	 * @param   int       the new scope
-	 * @return  ORM_MPTT
+	 * @param   Validation $validation  Validation object
+	 * @param   integer    $scope  The new scope
+	 * @return  ORM_MPTT|boolean
 	 * @throws  Validation_Exception
 	 */
 	public function make_root(Validation $validation = NULL, $scope = NULL)
