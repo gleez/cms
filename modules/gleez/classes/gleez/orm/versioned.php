@@ -1,25 +1,28 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * Object Relational Mapping (ORM) "versioned" extension. Allows ORM objects to
- * be revisioned instead of updated.
+ * Object Relational Mapping (ORM) "versioned" extension
  *
- * @package	Gleez
- * @category	ORM
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * Allows ORM objects to be revisioned instead of updated.
+ *
+ * @package    Gleez\ORM
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_ORM_Versioned extends ORM {
 
 	protected $_last_version = NULL;
-	
-	// the version state
+
+	/**
+	 * The version state
+	 * @var boolean
+	 */
 	protected $_restore =  FALSE;
         
-        /**
-	 * Overload ORM::update() to support versioned data
+	/**
+	 * Overload `ORM::update` to support versioned data
 	 *
-	 * @chainable
+	 * @param   Validation  $validation  Validation object
 	 * @return  ORM
 	 */
 	public function update(Validation $validation = NULL)

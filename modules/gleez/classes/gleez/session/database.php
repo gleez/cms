@@ -13,42 +13,62 @@
  *         PRIMARY KEY ( `session_id` ),
  *         INDEX ( `last_active` )
  *     ) ENGINE = MYISAM ;
- *     
- * @package	Gleez
- * @category	Session/Database
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2012 Gleez Technologies
- * @license	http://gleezcms.org/license
+ *
+ * @package    Gleez\Session\Database
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Session_Database extends Session {
 
-	// Database instance
+	/**
+	 * Database instance
+	 * @var Database
+	 */
 	protected $_db;
 
-	// Database table name
+	/**
+	 * Database table name
+	 * @var string
+	 */
 	protected $_table = 'sessions';
 
-	// Database column names
+	/**
+	 * Database column names
+	 * @var array
+	 */
 	protected $_columns = array(
 		'session_id'  => 'session_id',
 		'last_active' => 'last_active',
 		'contents'    => 'contents',
-                'hostname'    => 'hostname',
-                'uid'         => 'user_id'
+        'hostname'    => 'hostname',
+        'uid'         => 'user_id'
 	);
 
-	// Garbage collection requests
+	/**
+	 * Garbage collection requests
+	 * @var integer
+	 */
 	protected $_gc = 500;
 
-	// The current session id
+	/**
+	 * The current session id
+	 * @var string
+	 */
 	protected $_session_id;
 
-	// The old session id
+	/**
+	 * The old session id
+	 * @var string
+	 */
 	protected $_update_id;
-       
-        // The client user id
+
+	/**
+	 * The client user id
+	 * @var integer
+	 */
 	protected $_user_id;
-        
+
 	public function __construct(array $config = NULL, $id = NULL)
 	{
 		if ( ! isset($config['group']))
@@ -78,8 +98,8 @@ class Gleez_Session_Database extends Session {
 			$this->_columns = $config['columns'];
 		}
 
-                $this->_user_id   = 0;
-        
+		$this->_user_id = 0;
+
 		parent::__construct($config, $id);
 
 		if (mt_rand(0, $this->_gc) === $this->_gc)
@@ -239,18 +259,4 @@ class Gleez_Session_Database extends Session {
 			->execute($this->_db);
 	}
 
-	/**
-	 * @return  bool
-	 */
-	protected function _restart()
-	{
-		// Fire up a new session
-		//$status = session_start();
-
-		// Use the $_SESSION global for storing data
-		//$this->_data =& $_SESSION;
-
-		//return $status;
-	}
-	
-} // End Session_Database
+}

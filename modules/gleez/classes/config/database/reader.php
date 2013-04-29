@@ -1,13 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
 /**
  * Database reader for the kohana config system
  *
- * @package    Kohana/Database
- * @category   Configuration
- * @author     Kohana Team
- * @copyright  (c) 2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @package    Gleez\Configuration
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Config_Database_Reader implements Kohana_Config_Reader
 {
@@ -18,7 +16,7 @@ class Config_Database_Reader implements Kohana_Config_Reader
 	/**
 	 * Constructs the database reader object
 	 *
-	 * @param array Configuration for the reader
+	 * @param  array  $config  Configuration for the reader
 	 */
 	public function __construct(array $config = NULL)
 	{
@@ -38,7 +36,7 @@ class Config_Database_Reader implements Kohana_Config_Reader
 	}
 
 	/**
-	 * Tries to load the specificed configuration group
+	 * Tries to load the specified configuration group
 	 *
 	 * Returns FALSE if group does not exist or an array if it does
 	 *

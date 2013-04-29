@@ -72,7 +72,7 @@ return array
 	'An error occurred deleting alias, %path.' => 'Возникла ошибка при удалении синонима %path.',
 	'An error occurred deleting menu %menu' => 'Ошибка при удалении меню %menu',
 	'An error occurred deleting menu item %term.' => 'Произошла ошибка при удалении пункта меню %term.',
-	'An error occurred deleting page, :post.' => 'Произошла ошибка при удалении страницы :post.',
+	'An error occurred deleting page %post.' => 'Произошла ошибка при удалении страницы %post.',
 	'An error occurred deleting post, %post.' => 'Произошла ошибка при удалении публикации %post.',
 	'An error occurred deleting tag %tag!' =>  'Произошла ошибка при удалении тега %tag!',
 	'An error occurred deleting term %term.' => 'Произошла ошибка при удалении термина %term.',
