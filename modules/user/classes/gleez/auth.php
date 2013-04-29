@@ -8,11 +8,11 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Auth {
 
-        /**
+	/**
 	 * Auth instances
 	 *
 	 * @var string
@@ -66,14 +66,16 @@ abstract class Gleez_Auth {
 		$this->_config = $config;
 
 		$this->_session = Session::instance();
-
-		Kohana::$log->add(Log::DEBUG, 'Auth Library loaded');
+		if (Kohana::DEVELOPMENT === Kohana::$environment)
+		{
+			Kohana::$log->add(Log::DEBUG, 'Auth Library loaded');
+		}
 	}
 
 	/**
 	 * Checks if a user logged in via an OAuth provider.
 	 *
-	 * @param   string   provider name (e.g. 'twitter', 'google', etc.)
+	 * @param   string   $provider  Provider name (e.g. 'twitter', 'google', etc.) [Optional]
 	 * @return  boolean
 	 */
 	public function logged_in_oauth($provider = NULL)
@@ -99,9 +101,11 @@ abstract class Gleez_Auth {
 	}
 
 	/**
-	 * Gets the currently logged in user from the session.
+	 * Gets the currently logged in user from the session
+	 *
 	 * Returns NULL if no user is currently logged in.
 	 *
+	 * @param   mixed  $default  Default value to return
 	 * @return  mixed
 	 */
 	public function get_user($default = NULL)
@@ -114,7 +118,8 @@ abstract class Gleez_Auth {
 	 *
 	 * @return  string
 	 */
-	public function get_provider() {
+	public function get_provider()
+	{
 		return $this->_session->get($this->_config['session_key'] . '_provider', null);
 	}
 
@@ -136,7 +141,8 @@ abstract class Gleez_Auth {
 	 * method is deprecated, [Auth::hash] should be used instead.
 	 *
 	 * @deprecated
-	 * @param   string  plaintext password
+	 * @param   string  $password  Plaintext password
+	 * @return  string
 	 */
 	public function hash_password($password)
 	{
@@ -146,13 +152,16 @@ abstract class Gleez_Auth {
 	/**
 	 * Perform a hmac hash, using the configured method.
 	 *
-	 * @param   string  string to hash
+	 * @param   string  $str  String to hash
+	 * @throws  Gleez_Exception
 	 * @return  string
 	 */
 	public function hash($str)
 	{
 		if ( ! $this->_config['hash_key'])
+		{
 			throw new Gleez_Exception('A valid hash key must be set in your auth config.');
+		}
 
 		return hash_hmac($this->_config['hash_method'], $str, $this->_config['hash_key']);
 	}
@@ -160,9 +169,9 @@ abstract class Gleez_Auth {
 	/**
 	 * Attempt to log in a user by using an ORM object and plain-text password.
 	 *
-	 * @param   string   username to log in
-	 * @param   string   password to check against
-	 * @param   boolean  enable autologin
+	 * @param   string   $username  Username to log in
+	 * @param   string   $password  Password to check against
+	 * @param   boolean  $remember  Enable autologin [Optional]
 	 * @return  boolean
 	 */
 	public function login($username, $password, $remember = FALSE)
