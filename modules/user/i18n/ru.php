@@ -1,12 +1,12 @@
 <?php defined("SYSPATH") OR die("No direct script access.");
 /**
-* Localized strings into Russian
-*
-* @package   User\I18n
-* @author    Sergey Yakovlev - Gleez
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
+ * Localized strings into Russian
+ *
+ * @package    User\I18n
+ * @author     Sergey Yakovlev - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ */
 return array
 (
 	// :
@@ -74,7 +74,7 @@ return array
 	'Gleez users and group management' => 'Управление пользователями и группами в Gleez',
 	'Go to' => 'Перейти',
 	// H
-	'Hello :name!' => 'Здраствуйте :name!',
+	'Hello :name!' => 'Здравствуйте :name!',
 	'Home Page' => 'Домашняя страница',
 	// I
 	"If you don't use any of these services, you can create an account." => "Если вы не используете ни один из этих сервисов, вы можете зарегистрировать аккаунт.",
@@ -88,7 +88,7 @@ return array
 	'Last Visit' => 'Последнее посещение',
 	'Loading data from server' => 'Загрузка ',
 	'Login' => 'Вход',
-	'Login with :provider' => 'Войсти с помощью :provider',
+	'Login with :provider' => 'Войти с помощью :provider',
 	// M
 	'Mail' => 'Почта',
 	'Mail must be a valid email address.' => 'Email адрес должен быть в правильном формате.',
@@ -180,7 +180,7 @@ return array
 	'You must confirm password.' => 'Вы должны подтвердить пароль.',
 	'You must provide a password.' => 'Вы должны ввести пароль.',
 	'You must provide a username.' => 'Вы должны ввести имя пользователя.',
-	'You must provide an email address.' => 'Вы долны ввести email адрес.',
+	'You must provide an email address.' => 'Вы должны ввести email адрес.',
 	'You must provide old password.' => 'Вы должны ввести текущий пароль.',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
 	// Z
