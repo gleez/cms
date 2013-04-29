@@ -2,16 +2,18 @@
 /**
  * Modified Preorder Tree Traversal Class.
  * 
- * A port of Banks' Sprig_MPTT plus some code from BIakaVeron's ORM_MPTT module. Using Transactions instead of lock
+ * A port of Banks' Sprig_MPTT plus some code from BiakaVeron's ORM_MPTT module.
+ * Using Transactions instead of lock.
  *
- * @package      Gleez
- * @category     ORM
- * @author       Sandeep Sangamreddi
- * @author 	 Mathew Davies
- * @author 	 Kiall Mac Innes
- * @author 	 Paul Banks
- * @author 	 Brotkin Ivan
- * @author 	 Brandon Summers
+ * @package    Gleez\ORM
+ * @author     Sandeep Sangamreddi
+ * @author     Mathew Davies
+ * @author     Kiall Mac Innes
+ * @author     Paul Banks
+ * @author     Brotkin Ivan
+ * @author     Brandon Summers
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 
 class Gleez_ORM_MPTT extends ORM {
@@ -47,11 +49,9 @@ class Gleez_ORM_MPTT extends ORM {
 	public $parent_column = 'parent_id';
 
 	/**
-	 * Load the default column names.
+	 * Load the default column names
 	 *
-	 * @access  public
-	 * @param   mixed   parameter for find or object to load
-	 * @return  void
+	 * @param   mixed  $id  Parameter for find or object to load
 	 */
 	public function __construct($id = NULL)
 	{
