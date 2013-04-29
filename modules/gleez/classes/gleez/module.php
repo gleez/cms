@@ -453,7 +453,10 @@ class Gleez_Module {
 			$kohana_modules  = $data['kohana_modules'];
 
 			unset($data);
-			Kohana::$log->add(LOG::DEBUG, 'Modules Loaded FROM Cache');
+			if (Kohana::DEVELOPMENT === Kohana::$environment)
+			{
+				Kohana::$log->add(LOG::DEBUG, 'Modules Loaded FROM Cache');
+			}
 		}
 		else
 		{
@@ -506,7 +509,10 @@ class Gleez_Module {
 
 			$cache->set('load_modules', $data, Date::DAY);
 			unset($data, $_cache_modules, $_cache_active);
-			Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
+			if (Kohana::DEVELOPMENT === Kohana::$environment)
+			{
+				Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
+			}
 		}
 
 		Kohana::modules(Arr::merge($kohana_modules, Kohana::modules()));
