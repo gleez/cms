@@ -75,7 +75,7 @@ class Gleez_Request extends Kohana_Request {
 	}
 
 	/**
-	 * Overwrite to check and set maintainance mode
+	 * Overwrite to check and set maintenance mode
 	 *
 	 * @return  Response
 	 *
