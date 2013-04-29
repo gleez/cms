@@ -259,4 +259,14 @@ class Gleez_Session_Database extends Session {
 			->execute($this->_db);
 	}
 
+	/**
+	 * @return  bool
+	 */
+	protected function _restart()
+	{
+		$this->_regenerate();
+
+		return TRUE;
+	}
+
 }
