@@ -8,17 +8,17 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * @package    Gleez/ORM
- * @author     Gleez Team
- * @copyright  (c) 2013 Gleez Team
- * @license    http://gleezcms.org/license
+ * @package    Gleez\ORM
+ * @author     Sandeep Sangamreddi - Gleez
  * @author     Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Team
  * @copyright  (c) 2007-2010 Kohana Team
+ * @license    http://gleezcms.org/license  Gleez CMS License
  * @license    http://kohanaframework.org/license
  */
 class Gleez_ORM_Core extends Model implements serializable {
 
-        const DELETE =  5;
+	const DELETE =  5;
         
 	/**
 	 * Stores column information for ORM models
@@ -1471,7 +1471,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		$this->_original_values = $this->_object;
 
 		$this->after_save();
-                Module::event($this->_object_name .'_save', $this);
+		Module::event($this->_object_name .'_save', $this);
 
 		return $this;
 	}
@@ -1489,21 +1489,25 @@ class Gleez_ORM_Core extends Model implements serializable {
 	}
 
 	/**
-	 * Deletes a single record or multiple records, ignoring relationships.
+	 * Deletes a single record or multiple records, ignoring relationships
 	 *
-	 * @chainable
-	 * @return ORM
+	 * @return  ORM
+	 * @uses    Module::event
+	 * @uses    DB::delete
+	 * @throws  Gleez_Exception
 	 */
 	public function delete()
 	{
 		if ( ! $this->_loaded)
-			throw new Kohana_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
+		{
+			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
+		}
 
 		// Use primary key value
 		$id = $this->pk();
 
 		$this->before_delete($id);
-                Module::event($this->_object_name .'_predelete', $this);
+		Module::event($this->_object_name .'_predelete', $this);
 
 		// Delete the object
 		DB::delete($this->_table_name)
@@ -1511,29 +1515,33 @@ class Gleez_ORM_Core extends Model implements serializable {
 			->execute($this->_db);
 
 		$this->after_delete($id);
-                Module::event($this->_object_name .'_delete', $this);
+		Module::event($this->_object_name .'_delete', $this);
         
 		return $this->clear();
 	}
 
 	/**
-	 * Delete all objects in the associated table. This does NOT destroy
-	 * relationships that have been created with other objects.
+	 * Delete all objects in the associated table
 	 *
-	 * @chainable
+	 * This does NOT destroy relationships that have been created with other objects.
+	 *
 	 * @return  ORM
+	 * @uses    Module::event
+	 * @throws  Gleez_Exception
 	 */
 	public function delete_all()
 	{
-		if ( $this->_loaded)
-			throw new Kohana_Exception('Cannot delete all :model model because it is loaded.', array(':model' => $this->_object_name));
-        
-                Module::event($this->_object_name .'_pre_delete_all', $this);
+		if ($this->_loaded)
+		{
+			throw new Gleez_Exception('Cannot delete all :model model because it is loaded.', array(':model' => $this->_object_name));
+		}
+
+		Module::event($this->_object_name .'_pre_delete_all', $this);
         
 		$this->_build(ORM::DELETE);
 		$this->_db_builder->execute($this->_db);
 	
-                Module::event($this->_object_name .'_delete_all', $this);
+		Module::event($this->_object_name .'_delete_all', $this);
         
 		return $this->clear();
 	}

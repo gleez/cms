@@ -417,9 +417,9 @@ class Controller_Page extends Template {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occured deleting blog id: :id, :message',
+				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting page id: :id, :message',
 							array(':id' => $post->id, ':message' => $e->getMessage()));
-				Message::error(__('An error occured deleting page, %post.',array('%post' => $post->title)));
+				Message::error(__('An error occurred deleting page %post.',array('%post' => $post->title)));
 			}
 
 			$redirect = empty($destination) ? Route::get('page')->uri(array('action' => 'list')) :
