@@ -1,11 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * ORM Validation exceptions.
+ * ORM Validation exceptions
  *
- * @package    Kohana/ORM
- * @author     Kohana Team
- * @copyright  (c) 2007-2010 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @package    Gleez\Exceptions
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_ORM_Validation_Exception extends Kohana_Exception {
 
@@ -24,12 +24,11 @@ class Gleez_ORM_Validation_Exception extends Kohana_Exception {
 	/**
 	 * Constructs a new exception for the specified model
 	 *
-	 * @param  string     $alias       The alias to use when looking for error messages
-	 * @param  Validation $object      The Validation object of the model
-	 * @param  string     $message     The error message
-	 * @param  array      $values      The array of values for the error message
-	 * @param  integer    $code        The error code for the exception
-	 * @return void
+	 * @param  string     $alias    The alias to use when looking for error messages
+	 * @param  Validation $object   The Validation object of the model
+	 * @param  string     $message  The error message [Optional]
+	 * @param  array      $values   The array of values for the error message [Optional]
+	 * @param  integer    $code     The error code for the exception [Optional]
 	 */
 	public function __construct($alias, Validation $object, $message = 'Failed to validate array', array $values = NULL, $code = 0)
 	{

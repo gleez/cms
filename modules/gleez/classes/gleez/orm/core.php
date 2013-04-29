@@ -8,17 +8,17 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * @package    Gleez/ORM
- * @author     Gleez Team
- * @copyright  (c) 2013 Gleez Team
- * @license    http://gleezcms.org/license
+ * @package    Gleez\ORM
+ * @author     Sandeep Sangamreddi - Gleez
  * @author     Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Team
  * @copyright  (c) 2007-2010 Kohana Team
+ * @license    http://gleezcms.org/license  Gleez CMS License
  * @license    http://kohanaframework.org/license
  */
 class Gleez_ORM_Core extends Model implements serializable {
 
-        const DELETE =  5;
+	const DELETE =  5;
         
 	/**
 	 * Stores column information for ORM models
@@ -1471,7 +1471,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		$this->_original_values = $this->_object;
 
 		$this->after_save();
-                Module::event($this->_object_name .'_save', $this);
+		Module::event($this->_object_name .'_save', $this);
 
 		return $this;
 	}
