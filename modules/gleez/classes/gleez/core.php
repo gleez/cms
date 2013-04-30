@@ -357,7 +357,7 @@ class Gleez_Core {
 	 *
 	 * @param   integer   $min
 	 * @param   integer   $max
-	 * @param   integer   $from_user supplied intiger
+	 * @param   integer   $from_user supplied integer
 	 * @return  boolean
 	 */
 	public static function check_in_range($min, $max, $from_user)
@@ -369,6 +369,21 @@ class Gleez_Core {
 
 		// Check that user data is between start & end
 		return (($user > $start) AND ($user < $end));
+	}
+
+	/**
+	 * Gets current Gleez version
+	 *
+	 * @param   boolean  $with_v  If set, return the version number with the prefix `v` [Optional]
+	 * @param   boolean  $full    If set, return the full version with `Gleez CMS` prefix [Optional]
+	 * @return  string   The version of Gleez
+	 */
+	public static function get_version($with_v = TRUE, $full = FALSE)
+	{
+		$version = $with_v ? 'v' . Gleez::VERSION : Gleez::VERSION;
+		$version = $full ? 'Gleez CMS ' . $version : $version;
+
+		return $version;
 	}
 
 	/**
