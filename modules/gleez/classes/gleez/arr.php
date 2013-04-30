@@ -106,8 +106,8 @@ class Gleez_Arr extends Kohana_Arr {
 	/**
 	 * Search value in an array and gets array of values
 	 *
-	 * @param   $needle    The searched value
-	 * @param   $haystack  The array
+	 * @param   mixed  $needle    The searched value
+	 * @param   array  $haystack  The array
 	 * @return  array
 	 */
 	public static function search_in_array($needle, $haystack)
@@ -191,6 +191,25 @@ class Gleez_Arr extends Kohana_Arr {
 		}
 
 		return $serialize ? serialize($result) : $result;
+	}
+
+	/**
+	 * Unpack and prepare array to be used in the configuration files
+	 *
+	 * Example:<br>
+	 * <code>
+	 *  file_put_contents($file, process_config(array('foo' => 'bar')));
+	 * </code>
+	 *
+	 * @param   array  $config  Array of configuration
+	 * @return  string
+	 */
+	public static function process_config(array $config)
+	{
+		$array_str = "<?php defined('SYSPATH') OR die('No direct script access.');" . PHP_EOL
+			. "return " . var_export($config, TRUE) . ";" . PHP_EOL;
+
+		return $array_str;
 	}
 
 }
