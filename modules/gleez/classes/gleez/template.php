@@ -461,7 +461,7 @@ abstract class Gleez_Template extends Controller {
 	protected function _set_default_server_headers()
 	{
 		$headers = $this->_config->get('headers', array());
-		$headers['X-Gleez-Version'] = 'Gleez CMS v ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')';
+		$headers['X-Gleez-Version'] = Gleez::get_version(TRUE, TRUE) . " (Gleez::CODENAME)";
 
 		$xmlrpc = $this->_config->get('xmlrpc', NULL);
 
