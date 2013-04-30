@@ -69,6 +69,12 @@ class Gleez_Session_Database extends Session {
 	 */
 	protected $_user_id;
 
+	/**
+	 * Class constructor
+	 *
+	 * @param  array   $config  Configuration [Optional]
+	 * @param  string  $id      Session id [Optional]
+	 */
 	public function __construct(array $config = NULL, $id = NULL)
 	{
 		if ( ! isset($config['group']))
@@ -110,11 +116,27 @@ class Gleez_Session_Database extends Session {
 		}
 	}
 
+	/**
+	 * Get the current session id
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   $id = $session->id();
+	 * </code>
+	 *
+	 * @return  string
+	 */
 	public function id()
 	{
 		return $this->_session_id;
 	}
 
+	/**
+	 * Loads the raw session data string and returns it.
+	 *
+	 * @param   string  $id  Session id [Optional]
+	 * @return  string
+	 */
 	protected function _read($id = NULL)
 	{
 		if ($id OR $id = Cookie::get($this->_name))
@@ -142,6 +164,11 @@ class Gleez_Session_Database extends Session {
 		return NULL;
 	}
 
+	/**
+	 * Generate a new session id and return it.
+	 *
+	 * @return  string
+	 */
 	protected function _regenerate()
 	{
 		// Create the query to find an ID
@@ -164,6 +191,11 @@ class Gleez_Session_Database extends Session {
 		return $this->_session_id = $id;
 	}
 
+	/**
+	 * Writes the current session.
+	 *
+	 * @return  boolean
+	 */
 	protected function _write()
 	{
 		if ($this->_update_id === NULL)
@@ -209,6 +241,11 @@ class Gleez_Session_Database extends Session {
 		return TRUE;
 	}
 
+	/**
+	 * Destroys the current session.
+	 *
+	 * @return  boolean
+	 */
 	protected function _destroy()
 	{
 		if ($this->_update_id === NULL)
@@ -260,7 +297,9 @@ class Gleez_Session_Database extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Restarts the current session.
+	 *
+	 * @return  boolean
 	 */
 	protected function _restart()
 	{
