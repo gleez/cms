@@ -2,21 +2,12 @@
 
 // -- Environment setup --------------------------------------------------------
 
-// Load the core Kohana class
+// Load the core core classes
 require SYSPATH.'classes/kohana/core'.EXT;
-
-if (is_file(MODPATH.'gleez/classes/kohana'.EXT))
-{
-	// Application extends the core
-	require MODPATH.'gleez/classes/kohana'.EXT;
-	require MODPATH.'gleez/classes/kohana/config'.EXT;
-	require MODPATH.'gleez/classes/gleez/core'.EXT;
-}
-else
-{
-	// Load empty core extension
-	require SYSPATH.'classes/kohana'.EXT;
-}
+require GLZPATH.'classes/kohana'.EXT;
+require GLZPATH.'classes/kohana/config'.EXT;
+require GLZPATH.'classes/gleez/core'.EXT;
+require GLZPATH.'classes/gleez'.EXT;
 
 /**
  * Set the default time zone.
@@ -103,7 +94,6 @@ Kohana::$config->attach(new Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	 'gleez'       => MODPATH.'gleez',      // Gleez Core Module
 	 'user'        => MODPATH.'user',       // User and group Administration
 	 'database'    => MODPATH.'database',   // Database access
 	 'image'       => MODPATH.'image',      // Image manipulation

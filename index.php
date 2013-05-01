@@ -7,8 +7,7 @@
 *
 * @see  http://kohanaframework.org/guide/about.install#application
 */
-$application = 'application/sites'.DIRECTORY_SEPARATOR.$_SERVER['HTTP_HOST'];
-$application = (is_dir($application)) ? $application: 'application';
+$application = 'application';
 
 /**
  * The directory in which your modules are located.
@@ -16,6 +15,14 @@ $application = (is_dir($application)) ? $application: 'application';
  * @see  http://kohanaframework.org/guide/about.install#modules
  */
 $modules = 'modules';
+
+/**
+ * The directory in which the Gleez resources are located. The Gleez system
+ * directory must contain the classes/kohana.php file.
+ *
+ * @see  http://kohanaframework.org/guide/about.install#system
+ */
+$gleez = 'modules/gleez';
 
 /**
  * The directory in which the Kohana resources are located. The system
@@ -74,6 +81,10 @@ if ( ! is_dir($application) AND is_dir(DOCROOT.$application))
 if ( ! is_dir($modules) AND is_dir(DOCROOT.$modules))
 	$modules = DOCROOT.$modules;
 
+// Make the gleez relative to the docroot, for symlink'd index.php
+if ( ! is_dir($gleez) AND is_dir(DOCROOT.$gleez))
+	$gleez = DOCROOT.$gleez;
+
 // Make the system relative to the docroot, for symlink'd index.php
 if ( ! is_dir($system) AND is_dir(DOCROOT.$system))
 	$system = DOCROOT.$system;
@@ -85,6 +96,7 @@ if ( ! is_dir($themes) AND is_dir(DOCROOT.$themes))
 // Define the absolute paths for configured directories
 define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
 define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
+define('GLZPATH', realpath($gleez).DIRECTORY_SEPARATOR);
 define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
 define('THEMEPATH', realpath($themes).DIRECTORY_SEPARATOR);
 
