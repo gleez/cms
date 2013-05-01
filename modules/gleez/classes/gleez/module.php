@@ -43,7 +43,7 @@ class Gleez_Module {
 		{
 			$module->name   = $name;
 			// Only gleez or user is active by default
-			$module->active = ($name == 'gleez' OR $name == 'user');
+			$module->active = ($name == 'user');
 		}
 
 		$module->version = $version;
@@ -145,7 +145,6 @@ class Gleez_Module {
 
 			// Lock certain modules
 			$modules->user->locked  = TRUE;
-			$modules->gleez->locked = TRUE;
 
 			$modules->ksort();
 			Module::$available = $modules;
@@ -476,11 +475,8 @@ class Gleez_Module {
 					continue;
 				}
 
-				if ($module->name == 'gleez')
-				{
-					$gleez = $module;
-				}
-				else
+				//fix for old installations, where gleez exists in db
+				if ($module->name != 'gleez')
 				{
 					Module::$active[$module->name] = $module;
 					$_cache_active[$module->name]  = $module->as_array();
@@ -496,10 +492,6 @@ class Gleez_Module {
 					}
 				}
 			}
-
-			// put gleez last in the module list to match core.modules
-			Module::$active['gleez'] = $gleez;
-			$_cache_active['gleez']  = $gleez->as_array();
 
 			// set cache for performance
 			$data = array();
@@ -562,11 +554,8 @@ class Gleez_Module {
 
 		foreach (self::$active as $name => $module)
 		{
-			if ($name == 'gleez') {
-				continue;
-			}
 			$class = "{$name}_Event";
-			if (is_callable( array($class, $function) ))
+			if ($name != 'gleez' AND is_callable( array($class, $function) ))
 			{
 				try
 				{
