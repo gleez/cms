@@ -1,34 +1,43 @@
-body {
+html, body {
+	height: 100%;
+}
+
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -100px;
+}
+
+.systemcheck #wrap {
+	margin: 0 auto 40px;
+}
+
+#wrap > .container {
 	padding-top: 60px;
 }
 
-body > .container,
-.container .menu {
-	margin-top: 2em;
+#push, #footer {
+	height: 60px;
 }
 
-
-.hero-unit h1 {
-	font-size: 50px;
-	margin-bottom: 30px;
-}
-
-.progress {
-	margin-bottom: 2em;
-}
-
-.footer {
-	padding: 30px 0;
-	margin-top: 70px;
+#footer {
+	padding: 20px 0;
 	border-top: 1px solid #E5E5E5;
-	background-color: #F5F5F5;
-}
-
-.footer p {
-	margin-bottom: 0;
+	background: #F5F5F5;
 	color: #777;
 }
 
-.footer-credits {
+#footer .credits {
 	text-align: center;
+}
+
+#tests table {
+	background: #fff;
+	font-size: 13px;
+}
+
+.finalize .button-controls {
+	text-align: center;
+	margin: 20px 0;
 }

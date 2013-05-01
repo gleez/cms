@@ -1,7 +1,7 @@
 <?php defined("SYSPATH") OR die("No direct script access.") ?>
 
-<p>
-  <?php echo __('Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host.'); ?>
+<p class="lead">
+  <?php echo __('Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host. Everything else will do Gleez Installer. But first we need to check your system on compliance to the minimum requirements.'); ?>
 </p>
 
 <?php if ( ! @is_writable(APPPATH)): ?>
@@ -12,7 +12,6 @@
 <?php endif ?>
 
 <?php echo Form::open(Route::get('install')->uri(array('action' => 'systemcheck'))); ?>
-<div align="center">
-  <?php echo Form::submit('continue', __('Continue'), array('class' => 'btn btn-primary')); ?>
-</div>
+	<?php echo Form::button('continue', __('Continue'), array('class' => 'btn btn-primary pull-right', 'type' => 'submit')); ?>
+	<div class="clearfix"></div><br>
 <?php echo Form::close(); ?>
