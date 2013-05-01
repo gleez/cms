@@ -10,7 +10,9 @@
 class Controller_Admin_Comment extends Controller_Admin {
 
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
 	 */
 	public function before()
 	{
@@ -252,7 +254,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 		{
 			if ( ! isset($post['comments']) OR ( ! is_array($post['comments']) OR ! count(array_filter($post['comments']))))
 			{
-				$view->errors = array(__('No items selected.'));
+				$this->_errors = array(__('No items selected.'));
 
 				if ( ! $this->_internal)
 				{
@@ -301,7 +303,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 	/**
 	 * Bulk update
 	 *
-	 * Excetues the bulk operation
+	 * Executes the bulk operation
 	 *
 	 * @param  array $post  Array of comments
 	 * @uses   Comment::bulk_actions
@@ -327,7 +329,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 				$args = array($comments);
 			}
 
-			// Excetue the bulk operation
+			// Execute the bulk operation
 			call_user_func_array($func, $args);
 		}
 	}
