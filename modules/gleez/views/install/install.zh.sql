@@ -208,8 +208,7 @@ CREATE TABLE {modules} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
-(1, 'gleez', 1, 0, '2', NULL),
-(2, 'user', 1, 0, '2', NULL);
+(1, 'user', 1, 0, '2', NULL);
 
 DROP TABLE IF EXISTS {paths};
 CREATE TABLE {paths} (
