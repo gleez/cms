@@ -36,3 +36,8 @@ html, body {
 	background: #fff;
 	font-size: 13px;
 }
+
+.finalize .button-controls {
+	text-align: center;
+	margin: 20px 0;
+}
