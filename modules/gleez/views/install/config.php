@@ -23,11 +23,10 @@ return array
 			'username'   => '<?php echo $user ?>',
 			'password'   => '<?php echo str_replace("'", "\\'", $password) ?>',
 			'persistent' => FALSE,
-    			'socket'   => false,
 		),
 		'table_prefix' => '<?php echo $prefix ?>',
 		'charset'      => 'utf8',
 		'caching'      => FALSE,
-		'profiling'    => TRUE,
+		'profiling'    => FALSE,
 	),
 );
