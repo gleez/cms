@@ -85,6 +85,18 @@ class Controller_Install_Install extends Controller_Template {
 			$this->template->logo = $this->_media->uri(array('file' => 'logo.png'));
 			$this->template->link = $this->_media->uri(array('file' => 'favicon.ico'));
 
+			// Do some CSS magic to page class
+			$classes   = array();
+			$classes[] = I18n::$lang;
+			$classes[] = $this->request->controller();
+			$classes[] = $this->request->action();
+
+			$page_class = implode(' ', array_unique(array_map('trim', $classes)));
+
+			// Bind the generic page variables
+			$this->template->set('lang', I18n::$lang)
+						->set('page_class', $page_class);
+
 		}
 
 		parent::after();
@@ -192,7 +204,13 @@ class Controller_Install_Install extends Controller_Template {
 
 	public function action_database()
 	{
-		$this->template->content = View::factory('install/database')->bind('form', $form);
+		$action = Route::get('install')->uri(array('action' => 'database'));
+		$view = View::factory('install/database')
+					->bind('form', $form)
+					->set('action', $action);
+
+		$this->template->content = $view;
+
 		$this->template->title = __('Database Configuration');
 		$this->template->_activity = __('60');
 		$this->template->menu = array(
