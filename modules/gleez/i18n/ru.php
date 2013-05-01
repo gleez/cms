@@ -211,7 +211,7 @@ return array
 	'Innovate IT' => 'Иновационные информационные технологии',
 	'Install' => 'Установка',
 	'Installed'=> 'Установлено',
-	'Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host.' => 'Установка Gleez очень проста. Всё что нам сейчас нужно будет знать, так это &mdash; параметры доступа к базе данных MySQL и место для хранения ваших конфигурационных файлов. Всё остальное за вас сделает установщик.',
+	'Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host. Everything else will do Gleez Installer. But first we need to check your system on compliance to the minimum requirements.' => 'Установка Gleez очень проста. Всё что нам сейчас нужно будет знать, так это &mdash; параметры доступа к базе данных MySQL и место для хранения ваших конфигурационных файлов. Всё остальное за вас сделает Установщик Gleez. Но сначала нам нужно проверить вашу систему на соответствие минимальным требованиям.',
 	'Invalid URL Path' => 'Неверный URL путь',
 	'Items for %vocab' => 'Пункты меню %vocab',
 	// J
@@ -424,6 +424,7 @@ return array
 	'The security answer was wrong.' => 'Ответ на защитный вопрос не верный.',
 	'The security code can\'t be empty.' => 'Защитный код не может быть пустым.',
 	'The tags module allows you to create free-tagging for everything, to define the various properties of your content, for example \'Countries\' or \'Colors\'.' => 'Модуль тегов позволяет назначать теги для всего, определяя различные свойства вашего контента, например \'Страны\'  или \'Цвета\'.',
+	'The test results:' => 'Результаты проверки:',
 	'The update has been performed!' => 'Обновление выполнено!',
 	'The update has not been performed!' => 'Обновление не выполнено!',
 	'The username :param1 does not exist' => 'Пользователь :param1 не найден',
