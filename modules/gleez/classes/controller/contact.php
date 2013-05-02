@@ -86,9 +86,9 @@ class Controller_Contact extends Template {
 
 				// Create an email message
 				$email = Email::factory()
-						->to(Text::plain($post['email']), Text::plain($post['name']))
+						->to(Text::plain($this->_config->get('site_email', 'webmaster@gleezcms.org'), __('Webmaster :site', array(':site' => $this->_config->get('site_name', 'Gleez CMS'))))
 						->subject($subject)
-						->from($this->_config->get('site_email', 'webmaster@gleezcms.org'), __('Webmaster :site', array(':site' => $this->_config->get('site_name', 'Gleez CMS'))))
+						->from($post['email']), Text::plain($post['name']))
 						->message($body, 'text/html'); // @todo message type should be configurable
 
 				// Send the message
