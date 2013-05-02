@@ -235,7 +235,10 @@ class Gleez_Post extends ORM_Versioned {
 	}
 
 	/**
-	 * Make sure that the state is legal.
+	 * Make sure that the state is legal
+	 *
+	 * @param   string  $value  Status name
+	 * @return  boolean
 	 */
 	public static function valid_state($value)
 	{
@@ -291,7 +294,7 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Get teaser from the body either by delimiter or size
 	 *
-	 * @param   integer  $size  defaults to 105 words
+	 * @param   integer  $size  Defaults to 105 words [Optional]
 	 * 
 	 * @return  string  teaser
 	 */
@@ -742,7 +745,7 @@ class Gleez_Post extends ORM_Versioned {
 			return $content;
 		}
 
-		// We found special tag, so dont set widgets!
+		// We found special tag, so don't set widgets!
 		// Just return the content
 		if (strpos($content, self::NO_WIDGETS_TAG) !== FALSE)
 		{
