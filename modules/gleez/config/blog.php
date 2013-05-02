@@ -63,12 +63,6 @@ return array(
 	'use_provider_buttons' => TRUE,
 
 	/**
-	 * Enable per page caching for performance
-	 * @var boolean
-	 */
-	'use_cache' => FALSE,
-
-	/**
 	 * Allow people to post Comments (0: disabled, 1: read, 2: read/write)
 	 * @var integer
 	 */
