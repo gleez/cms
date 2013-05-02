@@ -826,4 +826,30 @@ class Gleez_Post extends ORM_Versioned {
 		return $post;
 	}
 
+	/**
+	 * Generates an array for select list with `items per page` values
+	 *
+	 * @return array
+	 */
+	public static function per_page()
+	{
+		return array(
+			5 => 5,
+			10 => 10,
+			15 => 15,
+			20 => 20,
+			25 => 25,
+			30 => 30,
+			35 => 35,
+			40 => 40,
+			45 => 45,
+			50 => 50,
+			70 => 70,
+			100 => 100,
+			150 => 150,
+			250 => 250,
+			300 => 300,
+		);
+	}
+
 }
