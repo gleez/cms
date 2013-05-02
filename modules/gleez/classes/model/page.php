@@ -1,12 +1,19 @@
-<?php defined("SYSPATH") or die("No direct script access.");
-
+<?php defined("SYSPATH") OR die("No direct script access.");
+/**
+ * Gleez Page Model
+ *
+ * @package    Gleez\ORM\Page
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ */
 class Model_Page extends Post {
         
 	/**
 	 * Post table name
 	 * @var string
 	 */
-        protected $_table_name = 'posts';
+	protected $_table_name = 'posts';
 	
 	/**
 	 * Post type
