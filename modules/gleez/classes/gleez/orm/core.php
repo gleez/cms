@@ -19,7 +19,7 @@
 class Gleez_ORM_Core extends Model implements serializable {
 
 	const DELETE =  5;
-        
+
 	/**
 	 * Stores column information for ORM models
 	 * @var array
@@ -31,7 +31,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * @var array
 	 */
 	protected static $_init_cache = array();
-        
+
 	/**
 	 * Creates and returns a new model.
 	 *
@@ -47,7 +47,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		return new $model($id);
 	}
-        
+
 	/**
 	 * "Has one" relationships
 	 * @var array
@@ -71,7 +71,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * @var array
 	 */
 	protected $_has_many_keys = array();
-	
+
 	/**
 	 * Relationships that should always be joined
 	 * @var array
@@ -129,7 +129,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * @var bool
 	 */
 	protected $_cache = FALSE;
-        
+
 	/**
 	 * @var array
 	 */
@@ -266,13 +266,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * @var object DataTables
 	 */
 	protected $_datatables;
-	
+
 	/**
 	 * Ignored columns
 	 * @var array
 	 */
 	protected $_ignored_columns = array();
-        
+
 	/**
 	 * Constructs a new model and loads a record if given
 	 *
@@ -364,7 +364,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 				// Optimize for performance
 				$init['_ignored_columns']= array_combine($this->_ignored_columns, $this->_ignored_columns);
 			}
-	
+
 			$defaults = array();
 
 			foreach ($this->_belongs_to as $alias => $details)
@@ -389,7 +389,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 				$defaults['foreign_key'] = $this->_object_name.$this->_foreign_key_suffix;
 				$defaults['through'] = NULL;
 				$defaults['far_key'] = Inflector::singular($alias).$this->_foreign_key_suffix;
-			
+
 				$init['_has_many'][$alias] = array_merge($defaults, $details);
 			}
 
@@ -398,10 +398,10 @@ class Gleez_ORM_Core extends Model implements serializable {
 				$defaults['model'] = Inflector::singular($alias);
 				$defaults['foreign_key'] = array($this->_object_name.$this->_foreign_key_suffix);
 				$defaults['far_key'] = array(Inflector::singular($alias).$this->_foreign_key_suffix);
-			
+
 				$init['_has_many_keys'][$alias] = array_merge($defaults, $details);
 			}
-			
+
 			ORM::$_init_cache[$this->_object_name] = $init;
 		}
 
@@ -410,7 +410,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		{
 			$this->{$property} = $value;
 		}
-	
+
 		// Load column information
 		$this->reload_columns();
 
@@ -695,7 +695,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		{
 			$model = ORM::factory($this->_has_many_keys[$column]['model']);
 			$far_key = $this->_has_many_keys[$column]['far_key'];
-			
+
 			foreach( $this->_has_many_keys[$column]['foreign_key'] as $fcol => $fvalue )
 			{
 				if( is_int($fcol) )
@@ -703,7 +703,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 					$fcol   = $fvalue;
 					$fvalue = isset($far_key[$fcol]) ? $far_key[$fcol] : isset($this->$fcol) ? $this->$fcol : $this->pk();
 				}
-				
+
 				$model->where($model->_object_name.'.'.$fcol, '=', $fvalue);
 			}
 
@@ -740,20 +740,21 @@ class Gleez_ORM_Core extends Model implements serializable {
 	/**
 	 * Handles setting of column
 	 *
-	 * @param  string $column Column name
-	 * @param  mixed  $value  Column value
-	 * @return void
+	 * @param   string  $column  Column name
+	 * @param   mixed   $value   Column value
+	 * @return  $this
+	 * @throws  Kohana_Exception
 	 */
 	public function set($column, $value)
 	{
-                if ( ! isset($this->_object_name))
-                {
-                        // Object not yet constructed, so we're loading data from a database call cast
-                        $this->_cast_data[$column] = $value;
-                        
-                        return $this;
-                }
-        
+		if ( ! isset($this->_object_name))
+		{
+			// Object not yet constructed, so we're loading data from a database call cast
+			$this->_cast_data[$column] = $value;
+
+			return $this;
+		}
+
 		if (in_array($column, $this->_serialize_columns))
 		{
 			$value = $this->_serialize_value($value);
@@ -818,13 +819,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 			// Don't set the primary key by default
 			unset($values[$this->_primary_key]);
 		}
-        
-                if ( ! empty($this->_ignored_columns) )
+
+				if ( ! empty($this->_ignored_columns) )
 		{
 			// merge the columns needed to process
 			$expected = array_merge($expected, array_keys($this->_ignored_columns) );
 		}
-        
+
 		foreach ($expected as $key => $column)
 		{
 			if (is_string($key))
@@ -881,7 +882,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 				$object[$column] = $this->__get($column);
 			}catch(Exception $e){}
 		}
-	
+
 		return $object;
 	}
 
@@ -1008,15 +1009,18 @@ class Gleez_ORM_Core extends Model implements serializable {
 	}
 
 	/**
-	 * Finds and loads a single database row into the object.
+	 * Finds and loads a single database row into the object
 	 *
-	 * @chainable
-	 * @return ORM
+	 * @return  Database_Result|ORM
+	 * @uses    Database::SELECT
+	 * @throws  Kohana_Exception
 	 */
 	public function find()
 	{
 		if ($this->_loaded)
+		{
 			throw new Kohana_Exception('Method find() cannot be called on loaded objects');
+		}
 
 		if ( ! empty($this->_load_with))
 		{
@@ -1033,14 +1037,18 @@ class Gleez_ORM_Core extends Model implements serializable {
 	}
 
 	/**
-	 * Finds multiple database rows and returns an iterator of the rows found.
+	 * Finds multiple database rows and returns an iterator of the rows found
 	 *
-	 * @return Database_Result
+	 * @return  Database_Result|ORM
+	 * @uses    Database::SELECT
+	 * @throws  Kohana_Exception
 	 */
 	public function find_all()
 	{
 		if ($this->_loaded)
+		{
 			throw new Kohana_Exception('Method find_all() cannot be called on loaded objects');
+		}
 
 		if ( ! empty($this->_load_with))
 		{
@@ -1057,23 +1065,24 @@ class Gleez_ORM_Core extends Model implements serializable {
 	}
 
 	/**
-        * Returns an array of columns to include in the select query. This method
-        * can be overridden to change the default select behavior.
-        *
-        * @return array Columns to select
-        */
-        protected function _build_select()
-        {
-                $columns = array();
-                
-                foreach ($this->_table_columns as $column => $_)
-                {
-                $columns[] = array($this->_object_name.'.'.$column, $column);
-                }
-                
-                return $columns;
-        }
-        
+	 * Returns an array of columns to include in the select query
+	 *
+	 * This method can be overridden to change the default select behavior.
+	 *
+	 * @return  array  Columns to select
+	 */
+	protected function _build_select()
+	{
+		$columns = array();
+
+		foreach ($this->_table_columns as $column => $_)
+		{
+			$columns[] = array($this->_object_name.'.'.$column, $column);
+		}
+
+		return $columns;
+	}
+
 	/**
 	 * Loads a database result, either as a new record for this model, or as
 	 * an iterator for multiple rows.
@@ -1319,9 +1328,9 @@ class Gleez_ORM_Core extends Model implements serializable {
 		// Always build a new validation object
 		$this->_validation();
 
-                // add custom rules to $this->_validation();
+		// add custom rules to $this->_validation();
 		Module::event($this->_object_name .'_validation', $this->_validation, $extra_errors);
-        
+
 		$array = $this->_validation;
 
 		if (($this->_valid = $array->check()) === FALSE OR $extra_errors)
@@ -1333,11 +1342,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 				// Merge any possible errors from the external object
 				$exception->add_object('_external', $extra_validation);
 			}
-			$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+			// Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+			$this->_validation = NULL;
 			throw $exception;
 		}
 
-		$this->_validation = NULL; //Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+		// Fixed memory leak @http://dev.kohanaframework.org/issues/4286
+		$this->_validation = NULL;
 		return $this;
 	}
 
@@ -1351,18 +1362,20 @@ class Gleez_ORM_Core extends Model implements serializable {
 	public function create(Validation $validation = NULL)
 	{
 		if ($this->_loaded)
+		{
 			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
+		}
 
-                Module::event($this->_object_name .'_prevalid', $this, $validation);
-        
+		Module::event($this->_object_name .'_prevalid', $this, $validation);
+
 		// Require model validation before saving
 		if ( ! $this->_valid OR $validation)
 		{
 			$this->check($validation);
 		}
-	
+
 		$this->before_save();
-                Module::event($this->_object_name .'_presave', $this, $validation);
+		Module::event($this->_object_name .'_presave', $this, $validation);
 
 		$data = array();
 		foreach ($this->_changed as $column)
@@ -1399,8 +1412,8 @@ class Gleez_ORM_Core extends Model implements serializable {
 		$this->_original_values = $this->_object;
 
 		$this->after_save();
-                Module::event($this->_object_name .'_save', $this);
-	
+		Module::event($this->_object_name .'_save', $this);
+
 		return $this;
 	}
 
@@ -1414,10 +1427,12 @@ class Gleez_ORM_Core extends Model implements serializable {
 	public function update(Validation $validation = NULL)
 	{
 		if ( ! $this->_loaded)
+		{
 			throw new Kohana_Exception('Cannot update :model model because it is not loaded.', array(':model' => $this->_object_name));
-	
+		}
+
 		Module::event($this->_object_name .'_prevalid', $this, $validation);
-	
+
 		// Run validation if the model isn't valid or we have additional validation rules.
 		if ( ! $this->_valid OR $validation)
 		{
@@ -1428,10 +1443,10 @@ class Gleez_ORM_Core extends Model implements serializable {
 		{
 			return $this;
 		}
-	
+
 		$this->before_save();
-                Module::event($this->_object_name .'_presave', $this, $validation);
-	
+				Module::event($this->_object_name .'_presave', $this, $validation);
+
 		$data = array();
 		foreach ($this->_changed as $column)
 		{
@@ -1516,7 +1531,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		$this->after_delete($id);
 		Module::event($this->_object_name .'_delete', $this);
-        
+
 		return $this->clear();
 	}
 
@@ -1537,15 +1552,15 @@ class Gleez_ORM_Core extends Model implements serializable {
 		}
 
 		Module::event($this->_object_name .'_pre_delete_all', $this);
-        
+
 		$this->_build(ORM::DELETE);
 		$this->_db_builder->execute($this->_db);
-	
+
 		Module::event($this->_object_name .'_delete_all', $this);
-        
+
 		return $this->clear();
 	}
-        
+
 	/**
 	 * Tests if this object has a relationship to a different model,
 	 * or an array of different models.
@@ -1630,7 +1645,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 				// Additional data stored in pivot table
 				$values  = array_merge($values, array_values($data));
 			}
-			
+
 			$query->values($values);
 		}
 
@@ -1724,7 +1739,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 			//$this->_db_pending += $order_by;
 			$this->_db_pending = array_merge($this->_db_pending, $order_by);
 		}
-	
+
 		$this->reset();
 
 		// Return the total number of records in a table
@@ -1845,7 +1860,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	{
 		return $this->_updated;
 	}
-        
+
 	public function primary_key()
 	{
 		return $this->_primary_key;
@@ -1880,7 +1895,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	{
 		return $this->_has_many_keys;
 	}
-        
+
 	public function load_with()
 	{
 		return $this->_load_with;
@@ -1922,36 +1937,36 @@ class Gleez_ORM_Core extends Model implements serializable {
 		return $this->_errors_filename;
 	}
 
-        /**
-         * Override this method to take certain actions before the data is saved
-         */
-        protected function before_save(){}
-        
-        /**
-         * Override this method to take actions after data is saved
-         */
-        protected function after_save(){}
-        
-        /**
-         * Override this method to take actions before the values are loaded
-         */
-        protected function before_load(){}
-        
-        /**
-         * Override this method to take actions after the values are loaded
-         */
-        protected function after_load(){}
-        
-        /**
-         * Override this method to take actions before the document is deleted
-         */
-        protected function before_delete($id){}
-        
-        /**
-         * Override this method to take actions after the document is deleted
-         */
-        protected function after_delete($id){}
-        
+	/**
+	 * Override this method to take certain actions before the data is saved
+	 */
+	protected function before_save(){}
+
+	/**
+	 * Override this method to take actions after data is saved
+	 */
+	protected function after_save(){}
+
+	/**
+	 * Override this method to take actions before the values are loaded
+	 */
+	protected function before_load(){}
+
+	/**
+	 * Override this method to take actions after the values are loaded
+	 */
+	protected function after_load(){}
+
+	/**
+	 * Override this method to take actions before the document is deleted
+	 */
+	protected function before_delete($id){}
+
+	/**
+	 * Override this method to take actions after the document is deleted
+	 */
+	protected function after_delete($id){}
+
 	/**
 	 * Alias of and_where()
 	 *
@@ -2240,7 +2255,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		return $this;
 	}
-        
+
 	/**
 	 * Creates a "GROUP BY ..." filter.
 	 *
@@ -2395,7 +2410,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Start returning results after "OFFSET ..."
 	 *
@@ -2465,7 +2480,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		return $this;
 	}
-        
+
 	/**
 	 * Checks whether a column value is unique.
 	 * Excludes itself if loaded.
@@ -2487,7 +2502,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 
 		return ( ! $model->loaded());
 	}
-	
+
 	/**
 	 * Setter/Getter for jquery DataTables support
 	 *
@@ -2499,13 +2514,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 		{
 			$this->_datatables = DataTables::factory($this)->columns($columns)->execute();
 		}
-		
+
 		return $this->_datatables;
 	}
 
 	/**
 	 * Finds or creates a model instance with the given values
-	 * 
+	 *
 	 * @param  array $values
 	 * @throws ORM_Validation_Exception If the object was not found and could not be created due to validation errors
 	 * @return $this
@@ -2514,25 +2529,24 @@ class Gleez_ORM_Core extends Model implements serializable {
 	{
 		// Unload any previously loaded objects
 		$this->clear();
-	
+
 		// Attempt to find the object
 		foreach ($values as $key => $value)
 		{
-		    $this->where($key, '=', $value);
+			$this->where($key, '=', $value);
 		}
-		
+
 		$found = $this->find()->loaded();
-		
+
 		if ($found)
 		{
-		    return $this;
+			return $this;
 		}
 		else
 		{
-		    $this->values($values);
-		    $s = $this->save();
-		    return $s;
+			$this->values($values);
+			$s = $this->save();
+			return $s;
 		}
 	}
-    
-} // End ORM
+}
