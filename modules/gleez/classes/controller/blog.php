@@ -56,9 +56,9 @@ class Controller_Blog extends Template {
 	 */
 	public function action_list()
 	{
-		$posts = ORM::factory('page');
+		$posts = ORM::factory('blog');
 
-		if ( ! ACL::check('administer content'))
+		if ( ! ACL::check('administer blog'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
