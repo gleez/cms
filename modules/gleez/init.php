@@ -239,15 +239,11 @@ if ( ! Route::cache())
 	Route::set('blog', 'blog(/<action>)(/<id>)(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+',
-<<<<<<< HEAD
-		'action'     => 'index|list|view|add|edit|delete|tag|term'
-=======
 		'action'     => 'list|view|add|edit|delete|tag|term'
->>>>>>> New feature: Added routing and ACL perms for Blog Module
 	))
 	->defaults(array(
 		'controller' => 'blog',
-		'action'     => 'index'
+		'action'     => 'list'
 	));
 
 	Route::set('contact', 'contact(/<action>)')
