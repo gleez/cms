@@ -159,7 +159,7 @@ if ( ! Route::cache())
 	Route::set('admin/blog', 'admin/blog(/<action>(/<id>))(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+',
-		'action'     => 'index|list|settings|confirm'
+		'action'     => 'index|list|settings|bulk'
 	))
 	->defaults(array(
 		'directory'  => 'admin',
@@ -244,7 +244,7 @@ if ( ! Route::cache())
 	))
 	->defaults(array(
 		'controller' => 'blog',
-		'action'     => 'index'
+		'action'     => 'list'
 	));
 
 	Route::set('contact', 'contact(/<action>)')
