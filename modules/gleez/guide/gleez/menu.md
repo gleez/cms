@@ -3,6 +3,7 @@
    - [Introduction](gleez.introduction)
    - [Conventions](gleez.conventions)
    - [Installation](about.install)
+   - [Configuration](config)
    - [HMVC](about.hmvc)
 - [Assets Manager](assets)
 - [Breadcrumb](breadcrumb)
