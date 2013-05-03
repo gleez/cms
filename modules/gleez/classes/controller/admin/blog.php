@@ -36,7 +36,6 @@ class Controller_Admin_Blog extends Controller_Admin {
 			array('link' => Route::url('admin/blog', array('action' =>'settings')),'text' => __('Settings')),
 		);
 
-		Assets::css('blog', 'media/css/blog.css', array('weight' => 5));
 		parent::after();
 	}
 
@@ -278,7 +277,6 @@ class Controller_Admin_Blog extends Controller_Admin {
 					$this->response->body($view);
 					return;
 				}
-
 				$this->_bulk_update($post);
 
 				Message::success(__('The update has been performed!'));
