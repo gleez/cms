@@ -50,7 +50,7 @@ class Gleez_Format {
 			$config = Kohana::$config->load('inputfilter');
 		}
 
-		new Format((array) $config);
+		new Format($config->as_array());
 
 		return Format::$instance;
 	}

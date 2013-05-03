@@ -4,7 +4,6 @@
 
 // Load the core core classes
 require GLZPATH.'classes/kohana'.EXT;
-require GLZPATH.'classes/kohana/config'.EXT;
 require GLZPATH.'classes/gleez/core'.EXT;
 require GLZPATH.'classes/gleez'.EXT;
 
