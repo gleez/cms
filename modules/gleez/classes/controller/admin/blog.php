@@ -26,7 +26,6 @@ class Controller_Admin_Blog extends Controller_Admin {
 	 * The after() method is called after controller action.
 	 *
 	 * @uses  Route::url
-	 * @uses  Assets::css
 	 */
 	public function after()
 	{
@@ -41,7 +40,6 @@ class Controller_Admin_Blog extends Controller_Admin {
 
 	/**
 	 * Blog management dashboard, display Blog statistics
-	 *
 	 */
 	public function action_index()
 	{
