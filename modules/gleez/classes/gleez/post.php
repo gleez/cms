@@ -463,7 +463,7 @@ class Gleez_Post extends ORM_Versioned {
 			break;
 			case 'rawtitle':
 				// Raw fields without markup. Usage: during edit or etc!
-				return parent::__get('title');;
+				return parent::__get('title');
 			break;
 			case 'rawteaser':
 				// Raw fields without markup. Usage: during edit or etc!
@@ -477,7 +477,7 @@ class Gleez_Post extends ORM_Versioned {
 				return Route::get($this->type)->uri(array( 'id' => $this->id));
 			break;
 			case 'url':
-				// Model specefic links; view, edit, delete url's
+				// Model specific links; view, edit, delete url's
 				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
 			break;
 			case 'edit_url':
