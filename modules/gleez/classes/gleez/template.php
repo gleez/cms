@@ -677,12 +677,13 @@ abstract class Gleez_Template extends Controller {
 		$_action = $this->request->post('_action');
 
 		$has_csrf = ! empty($_token) AND ! empty($_action);
-		$valid_csrf = $has_csrf AND CSRF::valid($_token, $_action);
+		$valid_csrf = CSRF::valid($_token, $_action);
 
 		if ($has_csrf AND ! $valid_csrf)
 		{
 			// CSRF was submitted but expired
-			Message::error(__('This form has expired. Please try submitting it again.'));
+			//Message::error(__('This form has expired. Please try submitting it again.'));
+                        $this->_errors = array('_token' => __('This form has expired. Please try submitting it again.'));
 			return FALSE;
 		}
 
@@ -692,12 +693,12 @@ abstract class Gleez_Template extends Controller {
 			if (empty($captcha))
 			{
 				// CSRF was not entered
-				Message::error(__('The security code can\'t be empty.'));
+				$this->_errors = array('_captcha' => __('The security code can\'t be empty.'));
 				return FALSE;
 			}
 			elseif ( ! Captcha::valid($captcha))
 			{
-				Message::error(__('The security answer was wrong.'));
+				$this->_errors = array('_captcha' => __('The security answer was wrong.'));
 				return FALSE;
 			}
 		}

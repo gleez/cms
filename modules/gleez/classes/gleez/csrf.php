@@ -22,10 +22,10 @@ class Gleez_CSRF {
          * @param   integer  $time    Used only internally
          * @return  string
          */
-        public static function token($id = '', $action = '', $time = 0)
+        public static function token($id = '', $action, $time = 0)
         {
                 // Get id string for token, could be uid or ip etc
-                if (!$id) $id = Request::$client_ip;
+                if (empty($id)) $id =  sha1(Request::$user_agent);
         
                 // Get time to live
                 if (!$time) $time = ceil(time() / self::$csrf_ttl);
@@ -44,12 +44,13 @@ class Gleez_CSRF {
         public static function valid($token = false, $action = '', $id = '')
         {
 		//get token and action from Form POST
-                if (!$token)  $token  = Arr::get($_REQUEST, '_token');
-                if (!$action) $action = Arr::get($_REQUEST, '_action');
+                if (empty($token))  $token  = Arr::get($_REQUEST, '_token');
+                if (empty($action)) $action = Arr::get($_REQUEST, '_action');
+		if (empty($id))     $id     = sha1(Request::$user_agent);
 	
                 // Get time to live
                 $time = ceil(time() / self::$csrf_ttl);
-        
+
                 // Check token validity
                 return ($token === self::token($id, $action, $time) || $token === self::token($id, $action, $time - 1));
         }
