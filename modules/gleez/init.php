@@ -239,11 +239,11 @@ if ( ! Route::cache())
 	Route::set('blog', 'blog(/<action>)(/<id>)(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+',
-		'action'     => 'list|view|add|edit|delete|tag|term'
+		'action'     => 'index|list|view|add|edit|delete|tag|term'
 	))
 	->defaults(array(
 		'controller' => 'blog',
-		'action'     => 'list'
+		'action'     => 'index'
 	));
 
 	Route::set('contact', 'contact(/<action>)')
