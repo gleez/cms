@@ -216,8 +216,11 @@ class Controller_Admin_Blog extends Controller_Admin {
 	 *
 	 * @uses  Route::get
 	 * @uses  Route::uri
+	 * @uses  Request::redirect
 	 * @uses  Message::success
 	 * @uses  Message::error
+	 * @uses  Post::bulk_delete
+	 * @uses  DB::select
 	 */
 	public function action_bulk()
 	{
@@ -270,7 +273,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 
 					$view = View::factory('form/confirm_multi')
 							->set('action', '')
-							->set('items', $items );
+							->set('items', $items);
 
 					$this->response->body($view);
 					return;
