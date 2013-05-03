@@ -45,6 +45,8 @@ class Controller_Blog extends Template {
 			// Add RichText Support
 			Assets::editor('.textarea', I18n::$lang);
 		}
+
+		parent::after();
 	}
 
 	/**
