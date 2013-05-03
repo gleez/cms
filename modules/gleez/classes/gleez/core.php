@@ -262,6 +262,7 @@ class Gleez_Core {
 	public static function types()
 	{
 		$states = array(
+			'blog'  => __('Blog'),
 			'page'  => __('Page'),
 			'user'  => __('User')
 		);
