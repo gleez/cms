@@ -37,10 +37,13 @@ class Controller_Page extends Template {
 
 	/**
 	 * The after() method is called after controller action
+	 *
+	 * @uses  Request::action
+	 * @uses  Assets::editor
 	 */
 	public function after()
 	{
-		if($this->request->action() == 'add' OR $this->request->action() == 'edit')
+		if ($this->request->action() == 'add' OR $this->request->action() == 'edit')
 		{
 			// Add RichText Support
 			Assets::editor('.textarea', I18n::$lang);
