@@ -52,7 +52,7 @@ if ( ! Route::cache())
 
 	Route::set('admin/page', 'admin/pages(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'action'     => 'index|list|settings|reset|confirm|bulk'
+		'action'     => 'index|list|settings|bulk'
 	))
 	->defaults(array(
 		'directory'  => 'admin',
@@ -156,9 +156,9 @@ if ( ! Route::cache())
 		'action'     => 'list'
 	));
 
-	Route::set('admin/blog', 'admin/blog(/<action>(/<id>))', array(
+	Route::set('admin/blog', 'admin/blogs(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'action'     => 'index|list|settings|reset|confirm|bulk'
+		'action'     => 'index|list|settings|bulk'
 	))
 	->defaults(array(
 		'directory'  => 'admin',
