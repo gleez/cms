@@ -142,7 +142,7 @@ class Controller_Page extends Template {
 	 * @uses    Route::uri
 	 * @uses    User::providers
 	 * @uses    Comment::form
-	 * @throws  HTTP_Exception_404
+	 * @throws  HTTP_Exception_403
 	 */
 	public function action_view()
 	{
@@ -154,7 +154,7 @@ class Controller_Page extends Template {
 		if ( ! ACL::post('view', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_403('Access denied!');
 		}
 
 		if (ACL::post('edit', $post))
@@ -270,8 +270,8 @@ class Controller_Page extends Template {
 			try
 			{
 				$post->values($_POST)->save();
-				Message::success(__('Page: :title created', array(':title' => $post->title)));
-				Kohana::$log->add(LOG::INFO, 'Page: :title created.', array(':title' => $post->title));
+				Message::success(__('Page %title created', array('%title' => $post->title)));
+				Kohana::$log->add(LOG::INFO, 'Page :title created.', array(':title' => $post->title));
 
 				if ( ! $this->_internal)
 				{
@@ -281,7 +281,8 @@ class Controller_Page extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors('models');
+				// @todo Added messages
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -291,7 +292,18 @@ class Controller_Page extends Template {
 	/**
 	 * Page edit
 	 *
-	 * @throws HTTP_Exception_404
+	 * @uses    ACL::post
+	 * @uses    Gleez_Config::load
+	 * @uses    Request::query
+	 * @uses    Request::redirect
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    URL::query
+	 * @uses    Tags::implode
+	 * @uses    Path::load
+	 * @uses    Message::success
+	 * @uses    Log::add
+	 * @throws HTTP_Exception_403
 	 */
 	public function action_edit()
 	{
@@ -301,7 +313,7 @@ class Controller_Page extends Template {
 		if ( ! ACL::post('edit', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_403('Access denied!');
 		}
 
 		$this->title = $post->title;
@@ -347,7 +359,7 @@ class Controller_Page extends Template {
 			{
 				$post->values($_POST)->save();
 
-				Message::success(__('Page: :title updated', array(':title' => $post->title)));
+				Message::success(__('Page %title updated', array('%title' => $post->title)));
 				Kohana::$log->add(LOG::INFO, 'Page: :title updated.', array(':title' => $post->title));
 
 				if ( ! $this->_internal)
@@ -377,7 +389,18 @@ class Controller_Page extends Template {
 	/**
 	 * Delete page
 	 *
-	 * @throws  HTTP_Exception_404
+	 * @uses    ACL::post
+	 * @uses    Request::query
+	 * @uses    Request::redirect
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    URL::query
+	 * @uses    ORM::delete
+	 * @uses    Cache::delete
+	 * @uses    Message::success
+	 * @uses    Message::error
+	 * @uses    Log::add
+	 * @throws  HTTP_Exception_403
 	 */
 	public function action_delete()
 	{
@@ -387,7 +410,7 @@ class Controller_Page extends Template {
 		if( ! ACL::post('delete', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent page..');
+			throw new HTTP_Exception_403('Access denied!');
 		}
 
 		$this->title = __('Delete :title', array(':title' => $post->title));
@@ -500,11 +523,11 @@ class Controller_Page extends Template {
 
 		$this->response->body($view);
 
-		// Set the canocial and shortlink for search engines
+		// Set the canonical and shortlink for search engines
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'category', 'id' => $term->id), TRUE ), array('rel' => 'shortlink'));
+			//Meta::links(Route::url('page', array('action' => 'category', 'id' => $term->id), TRUE ), array('rel' => 'shortlink'));
 		}
 	}
 
@@ -562,7 +585,7 @@ class Controller_Page extends Template {
 
 		$this->response->body($view);
 
-		// Set the canocial and shortlink for search engines
+		// Set the canonical and shortlink for search engines
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));

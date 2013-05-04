@@ -15,7 +15,7 @@ class Model_Page extends Post {
 	 */
 	protected $_table_name = 'posts';
 
-   /**
+	/**
 	 * Post type
 	 * @var string
 	 */
@@ -112,8 +112,5 @@ class Model_Page extends Post {
 
 		return parent::delete($id);
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Fixed issue: Amended PHPDoc
+
