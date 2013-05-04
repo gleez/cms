@@ -183,7 +183,7 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (12, 'Котакты', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
 (13, 'Администрирование', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
 (14, 'Меню', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(15, 'Блоги', 'blogs', '', 'icon-book', 'admin/blog/list', NULL, 1, 2, 9, 10, 2, 2),
+(15, 'Блоги', 'blogs', '', 'icon-book', 'admin/blogs', NULL, 1, 2, 9, 10, 2, 2),
 (16, 'Форматы', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
 (17, 'Настройки', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
 (18, 'Синонимы', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
