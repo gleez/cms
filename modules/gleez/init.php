@@ -30,13 +30,7 @@ if ( ! Route::cache())
 		'action'     => 'serve',
 		'file'       => NULL,
 	));
-}
 
-/** Run Gleez Components */
-Gleez::ready();
-
-if ( ! Route::cache())
-{
 // -- Gleez backend routes -----------------------------------------------------
 
 	Route::set('admin/autocomplete', 'admin/autocomplete/<action>(/<string>)', array(
