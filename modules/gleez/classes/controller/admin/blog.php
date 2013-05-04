@@ -120,7 +120,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 					->set('mode3',              $mode3)
 					->set('mode4',              $mode4);
 
-		$vocabs = Arr::merge($vocabs, ORM::factory('term')->where('lft', '=', 1)->find_all()->as_array('id', 'name'));
+		$vocabs = Arr::merge($vocabs, ORM::factory('term')->where('lft', '=', 1)->where('type', '=', 'blog')->find_all()->as_array('id', 'name'));
 
 		if ($this->valid_post('blog_settings'))
 		{
@@ -252,10 +252,10 @@ class Controller_Admin_Blog extends Controller_Admin {
 			if ( ! isset($post['blogs']) OR ( ! is_array($post['blogs']) OR ! count(array_filter($post['blogs']))))
 			{
 				Message::error(__('No blogs selected.'));
-			}
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
+				if ( ! $this->_internal)
+				{
+					$this->request->redirect($redirect);
+				}
 			}
 
 			try
