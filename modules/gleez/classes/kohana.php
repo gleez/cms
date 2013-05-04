@@ -568,9 +568,8 @@ class Kohana {
 		// Set the current module list
 		Kohana::$_modules = $modules;
 
-		//@todo better handling instead of init
-		// Include the gleez initialization file once
-		require_once GLZPATH.'init'.EXT;
+		/** Run Gleez Components */
+		Gleez::ready();
 
 		foreach (Kohana::$_modules as $path)
 		{
@@ -582,6 +581,9 @@ class Kohana {
 				require_once $init;
 			}
 		}
+	
+		//@todo better handling instead of init
+		require_once GLZPATH.'init'.EXT;
 	
 		return Kohana::$_modules;
 	}
