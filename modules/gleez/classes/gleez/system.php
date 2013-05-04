@@ -11,13 +11,13 @@
 class Gleez_System {
 
 	/** Windows OS */
-	const WINDOWS = 1;
+	const WIN = 'WINDOWS';
 
 	/** Linux OS */
-	const LINUX = 2;
+	const LIN = 'LINUX';
 
 	/** Other OS */
-	const OTHER = 3;
+	const OTHER = 'OTHER';
 	
 	/**
 	 * Get the server load averages (if possible)
@@ -371,26 +371,22 @@ class Gleez_System {
 	/**
 	 * Get current server OS
 	 *
-	 * @return  integer
+	 * @return  string
 	 * @todo    add more OS
 	 */
 	public static function os()
 	{
 		$sys = strtoupper(PHP_OS);
 
-		if (substr($sys, 0, 3) == "WIN")
+		switch (substr($sys, 0, 3))
 		{
-			$os = self::WINDOWS;
+			case substr(System::WIN, 0, 3):
+				return System::WIN;
+			break;
+			case substr(System::LIN, 0, 3):
+				return System::LIN;
+			break;
 		}
-		elseif ($sys == "LIN")
-		{
-			$os = self::LINUX;
-		}
-		else
-		{
-			$os = self::OTHER;
-		}
-
-		return $os;
+		return System::OTHER;
 	}
 }
