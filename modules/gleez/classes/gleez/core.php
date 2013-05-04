@@ -86,6 +86,13 @@ class Gleez_Core {
 			Kohana_Exception::$error_view = 'errors/stack';
 		}
 
+		// Turn off notices and strict errors in production
+		if (Kohana::$environment === Kohana::PRODUCTION)
+		{
+			// Turn off notices and strict errors
+			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+		}
+	
 		/**
 		 * Disable the kohana powered headers
 		 * @var boolean
