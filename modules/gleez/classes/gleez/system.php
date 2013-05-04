@@ -9,6 +9,15 @@
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_System {
+
+	/** Windows OS */
+	const WINDOWS = 1;
+
+	/** Linux OS */
+	const LINUX = 2;
+
+	/** Other OS */
+	const OTHER = 3;
 	
 	/**
 	 * Get the server load averages (if possible)
@@ -403,5 +412,31 @@ class Gleez_System {
 		$icons = array("icon-none" => __('none')) + $icons;
 
 		return $icons;
+	}
+
+	/**
+	 * Get current server OS
+	 *
+	 * @return  integer
+	 * @todo    add more OS
+	 */
+	public static function os()
+	{
+		$sys = strtoupper(PHP_OS);
+
+		if (substr($sys, 0, 3) == "WIN")
+		{
+			$os = self::WINDOWS;
+		}
+		elseif ($sys == "LIN")
+		{
+			$os = self::LINUX;
+		}
+		else
+		{
+			$os = self::OTHER;
+		}
+
+		return $os;
 	}
 }
