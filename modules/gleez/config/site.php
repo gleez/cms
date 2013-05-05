@@ -102,22 +102,18 @@ return array(
 		'en' => array(
 			'LINUX'   => 'en_US.utf-8',
 			'WINDOWS' => 'english',
-			'OTHER'   => 'en_US.utf-8',
 		),
 		'it' => array(
 			'LINUX'   => 'it_IT.utf-8',
 			'WINDOWS' => 'italian',
-			'OTHER'   => 'it_IT.utf-8',
 		),
 		'ru' => array(
 			'LINUX'   => 'ru_RU.utf-8',
 			'WINDOWS' => 'russian',
-			'OTHER'   => 'ru_RU.utf-8',
 		),
 		'zh' => array(
 			'LINUX'   => 'zh_CN.utf-8',
 			'WINDOWS' => 'chinese-simplified',
-			'OTHER'   => 'ru_RU.utf-8',
 		),
 	),
 
