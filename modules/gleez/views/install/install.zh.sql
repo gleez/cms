@@ -421,8 +421,8 @@ CREATE TABLE {widgets} (
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
 (1, 'static/donate', '捐赠', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, '如果您使用Gleez的，我们请您捐赠，以确保未来能够发展。', 1, 'icon-gift'),
-(2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(2, 'menu/main-menu', '主菜单', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', '管理', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'icon-cog'),
 (4, 'menu/navigation', '导航', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
 (5, 'menu/user-menu', '用户菜单', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
 (6, 'admin/donate', '捐赠', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
