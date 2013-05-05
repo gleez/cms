@@ -169,10 +169,18 @@ class Controller_Admin_Page extends Controller_Admin {
 
 	/**
 	 * Perform bulk actions
+	 *
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Request::redirect
+	 * @uses  Post::bulk_delete
+	 * @uses  Message::success
+	 * @uses  Message::error
+	 * @uses  DB::select
 	 */
 	public function action_bulk()
 	{
-		$redirect    = Route::get('admin/page')->uri(array('action' => 'list'));
+		$redirect = Route::get('admin/page')->uri(array('action' => 'list'));
 
 		$this->title = __('Bulk Actions');
 		$post = $this->request->post();
@@ -269,7 +277,7 @@ class Controller_Admin_Page extends Controller_Admin {
 			// set model name
 			$args['type'] = 'page';
 
-			// excetue the bulk operation
+			// execute the bulk operation
 			call_user_func_array($func, $args);
 		}
 	}

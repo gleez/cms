@@ -1,13 +1,13 @@
 <?php defined("SYSPATH") OR die("No direct script access.");
 /**
- * Gleez Page Model
+ * Gleez Blog Model
  *
- * @package    Gleez\ORM\Page
+ * @package    Gleez\ORM\Blog
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Model_Page extends Post {
+class Model_Blog extends Post {
 
 	/**
 	 * Post table name
@@ -19,7 +19,8 @@ class Model_Page extends Post {
 	 * Post type
 	 * @var string
 	 */
-	protected $_post_type = 'page';
+	protected $_post_type = 'blog';
+
 
 	/**
 	 * Updates or Creates the record depending on loaded()
@@ -29,15 +30,15 @@ class Model_Page extends Post {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		$config = Kohana::$config->load('page');
+		$config = Kohana::$config->load('blog');
 		$this->status = empty($this->status) ? $config->get('default_status', 'draft') : $this->status;
 
-		if( ! $config->use_comment)
+		if ( ! $config->use_comment)
 		{
 			$this->comment = empty($this->comment) ? $config->get('comment', 0) : $this->comment;
 		}
 
-		if( ! $config->use_excerpt )
+		if( ! $config->use_excerpt)
 		{
 			$this->teaser = FALSE;
 		}
@@ -112,5 +113,5 @@ class Model_Page extends Post {
 
 		return parent::delete($id);
 	}
-}
 
+}

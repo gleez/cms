@@ -235,7 +235,10 @@ class Gleez_Post extends ORM_Versioned {
 	}
 
 	/**
-	 * Make sure that the state is legal.
+	 * Make sure that the state is legal
+	 *
+	 * @param   string  $value  Status name
+	 * @return  boolean
 	 */
 	public static function valid_state($value)
 	{
@@ -291,7 +294,7 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Get teaser from the body either by delimiter or size
 	 *
-	 * @param   integer  $size  defaults to 105 words
+	 * @param   integer  $size  Defaults to 105 words [Optional]
 	 * 
 	 * @return  string  teaser
 	 */
@@ -460,7 +463,7 @@ class Gleez_Post extends ORM_Versioned {
 			break;
 			case 'rawtitle':
 				// Raw fields without markup. Usage: during edit or etc!
-				return parent::__get('title');;
+				return parent::__get('title');
 			break;
 			case 'rawteaser':
 				// Raw fields without markup. Usage: during edit or etc!
@@ -474,7 +477,7 @@ class Gleez_Post extends ORM_Versioned {
 				return Route::get($this->type)->uri(array( 'id' => $this->id));
 			break;
 			case 'url':
-				// Model specefic links; view, edit, delete url's
+				// Model specific links; view, edit, delete url's
 				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
 			break;
 			case 'edit_url':
@@ -742,7 +745,7 @@ class Gleez_Post extends ORM_Versioned {
 			return $content;
 		}
 
-		// We found special tag, so dont set widgets!
+		// We found special tag, so don't set widgets!
 		// Just return the content
 		if (strpos($content, self::NO_WIDGETS_TAG) !== FALSE)
 		{
@@ -824,6 +827,32 @@ class Gleez_Post extends ORM_Versioned {
 		}
 
 		return $post;
+	}
+
+	/**
+	 * Generates an array for select list with `items per page` values
+	 *
+	 * @return array
+	 */
+	public static function per_page()
+	{
+		return array(
+			5 => 5,
+			10 => 10,
+			15 => 15,
+			20 => 20,
+			25 => 25,
+			30 => 30,
+			35 => 35,
+			40 => 40,
+			45 => 45,
+			50 => 50,
+			70 => 70,
+			100 => 100,
+			150 => 150,
+			250 => 250,
+			300 => 300,
+		);
 	}
 
 }

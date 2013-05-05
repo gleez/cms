@@ -2,14 +2,17 @@
 /**
  * Menu Model Class
  *
- * @package   Gleez\ORM
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\ORM\Menu
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Menu extends ORM_MPTT {
 
-	/** @var array Table columns */
+	/**
+	 * Table columns
+	 * @var array
+	 */
 	protected $_table_columns =  array(
 		'id'     => array( 'type' => 'int' ),
 		'title'  => array( 'type' =>  'string' ),
@@ -26,23 +29,28 @@ class Model_Menu extends ORM_MPTT {
 		'scp'    => array( 'type' => 'int' ),
 	);
 	
-	/** @var string Scope column name */
+	/**
+	 * Scope column name
+	 * @var string
+	 */
 	public $scope_column = 'scp';
 
-	/** @var string Parent column name */
+	/**
+	 * Parent column name
+	 * @var string
+	 */
 	public $parent_column = 'pid';
 
 	/**
 	 * Rule definitions for validation
 	 *
-	 * @return  array  Array of rules
+	 * @return  array  Rules
 	 */
 	public function rules()
 	{
 		return array(
 			'name' => array(
 				array(array($this, 'is_valid'), array(':validation', ':field')),
-				//array('not_empty'),
 			),
 		);
 	}
@@ -50,7 +58,7 @@ class Model_Menu extends ORM_MPTT {
 	/**
 	 * Labels for fields in this model
 	 *
-	 * @return  array  Array of labels
+	 * @return  array  Labels
 	 */
 	public function labels()
 	{

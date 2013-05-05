@@ -1,13 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Add plural support to i18n
+ * Add plural support to I18n
  *
  * @package   Gleez\I18n
  * @author    Sandeep Sangamreddi - Gleez
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license  Gleez CMS License
  */
-class Gleez_I18n extends Kohana_I18n{
+class Gleez_I18n extends Kohana_I18n {
 
 	/**
 	 * This method is borrowed from the s7ncms code:
@@ -185,7 +185,7 @@ class Gleez_I18n extends Kohana_I18n{
 				if ($count == 1) {
 					return 'one';
 				} else if (is_int($count) AND ($i = $count % 10) >= 2 AND $i <= 4 &&
-				($i = $count % 100) < 12 AND $i > 14 AND ($i = $count % 100) < 22 AND $i > 24) {
+					($i = $count % 100) < 12 AND $i > 14 AND ($i = $count % 100) < 22 AND $i > 24) {
 					return 'few';
 				} else {
 					return 'other';
@@ -236,6 +236,54 @@ class Gleez_I18n extends Kohana_I18n{
 		}
 	}
 
+	/**
+	 * Getter and setter for default system locale
+	 *
+	 * Get default locale:<br>
+	 * <code>
+	 *  echo I18n::locale();
+	 * </code>
+	 *
+	 * Set locale:<br>
+	 * <code>
+	 *  echo I18n::locale('en_US.utf8');
+	 * </code>
+	 *
+	 * @param   integer|string $locale Locale
+	 * @return  string
+	 * @uses    @link http://php.net/manual/en/function.setlocale.php  setlocale()
+	 */
+	public static function locale($locale = 0)
+	{
+		return setlocale(LC_ALL, $locale);
+	}
+
+	/**
+	 * Setting localization by language
+	 *
+	 * @param   array   $locales  Array of locales (ex: `array('en' => array('LINUX' => 'en_US.utf-8', 'WINDOWS' => 'english', ...), ...)`)
+	 * @param   string  $lang     Language (ex: 'ru', 'en', 'it', etc)
+	 * @return  mixed|string
+	 */
+	public static function locale_by_lang(array $locales, $lang)
+	{
+		// Set default
+		$default =  I18n::locale(NULL);
+
+		if ( ! I18n::locale())
+		{
+			return $default;
+		}
+
+		$found = Arr::get($locales, $lang, FALSE);
+
+		if (is_array($found))
+		{
+			return Arr::get($found, System::os());
+		}
+
+		return I18n::locale();
+	}
 }
 
 if ( ! function_exists('__'))
@@ -291,19 +339,19 @@ if ( ! function_exists('__'))
 					case '@':
 						// Escaped only
 						$values[$key] = HTML::chars($value);
-					break;
+						break;
 					case '%':
 						// Escaped and placeholder
 						$values[$key] = '<em class="placeholder">' . HTML::chars($value) . '</em>';
-					break;
+						break;
 					case '^':
 						// Escaped and uppercase the first character of each word in a string
 						$values[$key] = ucwords(HTML::chars($value));
-					break;
+						break;
 					case '~':
 						// Escaped and make a string's first character uppercase
 						$values[$key] = ucfirst(HTML::chars($value));
-					break;
+						break;
 					case '!':
 					case ':':
 					default:

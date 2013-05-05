@@ -2,10 +2,10 @@
 /**
  * Comment Model Class
  *
- * @package    Gleez\Comment
+ * @package    Gleez\ORM\Comment
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Comment extends ORM {
 

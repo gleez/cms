@@ -2,7 +2,7 @@
 /**
  * An adaptation of handle path aliasing
  *
- * @package    Gleez\Path
+ * @package    Gleez\ORM\Path
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
