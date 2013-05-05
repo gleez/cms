@@ -11,7 +11,7 @@
 	<div class="control-group <?php echo isset($errors['items_per_page']) ? 'error': ''; ?>">
 		<?php echo Form::label('title', __('Blog entries per page'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::select('items_per_page', Post::per_page(), $config['items_per_page'], array('class' => 'span2')); ?>
+			<?php echo Form::select('items_per_page', HTML::per_page(), $config['items_per_page'], array('class' => 'span2')); ?>
 		</div>
 	</div>
 
@@ -83,7 +83,7 @@
 	<div class="control-group <?php echo isset($errors['comments_per_page']) ? 'error': ''; ?>">
 		<?php echo Form::label('comments_per_page', __('Comments per page'), array('class' => 'control-label')); ?>
 		<div class="controls">
-			<?php echo Form::select('comments_per_page', Post::per_page(), isset($config['comments_per_page']) ? $config['comments_per_page'] : 50, array('class' => 'span2'));	?>
+			<?php echo Form::select('comments_per_page', HTML::per_page(), isset($config['comments_per_page']) ? $config['comments_per_page'] : 50, array('class' => 'span2'));	?>
 		</div>
 	</div>
 
