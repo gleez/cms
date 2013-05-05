@@ -426,8 +426,8 @@ CREATE TABLE {widgets} (
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
 (1, 'static/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1, 'icon-gift'),
-(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'icon-cog'),
 (4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
 (5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
 (6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
