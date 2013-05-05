@@ -173,28 +173,34 @@ CREATE TABLE {menus} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
+(1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 18, 1, 1),
 (2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
 (3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
-(4, 'User Menu', 'user-menu', "The User menu contains links related to the user's account, as well as the 'Log out' link.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
+(4, 'User Menu', 'user-menu', 'The User menu contains links related to the user''s account, as well as the ''Log out'' link.', NULL, NULL, '', 1, 0, 1, 4, 1, 4),
 (8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
-(10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 7, 2, 1),
-(11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
+(10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 9, 2, 1),
+(11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 7, 8, 3, 1),
+(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 18, 19, 2, 1),
 (13, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
 (14, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(15, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 16, 17, 2, 2),
-(16, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 26, 27, 2, 2),
-(17, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 18, 19, 2, 2),
-(18, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 24, 25, 2, 2),
-(19, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 12, 13, 2, 2),
-(20, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 14, 15, 2, 2),
-(21, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(22, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 20, 21, 2, 2),
-(23, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
-(24, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
-(25, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(26, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
+(15, 'Blogs', 'blogs', '', 'icon-beer', 'admin/blogs', NULL, 1, 2, 10, 11, 2, 2),
+(16, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 18, 19, 2, 2),
+(17, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 28, 29, 2, 2),
+(18, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 20, 21, 2, 2),
+(19, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 26, 27, 2, 2),
+(20, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 14, 15, 2, 2),
+(21, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 16, 17, 2, 2),
+(22, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(23, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 22, 23, 2, 2),
+(24, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 24, 25, 2, 2),
+(25, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
+(26, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 12, 13, 2, 2),
+(27, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4),
+(28, 'Blogs', 'blogs-1', '', 'icon-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
+(29, 'Add Blog', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
+(30, 'List', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
+(31, 'List', 'list-1', '', NULL, 'blog', NULL, 1, 28, 11, 12, 3, 1),
+(32, 'Contact', 'contact-1', '', 'icon-envelope-alt', 'contact', NULL, 1, 1, 16, 17, 2, 1);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
@@ -420,8 +426,8 @@ CREATE TABLE {widgets} (
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
 (1, 'static/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'If you use Gleez!, we ask that you donate to ensure future development is possible.', 1, 'icon-gift'),
-(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, 'right', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '3', 1, NULL, 0, 'icon-cog'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'icon-cog'),
 (4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
 (5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
 (6, 'admin/donate', 'Donate', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),

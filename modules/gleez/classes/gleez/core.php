@@ -86,6 +86,13 @@ class Gleez_Core {
 			Kohana_Exception::$error_view = 'errors/stack';
 		}
 
+		// Turn off notices and strict errors in production
+		if (Kohana::$environment === Kohana::PRODUCTION)
+		{
+			// Turn off notices and strict errors
+			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+		}
+	
 		/**
 		 * Disable the kohana powered headers
 		 * @var boolean
@@ -255,6 +262,7 @@ class Gleez_Core {
 	public static function types()
 	{
 		$states = array(
+			'blog'  => __('Blog'),
 			'page'  => __('Page'),
 			'user'  => __('User')
 		);
@@ -397,27 +405,30 @@ class Gleez_Core {
 	protected static function _set_locale()
 	{
 		// First check cookies
-		$locale = Cookie::get('locale');
+		$lang = Cookie::get('lang');
 
 		// If cookies are empty read accept_language
-		if (empty($locale) AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		if (empty($lang) AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			$locale = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+			$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 		}
 
-		//Check if the locale is available or not
-		$installed_locales = in_array($locale, Kohana::$config->load('site.installed_locales'));
+		// Check if the locale is available or not
+		$installed_locales = array_key_exists($lang, Kohana::$config->load('site.installed_locales'));
 
 		if ( ! $installed_locales)
 		{
 		    // By default - English
-		    $locale = 'en';
+		    $lang = 'en';
 		}
 
-		// Setting lang
-		I18n::$lang = $locale;
+		// Setting locale
+		I18n::locale_by_lang(Kohana::$config->load('site.installed_locales'), $lang);
 
-		Cookie::set('locale', $locale);
+		// Setting lang
+		I18n::$lang = $lang;
+
+		Cookie::set('lang', $lang);
 	}
 
 }

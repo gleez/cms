@@ -9,7 +9,13 @@
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_System {
-	
+
+	/** Windows OS */
+	const WIN = 'WINDOWS';
+
+	/** Linux OS */
+	const LIN = 'LINUX';
+
 	/**
 	 * Get the server load averages (if possible)
 	 *
@@ -127,9 +133,7 @@ class Gleez_System {
 			"icon-bar-chart" => 'bar-chart',
 			"icon-barcode" => 'barcode',
 			"icon-beaker" => 'beaker',
-			"icon-beer" => 'beer',
 			"icon-bell" => 'bell',
-			"icon-bell-alt" => 'bell-alt',
 			"icon-bolt" => 'bolt',
 			"icon-book" => 'book',
 			"icon-bookmark" => 'bookmark',
@@ -142,12 +146,7 @@ class Gleez_System {
 			"icon-certificate" => 'certificate',
 			"icon-check" => 'check',
 			"icon-check-empty" => 'check-empty',
-			"icon-circle" => 'circle',
-			"icon-circle-blank" => 'circle-blank',
 			"icon-cloud" => 'cloud',
-			"icon-cloud-download" => 'cloud-download',
-			"icon-cloud-upload" => 'cloud-upload',
-			"icon-coffee" => 'coffee',
 			"icon-cog" => 'cog',
 			"icon-cogs" => 'cogs',
 			"icon-comment" => 'comment',
@@ -156,29 +155,23 @@ class Gleez_System {
 			"icon-comments-alt" => 'comments-alt',
 			"icon-credit-card" => 'credit-card',
 			"icon-dashboard" => 'dashboard',
-			"icon-desktop" => 'desktop',
 			"icon-download" => 'download',
 			"icon-download-alt" => 'download-alt',
 			
 			"icon-edit" => 'edit',
 			"icon-envelope" => 'envelope',
 			"icon-envelope-alt" => 'envelope-alt',
-			"icon-exchange" => 'exchange',
 			"icon-exclamation-sign" => 'exclamation-sign',
 			"icon-external-link" => 'external-link',
 			"icon-eye-close" => 'eye-close',
 			"icon-eye-open" => 'eye-open',
 			"icon-facetime-video" => 'facetime-video',
-			"icon-fighter-jet" => 'fighter-jet',
 			"icon-film" => 'film',
 			"icon-filter" => 'filter',
 			"icon-fire" => 'fire',
 			"icon-flag" => 'flag',
 			"icon-folder-close" => 'folder-close',
 			"icon-folder-open" => 'folder-open',
-			"icon-folder-close-alt" => 'folder-close-alt',
-			"icon-folder-open-alt" => 'folder-open-alt',
-			"icon-food" => 'food',
 			"icon-gift" => 'gift',
 			"icon-glass" => 'glass',
 			"icon-globe" => 'globe',
@@ -192,10 +185,8 @@ class Gleez_System {
 			"icon-info-sign" => 'info-sign',
 			"icon-key" => 'key',
 			"icon-leaf" => 'leaf',
-			"icon-laptop" => 'laptop',
 			"icon-legal" => 'legal',
 			"icon-lemon" => 'lemon',
-			"icon-lightbulb" => 'lightbulb',
 			"icon-lock" => 'lock',
 			"icon-unlock" => 'unlock',
 			
@@ -204,7 +195,6 @@ class Gleez_System {
 			"icon-map-marker" => 'map-marker',
 			"icon-minus" => 'minus',
 			"icon-minus-sign" => 'minus-sign',
-			"icon-mobile-phone" => 'mobile-phone',
 			"icon-money" => 'money',
 			"icon-move" => 'move',
 			"icon-music" => 'music',
@@ -221,15 +211,12 @@ class Gleez_System {
 			"icon-pushpin" => 'pushpin',
 			"icon-qrcode" => 'qrcode',
 			"icon-question-sign" => 'question-sign',
-			"icon-quote-left" => 'quote-left',
-			"icon-quote-right" => 'quote-right',
 			"icon-random" => 'random',
 			"icon-refresh" => 'refresh',
 			"icon-remove" => 'remove',
 			"icon-remove-circle" => 'remove-circle',
 			"icon-remove-sign" => 'remove-sign',
 			"icon-reorder" => 'reorder',
-			"icon-reply" => 'reply',
 			"icon-resize-horizontal" => 'resize-horizontal',
 			"icon-resize-vertical" => 'resize-vertical',
 			"icon-retweet" => 'retweet',
@@ -248,11 +235,9 @@ class Gleez_System {
 			"icon-sort" => 'sort',
 			"icon-sort-down" => 'sort-down',
 			"icon-sort-up" => 'sort-up',
-			"icon-spinner" => 'spinner',
 			"icon-star" => 'star',
 			"icon-star-empty" => 'star-empty',
 			"icon-star-half" => 'star-half',
-			"icon-tablet" => 'tablet',
 			"icon-tag" => 'tag',
 			"icon-tags" => 'tags',
 			"icon-tasks" => 'tasks',
@@ -267,7 +252,6 @@ class Gleez_System {
 			"icon-upload" => 'upload',
 			"icon-upload-alt" => 'upload-alt',
 			"icon-user" => 'user',
-			"icon-user-md" => 'user-md',
 			"icon-volume-off" => 'volume-off',
 			"icon-volume-down" => 'volume-down',
 			"icon-volume-up" => 'volume-up',
@@ -277,7 +261,6 @@ class Gleez_System {
 			"icon-zoom-out" => 'zoom-out',
 			
 			"icon-file" => 'file',
-			"icon-file-alt" => 'file-alt',
 			"icon-cut" => 'cut',
 			"icon-copy" => 'copy',
 			"icon-paste" => 'paste',
@@ -311,11 +294,7 @@ class Gleez_System {
 			"icon-list-ol" => 'list-ol',
 			"icon-list-ul" => 'list-ul',
 			"icon-list-alt" => 'list-alt',
-			
-			"icon-angle-left" => 'angle-left',
-			"icon-angle-right" => 'angle-right',
-			"icon-angle-up" => 'angle-up',
-			"icon-angle-down" => 'angle-down',
+
 			"icon-arrow-down" => 'arrow-down',
 			"icon-arrow-left" => 'arrow-left',
 			"icon-arrow-right" => 'arrow-right',
@@ -334,17 +313,11 @@ class Gleez_System {
 			"icon-circle-arrow-left" => 'circle-arrow-left',
 			"icon-circle-arrow-right" => 'circle-arrow-right',
 			"icon-circle-arrow-up" => 'circle-arrow-up',
-			"icon-double-angle-left" => 'double-angle-left',
-			"icon-double-angle-right" => 'double-angle-right',
-			"icon-double-angle-up" => 'double-angle-up',
-			"icon-double-angle-down" => 'double-angle-down',
 			
 			"icon-hand-down" => 'hand-down',
 			"icon-hand-left" => 'hand-left',
 			"icon-hand-right" => 'hand-right',
 			"icon-hand-up" => 'hand-up',
-			"icon-circle" => 'circle',
-			"icon-circle-blank" => 'circle-blank',
 			
 			"icon-play-circle" => 'play-circle',
 			"icon-play" => 'play',
@@ -372,7 +345,6 @@ class Gleez_System {
 			"icon-twitter" => 'twitter',
 			"icon-twitter-sign" => 'twitter-sign',
 			"icon-github" => 'github',
-			"icon-github-alt" => 'github-alt',
 			
 			"icon-github-sign" => 'github-sign',
 			"icon-linkedin" => 'linkedin',
@@ -383,18 +355,6 @@ class Gleez_System {
 			"icon-google-plus" => 'google-plus',
 			"icon-google-plus-sign" => 'google-plus-sign',
 			"icon-sign-blank" => 'sign-blank',
-			
-			"icon-ambulance" => 'ambulance',
-			"icon-beaker" => 'beaker',
-			
-			"icon-h-sign" => 'h-sign',
-			"icon-hospital" => 'hospital',
-			
-			"icon-medkit" => 'medkit',
-			"icon-plus-sign-alt" => 'plus-sign-alt',
-			
-			"icon-stethoscope" => 'stethoscope',
-			"icon-user-md" => 'user-md'
 		);
 		
 		//sort icons by natural order
@@ -403,5 +363,20 @@ class Gleez_System {
 		$icons = array("icon-none" => __('none')) + $icons;
 
 		return $icons;
+	}
+
+	/**
+	 * Get current server OS
+	 *
+	 * @return  string
+	 * @todo    add more OS
+	 */
+	public static function os()
+	{
+		if (Kohana::$is_windows)
+		{
+			return System::WIN;
+		}
+		return System::LIN;
 	}
 }

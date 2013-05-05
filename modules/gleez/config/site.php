@@ -94,13 +94,28 @@ return array(
     ),
   ),
 
-  /** @var array Installed locales */
-  'installed_locales' => array(
-    'en',
-    'it',
-    'ru',
-    'zh',
-  ),
+	/**
+	 * Installed locales
+	 *@var array
+	 */
+	'installed_locales' => array(
+		'en' => array(
+			'LINUX'   => 'en_US.utf-8',
+			'WINDOWS' => 'english',
+		),
+		'it' => array(
+			'LINUX'   => 'it_IT.utf-8',
+			'WINDOWS' => 'italian',
+		),
+		'ru' => array(
+			'LINUX'   => 'ru_RU.utf-8',
+			'WINDOWS' => 'russian',
+		),
+		'zh' => array(
+			'LINUX'   => 'zh_CN.utf-8',
+			'WINDOWS' => 'chinese-simplified',
+		),
+	),
 
   /** @var string Blocked ips */
   'blocked_ips' =>  NULL, //default to null, comma separated ip-addresses to block
