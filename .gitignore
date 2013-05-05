@@ -1,0 +1,6 @@
+applicacation/cache/[^.]*
+applicacation/congig/[^.]*
+applicacation/logs/[^.]*
+applicacation/media/[^.]*
+applicacation/uploads/[^.]*
+media/[^.]*
