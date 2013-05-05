@@ -16,9 +16,6 @@ class Gleez_System {
 	/** Linux OS */
 	const LIN = 'LINUX';
 
-	/** Other OS */
-	const OTHER = 'OTHER';
-	
 	/**
 	 * Get the server load averages (if possible)
 	 *
@@ -376,17 +373,10 @@ class Gleez_System {
 	 */
 	public static function os()
 	{
-		$sys = strtoupper(PHP_OS);
-
-		switch (substr($sys, 0, 3))
+		if (Kohana::$is_windows)
 		{
-			case substr(System::WIN, 0, 3):
-				return System::WIN;
-			break;
-			case substr(System::LIN, 0, 3):
-				return System::LIN;
-			break;
+			return System::WIN;
 		}
-		return System::OTHER;
+		return System::LIN;
 	}
 }
