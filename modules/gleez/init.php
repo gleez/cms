@@ -52,7 +52,7 @@ if ( ! Route::cache())
 
 	Route::set('admin/page', 'admin/pages(/<action>(/<id>))', array(
 		'id'         => '\d+',
-		'action'     => 'index|list|settings|reset|confirm|bulk'
+		'action'     => 'index|list|settings|bulk'
 	))
 	->defaults(array(
 		'directory'  => 'admin',
@@ -156,6 +156,16 @@ if ( ! Route::cache())
 		'action'     => 'list'
 	));
 
+	Route::set('admin/blog', 'admin/blogs(/<action>(/<id>))', array(
+		'id'         => '\d+',
+		'action'     => 'index|list|settings|bulk'
+	))
+	->defaults(array(
+		'directory'  => 'admin',
+		'controller' => 'blog',
+		'action'     => 'list',
+	));
+
 	Route::set('admin/setting', 'admin/settings(/<action>)')
 	->defaults(array(
 		'directory'  => 'admin',
@@ -224,6 +234,16 @@ if ( ! Route::cache())
 		'directory'  => 'feeds',
 		'controller' => 'base',
 		'action'     => 'list',
+	));
+
+	Route::set('blog', 'blog(/<action>)(/<id>)(/p<page>)', array(
+		'id'         => '\d+',
+		'page'       => '\d+',
+		'action'     => 'index|list|view|add|edit|delete|tag|term'
+	))
+	->defaults(array(
+		'controller' => 'blog',
+		'action'     => 'index'
 	));
 
 	Route::set('contact', 'contact(/<action>)')
@@ -364,6 +384,44 @@ if ( ! ACL::cache())
 			'title' => __('Sending Mails'),
 			'restrict access' => FALSE,
 			'description' => __('Ability to send messages for administrators from your site'),
+		),
+	));
+
+	ACL::set('blog', array(
+		'administer blog' =>  array(
+			'title' => __('Administer Blog'),
+			'restrict access' => TRUE,
+			'description' => __('Administer Blog and Blog settings'),
+		),
+		'access blog' => array(
+			'title' => __('Access Blog'),
+			'restrict access' => FALSE,
+			'description' => '',
+		),
+		'create blog' => array(
+			'title' => __('Create Blog post'),
+			'restrict access' => FALSE,
+			'description' => '',
+		),
+		'edit own blog' =>  array(
+			'title' => __('Edit own Blog post'),
+			'restrict access' => FALSE,
+			'description' => '',
+		),
+		'edit any blog' => array(
+			'title' => __('Edit any Blog posts'),
+			'restrict access' => FALSE,
+			'description' => '',
+		),
+		'delete own blog' => array(
+			'title' => __('Delete own Blog post'),
+			'restrict access' => FALSE,
+			'description' => '',
+		),
+		'delete any blog' => array(
+			'title' => __('Delete any Blog posts'),
+			'restrict access' => FALSE,
+			'description' => '',
 		),
 	));
 

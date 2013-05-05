@@ -31,7 +31,7 @@
 	<div class="control-group <?php echo isset($errors['items_per_page']) ? 'error': ''; ?>">
 		<?php echo Form::label('title', __('Page entries per page'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::select('items_per_page', array(5 => 5, 10 => 10, 15 => 15, 20 => 20, 25 => 25, 30 => 30, 35 => 35, 50 =>50), $post['items_per_page'], array('class' => 'span2')); ?>
+			<?php echo Form::select('items_per_page', Post::per_page(), $post['items_per_page'], array('class' => 'span2')); ?>
 		</div>
 	</div>
 
@@ -56,15 +56,17 @@
 			echo Form::hidden('comment_anonymous', 0);
 		?>
 		<div class="controls">
-			<?php echo Form::label('use_excerpt',       Form::checkbox('use_excerpt', TRUE, $use_excerpt).__('Enable excerpt'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_comment',       Form::checkbox('use_comment', TRUE, $use_comment).__('Enable comments'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_authors',       Form::checkbox('use_authors', TRUE, $use_authors).__('Enable authors'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_captcha',       Form::checkbox('use_captcha', TRUE, $use_captcha).__('Enable captcha'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_category',      Form::checkbox('use_category', TRUE, $use_category).__('Enable Category'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_tags',          Form::checkbox('use_tags', TRUE, $use_tags).__('Enable tag cloud'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_submitted',     Form::checkbox('use_submitted', TRUE, $use_submitted).__('Show Submitted Info'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('use_cache',         Form::checkbox('use_cache', TRUE, $use_cache).__('Enable Page Cache'), array('class' => 'checkbox')) ?>
-			<?php echo Form::label('comment_anonymous', Form::checkbox('comment_anonymous', TRUE, $comment_anonymous).__('Allow anonymous commenting (with contact information)'), array('class' => 'checkbox')) ?>
+			<?php
+				echo Form::label('use_excerpt',       Form::checkbox('use_excerpt', TRUE, $use_excerpt).__('Enable excerpt'), array('class' => 'checkbox'));
+				echo Form::label('use_comment',       Form::checkbox('use_comment', TRUE, $use_comment).__('Enable comments'), array('class' => 'checkbox'));
+				echo Form::label('use_authors',       Form::checkbox('use_authors', TRUE, $use_authors).__('Enable authors'), array('class' => 'checkbox'));
+				echo Form::label('use_captcha',       Form::checkbox('use_captcha', TRUE, $use_captcha).__('Enable captcha'), array('class' => 'checkbox'));
+				echo Form::label('use_category',      Form::checkbox('use_category', TRUE, $use_category).__('Enable Category'), array('class' => 'checkbox'));
+				echo Form::label('use_tags',          Form::checkbox('use_tags', TRUE, $use_tags).__('Enable tag cloud'), array('class' => 'checkbox'));
+				echo Form::label('use_submitted',     Form::checkbox('use_submitted', TRUE, $use_submitted).__('Show Submitted Info'), array('class' => 'checkbox'));
+				echo Form::label('use_cache',         Form::checkbox('use_cache', TRUE, $use_cache).__('Enable Page Cache'), array('class' => 'checkbox'));
+				echo Form::label('comment_anonymous', Form::checkbox('comment_anonymous', TRUE, $comment_anonymous).__('Allow anonymous commenting (with contact information)'), array('class' => 'checkbox'));
+			?>
 		</div>
 	</div>
 
@@ -101,7 +103,7 @@
 	<div class="control-group <?php echo isset($errors['comments_per_page']) ? 'error': ''; ?>">
 		<?php echo Form::label('comments_per_page', __('Comments per page'), array('class' => 'control-label')) ?>
 		<div class="controls">
-			<?php echo Form::select('comments_per_page', array(5 => 5, 10 => 10, 20 => 20, 30 => 30, 50 => 50, 70 => 70, 90 => 90, 150 => 150, 200 => 200, 250 => 250, 300 => 300), isset($post['comments_per_page']) ? $post['comments_per_page'] : 50, array('class' => 'span2')); ?>
+			<?php echo Form::select('comments_per_page', Post::per_page(), isset($post['comments_per_page']) ? $post['comments_per_page'] : 50, array('class' => 'span2')); ?>
 		</div>
 	</div>
 

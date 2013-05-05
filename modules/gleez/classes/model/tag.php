@@ -44,7 +44,7 @@ class Model_Tag extends ORM {
 	/**
 	 * Labels for fields in this model
 	 *
-	 * @return  array  Array of labels
+	 * @return  array  Labels
 	 */
 	public function labels()
 	{

@@ -578,17 +578,17 @@ class Gleez_Module {
 		$function = str_replace(".", "_", $action);
 		$filterargs = array_slice(func_get_args(), 2);
 
-		foreach ( self::$active as $name => $module )
+		foreach (Module::$active as $name => $module)
 		{
-			$class = "{$name}_Action";
+			$class = ucfirst($name).'_Action';
 			$args = $filterargs;
-			array_unshift( $args, $return );
+			array_unshift($args, $return);
 
-			if (is_callable( array($class, $function) ))
+			if (is_callable(array($class, $function)))
 			{
 				try
 				{
-					$return = call_user_func_array(array( $class, $function ), $args);
+					$return = call_user_func_array(array($class, $function), $args);
 				}
 				catch(Exception $e){}
 			}
