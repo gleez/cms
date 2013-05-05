@@ -173,14 +173,14 @@ CREATE TABLE {menus} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
+(1, 'Main Menu', 'main-menu', 'The Main menu is used on many sites to show the major sections of the site, often in a top navigation bar.', NULL, NULL, '', 1, 0, 1, 18, 1, 1),
 (2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
 (3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
-(4, 'User Menu', 'user-menu', "The User menu contains links related to the user's account, as well as the 'Log out' link.", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
+(4, 'User Menu', 'user-menu', 'The User menu contains links related to the user''s account, as well as the ''Log out'' link.', NULL, NULL, '', 1, 0, 1, 4, 1, 4),
 (8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
-(10, 'Pages', 'pages', '', 'icon-file', 'page', NULL, 1, 1, 4, 7, 2, 1),
-(11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 5, 6, 3, 1),
-(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 8, 9, 2, 1),
+(10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 9, 2, 1),
+(11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 7, 8, 3, 1),
+(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 18, 19, 2, 1),
 (13, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
 (14, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
 (15, 'Blogs', 'blogs', '', 'icon-book', 'admin/blogs', NULL, 1, 2, 10, 11, 2, 2),
@@ -195,7 +195,12 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (24, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (25, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (26, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(27, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
+(27, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4),
+(28, 'Blogs', 'blogs-1', '', 'icon-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
+(29, 'Add Blog', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
+(30, 'List', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
+(31, 'List', 'list-1', '', NULL, 'blog', NULL, 1, 28, 11, 12, 3, 1),
+(32, 'Contact', 'contact-1', '', 'icon-envelope-alt', 'contact', NULL, 1, 1, 16, 17, 2, 1);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
