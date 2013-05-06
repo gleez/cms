@@ -174,7 +174,7 @@ CREATE TABLE {menus} (
 
 INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `active`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
 (1, '主菜单', 'main-menu', '许多网站使用主菜单来显示网站的主要部分，通常在顶部的导航栏中。', NULL, NULL, '', 1, 0, 1, 8, 1, 1),
-(2, '管理', 'management', '管理菜单包含用于管理任务的链接。', NULL, NULL, '', 1, 0, 1, 28, 1, 2),
+(2, '管理', 'management', '管理菜单包含用于管理任务的链接。', NULL, NULL, '', 1, 0, 1, 30, 1, 2),
 (3, '导航', 'navigation', '导航菜单包含网站的访问者所用的链接。一些模块自动添加链接到导航菜单。', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
 (4, '用户菜单', 'user-menu', "用户菜单包含与用户帐户相关的链接，以及“退出”链接。", NULL, NULL, '', 1, 0, 1, 4, 1, 4),
 (8, '首页', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
