@@ -113,7 +113,7 @@
 							<?php endif; ?>
 
 							<div id="publishing-action">
-								<?php echo Form::submit('page', __('Save'), array('class' => 'btn btn-primary pull-right')) ?>
+								<?php echo Form::submit('blog', __('Save'), array('class' => 'btn btn-primary pull-right')) ?>
 							</div>
 						</div>
 					</div>
