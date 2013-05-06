@@ -326,7 +326,7 @@ abstract class Gleez_Widgets {
 			}
 		}
 
-		return trim( $response );
+		return ($format === FALSE) ? $widget : trim( $response );
 	}
 
 	/**
