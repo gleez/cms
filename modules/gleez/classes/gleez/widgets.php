@@ -318,7 +318,7 @@ abstract class Gleez_Widgets {
 			try
 			{
 				$widget->content = Widget::factory($name, $widget, $widget->config)->render();
-				$response = ($format === FALSE) ? $widget : $this->_html($widget, $this->_region, $this->_format);
+				$response = ($format === FALSE) ? $widget : trim($this->_html($widget, $this->_region, $this->_format));
 			}
 			catch( Exception $e )
 			{
@@ -326,7 +326,7 @@ abstract class Gleez_Widgets {
 			}
 		}
 
-		return ($format === FALSE) ? $widget : trim( $response );
+		return $response;
 	}
 
 	/**
