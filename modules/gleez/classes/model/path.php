@@ -141,11 +141,13 @@ class Model_Path extends ORM {
 
 	private function _unique_slug($str)
 	{
-		$path   = ORM::factory('path', array('alias' => $str));
 		$slug   = $str;
 		$suffix = 0;
-
-		while ($path AND $path->loaded() AND $path->source != $this->source )
+		
+		while( $path = ORM::factory('path', array('alias' => $str) )
+			AND $path->loaded()
+			AND $path->source != $this->source
+			)
 		{
 			$str = substr($slug, 0, 200 - (strlen($suffix) + 1)) . "-$suffix";
 			$suffix++;
