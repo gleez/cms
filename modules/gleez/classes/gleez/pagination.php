@@ -126,7 +126,7 @@ class Gleez_Pagination {
 		$config['group'] = (string) $group;
 
 		// Recursively load requested config groups
-		while (isset($config['group']) AND isset($config_file->$config['group']))
+		while (isset($config['group']) AND $config_file->offsetExists($config['group']))
 		{
 			// Temporarily store config group name
 			$group = $config['group'];
