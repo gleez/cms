@@ -11,7 +11,7 @@
         top: 70px;
 }
 
-.user-login form {
+.user-login #content form {
         width: 400px;
         margin: 0.5em auto;
 }
