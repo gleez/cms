@@ -17,6 +17,17 @@ class Validation_Contact extends Gleez_Validation {
 	const BODY_LEN = 400;
 
 	/**
+	 * Creates a new Validation instance.
+	 *
+	 * @param   array   $array  array to use for validation
+	 * @return  Validation
+	 */
+	public static function factory(array $array)
+	{
+		return new Validation_Contact($array);
+	}
+	
+	/**
 	 * Sets the fields for Contact form
 	 *
 	 * @return array
