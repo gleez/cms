@@ -256,6 +256,9 @@ abstract class Gleez_Text extends Kohana_Text {
          */
         public static function markup($text, $format_id = FALSE, $langcode = FALSE, $cache = FALSE)
         {
+		//save some cpu cycles if text is empty or null
+		if(empty($text)) return $text;
+	
 		$config = Kohana::$config->load('inputfilter');
 		$format_id = isset($format_id) ? (int) $format_id : (int) $config->get('default_format', 1);
         	$langcode  = isset($langcode) ? $langcode : I18n::$lang;
