@@ -784,7 +784,8 @@ class Gleez_Assets {
 		Assets::codes('editor', 'jQuery(document).ready(function(){
 					jQuery("'.$name.'").redactor({
 						lang: "'.$lang.'",
-						minHeight: 300
+						minHeight: 300,
+						autoresize: false
 					});
 			});'
 		);
