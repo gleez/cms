@@ -32,6 +32,9 @@ return array(
   /** @var string Default active admin theme */
   'admin_theme' => 'fluid',
 
+  /** @var mixed Mobile Theme or false */
+  'mobile_theme' => FALSE,
+  
   /** @var boolean Maintenance Mode */
   'maintenance_mode' => FALSE,
 

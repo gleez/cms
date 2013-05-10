@@ -56,6 +56,14 @@ class Gleez_Theme {
                         $theme = THEMEPATH . self::$site_theme_name;
                 }
         
+                //Set mobile theme, if enabled and mobile request
+                if(Request::is_mobile() AND $config->get('mobile_theme', FALSE))
+		{
+			// Load the mobile theme
+                        self::$site_theme_name = $config->get('mobile_theme', self::$site_theme_name);
+                        $theme = THEMEPATH . self::$site_theme_name;
+		}
+        
                 // Admins can override the site theme, temporarily. This lets us preview themes.
                 if (User::is_admin() AND isset($_GET['theme']) AND $override = $_GET['theme'])
                 {
