@@ -268,7 +268,7 @@ class Gleez_Post extends ORM_Versioned {
 		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
 
 		// Always save only raw text, unformated text
-		$this->teaser  = empty($this->teaser) ? $this->_teaser() : $this->teaser;
+		$this->teaser  = empty($this->rawteaser) ? $this->_teaser() : $this->rawteaser;
 		$this->body    = $this->rawbody;
 
 		parent::save( $validation );
