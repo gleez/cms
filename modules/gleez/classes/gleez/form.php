@@ -262,7 +262,7 @@ class Gleez_Form extends Kohana_Form {
 		$attrs['action'] = $action;
 
 		// Dynamically sets destination url to from action if exists in url
-		if ($desti = Request::current()->query('destination') AND ! empty($desti))
+		if (Kohana::$is_cli === FALSE AND $desti = Request::current()->query('destination') AND ! empty($desti))
 		{
 			// Properly parse the path and query
 			$url = URL::explode($action);
