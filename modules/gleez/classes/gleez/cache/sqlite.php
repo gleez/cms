@@ -64,6 +64,8 @@ class Gleez_Cache_Sqlite extends Cache implements Cache_Tagging {
 				throw new Cache_Exception('Failed to create new SQLite caches table with the following error : :error', array(':error' => $e->getMessage()));
 			}
 		}
+		
+		$this->_db->sqliteCreateFunction('regexp', array($this, 'removePatternRegexpCallback'), 2);
 	}
 
 	/**
@@ -360,5 +362,14 @@ class Gleez_Cache_Sqlite extends Cache implements Cache_Tagging {
 		}
 
 		return (bool) $statement->fetchAll();
+	}
+
+
+	/**
+	 * Callback used when deleting keys from cache.
+	 */
+	public function removePatternRegexpCallback($regexp, $key)
+	{
+		return preg_match($regexp, $key);
 	}
 }
