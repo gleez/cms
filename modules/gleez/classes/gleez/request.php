@@ -278,6 +278,9 @@ class Gleez_Request extends Kohana_Request {
 	 */
 	public static function post_max_size_exceeded()
 	{
+		//return false for cli request
+		if(Kohana::$is_cli === TRUE) return FALSE;
+		
 		// Make sure the request method is POST
 		if ( ! Request::current()->is_post())
 		{
