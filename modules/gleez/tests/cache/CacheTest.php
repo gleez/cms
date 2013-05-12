@@ -228,6 +228,7 @@ class Kohana_CacheTest extends PHPUnit_Framework_TestCase {
 			'get',
 			'set',
 			'delete',
+			'delete_pattern',
 			'delete_all'
 			), array(array()),
 			'', FALSE

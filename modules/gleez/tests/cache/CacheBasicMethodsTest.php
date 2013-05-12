@@ -264,6 +264,35 @@ TESTTEXT;
 	}
 
 	/**
+	 * Tests the [Cache::delete_pattern()] method, testing;
+	 * 
+	 *  - The a cached value is deleted from cache
+	 *  - The cache returns a TRUE value upon deletion
+	 *  - The cache returns a FALSE value if no value exists to delete
+	 *
+	 * @return  void
+	 */
+	public function test_delete_pattern()
+	{
+		// Init
+		$cache = $this->cache();
+		$cache->delete_all();
+
+		// Test deletion if real cached value
+		if ( ! $cache->set('test_delete_pattern_1', 'This should not be here!', 0))
+		{
+			$this->fail('Unable to set cache value to delete!');
+		}
+
+		// Test delete returns TRUE and check the value is gone
+		$this->assertTrue($cache->delete_pattern('test_delete_pattern_1'));
+		$this->assertNull($cache->get('test_delete_pattern_1'));
+
+		// Test non-existant cache value returns FALSE if no error
+		$this->assertFalse($cache->delete_pattern('test_delete_pattern_1'));
+	}
+
+	/**
 	 * Tests [Cache::delete_all()] works as specified
 	 *
 	 * @return  void
