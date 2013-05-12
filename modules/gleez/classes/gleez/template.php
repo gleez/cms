@@ -199,6 +199,13 @@ abstract class Gleez_Template extends Controller {
 			$this->_benchmark = Profiler::start('Gleez', 'Gleez Controller');
 		}
 
+		// Test whether the current request is command line request
+		if (Kohana::$is_cli)
+		{
+			$this->_ajax       = FALSE;
+			$this->auto_render = FALSE;
+		}
+
 		// Test whether the current request is the first request
 		if ( ! $this->request->is_initial())
 		{
