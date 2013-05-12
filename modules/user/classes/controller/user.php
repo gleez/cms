@@ -92,7 +92,8 @@ class Controller_User extends Template {
 			->set('action',  $action)
 			->set('post',    $post)
 			->bind('male',   $male)
-			->bind('female', $female);
+			->bind('female', $female)
+			->bind('errors', $this->_errors);
 
 		if($config->get('use_captcha', FALSE))
 		{
@@ -122,7 +123,7 @@ class Controller_User extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors =  $e->errors('models');
+				$this->_errors =  $e->errors('models', TRUE);
 			}
 		}
 
@@ -161,7 +162,8 @@ class Controller_User extends Template {
 			->set('use_username', $config->get('username'))
 			->set('providers',    array_filter($config->get('providers')))
 			->set('post',         $user)
-			->set('action',       $action);
+			->set('action',       $action)
+			->bind('errors',       $this->_errors);
 
 		if ($this->valid_post('login'))
 		{
@@ -180,7 +182,7 @@ class Controller_User extends Template {
 			}
 			catch (Validation_Exception $e)
 			{
-				$view->errors = $e->array->errors('login', TRUE);
+				$this->_errors = $e->array->errors('login', TRUE);
 			}
 		}
 
@@ -301,10 +303,11 @@ class Controller_User extends Template {
 		$action = Route::get('user')->uri(array('action' => $this->request->action(), 'id' => $user->id));
 
 		$view = View::factory('user/edit')
-				->set('user',   $user)
-				->set('male',   $male)
-				->set('action', $action)
-				->set('female', $female);
+				->set('user',    $user)
+				->set('male',    $male)
+				->set('action',  $action)
+				->set('female',  $female)
+				->bind('errors', $this->_errors);
 
 		// Form submitted
 		if ($this->valid_post('user_edit'))
@@ -329,7 +332,7 @@ class Controller_User extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -359,7 +362,8 @@ class Controller_User extends Template {
 
 		$view = View::factory('user/password')
 				->set('destination', $destination)
-				->set('params', $params);
+				->set('params',      $params)
+				->bind('errors',     $this->_errors);
 
 		// Form submitted
 		if ($this->valid_post('change_pass'))
@@ -378,7 +382,7 @@ class Controller_User extends Template {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors =  $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -404,7 +408,8 @@ class Controller_User extends Template {
 		$this->title =  __('Upload Photo');
 
 		$view = View::factory('user/photo')
-							->set('user', $user);
+					->set('user',    $user)
+					->bind('errors', $this->_errors);
 
 		// Form submitted
 		if ($this->valid_post('user_edit'))
@@ -422,7 +427,7 @@ class Controller_User extends Template {
 			}
 			catch(ORM_Validation_Exception $e)
 			{
-				$view->errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -478,9 +483,9 @@ class Controller_User extends Template {
 		$action = Route::get('user/reset')->uri(array('action' => 'password'));
 
 		$view = View::factory('user/reset_pass')
-				->set('action', $action)
-				->bind('post', $post)
-				->bind('errors', $errors);
+				->set('action',  $action)
+				->bind('post',   $post)
+				->bind('errors', $this->_errors);
 
 		// Form submitted
 		if($this->valid_post('reset_pass'))
@@ -495,7 +500,7 @@ class Controller_User extends Template {
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$errors = $post->errors('models/mail', TRUE);
+			$this->_errors = $post->errors('models/mail', TRUE);
 		}
 
 		$this->response->body($view);
@@ -527,8 +532,8 @@ class Controller_User extends Template {
 		// Show form
 		$this->title = __('Choose a new password');
 		$view = View::factory('user/confirm_reset_password')
-			->bind('post', $post)
-			->bind('errors', $errors);
+			->bind('post',   $post)
+			->bind('errors', $this->_errors);
 
 		// Form submitted
 		if( $this->valid_post('password_confirm'))
@@ -539,7 +544,7 @@ class Controller_User extends Template {
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$errors = $post->errors('models');
+			$this->_errors = $post->errors('models');
 		}
 
 		$this->response->body($view);
