@@ -767,7 +767,7 @@ abstract class Gleez_Template extends Controller {
          *  Process the response as JSON with some extra information about the
          *  (success status of the form) so that jQuery knows what to do with the result.
          */
-        protected function process_ajax()
+	protected function process_ajax()
 	{
 		if ( $this->request->method() == HTTP_Request::POST )
                 {
@@ -801,12 +801,12 @@ abstract class Gleez_Template extends Controller {
                 {
                         if ($this->request->query('sEcho') !== NULL) return;
                 
-                        $this->SetJson('FormSaved', $this->_formsaved);
-                        $this->SetJson('DeliveryType', $this->_accept_format);
+                        $this->SetJson('FormSaved',      $this->_formsaved);
+                        $this->SetJson('DeliveryType',   $this->_accept_format);
                         $this->SetJson('InformMessages', Message::get(NULL, NULL, TRUE));
-                        $this->SetJson('ErrorMessages', $this->_errors);
-                        $this->SetJson('RedirectUrl', Request::$_redirect_url);
-                        $this->SetJson('pageTitle', $this->title);
+                        $this->SetJson('ErrorMessages',  $this->_errors);
+                        $this->SetJson('RedirectUrl',    Request::$_redirect_url);
+                        $this->SetJson('pageTitle',      $this->title);
                 
                         if ( ! Text::check_utf8($this->_json['Data']) )
                         {
