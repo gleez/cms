@@ -44,6 +44,7 @@ class Gleez_Post extends ORM_Versioned {
 		'comment'  => array( 'type' => 'int' ),
 		'lang'     => array( 'type' => 'string' ),
 		'layout'   => array( 'type' => 'string' ),
+                'image'    => array( 'type' => 'string' ),
 	);
 
 	/**
@@ -263,6 +264,7 @@ class Gleez_Post extends ORM_Versioned {
 		$this->pubdate = empty($this->pubdate) ? time() : $this->pubdate;
 		$this->updated = empty($this->updated) ? time() : $this->updated;
 
+                $this->image   = empty($this->image)   ? NULL : $this->image;
 		$this->type    = empty($this->type)    ? $this->_post_type : $this->type;
 		$this->author  = empty($this->author)  ? User::active_user()->id : $this->author;
 		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
@@ -408,9 +410,13 @@ class Gleez_Post extends ORM_Versioned {
 			);
 		}
 
+                if($this->image AND file_exists($this->image))
+                {
+                        unlink($this->image);
+                }
+        
 		$source = $this->rawurl;
-		Cache::instance($this->type)
-				->delete($this->type.'-'.$this->id);
+		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
 		parent::delete();
 
 		// Delete the path aliases associated with this object
