@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<div class="control-group <?php echo isset($errors['email']) ? 'error': ''; ?>">
-				<?php echo Form::label('email', __('E-mail'), array('class' => 'control-label')) ?>
+				<?php echo Form::label('email', __('Reply-to'), array('class' => 'control-label')) ?>
 				<div class="controls">
 					<?php echo Form::input('email', $user->mail, array('class' => 'input-xlarge')); ?>
 				</div>
