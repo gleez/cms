@@ -304,8 +304,67 @@ jQuery.noConflict();
 		}
             });
         })
-        
     }
+
+    /**
+     * Dynamic injection of css and js files
+     *
+     * @todo add minor events
+     */
+    Gleez.requires = function(Library, filetype)
+    {
+        if(Library == null || Library == false) return;
+        if (!(Library instanceof Array)) Library = [Library];
+        
+        //if filename is a JavaScript file
+        if (filetype=="js")
+        {
+	    $(Library).each(function (i,Lib){
+                // Skip any libs that are ready or processing
+                if (Gleez.Libraries[Lib] === false || Gleez.Libraries[Lib] === true)
+                {
+                    $(document).trigger('attach', Gleez.settings);
+                    return;
+                }
+            
+                // As yet unseen. Try to load
+                Gleez.Libraries[Lib] = false;
+                var script  = document.createElement('script');
+                script.type = 'text/javascript';
+		node.async  = true;
+                script.src  = Gleez.settings.basePath+Lib;
+                script.onload = function(){
+                    $(document).trigger('attach', Gleez.settings);
+                };
+
+		var src = document.getElementsByTagName('script')[0];
+		src.parentNode.insertBefore(script, src);
+                Gleez.Libraries[Lib] = true;
+            });
+        }
+        
+        //if filename is an CSS file
+        if (filetype=="css")
+        {
+            $(Library).each(function (i,Lib){
+                // Skip any libs that are ready or processing
+                if (Gleez.Libraries[Lib] === false || Gleez.Libraries[Lib] === true)
+                    return;
+            
+                // As yet unseen. Try to load
+                Gleez.Libraries[Lib] = false;
+                var fileref=document.createElement("link");
+                fileref.setAttribute("rel", "stylesheet");
+                fileref.setAttribute("type", "text/css");
+                fileref.setAttribute("href", Gleez.settings.basePath+Lib);
+                
+                if (typeof fileref != "undefined"){
+                    document.getElementsByTagName("head")[0].appendChild(fileref);
+                    Gleez.Libraries[Lib] = true;
+                }
+            });
+        }
+    };
     
     Gleez.theme = function (func) {
       for (var i = 1, args = []; i < arguments.length; i++) {
