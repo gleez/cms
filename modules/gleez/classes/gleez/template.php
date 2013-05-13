@@ -48,6 +48,12 @@ abstract class Gleez_Template extends Controller {
 	public $title_separator;
 
 	/**
+	 * The page title icon
+	 * @var string
+	 */
+	public $icon = FALSE;
+	
+	/**
 	 * The sidebar content
 	 * @var array
 	 */
@@ -226,7 +232,7 @@ abstract class Gleez_Template extends Controller {
 			$this->_ajax       = TRUE;
 			$this->auto_render = FALSE;
 		}
-                
+		
 		$this->response->headers('X-Powered-By', 'Gleez CMS ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')');
 
 		$this->_config = Kohana::$config->load('site');
@@ -275,6 +281,7 @@ abstract class Gleez_Template extends Controller {
 					->set('main_column',   12)
 					->set('head_title',    $this->title)
 					->set('title',         $this->title)
+					->set('icon',          $this->icon)
 					->set('front',         FALSE)
 					->set('mission',       FALSE)
 					->set('tabs',          FALSE)
@@ -380,6 +387,7 @@ abstract class Gleez_Template extends Controller {
 					->set('page_class', $page_class)
 					->set('primary_menu', $primary_menu)
 					->set('title', $this->title)
+					->set('icon',  $this->icon)
 					->set('mission', $this->template->mission)
 					->set('content', $this->response->body())
 					->set('messages', Message::display())
@@ -609,7 +617,7 @@ abstract class Gleez_Template extends Controller {
 	protected function _set_default_css()
 	{
 		$theme = (Theme::$is_admin) ? Theme::$admin_theme_name : Theme::$site_theme_name;
-                
+		
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
@@ -690,7 +698,7 @@ abstract class Gleez_Template extends Controller {
 		{
 			// CSRF was submitted but expired
 			//Message::error(__('This form has expired. Please try submitting it again.'));
-                        $this->_errors = array('_token' => __('This form has expired. Please try submitting it again.'));
+			$this->_errors = array('_token' => __('This form has expired. Please try submitting it again.'));
 			return FALSE;
 		}
 
@@ -763,88 +771,88 @@ abstract class Gleez_Template extends Controller {
 		return (empty($uri) OR ($uri === $this->_config->front_page));
 	}
 
-        /**
-         *  Process the response as JSON with some extra information about the
-         *  (success status of the form) so that jQuery knows what to do with the result.
-         */
+	/**
+	 *  Process the response as JSON with some extra information about the
+	 *  (success status of the form) so that jQuery knows what to do with the result.
+	 */
 	protected function process_ajax()
 	{
 		if ( $this->request->method() == HTTP_Request::POST )
-                {
-                        // Allow for override. Set the form saved true for ajax request, if no errors
-                        if( empty($this->_errors) )
-                        {
-                                $this->SetFormSaved(TRUE);
-                                if( $this->_accept_format === 'application/json')
-                                {
-                                        $this->SetJson('Data', NULL);
-                                }
-                        }
-                        else
-                        {
-                                $this->SetFormSaved(FALSE);
-                                if( $this->_accept_format === 'application/json')
-                                {
-                                        $this->SetJson('Data', base64_encode($this->response->body()));
-                                }
-                        }
-                }
-                else
-                {
-                        if( $this->_accept_format === 'application/json')
-                        {
-                                $this->SetJson('Data', base64_encode($this->response->body()));
-                        }
-                }
+		{
+			// Allow for override. Set the form saved true for ajax request, if no errors
+			if( empty($this->_errors) )
+			{
+				$this->SetFormSaved(TRUE);
+				if( $this->_accept_format === 'application/json')
+				{
+					$this->SetJson('Data', NULL);
+				}
+			}
+			else
+			{
+				$this->SetFormSaved(FALSE);
+				if( $this->_accept_format === 'application/json')
+				{
+					$this->SetJson('Data', base64_encode($this->response->body()));
+				}
+			}
+		}
+		else
+		{
+			if( $this->_accept_format === 'application/json')
+			{
+				$this->SetJson('Data', base64_encode($this->response->body()));
+			}
+		}
 
-                if( $this->_accept_format === 'application/json')
-                {
-                        if ($this->request->query('sEcho') !== NULL) return;
-                
-                        $this->SetJson('FormSaved',      $this->_formsaved);
-                        $this->SetJson('DeliveryType',   $this->_accept_format);
-                        $this->SetJson('InformMessages', Message::get(NULL, NULL, TRUE));
-                        $this->SetJson('ErrorMessages',  $this->_errors);
-                        $this->SetJson('RedirectUrl',    Request::$_redirect_url);
-                        $this->SetJson('pageTitle',      $this->title);
-                
-                        if ( ! Text::check_utf8($this->_json['Data']) )
-                        {
-                                $this->_json['Data'] = utf8_encode($this->_json['Data']);
-                        }
+		if( $this->_accept_format === 'application/json')
+		{
+			if ($this->request->query('sEcho') !== NULL) return;
+		
+			$this->SetJson('FormSaved',      $this->_formsaved);
+			$this->SetJson('DeliveryType',   $this->_accept_format);
+			$this->SetJson('InformMessages', Message::get(NULL, NULL, TRUE));
+			$this->SetJson('ErrorMessages',  $this->_errors);
+			$this->SetJson('RedirectUrl',    Request::$_redirect_url);
+			$this->SetJson('pageTitle',      $this->title);
+		
+			if ( ! Text::check_utf8($this->_json['Data']) )
+			{
+				$this->_json['Data'] = utf8_encode($this->_json['Data']);
+			}
+		
+			$this->_json['Data'] = JSON::encode($this->_json);
+		}
+	}
+	
+	/**
+	 * If JSON is going to be sent to the client, this method allows you to add
+	 * extra values to the JSON array.
+	 *
+	 * @param string $Key The name of the array key to add.
+	 * @param string $Value The value to be added. If empty, nothing will be added.
+	 */
+	public function SetJson($Key, $Value = '')
+	{
+		$this->_json[$Key] = $Value;
+	}
 
-                        $this->_json['Data'] = JSON::encode($this->_json);
-                }
-        }
-        
-        /**
-         * If JSON is going to be sent to the client, this method allows you to add
-         * extra values to the JSON array.
-         *
-         * @param string $Key The name of the array key to add.
-         * @param string $Value The value to be added. If empty, nothing will be added.
-         */
-        public function SetJson($Key, $Value = '')
-        {
-                $this->_json[$Key] = $Value;
-        }
-
-        /**
-         * Set $this->_FormSaved for JSON Renders.
-         *
-         * @param bool $Saved Whether form data was successfully saved.
-         */
-        public function SetFormSaved($Saved = TRUE)
-        {
-                if ($Saved === '')
-                {
-                        // Allow reset
-                        $this->_formsaved = NULL;
-                }
-                else
-                {
-                        // Force true/false
-                        $this->_formsaved = ($Saved) ? TRUE : FALSE;
-                }
-        }
+	/**
+	 * Set $this->_FormSaved for JSON Renders.
+	 *
+	 * @param bool $Saved Whether form data was successfully saved.
+	 */
+	public function SetFormSaved($Saved = TRUE)
+	{
+		if ($Saved === '')
+		{
+			// Allow reset
+			$this->_formsaved = NULL;
+		}
+		else
+		{
+			// Force true/false
+			$this->_formsaved = ($Saved) ? TRUE : FALSE;
+		}
+	}
 }
