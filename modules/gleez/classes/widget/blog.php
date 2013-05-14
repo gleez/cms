@@ -45,19 +45,6 @@ class Widget_blog extends Widget {	public function info(){}
 		{
 			$blogs = ORM::factory('blog');
 
-			/**
-			 * Bug in ORM to repeat the `where()` methods after using `count_all()`
-			 * @link http://forum.kohanaframework.org/discussion/7736 Solved
-			 */
-			$total = $blogs->reset(FALSE)->count_all();
-
-			if ($total == 0)
-			{
-				Kohana::$log->add(Log::INFO, 'No blogs found');
-				$this->response->body(View::factory('blog/none'));
-				return;
-			}
-
 			if ( ! ACL::check('administer blog'))
 			{
 				$blogs->where('status', '=', 'publish');
@@ -78,7 +65,6 @@ class Widget_blog extends Widget {	public function info(){}
 
 			// set the cache
 			$cache->set('recent_blogs', $items, DATE::HOUR);
-			echo Debug::vars($cache);exit;
 		}
 
 		$view->render();
