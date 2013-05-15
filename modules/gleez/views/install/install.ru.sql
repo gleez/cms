@@ -195,7 +195,12 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (24, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (25, 'Страницы', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (26, 'Комментарии', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(27, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4);
+(27, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4)
+(28, 'Блоги', 'blogs-1', '', 'icon-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
+(29, 'Добавить блог', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
+(30, 'Все', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
+(31, 'Все', 'list-1', '', NULL, 'blog', NULL, 1, 28, 11, 12, 3, 1),
+(32, 'Контакты', 'contact-1', '', 'icon-envelope-alt', 'contact', NULL, 1, 1, 16, 17, 2, 1);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
@@ -431,7 +436,8 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (8, 'admin/info', 'Система', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
 (9, 'user/login', 'Авторизация', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
 (10, 'comment/recent', 'Комментарии', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
-(11, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark');
+(11, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark'),
+(12, 'blog/recent',	'Последние',	'blog',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
