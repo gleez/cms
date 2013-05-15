@@ -13,10 +13,10 @@ return array
 	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Аккаунт :prov',
-	':role Permissions' => 'Разрешения для :role',
+	':role Permissions' => 'Полномочия :role',
 	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	':site Account' => 'Аккаунт :site',
-	':user Permissions' => 'Разрешения для :user',
+	':user Permissions' => 'Полномочия :user',
 	// %
 	"%title successfully updated!" => '%title успешно обновлён!',
 	// A
@@ -58,7 +58,8 @@ return array
 	"Don't have an account?" => 'Нет аккаунта?',
 	// E
 	'Edit Account' => 'Изменить аккаунт',
-	'Edit Permission' => 'Изменить разрешения',
+	'Edit Permission' => 'Изменить полномочие',
+	'Edit Permissions' => 'Изменить полномочия',
 	'Edit profile' => 'Изменить профиль',
 	'Edit role %name' => 'Изменить роль %name',
 	'Edit User' => 'Изменить пользователя',
@@ -116,7 +117,7 @@ return array
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
 	'Permissions let you control what users can do on your site. User defined permission override role based permissions.' => 'Разрешения позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Пользовательские разрешения переопределяют разрешения определённые для ролей.',
-	'Permissions save failed!' => 'Разрешения сохранить не удалось!',
+	'Permissions save failed!' => 'Не удалось сохранить полномочия!',
 	'Permissions saved successfully!' => 'Полномочия успешно сохранены!',
 	'Photo' => 'Фотография',
 	'Photo successfully uploaded!' => 'Фотография успешно загружена',
@@ -138,6 +139,7 @@ return array
 	'Security code' => 'Защитный код',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
 	'Sign in using your registered account:' => 'Войдите используя ваш зарегистрированный аккаунт:',
+	"Special" => 'Особая роль',
 	'Special Role' => 'Особая роль',
 	'Stay Signed in' => 'Оставаться в системе',
 	// T

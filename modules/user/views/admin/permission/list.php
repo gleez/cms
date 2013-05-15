@@ -43,11 +43,11 @@
 				<tr class="<?php echo Text::alternate("odd", "even") ?>">
 					<td class="permission" >
 						<div class="permission-item" id="permission-<?php echo str_replace(' ', '-', $perm) ?>" >
-							<?php echo ucwords($name['title']) ?>
+							<strong><?php echo ucwords($name['title']) ?></strong>
 							<div class="description">
-								<?php echo Text::plain($name['description'])?>
+								<p class="muted"><?php echo Text::plain($name['description'])?></p>
 								<?php if ( ! empty($name['restrict access'])): ?>
-									<cite class="permission-warning">
+									<cite class="permission-warning text-warning">
 										<?php echo __('Warning! Give to trusted roles only; this permission has security implications.'); ?>
 									</cite>
 								<?php endif; ?>

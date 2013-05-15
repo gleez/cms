@@ -2,24 +2,32 @@
 /**
  * Database source for the Gleez config system
  *
- * @package     Gleez/Database
- * @category    Configuration
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2011 - 2013 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Database\Configuration
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011 - 2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Config_Database implements Config_Source {
-	
+
+	/**
+	 * @var string
+	 */
 	protected $_db_instance = 'default';
 
+	/**
+	 * @var string
+	 */
 	protected $_table_name  = 'config';
 
+	/**
+	 * @var array
+	 */
 	protected $_loaded_keys = array();
 	
 	/**
 	 * Constructs the database source object
 	 *
-	 * @param array Configuration for the source
+	 * @param  array  $config  Configuration for the source
 	 */
 	public function __construct(array $config = NULL)
 	{
@@ -35,7 +43,7 @@ class Gleez_Config_Database implements Config_Source {
 	}
 	
 	/**
-	 * Tries to load the specificed configuration group
+	 * Tries to load the specified configuration group
 	 *
 	 * Returns FALSE if group does not exist or an array if it does
 	 *
@@ -115,10 +123,10 @@ class Gleez_Config_Database implements Config_Source {
 	/**
 	 * Insert the config values into the table
 	 *
-	 * @param string      $group  The config group
-	 * @param string      $key    The config key to write to
-	 * @param array       $config The serialized configuration to write
-	 * @return boolean
+	 * @param   string  $group   The config group
+	 * @param   string  $key     The config key to write to
+	 * @param   array   $config  The serialized configuration to write
+	 * @return  Gleez_Config_Database
 	 */
 	protected function _insert($group, $key, $config)
 	{
@@ -132,10 +140,10 @@ class Gleez_Config_Database implements Config_Source {
 	/**
 	 * Update the config values in the table
 	 *
-	 * @param string      $group  The config group
-	 * @param string      $key    The config key to write to
-	 * @param array       $config The serialized configuration to write
-	 * @return boolean
+	 * @param   string  $group  The config group
+	 * @param   string  $key    The config key to write to
+	 * @param   array   $config The serialized configuration to write
+	 * @return  Gleez_Config_Database
 	 */
 	protected function _update($group, $key, $config)
 	{
@@ -151,9 +159,9 @@ class Gleez_Config_Database implements Config_Source {
 	/**
 	 * Delete the config key in the table
 	 *
-	 * @param string      $group  The config group
-	 * @param string      $key    The config key to delete
-	 * @return boolean
+	 * @param   string  $group  The config group
+	 * @param   string  $key    The config key to delete
+	 * @return  Gleez_Config_Database
 	 */
 	public function delete($group, $key)
 	{
