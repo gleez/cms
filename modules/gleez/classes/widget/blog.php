@@ -44,14 +44,7 @@ class Widget_blog extends Widget {
 
 		if ( ! $items = $cache->get('recent_blogs'))
 		{
-			$blogs = ORM::factory('blog');
-
-			if ( ! ACL::check('administer blog'))
-			{
-				$blogs->where('status', '=', 'publish');
-			}
-
-			$blogs->limit(10)->find_all();
+			$blogs = ORM::factory('blog')->limit(10)->find_all();
 
 			$items = array();
 			foreach($blogs as $blog)
