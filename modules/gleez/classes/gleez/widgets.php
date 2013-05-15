@@ -194,7 +194,7 @@ abstract class Gleez_Widgets {
 	 * </code>
 	 *
 	 * @param   string  $region  Region name [Optional]
-	 * @return  Region
+	 * @return  $this|string
 	 */
 	public function region($region = NULL)
 	{
@@ -217,7 +217,7 @@ abstract class Gleez_Widgets {
 	 * </code>
 	 *
 	 * @param   string  $format  Format name [Optional]
-	 * @return  Region
+	 * @return  $this|string
 	 */
 	public function format($format = NULL)
 	{
@@ -308,10 +308,9 @@ abstract class Gleez_Widgets {
 		($visible == TRUE) ? $this->is_visible($widget) : $widget->visible == TRUE;
 
 		// Enable developers to override widget
-		Module::event('widget', $widget);
+		Module::event('Widget', $widget);
 
-		// @todo member has protected access
-		Module::event("widget_{$widget->name}", $widget);
+		Module::event('Widget_'.ucfirst($name), $widget);
 	
 		if ($widget->status AND $widget->visible)
 		{
