@@ -27,16 +27,13 @@
  * driver         | __YES__  | (_string_) The driver type to use
  * cache_dir      | __NO__   | (_string_) The cache directory to use for this cache instance
  *
- * ### System requirements
- *
- * *  Kohana 3.0.x
- * *  PHP 5.2.4 or greater
- *
- * @package    Kohana/Cache
- * @category   Base
+ * @package    Gleez\Cache\Base
  * @author     Kohana Team
+ * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2009-2012 Kohana Team
+ * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Cache_File extends Cache{
 
@@ -72,9 +69,10 @@ class Gleez_Cache_File extends Cache{
 		// Setup parent
 		parent::__construct($config);
 
+		$directory = Arr::get($this->_config, 'cache_dir', Kohana::$cache_dir);
+
 		try
 		{
-			$directory = Arr::get($this->_config, 'cache_dir', Kohana::$cache_dir);
 			$this->_cache_dir = new SplFileInfo($directory);
 		}
 		// PHP < 5.3 exception handle

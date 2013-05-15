@@ -7,7 +7,7 @@
  * @package    Gleez\Widget
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Widget {
 

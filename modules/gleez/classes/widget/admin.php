@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-
+/**
+ * Admin Widget class
+ *
+ * @package    Gleez\Widget
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2012 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ */
 class Widget_Admin extends Widget {
 
 	public function info() {}
@@ -13,26 +20,28 @@ class Widget_Admin extends Widget {
 		{
 			case 'donate':
 				return $this->donate();
-				break;
+			break;
 			case 'welcome':
 				return $this->welcome();
-				break;
+			break;
 			case 'info':
 				return $this->system_info();
-				break;
+			break;
 			case 'shortcut':
 				return $this->shortcut();
-				break;
+			break;
 			default:
 				return;
-		}
+			}
 	}
 
 	public function shortcut()
 	{
 		$menus = Menu::items('management')->get_items();
 		unset($menus['administer']);
-		return View::factory('widgets/shortcuts')->set(array( 'items' => $menus ))->render();
+		return View::factory('widgets/shortcuts')
+				->set(array( 'items' => $menus ))
+				->render();
 	}
 
 	public function donate()
