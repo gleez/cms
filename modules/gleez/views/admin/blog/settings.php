@@ -33,6 +33,7 @@
 			echo Form::hidden('use_tags',          0);
 			echo Form::hidden('use_submitted',     0);
 			echo Form::hidden('use_cache',         0);
+			echo Form::hidden('primary_image',     0);
 			echo Form::hidden('comment_anonymous', 0);
 		?>
 		<div class="controls">
@@ -45,6 +46,7 @@
 				echo Form::label('use_tags',          Form::checkbox('use_tags', TRUE, $use_tags).__('Enable tag cloud'), array('class' => 'checkbox'));
 				echo Form::label('use_submitted',     Form::checkbox('use_submitted', TRUE, $use_submitted).__('Show Submitted Info'), array('class' => 'checkbox'));
 				echo Form::label('use_cache',         Form::checkbox('use_cache', TRUE, $use_cache).__('Enable Blog Cache'), array('class' => 'checkbox'));
+				echo Form::label('primary_image',     Form::checkbox('primary_image', TRUE, $primary_image).__('Use Primary Image'), array('class' => 'checkbox'));
 				echo Form::label('comment_anonymous', Form::checkbox('comment_anonymous', TRUE, $comment_anonymous).__('Allow anonymous commenting (with contact information)'), array('class' => 'checkbox'));
 			?>
 		</div>
