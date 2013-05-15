@@ -7,7 +7,9 @@
  * @copyright  (c) 2011-2012 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Widget_blog extends Widget {	public function info(){}
+class Widget_blog extends Widget {
+
+	public function info(){}
 	public function form(){}
 	public function save(array $post){}
 	public function delete(array $post){}
@@ -17,7 +19,7 @@ class Widget_blog extends Widget {	public function info(){}
 		switch($this->name)
 		{
 			case 'recent':
-				return $this->recent_blogs();
+				return $this->recent_blogs($this->widget);
 			break;
 			default:
 				return;
@@ -27,11 +29,9 @@ class Widget_blog extends Widget {	public function info(){}
 	/**
 	 * Get recent blogs
 	 */
-	public function recent_blogs()
+	public function recent_blogs($widget)
 	{
 		$action = Request::current()->action();
-		$cache  = Cache::instance('blogs');
-		$view   = View::factory('widgets/blog/list')->bind('items', $items);
 
 		// Don't show the widget on edit or delete actions
 		if ($action == 'edit' OR $action == 'delete')
@@ -39,9 +39,10 @@ class Widget_blog extends Widget {	public function info(){}
 			return FALSE;
 		}
 
-		$items = $cache->get('recent_blogs', array());
+		$cache = Cache::instance('widgets');
+		$view  = View::factory('widgets/blog/list')->bind('items', $items);
 
-		if (empty($items))
+		if ( ! $items = $cache->get('recent_blogs'))
 		{
 			$blogs = ORM::factory('blog');
 
@@ -52,14 +53,13 @@ class Widget_blog extends Widget {	public function info(){}
 
 			$blogs->limit(10)->find_all();
 
-
 			$items = array();
 			foreach($blogs as $blog)
 			{
-				$items[$blog->id]['id'] = $blog->id;
+				$items[$blog->id]['id']    = $blog->id;
 				$items[$blog->id]['title'] = $blog->title;
-				$items[$blog->id]['url'] = $blog->url;
-				$items[$blog->id]['date'] = $blog->updated ? $blog->updated : $blog->created;
+				$items[$blog->id]['url']   = $blog->url;
+				$items[$blog->id]['date']  = $blog->updated ? $blog->updated : $blog->created;
 
 			}
 
@@ -67,6 +67,6 @@ class Widget_blog extends Widget {	public function info(){}
 			$cache->set('recent_blogs', $items, DATE::HOUR);
 		}
 
-		$view->render();
+		return $view->render();
 	}
 }
