@@ -247,6 +247,7 @@ class Controller_Blog extends Template {
 			->set('author',      FALSE)
 			->set('path',        FALSE)
 			->set('tags',        isset($_POST['ftags']) ? $_POST['ftags'] : FALSE)
+			->set('image',        FALSE)
 			->bind('errors',     $this->_errors)
 			->bind('terms',      $terms)
 			->bind('blog',       $post);
@@ -301,6 +302,7 @@ class Controller_Blog extends Template {
 	 * @uses    Route::uri
 	 * @uses    URL::query
 	 * @uses    Tags::implode
+	 * @uses    Date::date_time
 	 * @uses    Path::load
 	 * @uses    Message::success
 	 * @uses    Log::add
@@ -330,9 +332,10 @@ class Controller_Blog extends Template {
 			->set('action',       $action)
 			->set('config',       $config)
 			->set('path',         FALSE)
-			->set('created',      date('Y-m-d H:i:s O', $post->created))
+			->set('created',      Date::date_time($post->created))
 			->set('author',       $post->user->name)
 			->set('tags',         Tags::implode($post->tags_form))
+			->set('image',        FALSE)
 			->bind('errors',      $this->_errors)
 			->bind('terms',       $terms)
 			->bind('blog',        $post);
@@ -352,6 +355,11 @@ class Controller_Blog extends Template {
 		{
 			$terms = ORM::factory('term', array('type' => 'blog', 'lvl' => 1))
 				->select_list('id', 'name', '--');
+		}
+
+		if ($config->get('primary_image', FALSE))
+		{
+			$image = $post->image;
 		}
 
 		if($this->valid_post('blog'))
