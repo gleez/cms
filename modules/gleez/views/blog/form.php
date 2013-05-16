@@ -32,6 +32,15 @@
 				</div>
 			<?php endif; ?>
 
+			<?php if ($config->primary_image): ?>
+				<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
+					<?php echo Form::label('image', __('Primary Image'), array('class' => 'control-label') ) ?>
+					<div class="controls">
+						<?php echo Form::input('image', $image, array('class' => 'span12')); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+
 			<?php if ($config->use_excerpt): ?>
 				<div class="control-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>

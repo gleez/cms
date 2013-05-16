@@ -91,6 +91,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 		$use_submitted     = (isset($config['use_submitted']) AND $config['use_submitted'] == 1) ? TRUE : FALSE;
 		$comment_anonymous = (isset($config['comment_anonymous']) AND $config['comment_anonymous'] == 1) ? TRUE : FALSE;
 		$use_cache         = (isset($config['use_cache']) AND $config['use_cache'] == 1) ? TRUE : FALSE;
+		$primary_image     = (isset($config['primary_image']) AND $config['primary_image'] == 1) ? TRUE : FALSE;
 		$comment1          = (isset($config['comment']) && $config['comment'] == 0) ? TRUE : FALSE;
 		$comment2          = (isset($config['comment']) && $config['comment'] == 1) ? TRUE : FALSE;
 		$comment3          = (isset($config['comment']) && $config['comment'] == 2) ? TRUE : FALSE;
@@ -112,6 +113,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 					->set('use_submitted',      $use_submitted)
 					->set('comment_anonymous',  $comment_anonymous)
 					->set('use_cache',          $use_cache)
+					->set('primary_image',      $primary_image)
 					->set('comment1',           $comment1)
 					->set('comment2',           $comment2)
 					->set('comment3',           $comment3)
