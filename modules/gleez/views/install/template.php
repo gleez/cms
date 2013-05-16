@@ -29,19 +29,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="span12">
-					<!--[if lt IE 7]>
-					<div class="alert">
-						<strong><?php echo __('Warning!'); ?></strong>
-						<?php
-						echo __('You are using an :out browser. Please :url or :frame to improve your experience', array(
-								':out' => '<strong>'.__('outdated').'</strong>',
-						':url' => HTML::anchor('http://browsehappy.com/', __('upgrade your browser')),
-						':frame' => HTML::anchor('http://www.google.com/chromeframe/?redirect=true&hl='.substr(I18n::$lang, 0, 2), __('activate Google Chrome Frame')),
-						)
-						)
-						?>
-					</div>
-					<![endif]-->
+					<?php include Kohana::find_file('views', 'errors/ielt7'); ?>
 					<div class="row">
 						<div class="span9">
 							<?php if ( ! empty($error)): ?>
@@ -66,7 +54,7 @@
 							<hr>
 							<blockquote>
 								<?php
-								echo __('Did something go wrong? Try the :github.', array(':github' => HTML::anchor('https://github.com/gleez/cms/issues', 'Github Issues') ));
+									echo __('Did something go wrong? Try the :github.', array(':github' => HTML::anchor('https://github.com/gleez/cms/issues', 'Github Issues') ));
 								?>
 							</blockquote>
 						</div>
