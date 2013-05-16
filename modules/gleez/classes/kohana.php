@@ -193,6 +193,7 @@ class Kohana {
 	 * @uses    Kohana::sanitize
 	 * @uses    Kohana::cache
 	 * @uses    Profiler
+	 * @uses    System::mkdir
 	 */
 	public static function init(array $settings = NULL)
 	{
@@ -259,10 +260,7 @@ class Kohana {
 				try
 				{
 					// Create the cache directory
-					mkdir($settings['cache_dir'], 0755, TRUE);
-
-					// Set permissions (must be manually set to fix umask issues)
-					chmod($settings['cache_dir'], 0755);
+					System::mkdir($settings['cache_dir']);
 				}
 				catch (Exception $e)
 				{
@@ -278,6 +276,19 @@ class Kohana {
 		{
 			// Use the default cache directory
 			Kohana::$cache_dir = APPPATH.'cache';
+		}
+
+		if ( ! is_dir(Kohana::$cache_dir))
+		{
+			try
+			{
+				System::mkdir(Kohana::$cache_dir);
+			}
+			catch (Exception $e)
+			{
+				throw new Kohana_Exception('Could not create cache directory :dir',
+					array(':dir' => Debug::path(Kohana::$cache_dir)));
+			}
 		}
 
 		if ( ! is_writable(Kohana::$cache_dir))
