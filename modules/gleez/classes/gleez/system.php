@@ -73,7 +73,7 @@ class Gleez_System {
 	public static function mkdir($path, $mode = 0777, $recursive = TRUE)
 	{
 		$oldumask = umask(0);
-		if (!is_dir($path))
+		if ( ! is_dir($path))
 		{
 			return @mkdir($path, $mode, $recursive);
 		}
@@ -83,7 +83,7 @@ class Gleez_System {
 	public static function icons()
 	{
 		$icons = array(
-			"icon-cloud-download" => ' cloud-download',
+			"icon-cloud-download" => 'cloud-download',
 			"icon-cloud-upload" => 'cloud-upload',
 			"icon-lightbulb" => 'lightbulb',
 			"icon-exchange" => 'exchange',
