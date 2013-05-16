@@ -801,7 +801,7 @@ class Gleez_Post extends ORM_Versioned {
 		$use_cache = (bool) $config->get('use_cache', FALSE);
 		$post      = ($use_cache) ? $cache->get("$type-$id", FALSE) : FALSE;
 
-		if ($post == FALSE OR is_null($post))
+		if (empty($post))
 		{
 			$post = ORM::factory($type, $id);
 
