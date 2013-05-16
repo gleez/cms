@@ -265,10 +265,10 @@ class Gleez_Post extends ORM_Versioned {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-                // Set primary image defaults
-                $this->_image_path = APPPATH.'media/';
-                $this->_image_url  = URL::site('media', TRUE);
-                
+		// Set primary image defaults
+		$this->_image_path = APPPATH.'media/';
+		$this->_image_url  = URL::site('media', TRUE);
+		
 		// Set some defaults
 		$this->status  = empty($this->status)  ? 'draft' : $this->status;
 		$this->promote = empty($this->promote) ? 0 : $this->promote;
