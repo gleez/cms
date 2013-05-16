@@ -99,34 +99,6 @@ jQuery.noConflict();
         $('#freeze-height').remove();
     };
 
-    Gleez.behaviors.titlehint = {
-        attach: function (context, settings) {
-            id = 'title';
-            var title = $('#' + id), titleprompt = $('#' + id + '-prompt-text');
-
-            if ( title.val() != '' )
-                titleprompt.css('visibility', 'hidden');
-
-            if ( title.val() == '' )
-                titleprompt.css('display', 'block');
-
-            titleprompt.click(function(){
-                $(this).css('visibility', 'hidden');
-                title.focus();
-            });
-
-            title.blur(function(){
-                if ( this.value == '' )
-                    titleprompt.css('display', 'block');
-                }).focus(function(){
-                    titleprompt.css('visibility', 'hidden');
-                }).keydown(function(e){
-                    titleprompt.css('visibility', 'hidden');
-                    $(this).unbind(e);
-            });
-        }
-    };
-
     /**
      * Encodes a Gleez path for use in a URL.
      *
@@ -582,8 +554,7 @@ jQuery.noConflict();
     };
 
     //Attach all behaviors.
-    $(function ()
-    {
+    $(function () {
         Gleez.attachBehaviors(document, Gleez.settings);
     });
 
