@@ -19,7 +19,7 @@ class Gleez_Post extends ORM_Versioned {
 
 	/** Special tag for stopping teaser setting */
 	const TEASER_TAG = '<!--break-->';
-	
+
 	/**
 	 * Table columns
 	 * @var array
@@ -44,7 +44,7 @@ class Gleez_Post extends ORM_Versioned {
 		'comment'  => array( 'type' => 'int' ),
 		'lang'     => array( 'type' => 'string' ),
 		'layout'   => array( 'type' => 'string' ),
-                'image'    => array( 'type' => 'string' ),
+		'image'    => array( 'type' => 'string' ),
 	);
 
 	/**
@@ -160,6 +160,7 @@ class Gleez_Post extends ORM_Versioned {
 			'title'    => __('Title'),
 			'body'     => __('Body'),
 			'teaser'   => __('Teaser'),
+			'image'    => __('Primary Image'),
 		);
 	}
 
@@ -170,7 +171,6 @@ class Gleez_Post extends ORM_Versioned {
 	 * @param   Validation  $validation  Validation object
 	 * @param   string      $field       Field name
 	 * @uses    Valid::numeric
-	 * @return  void
 	 */
 	public function is_valid($name, Validation $validation, $field)
 	{
@@ -264,7 +264,7 @@ class Gleez_Post extends ORM_Versioned {
 		$this->pubdate = empty($this->pubdate) ? time() : $this->pubdate;
 		$this->updated = empty($this->updated) ? time() : $this->updated;
 
-                $this->image   = empty($this->image)   ? NULL : $this->image;
+		$this->image   = empty($this->image)   ? NULL : $this->image;
 		$this->type    = empty($this->type)    ? $this->_post_type : $this->type;
 		$this->author  = empty($this->author)  ? User::active_user()->id : $this->author;
 		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
@@ -287,8 +287,7 @@ class Gleez_Post extends ORM_Versioned {
 			$this->aliases();
 		}
 
-		Cache::instance($this->type)
-				->delete($this->type.'-'.$this->id);
+		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
 
 		return $this;
 	}
@@ -297,8 +296,8 @@ class Gleez_Post extends ORM_Versioned {
 	 * Get teaser from the body either by delimiter or size
 	 *
 	 * @param   integer  $size  Defaults to 105 words [Optional]
-	 * 
-	 * @return  string  teaser
+	 * @return  string   Teaser
+	 * @uses    Text::limit_words
 	 */
 	protected function _teaser($size = 105)
 	{
@@ -310,7 +309,7 @@ class Gleez_Post extends ORM_Versioned {
 		{
 			return $this->rawbody;
 		}
-		
+
 		// If a valid delimiter has been specified, use it to chop off the teaser.
 		if ($delimiter !== FALSE)
 		{
@@ -319,11 +318,9 @@ class Gleez_Post extends ORM_Versioned {
 
 		return Text::limit_words($this->rawbody, $size, ' ...');
 	}
-	
+
 	/**
 	 * Adds or deletes terms
-	 *
-	 * @return  void
 	 */
 	private function _terms()
 	{
@@ -352,7 +349,6 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Adds or deletes terms
 	 *
-	 * @return  void
 	 * @uses    Tags::tagging
 	 */
 	private function _tags()
@@ -360,14 +356,13 @@ class Gleez_Post extends ORM_Versioned {
 		if (isset($this->ftags))
 		{
 			$tags = Tags::factory()
-					->tagging($this->ftags, $this, $this->author, false);
+				->tagging($this->ftags, $this, $this->author, FALSE);
 		}
 	}
 
 	/**
 	 * Adds or deletes path aliases
 	 *
-	 * @return  void
 	 * @uses    Path::load
 	 * @uses    Path::save
 	 */
@@ -395,10 +390,12 @@ class Gleez_Post extends ORM_Versioned {
 	}
 
 	/**
-	 * Deletes a single post or multiple posts, ignoring relationships.
+	 * Deletes a single post or multiple posts, ignoring relationships
 	 *
 	 * @return  Gleez_Post
 	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Cache::delete
 	 * @uses    Path::delete
 	 */
 	public function delete()
@@ -410,11 +407,11 @@ class Gleez_Post extends ORM_Versioned {
 			);
 		}
 
-                if($this->image AND file_exists($this->image))
-                {
-                        unlink($this->image);
-                }
-        
+		if($this->image AND file_exists($this->image))
+		{
+			unlink($this->image);
+		}
+
 		$source = $this->rawurl;
 		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
 		parent::delete();
@@ -494,10 +491,11 @@ class Gleez_Post extends ORM_Versioned {
 			break;
 			case 'count_comments':
 				return (int) DB::select('COUNT("*") AS mycount')
-							->from('comments')
-							->where('status', '=', 'publish')
-							->where('post_id', '=', $this->id)
-							->execute()->get('mycount');
+					->from('comments')
+					->where('status', '=', 'publish')
+					->where('post_id', '=', $this->id)
+					->execute()
+					->get('mycount');
 			break;
 		}
 
@@ -540,7 +538,7 @@ class Gleez_Post extends ORM_Versioned {
 		);
 
 		// Unset read more link on full page view
-		if(Request::current()->uri() == $this->url)
+		if (Request::current()->uri() == $this->url)
 		{
 			unset($links['more']);
 		}
@@ -553,9 +551,13 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Bulk actions
 	 *
-	 * @param   boolean  $list  TRUE for dropdown for bult actions [Optional]
+	 * @param   boolean  $list  TRUE for dropdown for bulk actions [Optional]
 	 * @param   string   $type  Type of post [Optional]
 	 * @return  mixed    States
+	 *
+	 * @uses    Post::bulk_update
+	 * @uses    Post::bulk_convert
+	 * @uses    Module::action
 	 */
 	public static function bulk_actions($list = FALSE, $type = 'post')
 	{
@@ -640,13 +642,12 @@ class Gleez_Post extends ORM_Versioned {
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post actions
 	 * @param   string  $type     Type of post [Optional]
-	 * @return  void
 	 */
 	public static function bulk_update(array $ids, array $actions, $type = 'post')
 	{
 		$posts = ORM::factory($type)
-				->where('id', 'IN', $ids)
-				->find_all();
+			->where('id', 'IN', $ids)
+			->find_all();
 
 		foreach($posts as $post)
 		{
@@ -668,13 +669,12 @@ class Gleez_Post extends ORM_Versioned {
 	 *
 	 * @param   array   $ids   Array of post id's
 	 * @param   string  $type  Type of post [Optional]
-	 * @return  void
 	 */
 	public static function bulk_delete(array $ids, $type = 'post')
 	{
 		$posts = ORM::factory($type)
-				->where('id', 'IN', $ids)
-				->find_all();
+			->where('id', 'IN', $ids)
+			->find_all();
 
 		foreach($posts as $post)
 		{
@@ -694,7 +694,6 @@ class Gleez_Post extends ORM_Versioned {
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post type (new type)
 	 * @param   string  $type     Type of post [Optional]
-	 * @return  void
 	 * @uses    Path::delete
 	 */
 	public static function bulk_convert(array $ids, array $actions, $type)
@@ -702,8 +701,8 @@ class Gleez_Post extends ORM_Versioned {
 		$new_type = (string) $actions[0];
 
 		$posts = ORM::factory($type)
-				->where('id', 'IN', $ids)
-				->find_all();
+			->where('id', 'IN', $ids)
+			->find_all();
 
 		foreach($posts as $post)
 		{
@@ -716,7 +715,7 @@ class Gleez_Post extends ORM_Versioned {
 			// Remove the previous tags relationship
 			$post->remove('tags');
 
-			// Ipdate the type column in comments
+			// Update the type column in comments
 			DB::update('comments')
 				->set(array('type' => $new_type))
 				->where('post_id', '=', $post->id)
@@ -802,7 +801,7 @@ class Gleez_Post extends ORM_Versioned {
 		$use_cache = (bool) $config->get('use_cache', FALSE);
 		$post      = ($use_cache) ? $cache->get("$type-$id", FALSE) : FALSE;
 
-		if( $post == FALSE OR is_null($post) )
+		if ($post == FALSE OR is_null($post))
 		{
 			$post = ORM::factory($type, $id);
 
@@ -811,24 +810,24 @@ class Gleez_Post extends ORM_Versioned {
 				throw new HTTP_Exception_404('Attempt to non-existent post.');
 			}
 
-			$post->content = View::factory("$type/body")->set('config', $config)->bind('post', $post)->render();
+			$post->content = View::factory($type."/body")->set('config', $config)->bind('post', $post)->render();
 
-			if( $use_cache )
+			if ($use_cache)
 			{
-				$data = array();
-				$data['author']  = (int)$post->author;
-				$data['status']  = $post->status;
-				$data['title']   = $post->title;
-				$data['comment'] = $post->comment;
-				$data['rawurl']      = $post->rawurl;
-				$data['url']         = $post->url;
-				$data['edit_url']    = $post->edit_url;
-				$data['delete_url']  = $post->delete_url;
-				$data['id']      = (int)$post->id;
-				$data['type']    = $post->type;
-				$data['content'] = (string) $post->content;
-			
-				$cache->set("$type-$id", (object) $data, DATE::WEEK);
+				$data               = array();
+				$data['author']     = (int)$post->author;
+				$data['status']     = $post->status;
+				$data['title']      = $post->title;
+				$data['comment']    = $post->comment;
+				$data['rawurl']     = $post->rawurl;
+				$data['url']        = $post->url;
+				$data['edit_url']   = $post->edit_url;
+				$data['delete_url'] = $post->delete_url;
+				$data['id']         = (int)$post->id;
+				$data['type']       = $post->type;
+				$data['content']    = (string) $post->content;
+
+				$cache->set($type.'-'.$id, (object) $data, DATE::WEEK);
 			}
 		}
 
