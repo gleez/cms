@@ -196,7 +196,7 @@ INSERT INTO `menus` (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (24, 'Роли', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 22, 23, 2, 2),
 (25, 'Страницы', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (26, 'Комментарии', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 10, 11, 2, 2),
-(27, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4)
+(27, 'Вход', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4),
 (28, 'Блоги', 'blogs-1', '', 'icon-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
 (29, 'Добавить блог', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
 (30, 'Все', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
