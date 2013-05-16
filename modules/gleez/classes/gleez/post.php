@@ -125,7 +125,7 @@ class Gleez_Post extends ORM_Versioned {
 	 * @var string
 	 */
 	protected $_image_url;
-	
+
 	/**
 	 * Rules for the post model
 	 *
@@ -262,13 +262,18 @@ class Gleez_Post extends ORM_Versioned {
 	 *
 	 * @param   Validation $validation Validation object [Optional]
 	 * @return  Gleez_Post
+	 *
+	 * @uses    URL::site
+	 * @uses    User::active_user
+	 * @uses    Config::load
+	 * @uses    Cache::delete
 	 */
 	public function save(Validation $validation = NULL)
 	{
 		// Set primary image defaults
 		$this->_image_path = APPPATH.'media/';
 		$this->_image_url  = URL::site('media', TRUE);
-		
+
 		// Set some defaults
 		$this->status  = empty($this->status)  ? 'draft' : $this->status;
 		$this->promote = empty($this->promote) ? 0 : $this->promote;
@@ -288,7 +293,7 @@ class Gleez_Post extends ORM_Versioned {
 		$this->teaser  = empty($this->rawteaser) ? $this->_teaser() : $this->rawteaser;
 		$this->body    = $this->rawbody;
 
-		parent::save( $validation );
+		parent::save($validation);
 
 		if ( $this->loaded())
 		{
