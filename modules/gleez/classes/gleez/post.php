@@ -114,7 +114,18 @@ class Gleez_Post extends ORM_Versioned {
 	 */
 	protected $_table_name = 'posts';
 
+	/**
+	 * Post primary image path
+	 * @var string
+	 */
+	protected $_image_path = APPPATH.'media/';
 
+	/**
+	 * Post primary image url
+	 * @var string
+	 */
+	protected $_image_url = URL::site('media', TRUE);
+        
 	/**
 	 * Rules for the post model
 	 *
@@ -264,10 +275,10 @@ class Gleez_Post extends ORM_Versioned {
 		$this->pubdate = empty($this->pubdate) ? time() : $this->pubdate;
 		$this->updated = empty($this->updated) ? time() : $this->updated;
 
-		$this->image   = empty($this->image)   ? NULL : $this->image;
-		$this->type    = empty($this->type)    ? $this->_post_type : $this->type;
-		$this->author  = empty($this->author)  ? User::active_user()->id : $this->author;
-		$this->format  = empty($this->format)  ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
+		$this->image   = empty($this->rawimage) ? NULL : $this->rawimage;
+		$this->type    = empty($this->type)     ? $this->_post_type : $this->type;
+		$this->author  = empty($this->author)   ? User::active_user()->id : $this->author;
+		$this->format  = empty($this->format)   ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
 
 		// Always save only raw text, unformated text
 		$this->teaser  = empty($this->rawteaser) ? $this->_teaser() : $this->rawteaser;
@@ -407,9 +418,9 @@ class Gleez_Post extends ORM_Versioned {
 			);
 		}
 
-		if($this->image AND file_exists($this->image))
+		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
 		{
-			unlink($this->image);
+			unlink($this->_image_path.$this->rawimage);
 		}
 
 		$source = $this->rawurl;
@@ -478,6 +489,10 @@ class Gleez_Post extends ORM_Versioned {
 			break;
 			case 'rawurl':
 				return Route::get($this->type)->uri(array( 'id' => $this->id));
+			break;
+			case 'rawimage':
+				// Raw fields without path. Usage: during edit or etc!
+				return parent::__get('image');
 			break;
 			case 'url':
 				// Model specific links; view, edit, delete url's
