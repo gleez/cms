@@ -825,6 +825,7 @@ class Gleez_Post extends ORM_Versioned {
 				$data['delete_url'] = $post->delete_url;
 				$data['id']         = (int)$post->id;
 				$data['type']       = $post->type;
+                                $data['image']      = $post->image;
 				$data['content']    = (string) $post->content;
 
 				$cache->set($type.'-'.$id, (object) $data, DATE::WEEK);
