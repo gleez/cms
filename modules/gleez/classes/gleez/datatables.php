@@ -10,25 +10,15 @@
  */
 class Gleez_Datatables {
 	
-	/**
-	 * Sort Ascending
-	 * 
-	 * @var		string
-	 */
+	/** Sort Ascending */
 	const SORT_ASC = 'ASC';
 	 
-	/**
-	 * Sort Descending
-	 * 
-	 * @var		string
-	 */
+	/** Sort Descending */
 	const SORT_DESC = 'DESC';	
 	
 	/**
 	 * Factory pattern
-	 * 
-	 * @static
-	 * @access	public
+	 *
 	 * @param	mixed	string|object
 	 * @param	mixed	NULL|string
 	 * @return	Datatables
@@ -39,13 +29,13 @@ class Gleez_Datatables {
 		return new Datatables($object); 
 	}
 	
-        /**
+	/**
 	 * Whether or not current request is via DataTables
-	 * 
-	 * @static
-	 * @access	public
-	 * @param	mixed	NULL|Request
-	 * @return	bool
+	 *
+	 * @param   mixed  $request  Request [Optional]
+	 * @return  boolean
+	 *
+	 * @uses    Request::current
 	 */
 	public static function is_request(Request $request = NULL)
 	{
@@ -56,9 +46,7 @@ class Gleez_Datatables {
         
 	/**
 	 * Object to perform paginate operations on
-	 * 
-	 * @access	protected
-	 * @var		object
+	 * @var object
 	 */
 	protected $_object;
 	
@@ -66,96 +54,74 @@ class Gleez_Datatables {
 	
 	/**
 	 * Columns
-	 * 
-	 * @access	protected
-	 * @var		array
+	 * @var array
 	 */
 	protected $_columns = array();
 	
 	/**
 	 * Search columns
-	 * 
-	 * @access	protected
-	 * @var		array
+	 * @var array
 	 */
 	protected $_search_columns = array();
 	
 	/**
 	 * Count for request
-	 * 
-	 * @access	protected
-	 * @var		int
+	 * @var integer
 	 */
 	protected $_count = 0;
 	
 	/**
 	 * Total count
-	 * 
-	 * @access	protected
-	 * @var		int
+	 * @var integer
 	 */
 	protected $_count_total = 0;
 	
 	/**
 	 * Result
-	 * 
-	 * @access	protected
-	 * @var		NULL
+	 * @var NULL
 	 */
 	protected $_result;	
 	
-        /**
+	/**
 	 * Rows
-	 * 
-	 * @access	protected
-	 * @var		array
+	 * @var array
 	 */
 	protected $_rows = array();		
 	
 	/**
 	 * View
-	 * 
-	 * @access	protected
-	 * @var		NULL|string
+	 * @var string
 	 */
 	protected $_view;	
 	
 	/**
 	 * Request
-	 * 
-	 * @access	protected
-	 * @var		NULL|Request
+	 * @var Request
 	 */
 	protected $_request;
 	
 	/**
 	 * Cached render
-	 * 
-	 * @access	protected
-	 * @var		string
+	 * @var string
 	 */
 	protected $_render;
         
 	/**
 	 * Initialize
-	 * 
-	 * @access	public
-	 * @param	object
-	 * @return	void
+	 *
+	 * @param  object  $object
 	 */	
 	public function __construct($object)
 	{
 		$this->_object = $object;
 		$this->_object_name = $object->object_name();
-                //$this->_columns = array_keys( $object->table_columns() );
 	}
 
 	/**
 	 * Apply limit
-	 * 
-	 * @access	protected
-	 * @param	int
-	 * @return	void
+	 *
+	 * @param	integer  $start   Offset
+	 * @param	integer  $length  Length
 	 */
 	protected function _limit($start, $length)
 	{
@@ -164,10 +130,9 @@ class Gleez_Datatables {
         
 	/**
 	 * Apply sort
-	 * 
-	 * @access	protected
-	 * @param	string
-	 * @return	void
+	 *
+	 * @param  string  $column     Column for sorting
+	 * @param  string  $direction  Direction
 	 */
 	protected function _sort($column, $direction)
 	{
@@ -176,11 +141,8 @@ class Gleez_Datatables {
 	
 	/**
 	 * Apply search query
-	 * 
-	 * @access	protected
-	 * @param	string
-	 * @param	string
-	 * @return	void
+	 *
+	 * @param  string  $query  Search query
 	 */
 	protected function _search($query)
 	{
@@ -212,9 +174,8 @@ class Gleez_Datatables {
 	
 	/**
 	 * Count
-	 * 
-	 * @access	protected
-	 * @return	int
+	 *
+	 * @return  integer
 	 */
 	protected function _count()
 	{
@@ -223,19 +184,17 @@ class Gleez_Datatables {
 	
 	/**
 	 * Count total
-	 * 
-	 * @access	protected
-	 * @return	int
+	 *
+	 * @return  integer
 	 */
 	protected function _count_total()
-        {
-                return $this->_object->reset(FALSE)->count_all();
-        }
+    {
+		return $this->_object->reset(FALSE)->count_all();
+    }
 	
 	/**
 	 * Execute result on object
-	 * 
-	 * @access	protected
+	 *
 	 * @return	mixed
 	 */
 	protected function _execute()
@@ -245,10 +204,9 @@ class Gleez_Datatables {
 	
 	/**
 	 * Set limit
-	 * 
-	 * @access	public
-	 * @param	int
-	 * @param	int
+	 *
+	 * @param	integer  $start   Offset
+	 * @param	integer  $length  Length
 	 * @return	$this
 	 */
 	public function limit($start, $length)
@@ -260,17 +218,18 @@ class Gleez_Datatables {
 	
 	/**
 	 * Set sort order
-	 * 
-	 * @access	public
-	 * @param	string
-	 * @param	mixed	SORT_ASC|SORT_DESC
+	 *
+	 * @param	string  $column     Column for sorting
+	 * @param	string  $direction  Sort order eg. SORT_ASC|SORT_DESC
 	 * @return	$this
 	 * @throws	Kohana_Exception
 	 */
 	public function sort($column, $direction = self::SORT_ASC)
 	{
 		if ( ! in_array($direction, array(self::SORT_ASC, self::SORT_DESC)))
+		{
 			throw new Kohana_Exception('Invalid sort order of `' . $direction . '`.');
+		}
 		
 		$this->_sort($column, $direction);
 		
@@ -279,9 +238,8 @@ class Gleez_Datatables {
 	
 	/**
 	 * Search query
-	 * 
-	 * @access	public
-	 * @param	mixed
+	 *
+	 * @param   string  $query  Search query
 	 * @return	$this
 	 */
 	public function search($query)
@@ -293,9 +251,8 @@ class Gleez_Datatables {
 	
 	/**
 	 * Get count based on post operations
-	 * 
-	 * @access	public
-	 * @return	int
+	 *
+	 * @return  integer
 	 */
 	public function count()
 	{
@@ -304,9 +261,8 @@ class Gleez_Datatables {
 	
 	/**
 	 * Get total count prior to operations
-	 * 
-	 * @access	public
-	 * @return	int
+	 *
+	 * @return	integer
 	 */
 	public function count_total()
 	{
@@ -315,15 +271,16 @@ class Gleez_Datatables {
 	
 	/**
 	 * Set or get columns
-	 * 
-	 * @access	public
-	 * @param	mixed	NULL|string
-	 * @return	mixed	$this|string
+	 *
+	 * @param	array  $columns  Columns for setting [Optional]
+	 * @return  $this
 	 */
 	public function columns(array $columns = NULL)
 	{
 		if ($columns === NULL)
+		{
 			return $this->_columns;
+		}
 		
 		$this->_columns = $columns;
 		
@@ -332,15 +289,16 @@ class Gleez_Datatables {
 	
 	/**
 	 * Set or get search columns
-	 * 
-	 * @access	public
-	 * @param	mixed	NULL|string
-	 * @return	mixed	$this|string
+	 *
+	 * @param   array  $columns  Columns [Optional]
+	 * @return  $this
 	 */
 	public function search_columns(array $columns = NULL)
 	{
 		if ($columns === NULL)
+		{
 			return $this->_search_columns;
+		}
 		
 		$this->_search_columns = $columns;
 		
@@ -349,8 +307,7 @@ class Gleez_Datatables {
 	
 	/**
 	 * Get result
-	 * 
-	 * @access	public
+	 *
 	 * @return	mixed
 	 */
 	public function result()
@@ -360,17 +317,17 @@ class Gleez_Datatables {
 	
 	/**
 	 * Execute
-	 * 
-	 * @access	public
-	 * @param	mixed	NULL|Request
+	 *
 	 * @return	$this
 	 */
 	public function execute()
 	{
-                $request = $this->request();
+		$request = $this->request();
 
 		if ( ! $request instanceof Request)
+		{
 			throw new Kohana_Exception('DataTables expecting valid Request. If within a sub-request, have controller pass `$this->request`.');
+		}
 		
 		$columns = $this->columns();
 		$this->_count_total = $this->_count_total();
@@ -414,17 +371,18 @@ class Gleez_Datatables {
 		return $this;
 	}
         
-        /**
+	/**
 	 * Set or get View file path
-	 * 
-	 * @access	public
+	 *
 	 * @param	mixed	NULL|string
 	 * @return	mixed	$this|string
 	 */
 	public function view($path = NULL)
 	{
 		if ($path === NULL)
+		{
 			return $this->_view;
+		}
 		
 		$this->_view = $path;
 		
@@ -455,10 +413,9 @@ class Gleez_Datatables {
 	
 	/**
 	 * Add row to output
-	 * 
-	 * @access	public
-	 * @param	array
-	 * @return	$this
+	 *
+	 * @param   array  $row  Row
+	 * @return  $this
 	 */
 	public function add_row(array $row)
 	{
@@ -469,9 +426,8 @@ class Gleez_Datatables {
         
 	/**
 	 * Render
-	 * 
-	 * @access	public
-	 * @return	string
+	 *
+	 * @return  string
 	 */
 	public function __toString()
 	{
@@ -480,8 +436,7 @@ class Gleez_Datatables {
 	
 	/**
 	 * Render
-	 * 
-	 * @access	public
+	 *
 	 * @return	string
 	 */
 	public function render()
@@ -497,10 +452,10 @@ class Gleez_Datatables {
 			
 			$this->_render = json_encode(array
 			(
-				'sEcho' 		=> intval($this->request()->query('sEcho')),
-				'iTotalRecords' 	=> $this->_count_total,
-				'iTotalDisplayRecords' 	=> $this->_count,
-				'aaData' 		=> $this->_rows
+				'sEcho'                 => intval($this->request()->query('sEcho')),
+				'iTotalRecords'         => $this->_count_total,
+				'iTotalDisplayRecords'  => $this->_count,
+				'aaData'                => $this->_rows
 			));
 		}
 		
