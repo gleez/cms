@@ -155,6 +155,11 @@ class Gleez_Form {
 			$attrs['type'] = 'text';
 		}
 
+		if (! isset($attrs['id']))
+		{
+			$attrs['id'] = Form::_get_id_by_name($name);
+		}
+	
 		$out = '';
 
 		if ($attrs['type'] === 'text' AND ! empty($url))
@@ -297,7 +302,12 @@ class Gleez_Form {
 	{
 		// Set the input name
 		$attributes['name'] = $name;
-
+		
+		if (! isset($attributes['id']))
+		{
+			$attributes['id'] = Form::_get_id_by_name($name);
+		}
+		
 		// Add default rows and cols attributes (required)
 		$attributes += array('rows' => 10, 'cols' => 50);
 
@@ -323,6 +333,11 @@ class Gleez_Form {
 		// Set the input name
 		$attributes['name'] = $name;
 
+		if (! isset($attributes['id']))
+		{
+			$attributes['id'] = Form::_get_id_by_name($name);
+		}
+	
 		if (is_array($selected))
 		{
 			// This is a multi-select, god save us!
@@ -484,6 +499,11 @@ class Gleez_Form {
 			$attrs['type'] = 'button';
 		}
 
+		if (! isset($attrs['id']))
+		{
+			$attrs['id'] = Form::_get_id_by_name($name);
+		}
+	
 		$out = '<button '.HTML::attributes($attrs).'>'.$caption.'</button>';
 
 		return $out;
@@ -853,4 +873,14 @@ class Gleez_Form {
 		return '<select'.HTML::attributes($attrs).'>'.$options.'</select>';
 	}
 
+	/**
+	* Generates a valid HTML ID based the name.
+	*
+	* @param  $name
+	* @return string the ID generated based on name.
+	*/
+	protected static function _get_id_by_name($name)
+	{
+		return 'form-'.str_replace(array('[]', '][', '[', ']', '\\'), array('', '_', '_', '', '_'), $name);
+	}
 }
