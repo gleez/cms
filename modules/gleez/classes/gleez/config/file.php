@@ -2,11 +2,10 @@
 /**
  * Default file source for the Gleez config system
  *
- * @package     Gleez/core
- * @category    Configuration
- * @author	Sandeep Sangamreddi - Gleez
- * @copyright	(c) 2011 - 2013 Gleez Technologies
- * @license	http://gleezcms.org/license
+ * @package    Gleez\Configuration\File
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Config_File implements Config_Source {
 	
@@ -19,22 +18,28 @@ class Gleez_Config_File implements Config_Source {
 	/**
 	 * Creates a new file reader using the given directory as a config source
 	 *
-	 * @param string    $directory  Configuration directory to search
+	 * @param  string  $directory  Configuration directory to search {optional]
 	 */
 	public function __construct($directory = 'config')
 	{
 		// Set the configuration directory name
-		$this->_directory = trim($directory, '/');
+		$this->_directory = trim($directory, DIRECTORY_SEPARATOR);
 	}
 	
 	/**
 	 * Load and merge all of the configuration files in this group.
 	 *
-	 *     $config->load($name);
+	 * Example:<br>
+	 * <code>
+	 *   $config->load($name);
+	 * </code>
 	 *
-	 * @param   string  $group  configuration group name
-	 * @return  $this   current object
+	 * @param   string  $group  Configuration group name
+	 * @return  $this   Current object
+	 *
 	 * @uses    Kohana::load
+	 * @uses    Kohana::find_file
+	 * @uses    Arr::merge
 	 */
 	public function load($group)
 	{
@@ -55,10 +60,10 @@ class Gleez_Config_File implements Config_Source {
 	/**
 	 * Writes the passed config for $group
 	 *
-	 * @param string      $group  The config group
-	 * @param string      $key    The config key to write to
-	 * @param array       $config The configuration to write
-	 * @return boolean
+	 * @param   string  $group  The config group
+	 * @param   string  $key    The config key to write to
+	 * @param   array   $config The configuration to write
+	 * @return  boolean
 	 */
 	public function write($group, $key, $config)
 	{
@@ -69,13 +74,13 @@ class Gleez_Config_File implements Config_Source {
 	/**
 	 * Delete the config item from config
 	 *
-	 * @param string      $group  The config group
-	 * @param string      $key    The config key to delete
-	 * @return boolean
+	 * @param   string  $group  The config group
+	 * @param   string  $key    The config key to delete
+	 * @return  boolean
 	 */
 	public function delete($group, $key)
 	{
-		//always return true
+		// Always return true
 		return TRUE;
 	}
 	

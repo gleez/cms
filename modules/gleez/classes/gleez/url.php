@@ -244,8 +244,8 @@ class Gleez_URL {
 	 * @param   boolean $index		Include the index_page in the URL
 	 * @return  string
 	 *
-	 * @see    [URL::base]
-	 * @see    [URL::_rawurlencode_callback]
+	 * @uses    URL::base
+	 * @uses    URL::_rawurlencode_callback
 	 */
 	public static function site($uri = '', $protocol = NULL, $index = TRUE)
 	{

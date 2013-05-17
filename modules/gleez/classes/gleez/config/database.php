@@ -2,9 +2,9 @@
 /**
  * Database source for the Gleez config system
  *
- * @package    Gleez\Database\Configuration
+ * @package    Gleez\Configuration\Database
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011 - 2013 Gleez Technologies
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Config_Database implements Config_Source {
@@ -27,7 +27,7 @@ class Gleez_Config_Database implements Config_Source {
 	/**
 	 * Constructs the database source object
 	 *
-	 * @param  array  $config  Configuration for the source
+	 * @param  array  $config  Configuration for the source [Optional]
 	 */
 	public function __construct(array $config = NULL)
 	{
