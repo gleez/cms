@@ -349,7 +349,7 @@ class Gleez_Text {
 	 * @uses    Text::auto_link_urls
 	 * @uses    Text::auto_link_emails
 	 */
-	public static function autoLink($text, $format = FALSE, $filter = FALSE)
+	public static function auto_link($text, $format = FALSE, $filter = FALSE)
 	{
 		// Auto link emails first to prevent problems with "www.domain.com@example.com"
 		//return Text::auto_link_urls(Text::auto_link_emails($text));
