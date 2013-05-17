@@ -73,7 +73,7 @@ class Gleez_System {
 	public static function mkdir($path, $mode = 0777, $recursive = TRUE)
 	{
 		$oldumask = umask(0);
-		if ( ! is_dir($path))
+		if (!is_dir($path))
 		{
 			return @mkdir($path, $mode, $recursive);
 		}
@@ -83,7 +83,7 @@ class Gleez_System {
 	public static function icons()
 	{
 		$icons = array(
-			"icon-cloud-download" => 'cloud-download',
+			"icon-cloud-download" => ' cloud-download',
 			"icon-cloud-upload" => 'cloud-upload',
 			"icon-lightbulb" => 'lightbulb',
 			"icon-exchange" => 'exchange',
@@ -355,6 +355,69 @@ class Gleez_System {
 			"icon-google-plus" => 'google-plus',
 			"icon-google-plus-sign" => 'google-plus-sign',
 			"icon-sign-blank" => 'sign-blank',
+			
+			"icon-expand-alt" => "expand-alt",
+			"icon-collapse-alt" => "collapse-alt",
+			"icon-smile" => "smile",
+			"icon-frown" => "frown",
+			"icon-meh" => "meh",
+			"icon-gamepad" => "gamepad",
+			"icon-keyboard" => "keyboard",
+			"icon-flag-alt" => "flag-alt",
+			"icon-flag-checkered" => "flag-checkered",
+			"icon-terminal" => "terminal",
+			"icon-code" => "code",
+			"icon-mail-forward " => "mail-forward ",
+			"icon-mail-reply " => "mail-reply",
+			
+			"icon-reply-all" => "reply-all",
+			"icon-mail-reply-all " => "mail-reply-all",
+			"icon-star-half-empty" => "star-half-empty",
+			"icon-star-half-full " => "star-half-full",
+			"icon-location-arrow" => "location-arrow",
+			"icon-rotate-left " => "rotate-left",
+			"icon-rotate-right " => "rotate-right ",
+			"icon-crop" => "crop",
+			"icon-code-fork" => "code-fork",
+			"icon-unlink" => "unlink",
+			"icon-question" => "question",
+			"icon-info" => "info",
+			"icon-exclamation" => "exclamation",
+			"icon-superscript" => "superscript",
+			"icon-subscript" => "subscript",
+			"icon-eraser" => "eraser",
+			"icon-puzzle-piece" => "puzzle-piece",
+			
+			"icon-microphone" => "microphone",
+			"icon-microphone-off" => "microphone-off",
+			"icon-shield" => "shield",
+			"icon-calendar-empty" => "calendar-empty",
+			"icon-fire-extinguisher" => "fire-extinguisher",
+			"icon-rocket" => "rocket",
+			"icon-maxcdn" => "maxcdn",
+			"icon-chevron-sign-left" => "chevron-sign-left",
+			"icon-chevron-sign-right" => "chevron-sign-right",
+			"icon-chevron-sign-up" => "chevron-sign-up",
+			"icon-chevron-sign-down" => "chevron-sign-down",
+			"icon-html5" => "html5",
+			"icon-css3" => "css3",
+			"icon-anchor" => "anchor",
+			"icon-unlock-alt" => "unlock-alt",
+			
+			"icon-bullseye" => "bullseye",
+			"icon-ellipsis-horizontal" => "ellipsis-horizontal",
+			"icon-ellipsis-vertical" => "ellipsis-vertical",
+			"icon-rss-sign" => "rss-sign",
+			"icon-play-sign" => "play-sign",
+			"icon-ticket" => "ticket",
+			"icon-minus-sign-alt" => "minus-sign-alt",
+			"icon-check-minus" => "check-minus",
+			"icon-level-up" => "level-up",
+			"icon-level-down" => "level-down",
+			"icon-check-sign" => "check-sign",
+			"icon-edit-sign" => "edit-sign",
+			"icon-external-link-sign" => "external-link-sign",
+			"icon-share-sign" => "share-sign",
 		);
 		
 		//sort icons by natural order
