@@ -243,7 +243,9 @@ class Gleez_URL {
 	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from
 	 * @param   boolean $index		Include the index_page in the URL
 	 * @return  string
-	 * @uses    URL::base
+	 *
+	 * @see    [URL::base]
+	 * @see    [URL::_rawurlencode_callback]
 	 */
 	public static function site($uri = '', $protocol = NULL, $index = TRUE)
 	{
