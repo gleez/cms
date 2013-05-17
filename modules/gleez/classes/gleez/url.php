@@ -379,4 +379,58 @@ class Gleez_URL {
 		return $url;
 	}
 
+	/**
+	* Determine current url
+	* 
+	* @param mixed $protocol
+	* @param boolean $index
+	* @param boolean $with_query_params
+	*/
+	public static function current($protocol = NULL, $index = FALSE, $with_query_params = TRUE)
+	{
+		static $uri;
+		$query = null;
+		if (!$with_query_params)
+		{
+			$query = URL::query();
+		}
+	
+		if (empty($uri))
+		{
+			$uri = Arr::get($_SERVER, 'REQUEST_URI', '/');
+		}
+	
+		return URL::base($protocol, $index) . str_replace($query, '', ltrim($uri, '/'));
+	}
+
+	/**
+	* Determine if current url is active
+	*
+	* @param string $url
+	* @return boolean
+	*/
+	public static function is_active($url)
+	{
+		$current = explode('/', trim(str_replace(URL::base(), '', URL::current()), '/'));
+		ksort($current);
+		$url = explode('/', trim(str_replace(URL::base(), '', $url), '/'));
+		ksort($url);
+		if (0 == count(array_diff($url, $current)))
+		{
+			return true;
+		}
+	
+		$result = false;
+	
+		if (count($url) < count($current))
+		{
+			for ($i = 0; $i == count($url); $i++)
+			{
+				$result = $url[$i] == $current[$i] OR $result;
+			}
+		}
+		
+		return $result;
+	}
+	
 }
