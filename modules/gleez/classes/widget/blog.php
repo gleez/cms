@@ -49,10 +49,12 @@ class Widget_blog extends Widget {
 			$items = array();
 			foreach($blogs as $blog)
 			{
-				$items[$blog->id]['id']    = $blog->id;
-				$items[$blog->id]['title'] = $blog->title;
-				$items[$blog->id]['url']   = $blog->url;
-				$items[$blog->id]['date']  = $blog->updated ? $blog->updated : $blog->created;
+				$items[$blog->id]['id']      = $blog->id;
+				$items[$blog->id]['title']   = $blog->title;
+				$items[$blog->id]['url']     = $blog->url;
+				$items[$blog->id]['user']    = $blog->user->name;
+				$items[$blog->id]['user_url'] = $blog->user->url;
+				$items[$blog->id]['date']    = $blog->updated ? $blog->updated : $blog->created;
 
 			}
 
