@@ -7,201 +7,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Gleez_Form extends Kohana_Form {
-
-	/**
-	 * Creates a form input
-	 *
-	 * If no type is specified, a "text" type input will be returned.
-	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo Form::input('username', $username);
-	 * </code>
-	 *
-	 * @param   string  $name   Input name
-	 * @param   string  $value  Input value [Optional]
-	 * @param   array   $attrs  HTML attributes [Optional]
-	 * @param   string  $url    Input url (autocomplete url) [Optional]
-	 * @param   boolean $smart  Smart smart results listing [Optional]
-	 * @return  string  HTML form input
-	 *
-	 * @uses    HTML::attributes
-	 * @uses    Assets::js
-	 * @uses    URL::site
-	 */
-	public static function input($name, $value = NULL, array $attrs = NULL, $url = '', $smart = TRUE)
-	{
-		// Set the input name
-		$attrs['name'] = $name;
-
-		// Set the input value
-		$attrs['value'] = $value;
-
-		if ( ! isset($attrs['type']))
-		{
-			// Default type is text
-			$attrs['type'] = 'text';
-		}
-
-		$out = '';
-
-		if ($attrs['type'] === 'text' AND ! empty($url))
-		{
-			$attrs['class'] = isset($attrs['class']) ? $attrs['class'].' form-autocomplete' : 'form-autocomplete';
-			$attrs['id'] = $name;
-			$attrs['autocomplete'] = "off";
-
-			// Assign the autocomplete js file
-			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
-
-			$attrs['data-url'] = URL::site($url, TRUE);
-			//$attrs['data-autocomplete-smart'] = $smart;
-		}
-
-		$out .= '<input'.HTML::attributes($attrs).'>';
-
-		return $out;
-	}
-
-	/**
-	 * Creates CSRF token input
-	 *
-	 * @param   string  $id      ID e.g. uid [Optional]
-	 * @param   string  $action  Action [Optional]
-	 * @return  string
-	 *
-	 * @uses    CSRF::token
-	 */
-	public static function csrf($id = '', $action = '')
-	{
-		return Form::hidden('token', CSRF::token($id, $action));
-	}
-
-	/**
-	 * Creates weight select field
-	 *
-	 * @param   string   $name      Input name
-	 * @param   integer  $selected  Selected option int [Optional]
-	 * @param   array    $attrs     HTML attributes [Optional]
-	 * @param   integer  $delta     Delta [Optional]
-	 * @return  string
-	 *
-	 * @uses    Form::select
-	 */
-	public static function weight($name, $selected = 0, array $attrs = NULL, $delta = 15)
-	{
-		$options = array();
-
-		for ($n = (-1 * $delta); $n <= $delta; $n++)
-		{
-			$options[$n] = $n;
-		}
-
-		return Form::select($name, $options, $selected, $attrs);
-	}
-
-	/**
-	 * Create a form field for filtering
-	 *
-	 * @param   string $column  Column
-	 * @param   array  $vals    Filter values
-	 * @param   array  $attrs   Filter attributes [Optional]
-	 * @return  string
-	 *
-	 * @uses    Arr::get
-	 */
-	public static function filter($column, array $vals, array $attrs = array())
-	{
-		if ( ! isset($attrs['style']))
-		{
-			// Default type is text
-			$attrs['style'] = 'width: 100%';
-		}
-
-		return Form::input("filter[$column]", Arr::get($vals, $column), $attrs);
-	}
-
-	/**
-	 * Creates a submit form input
-	 *
-	 * Example:<br>
-	 * <code>
-	 * 	echo Form::submit(NULL, 'Login');
-	 * </code>
-	 *
-	 * @param   string  $name   Input name
-	 * @param   string  $value  Input value
-	 * @param   array   $attrs  HTML attributes [Optional]
-	 * @return  string
-	 */
-	public static function submit($name, $value, array $attrs = array())
-	{
-		$attrs['type'] = 'submit';
-
-		return Form::input($name, $value, $attrs);
-	}
-
-	/**
-	 * Creates a button
-	 *
-	 * Example:<br>
-	 * <code>
-	 * 	echo Form::button('login', 'Login', array('class' => 'pull-right'));
-	 * </code>
-	 *
-	 * @param   string  $name     Button name
-	 * @param   string  $caption  Button caption
-	 * @param   array   $attrs    HTML attributes [Optional]
-	 * @return  string
-	 *
-	 * @uses    HTML::attributes
-	 */
-	public static function button($name, $caption, array $attrs = array())
-	{
-		// Set the button name
-		$attrs['name'] = $name;
-
-		// Set the button type
-		if ( ! isset($attrs['type']))
-		{
-			// Default type is button
-			$attrs['type'] = 'button';
-		}
-
-		$out = '<button '.HTML::attributes($attrs).'>'.$caption.'</button>';
-
-		return $out;
-	}
-
-	/**
-	 * Create a 'new x button'
-	 *
-	 * @param   string  $name   Button name
-	 * @param   string  $title  Button title [Optional]
-	 * @param   string  $url    Button URL [Optional]
-	 * @return  string
-	 *
-	 * @uses    HTML::anchor
-	 * @uses    HTML::sprite_img
-	 * @uses    Request::uri
-	 */
-	public static function newButton($name, $title = NULL, $url = NULL)
-	{
-		if (is_null($url))
-		{
-			$url = Request::current()->uri(array('action' => 'add'));
-		}
-
-		if (is_null($title))
-		{
-			$title = HTML::sprite_img('add') . __('add :object', array(':object' => __($name)));
-		}
-
-		$out = HTML::anchor($url, $title, array('class' => 'button positive'));
-
-		return $out;
-	}
+class Gleez_Form {
 
 	/**
 	 * Generates an opening HTML form tag
@@ -298,6 +104,499 @@ class Gleez_Form extends Kohana_Form {
 			$out 	.= Form::hidden('_token', CSRF::token(FALSE, $action)).PHP_EOL;
 			$out 	.= Form::hidden('_action', $action).PHP_EOL;
 		}
+
+		return $out;
+	}
+	
+	/**
+	 * Creates the closing form tag.
+	 *
+	 *     echo Form::close();
+	 *
+	 * @return  string
+	 */
+	public static function close()
+	{
+		return '</form>';
+	}
+	
+	/**
+	 * Creates a form input
+	 *
+	 * If no type is specified, a "text" type input will be returned.
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   echo Form::input('username', $username);
+	 * </code>
+	 *
+	 * @param   string  $name   Input name
+	 * @param   string  $value  Input value [Optional]
+	 * @param   array   $attrs  HTML attributes [Optional]
+	 * @param   string  $url    Input url (autocomplete url) [Optional]
+	 * @param   boolean $smart  Smart smart results listing [Optional]
+	 * @return  string  HTML form input
+	 *
+	 * @uses    HTML::attributes
+	 * @uses    Assets::js
+	 * @uses    URL::site
+	 */
+	public static function input($name, $value = NULL, array $attrs = NULL, $url = '', $smart = TRUE)
+	{
+		// Set the input name
+		$attrs['name'] = $name;
+
+		// Set the input value
+		$attrs['value'] = $value;
+
+		if ( ! isset($attrs['type']))
+		{
+			// Default type is text
+			$attrs['type'] = 'text';
+		}
+
+		$out = '';
+
+		if ($attrs['type'] === 'text' AND ! empty($url))
+		{
+			$attrs['class'] = isset($attrs['class']) ? $attrs['class'].' form-autocomplete' : 'form-autocomplete';
+			$attrs['id'] = $name;
+			$attrs['autocomplete'] = "off";
+
+			// Assign the autocomplete js file
+			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
+
+			$attrs['data-url'] = URL::site($url, TRUE);
+			//$attrs['data-autocomplete-smart'] = $smart;
+		}
+
+		$out .= '<input'.HTML::attributes($attrs).'>';
+
+		return $out;
+	}
+
+
+	/**
+	 * Creates a hidden form input.
+	 *
+	 *     echo Form::hidden('csrf', $token);
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function hidden($name, $value = NULL, array $attributes = NULL)
+	{
+		$attributes['type'] = 'hidden';
+
+		return Form::input($name, $value, $attributes);
+	}
+	
+	/**
+	 * Creates a password form input.
+	 *
+	 *     echo Form::password('password');
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function password($name, $value = NULL, array $attributes = NULL)
+	{
+		$attributes['type'] = 'password';
+
+		return Form::input($name, $value, $attributes);
+	}
+
+	/**
+	 * Creates a file upload form input. No input value can be specified.
+	 *
+	 *     echo Form::file('image');
+	 *
+	 * @param   string  $name       input name
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function file($name, array $attributes = NULL)
+	{
+		$attributes['type'] = 'file';
+
+		return Form::input($name, NULL, $attributes);
+	}
+
+	/**
+	 * Creates a checkbox form input.
+	 *
+	 *     echo Form::checkbox('remember_me', 1, (bool) $remember);
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   boolean $checked    checked status
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function checkbox($name, $value = NULL, $checked = FALSE, array $attributes = NULL)
+	{
+		$attributes['type'] = 'checkbox';
+
+		if ($checked === TRUE)
+		{
+			// Make the checkbox active
+			$attributes[] = 'checked';
+		}
+
+		return Form::input($name, $value, $attributes);
+	}
+
+	/**
+	 * Creates a radio form input.
+	 *
+	 *     echo Form::radio('like_cats', 1, $cats);
+	 *     echo Form::radio('like_cats', 0, ! $cats);
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   boolean $checked    checked status
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function radio($name, $value = NULL, $checked = FALSE, array $attributes = NULL)
+	{
+		$attributes['type'] = 'radio';
+
+		if ($checked === TRUE)
+		{
+			// Make the radio active
+			$attributes[] = 'checked';
+		}
+
+		return Form::input($name, $value, $attributes);
+	}
+	
+	/**
+	 * Creates a textarea form input.
+	 *
+	 *     echo Form::textarea('about', $about);
+	 *
+	 * @param   string  $name           textarea name
+	 * @param   string  $body           textarea body
+	 * @param   array   $attributes     html attributes
+	 * @param   boolean $double_encode  encode existing HTML characters
+	 * @return  string
+	 * @uses    HTML::attributes
+	 * @uses    HTML::chars
+	 */
+	public static function textarea($name, $body = '', array $attributes = NULL, $double_encode = TRUE)
+	{
+		// Set the input name
+		$attributes['name'] = $name;
+
+		// Add default rows and cols attributes (required)
+		$attributes += array('rows' => 10, 'cols' => 50);
+
+		return '<textarea'.HTML::attributes($attributes).'>'.HTML::chars($body, $double_encode).'</textarea>';
+	}
+
+	/**
+	 * Creates a select form input.
+	 *
+	 *     echo Form::select('country', $countries, $country);
+	 *
+	 * [!!] Support for multiple selected options was added in v3.0.7.
+	 *
+	 * @param   string  $name       input name
+	 * @param   array   $options    available options
+	 * @param   mixed   $selected   selected option string, or an array of selected options
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    HTML::attributes
+	 */
+	public static function select($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
+	{
+		// Set the input name
+		$attributes['name'] = $name;
+
+		if (is_array($selected))
+		{
+			// This is a multi-select, god save us!
+			$attributes[] = 'multiple';
+		}
+
+		if ( ! is_array($selected))
+		{
+			if ($selected === NULL)
+			{
+				// Use an empty array
+				$selected = array();
+			}
+			else
+			{
+				// Convert the selected options to an array
+				$selected = array( (string) $selected);
+			}
+		}
+
+		if (empty($options))
+		{
+			// There are no options
+			$options = '';
+		}
+		else
+		{
+			foreach ($options as $value => $name)
+			{
+				if (is_array($name))
+				{
+					// Create a new optgroup
+					$group = array('label' => $value);
+
+					// Create a new list of options
+					$_options = array();
+
+					foreach ($name as $_value => $_name)
+					{
+						// Force value to be string
+						$_value = (string) $_value;
+
+						// Create a new attribute set for this option
+						$option = array('value' => $_value);
+
+						if (in_array($_value, $selected))
+						{
+							// This option is selected
+							$option[] = 'selected';
+						}
+
+						// Change the option to the HTML string
+						$_options[] = '<option'.HTML::attributes($option).'>'.HTML::chars($_name, FALSE).'</option>';
+					}
+
+					// Compile the options into a string
+					$_options = "\n".implode("\n", $_options)."\n";
+
+					$options[$value] = '<optgroup'.HTML::attributes($group).'>'.$_options.'</optgroup>';
+				}
+				else
+				{
+					// Force value to be string
+					$value = (string) $value;
+
+					// Create a new attribute set for this option
+					$option = array('value' => $value);
+
+					if (in_array($value, $selected))
+					{
+						// This option is selected
+						$option[] = 'selected';
+					}
+
+					// Change the option to the HTML string
+					$options[$value] = '<option'.HTML::attributes($option).'>'.HTML::chars($name, FALSE).'</option>';
+				}
+			}
+
+			// Compile the options into a single string
+			$options = "\n".implode("\n", $options)."\n";
+		}
+
+		return '<select'.HTML::attributes($attributes).'>'.$options.'</select>';
+	}
+	
+	/**
+	 * Creates a submit form input
+	 *
+	 * Example:<br>
+	 * <code>
+	 * 	echo Form::submit(NULL, 'Login');
+	 * </code>
+	 *
+	 * @param   string  $name   Input name
+	 * @param   string  $value  Input value
+	 * @param   array   $attrs  HTML attributes [Optional]
+	 * @return  string
+	 */
+	public static function submit($name, $value, array $attrs = array())
+	{
+		$attrs['type'] = 'submit';
+
+		return Form::input($name, $value, $attrs);
+	}
+
+	/**
+	 * Creates a image form input.
+	 *
+	 *     echo Form::image(NULL, NULL, array('src' => 'media/img/login.png'));
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   array   $attributes html attributes
+	 * @param   boolean $index      add index file to URL?
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function image($name, $value, array $attributes = NULL, $index = FALSE)
+	{
+		if ( ! empty($attributes['src']))
+		{
+			if (strpos($attributes['src'], '://') === FALSE)
+			{
+				// Add the base URL
+				$attributes['src'] = URL::base($index).$attributes['src'];
+			}
+		}
+
+		$attributes['type'] = 'image';
+
+		return Form::input($name, $value, $attributes);
+	}
+	
+	/**
+	 * Creates a button
+	 *
+	 * Example:<br>
+	 * <code>
+	 * 	echo Form::button('login', 'Login', array('class' => 'pull-right'));
+	 * </code>
+	 *
+	 * @param   string  $name     Button name
+	 * @param   string  $caption  Button caption
+	 * @param   array   $attrs    HTML attributes [Optional]
+	 * @return  string
+	 *
+	 * @uses    HTML::attributes
+	 */
+	public static function button($name, $caption, array $attrs = array())
+	{
+		// Set the button name
+		$attrs['name'] = $name;
+
+		// Set the button type
+		if ( ! isset($attrs['type']))
+		{
+			// Default type is button
+			$attrs['type'] = 'button';
+		}
+
+		$out = '<button '.HTML::attributes($attrs).'>'.$caption.'</button>';
+
+		return $out;
+	}
+	
+	/**
+	 * Creates a form label. Label text is not automatically translated.
+	 *
+	 *     echo Form::label('username', 'Username');
+	 *
+	 * @param   string  $input      target input
+	 * @param   string  $text       label text
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    HTML::attributes
+	 */
+	public static function label($input, $text = NULL, array $attributes = NULL)
+	{
+		if ($text === NULL)
+		{
+			// Use the input name as the text
+			$text = ucwords(preg_replace('/[\W_]+/', ' ', $input));
+		}
+
+		// Set the label target
+		$attributes['for'] = $input;
+
+		return '<label'.HTML::attributes($attributes).'>'.$text.'</label>';
+	}
+	
+	/**
+	 * Creates CSRF token input
+	 *
+	 * @param   string  $id      ID e.g. uid [Optional]
+	 * @param   string  $action  Action [Optional]
+	 * @return  string
+	 *
+	 * @uses    CSRF::token
+	 */
+	public static function csrf($id = '', $action = '')
+	{
+		return Form::hidden('token', CSRF::token($id, $action));
+	}
+
+	/**
+	 * Creates weight select field
+	 *
+	 * @param   string   $name      Input name
+	 * @param   integer  $selected  Selected option int [Optional]
+	 * @param   array    $attrs     HTML attributes [Optional]
+	 * @param   integer  $delta     Delta [Optional]
+	 * @return  string
+	 *
+	 * @uses    Form::select
+	 */
+	public static function weight($name, $selected = 0, array $attrs = NULL, $delta = 15)
+	{
+		$options = array();
+
+		for ($n = (-1 * $delta); $n <= $delta; $n++)
+		{
+			$options[$n] = $n;
+		}
+
+		return Form::select($name, $options, $selected, $attrs);
+	}
+
+	/**
+	 * Create a form field for filtering
+	 *
+	 * @param   string $column  Column
+	 * @param   array  $vals    Filter values
+	 * @param   array  $attrs   Filter attributes [Optional]
+	 * @return  string
+	 *
+	 * @uses    Arr::get
+	 */
+	public static function filter($column, array $vals, array $attrs = array())
+	{
+		if ( ! isset($attrs['style']))
+		{
+			// Default type is text
+			$attrs['style'] = 'width: 100%';
+		}
+
+		return Form::input("filter[$column]", Arr::get($vals, $column), $attrs);
+	}
+
+	/**
+	 * Create a 'new x button'
+	 *
+	 * @param   string  $name   Button name
+	 * @param   string  $title  Button title [Optional]
+	 * @param   string  $url    Button URL [Optional]
+	 * @return  string
+	 *
+	 * @uses    HTML::anchor
+	 * @uses    HTML::sprite_img
+	 * @uses    Request::uri
+	 */
+	public static function newButton($name, $title = NULL, $url = NULL)
+	{
+		if (is_null($url))
+		{
+			$url = Request::current()->uri(array('action' => 'add'));
+		}
+
+		if (is_null($title))
+		{
+			$title = HTML::sprite_img('add') . __('add :object', array(':object' => __($name)));
+		}
+
+		$out = HTML::anchor($url, $title, array('class' => 'button positive'));
 
 		return $out;
 	}
@@ -553,4 +852,5 @@ class Gleez_Form extends Kohana_Form {
 
 		return '<select'.HTML::attributes($attrs).'>'.$options.'</select>';
 	}
+
 }
