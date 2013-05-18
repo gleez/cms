@@ -290,6 +290,7 @@ return array
 	// N
 	'Name' => 'Название',
 	'Neither :request_uri, :php_self, or :path_info is available' => 'Не доступно ни одно значение: :request_uri, :php_self, или :path_info',
+	'New entry' => 'Новая запись',
 	'Newer' => 'Новые',
 	'Next' => 'Далее',
 	'No' => 'Нет',
