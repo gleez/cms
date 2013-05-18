@@ -642,7 +642,7 @@ class Gleez_Post extends ORM_Versioned {
 
 		if($list)
 		{
-			$options = array();
+			$options = array('' => __('Bulk Options'));
 			foreach ($values as $operation => $array)
 			{
 				if( $operation == "ct_{$type}") continue;
