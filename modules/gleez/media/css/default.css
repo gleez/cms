@@ -649,6 +649,89 @@ body.widget{
   clear: none;
   position: relative !important;
 }
+
+/* Blog Module */
+.widget-blog-announce,
+.widget-blog-announce .widget-content {
+	padding: 0;
+}
+
+.widget-blog-announce .widget-content {
+	border: none;
+	background: transparent;
+}
+
+.recent-announce-blogs {
+	width: 100%;
+	height: 100%;
+}
+
+.recent-announce-blogs .announce-blog {
+	position: relative;
+	height: 188px;
+	width: 180px;
+	margin: 0 15px 17px 0;
+	float: left;
+	z-index: 2;
+	background: #FFF;
+	box-shadow: 0px 1px 1px #BBB;
+	-moz-box-shadow: 0px 1px 1px #BBB;
+	-webkit-box-shadow: 0px 1px 1px #BBB;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	transition-duration: 0.8s;
+	-webkit-transition-duration: 0.8s;
+	-moz-transition-duration: 0.8s;
+	-o-transition-duration: 0.8s;
+	-webkit-transition-property: -webkit-transform, opacity;
+	-moz-transition-property: -moz-transform, opacity;
+	-o-transition-property: top, left, opacity;
+	transition-property: transform, opacity;
+}
+
+.recent-announce-blogs .image {
+	padding: 0;
+	height: 140px;
+}
+
+.recent-announce-blogs .image img {
+	display: inline;
+}
+
+.recent-announce-blogs .image .empty-photo {
+	width: 180px;
+	height: 140px;
+	line-height: 140px;
+	background-color: #333;
+	color: #FFF;
+	text-align: center;
+}
+
+.recent-announce-blogs h3 {
+	margin: 8px 0 5px;
+	width: 180px;
+	height: 35px;
+	font-size: 13px;
+	font-weight: 900;
+	text-align: center;
+	line-height: 1.42em;
+	overflow: hidden;
+}
+
+.recent-announce-blogs h3 a {
+	color: #999;
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+.recent-announce-blogs h3 a:hover {
+	color: #25252C;
+	text-decoration: none;
+}
 /*------------------------------------------------------------------
 [1. Shortcuts / .shortcuts]
 */
