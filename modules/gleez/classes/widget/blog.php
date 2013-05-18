@@ -19,7 +19,7 @@ class Widget_blog extends Widget {
 		switch($this->name)
 		{
 			case 'recent':
-				return $this->recent_blogs($this->widget);
+				return $this->recent_blogs();
 			break;
 			default:
 				return;
@@ -28,8 +28,15 @@ class Widget_blog extends Widget {
 
 	/**
 	 * Get recent blogs
+	 *
+	 * @return  string
+	 *
+	 * @uses    Request::current
+	 * @uses    Request::action
+	 * @uses    Cache::get
+	 * @uses    Cache::set
 	 */
-	public function recent_blogs($widget)
+	public function recent_blogs()
 	{
 		$action = Request::current()->action();
 
@@ -44,21 +51,21 @@ class Widget_blog extends Widget {
 
 		if ( ! $items = $cache->get('recent_blogs'))
 		{
-			$blogs = ORM::factory('blog')->limit(10)->find_all();
+			$blogs = ORM::factory('blog')->order_by('created', 'DESC')->limit(10)->find_all();
 
 			$items = array();
 			foreach($blogs as $blog)
 			{
-				$items[$blog->id]['id']      = $blog->id;
-				$items[$blog->id]['title']   = $blog->title;
-				$items[$blog->id]['url']     = $blog->url;
-				$items[$blog->id]['user']    = $blog->user->name;
+				$items[$blog->id]['id']       = $blog->id;
+				$items[$blog->id]['title']    = $blog->title;
+				$items[$blog->id]['url']      = $blog->url;
+				$items[$blog->id]['user']     = $blog->user->name;
 				$items[$blog->id]['user_url'] = $blog->user->url;
-				$items[$blog->id]['date']    = $blog->updated ? $blog->updated : $blog->created;
+				$items[$blog->id]['date']     = $blog->updated ? $blog->updated : $blog->created;
 
 			}
 
-			// set the cache
+			// Set the cache
 			$cache->set('recent_blogs', $items, DATE::HOUR);
 		}
 
