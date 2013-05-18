@@ -105,6 +105,7 @@ return array
 	'Body' => 'Содержимое',
 	'Body must be less than :param2 characters long.' => 'Содержимое письма должно быть не длиннее :param2 символов.',
 	'Bulk Actions' => 'Массовые действия',
+	'Bulk Options' => 'Массовые параметры',
 	// C
 	'Cache Directory' => 'Каталог кэша',
 	'Categories' => 'Категории',
