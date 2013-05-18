@@ -251,13 +251,16 @@ class Controller_Admin_Blog extends Controller_Admin {
 
 		if ($this->valid_post('blog-bulk-actions'))
 		{
+			if(isset($post['operation']) AND empty($post['operation']))
+			{
+				Message::error(__('No bulk operation selected.'));
+				$this->request->redirect($redirect);
+			}
+			
 			if ( ! isset($post['blogs']) OR ( ! is_array($post['blogs']) OR ! count(array_filter($post['blogs']))))
 			{
 				Message::error(__('No blogs selected.'));
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+				$this->request->redirect($redirect);
 			}
 
 			try

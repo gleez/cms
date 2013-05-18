@@ -208,13 +208,16 @@ class Controller_Admin_Page extends Controller_Admin {
 
 		if ($this->valid_post('page-bulk-actions'))
 		{
+			if(isset($post['operation']) AND empty($post['operation']))
+			{
+				Message::error(__('No bulk operation selected.'));
+				$this->request->redirect($redirect);
+			}
+			
 			if ( ! isset($post['posts']) OR ( ! is_array($post['posts']) OR ! count(array_filter($post['posts']))))
 			{
 				Message::error(__('No pages selected.'));
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+				$this->request->redirect($redirect);
 			}
 
 			try

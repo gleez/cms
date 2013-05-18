@@ -12,13 +12,17 @@
 	
 	<div class="content">
 		<?php echo Form::open($action, array('id'=>'admin-blog-form', 'class'=>'no-form')); ?>
-			<?php echo HTML::anchor(Route::get('blog')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> '.__('New entry'), array('class'=>'btn btn-primary pull-right')); ?>
-			<div class="clearfix"></div><br>
-			<fieldset class="form-actions rounded">
-				<h4><?php echo __('Bulk Actions'); ?></h4>
-				<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
-					<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'blog'), '', array('class' => 'input-xlarge')); ?>
-					<?php echo Form::submit('blog-bulk-actions', __('Apply'), array('class'=>'btn btn-danger btn-mini')); ?>
+			<fieldset class="bulk-actions form-actions rounded">
+				<div class="row-fluid">
+					<div class="span8">
+						<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
+							<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'blog'), '', array('class' => 'span6')); ?>
+							<?php echo Form::submit('blog-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
+						</div>
+					</div>
+					<div class="span4">
+						<?php echo HTML::anchor(Route::get('blog')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> '.__('New entry'), array('class'=>'bulk-add pull-right')); ?>
+					</div>
 				</div>
 			</fieldset>
 			<table id ="blog-admin-list" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>

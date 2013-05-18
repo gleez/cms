@@ -2,7 +2,6 @@
     padding-left: 1em;
 }
 
-.form-actions select,
 .form-actions input[type="file"] {
 	padding: 2px 3px;
 	font-size: 10.5px;
@@ -19,22 +18,19 @@
 	-khtml-border-radius: 3px 3px 3px 3px;
 }
 
-.admin-page-list fieldset {
-    background-color: #FFFFFF;
-    border: 1px solid #DADCE0;
-    margin: 1.5em 2px;
-    padding: 0.5em;
-   -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
-   border-radius: 5px;
+.bulk-actions{
+    margin: 0;
+    padding: 5px;
 }
-.admin-page-list fieldset legend{
-	margin: 0px;
-	border: none;
-	width: 10%;
-	font-size: 12.5px;
-	line-height: normal;
+.bulk-actions .control-group {
+    margin-bottom: 0;
 }
+.bulk-actions .bulk-add{
+    font-size: 1.5em;
+    text-decoration: none;
+    padding-top: 3px;
+}
+
 form .captcha{
 	display: inline;
 	vertical-align: middle;
