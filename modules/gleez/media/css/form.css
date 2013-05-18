@@ -2,6 +2,23 @@
     padding-left: 1em;
 }
 
+.form-actions select,
+.form-actions input[type="file"] {
+	padding: 2px 3px;
+	font-size: 10.5px;
+	height: 22px;
+	line-height: 22px;
+}
+
+.form-actions.rounded {
+	border: 1px solid #e5e5e5;
+	border-radius: 3px 3px 3px 3px;
+	-webkit-border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px 3px 3px 3px;
+	-o-border-radius: 3px 3px 3px 3px;
+	-khtml-border-radius: 3px 3px 3px 3px;
+}
+
 .admin-page-list fieldset {
     background-color: #FFFFFF;
     border: 1px solid #DADCE0;
