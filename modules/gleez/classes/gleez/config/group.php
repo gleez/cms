@@ -2,7 +2,7 @@
 /**
  * Config Group for the Gleez config system
  *
- * @package    Gleez/Group
+ * @package    Gleez\Configuration\Group
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
