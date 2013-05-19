@@ -7,6 +7,8 @@
  *
  * @package    Gleez\Post
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
@@ -857,6 +859,63 @@ class Gleez_Post extends ORM_Versioned {
 		}
 
 		return $post;
+	}
+
+	/**
+	 * Gets recent articles (post, page, blog, etc.)
+	 *
+	 * Return FALSE if articles not found
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   array  $args  Array of arguments. Overrides defaults [Optional]
+	 * @return  mixed
+	 *
+	 * @uses    Arr::unpack_string
+	 * @uses    Post::status
+	 * @uses    System::parse_args
+	 * @uses    Cache::get
+	 * @uses    Cache::set
+	 */
+	public static function recent_posts(array $args = array())
+	{
+		$default = array(
+			'limit'     => 10,
+			'offset'    => 0,
+			'type'      => 'post',
+			'orderby'   => 'created',
+			'order'     => 'DESC',
+			'status'    => Arr::unpack_string(array_keys(Post::status()), FALSE, ','),
+			'use_cache' => TRUE,
+			'as_array'  => TRUE,
+		);
+
+		$params  = (object) System::parse_args($args, $default);
+
+		$cache     = Cache::instance('post');
+		$post      = $params->use_cache ? $cache->get('recent_'.$params->type, NULL) : NULL;
+
+		if (empty($post))
+		{
+			$post = ORM::factory($params->type)
+						->where('status', 'IN', $params->status)
+						->order_by($params->orderby, $params->order)
+						->limit($params->limit)
+						->offset($params->offset)
+						->find_all();
+
+			if ($params->as_array)
+			{
+				$post->as_array();
+			}
+
+			if ($params->use_cache)
+			{
+				$cache->set('recent_'.$params->type, $post, Date::HOUR);
+			}
+		}
+
+		return ( ! empty($post)) ? $post : FALSE;
 	}
 
 }
