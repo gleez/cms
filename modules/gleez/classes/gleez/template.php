@@ -5,7 +5,7 @@
  * @package    Gleez\Template
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -52,7 +52,7 @@ abstract class Gleez_Template extends Controller {
 	 * @var string
 	 */
 	public $icon = FALSE;
-	
+
 	/**
 	 * The sidebar content
 	 * @var array
@@ -86,7 +86,7 @@ abstract class Gleez_Template extends Controller {
 	/**
 	 * The Widgets Object
 	 * @var object
-	*/
+	 */
 	protected $_widgets;
 
 	/**
@@ -162,14 +162,12 @@ abstract class Gleez_Template extends Controller {
 
 	/**
 	 * Datatable Object.
-	 *
 	 * @var object
 	 */
 	protected $_datatables;
 
 	/**
 	 * An array of form error messages to be displayed to the user.
-	 *
 	 * @var array
 	 */
 	protected $_errors = array();
@@ -177,7 +175,6 @@ abstract class Gleez_Template extends Controller {
 	/**
 	 * If JSON is going to be delivered to the client,
 	 * this property will hold the values being sent.
-	 *
 	 * @var array
 	 */
 	protected $_json;
@@ -232,7 +229,7 @@ abstract class Gleez_Template extends Controller {
 			$this->_ajax       = TRUE;
 			$this->auto_render = FALSE;
 		}
-		
+
 		$this->response->headers('X-Powered-By', 'Gleez CMS ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')');
 
 		$this->_config = Kohana::$config->load('site');
@@ -259,11 +256,11 @@ abstract class Gleez_Template extends Controller {
 			// Load the template
 			$this->template         = View::factory($this->template);
 
-			$this->title_separator = $this->_config->get('title_separator', ' | ');
+			$this->title_separator  = $this->_config->get('title_separator', ' | ');
 			$this->_widgets         = Widgets::instance();
 			$this->template->_admin = Theme::$is_admin;
 
-			//set the destination & redirect url
+			// Set the destination & redirect url
 			$this->_desti = array(
 				'destination' => $this->request->uri()
 			);
@@ -272,21 +269,21 @@ abstract class Gleez_Template extends Controller {
 
 			// Bind the generic page variables
 			$this->template->set('site_name',      $this->_config->get('site_name', __('Gleez CMS')))
-					->set('site_slogan',   $this->_config->get('site_slogan', __('Innovate IT')))
-					->set('site_url',      URL::site(NULL, TRUE))
-					->set('site_logo',     $this->_config->get('site_logo', FALSE))
-					->set('sidebar_left',  array())
-					->set('sidebar_right', array())
-					->set('column_class',  '')
-					->set('main_column',   12)
-					->set('head_title',    $this->title)
-					->set('title',         $this->title)
-					->set('icon',          $this->icon)
-					->set('front',         FALSE)
-					->set('mission',       FALSE)
-					->set('tabs',          FALSE)
-					->set('_user',         $this->_auth->get_user())
-					->bind('datatables',   $this->_datatables);
+				->set('site_slogan',   $this->_config->get('site_slogan', __('Innovate IT')))
+				->set('site_url',      URL::site(NULL, TRUE))
+				->set('site_logo',     $this->_config->get('site_logo', FALSE))
+				->set('sidebar_left',  array())
+				->set('sidebar_right', array())
+				->set('column_class',  '')
+				->set('main_column',   12)
+				->set('head_title',    $this->title)
+				->set('title',         $this->title)
+				->set('icon',          $this->icon)
+				->set('front',         FALSE)
+				->set('mission',       FALSE)
+				->set('tabs',          FALSE)
+				->set('_user',         $this->_auth->get_user())
+				->bind('datatables',   $this->_datatables);
 
 			// Page Title
 			$this->title = ucwords($this->request->controller());
@@ -363,10 +360,12 @@ abstract class Gleez_Template extends Controller {
 				$this->template->mission = __($this->_config->get('site_mission', ''));
 			}
 
-			View::set_global('is_front', $this->template->front);
-			View::set_global('is_admin', $this->template->_admin);
+			View::set_global(array(
+				'is_front' => $this->template->front,
+				'is_admin' => $this->template->_admin
+			));
 
-			$classes[] = $this->template->_admin ? 'backend' : 'frontend';
+			$classes[]  = $this->template->_admin ? 'backend' : 'frontend';
 			$classes[]  = ($this->template->front) ? 'front' : 'not-front';
 			$page_class = implode(' ', array_unique(array_map('trim', $classes)));
 
@@ -378,20 +377,20 @@ abstract class Gleez_Template extends Controller {
 
 			// Set primary menu
 			$primary_menu = Menu::links('main-menu', array(
-					'class' => 'menus nav'
+				'class' => 'menus nav'
 			));
 
 			// Bind the generic page variables
 			$this->template->set('lang', I18n::$lang)
-					->set('page_id', $this->_page_id)
-					->set('page_class', $page_class)
-					->set('primary_menu', $primary_menu)
-					->set('title', $this->title)
-					->set('icon',  $this->icon)
-					->set('mission', $this->template->mission)
-					->set('content', $this->response->body())
-					->set('messages', Message::display())
-					->set('profiler', FALSE);
+				->set('page_id', $this->_page_id)
+				->set('page_class', $page_class)
+				->set('primary_menu', $primary_menu)
+				->set('title', $this->title)
+				->set('icon',  $this->icon)
+				->set('mission', $this->template->mission)
+				->set('content', $this->response->body())
+				->set('messages', Message::display())
+				->set('profiler', FALSE);
 
 			if (count($this->_tabs) > 0)
 			{
@@ -617,7 +616,6 @@ abstract class Gleez_Template extends Controller {
 	protected function _set_default_css()
 	{
 		$theme = (Theme::$is_admin) ? Theme::$admin_theme_name : Theme::$site_theme_name;
-		
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
@@ -697,7 +695,6 @@ abstract class Gleez_Template extends Controller {
 		if ($has_csrf AND ! $valid_csrf)
 		{
 			// CSRF was submitted but expired
-			//Message::error(__('This form has expired. Please try submitting it again.'));
 			$this->_errors = array('_token' => __('This form has expired. Please try submitting it again.'));
 			return FALSE;
 		}
@@ -808,23 +805,23 @@ abstract class Gleez_Template extends Controller {
 		if( $this->_accept_format === 'application/json')
 		{
 			if ($this->request->query('sEcho') !== NULL) return;
-		
+
 			$this->SetJson('FormSaved',      $this->_formsaved);
 			$this->SetJson('DeliveryType',   $this->_accept_format);
 			$this->SetJson('InformMessages', Message::get(NULL, NULL, TRUE));
 			$this->SetJson('ErrorMessages',  $this->_errors);
 			$this->SetJson('RedirectUrl',    Request::$_redirect_url);
 			$this->SetJson('pageTitle',      $this->title);
-		
+
 			if ( ! Text::check_utf8($this->_json['Data']) )
 			{
 				$this->_json['Data'] = utf8_encode($this->_json['Data']);
 			}
-		
+
 			$this->_json['Data'] = JSON::encode($this->_json);
 		}
 	}
-	
+
 	/**
 	 * If JSON is going to be sent to the client, this method allows you to add
 	 * extra values to the JSON array.

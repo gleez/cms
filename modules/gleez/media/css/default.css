@@ -651,11 +651,21 @@ body.widget{
 }
 
 /* Blog Module */
+.widget-blog-announce .widget-header {
+	margin: 1em 0;
+}
+
+.widget-blog-announce .widget-header h3 {
+	font-size: 16px;
+}
+
 .widget-blog-announce,
+.widget-blog-announce .widget-header,
 .widget-blog-announce .widget-content {
 	padding: 0;
 }
 
+.widget-blog-announce .widget-header,
 .widget-blog-announce .widget-content {
 	border: none;
 	background: transparent;
