@@ -179,7 +179,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 
 		$is_datatables = Request::is_datatables();
 		$blogs = ORM::factory('blog');
-
+		$blogs->recent_posts(array());
 		if ($is_datatables)
 		{
 			$this->_datatables = $blogs->dataTables(array('id', 'title', 'author', 'status', 'updated'));
