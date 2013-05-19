@@ -1,5 +1,5 @@
 /*!
- * Bootstrap v2.3.1
+ * Bootstrap v2.3.2
  *
  * Copyright 2012 Twitter, Inc
  * Licensed under the Apache License v2.0
@@ -3050,7 +3050,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-link:hover,
 .navbar-link:focus {
-  color: #ffffff;
+  color: #333333;
 }
 .navbar .divider-vertical {
   height: 40px;
@@ -3205,8 +3205,8 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: transparent;
+  color: #333333;
   text-decoration: none;
 }
 .navbar .nav > .active > a,
@@ -3310,8 +3310,8 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar .nav li.dropdown > a:hover .caret,
 .navbar .nav li.dropdown > a:focus .caret {
-  border-top-color: #ffffff;
-  border-bottom-color: #ffffff;
+  border-top-color: #333333;
+  border-bottom-color: #333333;
 }
 .navbar .nav li.dropdown.open > .dropdown-toggle,
 .navbar .nav li.dropdown.active > .dropdown-toggle,
@@ -4432,15 +4432,15 @@ a.thumbnail:focus {
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
   text-decoration: none;
-  color: #6baa3d;
-  background-color: #003b48;
-  background-image: -moz-linear-gradient(top, #004352, #002e39);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#004352), to(#002e39));
-  background-image: -webkit-linear-gradient(top, #004352, #002e39);
-  background-image: -o-linear-gradient(top, #004352, #002e39);
-  background-image: linear-gradient(to bottom, #004352, #002e39);
+  color: #ffffff;
+  background-color: #66a23a;
+  background-image: -moz-linear-gradient(top, #6baa3d, #5f9736);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#6baa3d), to(#5f9736));
+  background-image: -webkit-linear-gradient(top, #6baa3d, #5f9736);
+  background-image: -o-linear-gradient(top, #6baa3d, #5f9736);
+  background-image: linear-gradient(to bottom, #6baa3d, #5f9736);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff004352', endColorstr='#ff002e39', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff6baa3d', endColorstr='#ff5f9736', GradientType=0);
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
@@ -4475,6 +4475,14 @@ a.thumbnail:focus {
 }
 .open > .dropdown-menu {
   display: block;
+}
+.dropdown-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 990;
 }
 .pull-right > .dropdown-menu {
   right: 0;
@@ -4530,7 +4538,7 @@ a.thumbnail:focus {
   margin-right: -10px;
 }
 .dropdown-submenu:hover > a:after {
-  border-left-color: #6baa3d;
+  border-left-color: #ffffff;
 }
 .dropdown-submenu.pull-left {
   float: none;
