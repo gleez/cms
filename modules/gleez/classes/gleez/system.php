@@ -5,6 +5,7 @@
  * @package    Gleez\Core
  * @author     Sergey Yakovlev - Gleez
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -444,5 +445,40 @@ class Gleez_System {
 			return System::WIN;
 		}
 		return System::LIN;
+	}
+
+	/**
+	 * Merge user defined arguments into defaults array
+	 *
+	 * This function is used throughout Gleez to allow for both string
+	 * or array to be merged into another array.
+	 *
+	 * @since  1.1.0
+	 *
+	 * @param   string|array  $args      Value to merge with `$defaults`
+	 * @param   array         $defaults  Array that serves as the defaults [Optional]
+	 * @return  array                    Merged user defined values with defaults
+	 */
+	public static function parse_args($args, array $defaults = array())
+	{
+		if (is_object($args))
+		{
+			$result = get_object_vars($args);
+		}
+		elseif (is_array($args))
+		{
+			$result = &$args;
+		}
+		else
+		{
+			Text::parse($args, $result);
+		}
+
+		if ( ! empty($defaults))
+		{
+			return Arr::merge($defaults, $result);
+		}
+
+		return $result;
 	}
 }
