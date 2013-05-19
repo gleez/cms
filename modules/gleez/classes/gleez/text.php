@@ -7,6 +7,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovkev - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -1352,5 +1354,63 @@ class Gleez_Text {
 		$search = '/([^0-9A-Z]+)' . preg_quote($fraction, '/') . '([^0-9A-Z]+)/i';
 		$replacement = '$1' . $html_fraction . '$2';
 		return preg_replace($search, $replacement, $text);
+	}
+
+	/**
+	 * Navigates through an array and removes slashes from the values
+	 *
+	 * If an array is passed, the array_map() function causes a callback to pass the
+	 * value back to the function. The slashes from this value will removed.
+	 *
+	 * It is based on the WP function `stripslashes_deep()`.
+	 *
+	 * @since  1.1.0
+	 *
+	 * @param   mixed  $value  The value to be stripped
+	 * @return  array|object|string  Stripped value
+	 */
+	public static function strip_slashes($value)
+	{
+		if (is_array($value))
+		{
+			$value = array_map('Text::strip_slashes', $value);
+		}
+		elseif (is_object($value))
+		{
+			$vars = get_object_vars($value);
+			foreach ($vars as $key => $data)
+			{
+				$value->{$key} = Text::strip_slashes($data);
+			}
+		}
+		elseif (is_string($value))
+		{
+			$value = stripslashes($value);
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Parses a string into variables to be stored in an array
+	 *
+	 * It is based on the WP function `wp_parse_str()`.
+	 *
+	 * @since  1.1.0
+	 *
+	 * @param  string  $string  The string to be parsed
+	 * @param  array   $array   Variables will be stored in this array
+	 *
+	 * @link   http://php.net/manual/en/function.parse-str.php parse_str()
+	 * @link   http://php.net/manual/en/function.get-magic-quotes-gpc.php magic_quotes_gpc()
+	 */
+	public static function parse($string, array &$array = NULL)
+	{
+		parse_str($string, $array);
+
+		if (get_magic_quotes_gpc())
+		{
+			$array = Text::strip_slashes($array);
+		}
 	}
 }
