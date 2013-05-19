@@ -1391,26 +1391,4 @@ class Gleez_Text {
 		return $value;
 	}
 
-	/**
-	 * Parses a string into variables to be stored in an array
-	 *
-	 * It is based on the WP function `wp_parse_str()`.
-	 *
-	 * @since  1.1.0
-	 *
-	 * @param  string  $string  The string to be parsed
-	 * @param  array   $array   Variables will be stored in this array
-	 *
-	 * @link   http://php.net/manual/en/function.parse-str.php parse_str()
-	 * @link   http://php.net/manual/en/function.get-magic-quotes-gpc.php magic_quotes_gpc()
-	 */
-	public static function parse($string, array &$array = NULL)
-	{
-		parse_str($string, $array);
-
-		if (get_magic_quotes_gpc())
-		{
-			$array = Text::strip_slashes($array);
-		}
-	}
 }
