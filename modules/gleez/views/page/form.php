@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
-	echo Form::open($action, array('id'=>'page-form', 'class'=>'post-form form'));
+	echo Form::open($action, array('id'=>'page-form', 'class'=>'post-form form', 'enctype' => 'multipart/form-data'));
 
 	include Kohana::find_file('views', 'errors/partial');
 ?>
@@ -33,6 +33,15 @@
 				</div>
 			<?php endif; ?>
 
+			<?php if ($config->primary_image): ?>
+				<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
+					<?php echo Form::label('image', __('Primary Image'), array('class' => 'control-label') ) ?>
+					<div class="controls">
+						<?php echo Form::file('image', array('class' => 'span12')); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+	
 			<?php if ($config->use_excerpt): ?>
 				<div class="control-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
