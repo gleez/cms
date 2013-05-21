@@ -471,7 +471,7 @@ class Gleez_System {
 		}
 		else
 		{
-			Text::parse($args, $result);
+			parse_str($args, $result);
 		}
 
 		if ( ! empty($defaults))
