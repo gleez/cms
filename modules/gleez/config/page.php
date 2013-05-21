@@ -94,4 +94,10 @@ return array(
 	 * @var string
 	 */
 	'comment_order' => 'asc',
+
+	/**
+	 * Use primary image?
+	 * @var boolean
+	 */
+	'primary_image' => TRUE,
 );

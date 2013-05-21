@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
 
-<?php echo Form::open($action, array('id'=>'blog-form', 'class'=>'blog-form form')); ?>
+<?php echo Form::open($action, array('id'=>'blog-form', 'class'=>'blog-form form', 'enctype' => 'multipart/form-data')); ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
@@ -36,7 +36,7 @@
 				<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
 					<?php echo Form::label('image', __('Primary Image'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::input('image', $image, array('class' => 'span12')); ?>
+						<?php echo Form::file('image', array('class' => 'span12')); ?>
 					</div>
 				</div>
 			<?php endif; ?>

@@ -129,6 +129,20 @@ class Gleez_Post extends ORM_Versioned {
 	protected $_image_url;
 
 	/**
+	 * Constructs a new model and loads a record if given
+	 *
+	 * @param  mixed $id  Parameter for find or object to load [Optional]
+	 */
+	public function __construct($id = NULL)
+	{
+		// Set primary image defaults
+		$this->_image_path = APPPATH.'media/posts/';
+		$this->_image_url  = URL::site('media/posts', TRUE);
+		
+		parent::__construct($id);
+	}
+	
+	/**
 	 * Rules for the post model
 	 *
 	 * @return  array  Rules
@@ -158,6 +172,9 @@ class Gleez_Post extends ORM_Versioned {
 			),
 			'categories' => array(
 				array(array($this, 'is_valid'), array('category', ':validation', ':field')),
+			),
+			'image' => array(
+				array(array($this, 'is_valid'), array('image', ':validation', ':field')),
 			),
 		);
 	}
@@ -246,6 +263,22 @@ class Gleez_Post extends ORM_Versioned {
 				}
 			}
 		}
+		// Make sure we have an valid image is uploaded
+		elseif ($name == 'image')
+		{
+			if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
+			{
+				$data = Validation::factory($_FILES)
+					->rule('image', 'Upload::not_empty')
+					->rule('image', 'Upload::valid')
+					->rule('image', 'Upload::type', array(':value', array('jpg', 'png', 'gif')));
+					
+				if ( ! $data->check() )
+				{
+					$validation->error($field, 'invalid', array($validation[$field]));
+				}
+			}
+		}
 	}
 
 	/**
@@ -260,6 +293,26 @@ class Gleez_Post extends ORM_Versioned {
 	}
 
 	/**
+	 * Override this method to take certain actions before the data is saved
+	 */
+	protected function before_save()
+	{
+		if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
+		{
+			//create directory if not
+			System::mkdir($this->_image_path);
+		
+			//generate a unqiue filename to avoid conflicts
+			$filename = uniqid().preg_replace('/\s+/u', '-', $_FILES['image']['name']);
+			
+			if( $file = Upload::save($_FILES['image'], $filename, $this->_image_path) )
+			{
+				$this->image = $filename;
+			}
+		}
+	}
+	
+	/**
 	 * Updates or Creates the record depending on loaded()
 	 *
 	 * @param   Validation $validation Validation object [Optional]
@@ -272,10 +325,6 @@ class Gleez_Post extends ORM_Versioned {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		// Set primary image defaults
-		$this->_image_path = APPPATH.'media/';
-		$this->_image_url  = URL::site('media', TRUE);
-
 		// Set some defaults
 		$this->status  = empty($this->status)  ? 'draft' : $this->status;
 		$this->promote = empty($this->promote) ? 0 : $this->promote;
@@ -431,7 +480,7 @@ class Gleez_Post extends ORM_Versioned {
 
 		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
 		{
-			unlink($this->_image_path.$this->rawimage);
+			@unlink($this->_image_path.$this->rawimage);
 		}
 
 		$source = $this->rawurl;
@@ -514,6 +563,9 @@ class Gleez_Post extends ORM_Versioned {
 			break;
 			case 'delete_url':
 				return Route::get($this->type)->uri(array('id' => $this->id, 'action' => 'delete'));
+			break;
+			case 'image':
+				return $this->_image_url.$this->rawimage;
 			break;
 			case 'count_comments':
 				return (int) DB::select('COUNT("*") AS mycount')
