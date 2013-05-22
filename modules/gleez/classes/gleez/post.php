@@ -138,10 +138,10 @@ class Gleez_Post extends ORM_Versioned {
 		// Set primary image defaults
 		$this->_image_path = APPPATH.'media/posts/';
 		$this->_image_url  = URL::site('media/posts', TRUE);
-		
+
 		parent::__construct($id);
 	}
-	
+
 	/**
 	 * Rules for the post model
 	 *
@@ -268,11 +268,12 @@ class Gleez_Post extends ORM_Versioned {
 		{
 			if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
 			{
+				$allowed_types = Kohana::$config->load('media')->get('supported_image_formats', array('jpg', 'png', 'gif'));
 				$data = Validation::factory($_FILES)
 					->rule('image', 'Upload::not_empty')
 					->rule('image', 'Upload::valid')
-					->rule('image', 'Upload::type', array(':value', array('jpg', 'png', 'gif')));
-					
+					->rule('image', 'Upload::type', array(':value', $allowed_types));
+
 				if ( ! $data->check() )
 				{
 					$validation->error($field, 'invalid', array($validation[$field]));
@@ -301,17 +302,17 @@ class Gleez_Post extends ORM_Versioned {
 		{
 			//create directory if not
 			System::mkdir($this->_image_path);
-		
+
 			//generate a unqiue filename to avoid conflicts
 			$filename = uniqid().preg_replace('/\s+/u', '-', $_FILES['image']['name']);
-			
+
 			if( $file = Upload::save($_FILES['image'], $filename, $this->_image_path) )
 			{
 				$this->image = $filename;
 			}
 		}
 	}
-	
+
 	/**
 	 * Updates or Creates the record depending on loaded()
 	 *
