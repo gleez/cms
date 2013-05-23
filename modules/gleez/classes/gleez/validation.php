@@ -449,8 +449,8 @@ class Gleez_Validation implements ArrayAccess {
 		// Restore the data to its original form
 		$this->_data = $original;
 
-	        // To prevent memory leaks
-	        unset($this->_bound[':validation']);
+		// To prevent memory leaks
+		unset($this->_bound[':validation']);
 
 		if (isset($benchmark))
 		{
