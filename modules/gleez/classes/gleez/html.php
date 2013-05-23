@@ -212,6 +212,13 @@ class Gleez_HTML {
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
+		//allow theme to serve its own media assets
+		if(strpos($file, 'media/js') !== FALSE)
+		{
+			$theme = Theme::$active;
+			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
+		}
+		
 		if (strpos($file, '://') === FALSE)
 		{
 			// Add the base URL
@@ -337,6 +344,13 @@ class Gleez_HTML {
 	 */
 	public static function style($file, array $attrs = NULL, $protocol = NULL, $index = FALSE)
 	{
+		//allow theme to serve its own media assets
+		if(strpos($file, 'media/css') !== FALSE)
+		{
+			$theme = Theme::$active;
+			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
+		}
+		
 		if ( ! URL::is_absolute($file))
 		{
 			// Add the base URL

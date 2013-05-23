@@ -24,7 +24,7 @@ if ( ! Route::cache())
 	));
 
 	// Static file serving (CSS, JS, images)
-	Route::set('media', 'media(/<type>)/<file>', array('file' => '.+', 'type' => 'admin'))
+	Route::set('media', 'media(/<theme>)/<file>', array('file' => '.+', 'theme' => Theme::route_list()))
 	->defaults(array(
 		'controller' => 'media',
 		'action'     => 'serve',
