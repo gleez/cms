@@ -17,15 +17,15 @@ class Controller_Media extends Controller {
 	 */
 	public function before()
 	{
+		if ($theme = $this->request->param('theme', FALSE))
+		{
+			Theme::set_theme($theme);
+		}
+		
 		parent::before();
 		
 		// Load config
 		$this->config = Kohana::$config->load('media');
-		
-		if ($this->request->param('type', FALSE))
-		{
-			Theme::set_admin_theme();
-		}
 	}
 	
 	/**

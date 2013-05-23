@@ -258,12 +258,6 @@ class Gleez_URL {
 			$path = preg_replace_callback('~([^/]+)~', 'URL::_rawurlencode_callback', $path);
 		}
 
-		//allow admin theme to serve its own media assets
-		if(Theme::$is_admin == TRUE)
-		{
-			$path = str_replace(array('media', 'media/admin', 'media/admin/admin'), 'media/admin', $path);
-		}
-		
 		// Concat the URL
 		return URL::base($protocol, $index).$path;
 	}

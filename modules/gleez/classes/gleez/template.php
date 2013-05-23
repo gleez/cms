@@ -615,7 +615,7 @@ abstract class Gleez_Template extends Controller {
 	 */
 	protected function _set_default_css()
 	{
-		$theme = (Theme::$is_admin) ? Theme::$admin_theme_name : Theme::$site_theme_name;
+		$theme = Theme::$active;
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
