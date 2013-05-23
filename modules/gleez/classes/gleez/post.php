@@ -200,7 +200,10 @@ class Gleez_Post extends ORM_Versioned {
 	 * @param   string      $name        Validation name
 	 * @param   Validation  $validation  Validation object
 	 * @param   string      $field       Field name
+	 *
 	 * @uses    Valid::numeric
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
 	 */
 	public function is_valid($name, Validation $validation, $field)
 	{
@@ -287,6 +290,8 @@ class Gleez_Post extends ORM_Versioned {
 	 *
 	 * @param   string  $value  Status name
 	 * @return  boolean
+	 *
+	 * @uses    Post::status
 	 */
 	public static function valid_state($value)
 	{
@@ -295,6 +300,9 @@ class Gleez_Post extends ORM_Versioned {
 
 	/**
 	 * Override this method to take certain actions before the data is saved
+	 *
+	 * @uses  System::mkdir
+	 * @uses  Upload::save
 	 */
 	protected function before_save()
 	{
@@ -435,8 +443,9 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Adds or deletes path aliases
 	 *
-	 * @uses    Path::load
-	 * @uses    Path::save
+	 * @uses  Module::action
+	 * @uses  Path::load
+	 * @uses  Path::save
 	 */
 	protected function aliases()
 	{
@@ -605,8 +614,10 @@ class Gleez_Post extends ORM_Versioned {
 	 * List of links
 	 *
 	 * @return  array  Links
+	 *
 	 * @uses    Module::action
-	 * @uses    Request::uri()
+	 * @uses    Request::current
+	 * @uses    Request::uri
 	 */
 	public function links()
 	{
