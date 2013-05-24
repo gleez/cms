@@ -559,7 +559,7 @@ class Gleez_Post extends ORM_Versioned {
 				return parent::__get('body');
 			break;
 			case 'rawurl':
-				return Route::get($this->type)->uri(array( 'id' => $this->id));
+				return Route::get($this->type)->uri(array( 'id' => $this->id, 'action' => 'view'));
 			break;
 			case 'rawimage':
 				// Raw fields without path. Usage: during edit or etc!
