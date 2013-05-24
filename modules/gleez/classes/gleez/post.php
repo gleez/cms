@@ -311,6 +311,9 @@ class Gleez_Post extends ORM_Versioned {
 			//create directory if not
 			System::mkdir($this->_image_path);
 
+			//delete previous image if exists, to cleanup stale images
+			$this->_delete_image();
+	
 			//generate a unqiue filename to avoid conflicts
 			$filename = uniqid().preg_replace('/\s+/u', '-', $_FILES['image']['name']);
 
@@ -488,11 +491,9 @@ class Gleez_Post extends ORM_Versioned {
 			);
 		}
 
-		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
-		{
-			@unlink($this->_image_path.$this->rawimage);
-		}
-
+		//delete image if exists, to cleanup stale images
+		$this->_delete_image();
+	
 		$source = $this->rawurl;
 		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
 		parent::delete();
@@ -503,7 +504,7 @@ class Gleez_Post extends ORM_Versioned {
 
 		return $this;
 	}
-
+	
 	/**
 	 * Reading data from inaccessible properties
 	 *
@@ -982,4 +983,17 @@ class Gleez_Post extends ORM_Versioned {
 		return ( ! empty($post)) ? $post : FALSE;
 	}
 
+	/*
+	 * Deletes the primary image; used during upload and delete
+	 * 
+	 */
+	protected function _delete_image()
+	{
+		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
+		{
+			@unlink($this->_image_path.$this->rawimage);
+		}
+		
+		return $this;
+	}
 }
