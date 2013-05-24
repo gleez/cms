@@ -129,6 +129,20 @@ class Gleez_Post extends ORM_Versioned {
 	protected $_image_url;
 
 	/**
+	 * Constructs a new model and loads a record if given
+	 *
+	 * @param  mixed $id  Parameter for find or object to load [Optional]
+	 */
+	public function __construct($id = NULL)
+	{
+		// Set primary image defaults
+		$this->_image_path = APPPATH.'media/posts/';
+		$this->_image_url  = URL::site('media/posts', TRUE);
+
+		parent::__construct($id);
+	}
+
+	/**
 	 * Rules for the post model
 	 *
 	 * @return  array  Rules
@@ -159,6 +173,9 @@ class Gleez_Post extends ORM_Versioned {
 			'categories' => array(
 				array(array($this, 'is_valid'), array('category', ':validation', ':field')),
 			),
+			'image' => array(
+				array(array($this, 'is_valid'), array('image', ':validation', ':field')),
+			),
 		);
 	}
 
@@ -183,7 +200,10 @@ class Gleez_Post extends ORM_Versioned {
 	 * @param   string      $name        Validation name
 	 * @param   Validation  $validation  Validation object
 	 * @param   string      $field       Field name
+	 *
 	 * @uses    Valid::numeric
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
 	 */
 	public function is_valid($name, Validation $validation, $field)
 	{
@@ -246,6 +266,23 @@ class Gleez_Post extends ORM_Versioned {
 				}
 			}
 		}
+		// Make sure we have an valid image is uploaded
+		elseif ($name == 'image')
+		{
+			if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
+			{
+				$allowed_types = Kohana::$config->load('media')->get('supported_image_formats', array('jpg', 'png', 'gif'));
+				$data = Validation::factory($_FILES)
+					->rule('image', 'Upload::not_empty')
+					->rule('image', 'Upload::valid')
+					->rule('image', 'Upload::type', array(':value', $allowed_types));
+
+				if ( ! $data->check() )
+				{
+					$validation->error($field, 'invalid', array($validation[$field]));
+				}
+			}
+		}
 	}
 
 	/**
@@ -253,10 +290,35 @@ class Gleez_Post extends ORM_Versioned {
 	 *
 	 * @param   string  $value  Status name
 	 * @return  boolean
+	 *
+	 * @uses    Post::status
 	 */
 	public static function valid_state($value)
 	{
 		return in_array($value, array_keys(Post::status()));
+	}
+
+	/**
+	 * Override this method to take certain actions before the data is saved
+	 *
+	 * @uses  System::mkdir
+	 * @uses  Upload::save
+	 */
+	protected function before_save()
+	{
+		if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
+		{
+			//create directory if not
+			System::mkdir($this->_image_path);
+
+			//generate a unqiue filename to avoid conflicts
+			$filename = uniqid().preg_replace('/\s+/u', '-', $_FILES['image']['name']);
+
+			if( $file = Upload::save($_FILES['image'], $filename, $this->_image_path) )
+			{
+				$this->image = $filename;
+			}
+		}
 	}
 
 	/**
@@ -272,10 +334,6 @@ class Gleez_Post extends ORM_Versioned {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		// Set primary image defaults
-		$this->_image_path = APPPATH.'media/';
-		$this->_image_url  = URL::site('media', TRUE);
-
 		// Set some defaults
 		$this->status  = empty($this->status)  ? 'draft' : $this->status;
 		$this->promote = empty($this->promote) ? 0 : $this->promote;
@@ -385,8 +443,9 @@ class Gleez_Post extends ORM_Versioned {
 	/**
 	 * Adds or deletes path aliases
 	 *
-	 * @uses    Path::load
-	 * @uses    Path::save
+	 * @uses  Module::action
+	 * @uses  Path::load
+	 * @uses  Path::save
 	 */
 	protected function aliases()
 	{
@@ -431,7 +490,7 @@ class Gleez_Post extends ORM_Versioned {
 
 		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
 		{
-			unlink($this->_image_path.$this->rawimage);
+			@unlink($this->_image_path.$this->rawimage);
 		}
 
 		$source = $this->rawurl;
@@ -515,6 +574,9 @@ class Gleez_Post extends ORM_Versioned {
 			case 'delete_url':
 				return Route::get($this->type)->uri(array('id' => $this->id, 'action' => 'delete'));
 			break;
+			case 'image':
+				return $this->_image_url.$this->rawimage;
+			break;
 			case 'count_comments':
 				return (int) DB::select('COUNT("*") AS mycount')
 					->from('comments')
@@ -552,8 +614,10 @@ class Gleez_Post extends ORM_Versioned {
 	 * List of links
 	 *
 	 * @return  array  Links
+	 *
 	 * @uses    Module::action
-	 * @uses    Request::uri()
+	 * @uses    Request::current
+	 * @uses    Request::uri
 	 */
 	public function links()
 	{
