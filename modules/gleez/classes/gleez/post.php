@@ -137,7 +137,7 @@ class Gleez_Post extends ORM_Versioned {
 	{
 		// Set primary image defaults
 		$this->_image_path = APPPATH.'media/posts/';
-		$this->_image_url  = URL::site('media/posts', TRUE);
+		$this->_image_url  = trim(URL::site('media/posts'), '/').'/';
 
 		parent::__construct($id);
 	}
