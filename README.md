@@ -45,6 +45,7 @@ The available locale(s) in Gleez are:
 + Chinese
 + Russian
 + Italian
++ Romanian
 
 ## Documentation
 
