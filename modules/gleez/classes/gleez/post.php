@@ -576,7 +576,7 @@ class Gleez_Post extends ORM_Versioned {
 				return Route::get($this->type)->uri(array('id' => $this->id, 'action' => 'delete'));
 			break;
 			case 'image':
-				return $this->_image_url.'/'.$this->rawimage;
+				return $this->_image_url.$this->rawimage;
 			break;
 			case 'count_comments':
 				return (int) DB::select('COUNT("*") AS mycount')
