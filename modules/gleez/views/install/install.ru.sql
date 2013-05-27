@@ -60,7 +60,8 @@ CREATE TABLE {terms} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {terms} (`id`, `name`, `description`, `image`, `type`, `pid`, `lft`, `rgt`, `lvl`, `scp`) VALUES
-(1, 'Страницы', 'Используйте для группирования страниц на схожие темы в категории.', NULL, 'page', 0, 1, 2, 1, 1);
+(1, 'Страницы', 'Используйте для группирования страниц на схожие темы в категории.', NULL, 'page', 0, 1, 2, 1, 1),
+(2, 'Блоги', 'Используйте для группировки материалов блогов на схожие темы в категории.', NULL, 'blog', 0, 3, 4, 1, 1);
 
 DROP TABLE IF EXISTS {comments};
 CREATE TABLE {comments} (
