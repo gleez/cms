@@ -547,7 +547,7 @@ class Gleez_System {
 				$status = version_compare(PHP_VERSION, '5.3', '>=');
 			break;
 			case 'mysql':
-				$status = function_exists("mysqli_query");
+				$status = function_exists("mysqli_query") OR function_exists("mysql_query");
 			break;
 			case 'sys_dir':
 				$status = (is_dir(SYSPATH) AND is_readable(SYSPATH.'classes/kohana'.EXT));
@@ -598,10 +598,10 @@ class Gleez_System {
 				$status = function_exists('ctype_digit');
 			break;
 			case 'uri_determ':
-				$status = isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF']) OR isset($_SERVER['PATH_INFO']);
+				$status = (isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF']) OR isset($_SERVER['PATH_INFO']));
 			break;
 			case 'gd':
-				$status = function_exists('gd_info');
+				$status = extension_loaded('gd');
 			break;
 			default:
 				$status = FALSE;
