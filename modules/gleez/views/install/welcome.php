@@ -13,5 +13,5 @@
 
 <?php echo Form::open(Route::get('install')->uri(array('action' => 'systemcheck'))); ?>
 	<?php echo Form::button('continue', __('Continue'), array('class' => 'btn btn-primary pull-right', 'type' => 'submit')); ?>
-	<div class="clearfix"></div><br>
 <?php echo Form::close(); ?>
+<div class="clearfix"></div><br>
