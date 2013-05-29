@@ -5,7 +5,7 @@ return array
 (
 	'default' => array
 	(
-		'type'       => 'mysql',
+		'type'       => '<?php echo $type ?>',
 		'connection' => array(
 			/**
 			 * The following options are available for MySQL:
