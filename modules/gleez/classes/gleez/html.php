@@ -53,23 +53,29 @@ class Gleez_HTML {
 	);
 
 	/**
-	 * @var  boolean  use strict XHTML mode?
+	 * Use strict XHTML mode?
+	 * @var boolean
 	 */
 	public static $strict = TRUE;
 
 	/**
-	 * @var  boolean  automatically target external URLs to a new window?
+	 * Automatically target external URLs to a new window?
+	 * @var boolean
 	 */
 	public static $windowed_urls = TRUE;
 
 	/**
-	 * Convert special characters to HTML entities. All untrusted content
-	 * should be passed through this method to prevent XSS injections.
+	 * Convert special characters to HTML entities
 	 *
-	 *     echo HTML::chars($username);
+	 * All untrusted content should be passed through this method to prevent XSS injections.
 	 *
-	 * @param   string  $value          string to convert
-	 * @param   boolean $double_encode  encode existing entities
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::chars($username);
+	 * </code>
+	 *
+	 * @param   string   $value          String to convert
+	 * @param   boolean  $double_encode  Encode existing entities [Optional]
 	 * @return  string
 	 */
 	public static function chars($value, $double_encode = TRUE)
@@ -78,14 +84,18 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Convert all applicable characters to HTML entities. All characters
-	 * that cannot be represented in HTML with the current character set
+	 * Convert all applicable characters to HTML entities
+	 *
+	 * All characters that cannot be represented in HTML with the current character set
 	 * will be converted to entities.
 	 *
-	 *     echo HTML::entities($username);
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::entities($username);
+	 * </code>
 	 *
-	 * @param   string  $value          string to convert
-	 * @param   boolean $double_encode  encode existing entities
+	 * @param   string   $value          String to convert
+	 * @param   boolean  $double_encode  Encode existing entities [Optional]
 	 * @return  string
 	 */
 	public static function entities($value, $double_encode = TRUE)
@@ -94,20 +104,25 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Create HTML link anchors. Note that the title is not escaped, to allow
-	 * HTML elements within links (images, etc).
+	 * Create HTML link anchors
 	 *
-	 *     echo HTML::anchor('/user/profile', 'My Profile');
+	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * @param   string  $uri        URL or URI string
-	 * @param   string  $title      link text
-	 * @param   array   $attributes HTML anchor attributes
-	 * @param   mixed   $protocol   protocol to pass to URL::base()
-	 * @param   boolean $index      include the index page
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::anchor('/user/profile', 'My Profile');
+	 * </code>
+	 *
+	 * @param   string  $uri         URL or URI string
+	 * @param   string  $title       Link text [Optional]
+	 * @param   array   $attributes  HTML anchor attributes [Optional]
+	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
+	 * @param   boolean $index       Include the index page [Optional]
 	 * @return  string
+	 *
 	 * @uses    URL::base
 	 * @uses    URL::site
-	 * @uses    HTML::attributes
+	 * @uses    URL::is_absolute
 	 */
 	public static function anchor($uri, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = TRUE)
 	{
@@ -124,7 +139,7 @@ class Gleez_HTML {
 		}
 		else
 		{
-			if (strpos($uri, '://') !== FALSE)
+			if ( ! URL::is_absolute($uri))
 			{
 				if (HTML::$windowed_urls === TRUE AND empty($attributes['target']))
 				{
@@ -146,19 +161,23 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Creates an HTML anchor to a file. Note that the title is not escaped,
-	 * to allow HTML elements within links (images, etc).
+	 * Creates an HTML anchor to a file
 	 *
-	 *     echo HTML::file_anchor('media/doc/user_guide.pdf', 'User Guide');
+	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * @param   string  $file       name of file to link to
-	 * @param   string  $title      link text
-	 * @param   array   $attributes HTML anchor attributes
-	 * @param   mixed   $protocol   protocol to pass to URL::base()
-	 * @param   boolean $index      include the index page
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::file_anchor('media/doc/user_guide.pdf', 'User Guide');
+	 * </code>
+	 *
+	 * @param   string  $file        Name of file to link to
+	 * @param   string  $title       Link text [Optional]
+	 * @param   array   $attributes  HTML anchor attributes [Optional]
+	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
+	 * @param   boolean $index       Include the index page [Optional]
 	 * @return  string
+	 *
 	 * @uses    URL::base
-	 * @uses    HTML::attributes
 	 */
 	public static function file_anchor($file, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
@@ -175,16 +194,19 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Creates an email (mailto:) anchor. Note that the title is not escaped,
-	 * to allow HTML elements within links (images, etc).
+	 * Creates an email (mailto:) anchor
 	 *
-	 *     echo HTML::mailto($address);
+	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * @param   string  $email      email address to send to
-	 * @param   string  $title      link text
-	 * @param   array   $attributes HTML anchor attributes
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::mailto($address);
+	 * </code>
+	 *
+	 * @param   string  $email       Email address to send to
+	 * @param   string  $title       Link text [Optional]
+	 * @param   array   $attributes  HTML anchor attributes [Optional]
 	 * @return  string
-	 * @uses    HTML::attributes
 	 */
 	public static function mailto($email, $title = NULL, array $attributes = NULL)
 	{
@@ -198,28 +220,32 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Creates a script link.
+	 * Creates a script link
 	 *
-	 *     echo HTML::script('media/js/jquery.min.js');
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::script('media/js/jquery.min.js');
+	 * </code>
 	 *
-	 * @param   string  $file       file name
-	 * @param   array   $attributes default attributes
-	 * @param   mixed   $protocol   protocol to pass to URL::base()
-	 * @param   boolean $index      include the index page
+	 * @param   string  $file        File name
+	 * @param   array   $attributes  Default attributes [Optional]
+	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
+	 * @param   boolean $index       Include the index page [Optional]
 	 * @return  string
+	 *
 	 * @uses    URL::base
-	 * @uses    HTML::attributes
+	 * @uses    URL::is_absolute
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
 		//allow theme to serve its own media assets
-		if(strpos($file, 'media/js') !== FALSE AND Gleez::$installed)
+		if(strpos($file, 'media/js') !== FALSE AND Gleez::$installed AND strpos($file, 'guide/media') === FALSE)
 		{
 			$theme = Theme::$active;
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
-		
-		if (strpos($file, '://') === FALSE)
+
+		if ( ! URL::is_absolute($file))
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -235,21 +261,26 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Creates a image link.
+	 * Creates a image link
 	 *
-	 *     echo HTML::image('media/img/logo.png', array('alt' => 'My Company'));
+	 * Example:<br>
+	 * <code>
+	 *   echo HTML::image('media/img/logo.png', array('alt' => 'My Company'));
+	 * </code>
 	 *
-	 * @param   string  $file       file name
-	 * @param   array   $attributes default attributes
-	 * @param   mixed   $protocol   protocol to pass to URL::base()
-	 * @param   boolean $index      include the index page
+	 * @param   string  $file        File name
+	 * @param   array   $attributes  Default attributes [Optional]
+	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
+	 * @param   boolean $index       Include the index page [Optional]
 	 * @return  string
+	 *
 	 * @uses    URL::base
-	 * @uses    HTML::attributes
+	 * @uses    URL::is_absolute
 	 */
 	public static function image($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if (strpos($file, '://') === FALSE)
+
+		if ( ! URL::is_absolute($file))
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -262,18 +293,24 @@ class Gleez_HTML {
 	}
 
 	/**
-	 * Compiles an array of HTML attributes into an attribute string.
+	 * Compiles an array of HTML attributes into an attribute string
+	 *
 	 * Attributes will be sorted using HTML::$attribute_order for consistency.
 	 *
-	 *     echo '<div'.HTML::attributes($attrs).'>'.$content.'</div>';
+	 * Example:<br>
+	 * <code>
+	 *   echo '<div'.HTML::attributes($attrs).'>'.$content.'</div>';
+	 * </code>
 	 *
-	 * @param   array   $attributes attribute list
+	 * @param   array   $attributes  Attribute list [Optional]
 	 * @return  string
 	 */
 	public static function attributes(array $attributes = NULL)
 	{
 		if (empty($attributes))
+		{
 			return '';
+		}
 
 		$sorted = array();
 		foreach (HTML::$attribute_order as $key)
@@ -340,12 +377,11 @@ class Gleez_HTML {
 	 *
 	 * @uses    URL::base
 	 * @uses    URL::is_absolute
-	 * @uses    HTML::attributes
 	 */
 	public static function style($file, array $attrs = NULL, $protocol = NULL, $index = FALSE)
 	{
-		//allow theme to serve its own media assets
-		if(strpos($file, 'media/css') !== FALSE AND Gleez::$installed)
+		// allow theme to serve its own media assets
+		if(strpos($file, 'media/css') !== FALSE AND Gleez::$installed AND strpos($file, 'guide/media') === FALSE)
 		{
 			$theme = Theme::$active;
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
@@ -371,6 +407,7 @@ class Gleez_HTML {
 	 *
 	 * Width, height and type attributes are required to resize the image.
 	 *
+	 * Example:<br>
 	 * <code>
 	 *   echo HTML::resize('media/img/logo.png', array('alt' => 'My Company', 'width' => 50, 'height' => 50, 'type' => 'ratio'));
 	 * </code>
