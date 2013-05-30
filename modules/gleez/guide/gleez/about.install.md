@@ -22,27 +22,25 @@ To install Gleez, follow these instructions:
 ## Git Clone Installation
 
 ~~~
-git clone https://github.com/gleez/cms.git gleezcms
-cd gleezcms
-git submodule init
-git submodule update
+  git clone https://github.com/gleez/cms.git gleezcms
+  cd gleezcms
+  git submodule init
+  git submodule update
 ~~~
-Follow from step 2 of the above instructions
 
+Follow from step 2 of the above instructions
 
 ## Setting up a production environment
 
 There are a few things you'll want to do with your application before moving into production.
 
-1. See the [Configuration page](about.configuration) in the docs. 
-   This covers most of the global settings that would change between environments. 
-   As a general rule, you should enable caching and disable profiling ([Kohana::init] settings) for production sites. 
-   [Route caching](api/Route#cache) can also help if you have a lot of routes.
-   
-2. Turn on APC or some kind of opcode caching. 
-   This is the single easiest performance boost you can make to PHP itself. The more complex your application, the bigger the benefit of using opcode caching.
+1. See the [Configuration page](about.configuration) in the docs.
+   This covers most of the global settings that would change between environments.
+   As a general rule, you should enable caching and disable profiling ([Kohana::init] settings) for production sites. [Route caching](api/Route#cache) can also help if you have a lot of routes.
 
-[!!] Note: The default bootstrap will set Kohana::$environment = $_ENV['KOHANA_ENV'] if set. Docs on how to supply this variable are available in your web server's documentation (e.g. [Apache](http://httpd.apache.org/docs/1.3/mod/mod_env.html#setenv), [Lighttpd](http://redmine.lighttpd.net/wiki/1/Docs:ModSetEnv#Options), [Nginx](http://wiki.nginx.org/NginxHttpFcgiModule#fastcgi_param)). This is considered better practice than many alternative methods to set Kohana::$enviroment.
+2. Turn on APC or some kind of opcode caching. This is the single easiest performance boost you can make to PHP itself. The more complex your application, the bigger the benefit of using opcode caching.
+
+[!!] Note: The default bootstrap will set `Kohana::$environment = $_ENV['KOHANA_ENV']` if set. Docs on how to supply this variable are available in your web server's documentation (e.g. [Apache](http://httpd.apache.org/docs/1.3/mod/mod_env.html#setenv), [Lighttpd](http://redmine.lighttpd.net/wiki/1/Docs:ModSetEnv#Options), [Nginx](http://wiki.nginx.org/NginxHttpFcgiModule#fastcgi_param)). This is considered better practice than many alternative methods to set Kohana::$enviroment.
 
 		/**
 		 * Set the environment string by the domain (defaults to Kohana::DEVELOPMENT).
@@ -57,7 +55,7 @@ There are a few things you'll want to do with your application before moving int
 			'profile'    => Kohana::$environment !== Kohana::PRODUCTION,
 			'caching'    => Kohana::$environment === Kohana::PRODUCTION,
 		));
-		
+
 
 ## Putting Gleez in a subfolder
 
@@ -68,9 +66,9 @@ In **.htaccess**
     RewriteBase /
     -- change to --
     RewriteBase /subfolder
-  
+
 In **application/bootstrap.php**
-   
+
     'base_url'   => '/',
     -- change to --
     'base_url'   => 'http://example.com/subfolder/',

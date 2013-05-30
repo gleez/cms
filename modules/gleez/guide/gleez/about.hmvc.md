@@ -38,21 +38,21 @@ The following example shows you how to use the request factory from inside anoth
          */
         public function action_page()
         {
-           $page_name = Request::instance()->param('page');    
-        
+           $page_name = Request::instance()->param('page');
+
            $this->request->response = View::factory('page/'.$page_name)
                     ->bind('menu', $menu);
-    
-           $menu = Request::factory('static/menu')->execute()->response; 
+
+           $menu = Request::factory('static/menu')->execute()->response;
         }
-    
+
         public function action_menu()
         {
-           $page_name = Request::instance()->param('page');    
-    
+           $page_name = Request::instance()->param('page');
+
            $this->request->response = View::factory('page/menu')
                     ->bind('links', $links);
-    
+
            $links = Kohana::$config->load('menu')->$page_name;
         }
     }
@@ -62,13 +62,13 @@ The following example shows you how to use the request factory from inside anoth
 Another effective way to use the Request factory is to call a request from a View. In the example below we call a dynamic menu and a dynamic footer from a View instead of a controller.
 
     <h1><?php echo $page_title ?></h1>
-    
+
     <?php echo Request::factory('page/menu')->execute()->response ?>
-    
+
     <div id="container">
       <?php echo $content ?>
     </div>
-    
+
     <?php echo Request::factory('page/menu')->execute()->response ?>
 
 The only difference in calling **Request::instance()** over **Request::factory()** is that //instance()// creates a singleton of the Request class which is intended to handle the main request and also output neccessary response headers.
