@@ -787,19 +787,16 @@ abstract class Gleez_Template extends Controller {
 			if( empty($this->_errors) )
 			{
 				$this->SetFormSaved(TRUE);
-				if( $this->_response_format === 'application/json')
-				{
-					$this->SetJson('Data', NULL);
-				}
 			}
 			else
 			{
 				$this->SetFormSaved(FALSE);
-				if( $this->_response_format === 'application/json')
-				{
-					//$this->SetJson('body', base64_encode($this->response->body()));
+			}
+			
+			if( $this->_response_format === 'application/json')
+			{
+					//$this->SetJson('body', base64_encode(''));
 					$this->SetJson('body', FALSE);
-				}
 			}
 		}
 		else
