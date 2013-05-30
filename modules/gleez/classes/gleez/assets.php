@@ -43,40 +43,42 @@
  * @author     Corey Worrell
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Assets {
 
-	/** Format that compile can return */
-	const FORMAT_TAG = 'tag';
-
-	/** Format that compile can return */
+	/** Formats that compile can return */
+	const FORMAT_TAG      = 'tag';
 	const FORMAT_FILENAME = 'filename';
+	const FORMAT_AJAX     = 'ajax';
 
-	const FORMAT_AJAX	= 'ajax';
-	
 	/**
-	 * @var array CSS assets
+	 * CSS assets
+	 * @var array
 	 */
 	public static $css = array();
 
 	/**
-	 * @var array Javascript assets
+	 * Javascript assets
+	 * @var array
 	 */
 	public static $js = array();
 
 	/**
-	* @var array  Script blocks
-	*/
+	 * Script blocks
+	 * @var array
+	 */
 	public static $codes = array();
 
 	/**
-	* @var array  Settings blocks
-	*/
+	 * Settings blocks
+	 * @var array
+	 */
 	public static $settings = array();
 
 	/**
-	 * @var  array  Other asset groups (meta data, links, etc...)
+	 * Other asset groups (meta data, links, etc...)
+	 * @var array
 	 */
 	public static $groups = array();
 
@@ -199,11 +201,11 @@ class Gleez_Assets {
 			case Assets::FORMAT_FILENAME:
 				return Assets::compile($assets, $format, 'css');
 			break;
-		
+
 			case Assets::FORMAT_AJAX:
 				return $assets;
 			break;
-		
+
 			default:
 				throw new Exception("Unknown format: $format.");
 		}
@@ -358,7 +360,7 @@ class Gleez_Assets {
 			case Assets::FORMAT_AJAX:
 				return $sorted;
 			break;
-		
+
 			default:
 				throw new Exception("Unknown format: $format.");
 		}

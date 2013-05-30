@@ -3,7 +3,7 @@
  * Gleez Core class
  *
  * @package    Gleez\Core
- * @version    0.9.21
+ * @version    0.9.22
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -11,7 +11,7 @@
 class Gleez_Core {
 
 	/** Release version */
-	const VERSION = '0.9.21';
+	const VERSION = '0.9.22';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
@@ -55,7 +55,13 @@ class Gleez_Core {
 		self::$_ginit = TRUE;
 
 		/**
-		 * Default cookie salt
+		 * Set default cookie salt
+		 *
+		 * [!!] Also you can define a salt for the `Cookie` class in bootstrap.php:
+		 *      <code>
+		 *         Cookie::$salt = [really-long-cookie-salt-here]
+		 *      <code>
+		 *
 		 * @var string
 		 */
 		Cookie::$salt = Kohana::$config->load('cookie.salt');
