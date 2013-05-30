@@ -240,7 +240,14 @@ abstract class Gleez_Template extends Controller {
 		$accept_types = Arr::extract($accept_types, array_keys($this->_accept_formats));
 
 		// Set response format to first matched element
-		$this->_response_format = key($accept_types);
+		//$this->_response_format = key($accept_types);
+                $this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
+	
+		$site_name = $this->_config->get('site_name', __('Gleez CMS'));		
+		$url 	   =  URL::site(NULL, TRUE);
+	
+		View::bind_global('site_name', $site_name);
+		View::bind_global('site_url',  $url);
 
 		if ($this->auto_render)
 		{
@@ -305,8 +312,6 @@ abstract class Gleez_Template extends Controller {
 			 * Make your view template available to all your other views
 			 * so easily you could access template variables
 			 */
-			View::bind_global('site_name', $this->template->site_name);
-			View::bind_global('site_url', $this->template->site_url);
 			View::bind_global('template', $this->template);
 		}
 
@@ -413,13 +418,15 @@ abstract class Gleez_Template extends Controller {
 		elseif ($this->_ajax)
 		{
 			$output = $this->response->body();
+			$this->process_ajax();
 
 			if ($this->_response_format === 'application/json')
 			{
 				// Check for dataTables request
 				if ($this->request->query('sEcho') !== NULL) return;
 
-				$output = JSON::encode($output);
+				//$output = JSON::encode($output);
+				$output = $this->_json['Data'];
 			}
 
 			$this->response->body($output);
@@ -780,7 +787,7 @@ abstract class Gleez_Template extends Controller {
 			if( empty($this->_errors) )
 			{
 				$this->SetFormSaved(TRUE);
-				if( $this->_accept_format === 'application/json')
+				if( $this->_response_format === 'application/json')
 				{
 					$this->SetJson('Data', NULL);
 				}
@@ -788,34 +795,39 @@ abstract class Gleez_Template extends Controller {
 			else
 			{
 				$this->SetFormSaved(FALSE);
-				if( $this->_accept_format === 'application/json')
+				if( $this->_response_format === 'application/json')
 				{
-					$this->SetJson('Data', base64_encode($this->response->body()));
+					//$this->SetJson('body', base64_encode($this->response->body()));
+					$this->SetJson('body', FALSE);
 				}
 			}
 		}
 		else
 		{
-			if( $this->_accept_format === 'application/json')
+			if( $this->_response_format === 'application/json')
 			{
-				$this->SetJson('Data', base64_encode($this->response->body()));
+				$this->SetJson('body', base64_encode($this->response->body()));
 			}
 		}
 
-		if( $this->_accept_format === 'application/json')
+		if( $this->_response_format === 'application/json')
 		{
 			if ($this->request->query('sEcho') !== NULL) return;
 
+			$scripts = Assets::js(FALSE, NULL, NULL, FALSE, NULL, Assets::FORMAT_AJAX);
+			$styles  = Assets::css(FALSE, NULL, NULL, FALSE, Assets::FORMAT_AJAX);
+		
 			$this->SetJson('FormSaved',      $this->_formsaved);
-			$this->SetJson('DeliveryType',   $this->_accept_format);
-			$this->SetJson('InformMessages', Message::get(NULL, NULL, TRUE));
-			$this->SetJson('ErrorMessages',  $this->_errors);
-			$this->SetJson('RedirectUrl',    Request::$_redirect_url);
-			$this->SetJson('pageTitle',      $this->title);
+			$this->SetJson('messages', 	 Message::get(NULL, NULL, TRUE));
+			$this->SetJson('errors',  	 $this->_errors);
+			$this->SetJson('redirect',    	 Request::$redirect_url);
+			$this->SetJson('title',      	 $this->title);
+			$this->SetJson('css',      	 $styles);
+			$this->SetJson('js',      	 $scripts);
 
-			if ( ! Text::check_utf8($this->_json['Data']) )
+			if ( ! Text::check_utf8($this->_json['body']) )
 			{
-				$this->_json['Data'] = utf8_encode($this->_json['Data']);
+				$this->_json['body'] = utf8_encode($this->_json['body']);
 			}
 
 			$this->_json['Data'] = JSON::encode($this->_json);

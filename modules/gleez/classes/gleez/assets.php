@@ -53,6 +53,8 @@ class Gleez_Assets {
 	/** Format that compile can return */
 	const FORMAT_FILENAME = 'filename';
 
+	const FORMAT_AJAX	= 'ajax';
+	
 	/**
 	 * @var array CSS assets
 	 */
@@ -158,6 +160,7 @@ class Gleez_Assets {
 			break;
 
 			case Assets::FORMAT_FILENAME:
+			case Assets::FORMAT_AJAX:
 				return $asset['src'];
 			break;
 
@@ -196,7 +199,11 @@ class Gleez_Assets {
 			case Assets::FORMAT_FILENAME:
 				return Assets::compile($assets, $format, 'css');
 			break;
-
+		
+			case Assets::FORMAT_AJAX:
+				return $assets;
+			break;
+		
 			default:
 				throw new Exception("Unknown format: $format.");
 		}
@@ -292,6 +299,7 @@ class Gleez_Assets {
 			break;
 
 			case Assets::FORMAT_FILENAME:
+			case Assets::FORMAT_AJAX:
 				return $asset['src'];
 			break;
 
@@ -347,6 +355,10 @@ class Gleez_Assets {
 				return Assets::compile($sorted);
 			break;
 
+			case Assets::FORMAT_AJAX:
+				return $sorted;
+			break;
+		
 			default:
 				throw new Exception("Unknown format: $format.");
 		}
