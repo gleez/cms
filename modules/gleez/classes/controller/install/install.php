@@ -418,6 +418,7 @@ class Controller_Install_Install extends Controller_Template {
 	{
 		$config = new View('install/config');
 
+		$config->type	  = function_exists('mysqli_query') ? 'mysqli' : 'mysql';
 		$config->user     = $username;
 		$config->password = $password;
 		$config->host     = $hostname;
