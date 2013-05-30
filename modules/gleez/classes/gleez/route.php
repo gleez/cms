@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * @package    Gleez\Route
- * @version    1.0
+ * @version    1.0.0
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Route extends Kohana_Route {
 
@@ -173,7 +173,7 @@ class Gleez_Route extends Kohana_Route {
 	 *
 	 * @param   string  $uri  URI to match
 	 * @return  array   On success
-	 * @return  FALSE   On failure
+	 * @return  boolean FALSE on failure
 	 *
 	 * @uses    Arr::get
 	 */
@@ -231,6 +231,34 @@ class Gleez_Route extends Kohana_Route {
 		}
 
 		return $params;
+	}
+
+	/**
+	 * Create a URL from a route name
+	 *
+	 * This is a shortcut for:<br>
+	 * <code>
+	 *   URL::site(Route::get($name)->uri($params), $protocol);
+	 * </code>
+	 *
+	 * @param   string  $name      Route name
+	 * @param   array   $params    URI parameters [Optional]
+	 * @param   mixed   $protocol  Protocol string or boolean, adds protocol and domain [Optional]
+	 * @return  string
+	 *
+	 * @uses    URL::site
+	 */
+	public static function url($name, array $params = NULL, $protocol = NULL)
+	{
+		$route = Route::get($name);
+
+		// Create a URI with the route and convert it to a URL
+		if ($route->is_external())
+		{
+			return $route->uri($params);
+		}
+
+		return URL::site($route->uri($params), $protocol);
 	}
 
 	/**

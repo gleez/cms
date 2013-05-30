@@ -8,7 +8,7 @@
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovkev - Gleez
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -17,9 +17,10 @@ class Gleez_Text {
 	// vars for moving href links to bottom filter
 	protected static $_link_count = 0;
 	protected static $_link_list  = '';
-	
+
 	/**
-	 * @var  array   number units and text equivalents
+	 * Number units and text equivalents
+	 * @var array
 	 */
 	public static $units = array(
 		1000000000 => 'billion',
@@ -54,16 +55,19 @@ class Gleez_Text {
 		2  => 'two',
 		1  => 'one',
 	);
-	
-	
+
+
 	/**
-	 * Limits a phrase to a given number of words.
+	 * Limits a phrase to a given number of words
 	 *
-	 *     $text = Text::limit_words($text);
+	 * Example:<br>
+	 * <code>
+	 *   $text = Text::limit_words($text);
+	 * </code>
 	 *
-	 * @param   string  $str        phrase to limit words of
-	 * @param   integer $limit      number of words to limit to
-	 * @param   string  $end_char   end character or entity
+	 * @param   string  $str        Phrase to limit words of
+	 * @param   integer $limit      Number of words to limit to [Optional]
+	 * @param   string  $end_char   end character or entity [Optional]
 	 * @return  string
 	 */
 	public static function limit_words($str, $limit = 100, $end_char = NULL)
@@ -83,17 +87,21 @@ class Gleez_Text {
 		// than the starting string.
 		return rtrim($matches[0]).((strlen($matches[0]) === strlen($str)) ? '' : $end_char);
 	}
-	
+
 	/**
-	 * Limits a phrase to a given number of characters.
+	 * Limits a phrase to a given number of characters
 	 *
-	 *     $text = Text::limit_chars($text);
+	 * Example:<br>
+	 * <code>
+	 *   $text = Text::limit_chars($text);
+	 * </code>
 	 *
 	 * @param   string  $str            phrase to limit characters of
 	 * @param   integer $limit          number of characters to limit to
 	 * @param   string  $end_char       end character or entity
 	 * @param   boolean $preserve_words enable or disable the preservation of words while limiting
 	 * @return  string
+	 *
 	 * @uses    UTF8::strlen
 	 */
 	public static function limit_chars($str, $limit = 100, $end_char = NULL, $preserve_words = FALSE)
@@ -118,7 +126,7 @@ class Gleez_Text {
 
 		return rtrim($matches[0]).((strlen($matches[0]) === strlen($str)) ? '' : $end_char);
 	}
-	
+
 	/**
 	 * Alternates between two or more strings.
 	 *
@@ -145,7 +153,7 @@ class Gleez_Text {
 		$args = func_get_args();
 		return $args[($i++ % count($args))];
 	}
-	
+
 	/**
 	 * Generates a random string of a given type and length.
 	 *
@@ -240,7 +248,7 @@ class Gleez_Text {
 
 		return $str;
 	}
-	
+
 	/**
 	 * Uppercase words that are not separated by spaces, using a custom
 	 * delimiter or the default.
@@ -256,7 +264,7 @@ class Gleez_Text {
 		// Put the keys back the Case-Convention expected
 		return implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
 	}
-	
+
 	/**
 	 * Reduces multiple slashes in a string to single slashes.
 	 *
@@ -269,7 +277,7 @@ class Gleez_Text {
 	{
 		return preg_replace('#(?<!:)//+#', '/', $str);
 	}
-	
+
 	/**
 	 * Replaces the given words with a string.
 	 *
@@ -310,7 +318,7 @@ class Gleez_Text {
 
 		return preg_replace($regex, $replacement, $str);
 	}
-	
+
 	/**
 	 * Finds the text that is similar between a set of words.
 	 *
@@ -337,7 +345,7 @@ class Gleez_Text {
 		// Return the similar text
 		return substr($word, 0, $i);
 	}
-	
+
 	/**
 	 * Converts text email addresses and anchors into links. Existing links
 	 * will not be altered.
@@ -355,11 +363,11 @@ class Gleez_Text {
 	{
 		// Auto link emails first to prevent problems with "www.domain.com@example.com"
 		//return Text::auto_link_urls(Text::auto_link_emails($text));
-	
+
 		// Auto link emails first to prevent problems with "www.domain.com@example.com"
 		return Autolink::filter($text);
 	}
-	
+
 	/**
 	 * Converts text anchors into links. Existing links will not be altered.
 	 *
@@ -379,7 +387,7 @@ class Gleez_Text {
 		// Find and replace all naked www.links.com (without http://)
 		return preg_replace_callback('~\b(?<!://|">)www(?:\.[a-z0-9][-a-z0-9]*+)+\.[a-z]{2,6}[^<\s]*\b~i', 'Text::_auto_link_urls_callback2', $text);
 	}
-	
+
 	protected static function _auto_link_urls_callback1($matches)
 	{
 		return HTML::anchor($matches[0]);
@@ -389,7 +397,7 @@ class Gleez_Text {
 	{
 		return HTML::anchor('http://'.$matches[0], $matches[0]);
 	}
-	
+
 	/**
 	 * Converts text email addresses into links. Existing links will not
 	 * be altered.
@@ -409,7 +417,7 @@ class Gleez_Text {
 		//       The html entity for a colon (:) is &#58; or &#058; or &#0058; etc.
 		return preg_replace_callback('~\b(?<!href="mailto:|58;)(?!\.)[-+_a-z0-9.]++(?<!\.)@(?![-.])[-a-z0-9.]+(?<!\.)\.[a-z]{2,6}\b(?!</a>)~i', 'Text::_auto_link_emails_callback', $text);
 	}
-	
+
 	protected static function _auto_link_emails_callback($matches)
 	{
 		return HTML::mailto($matches[0]);
@@ -471,18 +479,23 @@ class Gleez_Text {
 
 		return $str;
 	}
-	
+
 	/**
-	 * Returns human readable sizes. Based on original functions written by
+	 * Returns human readable sizes
+	 *
+	 * Based on original functions written by
 	 * [Aidan Lister](http://aidanlister.com/repos/v/function.size_readable.php)
 	 * and [Quentin Zervaas](http://www.phpriot.com/d/code/strings/filesize-format/).
 	 *
-	 *     echo Text::bytes(filesize($file));
+	 * Example:<br>
+	 * <code>
+	 *   echo Text::bytes(filesize($file));
+	 * </code>
 	 *
-	 * @param   integer $bytes      size in bytes
-	 * @param   string  $force_unit a definitive unit
-	 * @param   string  $format     the return string format
-	 * @param   boolean $si         whether to use SI prefixes or IEC
+	 * @param   integer  $bytes       Size in bytes
+	 * @param   string   $force_unit  A definitive unit [Optional]
+	 * @param   string   $format      The return string format [Optional]
+	 * @param   boolean  $si          Whether to use SI prefixes or IEC [Optional]
 	 * @return  string
 	 */
 	public static function bytes($bytes, $force_unit = NULL, $format = NULL, $si = TRUE)
@@ -511,19 +524,22 @@ class Gleez_Text {
 
 		return sprintf($format, $bytes / pow($mod, $power), $units[$power]);
 	}
-	
+
 	/**
-	 * Format a number to human-readable text.
+	 * Format a number to human-readable text
 	 *
-	 *     // Display: one thousand and twenty-four
-	 *     echo Text::number(1024);
+	 * Display: one thousand and twenty-four:<br>
+	 * <code>
+	 *   echo Text::number(1024);
+	 * </code>
 	 *
-	 *     // Display: five million, six hundred and thirty-two
-	 *     echo Text::number(5000632);
+	 * Display: five million, six hundred and thirty-two:<br>
+	 * <code>
+	 *   echo Text::number(5000632);
+	 * </code>
 	 *
-	 * @param   integer $number number to format
+	 * @param   integer  $number  Number to format
 	 * @return  string
-	 * @since   3.0.8
 	 */
 	public static function number($number)
 	{
@@ -592,7 +608,7 @@ class Gleez_Text {
 
 		return $text;
 	}
-	
+
 	/**
 	 * Prevents [widow words](http://www.shauninman.com/archive/2006/08/22/widont_wordpress_plugin)
 	 * by inserting a non-breaking space between the last two words.
@@ -614,7 +630,7 @@ class Gleez_Text {
 
 		return $str;
 	}
-	
+
 	/**
 	 * Returns information about the client user agent.
 	 *
@@ -694,7 +710,7 @@ class Gleez_Text {
 		// The value requested could not be found
 		return FALSE;
 	}
-	
+
 	/**
 	 * Encode special characters in a plain-text string for display as HTML.
 	 *
@@ -715,15 +731,15 @@ class Gleez_Text {
 	 * with the return key. Multiple returns will not break the site's style.
 	 *
 	 * When entering more than one carriage return, only the first will be honored.
-	 * 
+	 *
 	 * @param $text
 	 *   The text to be checked or processed.
 	 */
 	public static function emptyparagraph($text)
 	{
-		return preg_replace('#<p[^>]*>(\s|&nbsp;?)*</p>#', '', $text); 
+		return preg_replace('#<p[^>]*>(\s|&nbsp;?)*</p>#', '', $text);
 	}
-	
+
 	/**
 	 * Scan input and make sure that all HTML tags are properly closed and nested.
 	 *
@@ -744,9 +760,9 @@ class Gleez_Text {
 	 *
 	 *   The partial (X)HTML snippet to load. Invalid mark-up
 	 *   will be corrected on import.
-	 *   
+	 *
 	 * @param   string   Text string to filter html
-	 * 
+	 *
 	 * @return
 	 *   A DOMDocument that represents the loaded (X)HTML snippet.
 	 */
@@ -759,7 +775,7 @@ class Gleez_Text {
 				content="text/html; charset=utf-8" /></head><body>' . $text . '</body></html>');
 		return $dom_document;
 	}
-	
+
 	/**
 	 * Converts a DOM object back to an HTML snippet.
 	 *
@@ -772,7 +788,7 @@ class Gleez_Text {
 	 * @param $dom_document
 	 *   A DOMDocument object to serialize, only the tags below
 	 *   the first <body> node will be converted.
-	 *   
+	 *
 	 * @return
 	 *   A valid (X)HTML snippet, as a string.
 	 */
@@ -780,7 +796,7 @@ class Gleez_Text {
 	{
 		$body_node    = $dom_document->getElementsByTagName('body')->item(0);
 		$body_content = '';
-	
+
 		foreach ($body_node->getElementsByTagName('script') as $node)
 		{
 			Text::_escape_cdata_element($dom_document, $node);
@@ -790,7 +806,7 @@ class Gleez_Text {
 		{
 			Text::_escape_cdata_element($dom_document, $node, '/*', '*/');
 		}
-	
+
 		foreach ($body_node->childNodes as $child_node)
 		{
 			$body_content .= $dom_document->saveXML($child_node);
@@ -833,7 +849,7 @@ class Gleez_Text {
 		}
 	}
 
-	
+
 	/**
 	 * Replace runs of multiple whitespace characters with a single space.
 	 *
@@ -865,15 +881,15 @@ class Gleez_Text {
 		$regexp = "/<a[^>]+href\s*=\s*[\"|']([^\s\"']+)[\"|'][^>]*>[^<]*<\/a>/i";
 		preg_match_all($regexp, stripslashes($html), $matches);
 		$matches = $matches[1];
-	
+
 		if ($unique)
 		{
 			$matches = array_values(array_unique($matches));
 		}
-	
+
 		return $matches;
 	}
-	
+
 	/**
 	 * Standardize newlines
 	 *
@@ -891,7 +907,7 @@ class Gleez_Text {
 
 		return $value;
 	}
-	
+
 	/**
 	 * Run all the enabled filters on a piece of text.
 	 *
@@ -919,7 +935,7 @@ class Gleez_Text {
 	{
 		//save some cpu cycles if text is empty or null
 		if(empty($text)) return $text;
-	
+
 		$config = Kohana::$config->load('inputfilter');
 		$format_id = isset($format_id) ? (int) $format_id : (int) $config->get('default_format', 1);
 		$langcode  = isset($langcode) ? $langcode : I18n::$lang;
@@ -930,12 +946,11 @@ class Gleez_Text {
 		{
 			return $cached;
 		}
-	       
+
 		// Convert all Windows and Mac newlines to a single newline, so filters
 		// only need to deal with one possibility.
 		$text = str_replace(array("\r\n", "\r"), "\n", $text);
-		//$text = str_replace('<!--break-->', '', $text);
-	
+
 		$textObj = new ArrayObject(array(
 				'text' 	   => (string) $text,
 				'format'   => (int)    $format_id,
@@ -943,29 +958,29 @@ class Gleez_Text {
 				'cache'    => (bool)   $cache,
 				'cache_id' => (string) $cache_id
 		), ArrayObject::ARRAY_AS_PROPS);
-		
+
 		Module::event('inputfilter', $textObj);
-		
+
 		$text = (is_string($textObj->text)) ? $textObj->text : $text;
-		
+
 		$text = Filter::process($textObj); //run all filters
-		
+
 		// Store in cache with a minimum expiration time of 1 day.
 		if ($cache)
 		{
 			Cache::instance('cache_filter')->set($cache_id, $text, null, time() + (60 * 60 * 24));
 		}
-		
+
 		return $text;
 	}
-	
+
 	/**
 	 * HTML filter. Provides filtering of input into accepted HTML.
 	 */
 	public static function html($text, $format, $filter) {
-		
+
 		$text = (string) HTMLFilter::factory($text, $format, $filter)->render();
-	
+
 		if ($filter['settings']['html_nofollow'])
 		{
 			$html_dom = self::dom_load($text);
@@ -973,20 +988,20 @@ class Gleez_Text {
 			foreach ($links as $link)
 			{
 				$link->setAttribute('rel', 'nofollow');
-				
+
 				//Shortens long URLs to http://www.example.com/long/url...
 				if ($filter['settings']['url_length'])
 				{
 					$link->nodeValue = Text::limit_chars($link->nodeValue,
-									     (int) $filter['settings']['url_length'], '....');
+										 (int) $filter['settings']['url_length'], '....');
 				}
 			}
 			$text = self::dom_serialize($html_dom);
 		}
-	
+
 		return trim($text);
 	}
-	
+
 	/**
 	 * Markdown filter. Allows content to be submitted using Markdown.
 	 *
@@ -999,13 +1014,13 @@ class Gleez_Text {
 
 		return Markdown($text);
 	}
-	
+
 	/**
 	 * Automatically applies "p" and "br" markup to text.
 	 *
 	 *     echo Text::autop($text);
-	 * 
-	 * @see http://api.drupal.org/api/drupal/modules--filter--filter.module/function/_filter_autop
+	 *
+	 * @link http://api.drupal.org/api/drupal/modules--filter--filter.module/function/_filter_autop
 	 *
 	 * @param   string   subject
 	 * @return  string
@@ -1033,7 +1048,7 @@ class Gleez_Text {
 		$ignore = FALSE;
 		$ignoretag = '';
 		$output = '';
-	
+
 		foreach ($chunks as $i => $chunk)
 		{
 			if ($i % 2)
@@ -1066,19 +1081,19 @@ class Gleez_Text {
 			elseif (!$ignore)
 			{
 				// just to make things a little easier, pad the end
-				$chunk = preg_replace('|\n*$|', '', $chunk) . "\n\n"; 
+				$chunk = preg_replace('|\n*$|', '', $chunk) . "\n\n";
 				$chunk = preg_replace('|<br />\s*<br />|', "\n\n", $chunk);
 				$chunk = preg_replace('!(<' . $block . '[^>]*>)!', "\n$1", $chunk); // Space things out a little
 				$chunk = preg_replace('!(</' . $block . '>)!', "$1\n\n", $chunk); // Space things out a little
 				$chunk = preg_replace("/\n\n+/", "\n\n", $chunk); // take care of duplicates
 				$chunk = preg_replace('/^\n|\n\s*\n$/', '', $chunk);
 				// make paragraphs, including one at the end
-				$chunk = '<p>' . preg_replace('/\n\s*\n\n?(.)/', "</p>\n<p>$1", $chunk) . "</p>\n"; 
+				$chunk = '<p>' . preg_replace('/\n\s*\n\n?(.)/', "</p>\n<p>$1", $chunk) . "</p>\n";
 				$chunk = preg_replace("|<p>(<li.+?)</p>|", "$1", $chunk); // problem with nested lists
 				$chunk = preg_replace('|<p><blockquote([^>]*)>|i', "<blockquote$1><p>", $chunk);
 				$chunk = str_replace('</blockquote></p>', '</p></blockquote>', $chunk);
 				// under certain strange conditions it could create a P of entirely whitespace
-				$chunk = preg_replace('|<p>\s*</p>\n?|', '', $chunk); 
+				$chunk = preg_replace('|<p>\s*</p>\n?|', '', $chunk);
 				$chunk = preg_replace('!<p>\s*(</?' . $block . '[^>]*>)!', "$1", $chunk);
 				$chunk = preg_replace('!(</?' . $block . '[^>]*>)\s*</p>!', "$1", $chunk);
 				$chunk = preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $chunk); // make line breaks
@@ -1088,10 +1103,10 @@ class Gleez_Text {
 			}
 			$output .= $chunk;
 		}
-	
+
 		return $output;
 	}
-	
+
 	/*
 	 * Move links to bottom of the text
 	 *
@@ -1103,27 +1118,27 @@ class Gleez_Text {
 	{
 		$search  = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
 		$replace = 'self::_links_list("\\1", "\\2")';
-	
+
 		if($auto_links)
 		{
 			$text = Text::auto_link($text);
 		}
-	
+
 		$text = preg_replace($search, $replace, $text);
-	
+
 		// Add link list
 		if ( !empty(self::$_link_list) )
 		{
 			$text .= __("\n\nLinks:\n") . self::$_link_list;
 		}
-	
+
 		//reset these vars to defaults
 		self::$_link_list  = '';
 		self::$_link_count = 0;
-	
+
 		return $text;
 	}
-	
+
 	/*
 	 * Helper function called by preg_replace() on link replacement.
 	 *
@@ -1135,7 +1150,7 @@ class Gleez_Text {
 	private static function _links_list( $link, $display )
 	{
 		if ( substr($link, 0, 7) == 'http://' OR substr($link, 0, 8) == 'https://' OR
-		    substr($link, 0, 7) == 'mailto:' )
+			substr($link, 0, 7) == 'mailto:' )
 		{
 			self::$_link_count++;
 			self::$_link_list .= "[" . self::$_link_count . "] $link\n";
@@ -1151,26 +1166,26 @@ class Gleez_Text {
 		{
 			self::$_link_count++;
 			self::$_link_list .= "[" . self::$_link_count . "] " . URL::site(null, TRUE);
-		
+
 			if ( substr($link, 0, 1) != '/' )
 			{
 				self::$_link_list .= '/';
 			}
-		
+
 			self::$_link_list .= "$link\n";
 			$additional = ' <sup>[' . self::$_link_count . ']</sup>';
 		}
 
 		return $display . $additional;
 	}
-	
+
 	/*
 	 * Highlights search terms in a string.
 	 *
 	 * @param   string  string to highlight terms in
 	 * @param   string  words to highlight
 	 * @return  string
-	*/ 
+	*/
 	public static function highlight($str, $keywords)
 	{
 		// Trim, strip tags, and replace multiple spaces with single spaces
@@ -1192,27 +1207,25 @@ class Gleez_Text {
 
 		return $str;
 	}
-	
+
 	/**
 	 * Reverts auto_p
 	 *
-	 * @static
-	 * @param  string string to be processed
-	 * @return string
+	 * @param   string  $str  String to be processed
+	 * @return  string
 	 */
 	public static function auto_p_revert($str)
 	{
-	    $br = preg_match('`<br>[\\n\\r]`', $str) ? '<br>' : '<br />';
-	    return preg_replace('`'.$br.'([\\n\\r])`', '$1', $str);
+		$br = preg_match('`<br>[\\n\\r]`', $str) ? '<br>' : '<br />';
+		return preg_replace('`'.$br.'([\\n\\r])`', '$1', $str);
 	}
 
 	/**
-	 * Adds <span class="ordinal"> tags around any ordinals (nd / st / th / rd)
+	 * Adds &lt;span class="ordinal"&gt; tags around any ordinals (nd / st / th / rd)
 	 *
-	 * @static
-	 * @see http://drupal.org/project/more_filters
-	 * @param  string string to be processed
-	 * @return string
+	 * @param   string  $text  String to be processed
+	 * @return  string
+	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function ordinals($text)
 	{
@@ -1221,14 +1234,13 @@ class Gleez_Text {
 		$processed_text = preg_replace('/([0-9]+)(nd|st|th|rd)([^a-zA-Z0-9]+)/', '$1<span class="ordinal">$2</span>$3', $text);
 		return $processed_text;
 	}
-	
+
 	/**
-	 * Adds <span class="initial"> tag around the initial letter of each paragraph
+	 * Adds &lt;span class="initial"&gt; tag around the initial letter of each paragraph
 	 *
-	 * @static
-	 * @see http://drupal.org/project/more_filters
-	 * @param  string string to be processed
-	 * @return string
+	 * @param   string  $text  String to be processed
+	 * @return  string
+	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function initialcaps($text)
 	{
@@ -1242,10 +1254,9 @@ class Gleez_Text {
 	/**
 	 * Converts fractions to their html equivalent (for example, 1/4 will become &frac14;)
 	 *
-	 * @static
-	 * @see http://drupal.org/project/more_filters
-	 * @param  string string to be processed
-	 * @return string
+	 * @param   string  $text  String to be processed
+	 * @return  string
+	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function fractions($text)
 	{
@@ -1260,99 +1271,107 @@ class Gleez_Text {
 		$processed_text = self::_replace_fraction('3/8', '&#8540;', $processed_text);
 		$processed_text = self::_replace_fraction('5/8', '&#8541;', $processed_text);
 		$processed_text = self::_replace_fraction('7/8', '&#8542;', $processed_text);
-		
+
 		return $processed_text;
 	}
-	
+
 	/**
 	 * Returns a string with all spaces converted to underscores (by default), accented
 	 * characters converted to non-accented characters, and non word characters removed.
 	 *
-	 * @param string $string the string you want to slug
-	 * @param string $replacement will replace keys in map
-	 * @return string
-	 * @access public
+	 * @param   string  $string       The string you want to slug
+	 * @param   string  $replacement  Will replace keys in map [Optional]
+	 * @return  string
 	 */
 	public static function convert_accented_characters($string, $replacement = '-')
 	{
-	    $string = strtolower($string);
-	    
-	    $foreign_characters = array(
-		'/Ã¤|Ã¦|Ç½/' => 'ae',
-		'/Ã¶|Å“/' => 'oe',
-		'/Ã¼/' => 'ue',
-		'/Ã„/' => 'Ae',
-		'/Ãœ/' => 'Ue',
-		'/Ã–/' => 'Oe',
-		'/Ã€|Ã|Ã‚|Ãƒ|Ã„|Ã…|Çº|Ä€|Ä‚|Ä„|Ç/' => 'A',
-		'/Ã |Ã¡|Ã¢|Ã£|Ã¥|Ç»|Ä|Äƒ|Ä…|ÇŽ|Âª/' => 'a',
-		'/Ã‡|Ä†|Äˆ|ÄŠ|ÄŒ/' => 'C',
-		'/Ã§|Ä‡|Ä‰|Ä‹|Ä/' => 'c',
-		'/Ã|ÄŽ|Ä/' => 'D',
-		'/Ã°|Ä|Ä‘/' => 'd',
-		'/Ãˆ|Ã‰|ÃŠ|Ã‹|Ä’|Ä”|Ä–|Ä˜|Äš/' => 'E',
-		'/Ã¨|Ã©|Ãª|Ã«|Ä“|Ä•|Ä—|Ä™|Ä›/' => 'e',
-		'/Äœ|Äž|Ä |Ä¢/' => 'G',
-		'/Ä|ÄŸ|Ä¡|Ä£/' => 'g',
-		'/Ä¤|Ä¦/' => 'H',
-		'/Ä¥|Ä§/' => 'h',
-		'/ÃŒ|Ã|ÃŽ|Ã|Ä¨|Äª|Ä¬|Ç|Ä®|Ä°/' => 'I',
-		'/Ã¬|Ã­|Ã®|Ã¯|Ä©|Ä«|Ä­|Ç|Ä¯|Ä±/' => 'i',
-		'/Ä´/' => 'J',
-		'/Äµ/' => 'j',
-		'/Ä¶/' => 'K',
-		'/Ä·/' => 'k',
-		'/Ä¹|Ä»|Ä½|Ä¿|Å/' => 'L',
-		'/Äº|Ä¼|Ä¾|Å€|Å‚/' => 'l',
-		'/Ã‘|Åƒ|Å…|Å‡/' => 'N',
-		'/Ã±|Å„|Å†|Åˆ|Å‰/' => 'n',
-		'/Ã’|Ã“|Ã”|Ã•|ÅŒ|ÅŽ|Ç‘|Å|Æ |Ã˜|Ç¾/' => 'O',
-		'/Ã²|Ã³|Ã´|Ãµ|Å|Å|Ç’|Å‘|Æ¡|Ã¸|Ç¿|Âº/' => 'o',
-		'/Å”|Å–|Å˜/' => 'R',
-		'/Å•|Å—|Å™/' => 'r',
-		'/Åš|Åœ|Åž|Å /' => 'S',
-		'/Å›|Å|ÅŸ|Å¡|Å¿/' => 's',
-		'/Å¢|Å¤|Å¦/' => 'T',
-		'/Å£|Å¥|Å§/' => 't',
-		'/Ã™|Ãš|Ã›|Å¨|Åª|Å¬|Å®|Å°|Å²|Æ¯|Ç“|Ç•|Ç—|Ç™|Ç›/' => 'U',
-		'/Ã¹|Ãº|Ã»|Å©|Å«|Å­|Å¯|Å±|Å³|Æ°|Ç”|Ç–|Ç˜|Çš|Çœ/' => 'u',
-		'/Ã|Å¸|Å¶/' => 'Y',
-		'/Ã½|Ã¿|Å·/' => 'y',
-		'/Å´/' => 'W',
-		'/Åµ/' => 'w',
-		'/Å¹|Å»|Å½/' => 'Z',
-		'/Åº|Å¼|Å¾/' => 'z',
-		'/Ã†|Ç¼/' => 'AE',
-		'/ÃŸ/' => 'ss',
-		'/Ä²/' => 'IJ',
-		'/Ä³/' => 'ij',
-		'/Å’/' => 'OE',
-		'/Æ’/' => 'f'
-	    );
-	
-	    if (is_array($replacement))
-	    {
-		$map         = $replacement;
-		$replacement = '_';
-	    }
-	
-	    $quotedReplacement = preg_quote($replacement, '/');
-	    
-	    $merge = array(
-		'/[^\s\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
-		'/\\s+/' => $replacement,
-		sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => ''
-	    );
-	
-	    $map = $foreign_characters + $merge;
-	    return preg_replace(array_keys($map), array_values($map), $string);
+		$string = mb_strtolower($string);
+
+		$foreign_characters = array(
+			'/Ã¤|Ã¦|Ç½/' => 'ae',
+			'/Ã¶|Å“/' => 'oe',
+			'/Ã¼/' => 'ue',
+			'/Ã„/' => 'Ae',
+			'/Ãœ/' => 'Ue',
+			'/Ã–/' => 'Oe',
+			'/Ã€|Ã|Ã‚|Ãƒ|Ã„|Ã…|Çº|Ä€|Ä‚|Ä„|Ç/' => 'A',
+			'/Ã |Ã¡|Ã¢|Ã£|Ã¥|Ç»|Ä|Äƒ|Ä…|ÇŽ|Âª/' => 'a',
+			'/Ã‡|Ä†|Äˆ|ÄŠ|ÄŒ/' => 'C',
+			'/Ã§|Ä‡|Ä‰|Ä‹|Ä/' => 'c',
+			'/Ã|ÄŽ|Ä/' => 'D',
+			'/Ã°|Ä|Ä‘/' => 'd',
+			'/Ãˆ|Ã‰|ÃŠ|Ã‹|Ä’|Ä”|Ä–|Ä˜|Äš/' => 'E',
+			'/Ã¨|Ã©|Ãª|Ã«|Ä“|Ä•|Ä—|Ä™|Ä›/' => 'e',
+			'/Äœ|Äž|Ä |Ä¢/' => 'G',
+			'/Ä|ÄŸ|Ä¡|Ä£/' => 'g',
+			'/Ä¤|Ä¦/' => 'H',
+			'/Ä¥|Ä§/' => 'h',
+			'/ÃŒ|Ã|ÃŽ|Ã|Ä¨|Äª|Ä¬|Ç|Ä®|Ä°/' => 'I',
+			'/Ã¬|Ã­|Ã®|Ã¯|Ä©|Ä«|Ä­|Ç|Ä¯|Ä±/' => 'i',
+			'/Ä´/' => 'J',
+			'/Äµ/' => 'j',
+			'/Ä¶/' => 'K',
+			'/Ä·/' => 'k',
+			'/Ä¹|Ä»|Ä½|Ä¿|Å/' => 'L',
+			'/Äº|Ä¼|Ä¾|Å€|Å‚/' => 'l',
+			'/Ã‘|Åƒ|Å…|Å‡/' => 'N',
+			'/Ã±|Å„|Å†|Åˆ|Å‰/' => 'n',
+			'/Ã’|Ã“|Ã”|Ã•|ÅŒ|ÅŽ|Ç‘|Å|Æ |Ã˜|Ç¾/' => 'O',
+			'/Ã²|Ã³|Ã´|Ãµ|Å|Å|Ç’|Å‘|Æ¡|Ã¸|Ç¿|Âº/' => 'o',
+			'/Å”|Å–|Å˜/' => 'R',
+			'/Å•|Å—|Å™/' => 'r',
+			'/Åš|Åœ|Åž|Å /' => 'S',
+			'/Å›|Å|ÅŸ|Å¡|Å¿/' => 's',
+			'/Å¢|Å¤|Å¦/' => 'T',
+			'/Å£|Å¥|Å§/' => 't',
+			'/Ã™|Ãš|Ã›|Å¨|Åª|Å¬|Å®|Å°|Å²|Æ¯|Ç“|Ç•|Ç—|Ç™|Ç›/' => 'U',
+			'/Ã¹|Ãº|Ã»|Å©|Å«|Å­|Å¯|Å±|Å³|Æ°|Ç”|Ç–|Ç˜|Çš|Çœ/' => 'u',
+			'/Ã|Å¸|Å¶/' => 'Y',
+			'/Ã½|Ã¿|Å·/' => 'y',
+			'/Å´/' => 'W',
+			'/Åµ/' => 'w',
+			'/Å¹|Å»|Å½/' => 'Z',
+			'/Åº|Å¼|Å¾/' => 'z',
+			'/Ã†|Ç¼/' => 'AE',
+			'/ÃŸ/' => 'ss',
+			'/Ä²/' => 'IJ',
+			'/Ä³/' => 'ij',
+			'/Å’/' => 'OE',
+			'/Æ’/' => 'f'
+		);
+
+		if (is_array($replacement))
+		{
+			$map         = $replacement;
+			$replacement = '_';
+		}
+
+		$quotedReplacement = preg_quote($replacement, '/');
+
+		$merge = array(
+			'/[^\s\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
+			'/\\s+/' => $replacement,
+			sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => ''
+		);
+
+		$map = $foreign_characters + $merge;
+
+		return preg_replace(array_keys($map), array_values($map), $string);
 	}
-	
+
+	/**
+	 * Converts fractions to their html equivalent
+	 *
+	 * This is called automatically by [Text::fraction].
+	 *
+	 * @return  string
+	 */
 	private static function _replace_fraction($fraction, $html_fraction, $text)
 	{
 		// fraction can't be preceded or followed by a number or letter.
 		$search = '/([^0-9A-Z]+)' . preg_quote($fraction, '/') . '([^0-9A-Z]+)/i';
 		$replacement = '$1' . $html_fraction . '$2';
+
 		return preg_replace($search, $replacement, $text);
 	}
 
@@ -1391,84 +1410,122 @@ class Gleez_Text {
 		return $value;
 	}
 
-        /**
-         * Checks whether a string is valid UTF-8.
-         *
-         * All functions designed to filter input should use drupal_validate_utf8
-         * to ensure they operate on valid UTF-8 strings to prevent bypass of the
-         * filter.
-         *
-         * When text containing an invalid UTF-8 lead byte (0xC0 - 0xFF) is presented
-         * as UTF-8 to Internet Explorer 6, the program may misinterpret subsequent
-         * bytes. When these subsequent bytes are HTML control characters such as
-         * quotes or angle brackets, parts of the text that were deemed safe by filters
-         * end up in locations that are potentially unsafe; An onerror attribute that
-         * is outside of a tag, and thus deemed safe by a filter, can be interpreted
-         * by the browser as if it were inside the tag.
-         *
-         * The function does not return FALSE for strings containing character codes
-         * above U+10FFFF, even though these are prohibited by RFC 3629.
-         *
-         * @param $text
-         *   The text to check.
-         * @return
-         *   TRUE if the text is valid UTF-8, FALSE if not.
-         */
-        public static function check_utf8( $string )
-        {
-                if (strlen($string) == 0)
-                {
-                        return TRUE;
-                }
-                // With the PCRE_UTF8 modifier 'u', preg_match() fails silently on strings
-                // containing invalid UTF-8 byte sequences. It does not reject character
-                // codes above U+10FFFF (represented by 4 or more octets), though.
-                return (preg_match('/^./us', $string) == 1);
-        }
-
-	/*
-	 * Simple fast string encyption
+	/**
+	 * Checks whether a string is valid UTF-8.
+	 *
+	 * All functions designed to filter input should use drupal_validate_utf8
+	 * to ensure they operate on valid UTF-8 strings to prevent bypass of the
+	 * filter.
+	 *
+	 * When text containing an invalid UTF-8 lead byte (0xC0 - 0xFF) is presented
+	 * as UTF-8 to Internet Explorer 6, the program may misinterpret subsequent
+	 * bytes. When these subsequent bytes are HTML control characters such as
+	 * quotes or angle brackets, parts of the text that were deemed safe by filters
+	 * end up in locations that are potentially unsafe; An onerror attribute that
+	 * is outside of a tag, and thus deemed safe by a filter, can be interpreted
+	 * by the browser as if it were inside the tag.
+	 *
+	 * The function does not return FALSE for strings containing character codes
+	 * above U+10FFFF, even though these are prohibited by RFC 3629.
+	 *
+	 * @since   1.1.1
+	 *
+	 * @param   string   $string  The text to check.
+	 * @return  boolean  TRUE if the text is valid UTF-8, FALSE if not.
 	 */
-	public static function encode($string, $key = FALSE)
-	{ 
-		if(!$string) return false;
-		if(!$key) $key = Gleez::private_key();
-		
-		$crypttext = mcrypt_encrypt(MCRYPT_GOST, $key, $string, MCRYPT_MODE_ECB);
-		return trim(self::safe_b64encode($crypttext)); 
+	public static function check_utf8($string)
+	{
+		if (strlen($string) == 0)
+		{
+			return TRUE;
+		}
+
+		// With the PCRE_UTF8 modifier 'u', preg_match() fails silently on strings
+		// containing invalid UTF-8 byte sequences. It does not reject character
+		// codes above U+10FFFF (represented by 4 or more octets), though.
+		return (preg_match('/^./us', $string) == 1);
 	}
 
-	/*
+	/**
+	 * Simple fast string encyption
+	 *
+	 * @since   1.1.1
+	 *
+	 * @uses    Gleez::private_key
+	 * @return  string
+	 */
+	public static function encode($string, $key = FALSE)
+	{
+		if ( ! $string)
+		{
+			return FALSE;
+		}
+
+		if ( ! $key)
+		{
+			$key = Gleez::private_key();
+		}
+
+		$crypttext = mcrypt_encrypt(MCRYPT_GOST, $key, $string, MCRYPT_MODE_ECB);
+
+		return trim(self::safe_b64encode($crypttext));
+	}
+
+	/**
 	 * Simple fast string decyption
+	 *
+	 * @since   1.1.1
+	 *
+	 * @uses    Gleez::private_key
+	 * @return  string
 	 */
 	public static function decode($string, $key = FALSE)
 	{
-		if(!$string) return false;
-		if(!$key) $key = Gleez::private_key();
-		
-		$crypttext = self::safe_b64decode($string); 
+		if ( ! $string)
+		{
+			 return FALSE;
+		}
+
+		if ( ! $key)
+		{
+			$key = Gleez::private_key();
+		}
+
+		$crypttext = self::safe_b64decode($string);
 		$decrypttext = mcrypt_decrypt(MCRYPT_GOST, $key, $crypttext, MCRYPT_MODE_ECB);
+
 		return trim($decrypttext);
 	}
 
-	/*
+	/**
 	 * Url safe base64 encode
+	 *
+	 * @since   1.1.1
+	 * @return  string
 	 */
 	public static function safe_b64encode($string)
 	{
 		$data = base64_encode($string);
 		$data = str_replace(array('+','/','='),array('-','_',''),$data);
+
 		return $data;
 	}
 
-	/*
+	/**
 	 * Url safe base64 decode
+	 *
+	 * @since   1.1.1
+	 * @return  string
 	 */
 	public static function safe_b64decode($string)
 	{
 		$data = str_replace(array('-','_'),array('+','/'),$string);
 		$mod4 = strlen($data) % 4;
-		if ($mod4) $data .= substr('====', $mod4);
+
+		if ($mod4)
+		{
+			$data .= substr('====', $mod4);
+		}
 
 		return base64_decode($data);
 	}
