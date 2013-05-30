@@ -217,7 +217,7 @@ class Gleez_URL {
 	 */
 	public static function is_absolute($url)
 	{
-		return (strpos($url, '://') !== FALSE);
+		return (mb_strpos($url, '://') === FALSE);
 	}
 
 	/**
@@ -228,9 +228,7 @@ class Gleez_URL {
 	 */
 	public static function is_remote($url)
 	{
-		return (strpos(strtolower($url), 'http://') !== FALSE)
-			OR (strpos(strtolower($url), 'https://') !== FALSE)
-			OR (strpos(strtolower($url), 'ftp://') !== FALSE);
+		return (mb_strpos($url, '://') !== FALSE);
 	}
 
 	/**

@@ -122,7 +122,7 @@ class Gleez_HTML {
 	 *
 	 * @uses    URL::base
 	 * @uses    URL::site
-	 * @uses    URL::is_absolute
+	 * @uses    URL::is_remote
 	 */
 	public static function anchor($uri, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = TRUE)
 	{
@@ -139,7 +139,7 @@ class Gleez_HTML {
 		}
 		else
 		{
-			if ( ! URL::is_absolute($uri))
+			if (URL::is_remote($uri))
 			{
 				if (HTML::$windowed_urls === TRUE AND empty($attributes['target']))
 				{
@@ -245,7 +245,7 @@ class Gleez_HTML {
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
 
-		if ( ! URL::is_absolute($file))
+		if (URL::is_absolute($file))
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -279,8 +279,7 @@ class Gleez_HTML {
 	 */
 	public static function image($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-
-		if ( ! URL::is_absolute($file))
+		if (URL::is_absolute($file))
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -386,8 +385,8 @@ class Gleez_HTML {
 			$theme = Theme::$active;
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
 		}
-		
-		if ( ! URL::is_absolute($file))
+
+		if (URL::is_absolute($file))
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
