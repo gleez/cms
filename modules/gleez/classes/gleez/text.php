@@ -1391,4 +1391,85 @@ class Gleez_Text {
 		return $value;
 	}
 
+        /**
+         * Checks whether a string is valid UTF-8.
+         *
+         * All functions designed to filter input should use drupal_validate_utf8
+         * to ensure they operate on valid UTF-8 strings to prevent bypass of the
+         * filter.
+         *
+         * When text containing an invalid UTF-8 lead byte (0xC0 - 0xFF) is presented
+         * as UTF-8 to Internet Explorer 6, the program may misinterpret subsequent
+         * bytes. When these subsequent bytes are HTML control characters such as
+         * quotes or angle brackets, parts of the text that were deemed safe by filters
+         * end up in locations that are potentially unsafe; An onerror attribute that
+         * is outside of a tag, and thus deemed safe by a filter, can be interpreted
+         * by the browser as if it were inside the tag.
+         *
+         * The function does not return FALSE for strings containing character codes
+         * above U+10FFFF, even though these are prohibited by RFC 3629.
+         *
+         * @param $text
+         *   The text to check.
+         * @return
+         *   TRUE if the text is valid UTF-8, FALSE if not.
+         */
+        public static function check_utf8( $string )
+        {
+                if (strlen($string) == 0)
+                {
+                        return TRUE;
+                }
+                // With the PCRE_UTF8 modifier 'u', preg_match() fails silently on strings
+                // containing invalid UTF-8 byte sequences. It does not reject character
+                // codes above U+10FFFF (represented by 4 or more octets), though.
+                return (preg_match('/^./us', $string) == 1);
+        }
+
+	/*
+	 * Simple fast string encyption
+	 */
+	public static function encode($string, $key = FALSE)
+	{ 
+		if(!$string) return false;
+		if(!$key) $key = Gleez::private_key();
+		
+		$crypttext = mcrypt_encrypt(MCRYPT_GOST, $key, $string, MCRYPT_MODE_ECB);
+		return trim(self::safe_b64encode($crypttext)); 
+	}
+
+	/*
+	 * Simple fast string decyption
+	 */
+	public static function decode($string, $key = FALSE)
+	{
+		if(!$string) return false;
+		if(!$key) $key = Gleez::private_key();
+		
+		$crypttext = self::safe_b64decode($string); 
+		$decrypttext = mcrypt_decrypt(MCRYPT_GOST, $key, $crypttext, MCRYPT_MODE_ECB);
+		return trim($decrypttext);
+	}
+
+	/*
+	 * Url safe base64 encode
+	 */
+	public static function safe_b64encode($string)
+	{
+		$data = base64_encode($string);
+		$data = str_replace(array('+','/','='),array('-','_',''),$data);
+		return $data;
+	}
+
+	/*
+	 * Url safe base64 decode
+	 */
+	public static function safe_b64decode($string)
+	{
+		$data = str_replace(array('-','_'),array('+','/'),$string);
+		$mod4 = strlen($data) % 4;
+		if ($mod4) $data .= substr('====', $mod4);
+
+		return base64_decode($data);
+	}
 }
