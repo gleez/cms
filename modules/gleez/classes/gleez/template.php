@@ -5,7 +5,7 @@
  * @package    Gleez\Template
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -240,12 +240,11 @@ abstract class Gleez_Template extends Controller {
 		$accept_types = Arr::extract($accept_types, array_keys($this->_accept_formats));
 
 		// Set response format to first matched element
-		//$this->_response_format = key($accept_types);
-                $this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
-	
-		$site_name = $this->_config->get('site_name', __('Gleez CMS'));		
-		$url 	   =  URL::site(NULL, TRUE);
-	
+		$this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
+
+		$site_name = $this->_config->get('site_name', __('Gleez CMS'));
+		$url       =  URL::site(NULL, TRUE);
+
 		View::bind_global('site_name', $site_name);
 		View::bind_global('site_url',  $url);
 
@@ -387,15 +386,15 @@ abstract class Gleez_Template extends Controller {
 
 			// Bind the generic page variables
 			$this->template->set('lang', I18n::$lang)
-				->set('page_id', $this->_page_id)
-				->set('page_class', $page_class)
+				->set('page_id',      $this->_page_id)
+				->set('page_class',   $page_class)
 				->set('primary_menu', $primary_menu)
-				->set('title', $this->title)
-				->set('icon',  $this->icon)
-				->set('mission', $this->template->mission)
-				->set('content', $this->response->body())
-				->set('messages', Message::display())
-				->set('profiler', FALSE);
+				->set('title',        $this->title)
+				->set('icon',         $this->icon)
+				->set('mission',      $this->template->mission)
+				->set('content',      $this->response->body())
+				->set('messages',     Message::display())
+				->set('profiler',     FALSE);
 
 			if (count($this->_tabs) > 0)
 			{
@@ -425,7 +424,6 @@ abstract class Gleez_Template extends Controller {
 				// Check for dataTables request
 				if ($this->request->query('sEcho') !== NULL) return;
 
-				//$output = JSON::encode($output);
 				$output = $this->_json['Data'];
 			}
 
@@ -463,9 +461,7 @@ abstract class Gleez_Template extends Controller {
 		}
 		else
 		{
-			$head_title = array(
-				$this->template->site_name
-			);
+			$head_title = array($this->template->site_name);
 
 			if ($this->template->site_slogan)
 			{
@@ -486,7 +482,6 @@ abstract class Gleez_Template extends Controller {
 
 		$xmlrpc = $this->_config->get('xmlrpc', NULL);
 
-		/** @var $xmlrpc string|NULL */
 		if ( ! is_null($xmlrpc))
 		{
 			$headers['X-Pingback'] = URL::site($xmlrpc, TRUE);
@@ -784,7 +779,7 @@ abstract class Gleez_Template extends Controller {
 		if ( $this->request->method() == HTTP_Request::POST )
 		{
 			// Allow for override. Set the form saved true for ajax request, if no errors
-			if( empty($this->_errors) )
+			if (empty($this->_errors))
 			{
 				$this->SetFormSaved(TRUE);
 			}
@@ -792,37 +787,36 @@ abstract class Gleez_Template extends Controller {
 			{
 				$this->SetFormSaved(FALSE);
 			}
-			
-			if( $this->_response_format === 'application/json')
+
+			if ($this->_response_format === 'application/json')
 			{
-					//$this->SetJson('body', base64_encode(''));
 					$this->SetJson('body', FALSE);
 			}
 		}
 		else
 		{
-			if( $this->_response_format === 'application/json')
+			if ($this->_response_format === 'application/json')
 			{
 				$this->SetJson('body', base64_encode($this->response->body()));
 			}
 		}
 
-		if( $this->_response_format === 'application/json')
+		if ($this->_response_format === 'application/json')
 		{
 			if ($this->request->query('sEcho') !== NULL) return;
 
 			$scripts = Assets::js(FALSE, NULL, NULL, FALSE, NULL, Assets::FORMAT_AJAX);
 			$styles  = Assets::css(FALSE, NULL, NULL, FALSE, Assets::FORMAT_AJAX);
-		
-			$this->SetJson('FormSaved',      $this->_formsaved);
-			$this->SetJson('messages', 	 Message::get(NULL, NULL, TRUE));
-			$this->SetJson('errors',  	 $this->_errors);
-			$this->SetJson('redirect',    	 Request::$redirect_url);
-			$this->SetJson('title',      	 $this->title);
-			$this->SetJson('css',      	 $styles);
-			$this->SetJson('js',      	 $scripts);
 
-			if ( ! Text::check_utf8($this->_json['body']) )
+			$this->SetJson('FormSaved',  $this->_formsaved);
+			$this->SetJson('messages',   Message::get(NULL, NULL, TRUE));
+			$this->SetJson('errors',     $this->_errors);
+			$this->SetJson('redirect',   Request::$redirect_url);
+			$this->SetJson('title',      $this->title);
+			$this->SetJson('css',        $styles);
+			$this->SetJson('js',         $scripts);
+
+			if ( ! Text::check_utf8($this->_json['body']))
 			{
 				$this->_json['body'] = utf8_encode($this->_json['body']);
 			}
@@ -835,8 +829,8 @@ abstract class Gleez_Template extends Controller {
 	 * If JSON is going to be sent to the client, this method allows you to add
 	 * extra values to the JSON array.
 	 *
-	 * @param string $Key The name of the array key to add.
-	 * @param string $Value The value to be added. If empty, nothing will be added.
+	 * @param  string  $Key    The name of the array key to add.
+	 * @param  string  $Value  The value to be added. If empty, nothing will be added [Optional]
 	 */
 	public function SetJson($Key, $Value = '')
 	{

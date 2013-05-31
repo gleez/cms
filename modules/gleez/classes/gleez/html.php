@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * HTML Class Helper
+ * HTML Helper
  *
  * Provides generic methods for generating various HTML
  * tags and making output HTML safe.
