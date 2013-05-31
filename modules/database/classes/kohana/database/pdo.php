@@ -250,4 +250,29 @@ class Kohana_Database_PDO extends Database {
 		return $this->_connection->quote($value);
 	}
 
+	/**
+	 * Get server version
+	 *
+	 * Usage:<br>
+	 * <code>
+	 *   $db->version();
+	 * </code>
+	 *
+	 * @param   boolean  $full  Show full version [Optional]
+	 * @return  string
+	 *
+	 * @uses    I18n::__
+	 */
+	public function version($full = FALSE)
+	{
+		$version = $this->_connection->getAttribute(constant("PDO::ATTR_SERVER_VERSION"));
+
+		if (is_null($version))
+		{
+			return __('Unavailable');
+		}
+
+		return $full ? $version : substr($version, 0, strpos($version, "-"));
+	}
+
 } // End Database_PDO
