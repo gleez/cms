@@ -547,7 +547,7 @@ class Gleez_System {
 				$status = version_compare(PHP_VERSION, '5.3', '>=');
 			break;
 			case 'mysql':
-				$status = function_exists("mysqli_query") OR function_exists("mysql_query");
+				$status = function_exists('mysqli_query') OR function_exists('mysql_query');
 			break;
 			case 'sys_dir':
 				$status = (is_dir(SYSPATH) AND is_readable(SYSPATH.'classes/kohana'.EXT));
