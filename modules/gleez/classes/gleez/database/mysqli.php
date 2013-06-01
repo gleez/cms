@@ -260,7 +260,7 @@ class Gleez_Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if ( ! empty($this->_config['profiling']))
+		if ( ! empty($this->_config['profiling']) AND Kohana::$profiling)
 		{
 			// Benchmark this query for the current instance
 			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
@@ -597,6 +597,9 @@ class Gleez_Database_MySQLi extends Database {
 	 */
 	public function version($full = FALSE)
 	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
 		$result = mysqli_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
 		$row = mysqli_fetch_object($result);
 
