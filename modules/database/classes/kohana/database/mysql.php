@@ -448,19 +448,18 @@ class Kohana_Database_MySQL extends Database {
 	 *   $db->version();
 	 * </code>
 	 *
-	 * [!!] Works only with MySQL
-	 *
+	 * @param   boolean  $full  Show full version [Optional]
 	 * @return  string
 	 *
 	 * @link    http://php.net/manual/en/function.mysql-query.php mysql_query()
 	 * @link    http://php.net/manual/en/function.mysql-fetch-object.php mysql_fetch_object()
 	 */
-	public function version()
+	public function version($full = FALSE)
 	{
 		$result = mysql_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
 		$row = mysql_fetch_object($result);
 
-		return $row->Value;
+		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
 	}
 
 } // End Database_MySQL
