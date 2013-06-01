@@ -265,6 +265,9 @@ class Kohana_Database_PDO extends Database {
 	 */
 	public function version($full = FALSE)
 	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
 		$version = $this->_connection->getAttribute(constant("PDO::ATTR_SERVER_VERSION"));
 
 		if (is_null($version))
