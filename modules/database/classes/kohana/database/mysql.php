@@ -440,4 +440,27 @@ class Kohana_Database_MySQL extends Database {
 		return "'$value'";
 	}
 
+	/**
+	 * Get MySQL version
+	 *
+	 * Usage:<br>
+	 * <code>
+	 *   $db->version();
+	 * </code>
+	 *
+	 * [!!] Works only with MySQL
+	 *
+	 * @return  string
+	 *
+	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
+	 * @link    http://php.net/manual/en/mysqli-result.fetch-object.php mysqli_fetch_object()
+	 */
+	public function version()
+	{
+		$result = mysql_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
+		$row = mysql_fetch_object($result);
+
+		return $row->Value;
+	}
+
 } // End Database_MySQL
