@@ -452,8 +452,8 @@ class Kohana_Database_MySQL extends Database {
 	 *
 	 * @return  string
 	 *
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
-	 * @link    http://php.net/manual/en/mysqli-result.fetch-object.php mysqli_fetch_object()
+	 * @link    http://php.net/manual/en/function.mysql-query.php mysql_query()
+	 * @link    http://php.net/manual/en/function.mysql-fetch-object.php mysql_fetch_object()
 	 */
 	public function version()
 	{

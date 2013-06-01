@@ -581,7 +581,6 @@ class Gleez_Database_MySQLi extends Database {
 		return "'$value'";
 	}
 
-
 	/**
 	 * Get MySQL version
 	 *
@@ -589,6 +588,8 @@ class Gleez_Database_MySQLi extends Database {
 	 * <code>
 	 *   $db->version();
 	 * </code>
+	 *
+	 * [!!] Works only with MySQL
 	 *
 	 * @return  string
 	 *
