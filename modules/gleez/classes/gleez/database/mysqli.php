@@ -589,18 +589,18 @@ class Gleez_Database_MySQLi extends Database {
 	 *   $db->version();
 	 * </code>
 	 *
-	 * [!!] Works only with MySQL
-	 *
+	 * @param   boolean  $full  Show full version [Optional]
 	 * @return  string
 	 *
 	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
 	 * @link    http://php.net/manual/en/mysqli-result.fetch-object.php mysqli_fetch_object()
 	 */
-	public function version()
+	public function version($full = FALSE)
 	{
 		$result = mysqli_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
 		$row = mysqli_fetch_object($result);
 
-		return $row->Value;
+		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
 	}
+
 }
