@@ -456,6 +456,9 @@ class Kohana_Database_MySQL extends Database {
 	 */
 	public function version($full = FALSE)
 	{
+		// Make sure the database is connected
+		$this->_connection or $this->connect();
+
 		$result = mysql_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
 		$row = mysql_fetch_object($result);
 
