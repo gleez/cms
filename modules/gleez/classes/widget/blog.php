@@ -105,10 +105,15 @@ class Widget_Blog extends Widget {
 			$items = array();
 			foreach($blogs as $blog)
 			{
-				$items[$blog->id]['id']       = $blog->id;
-				$items[$blog->id]['title']    = $blog->title;
-				$items[$blog->id]['url']      = $blog->url;
-				$items[$blog->id]['image']    = $blog->image;
+				$items[$blog->id]['id']    = $blog->id;
+				$items[$blog->id]['title'] = $blog->title;
+				$items[$blog->id]['url']   = $blog->url;
+
+				$image = is_null($blog->image)
+					? '<div class="empty-photo"><i class="icon-camera-retro icon-2x"></i></div>'
+					: HTML::resize($blog->image, array('alt' => $blog->title, 'height' => 140, 'width' => 180, 'type' => 'resize', 'itemprop' => 'image'));
+
+				$items[$blog->id]['image'] = $image;
 			}
 
 			// Set the cache
