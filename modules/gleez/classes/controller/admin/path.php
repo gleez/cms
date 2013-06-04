@@ -222,7 +222,7 @@ class Controller_Admin_Path extends Controller_Admin {
 			{
 				Kohana::$log->add(Log::ERROR, 'Error occured deleting alias id: :id, :message',
 					array(':id' => $path->id, ':message' => $e->getMessage()));
-				Message::error('An error occurred deleting alias, %path.',array(':path' => $path->alias));
+				Message::error('An error occurred deleting alias %path',array(':path' => $path->alias));
 
 				if ( ! $this->_internal)
 				{

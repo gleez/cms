@@ -173,6 +173,10 @@ return array(
 			'LINUX'   => 'it_IT.utf-8',
 			'WINDOWS' => 'italian',
 		),
+		'ro' => array(
+			'LINUX'   => 'ro_RO.utf-8',
+			'WINDOWS' => 'romanian',
+		),
 		'ru' => array(
 			'LINUX'   => 'ru_RU.utf-8',
 			'WINDOWS' => 'russian',
