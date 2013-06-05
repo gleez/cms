@@ -240,7 +240,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting menu item id: :id, :message',
 					array(':id' => $menu->id, ':message' => $e->getMessage())
 				);
-				Message::error(__('An error occurred deleting menu item :term.', array(':term' => $menu->title)));
+				Message::error(__('An error occurred deleting menu item %term', array(':term' => $menu->title)));
 
 				if ( ! $this->_internal)
 				{

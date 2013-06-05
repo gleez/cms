@@ -96,11 +96,11 @@ class Controller_Admin_Comment extends Controller_Admin {
 	public function action_view()
 	{
 		$id = (int) $this->request->param('id', 0);
-		$comment = ORM::factory('comment', $id)->access('view');
+		$comment = ORM::factory('comment', $id)->access();
 
 		if( ! $comment->loaded())
 		{
-			Message::error( __('Comment: doesn\'t exists!') );
+			Message::error( __('Comment doesn\'t exists!') );
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
 
 			if ( ! $this->_internal)
