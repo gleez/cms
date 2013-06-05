@@ -454,7 +454,7 @@ class Controller_Blog extends Template {
 			{
 				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting blog id: :id, :message',
 					array(':id' => $post->id, ':message' => $e->getMessage()));
-				Message::error(__('An error occurred deleting blog %post.',array('%post' => $post->title)));
+				Message::error(__('An error occurred deleting blog %post',array('%post' => $post->title)));
 			}
 
 			$redirect = empty($destination) ? Route::get('blog')->uri(array('action' => 'list')) :
