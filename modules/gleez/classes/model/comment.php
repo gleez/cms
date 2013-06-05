@@ -216,7 +216,7 @@ class Model_Comment extends ORM {
 	 * Validation callback.
 	 *
 	 * @param   Validation  $validation  Validation object
-	 * @param   string      Field name
+	 * @param   string      $field       Field name
 	 *
 	 * @uses    User::lookup_by_name
 	 * @uses    DB::select
@@ -262,7 +262,10 @@ class Model_Comment extends ORM {
 	/**
 	 * Make sure that the email address is legal
 	 *
-	 * @uses  Valid::email
+	 * @param   Validation  $validation  Validation object
+	 * @param   string      $field       Field name
+	 *
+	 * @uses    Valid::email
 	 */
 	public function valid_email(Validation $validation, $field)
 	{
