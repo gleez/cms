@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * File log writer
  *
@@ -12,9 +12,16 @@
 class Gleez_Log_File extends Log_Writer {
 
 	/**
-	 * @var  string  Directory to place log files in
+	 * Directory to place log files in
+	 * @var  string
 	 */
 	protected $_directory;
+
+	/**
+	 * Default format
+	 * @var string
+	 */
+	public static $format_string = 'time - - level: body - - hostname - - url - - user_agent - - referer';
 
 	/**
 	 * Creates a new file logger
@@ -26,8 +33,9 @@ class Gleez_Log_File extends Log_Writer {
 	 *   $writer = new Log_File($directory);
 	 * </code>
 	 *
-	 * @param   string  Log directory
-	 * @throws  Kohana_Exception
+	 * @param   string  $directory  Log directory
+	 * @throws  Gleez_Exception
+	 *
 	 * @uses    System::mkdir
 	 * @uses    Debug::path
 	 */
@@ -37,12 +45,12 @@ class Gleez_Log_File extends Log_Writer {
 		{
 			try
 			{
-				// Create the cache directory
+				// Create the log directory
 				System::mkdir($directory);
 			}
 			catch (Exception $e)
 			{
-				throw new Kohana_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create cache directory :dir',
 					array(':dir' => Debug::path($directory)));
 			}
 		}
@@ -70,9 +78,11 @@ class Gleez_Log_File extends Log_Writer {
 	 * </code>
 	 *
 	 * @param   array  $messages  Log messages
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
+	 *
 	 * @uses    System::mkdir
 	 * @uses    Debug::path
+	 * @uses    Arr::merge
 	 */
 	public function write(array $messages)
 	{
@@ -88,7 +98,7 @@ class Gleez_Log_File extends Log_Writer {
 			}
 			catch (Exception $e)
 			{
-				throw new Kohana_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create cache directory :dir',
 					array(':dir' => Debug::path($directory)));
 			}
 		}
@@ -105,7 +115,7 @@ class Gleez_Log_File extends Log_Writer {
 			}
 			catch (Exception $e)
 			{
-				throw new Kohana_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create cache directory :dir',
 					array(':dir' => Debug::path($directory)));
 			}
 		}
@@ -131,9 +141,9 @@ class Gleez_Log_File extends Log_Writer {
 
 		foreach ($messages as $message)
 		{
+			$message = Arr::merge($message, $info);
 			// Write each message into the log file
-			// Format: time --- level: body hostname
-			file_put_contents($filename, PHP_EOL.$message['time'].' - - '.$this->_log_levels[$message['level']].': '.$message['body'].' - - '.$info['hostname'].' - - '.$info['url'].' - - '.$info['user_agent'].' - - '.$info['referer'], FILE_APPEND);
+			file_put_contents($filename, PHP_EOL.$this->format_message($message, Log_File::$format_string), FILE_APPEND);
 		}
 
 	}
