@@ -82,7 +82,7 @@ Kohana::modules(array(
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
 	'userguide'   => MODPATH.'userguide',  // User guide and API documentation
-	//'mango'       => MODPATH.'mango',      // Mango Reader
+	//'mango'       => MODPATH.'mango',      // Gleez Mango
 ));
 
 /**
