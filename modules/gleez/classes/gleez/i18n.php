@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Add plural support to I18n
  *
@@ -6,6 +6,8 @@
  * @author    Sandeep Sangamreddi - Gleez
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license  Gleez CMS License
+ *
+ * @todo      Need optimize, and move __() and _e() to current environment
  */
 class Gleez_I18n extends Kohana_I18n {
 
@@ -251,7 +253,8 @@ class Gleez_I18n extends Kohana_I18n {
 	 *
 	 * @param   integer|string $locale Locale
 	 * @return  string
-	 * @uses    @link http://php.net/manual/en/function.setlocale.php  setlocale()
+	 *
+	 * @link    http://php.net/setlocale
 	 */
 	public static function locale($locale = 0)
 	{
@@ -361,5 +364,21 @@ if ( ! function_exists('__'))
 		}
 
 		return strtr($string, $values);
+	}
+}
+
+if ( ! function_exists('_e'))
+{
+
+	/**
+	 * Displays the returned translated text from __()
+	 *
+	 * @param   string  $string Text to translate
+	 * @param   array   $values Values to replace in the translated text. [Optional]
+	 * @param   string  $lang   Source language [Optional]
+	 */
+	function _e($string, array $values = NULL, $lang = 'en-us')
+	{
+		echo __($string, $values, $lang);
 	}
 }

@@ -16,14 +16,6 @@ require GLZPATH.'classes/gleez'.EXT;
 date_default_timezone_set('Asia/Kolkata');
 
 /**
- * Set the default locale.
- *
- * @link  http://kohanaframework.org/guide/using.configuration
- * @link  http://php.net/setlocale
- */
-setlocale(LC_ALL, 'en_US.utf-8');
-
-/**
  * Enable the Kohana auto-loader.
  *
  * @link  http://kohanaframework.org/guide/using.autoloading
@@ -40,11 +32,6 @@ spl_autoload_register(array('Kohana', 'auto_load'));
 ini_set('unserialize_callback_func', 'spl_autoload_call');
 
 // -- Configuration and initialization -----------------------------------------
-
-/**
- * Set the default language
- */
-I18n::lang('en-us');
 
 /**
  * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
@@ -77,39 +64,46 @@ Kohana::init(array(
 	'profile'    => Kohana::$environment !== Kohana::PRODUCTION,
 ));
 
-
-/**
- * Attach the file write to logging. Multiple writers are supported.
- */
-//Kohana::$log->attach(new Log_File(APPPATH.'logs'));
-
 /**
  * Attach a file reader to config. Multiple readers are supported.
  */
 Kohana::$config->attach(new Config_File);
 
 /**
- * Enable modules. Modules are referenced by a relative or absolute path.
+ * Enable modules.
+ *
+ * Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	 'user'        => MODPATH.'user',       // User and group Administration
-	 'database'    => MODPATH.'database',   // Database access
-	 'image'       => MODPATH.'image',      // Image manipulation
-	 'captcha'     => MODPATH.'captcha',    // Captcha implementation
-	// 'unittest'   => MODPATH.'unittest',   // Unit testing
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	 'userguide'   => MODPATH.'userguide',  // User guide and API documentation
-	//'mango'       => MODPATH.'mango',      // Mango Reader
-	));
+	'user'        => MODPATH.'user',       // User and group Administration
+	'database'    => MODPATH.'database',   // Database access
+	'image'       => MODPATH.'image',      // Image manipulation
+	'captcha'     => MODPATH.'captcha',    // Captcha implementation
+	//'unittest'    => MODPATH.'unittest',   // Unit testing
+	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
+	'userguide'   => MODPATH.'userguide',  // User guide and API documentation
+	//'mango'       => MODPATH.'mango',      // Gleez Mango
+));
 
 /**
- * Attach the file write to logging. Multiple writers are supported.
+ * Attach the file write to logging.
+ *
+ * Multiple writers are supported.
+ *
+ * For use Log_Mango() Gleez Mango is required.
+ * Enable `mango` in [Kohana::modules].
+ *
+ * Usage:<br>
+ * <code>
+ *   Kohana::$log->attach(new Log_Mango());
+ * </code>
  */
-Kohana::$log->attach(new Gleez_Log_File(APPPATH.'logs'));
-// For Log_Mango() Mango Reader is required
-// Kohana::$log->attach(new Log_Mango());
+Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 
-//default path for uploads directory
+/**
+ * Default path for uploads directory.
+ * Path are referenced by a relative or absolute path.
+ */
 Upload::$default_directory = APPPATH.'uploads';
 
 /**
