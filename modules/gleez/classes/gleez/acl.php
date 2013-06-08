@@ -10,19 +10,17 @@
  * to control access to certain protected objects by other
  * requesting objects.
  *
- * ### Dependencies
+ * ### System Requirements
  *
  * - Default Database module
  * - Any ORM implementation
- * - Gleez User
- * - Gleez Core
  *
  * @package    Gleez\ACL
- * @version    2.0
+ * @version    2.0.0
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @license    http://gleezcms.org/license  Gleez CMS License
  *
  * @todo       Implement their own exceptions (eg. ACL_Exception)
  */
@@ -332,21 +330,20 @@ class Gleez_ACL {
 	 * 
 	 * If a role exists in user cache and not in roles table, will
 	 * be checked for only available roles.
-	 * 
-	 * @access public
 	 *
-	 * @param string $role Role name to look up.
-	 * @return bool
+	 * @param   string  $role  Role name to look up
+	 * @return  boolean
 	 */
-	public static function is_role( $role )
+	public static function is_role($role)
 	{
 		$roles = ACL::site_roles();
-		return isset( $roles[$role] );
+		return isset($roles[$role]);
 	}
 
 	/**
 	 * Get all the active roles
-	 * Added cache support for performance
+	 *
+	 * Added cache support for performance.
 	 *
 	 * @since   2.0
 	 * @return  array    Role(s) all roles as array
@@ -370,7 +367,8 @@ class Gleez_ACL {
 	
 	/**
 	 * Get all the enabled permissions for all roles
-	 * Added cache support for performance
+	 *
+	 * Added cache support for performance.
 	 *
 	 * @since   2.0
 	 * @return  boolean  FALSE If the role(s) doesn't have any permission
@@ -401,12 +399,10 @@ class Gleez_ACL {
 		return $perms;
 	}
 
-	/*
+	/**
 	 * Sets the permissions; both role based and user based
 	 *
 	 * @param Model_User User object
-	 *
-	 * return void
 	 */
 	protected static function _set_permissions($user)
 	{
@@ -430,7 +426,7 @@ class Gleez_ACL {
 			}
 		}
 
-		//user based paermissions
+		// User based permissions
 		foreach($user_perms as $perm => $val)
 		{
 			if($val == ACL::PERM_ALLOW)
@@ -451,7 +447,7 @@ class Gleez_ACL {
 	/**
 	 * Make sure the user has permission to do certain action on this object
 	 *
-	 * Similar to Post::access but this return TRUE/FALSE instead of exception
+	 * Similar to [Post::access] but this return TRUE/FALSE instead of exception
 	 *
 	 * @param   string     $action  The action `view|edit|delete` default `view`
 	 * @param   ORM        $post    The post object
@@ -552,7 +548,7 @@ class Gleez_ACL {
 	/**
 	 * Make sure the user has permission to do the action on this object
 	 *
-	 * Similar to Comment::access but this return TRUE/FALSE instead of exception
+	 * Similar to [Comment::access] but this return TRUE/FALSE instead of exception
 	 *
 	 * @param   string     $action   The action `view|edit|delete` default `view`
 	 * @param   ORM        $comment  The comment object
