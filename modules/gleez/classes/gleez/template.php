@@ -199,7 +199,7 @@ abstract class Gleez_Template extends Controller {
 		if (Kohana::$profiling)
 		{
 			// Start a new benchmark
-			$this->_benchmark = Profiler::start('Gleez', 'Gleez Controller');
+			$this->_benchmark = Profiler::start('Gleez', ucfirst($this->request->controller()) .' Controller');
 		}
 
 		// Test whether the current request is command line request
