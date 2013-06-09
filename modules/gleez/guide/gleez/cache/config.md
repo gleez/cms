@@ -20,7 +20,7 @@ Name           | Required | Description
 -------------- | -------- | ---------------------------------------------------------------
 driver         | __YES__  | (_string_) The driver type to use
 default_expire | __NO__   | (_string_) The driver type to use
-prefix         | __NO__   | (_string_) The site specefic prefix key
+prefix         | __NO__   | (_string_) The site specific prefix key
 
 
 	'file'  => array
@@ -28,7 +28,7 @@ prefix         | __NO__   | (_string_) The site specefic prefix key
 		'driver'             => 'file',
 		'cache_dir'          => APPPATH.'cache/.gleez_cache',
 		'default_expire'     => 3600,
-                'prefix'             => '74td75j'
+		'prefix'             => '74td75j'
 	),
 
 ## Memcache & Memcached-tag settings
@@ -56,8 +56,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 	(
 		'driver'             => 'memcache',
 		'default_expire'     => 3600,
-		'compression'        => FALSE,              // Use Zlib compression 
-		                                            (can cause issues with integers)
+		'compression'        => FALSE, // Use Zlib compression (can cause issues with integers)
 		'servers'            => array
 		(
 			'local' => array
@@ -67,7 +66,7 @@ failure_callback | __NO__   | (_[callback](http://www.php.net/manual/en/language
 				'persistent'       => FALSE,        // Persistent connection
 			),
 		),
-                'prefix'            => '74td75j' //site specefic prefix key
+		'prefix'            => '74td75j' //site specific prefix key
 	),
 	'memcachetag' => array
 	(
@@ -134,7 +133,7 @@ The following example demonstrates how to override an existing configuration set
 		'memcache'   => array
 		(
 			'driver'         => 'memcache',  // Use Memcached as the default driver
-			'default_expire' => 8000,        // Overide default expiry
+			'default_expire' => 8000,        // Override default expiry
 			'servers'        => array
 			(
 				// Add a new server
@@ -160,6 +159,6 @@ The following example demonstrates how to add a new configuration setting, using
 		'fastkv'   => array
 		(
 			'driver'         => 'apc',  // Use apc as the default driver
-			'default_expire' => 1000,   // Overide default expiry
+			'default_expire' => 1000,   // Override default expiry
 		)
 	);
