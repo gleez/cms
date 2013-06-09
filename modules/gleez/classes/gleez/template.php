@@ -126,8 +126,8 @@ abstract class Gleez_Template extends Controller {
 	protected $_tabs;
 
 	/**
-	 * Profiling
-	 * @var array
+	 * Benchmark token
+	 * @var string
 	 */
 	protected $_benchmark;
 
@@ -198,7 +198,7 @@ abstract class Gleez_Template extends Controller {
 
 		if (Kohana::$profiling)
 		{
-			// Start a new benchmark
+			// Start a new benchmark token
 			$this->_benchmark = Profiler::start('Gleez', ucfirst($this->request->controller()) .' Controller');
 		}
 
@@ -721,9 +721,10 @@ abstract class Gleez_Template extends Controller {
 	}
 
 	/**
-	 * Set the profiler stats into template.
+	 * Set the profiler stats into template
 	 *
 	 * @uses  Profiler::groups
+	 *
 	 * @link  http://php.net/manual/en/function.number-format.php  number_format
 	 * @link  http://php.net/manual/en/function.get-included-files.php  get_included_files
 	 */
