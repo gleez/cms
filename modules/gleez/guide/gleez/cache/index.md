@@ -1,5 +1,17 @@
 # About Gleez Cache
 
+ ### Introduction to caching
+
+ Caching should be implemented with consideration. Generally, caching the result of resources
+ is faster than reprocessing them. Choosing what, how and when to cache is vital. PHP APC is
+ presently one of the fastest caching systems available, closely followed by Memcache. SQLite
+ and File caching are two of the slowest cache methods, however usually faster than reprocessing
+ a complex set of instructions.
+
+ Caching engines that use memory are considerably faster than the file based alternatives. But
+ memory is limited whereas disk space is plentiful. If caching large datasets it is best to use
+ file caching.
+
 [Gleez_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is
 supported where available natively to the cache system. Gleez Cache supports multiple 
 instances of cache engines through a grouped singleton pattern.
