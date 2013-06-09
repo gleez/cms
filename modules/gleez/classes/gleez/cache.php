@@ -1,9 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Gleez Core Cache Class
- * 
- * Gleez Cache provides a common interface to a variety of caching engines. Tags are
- * supported where available natively to the cache system. Cache supports multiple
+ *
+ * [Gleez Cache](gleez/cache/index) provides a common interface to a variety of caching engines.
+ * Tags are supported where available natively to the cache system. Cache supports multiple
  * instances of cache engines through a grouped singleton pattern.
  *
  * ### Supported cache engines
@@ -13,23 +13,11 @@
  * *  [Memcache](http://memcached.org/)
  * *  [Memcached-tags](http://code.google.com/p/memcached-tags/)
  * *  [SQLite](http://www.sqlite.org/)
- * *  [Xcache](http://xcache.lighttpd.net/)
- *
- * ### Introduction to caching
- *
- * Caching should be implemented with consideration. Generally, caching the result of resources
- * is faster than reprocessing them. Choosing what, how and when to cache is vital. PHP APC is
- * presently one of the fastest caching systems available, closely followed by Memcache. SQLite
- * and File caching are two of the slowest cache methods, however usually faster than reprocessing
- * a complex set of instructions.
- *
- * Caching engines that use memory are considerably faster than the file based alternatives. But
- * memory is limited whereas disk space is plentiful. If caching large datasets it is best to use
- * file caching.
+ * *  [Wincache](http://php.net/manual/en/book.wincache.php)
  *
  * ### Configuration settings
  *
- * Kohana Cache uses configuration groups to create cache instances. A configuration group can
+ * Gleez Cache uses configuration groups to create cache instances. A configuration group can
  * use any supported driver, with successive groups using the same driver type if required.
  *
  * #### Configuration example
@@ -78,12 +66,14 @@ abstract class Gleez_Cache {
 	const DEFAULT_EXPIRE = 86400;
 
 	/**
-	 * @var   string     default driver to use
+	 * Default driver to use
+	 * @var string
 	 */
 	public static $default = 'file';
 
 	/**
-	 * @var   Kohana_Cache instances
+	 * Gleez_Cache instances
+	 * @var array
 	 */
 	public static $instances = array();
 
@@ -126,20 +116,19 @@ abstract class Gleez_Cache {
 		{
 			// Use the default setting by gleez
 			$group = Cache::$default;
-                
-                	if (isset(Cache::$instances[$group]))
-                        {
-                                // Return the current group if initiated already
-                                return Cache::$instances[$group];
-                        }
-                
-                        if ( ! $config->offsetExists($group))
-                        {
-                                throw new Cache_Exception(
-                                        'Failed to load Kohana Cache group: :group',
-                                        array(':group' => $group)
-                                );
-                        }
+
+			if (isset(Cache::$instances[$group]))
+			{
+				// Return the current group if initiated already
+				return Cache::$instances[$group];
+			}
+
+			if ( ! $config->offsetExists($group))
+			{
+				throw new Cache_Exception('Failed to load Gleez Cache group: :group',
+					array(':group' => $group)
+				);
+			}
 		}
 
 		$config = $config->get($group);
@@ -160,13 +149,13 @@ abstract class Gleez_Cache {
 
 	/**
 	 * Ensures singleton pattern is observed, loads the default expiry
-	 * 
+	 *
 	 * @param  array  $config  configuration
 	 */
 	protected function __construct(array $config)
 	{
 		$this->_config['prefix'] = isset($config['prefix']) ? $config['prefix'].self::SEPARATOR : md5(dirname(__FILE__)).self::SEPARATOR;
-    
+
 		$this->config($config);
 	}
 
@@ -187,8 +176,8 @@ abstract class Gleez_Cache {
 	 *     // Get a configuration setting
 	 *     $servers = $cache->config('servers);
 	 *
-	 * @param   mixed    key to set to array, either array or config path
-	 * @param   mixed    value to associate with key
+	 * @param   mixed  $key    Key to set to array, either array or config path [Optional]
+	 * @param   mixed  $value  Value to associate with key [Optional]
 	 * @return  mixed
 	 */
 	public function config($key = NULL, $value = NULL)
@@ -219,7 +208,7 @@ abstract class Gleez_Cache {
 	 */
 	final public function __clone()
 	{
-		throw new Cache_Exception('Cloning of Kohana_Cache objects is forbidden');
+		throw new Cache_Exception('Cloning of Gleez_Cache objects is forbidden');
 	}
 
 	/**
@@ -292,23 +281,30 @@ abstract class Gleez_Cache {
 	abstract public function delete_pattern($pattern);
 
 	/**
-	 * Delete all cache entries.
+	 * Delete all cache entries
 	 *
-	 * Beware of using this method when
-	 * using shared memory cache systems, as it will wipe every
-	 * entry within the system for all clients.
+	 * Beware of using this method when using shared memory cache systems,
+	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the default group
-	 *     Cache::instance()->delete_all();
+	 * The clean mode can be:
 	 *
-	 *     // Delete all cache entries in the memcache group
-	 *     Cache::instance('memcache')->delete_all();
+	 *  + `Cache::ALL`: remove all keys (default)
+	 *  + `Cache::OLD`: remove all expired keys
 	 *
-	 * @param  string  $mode  The clean mode
-	 *                        Cache::ALL: remove all keys (default)
-	 *                        Cache::OLD: remove all expired keys
+	 * ### Examples
 	 *
-	 * @return Boolean true if no problem
+	 * Delete all cache entries in the default group:<br>
+	 * <code>
+	 *   Cache::instance()->delete_all();
+	 * </code>
+	 *
+	 * Delete all cache entries in the memcache group:
+	 * <code>
+	 *   Cache::instance('memcache')->delete_all();
+	 * </code>
+	 *
+	 * @param   integer  $mode The clean mode [Optional]
+	 * @return  boolean  TRUE if no problem
 	 */
 	abstract public function delete_all($mode = Cache::ALL);
 
@@ -326,10 +322,10 @@ abstract class Gleez_Cache {
 		{
 			$data[$key] = $this->get($key);
 		}
-      
+
 		return $data;
 	}
-      
+
 	/**
 	 * Computes lifetime.
 	 *
@@ -361,7 +357,7 @@ abstract class Gleez_Cache {
 			array('.+?',    '[^'.preg_quote(Cache::SEPARATOR, '#').']+'),
 			preg_quote($pattern, '#')
 		);
-	    
+
 		return '#^'.$regexp.'$#';
 	}
 
@@ -381,4 +377,4 @@ abstract class Gleez_Cache {
 	}
 }
 
-class Cache_Exception extends Kohana_Exception {}
+class Cache_Exception extends Gleez_Exception {}
