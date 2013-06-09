@@ -7,6 +7,8 @@
    - [HMVC](about.hmvc)
 - [Assets Manager](assets)
 - [Breadcrumb](breadcrumb)
+- [Gleez Mango](mango/index)
+  - [Configuration](mango/config)
 
 #### Cache
 - [Getting Started](cache/index)
