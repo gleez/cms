@@ -36,7 +36,7 @@ class Gleez_Database_MySQLi extends Database {
 	/**
 	 * Connect to the database
 	 *
-	 * This is called automatically when the first query is executed.
+	 * [!!] This is called automatically when the first query is executed.
 	 *
 	 * Example:<br>
 	 * <code>
@@ -134,7 +134,7 @@ class Gleez_Database_MySQLi extends Database {
 	/**
 	 * Disconnect from the database
 	 *
-	 * This is called automatically by [Database::__destruct].
+	 * [!!] This is called automatically by [Database::__destruct].
 	 *
 	 * Example:<br>
 	 * <code>
@@ -176,7 +176,7 @@ class Gleez_Database_MySQLi extends Database {
 	/**
 	 * Select the database
 	 *
-	 * This is called automatically by [Database_MySQLi::connect].
+	 * [!!] This is called automatically by [Database_MySQLi::connect].
 	 *
 	 * @param   string  $database  Database name
 	 * @throws  Database_Exception
@@ -199,7 +199,7 @@ class Gleez_Database_MySQLi extends Database {
 	/**
 	 * Set the connection character set
 	 *
-	 * This is called automatically by [Database_MySQLi::connect].
+	 * [!!] This is called automatically by [Database_MySQLi::connect].
 	 *
 	 * Example:<br>
 	 * <code>
