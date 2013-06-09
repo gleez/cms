@@ -7,5 +7,7 @@ Disallow: /themes/
 Disallow: /admin/
 Disallow: /page/add
 Disallow: /page/edit
+Disallow: /blog/add
+Disallow: /blog/edit
 Disallow: /user/login
 Disallow: /user/logout
