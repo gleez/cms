@@ -86,17 +86,38 @@ Kohana::modules(array(
 ));
 
 /**
- * Attach the file write to logging.
+ * ### Attach the file write to logging
  *
  * Multiple writers are supported.
  *
- * For use Log_Mango() Gleez Mango is required.
- * Enable `mango` in [Kohana::modules].
+ * ### Usage:
  *
- * Usage:<br>
+ * Using file log writer:<br>
+ * <code>
+ *   Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+ * </code>
+ *
+ * Using STDERR log writer:<br>
+ * <code>
+ *   Kohana::$log->attach(new Log_StdErr());
+ * </code>
+ *
+ * Using STDOUT log writer:<br>
+ * <code>
+ *   Kohana::$log->attach(new Log_StdOut());
+ * </code>
+ *
+ * Using Syslog log writer:<br>
+ * <code>
+ *   Kohana::$log->attach(new Log_Syslog());
+ * </code>
+ *
+ * Using Gleez Mango Log:<br>
  * <code>
  *   Kohana::$log->attach(new Log_Mango());
  * </code>
+ *
+ * @todo Add guide about this to the userguide and wiki
  */
 Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 
