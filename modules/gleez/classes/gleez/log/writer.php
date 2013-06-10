@@ -101,7 +101,7 @@ abstract class Gleez_Log_Writer {
 
 		$exception = isset($message['additional']['exception']) ? $message['additional']['exception'] : NULL;
 		$message['time']  = Date::formatted_time($message['time'], Log_Writer::$timestamp, Log_Writer::$timezone);
-		$message['level'] = $this->_log_levels[$message['level']];
+		$message['level'] = Arr::get($this->_log_levels, $message['level']);
 
 		unset($message['additional'], $message['trace']);
 
