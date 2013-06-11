@@ -5,14 +5,14 @@
 * The application directory must contain the bootstrap.php file.
 * This automatically detects multi-site configuration found in 'sites' directory
 *
-* @see  http://kohanaframework.org/guide/about.install#application
+* @link  http://kohanaframework.org/guide/about.install#application
 */
 $application = 'application';
 
 /**
  * The directory in which your modules are located.
  *
- * @see  http://kohanaframework.org/guide/about.install#modules
+ * @link  http://kohanaframework.org/guide/about.install#modules
  */
 $modules = 'modules';
 
@@ -20,7 +20,7 @@ $modules = 'modules';
  * The directory in which the Gleez resources are located. The Gleez system
  * directory must contain the classes/kohana.php file.
  *
- * @see  http://kohanaframework.org/guide/about.install#system
+ * @link  http://kohanaframework.org/guide/about.install#system
  */
 $gleez = 'modules/gleez';
 
@@ -28,7 +28,7 @@ $gleez = 'modules/gleez';
  * The directory in which the Kohana resources are located. The system
  * directory must contain the classes/kohana.php file.
  *
- * @see  http://kohanaframework.org/guide/about.install#system
+ * @link  http://kohanaframework.org/guide/about.install#system
  */
 $system = 'system';
 
@@ -44,7 +44,7 @@ $themes = 'themes';
  * The default extension of resource files. If you change this, all resources
  * must be renamed to use the new extension.
  *
- * @see  http://kohanaframework.org/guide/about.install#ext
+ * @link  http://kohanaframework.org/guide/about.install#ext
  */
 define('EXT', '.php');
 
@@ -67,7 +67,7 @@ error_reporting(E_ALL | E_STRICT);
  * End of standard configuration! Changing any of the code below should only be
  * attempted by those with a working knowledge of Kohana internals.
  *
- * @see  http://kohanaframework.org/guide/using.configuration
+ * @link  http://kohanaframework.org/guide/using.configuration
  */
 
 // Set the full path to the docroot
