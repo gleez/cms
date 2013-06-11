@@ -77,7 +77,7 @@ class Gleez_Core {
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
 			// @todo We need error handler with Gleez Views
-			Kohana_Exception::$error_view = 'errors/stack';
+			Gleez_Exception::$error_view = 'errors/stack';
 		}
 
 		// Turn off notices and strict errors in production
@@ -308,7 +308,7 @@ class Gleez_Core {
 	 *
 	 * @param   string  $file The file name
 	 * @return  string  The file path
-	 * @throws  Kohana_Exception Indicates that the file does not exist
+	 * @throws  Gleez_Exception Indicates that the file does not exist
 	 * @uses    Kohana::modules
 	 */
 	protected static function find_file_custom($file)
@@ -346,7 +346,7 @@ class Gleez_Core {
 			return $uri;
 		}
 
-		throw new Kohana_Exception('Unable to locate file `:file`. No file exists with the specified file name.', array(
+		throw new Gleez_Exception('Unable to locate file `:file`. No file exists with the specified file name.', array(
 			':file' => $file
 		));
 	}
