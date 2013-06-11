@@ -16,14 +16,14 @@ abstract class Gleez_Log_Writer {
 
 	/**
 	 * Timestamp format for log entries.
-	 * Defaults to Date::$timestamp_format
+	 * Defaults to [Date::$timestamp_format]
 	 * @var string
 	 */
 	public static $timestamp;
 
 	/**
 	 * Timezone for log entries.
-	 * Defaults to Date::$timezone, which defaults to date_default_timezone_get()
+	 * Defaults to [Date::$timezone], which defaults to date_default_timezone_get()
 	 * @var string
 	 */
 	public static $timezone;
@@ -101,7 +101,7 @@ abstract class Gleez_Log_Writer {
 
 		$exception = isset($message['additional']['exception']) ? $message['additional']['exception'] : NULL;
 		$message['time']  = Date::formatted_time($message['time'], Log_Writer::$timestamp, Log_Writer::$timezone);
-		$message['level'] = Arr::get($this->_log_levels, $message['level']);
+		$message['level'] = $this->_log_levels[$message['level']];
 
 		unset($message['additional'], $message['trace']);
 
