@@ -186,7 +186,7 @@ class Kohana {
 	 * `boolean` | caching    | Cache file locations to speed up [Kohana::find_file].  This has nothing to do with [Kohana::cache], [Fragments](kohana/fragments) or the [Cache module](cache).  <br /> <br />  Recommended setting: `FALSE` while developing, `TRUE` on production servers. | `FALSE`
 	 * `boolean` | expose     | Set the X-Powered-By header
 	 *
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 * @param   array   $settings   Array of settings.  See above.
 	 * @return  void
 	 * @uses    Kohana::globals
@@ -224,7 +224,7 @@ class Kohana {
 		if (Kohana::$errors === TRUE)
 		{
 			// Enable Kohana exception handling, adds stack traces and error source.
-			set_exception_handler(array('Kohana_Exception', 'handler'));
+			set_exception_handler(array('Gleez_Exception', 'handler'));
 
 			// Enable Kohana error handling, converts all PHP errors to exceptions.
 			set_error_handler(array('Kohana', 'error_handler'));
@@ -264,7 +264,7 @@ class Kohana {
 				}
 				catch (Exception $e)
 				{
-					throw new Kohana_Exception('Could not create cache directory :dir',
+					throw new Gleez_Exception('Could not create cache directory :dir',
 						array(':dir' => Debug::path($settings['cache_dir'])));
 				}
 			}
@@ -286,14 +286,14 @@ class Kohana {
 			}
 			catch (Exception $e)
 			{
-				throw new Kohana_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create cache directory :dir',
 					array(':dir' => Debug::path(Kohana::$cache_dir)));
 			}
 		}
 
 		if ( ! is_writable(Kohana::$cache_dir))
 		{
-			throw new Kohana_Exception('Directory :dir must be writable',
+			throw new Gleez_Exception('Directory :dir must be writable',
 				array(':dir' => Debug::path(Kohana::$cache_dir)));
 		}
 
@@ -525,7 +525,7 @@ class Kohana {
 		}
 		catch (Exception $e)
 		{
-			Kohana_Exception::handler($e);
+			Gleez_Exception::handler($e);
 			die;
 		}
 	}
@@ -560,7 +560,7 @@ class Kohana {
 			else
 			{
 				// This module is invalid, remove it
-				throw new Kohana_Exception('Attempted to load an invalid or missing module \':module\' at \':path\'', array(
+				throw new Gleez_Exception('Attempted to load an invalid or missing module \':module\' at \':path\'', array(
 					':module' => $name,
 					':path'   => Debug::path($path),
 				));
@@ -831,7 +831,7 @@ class Kohana {
 	 *     // Get the "foo" cache
 	 *     $foo = Kohana::cache('foo');
 	 *
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 * @param   string    $name       name of the cache
 	 * @param   mixed     $data       data to cache
 	 * @param   integer   $lifetime   number of seconds the cache is valid for
@@ -853,11 +853,11 @@ class Kohana {
 		//no data provided we read
 		if ($data === NULL)
 		{
-		    return Cache::instance()->get($name);
+		    //return Cache::instance()->get($name);
 		}
 		else
 		{
-		    return Cache::instance()->set($name, $data, $lifetime);
+		    //return Cache::instance()->set($name, $data, $lifetime);
 		}
 	}
 
@@ -932,7 +932,7 @@ class Kohana {
 	/**
 	 * Catches errors that are not caught by the error handler, such as E_PARSE.
 	 *
-	 * @uses    Kohana_Exception::handler
+	 * @uses    Gleez_Exception::handler
 	 * @return  void
 	 */
 	public static function shutdown_handler()
@@ -954,7 +954,7 @@ class Kohana {
 		catch (Exception $e)
 		{
 			// Pass the exception to the handler
-			Kohana_Exception::handler($e);
+			Gleez_Exception::handler($e);
 		}
 
 		if (Kohana::$errors AND $error = error_get_last() AND in_array($error['type'], Kohana::$shutdown_errors))
@@ -963,7 +963,7 @@ class Kohana {
 			ob_get_level() and ob_clean();
 
 			// Fake an exception for nice debugging
-			Kohana_Exception::handler(new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
+			Gleez_Exception::handler(new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
 
 			// Shutdown now to avoid a "death loop"
 			exit(1);
