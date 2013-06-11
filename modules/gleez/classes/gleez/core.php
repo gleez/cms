@@ -32,13 +32,21 @@ class Gleez_Core {
 	public static $theme = 'fluid';
 
 	/**
-	 * Has [Gleez::_ginit] been called?
+	 * Has [Gleez::ready] been called?
 	 * @var boolean
 	 */
 	protected static $_ginit = FALSE;
 
 	/**
 	 * Runs the Gleez environment
+	 *
+	 * @uses  Gleez::_set_cookie
+	 * @uses  Gleez::_set_locale
+	 * @uses  Route::set
+	 * @uses  Route::defaults
+	 * @uses  Config::load
+	 * @uses  Module::load_modules
+	 * @uses  Theme::load_themes
 	 */
 	public static function ready()
 	{
@@ -48,34 +56,13 @@ class Gleez_Core {
 			return;
 		}
 
-		/**
-		 * Gleez is now initialized?
-		 * @var boolean
-		 */
+		// Gleez is now initialized?
 		self::$_ginit = TRUE;
 
-		/**
-		 * Set default cookie salt
-		 *
-		 * [!!] Also you can define a salt for the `Cookie` class in bootstrap.php:
-		 *      <code>
-		 *         Cookie::$salt = [really-long-cookie-salt-here]
-		 *      <code>
-		 *
-		 * @var string
-		 */
-		Cookie::$salt = Kohana::$config->load('cookie.salt');
+		// Set default cookie salt and lifetime
+		self::_set_cookie();
 
-		/**
-		 * Default cookie lifetime
-		 * @var string
-		 */
-		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
-
-		/**
-		 * Check database config file exist or not
-		 * @var boolean
-		 */
+		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
 
 		if (Gleez::$installed)
@@ -89,6 +76,7 @@ class Gleez_Core {
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
+			// @todo We need error handler with Gleez Views
 			Kohana_Exception::$error_view = 'errors/stack';
 		}
 
@@ -99,10 +87,7 @@ class Gleez_Core {
 			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 		}
 	
-		/**
-		 * Disable the kohana powered headers
-		 * @var boolean
-		 */
+		// Disable the kohana powered headers
 		Kohana::$expose = FALSE;
 
 		/**
@@ -112,7 +97,7 @@ class Gleez_Core {
 		if ( ! Gleez::$installed)
 		{
 			Session::$default = 'cookie';
-			Kohana_Exception::$error_view = 'kohana/error';
+			Gleez_Exception::$error_view = 'kohana/error';
 
 			// Static file serving (CSS, JS, images)
 			Route::set('install/media', 'media(/<file>)', array(
@@ -437,4 +422,21 @@ class Gleez_Core {
 		Cookie::set('lang', $lang);
 	}
 
+	/**
+	 * Set default cookie [salt](gleez/cookie/config#salt)
+	 * and [lifetime](gleez/cookie/config#expiration)
+	 *
+	 * Also you can define a salt for the `Cookie` class in bootstrap.php:<br>
+	 * <code>
+	 *   Cookie::$salt = [really-long-cookie-salt-here]
+	 * </code>
+	 */
+	protected static function _set_cookie()
+	{
+		/** @var Cookie::$salt string */
+		Cookie::$salt = Kohana::$config->load('cookie.salt');
+
+		/** @var Cookie::$expiration string */
+		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
+	}
 }
