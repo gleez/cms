@@ -105,7 +105,7 @@ class Gleez_Log_File extends Log_Writer {
 			}
 			catch (Exception $e)
 			{
-				throw new Gleez_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create log directory :dir',
 					array(':dir' => Debug::path($directory)));
 			}
 		}
@@ -122,7 +122,7 @@ class Gleez_Log_File extends Log_Writer {
 			}
 			catch (Exception $e)
 			{
-				throw new Gleez_Exception('Could not create cache directory :dir',
+				throw new Gleez_Exception('Could not create log directory :dir',
 					array(':dir' => Debug::path($directory)));
 			}
 		}
@@ -150,6 +150,7 @@ class Gleez_Log_File extends Log_Writer {
 		foreach ($messages as $message)
 		{
 			$message = Arr::merge($message, $info);
+
 			// Write each message into the log file
 			file_put_contents($filename, PHP_EOL.$this->format_message($message, Log_File::$format_string), FILE_APPEND);
 		}
