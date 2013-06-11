@@ -2,9 +2,290 @@
 /**
  * Gleez Exception Class
  *
+ * Translates exceptions using the [I18n] class
+ *
  * @package    Gleez\Exceptions
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @author     Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
+ * @license    http://kohanaframework.org/license
  */
-class Gleez_Exception extends Kohana_Kohana_Exception {}
+class Gleez_Exception extends Exception {
+
+	/**
+	 * PHP error `code => human readable name`
+	 * @var array
+	 */
+	public static $php_errors = array(
+		E_ERROR              => 'Fatal Error',
+		E_USER_ERROR         => 'User Error',
+		E_PARSE              => 'Parse Error',
+		E_WARNING            => 'Warning',
+		E_USER_WARNING       => 'User Warning',
+		E_STRICT             => 'Strict',
+		E_NOTICE             => 'Notice',
+		E_RECOVERABLE_ERROR  => 'Recoverable Error',
+		E_DEPRECATED         => 'Deprecated',
+	);
+
+	/**
+	 * Error rendering view
+	 * @var string
+	 */
+	public static $error_view = 'kohana/error';
+
+	/**
+	 * Error view content type
+	 * @var string
+	 */
+	public static $error_view_content_type = 'text/html';
+
+	/**
+	 * Translate (localize) error message or not
+	 * @var bool
+	 */
+	public static $translate_errors = TRUE;
+
+	/**
+	 * Creates a new translated exception
+	 *
+	 * Usage:<br>
+	 * <code>
+	 *   throw new Gleez_Exception('Something went terrible wrong, :user', array(':user' => $user));
+	 * </code>
+	 *
+	 * @param  string     $message    Error message [Optional]
+	 * @param  array      $variables  Translation variables [Optional]
+	 * @param  integer    $code       The exception code [Optional]
+	 * @param  Exception  $previous   Previous exception [Optional]
+	 */
+	public function __construct($message = "", array $variables = NULL, $code = 0, Exception $previous = NULL)
+	{
+		if (Gleez_Exception::$translate_errors)
+		{
+			// Set the message
+			$message = __($message, $variables);
+		}
+
+		// Pass the message and integer code to the parent
+		parent::__construct($message, (int) $code, $previous);
+
+		// Save the unmodified code
+		// @link http://bugs.php.net/39615
+		$this->code = $code;
+	}
+
+	/**
+	 * Magic object-to-string method
+	 *
+	 * Usage:<br>
+	 * <code>
+	 *   echo $exception;
+	 * </code>
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return Gleez_Exception::text($this);
+	}
+
+	/**
+	 * Inline exception handler, displays the error message, source of the
+	 * exception, and the stack trace of the error.
+	 *
+	 * @param  Exception  $e  Exception
+	 */
+	public static function handler(Exception $e)
+	{
+		$response = Gleez_Exception::_handler($e);
+
+		// Send the response to the browser
+		echo $response->send_headers()->body();
+
+		exit(1);
+	}
+
+	/**
+	 * Exception handler, logs the exception and generates a Response object
+	 * for display.
+	 *
+	 * @param   Exception  $e  Exception
+	 * @return  mixed
+	 */
+	public static function _handler(Exception $e)
+	{
+		try
+		{
+			// Log the exception
+			Gleez_Exception::log($e);
+
+			// Generate the response
+			$response = Gleez_Exception::response($e);
+
+			return $response;
+		}
+		catch (Exception $e)
+		{
+			/**
+			 * Things are going *really* badly for us, We now have no choice
+			 * but to bail. Hard.
+			 */
+			// Clean the output buffer if one exists
+			ob_get_level() AND ob_clean();
+
+			// Set the Status code to 500, and Content-Type to text/plain.
+			header('Content-Type: text/plain; charset='.Kohana::$charset, TRUE, 500);
+
+			echo Gleez_Exception::text($e);
+
+			exit(1);
+		}
+	}
+
+	/**
+	 * Logs an exception
+	 *
+	 * @param  Exception  $e      Exception
+	 * @param  integer    $level  Level of message [Optional]
+	 *
+	 * @uses   Log::add
+	 * @uses   Log::write
+	 */
+	public static function log(Exception $e, $level = Log::EMERGENCY)
+	{
+		if (is_object(Kohana::$log))
+		{
+			// Create a text version of the exception
+			$error = Gleez_Exception::text($e);
+
+			// Add this exception to the log
+			Kohana::$log->add($level, $error, NULL, array('exception' => $e));
+
+			// Make sure the logs are written
+			Kohana::$log->write();
+		}
+	}
+
+	public static function response(Exception $e)
+	{
+		try
+		{
+			// Get the exception information
+			$class   = get_class($e);
+			$code    = $e->getCode();
+			$message = $e->getMessage();
+			$file    = $e->getFile();
+			$line    = $e->getLine();
+			$trace   = $e->getTrace();
+
+			if ( ! headers_sent())
+			{
+				// Make sure the proper http header is sent
+				$http_header_status = ($e instanceof HTTP_Exception) ? $code : 500;
+			}
+
+			/**
+			 * HTTP_Exceptions are constructed in the HTTP_Exception::factory()
+			 * method. We need to remove that entry from the trace and overwrite
+			 * the variables from above.
+			 */
+			if ($e instanceof HTTP_Exception AND $trace[0]['function'] == 'factory')
+			{
+				extract(array_shift($trace));
+			}
+
+			if ($e instanceof ErrorException)
+			{
+				/**
+				 * If XDebug is installed, and this is a fatal error,
+				 * use XDebug to generate the stack trace
+				 */
+				if (function_exists('xdebug_get_function_stack') AND $code == E_ERROR)
+				{
+					$trace = array_slice(array_reverse(xdebug_get_function_stack()), 4);
+
+					foreach ($trace as & $frame)
+					{
+						/**
+						 * XDebug pre 2.1.1 doesn't currently set the call type key
+						 * @link  http://bugs.xdebug.org/view.php?id=695
+						 */
+						if ( ! isset($frame['type']))
+						{
+							$frame['type'] = '??';
+						}
+
+						// XDebug also has a different name for the parameters array
+						if (isset($frame['params']) AND ! isset($frame['args']))
+						{
+							$frame['args'] = $frame['params'];
+						}
+					}
+				}
+
+				if (isset(Gleez_Exception::$php_errors[$code]))
+				{
+					// Use the human-readable error name
+					$code = Gleez_Exception::$php_errors[$code];
+				}
+			}
+
+			/**
+			 * The stack trace becomes unmanageable inside PHPUnit.
+			 *
+			 * The error view ends up several GB in size, taking
+			 * several minutes to render.
+			 */
+			if (defined('PHPUnit_MAIN_METHOD'))
+			{
+				$trace = array_slice($trace, 0, 2);
+			}
+
+			// Instantiate the error view.
+			$view = View::factory(Gleez_Exception::$error_view, get_defined_vars());
+
+			// Prepare the response object.
+			$response = Response::factory();
+
+			// Set the response status
+			$response->status(($e instanceof HTTP_Exception) ? $e->getCode() : 500);
+
+			// Set the response headers
+			$response->headers('Content-Type', Gleez_Exception::$error_view_content_type.'; charset='.Kohana::$charset);
+
+			// Set the response body
+			$response->body($view->render());
+		}
+		catch (Exception $e)
+		{
+			/**
+			 * Things are going badly for us, Lets try to keep things under control by
+			 * generating a simpler response object.
+			 */
+			$response = Response::factory();
+			$response->status(500);
+			$response->headers('Content-Type', 'text/plain');
+			$response->body(Gleez_Exception::text($e));
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Get a single line of text representing the exception:
+	 *
+	 * Error [ Code ]: Message ~ File [ Line ]
+	 *
+	 * @param   Exception  $e  Exception
+	 * @return  string
+	 */
+	public static function text(Exception $e)
+	{
+		return sprintf('%s [ %s ]: %s ~ %s [ %d ]',
+			get_class($e), $e->getCode(), strip_tags($e->getMessage()), Debug::path($e->getFile()), $e->getLine());
+	}
+}
