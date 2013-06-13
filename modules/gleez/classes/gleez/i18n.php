@@ -1,15 +1,141 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Add plural support to I18n
+ * Internationalization (i18n) class with plural support to I18n
  *
- * @package   Gleez\I18n
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license  Gleez CMS License
+ * Provides language loading and translation methods without dependencies on [gettext](http://php.net/gettext).
  *
- * @todo      Need optimize, and move __() and _e() to current environment
+ * Typically this class would never be used directly, but used via the __()
+ * function, which loads the message and replaces parameters:
+ *
+ *     // Display a translated message
+ *     echo __('Hello, world');
+ *
+ *     // With parameter replacement
+ *     echo __('Hello, :user', array(':user' => $username));
+ *
+ * @package    Gleez\I18n
+ * @author     Kohana Team
+ * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Gleez_I18n extends Kohana_I18n {
+class Gleez_I18n {
+	/**
+	 * @var  string   target language: en-us, es-es, zh-cn, etc
+	 */
+	public static $lang = 'en-us';
+
+	/**
+	 * @var  string  source language: en-us, es-es, zh-cn, etc
+	 */
+	public static $source = 'en-us';
+
+	/**
+	 * @var  array  cache of loaded languages
+	 */
+	protected static $_cache = array();
+
+	/**
+	 * Get and set the target language.
+	 *
+	 *     // Get the current language
+	 *     $lang = I18n::lang();
+	 *
+	 *     // Change the current language to Spanish
+	 *     I18n::lang('es-es');
+	 *
+	 * @param   string  $lang   new language setting
+	 * @return  string
+	 * @since   3.0.2
+	 */
+	public static function lang($lang = NULL)
+	{
+		if ($lang)
+		{
+			// Normalize the language
+			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', $lang));
+		}
+
+		return I18n::$lang;
+	}
+
+	/**
+	 * Returns translation of a string. If no translation exists, the original
+	 * string will be returned. No parameters are replaced.
+	 *
+	 *     $hello = I18n::get('Hello friends, my name is :name');
+	 *
+	 * @param   string  $string text to translate
+	 * @param   string  $lang   target language
+	 * @return  string
+	 */
+	public static function get($string, $lang = NULL)
+	{
+		if ( ! $lang)
+		{
+			// Use the global target language
+			$lang = I18n::$lang;
+		}
+
+		// Load the translation table for this language
+		$table = I18n::load($lang);
+
+		// Return the translated string if it exists
+		return isset($table[$string]) ? $table[$string] : $string;
+	}
+
+	/**
+	 * Returns the translation table for a given language.
+	 *
+	 *     // Get all defined Spanish messages
+	 *     $messages = I18n::load('es-es');
+	 *
+	 * @param   string  $lang   language to load
+	 * @return  array
+	 */
+	public static function load($lang)
+	{
+		if (isset(self::$_cache[$lang]))
+		{
+			return self::$_cache[$lang];
+		}
+
+		// New translation table
+		$table = array();
+
+		// Split the language: language, region, locale, etc
+		$parts = explode('-', $lang);
+
+		do
+		{
+			// Create a path for this set of parts
+			$path = implode(DIRECTORY_SEPARATOR, $parts);
+
+			if ($files = Kohana::find_file('i18n', $path, NULL, TRUE))
+			{
+				$t = array();
+				foreach ($files as $file)
+				{
+					// Merge the language strings into the sub table
+					$t = array_merge($t, Kohana::load($file));
+				}
+
+				// Append the sub table, preventing less specific language
+				// files from overloading more specific files
+				$table += $t;
+			}
+
+			// Remove the last part
+			array_pop($parts);
+		}
+		while ($parts);
+
+		// Cache the translation table locally
+		return self::$_cache[$lang] = $table;
+	}
 
 	/**
 	 * This method is borrowed from the s7ncms code:
@@ -236,56 +362,6 @@ class Gleez_I18n extends Kohana_I18n {
 			default: // en, de, etc.
 				return $count == 1 ? 'one' : 'other';
 		}
-	}
-
-	/**
-	 * Getter and setter for default system locale
-	 *
-	 * Get default locale:<br>
-	 * <code>
-	 *  echo I18n::locale();
-	 * </code>
-	 *
-	 * Set locale:<br>
-	 * <code>
-	 *  echo I18n::locale('en_US.utf8');
-	 * </code>
-	 *
-	 * @param   integer|string $locale Locale
-	 * @return  string
-	 *
-	 * @link    http://php.net/setlocale
-	 */
-	public static function locale($locale = 0)
-	{
-		return setlocale(LC_ALL, $locale);
-	}
-
-	/**
-	 * Setting localization by language
-	 *
-	 * @param   array   $locales  Array of locales (ex: `array('en' => array('LINUX' => 'en_US.utf-8', 'WINDOWS' => 'english', ...), ...)`)
-	 * @param   string  $lang     Language (ex: 'ru', 'en', 'it', etc)
-	 * @return  mixed|string
-	 */
-	public static function locale_by_lang(array $locales, $lang)
-	{
-		// Set default
-		$default =  I18n::locale(NULL);
-
-		if ( ! I18n::locale())
-		{
-			return $default;
-		}
-
-		$found = Arr::get($locales, $lang, FALSE);
-
-		if (is_array($found))
-		{
-			return Arr::get($found, System::os());
-		}
-
-		return I18n::locale();
 	}
 }
 
