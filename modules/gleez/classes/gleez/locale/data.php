@@ -15,10 +15,11 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
- * @link       http://msdn.microsoft.com/en-us/library/39cwe7zf.aspx MSDN Language Strings
- * @link       http://msdn.microsoft.com/en-us/library/cdax410z.aspx MSDN Country/Region Strings
- * @link       http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx Locale IDs Assigned by Microsoft
- * @link       http://msdn.microsoft.com/en-us/goglobal/bb895996.aspx Locale IDs, Input Locales, and Language Collections for Windows XP and Windows Server 2003
+ * @link       http://msdn.microsoft.com/en-us/library/39cwe7zf.aspx MSDN: Language Strings
+ * @link       http://msdn.microsoft.com/en-us/library/cdax410z.aspx MSDN: Country/Region Strings
+ * @link       http://msdn.microsoft.com/en-us/goglobal/bb964664.aspx MSDN: Locale IDs Assigned by Microsoft
+ * @link       http://msdn.microsoft.com/en-us/goglobal/bb895996.aspx MSDN: Locale IDs, Input Locales, and Language Collections for Windows XP and Windows Server 2003
+ * @link       http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_territory_information.html Language-Territory Information
  */
 class Gleez_Locale_Data {
 
