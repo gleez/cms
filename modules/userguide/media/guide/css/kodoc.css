@@ -4,6 +4,13 @@ html { background: #00262f; font-size: 70%; }
 body { margin: 0; }
 ol ol, ol ul, ul ul, ul ol { margin-bottom: 0; }
 a img { border: 0; }
+a {
+	-webkit-transition: all 0.25s linear;
+	-moz-transition: all 0.25s linear;
+	-ms-transition: all 0.25s linear;
+	-o-transition: all 0.25s linear;
+	transition: all 0.25s linear;
+}
 
 h1 small,
 h2 small,
@@ -140,3 +147,14 @@ h6:hover a.permalink {
 #kodoc-footer { padding: 1em 0; background: #00262f; color: #405c63; text-shadow: #00262f 0.1em 0.1em 1px; font-size: 0.9em; }
 	#kodoc-footer a { color: #809397; }
 	#kodoc-footer div.last { text-align: right; }
+.classname, .methodname {
+	font-family: monospace;
+	font-size: 1.1em;
+	background-color: #F8F8F8;
+	/*margin: 0 2px;*/
+	padding: 0 5px;
+	border: 1px solid #eaeaea;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
