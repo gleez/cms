@@ -41,7 +41,6 @@ class Gleez_Core {
 	 * Runs the Gleez environment
 	 *
 	 * @uses  Gleez::_set_cookie
-	 * @uses  Gleez::_set_locale
 	 * @uses  Route::set
 	 * @uses  Route::defaults
 	 * @uses  Config::load
@@ -70,9 +69,6 @@ class Gleez_Core {
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
 		}
-
-		// I18n settings
-		self::_set_locale();
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
@@ -383,43 +379,6 @@ class Gleez_Core {
 		$version = $full ? 'Gleez CMS ' . $version : $version;
 
 		return $version;
-	}
-
-	/**
-	 * I18n settings
-	 *
-	 * By default - English
-	 *
-	 * @uses  Cookie::get
-	 * @uses  Cookie::set
-	 */
-	protected static function _set_locale()
-	{
-		// First check cookies
-		$lang = Cookie::get('lang');
-
-		// If cookies are empty read accept_language
-		if (empty($lang) AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
-		{
-			$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-		}
-
-		// Check if the locale is available or not
-		$installed_locales = array_key_exists($lang, Kohana::$config->load('site.installed_locales'));
-
-		if ( ! $installed_locales)
-		{
-		    // By default - English
-		    $lang = 'en';
-		}
-
-		// Setting locale
-		I18n::locale_by_lang(Kohana::$config->load('site.installed_locales'), $lang);
-
-		// Setting lang
-		I18n::$lang = $lang;
-
-		Cookie::set('lang', $lang);
 	}
 
 	/**
