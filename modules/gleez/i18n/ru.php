@@ -207,6 +207,8 @@ return array
 	'Excerpt' => 'Анонс',
 	'Existing URL Path' => 'Существующий адрес',
 	// F
+	'Failed to load locale: :locale' => 'Не удалось загрузить локаль: :locale',
+	'Failed to autodetect of Locale!' => 'Не удалось автоматически определить локаль!',
 	'Favicon' => 'Иконка',
 	'Feedback' => 'Обратная связь',
 	'Filters Enabled' => 'Фильтрация данных',
