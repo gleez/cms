@@ -1,16 +1,15 @@
 # About Gleez Cache
 
- ### Introduction to caching
+## Introduction
 
- Caching should be implemented with consideration. Generally, caching the result of resources
- is faster than reprocessing them. Choosing what, how and when to cache is vital. PHP APC is
- presently one of the fastest caching systems available, closely followed by Memcache. SQLite
- and File caching are two of the slowest cache methods, however usually faster than reprocessing
- a complex set of instructions.
+Caching should be implemented with consideration. Generally, caching the result of resources
+is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APC](http://php.net/manual/en/book.apc.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
+a complex set of instructions.
 
- Caching engines that use memory are considerably faster than the file based alternatives. But
- memory is limited whereas disk space is plentiful. If caching large datasets it is best to use
- file caching.
+Caching engines that use memory are considerably faster than file based alternatives. But
+memory is limited whereas disk space is plentiful. If caching large datasets, such as large database result sets, it is best to use file caching.
+
+[!!] Cache drivers require the relevant PHP extensions to be installed. APC, eAccelerator, Memecached and Xcache all require non-standard PHP extensions.
 
 [Gleez_Cache] provides a common interface to a variety of caching engines. [Cache_Tagging] is
 supported where available natively to the cache system. Gleez Cache supports multiple 
@@ -24,17 +23,6 @@ instances of cache engines through a grouped singleton pattern.
  *  Memcached-tags ([Cache_Memcachetag])
  *  SQLite ([Cache_Sqlite])
  *  Wincache
-
-## Introduction to caching
-
-Caching should be implemented with consideration. Generally, caching the result of resources
-is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APC](http://php.net/manual/en/book.apc.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
-a complex set of instructions.
-
-Caching engines that use memory are considerably faster than file based alternatives. But
-memory is limited whereas disk space is plentiful. If caching large datasets, such as large database result sets, it is best to use file caching.
-
- [!!] Cache drivers require the relevant PHP extensions to be installed. APC, eAccelerator, Memecached and Xcache all require non-standard PHP extensions.
 
 ## What the Gleez Cache module does (and does not do)
 
