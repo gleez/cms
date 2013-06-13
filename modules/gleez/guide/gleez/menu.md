@@ -23,3 +23,6 @@
   - [Examples](orm/examples)
     - [Simple](orm/examples/simple)
     - [Validation](orm/examples/validation)
+
+#### Locale
+- [Getting Started](locale/index)
