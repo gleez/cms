@@ -19,7 +19,7 @@
 	<div id="kodoc-header">
 		<div class="container">
 			<a href="http://gleezcms.org/" id="logo">
-                                <img class="logo" title="Gleez CMS Light, Simple, Flexible Content Management System" alt="Gleez CMS Light, Simple, Flexible Content Management System" src="/media/logo.png"></a>
+				<img class="logo" title="Gleez CMS Light, Simple, Flexible Content Management System" alt="Gleez CMS Light, Simple, Flexible Content Management System" src="/media/logo.png">
 			</a>
 			<div id="kodoc-menu">
 				<ul>
@@ -86,7 +86,7 @@
 			<?php endif ?>
 			</div>
 			<div class="span-12 last right">
-			<p>Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez CMS') ?> v <?php echo Gleez::VERSION ?></p>
+				<p>Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez CMS') ?> v <?php echo Gleez::VERSION ?></p>
 			</div>
 		</div>
 	</div>

@@ -7,6 +7,8 @@
    - [HMVC](about.hmvc)
 - [Assets Manager](assets)
 - [Breadcrumb](breadcrumb)
+- [Gleez Mango](mango/index)
+  - [Configuration](mango/config)
 
 #### Cache
 - [Getting Started](cache/index)
@@ -23,3 +25,6 @@
   - [Examples](orm/examples)
     - [Simple](orm/examples/simple)
     - [Validation](orm/examples/validation)
+
+#### Locale
+- [Getting Started](locale/index)
