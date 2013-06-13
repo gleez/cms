@@ -17,7 +17,7 @@ return array(
 			'description' => 'Core CMS Module',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2011-2013 Gleez Team',
-		)	
+			'copyright' => '&copy; 2011-2013 Gleez Technologies',
+		)
 	)
 );
