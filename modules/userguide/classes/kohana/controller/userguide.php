@@ -1,10 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Kohana user guide and api browser.
+ * Gleez user guide and api browser
  *
- * @package    Kohana/Userguide
- * @category   Controllers
+ * @package    Gleez\Userguide\Controller
  * @author     Kohana Team
+ * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Kohana_Controller_Userguide extends Controller_Template {
 
@@ -42,8 +45,9 @@ abstract class Kohana_Controller_Userguide extends Controller_Template {
 	// List all modules that have userguides
 	public function index()
 	{
-		$this->template->title = "Userguide";
-		$this->template->breadcrumb = array('User Guide');
+		$this->template->title = __('User Guide');
+		$this->template->breadcrumb = array(__('User Guide'));
+
 		$this->template->content = View::factory('userguide/index', array('modules' => $this->_modules()));
 		$this->template->menu = View::factory('userguide/menu', array('modules' => $this->_modules()));
 		
@@ -373,8 +377,15 @@ abstract class Kohana_Controller_Userguide extends Controller_Template {
 		
 		return $markdown;
 	}
-	
-	// Get the list of modules from the config, and reverses it so it displays in the order the modules are added, but move Gleez to the top.
+
+	/**
+	 * Get modules from config
+	 *
+	 * Get the list of modules from the config, and reverses it so it displays
+	 * in the order the modules are added, but move Gleez to the top.
+	 *
+	 * @return array
+	 */
 	protected function _modules()
 	{
 		$modules = array_reverse(Kohana::$config->load('userguide.modules'));

@@ -4,6 +4,13 @@ html { background: #00262f; font-size: 70%; }
 body { margin: 0; }
 ol ol, ol ul, ul ul, ul ol { margin-bottom: 0; }
 a img { border: 0; }
+a {
+	-webkit-transition: all 0.25s linear;
+	-moz-transition: all 0.25s linear;
+	-ms-transition: all 0.25s linear;
+	-o-transition: all 0.25s linear;
+	transition: all 0.25s linear;
+}
 
 h1 small,
 h2 small,
@@ -100,43 +107,53 @@ h6:hover a.permalink {
 #kodoc-footer { float: left; clear: both; width: 100%; }
 
 #kodoc-header { padding: 58px 0 2em; background: #77c244 url(../img/header.png) center top repeat-x; }
-	#kodoc-logo { display: block; float: left; }
-	#kodoc-menu { float: right; margin-top: 12px; background: #113c32; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
-	#kodoc-menu ul { float: left; margin: 0; padding: 0 0.5em 0 0; }
-		#kodoc-menu li { display: block; float: left; margin: 0; padding: 0; }
-		#kodoc-menu li.first { padding-left: 0.5em; }
-			#kodoc-menu li a { display: block; height: 32px; line-height: 32px; padding: 0 0.8em; border-right: solid 1px #0f362d; border-left: solid 1px #144539; letter-spacing: 0.05em; text-decoration: none; text-transform: uppercase; color: #efefef; font-size: 90%; }
-			#kodoc-menu li.first a { border-left: 0; }
-			#kodoc-menu li.last a { border-right: 0; }
-			#kodoc-menu li a:hover { background: #164e41; border-left-color: #195a4b; color: #fff; text-shadow: #fff 0 0 1px; }
+#kodoc-logo { display: block; float: left; }
+#kodoc-menu { float: right; margin-top: 12px; background: #113c32; -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+#kodoc-menu ul { float: left; margin: 0; padding: 0 0.5em 0 0; }
+#kodoc-menu li { display: block; float: left; margin: 0; padding: 0; }
+#kodoc-menu li.first { padding-left: 0.5em; }
+#kodoc-menu li a { display: block; height: 32px; line-height: 32px; padding: 0 0.8em; border-right: solid 1px #0f362d; border-left: solid 1px #144539; letter-spacing: 0.05em; text-decoration: none; text-transform: uppercase; color: #efefef; font-size: 90%; }
+#kodoc-menu li.first a { border-left: 0; }
+#kodoc-menu li.last a { border-right: 0; }
+#kodoc-menu li a:hover { background: #164e41; border-left-color: #195a4b; color: #fff; text-shadow: #fff 0 0 1px; }
 
 #kodoc-content { background: #f1f8db url(../img/content.png) center top repeat-x; }
-	#kodoc-content .wrapper { min-height: 390px; padding: 1em 0; background: transparent url(../img/wrapper.png) center top no-repeat; }
-	#kodoc-content div.page-toc { float: right; margin: 1em; margin-top: 0; padding: 1em; background: #fff; border: solid 0.1em #e8efcf; border-radius: 0.6em; }
-	#kodoc-content p.intro { padding: 1em 20px; padding-left: 20px; margin: 0 -20px; font-size: 1.2em; }
-	#kodoc-content a { color: #004352; }
-	#kodoc-content a:hover { color: #00758f; }
-	#kodoc-content a:active { text-decoration: none; }
+#kodoc-content .wrapper { min-height: 390px; padding: 1em 0; background: transparent url(../img/wrapper.png) center top no-repeat; }
+#kodoc-content div.page-toc { float: right; margin: 1em; margin-top: 0; padding: 1em; background: #fff; border: solid 0.1em #e8efcf; border-radius: 0.6em; }
+#kodoc-content p.intro { padding: 1em 20px; padding-left: 20px; margin: 0 -20px; font-size: 1.2em; }
+#kodoc-content a { color: #004352; }
+#kodoc-content a:hover { color: #00758f; }
+#kodoc-content a:active { text-decoration: none; }
 
 #kodoc-breadcrumb { margin: 0 0 1em; padding: 0 0 0.5em; list-style: none; border-bottom: solid 1px #e8efcf; }
-	#kodoc-breadcrumb li { display: inline-block; margin: 0; padding: 0 0.4em 0 0; text-transform: uppercase; font-size: 11px; }
-	#kodoc-breadcrumb li:before { content: '»'; padding-right: 0.4em; }
-	#kodoc-breadcrumb li a { color: #999; text-decoration: none; }
+#kodoc-breadcrumb li { display: inline-block; margin: 0; padding: 0 0.4em 0 0; text-transform: uppercase; font-size: 11px; }
+#kodoc-breadcrumb li:before { content: '»'; padding-right: 0.4em; }
+#kodoc-breadcrumb li a { color: #999; text-decoration: none; }
 
-#kodoc-topics {  }
-	#kodoc-topics ul,
-	#kodoc-topics ol { list-style-type:none; margin: 0; padding: 0;}
-		#kodoc-topics ul li,
-		#kodoc-topics ol li { margin:0; padding: 0; margin-left: 1em; }
-		#kodoc-topics ul li a.current,
-		#kodoc-topics ol li a.current { font-weight: bold; }
-	#kodoc-topics span,
-	#kodoc-topics a { display: block; padding: 0; margin: 0; }
-	#kodoc-topics span { cursor: pointer; }
-	#kodoc-topics span.toggle { display: block; float: left; width: 1em; padding-right: 0.4em; margin-left: -1.4em; text-align: center; }
-
-	#kodoc-topics li span { cursor:pointer; }
+#kodoc-topics ul,
+#kodoc-topics ol { list-style-type:none; margin: 0; padding: 0;}
+#kodoc-topics ul li,
+#kodoc-topics ol li { margin:0; padding: 0; margin-left: 1em; }
+#kodoc-topics ul li a.current,
+#kodoc-topics ol li a.current { font-weight: bold; }
+#kodoc-topics span,
+#kodoc-topics a { display: block; padding: 0; margin: 0; }
+#kodoc-topics span { cursor: pointer; }
+#kodoc-topics span.toggle { display: block; float: left; width: 1em; padding-right: 0.4em; margin-left: -1.4em; text-align: center; }
+#kodoc-topics li span { cursor:pointer; }
 
 #kodoc-footer { padding: 1em 0; background: #00262f; color: #405c63; text-shadow: #00262f 0.1em 0.1em 1px; font-size: 0.9em; }
-	#kodoc-footer a { color: #809397; }
-	#kodoc-footer div.last { text-align: right; }
+#kodoc-footer a { color: #809397; }
+#kodoc-footer div.last { text-align: right; }
+
+tt, .classname, .methodname {
+	font-family: Consolas, "Liberation Mono", Courier, monospace;
+	font-size: 12px;
+	background-color: #F8F8F8;
+	margin: 0 2px;
+	padding: 0 5px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}

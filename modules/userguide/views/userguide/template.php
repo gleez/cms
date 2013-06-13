@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title><?php echo $title ?> | Kohana <?php echo 'User Guide'; ?></title>
+<title><?php echo $title ?> | Gleez CMS <?php echo 'User Guide'; ?></title>
 
 <?php foreach ($styles as $style => $media) echo HTML::style($style, array('media' => $media), NULL, TRUE), "\n" ?>
 
@@ -85,7 +85,7 @@
 			<?php endif ?>
 			</div>
 			<div class="span-12 last right">
-			<p>Powered by <?php echo HTML::anchor('http://kohanaframework.org/', 'Kohana') ?> v<?php echo Kohana::VERSION ?></p>
+				<p>Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez CMS') ?> v <?php echo Gleez::VERSION ?></p>
 			</div>
 		</div>
 	</div>
