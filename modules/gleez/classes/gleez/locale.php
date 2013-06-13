@@ -416,6 +416,18 @@ class Gleez_Locale {
 	}
 
 	/**
+	 * Returns the language part of the locale
+	 *
+	 * @return mixed
+	 */
+	public function get_language()
+	{
+		$locale = explode('_', $this->_locale);
+
+		return $locale[0];
+	}
+
+	/**
 	 * Sets a new locale
 	 *
 	 * @param  string|Gleez_Locale  $locale  New locale to set [Optional]
