@@ -189,11 +189,14 @@ class Kohana {
 	 * @throws  Gleez_Exception
 	 * @param   array   $settings   Array of settings.  See above.
 	 * @return  void
+	 *
 	 * @uses    Kohana::globals
 	 * @uses    Kohana::sanitize
 	 * @uses    Kohana::cache
 	 * @uses    Profiler
 	 * @uses    System::mkdir
+	 * @uses    Locale::set_lang_cookie
+	 * @uses    Locale::set_lang_cookie
 	 */
 	public static function init(array $settings = NULL)
 	{
@@ -223,12 +226,17 @@ class Kohana {
 
 		if (Kohana::$errors === TRUE)
 		{
-			// Enable Kohana exception handling, adds stack traces and error source.
+			// Enable Gleez exception handling, adds stack traces and error source.
 			set_exception_handler(array('Gleez_Exception', 'handler'));
 
 			// Enable Kohana error handling, converts all PHP errors to exceptions.
 			set_error_handler(array('Kohana', 'error_handler'));
 		}
+
+		// Setting locale
+		// @todo Set/Get lang from/to Cookie/Session
+		$locale = new Locale();
+		I18n::$lang = $locale->get_language();
 
 		// Enable the Kohana shutdown handler, which catches E_FATAL errors.
 		register_shutdown_function(array('Kohana', 'shutdown_handler'));
