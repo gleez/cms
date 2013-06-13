@@ -2,8 +2,7 @@
 /**
  * Gleez Locale
  *
- * Base class for localization.
- * Adds full [i18n and l10n][ref-wiki] support.
+ * Base class for [i18n and l10n][ref-wiki] support.
  *
  * [!!] This code and ideas partly borrowed and partly adapted from
  *      [Zend Framework][ref-zend] 1.12. Please see Zend license: /licenses/Zend.txt
@@ -26,7 +25,8 @@ class Gleez_Locale {
 	const CLIENT = 'client';
 
 	/**
-	 * PHP publishes the host server's locale via the PHP internal function setlocale().
+	 * PHP publishes the host server's locale via the PHP internal
+	 * function [setlocale()](http://php.net/setlocale).
 	 */
 	const ENVIRONMENT = 'environment';
 
@@ -90,31 +90,31 @@ class Gleez_Locale {
 	 *
 	 * Choosing a specific locale:<br>
 	 * <code>
-	 *   $locale = new Gleez_Locale('de_DE');
+	 *   $locale = new Locale('de_DE');
 	 * </code>
 	 *
 	 * Automatically selecting a locale:<br>
 	 * <code>
-	 *   $locale = new Gleez_Locale();
+	 *   $locale = new Locale();
 	 * </code>
 	 *
 	 * Default behavior, same as above:<br>
 	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::CLIENT);
+	 *   $locale = new Locale(Locale::CLIENT);
 	 * </code>
 	 *
 	 * Prefer settings on host server:<br>
 	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::ENVIRONMENT);
+	 *   $locale = new Locale(Locale::ENVIRONMENT);
 	 * </code>
 	 *
 	 * Prefer Gleez framework settings:<br>
 	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::FRAMEWORK);
+	 *   $locale = new Locale(Locale::FRAMEWORK);
 	 * </code>
 	 *
-	 * @param   string|Gleez_Locale  $locale  Locale for parsing input [Optional]
-	 * @throws  Gleez_Exception      When autodetect failed
+	 * @param   string|Locale     $locale  Locale for parsing input [Optional]
+	 * @throws  Locale_Exception  When autodetect failed
 	 */
 	public function __construct($locale = NULL)
 	{
@@ -156,17 +156,16 @@ class Gleez_Locale {
 	/**
 	 * Prepare and returns a single locale on detection
 	 *
-	 * @param   string|Gleez_Locale  $locale  Locale to work on
-	 * @param   boolean              $strict
+	 * @param   string|Locale     $locale  Locale to work on
+	 * @param   boolean           $strict  Strict preparation [Optional]
 	 * @return  string
-	 * @throws  Gleez_Exception      When no locale is set which is only possible when the class was wrong extended
+	 * @throws  Locale_Exception  When no locale is set which is only possible when the class was wrong extended
 	 *
 	 * @uses    Arr::merge
-	 * @uses    Arr::get
 	 * @uses    Locale_Data::locale_data
 	 * @uses    Locale_Data::territory_data
 	 */
-	private function _prepare_locale($locale, $strict = FALSE)
+	private static function _prepare_locale($locale, $strict = FALSE)
 	{
 		if ($locale instanceof Gleez_Locale)
 		{
@@ -180,9 +179,9 @@ class Gleez_Locale {
 
 		if (is_null(self::$_detected))
 		{
-			self::$_client_locales = self::get_client_locales();
+			self::$_client_locales      = self::get_client_locales();
 			self::$_environment_locales = self::get_environment_locales();
-			self::$_detected       = Arr::merge(self::$_client_locales, self::$_environment_locales, self::$_framework);
+			self::$_detected            = Arr::merge(self::$_client_locales, self::$_environment_locales, self::$_framework);
 		}
 
 		if ( ! $strict)
@@ -216,7 +215,7 @@ class Gleez_Locale {
 		// This can only happen when someone extends Gleez_Locale and erases the `$_framework`
 		if (is_null($locale))
 		{
-			throw new Gleez_Exception('Failed to autodetect of Locale!');
+			throw new Locale_Exception('Failed to autodetect of Locale!');
 		}
 
 		if (strpos($locale, '-') !== FALSE)
@@ -226,11 +225,11 @@ class Gleez_Locale {
 
 		$parts = explode('_', $locale);
 
-		if ( ! Arr::get(Locale_Data::locale_data(), $parts[0]))
+		if ( ! array_key_exists($parts[0], Locale_Data::locale_data()))
 		{
 			if ((count($parts) == 1) AND array_key_exists($parts[0], Locale_Data::territory_data()))
 			{
-				return Arr::get(Locale_Data::territory_data(), $parts[0]);
+				return Locale_Data::territory_data()[$parts[0]];
 			}
 
 			return '';
@@ -340,7 +339,7 @@ class Gleez_Locale {
 	 *
 	 * @return  array
 	 *
-	 * @link    http://php.net/manual/en/function.setlocale.php
+	 * @link    http://php.net/setlocale setlocale()
 	 */
 	public static function get_environment_locales()
 	{
@@ -431,15 +430,13 @@ class Gleez_Locale {
 	 * Sets a new locale
 	 *
 	 * @param  string|Gleez_Locale  $locale  New locale to set [Optional]
-	 *
-	 * @uses   Arr::get
 	 * @uses   Locale_Data::locale_data
 	 */
 	public function set_locale($locale = NULL)
 	{
 		$locale = self::_prepare_locale($locale);
 
-		if ( ! Arr::get(Locale_Data::locale_data(), $locale))
+		if ( ! array_key_exists($locale, Locale_Data::locale_data()))
 		{
 			$region = substr((string) $locale, 0, 3);
 
@@ -451,7 +448,7 @@ class Gleez_Locale {
 				}
 			}
 
-			if (Arr::get(Locale_Data::locale_data(), (string) $region))
+			if (array_key_exists((string) $region, Locale_Data::locale_data()))
 			{
 				$this->_locale = $region;
 			}
@@ -464,5 +461,63 @@ class Gleez_Locale {
 		{
 			$this->_locale = $locale;
 		}
+	}
+
+	/**
+	 * Set new default locale
+	 *
+	 * Sets a new default locale which will be used when no locale can be detected
+	 * If provided you can set a quality between 0 and 1 (or 2 and 100) which represents
+	 * the percent of quality the browser requested within HTTP
+	 *
+	 * Usage:<br>
+	 * <code>
+	 *   Gleez_Locale::set_default('de');
+	 * </code>
+	 *
+	 * @param   string|Gleez_Locale  $locale   Locale to set
+	 * @param   integer              $quality  The quality to set from 0 to 1 [Optional]
+	 * @throws  Locale_Exception
+	 *
+	 * @uses    Arr::merge
+	 */
+	public static function set_default($locale, $quality = 1)
+	{
+		if (in_array($locale, array('detected', 'root', 'framework', 'environment', 'client')))
+		{
+			throw new Locale_Exception('Only full qualified locales can be used as default!');
+		}
+
+		if (($quality < 0.1) or ($quality > 100))
+		{
+			throw new Locale_Exception('Locale quality (priority) must be between 0.1 and 100');
+		}
+
+		if ($quality > 1)
+		{
+			$quality /= 100;
+		}
+
+		$locale = self::_prepare_locale($locale);
+
+		if (in_array((string) $locale, Locale_Data::locale_data()))
+		{
+			self::$_framework = array((string) $locale => $quality);
+		}
+		else
+		{
+			$elocale = explode('_', (string) $locale);
+
+			if (in_array($elocale[0], Locale_Data::locale_data()))
+			{
+				self::$_framework = array($elocale[0] => $quality);
+			}
+			else
+			{
+				throw new Locale_Exception("Can't set unknown locale as default!");
+			}
+		}
+
+		self::$_detected = Arr::merge(self::get_client_locales(), self::get_environment_locales(), self::get_framework_locales());
 	}
 }
