@@ -161,7 +161,6 @@ class Gleez_Locale {
 	 * @return  string
 	 * @throws  Locale_Exception  When no locale is set which is only possible when the class was wrong extended
 	 *
-	 * @uses    Arr::merge
 	 * @uses    Locale_Data::locale_data
 	 * @uses    Locale_Data::territory_data
 	 */
@@ -181,7 +180,7 @@ class Gleez_Locale {
 		{
 			self::$_client_locales      = self::get_client_locales();
 			self::$_environment_locales = self::get_environment_locales();
-			self::$_detected            = Arr::merge(self::$_client_locales, self::$_environment_locales, self::$_framework);
+			self::$_detected            = self::$_client_locales + self::$_environment_locales + self::$_framework;
 		}
 
 		if ( ! $strict)
@@ -223,13 +222,15 @@ class Gleez_Locale {
 			$locale = strtr($locale, '-', '_');
 		}
 
-		$parts = explode('_', $locale);
+		$parts          = explode('_', $locale);
+		$locale_data    = Locale_Data::locale_data();
+		$territory_data = Locale_Data::territory_data();
 
-		if ( ! array_key_exists($parts[0], Locale_Data::locale_data()))
+		if ( ! isset($locale_data[$parts[0]]))
 		{
-			if ((count($parts) == 1) AND array_key_exists($parts[0], Locale_Data::territory_data()))
+			if ((count($parts) == 1) AND array_key_exists($parts[0], $territory_data))
 			{
-				return Locale_Data::territory_data()[$parts[0]];
+				return $territory_data[$parts[0]];
 			}
 
 			return '';
@@ -264,7 +265,6 @@ class Gleez_Locale {
 	 * returned an array, i.e: `array('fr_FR' => 1.0, 'fr' => 1.0, 'en_US' => 0.6, 'en' => 0.6)`
 	 *
 	 * @return  array
-	 *
 	 * @link    http://php.net/manual/en/function.getenv.php getenv()
 	 */
 	public static function get_client_locales()
@@ -339,18 +339,24 @@ class Gleez_Locale {
 	 *
 	 * @return  array
 	 *
+	 * @uses    Locale_Data::locale_data
+	 * @uses    Locale_Data::$languages
+	 * @uses    Locale_Data::$regions
+	 *
 	 * @link    http://php.net/setlocale setlocale()
 	 */
 	public static function get_environment_locales()
 	{
+		// Return cache
 		if ( ! is_null(self::$_environment_locales))
 		{
 			return self::$_environment_locales;
 		}
 
-		$language  = setlocale(LC_ALL, 0);
-		$languages = explode(';', $language);
+		$language      = setlocale(LC_ALL, 0);
+		$languages     = explode(';', $language);
 		$languagearray = array();
+		$locale_data   = Locale_Data::locale_data();
 
 		foreach ($languages as $locale)
 		{
@@ -385,7 +391,7 @@ class Gleez_Locale {
 					$language
 				);
 
-				if (in_array($language, Locale_Data::locale_data()))
+				if (isset($locale_data[$language]))
 				{
 					$languagearray[$language] = 1;
 
@@ -430,13 +436,15 @@ class Gleez_Locale {
 	 * Sets a new locale
 	 *
 	 * @param  string|Gleez_Locale  $locale  New locale to set [Optional]
+	 *
 	 * @uses   Locale_Data::locale_data
 	 */
 	public function set_locale($locale = NULL)
 	{
-		$locale = self::_prepare_locale($locale);
+		$locale      = self::_prepare_locale($locale);
+		$locale_data = Locale_Data::locale_data();
 
-		if ( ! array_key_exists($locale, Locale_Data::locale_data()))
+		if ( ! isset($locale_data[(string)$locale]))
 		{
 			$region = substr((string) $locale, 0, 3);
 
@@ -448,7 +456,7 @@ class Gleez_Locale {
 				}
 			}
 
-			if (array_key_exists((string) $region, Locale_Data::locale_data()))
+			if (isset($locale_data[(string)$region]))
 			{
 				$this->_locale = $region;
 			}
@@ -479,7 +487,7 @@ class Gleez_Locale {
 	 * @param   integer              $quality  The quality to set from 0 to 1 [Optional]
 	 * @throws  Locale_Exception
 	 *
-	 * @uses    Arr::merge
+	 * @uses    Locale_Data::locale_data
 	 */
 	public static function set_default($locale, $quality = 1)
 	{
@@ -498,9 +506,10 @@ class Gleez_Locale {
 			$quality /= 100;
 		}
 
-		$locale = self::_prepare_locale($locale);
+		$locale      = self::_prepare_locale($locale);
+		$locale_data = Locale_Data::locale_data();
 
-		if (in_array((string) $locale, Locale_Data::locale_data()))
+		if (isset($locale_data[(string)$locale]))
 		{
 			self::$_framework = array((string) $locale => $quality);
 		}
@@ -508,7 +517,7 @@ class Gleez_Locale {
 		{
 			$elocale = explode('_', (string) $locale);
 
-			if (in_array($elocale[0], Locale_Data::locale_data()))
+			if (isset($locale_data[$elocale[0]]))
 			{
 				self::$_framework = array($elocale[0] => $quality);
 			}
@@ -518,6 +527,6 @@ class Gleez_Locale {
 			}
 		}
 
-		self::$_detected = Arr::merge(self::get_client_locales(), self::get_environment_locales(), self::get_framework_locales());
+		self::$_detected = self::get_client_locales() + self::get_environment_locales() + self::get_framework_locales();
 	}
 }
