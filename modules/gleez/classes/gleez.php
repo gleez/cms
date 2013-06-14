@@ -32,6 +32,15 @@ class Gleez {
 	public static $theme = 'fluid';
 
 	/**
+	 * Public [Gleez_Locale] object
+	 *
+	 * @todo In the future, this object should be moved to Gleez Core
+	 *
+	 * @var Gleez_Locale
+	 */
+	public static $locale = NULL;
+	
+	/**
 	 * Has [Gleez::ready] been called?
 	 * @var boolean
 	 */
@@ -86,6 +95,9 @@ class Gleez {
 		// Disable the kohana powered headers
 		Kohana::$expose = FALSE;
 
+		// Link the Kohana locale to gleez for temporary, it's not singleton
+		Gleez::$locale = Kohana::$locale;
+	
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
 		 * properly installed and send to the installer.
