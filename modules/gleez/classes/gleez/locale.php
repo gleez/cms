@@ -10,9 +10,9 @@
  * [ref-zend]: http://framework.zend.com/
  * [ref-wiki]: http://en.wikipedia.org/wiki/Internationalization_and_localization
  *
- * @package    Gleez\Base\I18n
+ * @package    Gleez\Base
  * @author     Sergey Yakovlev - Gleez
- * @version    0.0.1
+ * @version    0.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -90,31 +90,31 @@ class Gleez_Locale {
 	 *
 	 * Choosing a specific locale:<br>
 	 * <code>
-	 *   $locale = new Locale('de_DE');
+	 *   $locale = new Gleez_Locale('de_DE');
 	 * </code>
 	 *
 	 * Automatically selecting a locale:<br>
 	 * <code>
-	 *   $locale = new Locale();
+	 *   $locale = new Gleez_Locale();
 	 * </code>
 	 *
 	 * Default behavior, same as above:<br>
 	 * <code>
-	 *   $locale = new Locale(Locale::CLIENT);
+	 *   $locale = new Gleez_Locale(Gleez_Locale::CLIENT);
 	 * </code>
 	 *
 	 * Prefer settings on host server:<br>
 	 * <code>
-	 *   $locale = new Locale(Locale::ENVIRONMENT);
+	 *   $locale = new Gleez_Locale(Gleez_Locale::ENVIRONMENT);
 	 * </code>
 	 *
 	 * Prefer Gleez framework settings:<br>
 	 * <code>
-	 *   $locale = new Locale(Locale::FRAMEWORK);
+	 *   $locale = new Gleez_Locale(Gleez_Locale::FRAMEWORK);
 	 * </code>
 	 *
-	 * @param   string|Locale     $locale  Locale for parsing input [Optional]
-	 * @throws  Locale_Exception  When autodetect failed
+	 * @param   string|Gleez_Locale  $locale  Locale for parsing input [Optional]
+	 * @throws  Locale_Exception
 	 */
 	public function __construct($locale = NULL)
 	{
@@ -156,10 +156,10 @@ class Gleez_Locale {
 	/**
 	 * Prepare and returns a single locale on detection
 	 *
-	 * @param   string|Locale     $locale  Locale to work on
-	 * @param   boolean           $strict  Strict preparation [Optional]
+	 * @param   string|Gleez_Locale  $locale  Locale to work on
+	 * @param   boolean              $strict  Strict preparation [Optional]
 	 * @return  string
-	 * @throws  Locale_Exception  When no locale is set which is only possible when the class was wrong extended
+	 * @throws  Locale_Exception
 	 *
 	 * @uses    Locale_Data::locale_data
 	 * @uses    Locale_Data::territory_data
