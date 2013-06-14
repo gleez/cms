@@ -16,6 +16,14 @@ require GLZPATH.'classes/gleez'.EXT;
 date_default_timezone_set('Asia/Kolkata');
 
 /**
+ * Set the default locale.
+ *
+ * @link http://kohanaframework.org/guide/using.configuration
+ * @link http://www.php.net/manual/function.setlocale
+ */
+setlocale(LC_ALL, 'en_US.utf-8');
+
+/**
  * Enable the Kohana auto-loader.
  *
  * @link  http://kohanaframework.org/guide/using.autoloading
