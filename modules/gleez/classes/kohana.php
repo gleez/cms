@@ -235,7 +235,7 @@ class Kohana {
 
 		// Setting locale
 		// @todo Set/Get lang from/to Cookie/Session
-		$locale = new Locale();
+		$locale = new Gleez_Locale();
 		I18n::$lang = $locale->get_language();
 
 		// Enable the Kohana shutdown handler, which catches E_FATAL errors.
