@@ -423,7 +423,7 @@ class Gleez_Locale {
 	/**
 	 * Returns the language part of the locale
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_language()
 	{
