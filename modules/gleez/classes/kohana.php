@@ -139,6 +139,23 @@ class Kohana {
 	public static $config;
 
 	/**
+	 * Public [Gleez_Locale] object
+	 *
+	 * @todo In the future, this object should be moved to Gleez Core
+	 *
+	 * @var Gleez_Locale
+	 */
+	public static $locale = NULL;
+
+	/**
+	 * The switch for the [Gleez_Locale]
+	 *
+	 * @todo In the future, this variable should be moved to Gleez Core
+	 *
+	 * @var boolean
+	 */
+	public static $autolocale = TRUE;
+	/**
 	 * @var  boolean  Has [Kohana::init] been called?
 	 */
 	protected static $_init = FALSE;
@@ -233,10 +250,25 @@ class Kohana {
 			set_error_handler(array('Kohana', 'error_handler'));
 		}
 
-		// Setting locale
+		if (isset($settings['autolocale']))
+		{
+			// Manual enable Gleez_Locale
+			if ($settings['autolocale'] === TRUE)
+			{
+				Kohana::$locale = new Gleez_Locale();
+			}
+		}
+		elseif (Kohana::$autolocale)
+		{
+			// By default enable Gleez_Locale
+			Kohana::$locale = new Gleez_Locale();
+		}
+
 		// @todo Set/Get lang from/to Cookie/Session
-		$locale = new Gleez_Locale();
-		I18n::$lang = $locale->get_language();
+		if (Kohana::$locale AND Kohana::$autolocale)
+		{
+			I18n::$lang = Kohana::$locale->get_language();
+		}
 
 		// Enable the Kohana shutdown handler, which catches E_FATAL errors.
 		register_shutdown_function(array('Kohana', 'shutdown_handler'));
