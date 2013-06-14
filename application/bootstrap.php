@@ -64,6 +64,7 @@ if (isset($_SERVER['KOHANA_ENV']))
  * - boolean  errors      enable or disable error handling                   TRUE
  * - boolean  profile     enable or disable internal profiling               TRUE
  * - boolean  caching     enable or disable internal caching                 FALSE
+ * - boolean  autolocale  enable or disable autodetect locale                TRUE
  */
 Kohana::init(array(
 	'base_url'   => '/',
