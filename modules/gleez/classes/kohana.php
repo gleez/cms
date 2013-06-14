@@ -255,7 +255,7 @@ class Kohana {
 			// Manual enable Gleez_Locale
 			if ($settings['autolocale'] === TRUE)
 			{
-				Kohana::$locale = new Gleez_Locale();
+				Kohana::$locale = Gleez_Locale::instance();
 			}
 		}
 		elseif (Kohana::$autolocale)
