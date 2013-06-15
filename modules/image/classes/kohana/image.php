@@ -85,7 +85,7 @@ abstract class Kohana_Image {
 	 *
 	 * @param   string  $file  image file path
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function __construct($file)
 	{
@@ -104,7 +104,7 @@ abstract class Kohana_Image {
 
 		if (empty($file) OR empty($info))
 		{
-			throw new Kohana_Exception('Not an image or invalid image: :file',
+			throw new Gleez_Exception('Not an image or invalid image: :file',
 				array(':file' => Debug::path($file)));
 		}
 
@@ -138,7 +138,7 @@ abstract class Kohana_Image {
 			if (is_object(Kohana::$log))
 			{
 				// Get the text of the exception
-				$error = Kohana_Exception::text($e);
+				$error = Gleez_Exception::text($e);
 
 				// Add this exception to the log
 				Kohana::$log->add(Log::ERROR, $error);
@@ -603,7 +603,7 @@ abstract class Kohana_Image {
 	 * @param   integer  $quality  quality of image: 1-100
 	 * @return  boolean
 	 * @uses    Image::_save
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function save($file = NULL, $quality = 100)
 	{
@@ -617,7 +617,7 @@ abstract class Kohana_Image {
 		{
 			if ( ! is_writable($file))
 			{
-				throw new Kohana_Exception('File must be writable: :file',
+				throw new Gleez_Exception('File must be writable: :file',
 					array(':file' => Debug::path($file)));
 			}
 		}
@@ -628,7 +628,7 @@ abstract class Kohana_Image {
 
 			if ( ! is_dir($directory) OR ! is_writable($directory))
 			{
-				throw new Kohana_Exception('Directory must be writable: :directory',
+				throw new Gleez_Exception('Directory must be writable: :directory',
 					array(':directory' => Debug::path($directory)));
 			}
 		}

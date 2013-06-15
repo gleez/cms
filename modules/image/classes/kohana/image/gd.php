@@ -24,7 +24,7 @@ class Kohana_Image_GD extends Image {
 	{
 		if ( ! function_exists('gd_info'))
 		{
-			throw new Kohana_Exception('GD is either not installed or not enabled, check your configuration');
+			throw new Gleez_Exception('GD is either not installed or not enabled, check your configuration');
 		}
 
 		if (defined('GD_BUNDLED'))
@@ -60,7 +60,7 @@ class Kohana_Image_GD extends Image {
 
 		if ( ! version_compare($version, '2.0.1', '>='))
 		{
-			throw new Kohana_Exception('Image_GD requires GD version :required or greater, you have :version',
+			throw new Gleez_Exception('Image_GD requires GD version :required or greater, you have :version',
 				array('required' => '2.0.1', ':version' => $version));
 		}
 
@@ -78,7 +78,7 @@ class Kohana_Image_GD extends Image {
 	 *
 	 * @param   string  $file  image file path
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function __construct($file)
 	{
@@ -106,7 +106,7 @@ class Kohana_Image_GD extends Image {
 
 		if ( ! isset($create) OR ! function_exists($create))
 		{
-			throw new Kohana_Exception('Installed GD does not support :type images',
+			throw new Gleez_Exception('Installed GD does not support :type images',
 				array(':type' => image_type_to_extension($this->type, FALSE)));
 		}
 
@@ -248,7 +248,7 @@ class Kohana_Image_GD extends Image {
 	{
 		if ( ! Image_GD::$_bundled)
 		{
-			throw new Kohana_Exception('This method requires :function, which is only available in the bundled version of GD',
+			throw new Gleez_Exception('This method requires :function, which is only available in the bundled version of GD',
 				array(':function' => 'imagerotate'));
 		}
 
@@ -330,7 +330,7 @@ class Kohana_Image_GD extends Image {
 	{
 		if ( ! Image_GD::$_bundled)
 		{
-			throw new Kohana_Exception('This method requires :function, which is only available in the bundled version of GD',
+			throw new Gleez_Exception('This method requires :function, which is only available in the bundled version of GD',
 				array(':function' => 'imageconvolution'));
 		}
 
@@ -369,7 +369,7 @@ class Kohana_Image_GD extends Image {
 	{
 		if ( ! Image_GD::$_bundled)
 		{
-			throw new Kohana_Exception('This method requires :function, which is only available in the bundled version of GD',
+			throw new Gleez_Exception('This method requires :function, which is only available in the bundled version of GD',
 				array(':function' => 'imagefilter'));
 		}
 
@@ -450,7 +450,7 @@ class Kohana_Image_GD extends Image {
 	{
 		if ( ! Image_GD::$_bundled)
 		{
-			throw new Kohana_Exception('This method requires :function, which is only available in the bundled version of GD',
+			throw new Gleez_Exception('This method requires :function, which is only available in the bundled version of GD',
 				array(':function' => 'imagelayereffect'));
 		}
 
@@ -598,7 +598,7 @@ class Kohana_Image_GD extends Image {
 	 * @param   string   $extension  image type: png, jpg, etc
 	 * @param   integer  $quality    image quality
 	 * @return  array    save function, IMAGETYPE_* constant
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	protected function _save_function($extension, & $quality)
 	{
@@ -633,7 +633,7 @@ class Kohana_Image_GD extends Image {
 				$quality = 9;
 			break;
 			default:
-				throw new Kohana_Exception('Installed GD does not support :type images',
+				throw new Gleez_Exception('Installed GD does not support :type images',
 					array(':type' => $extension));
 			break;
 		}

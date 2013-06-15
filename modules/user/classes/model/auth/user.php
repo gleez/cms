@@ -218,13 +218,13 @@ class Model_Auth_User extends ORM {
 	/**
 	 * Override the create method with defaults
 	 *
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function create(Validation $validation = NULL)
 	{
 		if ($this->_loaded)
 		{
-			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
 		}
 
 		$this->init = $this->mail;
@@ -236,13 +236,13 @@ class Model_Auth_User extends ORM {
 	/**
 	 * Override the create method with defaults
 	 *
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function update(Validation $validation = NULL)
 	{
 		if ( ! $this->_loaded)
 		{
-			throw new Kohana_Exception('Cannot Update :model model because it is not loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot Update :model model because it is not loaded.', array(':model' => $this->_object_name));
 		}
 		
 		$this->data = $this->_data();

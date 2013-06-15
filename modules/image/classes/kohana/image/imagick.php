@@ -18,14 +18,14 @@ class Kohana_Image_Imagick extends Image {
 	/**
 	 * Checks if ImageMagick is enabled.
 	 *
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 * @return  boolean
 	 */
 	public static function check()
 	{
 		if ( ! extension_loaded('imagick'))
 		{
-			throw new Kohana_Exception('Imagick is not installed, or the extension is not loaded');
+			throw new Gleez_Exception('Imagick is not installed, or the extension is not loaded');
 		}
 
 		return Image_Imagick::$_checked = TRUE;
@@ -35,7 +35,7 @@ class Kohana_Image_Imagick extends Image {
 	 * Runs [Image_Imagick::check] and loads the image.
 	 *
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function __construct($file)
 	{
@@ -304,7 +304,7 @@ class Kohana_Image_Imagick extends Image {
 	 *
 	 * @param   string   image extension: png, jpg, etc
 	 * @return  string   IMAGETYPE_* constant
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	protected function _get_imagetype($extension)
 	{
@@ -324,7 +324,7 @@ class Kohana_Image_Imagick extends Image {
 				$type = IMAGETYPE_PNG;
 			break;
 			default:
-				throw new Kohana_Exception('Installed ImageMagick does not support :type images',
+				throw new Gleez_Exception('Installed ImageMagick does not support :type images',
 					array(':type' => $extension));
 			break;
 		}
