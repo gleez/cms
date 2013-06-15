@@ -579,7 +579,7 @@ class Gleez_Post extends ORM_Versioned {
 				return $this->rawimage ? $this->_image_url.$this->rawimage : NULL;
 			break;
 			case 'count_comments':
-				return (int) DB::select('COUNT("*") AS mycount')
+				return (int) DB::select(array(DB::expr('COUNT(*)'), 'mycount'))
 					->from('comments')
 					->where('status', '=', 'publish')
 					->where('post_id', '=', $this->id)
