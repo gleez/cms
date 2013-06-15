@@ -54,7 +54,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 	{
 		if ( ! empty($this->_using))
 		{
-			throw new Kohana_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new Gleez_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$this->_on[] = array($c1, $op, $c2);
@@ -72,7 +72,7 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 	{
 		if ( ! empty($this->_on))
 		{
-			throw new Kohana_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new Gleez_Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$columns = func_get_args();
@@ -85,11 +85,17 @@ class Kohana_Database_Query_Builder_Join extends Database_Query_Builder {
 	/**
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		if ($this->_type)
 		{
 			$sql = strtoupper($this->_type).' JOIN';

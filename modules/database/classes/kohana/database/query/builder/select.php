@@ -296,7 +296,7 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 			$select = DB::select()->from($select);
 		}
 		if ( ! $select instanceof Database_Query_Builder_Select)
-			throw new Kohana_Exception('first parameter must be a string or an instance of Database_Query_Builder_Select');
+			throw new Gleez_Exception('first parameter must be a string or an instance of Database_Query_Builder_Select');
 		$this->_union []= array('select' => $select, 'all' => $all);
 		return $this;
 	}
@@ -317,11 +317,17 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	/**
 	 * Compile the SQL query and return it.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		// Callback to quote columns
 		$quote_column = array($db, 'quote_column');
 

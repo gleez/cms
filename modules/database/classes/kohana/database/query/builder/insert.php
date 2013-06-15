@@ -81,7 +81,7 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	{
 		if ( ! is_array($this->_values))
 		{
-			throw new Kohana_Exception('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
+			throw new Gleez_Exception('INSERT INTO ... SELECT statements cannot be combined with INSERT INTO ... VALUES');
 		}
 
 		// Get all of the passed values
@@ -102,7 +102,7 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	{
 		if ($query->type() !== Database::SELECT)
 		{
-			throw new Kohana_Exception('Only SELECT queries can be combined with INSERT queries');
+			throw new Gleez_Exception('Only SELECT queries can be combined with INSERT queries');
 		}
 
 		$this->_values = $query;
@@ -113,11 +113,17 @@ class Kohana_Database_Query_Builder_Insert extends Database_Query_Builder {
 	/**
 	 * Compile the SQL query and return it.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		// Start an insertion query
 		$query = 'INSERT INTO '.$db->quote_table($this->_table);
 

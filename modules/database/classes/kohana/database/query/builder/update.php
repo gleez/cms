@@ -80,11 +80,17 @@ class Kohana_Database_Query_Builder_Update extends Database_Query_Builder_Where 
 	/**
 	 * Compile the SQL query and return it.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		// Start an update query
 		$query = 'UPDATE '.$db->quote_table($this->_table);
 
