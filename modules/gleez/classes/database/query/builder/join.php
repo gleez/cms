@@ -17,7 +17,7 @@ class Database_Query_Builder_Join extends Kohana_Database_Query_Builder_Join {
 	{
 		if ( ! empty($this->_using))
 		{
-			throw new Kohana_Exception('JOIN ... AND ... cannot be combined with JOIN ... USING ...');
+			throw new Gleez_Exception('JOIN ... AND ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$this->_and[] = array($c1, $op, $c2);
