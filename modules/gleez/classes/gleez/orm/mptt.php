@@ -420,7 +420,7 @@ class Gleez_ORM_MPTT extends ORM {
 	{
 		if ($query !== NULL)
 		{
-			throw new Kohana_Exception('ORM_MPTT does not support passing a query object to delete()');
+			throw new Gleez_Exception('ORM_MPTT does not support passing a query object to delete()');
 		}
 		
 		//$this->lock();
@@ -437,7 +437,7 @@ class Gleez_ORM_MPTT extends ORM {
 
 			$this->delete_space($this->left(), $this->size());
 		}
-		catch (Kohana_Exception $e)
+		catch (Gleez_Exception $e)
 		{
 			//$this->unlock();
 			$this->_db->rollback();
@@ -546,7 +546,7 @@ class Gleez_ORM_MPTT extends ORM {
 			
 			$this->delete_space($this->left(), $size);
 		}
-		catch (Kohana_Exception $e)
+		catch (Gleez_Exception $e)
 		{
 			// Unlock table and re-throw exception
 			//$this->unlock();
@@ -603,7 +603,7 @@ class Gleez_ORM_MPTT extends ORM {
 		}
 		elseif (is_null($scope) AND ! $this->loaded())
 		{
-			throw new Kohana_Exception(':method must be called on an ORM_MPTT object instance.', array(':method' => 'root'));
+			throw new Gleez_Exception(':method must be called on an ORM_MPTT object instance.', array(':method' => 'root'));
 		}
 		
 		return self::factory($this->object_name(), array($this->left_column => 1, $this->scope_column => $scope));

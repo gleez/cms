@@ -417,7 +417,7 @@ class Gleez_Pagination {
 		}
 		catch(Exception $e)
 		{
-			Kohana_Exception::handler($e);
+			Gleez_Exception::handler($e);
 			return '';
 		}
 	}

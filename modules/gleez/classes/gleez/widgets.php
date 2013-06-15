@@ -105,14 +105,14 @@ abstract class Gleez_Widgets {
 	 * @param   string  $region  Widget region
 	 * @param   string  $name    Unique widget name
 	 * @param   string  $widget  Widget object
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 * @return  Widget
 	 */
 	public function add($region, $name, $widget)
 	{
 		if( ! is_object($widget))
 		{
-			throw new Kohana_Exception('Not a valid widget object: :widget', array(':widget' => $name));
+			throw new Gleez_Exception('Not a valid widget object: :widget', array(':widget' => $name));
 		}
 	
 		if ( ! isset($this->_regions[$region]))

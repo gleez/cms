@@ -711,7 +711,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		}
 		else
 		{
-			throw new Kohana_Exception('The :property property does not exist in the :class class',
+			throw new Gleez_Exception('The :property property does not exist in the :class class',
 				array(':property' => $column, ':class' => get_class($this)));
 		}
 	}
@@ -743,7 +743,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * @param   string  $column  Column name
 	 * @param   mixed   $value   Column value
 	 * @return  $this
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function set($column, $value)
 	{
@@ -794,7 +794,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 		}
 		else
 		{
-			throw new Kohana_Exception('The :property: property does not exist in the :class: class',
+			throw new Gleez_Exception('The :property: property does not exist in the :class: class',
 				array(':property:' => $column, ':class:' => get_class($this)));
 		}
 
@@ -1013,13 +1013,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 *
 	 * @return  Database_Result|ORM
 	 * @uses    Database::SELECT
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function find()
 	{
 		if ($this->_loaded)
 		{
-			throw new Kohana_Exception('Method find() cannot be called on loaded objects');
+			throw new Gleez_Exception('Method find() cannot be called on loaded objects');
 		}
 
 		if ( ! empty($this->_load_with))
@@ -1041,13 +1041,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 *
 	 * @return  Database_Result|ORM
 	 * @uses    Database::SELECT
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function find_all()
 	{
 		if ($this->_loaded)
 		{
-			throw new Kohana_Exception('Method find_all() cannot be called on loaded objects');
+			throw new Gleez_Exception('Method find_all() cannot be called on loaded objects');
 		}
 
 		if ( ! empty($this->_load_with))
@@ -1357,13 +1357,13 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 *
 	 * @param   Validation $validation Validation object [Optional]
 	 * @return  ORM
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function create(Validation $validation = NULL)
 	{
 		if ($this->_loaded)
 		{
-			throw new Kohana_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot create :model model because it is already loaded.', array(':model' => $this->_object_name));
 		}
 
 		Module::event($this->_object_name .'_prevalid', $this, $validation);
@@ -1428,7 +1428,7 @@ class Gleez_ORM_Core extends Model implements serializable {
 	{
 		if ( ! $this->_loaded)
 		{
-			throw new Kohana_Exception('Cannot update :model model because it is not loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot update :model model because it is not loaded.', array(':model' => $this->_object_name));
 		}
 
 		Module::event($this->_object_name .'_prevalid', $this, $validation);

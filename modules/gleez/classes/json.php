@@ -42,7 +42,7 @@ class JSON {
 	 * PHP 5.2.3  - The nesting limit was increased from 20 to 128
 	 *
 	 * @static
-	 * @throws Kohana_Exception
+	 * @throws Gleez_Exception
 	 * @param  string  $json      This function only works with UTF-8 encoded data
 	 * @param  bool    $to_assoc  When TRUE, returned objects will be converted into associative arrays
 	 * @param  int     $depth     User specified recursion depth
@@ -73,7 +73,7 @@ class JSON {
 
 		if ( ! empty($error))
 		{
-			throw new Kohana_Exception('JSON DECODE: :error', array(':error' => $error));
+			throw new Gleez_Exception('JSON DECODE: :error', array(':error' => $error));
 		}
 
 		return $result;

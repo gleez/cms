@@ -44,13 +44,13 @@ abstract class Gleez_Shortcode {
          * @param   callable   $callback    Hook to run when shortcode is found.
          * @param   string     $asset      CSS or JS or both to be added. css|js|both
          * @return  $_tags
-         * @throws  Kohana_Exception
+         * @throws  Gleez_Exception
          */
         public static function set($tag, $callback, $asset = FALSE)
         {
 		if ( ! is_callable($callback) )
 		{
-			throw new Kohana_Exception('Invalid Shortcode::callback specified');
+			throw new Gleez_Exception('Invalid Shortcode::callback specified');
 		}
 
 		self::$_tags[$tag] = $callback;
