@@ -158,7 +158,7 @@ class Controller_Admin_Modules extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, Kohana_Exception::text($e));
+				Kohana::$log->add(LOG::ERROR, Gleez_Exception::text($e));
 			}
 		}
 
