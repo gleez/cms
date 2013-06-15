@@ -127,7 +127,7 @@ class Gleez_Database_MySQLi extends Database {
 				$variables[] = 'SESSION '.$var.' = '.$this->quote($val);
 			}
 
-			mysqli_query('SET '.implode(', ', $variables), $this->_connection);
+			mysqli_query($this->_connection, 'SET '.implode(', ', $variables));
 		}
 	}
 
@@ -393,12 +393,14 @@ class Gleez_Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if ($mode AND ! mysqli_query("SET TRANSACTION ISOLATION LEVEL $mode", $this->_connection))
+		if ($mode AND ! mysqli_query($this->_connection, "SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error', array(':error' => mysqli_error($this->_connection)), mysqli_errno($this->_connection));
+			throw new Database_Exception(':error',
+				array(':error' => mysqli_error($this->_connection)),
+				mysqli_errno($this->_connection));
 		}
 
-		return (bool) mysqli_query('START TRANSACTION', $this->_connection);
+		return (bool) mysqli_query($this->_connection, 'START TRANSACTION');
 	}
 
 	/**
@@ -417,7 +419,7 @@ class Gleez_Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) mysqli_query('COMMIT', $this->_connection);
+		return (bool) mysqli_query($this->_connection, 'COMMIT');
 	}
 
 	/**
@@ -436,7 +438,7 @@ class Gleez_Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) mysqli_query('ROLLBACK', $this->_connection);
+		return (bool) mysqli_query($this->_connection, 'ROLLBACK');
 	}
 
 	/**
@@ -600,7 +602,7 @@ class Gleez_Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		$result = mysqli_query('SHOW VARIABLES WHERE variable_name = "version"', $this->_connection);
+		$result = mysqli_query($this->_connection, 'SHOW VARIABLES WHERE variable_name = "version"');
 		$row = mysqli_fetch_object($result);
 
 		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
