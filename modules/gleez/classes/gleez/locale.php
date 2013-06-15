@@ -72,7 +72,30 @@ class Gleez_Locale {
 	protected static $_framework = array('en' => TRUE);
 
 	/**
-	 * Generates a locale object
+	 * Gleez_Locale instance
+	 * @var Gleez_Locale
+	 */
+	protected static $_instance;
+
+	/**
+	 * Singleton instance of Gleez_Locale
+	 *
+	 * @param   string|Gleez_Locale  $locale  Locale for parsing input [Optional]
+	 * @return  Gleez_Locale
+	 */
+	public static function instance($locale = NULL)
+	{
+		if ( ! isset(Gleez_Locale::$_instance))
+		{
+			// Create a new captcha instance
+			Gleez_Locale::$_instance = new Gleez_Locale($locale);
+		}
+
+		return Gleez_Locale::$_instance;
+	}
+
+	/**
+	 * Constructs a new locale object
 	 *
 	 * ### Overview
 	 *
