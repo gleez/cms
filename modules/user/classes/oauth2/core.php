@@ -25,7 +25,7 @@ abstract class OAuth2_Core {
 	 * @param   string   remote URL
 	 * @param   array    curl options
 	 * @return  string
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public static function remote($url, array $options = NULL)
 	{
@@ -38,7 +38,7 @@ abstract class OAuth2_Core {
 		// Set connection options
 		if ( ! curl_setopt_array($remote, $options))
 		{
-			throw new Kohana_Exception('Failed to set CURL options, check CURL documentation: :url',
+			throw new Gleez_Exception('Failed to set CURL options, check CURL documentation: :url',
 				array(':url' => 'http://php.net/curl_setopt_array'));
 		}
 
