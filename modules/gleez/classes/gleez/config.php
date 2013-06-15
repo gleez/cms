@@ -105,23 +105,23 @@ class Gleez_Config {
 	 *
 	 * @param   string  configuration group name
 	 * @return  object  Gleez_Config
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	public static function load($group)
 	{
 		if( ! count(self::$_sources))
 		{
-			throw new Kohana_Exception('No configuration sources attached');
+			throw new Gleez_Exception('No configuration sources attached');
 		}
 
 		if (empty($group))
 		{
-			throw new Kohana_Exception("Need to specify a config group");
+			throw new Gleez_Exception("Need to specify a config group");
 		}
 
 		if ( ! is_string($group))
 		{
-			throw new Kohana_Exception("Config group must be a string");
+			throw new Gleez_Exception("Config group must be a string");
 		}
 
 		if (strpos($group, '.') !== FALSE)

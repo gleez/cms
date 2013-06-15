@@ -151,7 +151,7 @@ class Gleez_ORM_Versioned extends ORM {
 	public function delete()
 	{
                 if ( ! $this->_loaded)
-			throw new Kohana_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
 	
                 // Use primary key value
 		$id = $this->pk();

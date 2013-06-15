@@ -92,14 +92,14 @@ class Model_Tag extends ORM {
 	 * Deletes a single post or multiple posts, ignoring relationships.
 	 *
 	 * @return  ORM
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 * @uses    Path::delete
 	 */
 	public function delete()
 	{
 		if ( ! $this->_loaded)
 		{
-			throw new Kohana_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
+			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
 		}
 
 		$source = $this->rawurl;
