@@ -49,7 +49,7 @@ class Kohana_Database_Query {
 	 *
 	 * @return  string
 	 */
-	final public function __toString()
+	public function __toString()
 	{
 		try
 		{
@@ -58,7 +58,7 @@ class Kohana_Database_Query {
 		}
 		catch (Exception $e)
 		{
-			return Kohana_Exception::text($e);
+			return Gleez_Exception::text($e);
 		}
 	}
 
@@ -176,11 +176,17 @@ class Kohana_Database_Query {
 	 * Compile the SQL query and return it. Replaces any parameters with their
 	 * given values.
 	 *
-	 * @param   object  $db  Database instance
+	 * @param   mixed  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	public function compile(Database $db)
+	public function compile($db = NULL)
 	{
+		if ( ! is_object($db))
+		{
+			// Get the database instance
+			$db = Database::instance($db);
+		}
+
 		// Import the SQL locally
 		$sql = $this->_sql;
 
