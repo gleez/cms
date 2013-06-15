@@ -13,7 +13,7 @@ class Kohana_Database_PDO extends Database {
 	// PDO uses no quoting for identifiers
 	protected $_identifier = '';
 
-	protected function __construct($name, array $config)
+	public function __construct($name, array $config)
 	{
 		parent::__construct($name, $config);
 
@@ -59,12 +59,6 @@ class Kohana_Database_PDO extends Database {
 			throw new Database_Exception(':error',
 				array(':error' => $e->getMessage()),
 				$e->getCode());
-		}
-
-		if ( ! empty($this->_config['charset']))
-		{
-			// Set the character set
-			$this->set_charset($this->_config['charset']);
 		}
 	}
 
@@ -124,9 +118,9 @@ class Kohana_Database_PDO extends Database {
 	public function set_charset($charset)
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		// Execute a raw SET NAMES query
+		// This SQL-92 syntax is not supported by all drivers
 		$this->_connection->exec('SET NAMES '.$this->quote($charset));
 	}
 
@@ -135,7 +129,7 @@ class Kohana_Database_PDO extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		if ( ! empty($this->_config['profiling']))
+		if (Kohana::$profiling)
 		{
 			// Benchmark this query for the current instance
 			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
@@ -277,5 +271,4 @@ class Kohana_Database_PDO extends Database {
 
 		return $full ? $version : substr($version, 0, strpos($version, "-"));
 	}
-
 } // End Database_PDO
