@@ -96,7 +96,7 @@ class Gleez {
 		Kohana::$expose = FALSE;
 
 		// Link the Kohana locale to gleez for temporary, it's not singleton
-		Gleez::$locale = Kohana::$locale;
+		Gleez::$locale = Gleez_Locale::instance();
 	
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
