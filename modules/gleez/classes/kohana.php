@@ -253,20 +253,14 @@ class Kohana {
 		if (isset($settings['autolocale']))
 		{
 			// Manual enable Gleez_Locale
-			if ($settings['autolocale'] === TRUE)
-			{
-				Kohana::$locale = Gleez_Locale::instance();
-			}
-		}
-		elseif (Kohana::$autolocale)
-		{
-			// By default enable Gleez_Locale
-			Kohana::$locale = new Gleez_Locale();
+			Kohana::$autolocale = (bool) $settings['autolocale'];
 		}
 
-		// @todo Set/Get lang from/to Cookie/Session
-		if (Kohana::$locale AND Kohana::$autolocale)
+		// By default enable Gleez_Locale
+		if (Kohana::$autolocale)
 		{
+			// @todo Set/Get lang from/to Cookie/Session
+			Kohana::$locale = Gleez_Locale::instance();
 			I18n::$lang = Kohana::$locale->get_language();
 		}
 
@@ -441,12 +435,11 @@ class Kohana {
 
 	/**
 	 * Reverts the effects of the `register_globals` PHP setting by unsetting
-	 * all global varibles except for the default super globals (GPCS, etc),
+	 * all global variables except for the default super globals (GPCS, etc),
 	 * which is a [potential security hole.][ref-wikibooks]
 	 *
 	 * This is called automatically by [Kohana::init] if `register_globals` is
 	 * on.
-	 *
 	 *
 	 * [ref-wikibooks]: http://en.wikibooks.org/wiki/PHP_Programming/Register_Globals
 	 *
@@ -578,6 +571,7 @@ class Kohana {
 	 *
 	 * @param   array   $modules    list of module paths
 	 * @return  array   enabled modules
+	 * @throws  Gleez_Exception
 	 */
 	public static function modules(array $modules = NULL)
 	{
@@ -776,6 +770,8 @@ class Kohana {
 	 * @param   string  $directory  directory name
 	 * @param   array   $paths      list of paths to search
 	 * @return  array
+	 *
+	 * @todo    Need move to System or File
 	 */
 	public static function list_files($directory = NULL, array $paths = NULL)
 	{
@@ -950,11 +946,16 @@ class Kohana {
 	}
 
 	/**
-	 * PHP error handler, converts all errors into ErrorExceptions. This handler
-	 * respects error_reporting settings.
+	 * PHP error handler, converts all errors into ErrorExceptions
 	 *
+	 * This handler respects [error_reporting](http://php.net/error_reporting) settings.
+	 *
+	 * @param   integer  $code   The Exception code
+	 * @param   string   $error  The Exception message to throw
+	 * @param   string   $file   The filename where the exception is thrown [Optional]
+	 * @param   integer  $line   The line number where the exception is thrown [Optional]
+	 * @return  boolean
 	 * @throws  ErrorException
-	 * @return  TRUE
 	 */
 	public static function error_handler($code, $error, $file = NULL, $line = NULL)
 	{
