@@ -32,7 +32,7 @@ class Gleez {
 	public static $theme = 'fluid';
 
 	/**
-	 * Public [Gleez_Locale] object
+	 * Public [Gleez_Locale] instance
 	 *
 	 * @todo In the future, this object should be moved to Gleez Core
 	 *
