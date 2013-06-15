@@ -251,11 +251,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 * @param   int     $offset
 	 * @param   mixed   $value
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	final public function offsetSet($offset, $value)
 	{
-		throw new Kohana_Exception('Database results are read-only');
+		throw new Gleez_Exception('Database results are read-only');
 	}
 
 	/**
@@ -265,11 +265,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 *
 	 * @param   int     $offset
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 * @throws  Gleez_Exception
 	 */
 	final public function offsetUnset($offset)
 	{
-		throw new Kohana_Exception('Database results are read-only');
+		throw new Gleez_Exception('Database results are read-only');
 	}
 
 	/**
