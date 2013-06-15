@@ -87,7 +87,7 @@ class Gleez_Locale {
 	{
 		if ( ! isset(Gleez_Locale::$_instance))
 		{
-			// Create a new captcha instance
+			// Create a new locale instance
 			Gleez_Locale::$_instance = new Gleez_Locale($locale);
 		}
 
