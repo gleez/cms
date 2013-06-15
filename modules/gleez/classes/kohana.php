@@ -139,7 +139,7 @@ class Kohana {
 	public static $config;
 
 	/**
-	 * Public [Gleez_Locale] object
+	 * Public [Gleez_Locale] instance
 	 *
 	 * @todo In the future, this object should be moved to Gleez Core
 	 *
@@ -255,7 +255,7 @@ class Kohana {
 			// Manual enable Gleez_Locale
 			if ($settings['autolocale'] === TRUE)
 			{
-				Kohana::$locale = new Gleez_Locale();
+				Kohana::$locale = Gleez_Locale::instance();
 			}
 		}
 		elseif (Kohana::$autolocale)
