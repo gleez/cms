@@ -425,8 +425,5 @@ class Gleez {
 
 		/** @var Cookie::$expiration string */
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
-
-		// Trying to set language to cookies
-		//Cookie::set(Gleez_Locale::$cookie, 'en', DATE::YEAR);
 	}
 }
