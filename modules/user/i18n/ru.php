@@ -61,6 +61,7 @@ return array
 	'Edit Permission' => 'Изменить полномочие',
 	'Edit Permissions' => 'Изменить полномочия',
 	'Edit profile' => 'Изменить профиль',
+	'Editing profile'=> 'Изменение профиля',
 	'Edit role %name' => 'Изменить роль %name',
 	'Edit User' => 'Изменить пользователя',
 	// F
