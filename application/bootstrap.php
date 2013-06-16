@@ -12,7 +12,7 @@ require GLZPATH.'classes/gleez'.EXT;
  * @link  http://kohanaframework.org/guide/using.configuration
  * @link  http://php.net/timezones
  */
-date_default_timezone_set('Asia/Kolkata');
+date_default_timezone_set('UTC');
 
 /**
  * Set the default locale.
