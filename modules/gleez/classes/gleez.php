@@ -294,7 +294,12 @@ class Gleez {
 	 * to a "This site is down for maintenance" page.
 	 *
 	 * @throws  HTTP_Exception_503
+	 *
 	 * @uses    Request::initial
+	 * @uses    Config::load
+	 * @uses    Request::controller
+	 * @uses    Request::action
+	 * @uses    ACL::check
 	 */
 	public static function maintenance_mode()
 	{
@@ -314,6 +319,10 @@ class Gleez {
 	 * Check to see if an IP address has been blocked and deny access to blocked IP addresses
 	 *
 	 * @throws  HTTP_Exception_403
+	 *
+	 * @uses    Config::load
+	 * @uses    Log::add
+	 * @uses    Request::$client_ip
 	 */
 	public static function block_ips()
 	{
@@ -334,6 +343,7 @@ class Gleez {
 	 * @param   string  $file The file name
 	 * @return  string  The file path
 	 * @throws  Gleez_Exception Indicates that the file does not exist
+	 *
 	 * @uses    Kohana::modules
 	 */
 	protected static function find_file_custom($file)
