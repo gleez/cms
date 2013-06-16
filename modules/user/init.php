@@ -99,7 +99,7 @@ if ( ! ACL::cache() )
 			'description'     => __('Access to all profiles'),
 		),
 		'edit profile' => array(
-			'title'           => __('Edit profile'),
+			'title'           => __('Editing profile'),
 			'restrict access' => FALSE,
 			'description'     => __('The ability to change profile'),
 		),
