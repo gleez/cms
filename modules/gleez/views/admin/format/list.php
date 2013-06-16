@@ -4,7 +4,7 @@
 	<?php echo __('Text formats defines the HTML tags, code, and other formatting that can be used when entering text. Improper text format configuration is a security risk. Text formats are presented on content editing pages in the order defined on this page. The first format available to a user will be selected by default.'); ?>
 </div>
 
-<table id="text-format-order" class="table table-striped table-bordered">
+<table id="text-format-order" class="table table-striped table-bordered table-highlight">
 	<thead>
 		<tr>
 			<th><?php echo __('Name') ?></th>
