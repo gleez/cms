@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Gleez Page Controller
+ * Page Controller
  *
  * @package    Gleez\Controller
  * @author     Sandeep Sangamreddi - Gleez

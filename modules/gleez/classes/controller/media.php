@@ -2,14 +2,14 @@
 /**
  * Media Controller
  *
- * @package    Gleez\Media\Controller
+ * @package    Gleez\Controller
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License 
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Media extends Controller {
 	
-	/** @var Kohana_Config The configuration settings */
+	/** @var Config The configuration settings */
 	public $config;
 	
 	/**
