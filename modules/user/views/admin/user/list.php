@@ -12,7 +12,7 @@
 	<?php echo HTML::anchor(Route::get('admin/user')->uri(array('action' =>'add')), '<i class="icon-plus icon-white"></i> '.__('Add New User'), array('class' => 'btn btn-danger pull-right')); ?>
 	<div class='clearfix'></div><br>
 
-	<table id = "admin-list-users" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["2", "desc"]]'>
+	<table id = "admin-list-users" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["2", "desc"]]'>
 		<thead>
 			<tr>
 				<th width="20%" class="sorting_desc"><?php echo __("Username"); ?></th>

@@ -11,7 +11,7 @@
 	<?php echo HTML::anchor($add_url, '<i class="icon-plus icon-white"></i> '.__('Add Alias'), array('class' => 'btn btn-danger pull-right')) ?>
 	<div class='clearfix'></div><br>
 
-	<table id = "admin-list-paths" class="table table-striped table-bordered" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1", "desc"]]'>
+	<table id = "admin-list-paths" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1", "desc"]]'>
 		<thead>
 		<tr>
 			<th width="50%" class="sorting_desc"><?php echo __("URL Path"); ?></th>

@@ -78,6 +78,12 @@ class Gleez_Locale {
 	protected static $_instance;
 
 	/**
+	 * Cookie name
+	 * @var string
+	 */
+	public static $cookie = 'language';
+
+	/**
 	 * Singleton instance of Gleez_Locale
 	 *
 	 * @param   string|Gleez_Locale  $locale  Locale for parsing input [Optional]

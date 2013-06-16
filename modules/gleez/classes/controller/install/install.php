@@ -153,7 +153,7 @@ class Controller_Install_Install extends Controller_Template {
 
 		$view->php_version           = version_compare(PHP_VERSION, '5.3', '>=');
 		$view->mysql           	     = function_exists("mysql_query");
-		$view->system_directory      = (is_dir(SYSPATH) AND is_file(SYSPATH.'classes/kohana'.EXT));
+		$view->system_directory      = (is_dir(SYSPATH));
 		$view->application_directory = (is_dir(APPPATH) AND is_file(APPPATH.'bootstrap'.EXT));
 		$view->modules_directory     = is_dir(MODPATH);
 		$view->config_writable       = (is_dir(APPPATH.'config') AND is_writable(APPPATH.'config'));

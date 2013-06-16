@@ -3,7 +3,7 @@
  * Gleez Core class
  *
  * @package    Gleez
- * @version    0.9.23
+ * @version    0.9.24
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -11,7 +11,7 @@
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.23';
+	const VERSION = '0.9.24';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
@@ -67,8 +67,27 @@ class Gleez {
 		// Gleez is now initialized?
 		self::$_ginit = TRUE;
 
+		// Link the Kohana locale to gleez for temporary, it's not singleton
+		Gleez::$locale = Gleez_Locale::instance();
+
 		// Set default cookie salt and lifetime
 		self::_set_cookie();
+
+		// Trying to get language from cookies
+		if ($lang = Cookie::get(Gleez_Locale::$cookie))
+		{
+			I18n::$lang = $lang;
+		}
+		elseif (Kohana::$autolocale)
+		{
+			I18n::$lang = Gleez::$locale->get_language();
+			// Trying to set language to cookies
+			Cookie::set(Gleez_Locale::$cookie, I18n::$lang, Date::YEAR);
+		}
+		else
+		{
+			I18n::$lang = 'en-us';
+		}
 
 		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
@@ -94,9 +113,6 @@ class Gleez {
 	
 		// Disable the kohana powered headers
 		Kohana::$expose = FALSE;
-
-		// Link the Kohana locale to gleez for temporary, it's not singleton
-		Gleez::$locale = Gleez_Locale::instance();
 	
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
@@ -409,5 +425,8 @@ class Gleez {
 
 		/** @var Cookie::$expiration string */
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
+
+		// Trying to set language to cookies
+		//Cookie::set(Gleez_Locale::$cookie, 'en', DATE::YEAR);
 	}
 }
