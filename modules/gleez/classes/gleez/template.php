@@ -73,7 +73,7 @@ abstract class Gleez_Template extends Controller {
 
 	/**
 	 * The configuration settings
-	 * @var Kohana_Config
+	 * @var Config
 	 */
 	protected $_config;
 
@@ -230,7 +230,7 @@ abstract class Gleez_Template extends Controller {
 			$this->auto_render = FALSE;
 		}
 
-		$this->response->headers('X-Powered-By', 'Gleez CMS ' . Gleez::VERSION . ' (' . Gleez::CODENAME . ')');
+		$this->response->headers('X-Powered-By', Gleez::get_version(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
 
 		$this->_config = Kohana::$config->load('site');
 		$this->_auth   = Auth::instance();
@@ -342,14 +342,15 @@ abstract class Gleez_Template extends Controller {
 			$this->_set_column_class();
 
 			// Do some CSS magic to page class
-			$classes   = array();
-			$classes[] = I18n::$lang;
-			$classes[] = $this->request->controller();
-			$classes[] = $this->request->action();
-			$classes[] = $this->request->controller() . '-' . $this->request->action();
-			$classes[] = $this->template->column_class;
-			$classes[] = $this->_page_class;
-			$classes[] = ($this->_auth->logged_in()) ? 'logged-in' : 'not-logged-in';
+			$classes   = array(
+				I18n::$lang,
+				$this->request->controller(),
+				$this->request->action(),
+				$this->request->controller() . '-' . $this->request->action(),
+				$this->template->column_class,
+				$this->_page_class,
+				($this->_auth->logged_in()) ? 'logged-in' : 'not-logged-in'
+			);
 
 			// Special check for frontpage and frontpage title
 			if ($this->is_frontpage())

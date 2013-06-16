@@ -302,7 +302,7 @@ if ( ! ACL::cache())
 		'administer content' => array(
 			'title' => __('Administer content'),
 			'restrict access' => TRUE,
-			'description' => __(''),
+			'description' => __('Most of the tasks associated with the administration of the contents of this website associated with this permission'),
 		),
 		'access content' => array(
 			'title' => __('Access content'),
@@ -325,7 +325,7 @@ if ( ! ACL::cache())
 			'description' => __('The ability to create pages'),
 		),
 		'edit own page' => array(
-			'title' => __('Edit own page'),
+			'title' => __('Edit own pages'),
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
@@ -335,7 +335,7 @@ if ( ! ACL::cache())
 			'description' => __(''),
 		),
 		'delete own page' => array(
-			'title' => __('Delete own page'),
+			'title' => __('Delete own pages'),
 			'restrict access' => FALSE,
 			'description' => __(''),
 		),
