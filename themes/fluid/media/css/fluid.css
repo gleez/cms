@@ -146,6 +146,14 @@ ul.page-stats ul {
 .radio.inline, .checkbox.inline {
   white-space: nowrap;
 }
+
+/* font-awesome fix */
+[class^="icon-"],
+[class*=" icon-"] {
+	margin-right: 4px;
+}
+
+
 /* Responsive Docs
 -------------------------------------------------- */
 @media (max-width: 480px) {

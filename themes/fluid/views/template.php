@@ -37,9 +37,7 @@
 							<?php if ( ! User::is_guest()): ?>
 								<li class="dropdown">
 									<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-										<i class="icon-user"></i>
-										<?php echo $_user->nick; ?>
-										<b class="caret"></b>
+										<i class="icon-user"></i><?php echo $_user->nick; ?><b class="caret"></b>
 									</a>
 
 									<ul class="dropdown-menu">
