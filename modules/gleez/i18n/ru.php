@@ -512,6 +512,7 @@ return array
 	'This form has expired. Please try submitting it again.' => 'Данные устарели. Пожалуйста попробуйте отправить форму ещё раз.',
 	'This is your administration dashboard and it provides a quick overview of status messages, recent updates, and frequently used options.' => 'Это ваша приборная панель администратора. Она обеспечивает быстрый просмотр сообщений о состоянии, последних обновлений и доступ к часто используемым опциям.',
 	'This page provides interface for assigning a widget to a region, and for controlling the order of widgets within regions. Click the configure link next to each widget to configure its specific title and visibility settings.' => 'Данная страница предоставляет интерфейс для назначения виджетов регионам и контролирования порядком виджетов в регионах. Нажмите на ссылку Настроить рядом с виджетом для установки его специфического заголовка и настройки видимости виджета.',
+	'This site is down for maintenance' => 'Сайт закрыт на обслуживание',
 	'Threaded list &mdash; expanded' => 'Иерархический список &mdash; развёрнутый',
 	'Threaded list &mdash; collapsed' => 'Иерархический список &mdash; свёрнутый',
 	'Time Format' => 'Формат времени',
