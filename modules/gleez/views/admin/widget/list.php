@@ -7,7 +7,7 @@
 <?php echo HTML::anchor(Route::get('admin/widget')->uri( array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Widget'), array('class' => 'btn btn-danger pull-right')) ?>
 <div class="clearfix"></div><br>
 <?php echo Form::open( Route::url('admin/widget', array('action' => 'index')), array('id'=>'widgets-form', 'class'=>'form') ); ?>
-	<table id="widgets" class="table table-striped table-bordered">
+	<table id="widgets" class="table table-striped table-bordered table-highlight">
 		<thead>
 			<tr>
 				<th><?php echo __('Title') ?></th>
@@ -20,9 +20,6 @@
 			<?php foreach ($widget_regions as $region => $title): ?>
 				<tr class="region-title region-title-<?php echo $region?>">
 					<td colspan="4"><?php echo HTML::chars($title) ?></td>
-				</tr>
-				<tr class="region-message region-<?php print $region?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
-					<td colspan="4"><em><?php echo __('No Widgets in this region'); ?></em></td>
 				</tr>
 				<?php foreach ($widgets[$region] as $i => $widget): ?>
 					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">
