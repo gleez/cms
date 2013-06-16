@@ -259,6 +259,7 @@ class Kohana {
 		// By default enable Gleez_Locale
 		if (Kohana::$autolocale)
 		{
+			// @todo use Cookie here
 			Kohana::$locale = Gleez_Locale::instance();
 		}
 
