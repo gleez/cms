@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
-
+/**
+ * Comment Controller
+ *
+ * @package    Gleez\Controller
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ */
 class Controller_Comment extends Template {
 
 	protected $_route;
