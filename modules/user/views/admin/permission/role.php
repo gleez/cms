@@ -8,11 +8,11 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 	
-	<table id="permissions" class="table table-striped table-bordered">
+	<table id="permissions" class="table table-bordered table-striped table-highlight">
 		<thead>
 		  <tr>
 		    <th><?php echo __('Permission') ?></th>
-		    <th class="row-checkbox"><?php echo ucwords(Text::plain($role->name)) ?></th>
+		    <th><?php  _e('Role :role', array(':role' => ucwords(Text::plain($role->name)))) ?></th>
 		  </tr>
 		</thead>
 		<?php 
@@ -25,7 +25,7 @@
 		<?php foreach ($permissions as $key => $access_names): ?>
 			  <tr class="permission-group">
 			      <td class="permission-key" width="30%" colspan="2">
-				  <?php echo ucwords(Text::plain($key)) ?>
+					<?php _e('Subsystem'); ?>:&nbsp;<span class="label label-info"><?php _e(ucwords(Text::plain($key))) ?></span>
 			      </td>
 			  </tr>
 			  
