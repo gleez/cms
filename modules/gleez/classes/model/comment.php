@@ -192,9 +192,6 @@ class Model_Comment extends ORM {
 				return parent::__get('body');
 			break;
 			case 'url':
-				return Route::get('comment')->uri( array('id' => $this->id, 'action' => 'view'));
-			break;
-			case 'url':
 				// Model specific links; view, edit, delete url's.
 				return Route::get('comment')->uri( array('id' => $this->id, 'action' => 'view'));
 			break;
@@ -296,7 +293,7 @@ class Model_Comment extends ORM {
 	 */
 	public function valid_post(Validation $validation, $field)
 	{
-		$result = DB::select(array('COUNT("*")', 'total_count'))
+		$result = DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
 				->from('posts')
 				->where('id', '=', $this->post_id)
 				->execute($this->_db)
