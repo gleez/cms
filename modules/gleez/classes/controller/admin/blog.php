@@ -2,7 +2,7 @@
 /**
  * Admin Blog Controller
  *
- * @package    Gleez\Admin\Controller
+ * @package    Gleez\Controller\Admin
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies

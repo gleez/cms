@@ -294,12 +294,18 @@ class Gleez {
 	 * to a "This site is down for maintenance" page.
 	 *
 	 * @throws  HTTP_Exception_503
+	 *
 	 * @uses    Request::initial
+	 * @uses    Config::load
+	 * @uses    Request::controller
+	 * @uses    Request::action
+	 * @uses    ACL::check
 	 */
 	public static function maintenance_mode()
 	{
 		$maintenance_mode = Kohana::$config->load('site.maintenance_mode', FALSE);
-		$message          = Kohana::$config->load('site.offline_message', Gleez::MAINTENANCE_MESSAGE);
+		$message          = Kohana::$config->load('site.offline_message', FALSE);
+		$message          = (empty($message) OR ! $message) ? Gleez::MAINTENANCE_MESSAGE : $message;
 		$request          = Request::initial();
 
 		if ($maintenance_mode AND ($request instanceof Request) AND ($request->controller() != 'user' AND $request->action() != 'login') AND !ACL::check('administer site') AND $request->controller() != 'media')
@@ -313,6 +319,10 @@ class Gleez {
 	 * Check to see if an IP address has been blocked and deny access to blocked IP addresses
 	 *
 	 * @throws  HTTP_Exception_403
+	 *
+	 * @uses    Config::load
+	 * @uses    Log::add
+	 * @uses    Request::$client_ip
 	 */
 	public static function block_ips()
 	{
@@ -333,6 +343,7 @@ class Gleez {
 	 * @param   string  $file The file name
 	 * @return  string  The file path
 	 * @throws  Gleez_Exception Indicates that the file does not exist
+	 *
 	 * @uses    Kohana::modules
 	 */
 	protected static function find_file_custom($file)
@@ -425,8 +436,5 @@ class Gleez {
 
 		/** @var Cookie::$expiration string */
 		Cookie::$expiration = Kohana::$config->load('cookie.lifetime');
-
-		// Trying to set language to cookies
-		//Cookie::set(Gleez_Locale::$cookie, 'en', DATE::YEAR);
 	}
 }
