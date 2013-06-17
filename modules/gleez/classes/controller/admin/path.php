@@ -2,10 +2,10 @@
 /**
  * Admin Path Controller
  *
- * @package   Gleez\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
- * @copyright (c) 2011-2013 Gleez Technologies
- * @license   http://gleezcms.org/license
+ * @package    Gleez\Controller\Admin
+ * @author     Sandeep Sangamreddi - Gleez
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Path extends Controller_Admin {
 

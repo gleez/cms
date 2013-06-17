@@ -2,7 +2,7 @@
 /**
  * Abstract template class for feed controllers
  *
- * @package    Gleez\Feed\Controller
+ * @package    Gleez\Controller\Feed
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
