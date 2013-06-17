@@ -189,10 +189,14 @@ class Model_Tag extends ORM {
 	 *
 	 * @param   Validation  $validation Validation object
 	 * @param   string      $field      Field name
+	 *
+	 * @uses    DB::select
+	 * @uses    DB::expr
+	 * @uses    Validation::error
 	 */
 	public function tag_available(Validation $validation, $field)
 	{
-		$result = DB::select(array('COUNT("*")', 'total_count'))
+		$result = DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
 				->from($this->_table_name)
 				->where('name', '=', $validation[$field])
 				->where($this->_primary_key, '!=', $this->pk())
