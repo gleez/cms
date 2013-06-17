@@ -226,7 +226,7 @@ class Model_Term extends ORM_MPTT {
 	 */
 	public function term_available(Validation $validation, $field)
 	{
-		$query = DB::select(array('COUNT("*")', 'total_count'))
+		$query = DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
 				->from($this->_table_name)
 				->where('name', '=', $validation[$field])
 				->where($this->_primary_key, '!=', $this->pk())
