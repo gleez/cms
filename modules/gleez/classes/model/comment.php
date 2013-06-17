@@ -195,11 +195,11 @@ class Model_Comment extends ORM {
 				return Route::get('comment')->uri( array('id' => $this->id, 'action' => 'view'));
 			break;
 			case 'url':
-				// Model specefic links; view, edit, delete url's.
+				// Model specific links; view, edit, delete url's.
 				return Route::get('comment')->uri( array('id' => $this->id, 'action' => 'view'));
 			break;
 			case 'edit_url':
-				// Model specefic links; view, edit, delete url's.
+				// Model specific links; view, edit, delete url's.
 				return Route::get('comment')->uri(array('id' => $this->id, 'action' => 'edit'));
 			break;
 			case 'delete_url':
@@ -220,6 +220,8 @@ class Model_Comment extends ORM {
 	 *
 	 * @uses    User::lookup_by_name
 	 * @uses    DB::select
+	 * @uses    DB::expr
+	 * @uses    Validation::error
 	 */
 	public function valid_author(Validation $validation, $field)
 	{
@@ -245,7 +247,7 @@ class Model_Comment extends ORM {
 		}
 		elseif ($this->author == 1 AND ! empty($this->guest_name))
 		{
-			$result = DB::select(array('COUNT("*")', 'total_count'))
+			$result = DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
 						->from('users')
 						->where('name', 'LIKE', $this->guest_name)
 						->or_where('nick', 'LIKE', $this->guest_name)
@@ -312,9 +314,14 @@ class Model_Comment extends ORM {
 	 * @param   boolean|string     $action The action view|edit|delete default view [Optional]
 	 * @param   Model_User|Object  $user   The user object to check permission, defaults to logged in user [Optional]
 	 * @param   string             $misc   The misc element usually id|slug for logging purpose [Optional]
+	 *
 	 * @throws  HTTP_Exception_404
 	 * @throws  HTTP_Exception_403
+	 *
 	 * @return  Post
+	 *
+	 * @uses    ACL::check
+	 * @uses    Module::event
 	 */
 	public function access($action = FALSE, Model_User $user = NULL, $misc = NULL)
 	{
@@ -323,97 +330,91 @@ class Model_Comment extends ORM {
 			$action = 'view';
 		}
 
-				if (!in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
+		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-						throw new HTTP_Exception_404('Unauthorised attempt to non-existent action :act.', array(
-				':act' => $action
-			));
+			throw new HTTP_Exception_404('Unauthorised attempt to non-existent action :act.',
+				array(':act' => $action));
 		}
 
-		if (! $this->loaded() )
+		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-						throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw new HTTP_Exception_404('Attempt to non-existent post.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
-		if( empty( $user ) )   $user = User::active_user();
+		empty($user) AND $user = User::active_user();
 
 		if (ACL::check('bypass comment access', $user))
 		{
 			return $this;
 		}
 
-		//allow other modules to interact with access
+		// Allow other modules to interact with access
 		Module::event('comment_access', $action, $this);
 
 		if ($action === 'view')
 		{
-			if( $this->status === 'publish' AND ACL::check('access comment', $user))
+			if ($this->status === 'publish' AND ACL::check('access comment', $user))
 			{
 				return $this;
 			}
 			// Check if authors can view their own unpublished posts.
-			elseif( $this->status != 'publish' AND $this->author == (int)$user->id AND $user->id != 1 )
+			elseif ($this->status != 'publish' AND $this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-								throw new HTTP_Exception_403('Unauthorised attempt to view comment :post.', array(
-										':post' => $this->id
-								));
+				throw new HTTP_Exception_403('Unauthorised attempt to view comment :post.',
+					array(':post' => $this->id)
+				);
 			}
-
 		}
 
 		if ($action === 'edit')
 		{
-
-			if( ACL::check('edit own comment') AND $this->author == (int)$user->id AND $user->id != 1 )
+			if (ACL::check('edit own comment') AND $this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-								throw new HTTP_Exception_403('Unauthorised attempt to edit comment :post', array(
-										':post' => $this->id,
-								));
+				throw new HTTP_Exception_403('Unauthorised attempt to edit comment :post',
+					array(':post' => $this->id,)
+				);
 			}
-
 		}
 
 		if ($action === 'delete')
 		{
-
-			if( ( ACL::check('delete own comment') OR ACL::check('delete any comment') ) AND
-				$this->author == (int)$user->id AND $user->id != 1 )
+			if ((ACL::check('delete own comment') OR ACL::check('delete any comment')) AND
+				$this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-				throw new HTTP_Exception_403('Unauthorised attempt to delete comment :post', array(
-										':post' => $this->id
-								));
+				throw new HTTP_Exception_403('Unauthorised attempt to delete comment :post',
+					array(':post' => $this->id)
+				);
 			}
-
 		}
 
-				return $this;
+		return $this;
 	}
 
 
