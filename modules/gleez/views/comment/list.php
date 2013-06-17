@@ -13,7 +13,7 @@
 							$nick = $comment->user->nick;
 							$url  = $comment->user->url;
 							$img  = ( ! empty($comment->user->picture))
-								? HTML::resize($comment->user->picture, array('alt' => $comment->user->nick, 'height' => 24, 'width' => 24, 'type' => 'resize', 'itemprop' => 'image', 'class' => 'commentor_avatar'))
+								? HTML::resize($comment->user->picture, array('alt' => $comment->user->nick, 'height' => 24, 'width' => 24, 'type' => 'resize', 'class' => 'commentor_avatar'))
 								: HTML::image('media/images/commentor.jpg', array('title' => $nick, 'height' => 24, 'width' => 24, 'class' => 'commentor_avatar'));
 
 							echo HTML::anchor($url, $img);
