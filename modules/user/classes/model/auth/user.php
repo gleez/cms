@@ -389,7 +389,7 @@ class Model_Auth_User extends ORM {
 			$field = $this->unique_key($value);
 		}
 
-		$result = DB::select(array('COUNT("*")', 'total_count'))
+		$result = DB::select(array(DB::expr('COUNT(*)'), 'total_count'))
 					->from($this->_table_name)
 					->where($field, '=', $value)
 					->where($this->_primary_key, '!=', $this->pk())

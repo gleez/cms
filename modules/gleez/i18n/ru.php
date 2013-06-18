@@ -10,6 +10,7 @@
 return array
 (
 	// :
+	'(:count) Comments' => '(:count) Комментариев',
 	':field must not be empty' => ':field не может быть пустым',
 	':name sent a message using the contact form at :site.' => ':name отправил(а) вам сообщение используя форму отправки сообщений с сайта :site.',
 	':pcre has not been compiled with Unicode property support.' => ':pcre собран без поддержки Unicode.',
@@ -169,6 +170,7 @@ return array
 	'Delete any pages' => 'Удаление любых страниц',
 	'Delete Blog' => 'Удалить публикацию блога',
 	'Delete Blogs' => 'Удалить блоги',
+	'Delete Comment' => 'Удалить комментарий',
 	'Delete Comment :title' => 'Удалить комментарий :title',
 	'Delete Item' => 'Удалить пункт',
 	'Delete Menu' => 'Удалить меню',
@@ -196,6 +198,7 @@ return array
 	'Edit any Blog posts' => 'Правка любого блога',
 	'Edit any pages' => 'Правка любых страниц',
 	'Edit Blog' => 'Правка пуьликации блога',
+	'Edit Comment' => 'Изменить комментарий',
 	'Edit Item' => 'Изменить пункт',
 	'Edit Item :name' => 'Правка пункта :name',
 	'Edit Menu' => 'Правка меню',
