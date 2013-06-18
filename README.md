@@ -25,17 +25,14 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 
 ## Demo
 
+You can visit our demo site to become familiar with the basic features of Gleez CMS
+
 [http://demo.gleezcms.org](http://demo.gleezcms.org)
 
-**User**
-
-+ Username: demo
-+ Password: demo
-
-**Admin**
-
-+ Username: demoadmin
-+ Password: demoadmin
+| Login details | Typical user | Administrator |
+| ------------- |:------------:| -------------:|
+| *Username*    | demo         | demoadmin     |
+| *Password*    | demo         | demoadmin     |
 
 ## Internationalization (i18n Support)
 
