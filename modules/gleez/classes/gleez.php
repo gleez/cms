@@ -3,7 +3,7 @@
  * Gleez Core class
  *
  * @package    Gleez
- * @version    0.9.24
+ * @version    0.9.25
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -11,7 +11,7 @@
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.24';
+	const VERSION = '0.9.25';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
