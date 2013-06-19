@@ -21,7 +21,7 @@ class Gleez_Log_File extends Log_Writer {
 	 * Default format
 	 * @var string
 	 */
-	public static $format_string = 'time - - level: body - - hostname - - url - - [user]: user_agent - - referer';
+	public static $format_string = 'time - - level: body - - hostname - - url - - user_agent - - referer';
 
 	/**
 	 * Class constructor
@@ -142,7 +142,6 @@ class Gleez_Log_File extends Log_Writer {
 		$info = array(
 			'hostname'   => Request::$client_ip,
 			'user_agent' => Request::$user_agent,
-			'user'       => User::active_user()->id,
 			'url'        => Text::plain(Request::initial()->uri()),
 			'referer'    => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
 		);
