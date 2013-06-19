@@ -1,19 +1,27 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Media Controller
  *
- * @package    Gleez\Controller
+ * @package    Gleez\Media\Controller
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @license    http://gleezcms.org/license Gleez CMS License 
  */
 class Controller_Media extends Controller {
 	
-	/** @var Config The configuration settings */
+	/**
+	 * The configuration settings
+	 * @var Config
+	 */
 	public $config;
 	
 	/**
-	 * The before() method is called before controller action.
+	 * The before() method is called before controller action
+	 *
+	 * @uses  Request::param
+	 * @uses  Theme::set_theme
+	 * @uses  Config::load
 	 */
 	public function before()
 	{
@@ -29,10 +37,25 @@ class Controller_Media extends Controller {
 	}
 	
 	/**
-	 * Static file serving (CSS, JS, images)
+	 * Static file serving (CSS, JS, images, etc.)
+	 *
+	 * @uses  Request::param
+	 * @uses  Request::uri
+	 * @uses  Kohana::find_file
+	 * @uses  Response::check_cache
+	 * @uses  Response::body
+	 * @uses  Response::headers
+	 * @uses  Response::status
+	 * @uses  File::mime_by_ext
+	 * @uses  Config::get
+	 * @uses  Log::add
+	 * @uses  System::mkdir
 	 */
 	public function action_serve()
 	{
+		// Get file type from the request
+		$type = $this->request->param('type', FALSE);
+
 		// Get the file path from the request
 		$file = $this->request->param('file');
 		
@@ -53,25 +76,26 @@ class Controller_Media extends Controller {
 			// Set the proper headers to allow caching
 			$this->response->headers('content-type', File::mime_by_ext($ext));
 			$this->response->headers('last-modified', date('r', filemtime($file_name)));
-			//this is ignored by check_cache
+
+			// This is ignored by check_cache
 			$this->response->headers('cache-control', 'public, max-age=2592000');
 			
 			if ($this->config->get('cache', FALSE))
 			{
-				//set base path
+				// Set base path
 				$path = $this->config->get('public_dir', 'media');
 			
-				//override path if we're in admin
-				if ($this->request->param('type', FALSE))
+				// Override path if we're in admin
+				if ($type)
 				{
-					$path = $path.DIRECTORY_SEPARATOR.'admin';
+					$path = $path.DIRECTORY_SEPARATOR . 'admin';
 				}
 				
 				// Save the contents to the public directory for future requests
 				$public_path = $path.DIRECTORY_SEPARATOR. $file . '.' . $ext;
 				$directory   = dirname($public_path);
 				
-				if (!is_dir($directory))
+				if ( ! is_dir($directory))
 				{
 					// Recursively create the directories needed for the file
 					System::mkdir($directory, 0777, TRUE);
@@ -82,9 +106,10 @@ class Controller_Media extends Controller {
 		}
 		else
 		{
-			Kohana::$log->add(LOG::ERROR, 'Media controller error while loading file: `:file`', array(
-				':file' => $file
-			));
+			Kohana::$log->add(LOG::ERROR, 'Media controller error while loading file: `:file`',
+				array(':file' => $file)
+			);
+
 			// Return a 404 status
 			$this->response->status(404);
 		}
