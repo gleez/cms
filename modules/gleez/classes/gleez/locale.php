@@ -165,6 +165,11 @@ class Gleez_Locale {
 	/**
 	 * Returns a string representation of the object
 	 *
+	 * Example:<br>
+	 * <code>
+	 *   print $locale->toString();
+	 * </code>
+	 *
 	 * @return  string
 	 */
 	public function toString()
@@ -359,7 +364,6 @@ class Gleez_Locale {
 		return $languages;
 	}
 
-
 	/**
 	 * Expects the Systems standard locale
 	 *
@@ -450,7 +454,64 @@ class Gleez_Locale {
 	}
 
 	/**
+	 * List of all Locales
+	 *
+	 * Returns a list of all known locales where the locale is the key.
+	 * Only real locales are returned, the internal locale 'root' are suppressed.
+	 *
+	 * @return  array
+	 * @uses    Gleez_Locale_Data::locale_data
+	 */
+	public static function get_locale_list()
+	{
+		$list = Gleez_Locale_Data::locale_data();
+		unset($list['root']);
+
+		return $list;
+	}
+
+	/**
 	 * Returns the language part of the locale
+	 *
+	 * Static alias for [Gleez_Locale::get_language]
+	 *
+	 * @param   string  $locale  Locale (eg. en_US, ru_RU, ar_JO, ...)
+	 * @return  string
+	 */
+	public static function get_language_by_locale($locale)
+	{
+		$locale = explode('_', $locale);
+
+		return $locale[0];
+	}
+
+	/**
+	 * Returns the region part of the locale if available
+	 *
+	 * Static alias for [Gleez_Locale::get_region]
+	 *
+	 * @param   string  $locale  Locale (eg. en_US, ru_RU, ar_JO, ...)
+	 * @return  boolean|string
+	 */
+	public static function get_region_by_locale($locale)
+	{
+		$locale = explode('_', $locale);
+
+		if (isset($locale[1]))
+		{
+			return $locale[1];
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Returns the language part of the locale
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   print $locale->get_language();
+	 * </code>
 	 *
 	 * @return string
 	 */
@@ -459,6 +520,29 @@ class Gleez_Locale {
 		$locale = explode('_', $this->_locale);
 
 		return $locale[0];
+	}
+
+	/**
+	 * Returns the region part of the locale if available
+	 *
+	 * For example, if locale is 'de_AT' then 'AT' will be returned as region:
+	 * <code>
+	 *   print $locale->get_region();
+	 * </code>
+	 *
+	 * @return  string   Region part of the locale if available
+	 * @return  boolean  FALSE if not available
+	 */
+	public function get_region()
+	{
+		$locale = explode('_', $this->_locale);
+
+		if (isset($locale[1]))
+		{
+			return $locale[1];
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -557,5 +641,28 @@ class Gleez_Locale {
 		}
 
 		self::$_detected = self::get_client_locales() + self::get_environment_locales() + self::get_framework_locales();
+	}
+
+	/**
+	 * Returns true if both locales are equal
+	 *
+	 * Example:<br>
+	 * <pre>
+	 *   $locale = new Gleez_Locale();
+	 *   $mylocale = new Gleez_Locale('en_US');
+	 *
+	 *   // Check if locales are equal
+	 *   if ($locale->equals($mylocale))
+	 *   {
+	 *     // ...
+	 *   }
+	 * </pre>
+	 *
+	 * @param   Gleez_Locale  $locale  Locale to check for equality
+	 * @return  boolean
+	 */
+	public function equals(Gleez_Locale $locale)
+	{
+		return ($locale->toString() === $this->toString());
 	}
 }
