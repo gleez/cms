@@ -236,6 +236,7 @@ return array
 	'Flat list &mdash; collapsed' => 'Плоский список &mdash; свёрнутый',
 	'Footer' => 'Подвал',
 	'Forum' => 'Форум',
+	'Friday' => 'Пятница',
 	'Front page' => 'Главная страница',
 	'Full HTML' => 'Полный HTML',
 	// G
@@ -313,6 +314,7 @@ return array
 	'Modules' => 'Модули',
 	'Modules Directory' => 'Каталог модулей',
 	'Most of the tasks associated with the administration of the contents of this website associated with this permission' => 'Большинство задач, связанных с введением в содержание этого сайта, связанные с этим разрешением',
+	'Monday' => 'Понедельник',
 	'Move to Trash' => 'Перенести в корзину',
 	'MySQL Version' => 'Версия MySQL',
 	// N
@@ -406,6 +408,7 @@ return array
 	'Role :role' => 'Роль :role',
 	'Roles' => 'Роли',
 	// S
+	'Saturday' => 'Суббота',
 	'Save' => 'Сохранить',
 	'Save Changes' => 'Сохранить изменения',
 	'Save Filters' => 'Сохранить фильтры',
@@ -445,6 +448,7 @@ return array
 	'Subsystem' => 'Посистема',
 	'Subject must be less than :param2 characters long.' => 'Тема сообщения должна содержать не более :param2 символов.',
 	'Success!' => 'Успех!',
+	'Sunday' => 'Воскресенье',
 	'System Check' => 'Проверка системы',
 	'System Directory' => 'Системный каталог',
 	// T
@@ -523,6 +527,8 @@ return array
 	'Title' => 'Заголовок',
 	'Top Region' => 'Верхний регион',
 	'Total:' => 'Итого:',
+	'Tuesday' => 'Вторник',
+	'Thursday' => 'Четверг',
 	'Type' => 'Тип',
 	// U
 	'Unavailable' => 'Не доступно',
@@ -552,9 +558,10 @@ return array
 	'We\'ve created an account for you to use:' => 'Мы создали для Вас аккаунт со следующими данными:',
 	'Webmaster :site' => 'Вебмастер :site',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
-	'Week Starts On' => 'Неделя начинается с',
+	'Week Starts On' => 'Первый день недели',
 	'Webserver' => 'Веб сервер',
 	'Website address' => 'Адрес сайта',
+	'Wednesday' => 'Среда',
 	'Weight' => 'Вес',
 	'Welcome' => 'Добро пожаловать',
 	'Widget %name created successful!' => 'Виджет %name успешно создан!',
