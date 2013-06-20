@@ -404,7 +404,7 @@ class Gleez_ACL {
 	 *
 	 * @param Model_User User object
 	 */
-	protected static function _set_permissions($user)
+	protected static function _set_permissions(Model_User $user)
 	{
 		$user_perms = $user->perms();
 		$site_perms = ACL::site_perms();
