@@ -263,12 +263,9 @@ ul.ss-box li.ss-result p span.ss-result-title {
 	border: none;
 }
 .error .inside{
-    /*border-color: #C20F2E;*/
     border: 1px solid #C20F2E;
 }
-#comment-form #post-body h3.hndle{
-	/*text-transform: capitalize;*/
-}
+
 .post-comment-form #comment-form.form{
 	padding: 5px 1px;
 }
@@ -284,11 +281,11 @@ ul.ss-box li.ss-result p span.ss-result-title {
 	width: 40%;
 }
 .page-view #comment-form .stuffbox, .page-view #comment-form .postarea{
-	height: 216px;
+	min-height: 216px;
 }
 .page-view #comment-form .postarea .textarea
 {
-	margin: 0px;
+	margin: 0;
 	padding: 2px;
 	width: 99%;
 	z-index: 100;
@@ -299,7 +296,6 @@ ul.ss-box li.ss-result p span.ss-result-title {
     display: block;
     float: right;
     position: relative;
-    /*width: 255px;*/
 }
 .postbox h3, .stuffbox h3{
     border-bottom-color: #DFDFDF;
@@ -309,11 +305,16 @@ ul.ss-box li.ss-result p span.ss-result-title {
     border-bottom-width: 1px;
     margin-top: 1px;
 }
+
+.postbox h3, .stuffbox h3, .postarea h3 {
+	font-size: 15px;
+	padding: 7px 10px;
+	margin-top: 1px;
+}
+
 .postbox h3{
-    font-size: 15px;
     font-weight: normal;
     line-height: 1;
-    margin: 0;
     padding: 7px 10px;
     color: #464646;
     font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
