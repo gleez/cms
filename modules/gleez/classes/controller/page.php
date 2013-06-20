@@ -158,13 +158,13 @@ class Controller_Page extends Template {
 
 		if (ACL::post('edit', $post))
 		{
-			$this->_tabs[] =  array('link' => $post->url, 'text' => __('View'));
+			$this->_tabs[] = array('link' => $post->url, 'text' => __('View'));
 			$this->_tabs[] = array('link' => $post->edit_url, 'text' => __('Edit'));
 		}
 
 		if (ACL::post('delete', $post))
 		{
-			$this->_tabs[] =  array('link' => $post->delete_url, 'text' => __('Delete'));
+			$this->_tabs[] = array('link' => $post->delete_url, 'text' => __('Delete'));
 		}
 
 		if (($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
