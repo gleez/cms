@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * [Kohana Cache](api/Kohana_Cache) File driver. Provides a file based
  * driver for the Kohana Cache library. This is one of the slowest
@@ -35,7 +35,7 @@
  * @license    http://kohanaphp.com/license
  * @license    http://gleezcms.org/license Gleez CMS License
  */
-class Gleez_Cache_File extends Cache{
+class Gleez_Cache_File extends Cache {
 
 	/**
 	 * Creates a hashed filename based on the string. This is used
@@ -114,10 +114,12 @@ class Gleez_Cache_File extends Cache{
 	 *     // Retrieve cache entry from file group and return 'bar' if miss
 	 *     $data = Cache::instance('file')->get('foo', 'bar');
 	 *
-	 * @param   string   $id       id of cache to entry
-	 * @param   string   $default  default value to return if cache miss
+	 * @param   string  $id       id of cache to entry
+	 * @param   string  $default  default value to return if cache miss
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
+	 * @throws  ErrorException
 	 */
 	public function get($id, $default = NULL)
 	{
@@ -198,6 +200,10 @@ class Gleez_Cache_File extends Cache{
 	 * @param   string   $data      data to set to cache
 	 * @param   integer  $lifetime  lifetime in seconds
 	 * @return  boolean
+	 *
+	 * @throws  ErrorException
+	 * @throws  Cache_Exception
+	 * @throws  Exception
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
@@ -276,12 +282,13 @@ class Gleez_Cache_File extends Cache{
 	 *
 	 * @param   string  $pattern The cache key pattern
 	 * @return  boolean
+	 * @throws  Cache_Exception
 	 */
 	public function delete_pattern($pattern)
 	{
-		throw new Cache_Exception('Not implemented yet.');
+		throw new Cache_Exception('Not implemented yet!');
 	}
-	
+
 	/**
 	 * Delete all cache entries.
 	 *
@@ -292,6 +299,7 @@ class Gleez_Cache_File extends Cache{
 	 *     // Delete all cache entries in the file group
 	 *     Cache::instance('file')->delete_all();
 	 *
+	 * @param   integer  $mode
 	 * @return  boolean
 	 */
 	public function delete_all($mode = Cache::ALL)
