@@ -167,8 +167,7 @@ class Controller_Page extends Template {
 			$this->_tabs[] = array('link' => $post->delete_url, 'text' => __('Delete'));
 		}
 
-		if (($post->comment == Comment::COMMENT_OPEN OR $post->comment == Comment::COMMENT_CLOSED)
-		   AND ACL::check('access comment'))
+		if (($post->comment > Comment::COMMENT_HIDDEN) AND ACL::check('access comment'))
 		{
 			// Determine pagination offset
 			$p = ((int) $this->request->param('page', 0)) ? '/p'.$this->request->param('page', 0) : FALSE;
