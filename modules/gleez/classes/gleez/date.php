@@ -38,7 +38,7 @@ class Gleez_Date extends Kohana_Date {
 	 *
 	 * @return array
 	 */
-	static function weeekdays()
+	public static function weeekdays()
 	{
 		return array(
 			0 => __('Sunday'),
@@ -54,8 +54,7 @@ class Gleez_Date extends Kohana_Date {
 	/**
 	 * Number of months in a year. Value will hold month name
 	 *
-	 * @param   boolean     Long (TRUE) or short (FALSE) months names [Optional]
-	 * @uses    Date::hours
+	 * @param   boolean $long  Long (TRUE) or short (FALSE) months names [Optional]
 	 * @return  array  Array from 1-12 with month names
 	 */
 	public static function months_with_name($long = FALSE)
@@ -77,7 +76,7 @@ class Gleez_Date extends Kohana_Date {
 	 * Checks whether a string is a date
 	 *
 	 * @param  string date
-	 * @return bool
+	 * @return boolean
 	 */
 	public static function is_date($str)
 	{

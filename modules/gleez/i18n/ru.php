@@ -236,6 +236,7 @@ return array
 	'Flat list &mdash; collapsed' => 'Плоский список &mdash; свёрнутый',
 	'Footer' => 'Подвал',
 	'Forum' => 'Форум',
+	'Friday' => 'Пятница',
 	'Front page' => 'Главная страница',
 	'Full HTML' => 'Полный HTML',
 	// G
@@ -313,6 +314,7 @@ return array
 	'Modules' => 'Модули',
 	'Modules Directory' => 'Каталог модулей',
 	'Most of the tasks associated with the administration of the contents of this website associated with this permission' => 'Большинство задач, связанных с введением в содержание этого сайта, связанные с этим разрешением',
+	'Monday' => 'Понедельник',
 	'Move to Trash' => 'Перенести в корзину',
 	'MySQL Version' => 'Версия MySQL',
 	// N
@@ -406,6 +408,7 @@ return array
 	'Role :role' => 'Роль :role',
 	'Roles' => 'Роли',
 	// S
+	'Saturday' => 'Суббота',
 	'Save' => 'Сохранить',
 	'Save Changes' => 'Сохранить изменения',
 	'Save Filters' => 'Сохранить фильтры',
@@ -445,6 +448,7 @@ return array
 	'Subsystem' => 'Посистема',
 	'Subject must be less than :param2 characters long.' => 'Тема сообщения должна содержать не более :param2 символов.',
 	'Success!' => 'Успех!',
+	'Sunday' => 'Воскресенье',
 	'System Check' => 'Проверка системы',
 	'System Directory' => 'Системный каталог',
 	// T
@@ -523,6 +527,8 @@ return array
 	'Title' => 'Заголовок',
 	'Top Region' => 'Верхний регион',
 	'Total:' => 'Итого:',
+	'Tuesday' => 'Вторник',
+	'Thursday' => 'Четверг',
 	'Type' => 'Тип',
 	// U
 	'Unavailable' => 'Не доступно',
@@ -551,10 +557,12 @@ return array
 	'We hate reinventing the wheel. But when the wheel doesn\'t exist, or is square, we\'re not afraid to invent a round one.' => 'Мы не любим изобретать колесо. Но если колеса нет или оно квадратное, мы не боимся изобрести одно круглое.',
 	'We\'ve created an account for you to use:' => 'Мы создали для Вас аккаунт со следующими данными:',
 	'Webmaster :site' => 'Вебмастер :site',
+	'Website' => 'Вебсайт',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
-	'Week Starts On' => 'Неделя начинается с',
+	'Week Starts On' => 'Первый день недели',
 	'Webserver' => 'Веб сервер',
 	'Website address' => 'Адрес сайта',
+	'Wednesday' => 'Среда',
 	'Weight' => 'Вес',
 	'Welcome' => 'Добро пожаловать',
 	'Widget %name created successful!' => 'Виджет %name успешно создан!',
@@ -570,6 +578,8 @@ return array
 	'You must provide mail body.' => 'Вы должны ввести тело сообщения',
 	'You must provide mail subject.' => 'Вы должны выбрать тему сообщения.',
 	'You must select a category.' => 'Вы должны выбрать категорию.',
+	'Your comment has been posted.' => 'Ваш комментарий был добавлен.',
+	'Your comment has been queued for review by site administrators and will be published after approval.' => 'Ваш комментарий добавлен в очередь на рассмотрение администратором сайта и будет опубликован после утверждения.',
 	'Your Gleez install is complete!' => 'Ваша установка Gleez завершена!',
 	'Your message has been sent.' => 'Ваше сообщение успешно отправлено.',
 	'Your Name' => 'Ваше имя',

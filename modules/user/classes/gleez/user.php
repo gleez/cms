@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * User library
  *
@@ -6,7 +6,7 @@
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_User {
 
@@ -99,8 +99,8 @@ class Gleez_User {
 	/**
 	 * Checks if user belongs to group(s)
 	 *
-	 * @param  mixed $groups Group(s)
-	 * @returm boolean TRUE if user belongs to group(s)
+	 * @param   mixed    $groups  Group(s)
+	 * @return  boolean  TRUE if user belongs to group(s)
 	 */
 	public static function belongsto($groups)
 	{
@@ -126,7 +126,7 @@ class Gleez_User {
 			}
 
 			// array_diff is not safe
-			if(array_intersect(array_values($groups), array_keys(User::$roles[$user->id])))
+			if (array_intersect(array_values($groups), array_keys(User::$roles[$user->id])))
 			{
 				return TRUE;
 			}
@@ -134,7 +134,7 @@ class Gleez_User {
 			return FALSE;
 		}
 
-		if(in_array('guest', $groups) OR array_key_exists(1, $groups))
+		if (in_array('guest', $groups) OR array_key_exists(1, $groups))
 		{
 			return TRUE;
 		}
@@ -173,10 +173,11 @@ class Gleez_User {
 	}
 
 	/**
-	 * Look up a user by field value.
-	 * @param string      search field
-	 * @param string      search value
-	 * @return Model_User  the user object, or boolean if the name was invalid.
+	 * Look up a user by field value
+	 *
+	 * @param   string  $field  Search field
+	 * @param   string  $value  Search value
+	 * @return  Model_User  the user object, or boolean if the name was invalid.
 	 */
 	private static function _lookup_by_field($field, $value)
 	{
@@ -190,7 +191,6 @@ class Gleez_User {
 		}
 		catch (Exception $e)
 		{
-			//throw new Gleez_Exception('Unknown user exception!');
 			return FALSE;
 		}
 
@@ -285,16 +285,15 @@ class Gleez_User {
 	/**
 	 * Themed list of roles to print
 	 *
-	 * @param object $user The user object
-	 *
-	 * @return string html to display
+	 * @param   ORM     $user  The user object
+	 * @return  string  html to display
 	 */
 	public static function roles(ORM $user)
 	{
 		$roles = '<ul class="user-roles">';
 		foreach ($user->roles() as $role)
 		{
-            		$roles .= '<li>'. Text::plain($role) . '</li>';
+			$roles .= '<li>'. Text::plain($role) . '</li>';
 		}
 		$roles .= '</ul>';
 		
