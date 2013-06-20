@@ -25,8 +25,12 @@ class Model_Blog extends Post {
 	/**
 	 * Updates or Creates the record depending on loaded()
 	 *
-	 * @param   Validation $validation Validation object [Optional]
-	 * @return  Gleez_Post
+	 * @param   Validation  $validation  Validation object [Optional]
+	 * @return  Post
+	 *
+	 * @uses    Config::load
+	 * @uses    Config::get
+	 * @uses    Cache::delete
 	 */
 	public function save(Validation $validation = NULL)
 	{
@@ -42,6 +46,8 @@ class Model_Blog extends Post {
 		{
 			$this->teaser = FALSE;
 		}
+
+		Cache::instance($this->type)->delete('recent_blogs');
 
 		return parent::save($validation);
 	}
