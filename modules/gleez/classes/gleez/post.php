@@ -955,10 +955,9 @@ class Gleez_Post extends ORM_Versioned {
 			'as_array'  => TRUE,
 		);
 
-		$params  = (object) System::parse_args($args, $default);
-
-		$cache     = Cache::instance('post');
-		$post      = $params->use_cache ? $cache->get('recent_'.$params->type, NULL) : NULL;
+		$params = (object) System::parse_args($args, $default);
+		$cache  = Cache::instance('post');
+		$post   = $params->use_cache ? $cache->get('recent_'.$params->type, NULL) : NULL;
 
 		if (empty($post))
 		{
