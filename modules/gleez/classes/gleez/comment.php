@@ -93,8 +93,7 @@ class Gleez_Comment {
 				$post->values($values)->save();
 				if($post->status != 'publish')
 				{
-					Message::success(__('Your comment has been queued for review by
-							    site administrators and will be published after approval.') );
+					Message::success(__('Your comment has been queued for review by site administrators and will be published after approval.') );
 				}
 				else
 				{
@@ -118,8 +117,8 @@ class Gleez_Comment {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors =  $e->errors('models');
-				Message::error(__('Please see the errors below!'));
+				// @todo Add messages
+				$errors = $e->errors('models', TRUE);
 			}
 		}
 
