@@ -33,6 +33,7 @@ return array
 	'Access to all profiles' => 'Доступ ко всем профилям',
 	'After logging in, you will be redirected, so you can change your password. We do not encourage you to lose your password again. Be aware that this behaviour can be dangerous.' => 'После входа в систему вы будете перенаправлены для того чтоб изменить свой пароль. Мы не рекомендуем вам терять свой пароль повторно. Эта ситуация потенциально опасна.',
 	'Allow' => 'Разрешить',
+	'Already have an account?' => 'Уже есть аккаунт?',
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
@@ -90,7 +91,7 @@ return array
 	'Last Visit' => 'Последнее посещение',
 	'Loading data from server' => 'Загрузка ',
 	'Login' => 'Вход',
-	'Login with :provider' => 'Войти с помощью :provider',
+	'Login with :provider account' => 'Войти с помощью учётной записи :provider',
 	// M
 	'Mail' => 'Почта',
 	'Mail must be a valid email address.' => 'Email адрес должен быть в правильном формате.',
@@ -107,6 +108,7 @@ return array
 	'No more than 800 characters' => 'Не более 800 символов',
 	// O
 	'Old password is incorrect.' => 'Текущий пароль введён неверно',
+	'Only authorized users can post comments. :register or login using one of these services:' => 'Только авторизованные пользователи могут оставлять комментарии. :register или войдите с помощью одного их этих сервисов:',
 	// P
 	'Password' => 'Пароль',
 	'Password or username is incorrect.' => 'Пароль или имя пользователя не верны.',
@@ -122,6 +124,7 @@ return array
 	'Permissions saved successfully!' => 'Полномочия успешно сохранены!',
 	'Photo' => 'Фотография',
 	'Photo successfully uploaded!' => 'Фотография успешно загружена',
+	'Please register' => 'Пожалуйста зарегистрируйтесь',
 	'Profile %title' => 'Профиль %title',
 	'Public' => 'Публичное',
 	// Q
