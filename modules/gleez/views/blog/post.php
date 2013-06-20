@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined("SYSPATH") OR die("No direct script access.") ?>
 
 <div class="blog-page-wrapper">
 	<?php if (isset($blog)): ?>
@@ -17,15 +17,21 @@
 </div>
 
 <div class="blog-comment-form-wrapper">
-	<?php if (isset($provider_buttons)): ?>
-		<div id="post-provider-buttons">
+	<?php if (isset($provider_buttons) AND ! isset($comment_form)): ?>
+		<p>
+			<?php
+			_e('Only authorized users can post comments. :register or login using one of these services:',
+				array(':register' => HTML::anchor(Route::get('user')->uri(array('action' => 'register')), __('Please register')))
+			);
+			?>
+		</p>
+		<div id="blog-provider-buttons">
 			<?php echo $provider_buttons; ?>
-			<?php echo Form::textarea('comment', '', array('disabled' => TRUE, 'class' => 'textarea full', 'rows' => 5)); ?>
 		</div>
 	<?php endif;?>
-	
+
 	<?php if (isset($comment_form)): ?>
-		<div class="post-comment-form">
+		<div class="blog-comment-form">
 			<?php echo $comment_form; ?>
 		</div>
 	<?php endif;?>
