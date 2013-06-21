@@ -13,7 +13,7 @@
 class Gleez_Filter {
 
 	/**
-	 * @var  array 
+	 * @var  array
 	 */
 	protected static $_filters = array();
 
@@ -21,7 +21,7 @@ class Gleez_Filter {
 	 * @var  bool Indicates whether filters are cached
 	 */
 	public static $cache = FALSE;
-        
+
 	/**
 	 * Stores a named filter and returns it. The "action" will always be set to
 	 * "index" if it is not defined.
@@ -72,26 +72,26 @@ class Gleez_Filter {
 	{
 		return Filter::$_filters;
 	}
-        
-        /**
-         * Retrive(s) all available formats from config
-         *
-         * $formats = Filter::formats();
-         * @return  array  format by name
-         */
+
+		/**
+		 * Retrive(s) all available formats from config
+		 *
+		 * $formats = Filter::formats();
+		 * @return  array  format by name
+		 */
 	public static function formats()
 	{
 		$config = Kohana::$config->load('inputfilter');
-	
+
 		$formats = array();
 		foreach($config->formats as $id => $format)
 		{
 			$formats[$id] = $format['name'];
 		}
-	
+
 		return $formats;
 	}
-        
+
 	/**
 	 * Saves or loads the filter cache. If your filters will remain the same for
 	 * a long period of time, use this to reload the filters from the cache
@@ -143,11 +143,11 @@ class Gleez_Filter {
 	}
 
 	/**
-	 * Method to run all enabled filters by the format id on given string 
-         *
-         * @param  object  $text       The text object to be filtered.
-         * @return string  $text       The filtered text
-         */
+	 * Method to run all enabled filters by the format id on given string
+		 *
+		 * @param  object  $text       The text object to be filtered.
+		 * @return string  $text       The filtered text
+		 */
 	public static function process($text)
 	{
 		$config = Kohana::$config->load('inputfilter');
@@ -159,10 +159,10 @@ class Gleez_Filter {
 
 		$filters = $config->formats[$text->format]['filters'];
 		$filter_info = Filter::all();
-	
+
 		//sort filters by weight
 		$filters = Arr::array_sort($filters, 'weight');
-	
+
 		// Give filters the chance to escape HTML-like data such as code or formulas.
 		foreach ($filters as $name => $filter)
 		{
@@ -172,7 +172,7 @@ class Gleez_Filter {
 				$text->text = Filter::execute( $prepare_callback, $text->text, $text->format, $filter );
 			}
 		}
-	
+
 		// Perform filtering
 		foreach ($filters as $name => $filter)
 		{
@@ -182,59 +182,59 @@ class Gleez_Filter {
 				$text->text = Filter::execute( $process_callback, $text->text, $text->format, $filter );
 			}
 		}
-		
+
 		return $text->text;
 	}
-        
-        /**
-         * Execute a filter on the given text
-         *
-         * @param  mixed   $callback   The callback to be executed.
-         * @param  string  $text       The text to be filtered.
-         * @param  string  $format     The format id of the text to be filtered.
-         * @param  object  $filter     The filter object.
-         *
-         * @return string  $text       The filtered text
-         */
-        public static function execute($callback, $text, $format, $filter)
-        {
-                $args = func_get_args();
-                array_shift($args);
-        
-                if (is_string($callback) AND strpos($callback, '::') !== FALSE)
+
+		/**
+		 * Execute a filter on the given text
+		 *
+		 * @param  mixed   $callback   The callback to be executed.
+		 * @param  string  $text       The text to be filtered.
+		 * @param  string  $format     The format id of the text to be filtered.
+		 * @param  object  $filter     The filter object.
+		 *
+		 * @return string  $text       The filtered text
+		 */
+		public static function execute($callback, $text, $format, $filter)
+		{
+				$args = func_get_args();
+				array_shift($args);
+
+				if (is_string($callback) AND strpos($callback, '::') !== FALSE)
 		{
 			// Make the static callback into an array
 			$callback = explode('::', $callback, 2);
 		}
-        
-                if ($callback AND is_callable($callback))
+
+				if ($callback AND is_callable($callback))
 		{
-                        try
-                        {
-                            return  call_user_func_array($callback, $args);
-                        }
-                        catch (Exception $e)
-                        {
-                                Kohana::$log->add(Log::ERROR, __('Filter callback :class for :filter',
-                                                                 array(':class' => $e->getMessage(), 'filter' => $filter['name'])));
-                                return $text;
-                        }
-                }
-        
-                return $text;
-        }
-        
+						try
+						{
+							return  call_user_func_array($callback, $args);
+						}
+						catch (Exception $e)
+						{
+								Kohana::$log->add(Log::ERROR, __('Filter callback :class for :filter',
+																 array(':class' => $e->getMessage(), 'filter' => $filter['name'])));
+								return $text;
+						}
+				}
+
+				return $text;
+		}
+
 	/**
 	 * @var  string  Filter Title
 	 */
 	protected $_title = '';
-        
+
 	/**
 	 * @var  callbacks     The prepare and process callbacks for filter
 	 */
 	protected $_callbacks = array('prepare callback' => FALSE, 'process callback' => FALSE);
 
-        /**
+		/**
 	 * @var  array Filter Settings
 	 */
 	protected $_settings = array();
@@ -243,51 +243,51 @@ class Gleez_Filter {
 	 * @var  string  Filter Description
 	 */
 	protected $_description = '';
-        
-        /**
+
+		/**
 	 * @param   string   filter title
 	 * @param   array    filter callbacks
 	 * @return  void
 	 */
 	public function __construct($title, $callbacks = array())
 	{
-                $this->_title = $title;
-                $this->_callbacks = $callbacks;
-        }
+				$this->_title = $title;
+				$this->_callbacks = $callbacks;
+		}
 
-        public function __get($key)
-        {
-                if($key == 'title')
-                {
-                        return $this->_title;
-                }
-                else if($key == 'description')
-                {
-                        return $this->_description;
-                }
-                else if($key == 'prepare_callback')
-                {
-                        return $this->_callbacks['prepare callback'];
-                }
-                else if($key == 'process_callback')
-                {
-                        return $this->_callbacks['process callback'];
-                }
-                else if($key == 'callbacks')
-                {
-                        return $this->_callbacks;
-                }
-                else if($key == 'settings')
-                {
-                        return $this->_settings;
-                }
-                else
-                {
-                        throw new Gleez_Exception('The requested property does not exist: :key',
+		public function __get($key)
+		{
+				if($key == 'title')
+				{
+						return $this->_title;
+				}
+				else if($key == 'description')
+				{
+						return $this->_description;
+				}
+				else if($key == 'prepare_callback')
+				{
+						return $this->_callbacks['prepare callback'];
+				}
+				else if($key == 'process_callback')
+				{
+						return $this->_callbacks['process callback'];
+				}
+				else if($key == 'callbacks')
+				{
+						return $this->_callbacks;
+				}
+				else if($key == 'settings')
+				{
+						return $this->_settings;
+				}
+				else
+				{
+						throw new Gleez_Exception('The requested property does not exist: :key',
 				array(':key' => $key));
-                }
-        }
-        
+				}
+		}
+
 	/**
 	 * Set or get callbacks for filter
 	 *
@@ -295,7 +295,7 @@ class Gleez_Filter {
 	 *         'prepare callback'   => FALSE,
 	 *         'process callback'   => 'Text::html'
 	 *     ));
-	 * 
+	 *
 	 * If no parameter is passed, this method will act as a getter.
 	 *
 	 * @param   array  key values
@@ -320,7 +320,7 @@ class Gleez_Filter {
 	 *         'html_nofollow' => true,
 	 *         'allowed_html'  => '<a> <em> <strong> <cite> <blockquote>'
 	 *     ));
-	 * 
+	 *
 	 * If no parameter is passed, this method will act as a getter.
 	 *
 	 * @param   array  key values
@@ -338,11 +338,11 @@ class Gleez_Filter {
 		return $this;
 	}
 
-        /**
+		/**
 	 * Set or get title for filter
 	 *
 	 *     $filter->title(__('Limit allowed HTML tags'));
-	 * 
+	 *
 	 * If no parameter is passed, this method will act as a getter.
 	 *
 	 * @param   string  title
@@ -360,11 +360,11 @@ class Gleez_Filter {
 		return $this;
 	}
 
-        /**
+		/**
 	 * Set or get description for filter
 	 *
 	 *     $filter->description(__('Allowed HTML tags'));
-	 * 
+	 *
 	 * If no parameter is passed, this method will act as a getter.
 	 *
 	 * @param   string  description
@@ -381,5 +381,5 @@ class Gleez_Filter {
 
 		return $this;
 	}
-        
+
 }
