@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Admin Autocomplete Controller
  *
@@ -10,51 +10,74 @@
  */
 class Controller_Admin_Autocomplete extends Controller {
 
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses    Request::is_ajax
+	 * @uses    Request::uri
+	 * @throws  HTTP_Exception_404
+	 */
 	public function before()
 	{
 		// Ajax request only!
-		if ( !$this->request->is_ajax() )
+		if (! $this->request->is_ajax())
 		{
-			throw new HTTP_Exception_404('Accessing an ajax request <small>:type</small> externally', array(
-                                     ':type' => $this->request->uri(),
-                              ));
+			throw new HTTP_Exception_404('Accessing an ajax request :type externally',
+				array(':type' => '<small>'.$this->request->uri().'</small>')
+			);
 		}
-		
+
 		parent::before();
 	}
-	
-	/**
-	* Retrieve a JSON object containing autocomplete suggestions for existing aliases.
-	*/
-        public function action_links()
-        {
-                ACL::Required('administer menu');
-                
-                $string = $this->request->param('string', FALSE);
-        
-                $matches = array();
-                if ($string)
-                {
-                        $result  = DB::select('alias')->from('paths')->where('alias', 'LIKE', $string.'%')
-                                        ->limit('10')->execute();
-                        
-                        foreach ($result as $link)
-                        {
-                                $matches[$link['alias']] = Text::plain($link['alias']);
-                        }
-                }
 
-		$this->response->body( JSON::encode( $matches ) );
-        }
-	
+	/**
+	 * The after() method is called after controller action
+	 *
+	 * @uses  Request::is_ajax
+	 * @uses  Response::headers
+	 */
 	public function after()
 	{
-                if ( $this->request->is_ajax() )
+		if ($this->request->is_ajax())
 		{
-                        $this->response->headers('content-type',  'application/json; charset='.Kohana::$charset);
-                }
-        
+			$this->response->headers('content-type',  'application/json; charset='.Kohana::$charset);
+		}
+
 		parent::after();
 	}
+
+	/**
+	 * Retrieve a JSON object containing autocomplete suggestions for existing aliases
+	 *
+	 * @uses  ACL::required
+	 * @uses  DB::select
+	 * @uses  Text::plain
+	 * @uses  JSON::encode
+	 */
+	public function action_links()
+	{
+		ACL::required('administer menu');
+
+		$string  = $this->request->param('string', FALSE);
+		$matches = array();
+
+		if ($string)
+		{
+			$result  = DB::select('alias')
+						->from('paths')
+						->where('alias', 'LIKE', $string.'%')
+						->limit('10')
+						->execute();
+
+			foreach ($result as $link)
+			{
+				$matches[$link['alias']] = Text::plain($link['alias']);
+			}
+		}
+
+		$this->response->body(JSON::encode($matches));
+	}
+
+
 
 }
