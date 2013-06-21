@@ -1,7 +1,7 @@
 /*
  * This turns any form into a "post-in-place" form so it is ajaxed to save
  * without a refresh. Requires jquery form plugin @link
- * 
+ *
  * @package    	Gleez\AjaxForm
  * @version    	1.0
  * @requires   	jQuery v1.8 or later
@@ -49,17 +49,17 @@
     Ajaxform.prototype.init = function(element, options) {
 		$(element).ajaxSubmit(options).removeData('jqxhr')
     }
-    
-    Ajaxform.prototype.beforeSubmit = function(formData, form, options) { 
+
+    Ajaxform.prototype.beforeSubmit = function(formData, form, options) {
 		// Hide any errorContainers
 		$(form).find('.error-message-container').slideUp(250)
 		$(form).find('[type=submit]').attr('disabled', true).addClass('InProgress1')
-		return true; 
+		return true;
     }
 
     Ajaxform.prototype.showResponse = function(data, status, xhr, form) {
 		if (data.FormSaved == false && data.errors){
-			Ajaxform.prototype.validationErrors(data, form);	
+			Ajaxform.prototype.validationErrors(data, form);
 		}
 		else if (data.FormSaved == true){
 			//Lets check if the form is in popup window
@@ -69,7 +69,7 @@
 			if(popup){
 				$(popup).find('.popup-body').html('Success')
 			}
-			
+
 		}
     }
 
@@ -81,31 +81,31 @@
     Ajaxform.prototype.validationErrors = function(data, form) {
 		var title = 'Error'
 		  , tmpl = '<div class="alert alert-error alert-block">'
-		
+
 		tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>';
-			// Loop through the errors 
+			// Loop through the errors
 			$.each(data.errors, function(i, value) {
 			// And add the error to the list.
 			tmpl += '<li>' + value + '</li>';
 			// Let's guesstimate the input that gave us an error
 			var $inputField = $('[name*="'+i+'"]')
-			
+
 			if ($inputField.length){
 				$($inputField).parent('div.controls').parent('div.control-group').addClass('error')
 			}
-			});					
+			});
 		tmpl += '</ul></div>';
-		
+
 		// If the target block doesn't exist..
 		if (!$('.error-message-container').length){
 			$(form).prepend('<div class="error-message-container" style="display:none"></div>')
 		}
-		 
+
 		// Empty any previous error messages, insert the new errors and slide it in to view.
 		$(form).find('.error-message-container').empty().html(tmpl).slideDown(250)
 		$(form).find('[type=submit]').removeAttr('disabled')
     }
-    
+
     Ajaxform.prototype.processData = function(data, $el) {
 	if (data.location) {
 	    window.location.href = data.location
@@ -123,7 +123,7 @@
 	      , remove_selector = $el.attr('data-remove')
 	      , clear_closest_selector = $el.attr('data-clear-closest')
 	      , remove_closest_selector = $el.attr('data-remove-closest')
-	    
+
 	    if (replace_selector) {
 		$(replace_selector).replaceWith(data.html)
 	    }
@@ -169,7 +169,7 @@
 		$el.closest(remove_closest_selector).remove()
 	    }
 	}
-	
+
 	if (data.fragments) {
 	    for (var s in data.fragments) {
 		$(s).replaceWith(data.fragments[s])
@@ -190,10 +190,10 @@
 		$(p).prepend(data['prepend-fragments'][p])
 	    }
 	}
-	
+
 	$el.trigger('ajaxform.success', [data, $el]);
     }
-    
+
     Ajaxform.prototype.captureSubmittingElement = function(e) {
 	var target = e.target;
 	var $el = $(target);
@@ -223,7 +223,7 @@
 	// clear form vars
 	setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
     }
-    
+
     // AJAXFROM PLUGIN DEFINITION
     // =======================
 
@@ -264,7 +264,7 @@
       , includehidden: true
       , uploadprogress: false
     }
-    
+
     $.fn.aform.Constructor = Ajaxform
 
 
@@ -284,15 +284,15 @@
 	var $this = $(this)
 	, $target = $this.parents('form')
 	, option  = $.extend({}, $target.data(), $this.data())
-	
+
 	// if event has been canceled, don't proceed
 	if (!e.isDefaultPrevented()) {
 	    e.preventDefault();
 	    $target.removeData('ajaxform').aform(option)
 	}
     })
-    
+
     $(document.body).on('submit.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
     $(document.body).on('click.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
-    
+
 }(window.jQuery);

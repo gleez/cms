@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gleez jQuery DataTables support
- * 
+ *
  * @package    Gleez\Datatables
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0
@@ -9,13 +9,13 @@
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Datatables {
-	
+
 	/** Sort Ascending */
 	const SORT_ASC = 'ASC';
-	 
+
 	/** Sort Descending */
-	const SORT_DESC = 'DESC';	
-	
+	const SORT_DESC = 'DESC';
+
 	/**
 	 * Factory pattern
 	 *
@@ -26,9 +26,9 @@ class Gleez_Datatables {
 	 */
 	public static function factory(ORM $object = NULL)
 	{
-		return new Datatables($object); 
+		return new Datatables($object);
 	}
-	
+
 	/**
 	 * Whether or not current request is via DataTables
 	 *
@@ -40,77 +40,77 @@ class Gleez_Datatables {
 	public static function is_request(Request $request = NULL)
 	{
 		$request = ($request) ? $request : Request::current();
-		
+
 		return (bool) $request->query('sEcho');
 	}
-        
+
 	/**
 	 * Object to perform paginate operations on
 	 * @var object
 	 */
 	protected $_object;
-	
+
 	protected $_object_name;
-	
+
 	/**
 	 * Columns
 	 * @var array
 	 */
 	protected $_columns = array();
-	
+
 	/**
 	 * Search columns
 	 * @var array
 	 */
 	protected $_search_columns = array();
-	
+
 	/**
 	 * Count for request
 	 * @var integer
 	 */
 	protected $_count = 0;
-	
+
 	/**
 	 * Total count
 	 * @var integer
 	 */
 	protected $_count_total = 0;
-	
+
 	/**
 	 * Result
 	 * @var NULL
 	 */
-	protected $_result;	
-	
+	protected $_result;
+
 	/**
 	 * Rows
 	 * @var array
 	 */
-	protected $_rows = array();		
-	
+	protected $_rows = array();
+
 	/**
 	 * View
 	 * @var string
 	 */
-	protected $_view;	
-	
+	protected $_view;
+
 	/**
 	 * Request
 	 * @var Request
 	 */
 	protected $_request;
-	
+
 	/**
 	 * Cached render
 	 * @var string
 	 */
 	protected $_render;
-        
+
 	/**
 	 * Initialize
 	 *
 	 * @param  object  $object
-	 */	
+	 */
 	public function __construct($object)
 	{
 		$this->_object = $object;
@@ -127,7 +127,7 @@ class Gleez_Datatables {
 	{
 		$this->_object->offset($start)->limit($length);
 	}
-        
+
 	/**
 	 * Apply sort
 	 *
@@ -138,7 +138,7 @@ class Gleez_Datatables {
 	{
 		$this->_object->order_by($this->_object_name.'.'.$column, Text::plain($direction));
 	}
-	
+
 	/**
 	 * Apply search query
 	 *
@@ -148,12 +148,12 @@ class Gleez_Datatables {
 	{
 		// Use search columns if specified; otherwise, search across all columns
 		$columns = ( ! empty($this->_search_columns)) ? $this->_search_columns : $this->_columns;
-		
+
 
 		if (count($columns) > 0)
 		{
 			$query = '%' . Text::plain($query) . '%';
-			
+
 			$this->_object->where_open();
 
 			foreach ($columns as $key => $column)
@@ -169,9 +169,9 @@ class Gleez_Datatables {
 			}
 
 			$this->_object->where_close();
-		}		
+		}
 	}
-	
+
 	/**
 	 * Count
 	 *
@@ -180,18 +180,18 @@ class Gleez_Datatables {
 	protected function _count()
 	{
 		return count($this->_result);
-	}	
-	
+	}
+
 	/**
 	 * Count total
 	 *
 	 * @return  integer
 	 */
 	protected function _count_total()
-    {
+	{
 		return $this->_object->reset(FALSE)->count_all();
-    }
-	
+	}
+
 	/**
 	 * Execute result on object
 	 *
@@ -201,7 +201,7 @@ class Gleez_Datatables {
 	{
 		return $this->_object->find_all();
 	}
-	
+
 	/**
 	 * Set limit
 	 *
@@ -212,10 +212,10 @@ class Gleez_Datatables {
 	public function limit($start, $length)
 	{
 		$this->_limit($start, $length);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Set sort order
 	 *
@@ -230,12 +230,12 @@ class Gleez_Datatables {
 		{
 			throw new Gleez_Exception('Invalid sort order of `' . $direction . '`.');
 		}
-		
+
 		$this->_sort($column, $direction);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Search query
 	 *
@@ -245,10 +245,10 @@ class Gleez_Datatables {
 	public function search($query)
 	{
 		$this->_search($query);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Get count based on post operations
 	 *
@@ -258,7 +258,7 @@ class Gleez_Datatables {
 	{
 		return (int) $this->_count;
 	}
-	
+
 	/**
 	 * Get total count prior to operations
 	 *
@@ -268,7 +268,7 @@ class Gleez_Datatables {
 	{
 		return (int) $this->_count_total;
 	}
-	
+
 	/**
 	 * Set or get columns
 	 *
@@ -281,12 +281,12 @@ class Gleez_Datatables {
 		{
 			return $this->_columns;
 		}
-		
+
 		$this->_columns = $columns;
-		
+
 		return $this;
-	}	
-	
+	}
+
 	/**
 	 * Set or get search columns
 	 *
@@ -299,12 +299,12 @@ class Gleez_Datatables {
 		{
 			return $this->_search_columns;
 		}
-		
+
 		$this->_search_columns = $columns;
-		
+
 		return $this;
-	}		
-	
+	}
+
 	/**
 	 * Get result
 	 *
@@ -313,8 +313,8 @@ class Gleez_Datatables {
 	public function result()
 	{
 		return $this->_result;
-	}	
-	
+	}
+
 	/**
 	 * Execute
 	 *
@@ -328,30 +328,30 @@ class Gleez_Datatables {
 		{
 			throw new Gleez_Exception('DataTables expecting valid Request. If within a sub-request, have controller pass `$this->request`.');
 		}
-		
+
 		$columns = $this->columns();
 		$this->_count_total = $this->_count_total();
-		
+
 		if ($request->query('iSortCol_0') !== NULL)
 		{
 			for ($i = 0; $i < intval($request->query('iSortingCols')); $i++)
 			{
 				$column = $columns[intval($request->query('iSortCol_' . $i))];
-				
+
 				$sort = 'Datatables::SORT_' . strtoupper($request->query('sSortDir_' . $i));
-				
+
 				if (defined($sort))
 				{
 					$this->sort($column, constant($sort));
 				}
-			}	
+			}
 		}
-		
+
 		if ($request->query('iDisplayStart') !== NULL && $request->query('iDisplayLength') != '-1')
 		{
 			$start = $request->query('iDisplayStart');
 			$length = $request->query('iDisplayLength');
-			
+
 			$this->limit($start, $length);
 		}
 
@@ -359,18 +359,18 @@ class Gleez_Datatables {
 		{
 			$this->search($request->query('sSearch'));
 		}
-		
-		
-                $this->_result = $this->_execute();
-		
+
+
+				$this->_result = $this->_execute();
+
 		$this->_count = $this->_count();
-	
+
 		// Count should always match total unless search is being applied
 		$this->_count = ($request->query('sSearch')) ? $this->count() : $this->_count_total;
-		
+
 		return $this;
 	}
-        
+
 	/**
 	 * Set or get View file path
 	 *
@@ -383,15 +383,15 @@ class Gleez_Datatables {
 		{
 			return $this->_view;
 		}
-		
+
 		$this->_view = $path;
-		
+
 		return $this;
 	}
-        
+
 	/**
 	 * Set or get Request
-	 * 
+	 *
 	 * @access	public
 	 * @param	mixed	NULL|Request
 	 * @return	mixed	$this|Request|NULL
@@ -402,15 +402,15 @@ class Gleez_Datatables {
 		{
 			if ($this->_request instanceof Request)
 				return $this->_request;
-				
+
 			return Request::current();
 		}
-			
+
 		$this->_request = $request;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Add row to output
 	 *
@@ -420,10 +420,10 @@ class Gleez_Datatables {
 	public function add_row(array $row)
 	{
 		$this->_rows[] = $row;
-		
+
 		return $this;
 	}
-        
+
 	/**
 	 * Render
 	 *
@@ -432,8 +432,8 @@ class Gleez_Datatables {
 	public function __toString()
 	{
 		return $this->render();
-	}	
-	
+	}
+
 	/**
 	 * Render
 	 *
@@ -447,9 +447,9 @@ class Gleez_Datatables {
 			{
 				View::factory($this->_view, array('datatables' => $this))->render();
 			}
-			
+
 			$this->request()->response()->headers('content-type', 'application/json; charset=' . Kohana::$charset);
-			
+
 			$this->_render = json_encode(array
 			(
 				'sEcho'                 => intval($this->request()->query('sEcho')),
@@ -458,7 +458,7 @@ class Gleez_Datatables {
 				'aaData'                => $this->_rows
 			));
 		}
-		
+
 		return $this->_render;
-	}        
+	}
 }
