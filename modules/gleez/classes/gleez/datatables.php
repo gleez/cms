@@ -136,7 +136,7 @@ class Gleez_Datatables {
 	 */
 	protected function _sort($column, $direction)
 	{
-		$this->_object->order_by($this->_object_name.'.'.$column, mysql_real_escape_string($direction));
+		$this->_object->order_by($this->_object_name.'.'.$column, Text::plain($direction));
 	}
 	
 	/**
@@ -152,7 +152,7 @@ class Gleez_Datatables {
 
 		if (count($columns) > 0)
 		{
-			$query = '%' . $query . '%';
+			$query = '%' . Text::plain($query) . '%';
 			
 			$this->_object->where_open();
 
