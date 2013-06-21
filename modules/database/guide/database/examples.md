@@ -12,7 +12,7 @@ In this example, we loop through an array of whitelisted input fields and for ea
 
 	$query = DB::select()->from('users');
 	
-	//only search for these fields
+	// only search for these fields
 	$form_inputs = array('first_name', 'last_name', 'email');
 	foreach ($form_inputs as $name) 
 	{
@@ -23,11 +23,11 @@ In this example, we loop through an array of whitelisted input fields and for ea
 		}
 	}
 	
-	//copy the query & execute it
+	// copy the query & execute it
 	$pagination_query = clone $query;
-	$count = $pagination_query->select('COUNT("*") AS mycount')->execute()->get('mycount');
+	$count = $pagination_query->select(DB::expr('COUNT(*)) AS mycount')->execute()->get('mycount');
 	
-	//pass the total item count to Pagination
+	// pass the total item count to Pagination
 	$config = Kohana::$config->load('pagination');
 	$pagination = Pagination::factory(array(
 		'total_items' => $count,
@@ -38,7 +38,7 @@ In this example, we loop through an array of whitelisted input fields and for ea
 	));
 	$page_links = $pagination->render();
 	
-	//search for results starting at the offset calculated by the Pagination class
+	// search for results starting at the offset calculated by the Pagination class
 	$query->order_by('last_name', 'asc')
 		->order_by('first_name', 'asc')
 		->limit($pagination->items_per_page)
