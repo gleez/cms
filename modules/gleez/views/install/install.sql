@@ -236,8 +236,9 @@ CREATE TABLE {paths} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {paths} (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
-(NULL, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
-(NULL, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL);
+(1, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
+(2, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL),
+(3, 'user/login', 'login', 'und', 'user', NULL, 'user', 'login', NULL);
 
 DROP TABLE IF EXISTS {permissions};
 CREATE TABLE {permissions} (
