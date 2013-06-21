@@ -6,15 +6,17 @@
  * name is the [config](database/config) group.
  *
  * This class provides connection instance management via Database Drivers, as
- * well as quoting, escaping and other related functions. Querys are done using
+ * well as quoting, escaping and other related functions. Queries are done using
  * [Database_Query] and [Database_Query_Builder] objects, which can be easily
  * created using the [DB] helper class.
  *
- * @package    Kohana/Database
- * @category   Base
+ * @package    Kohana\Database\Base
  * @author     Kohana Team
+ * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Kohana_Database {
 
@@ -25,29 +27,40 @@ abstract class Kohana_Database {
 	const DELETE =  4;
 
 	/**
-	 * @var  string  default instance name
+	 * Default instance name
+	 * @var string
 	 */
 	public static $default = 'default';
 
 	/**
-	 * @var  array  Database instances
+	 * Database instances
+	 * @var array
 	 */
 	public static $instances = array();
 
 	/**
-	 * Get a singleton Database instance. If configuration is not specified,
-	 * it will be loaded from the database configuration file using the same
-	 * group as the name.
+	 * Get a singleton Database instance
 	 *
-	 *     // Load the default database
-	 *     $db = Database::instance();
+	 * If configuration is not specified, it will be loaded from the database
+	 * configuration file using the same group as the name.
 	 *
-	 *     // Create a custom configured instance
-	 *     $db = Database::instance('custom', $config);
+	 * ### Examples
 	 *
-	 * @param   string   $name    instance name
-	 * @param   array    $config  configuration parameters
+	 * Load the default database:<br>
+	 * <code>
+	 *   $db = Database::instance();
+	 * </code>
+	 *
+	 * Create a custom configured instance:<br>
+	 * <code>
+	 *   $db = Database::instance('custom', $config);
+	 * </code>
+	 *
+	 * @param   string   $name    Instance name [Optional]
+	 * @param   array    $config  Configuration parameters [Optional]
 	 * @return  Database
+	 *
+	 * @throws  Gleez_Exception
 	 */
 	public static function instance($name = NULL, array $config = NULL)
 	{
@@ -106,7 +119,8 @@ abstract class Kohana_Database {
 	 *
 	 * [!!] This method cannot be accessed directly, you must use [Database::instance].
 	 *
-	 * @return  void
+	 * @param  string  $name    Instance name
+	 * @param  array   $config  Configuration parameters
 	 */
 	public function __construct($name, array $config)
 	{
@@ -723,4 +737,4 @@ abstract class Kohana_Database {
 	 */
 	abstract public function escape($value);
 
-} // End Database_Connection
+}
