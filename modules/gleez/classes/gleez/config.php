@@ -3,7 +3,7 @@
  * Wrapper for configuration arrays. Multiple configuration sources can be
  * attached to allow loading configuration from files, database, etc.
  *
- * Configuration directives cascade across config sources in the same way that 
+ * Configuration directives cascade across config sources in the same way that
  * files cascade across the filesystem.
  *
  * Directives from sources high in the sources list will override ones from those
@@ -16,18 +16,18 @@
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Config {
-	
+
 	/**
 	 * @var array $_items config array
 	 */
 	protected static $_items = array();
-	
+
 	/**
 	 * @var array $_sources configuration sources
 	 */
 	protected static $_sources = array();
-	
-        /**
+
+		/**
 	 * @var config instance
 	 */
 	protected static $_instance;
@@ -43,7 +43,7 @@ class Gleez_Config {
 		{
 			Config::$_instance = new Config();
 		}
-		
+
 		return Config::$_instance;
 	}
 
@@ -74,7 +74,7 @@ class Gleez_Config {
 
 		return Config::$_instance;
 	}
-	
+
 	/**
 	 * Detach a configuration source.
 	 *
@@ -95,9 +95,9 @@ class Gleez_Config {
 	}
 
 	/**
-	 * Load a configuration group. Searches all the config sources, merging all the 
-	 * directives found into a single config group.  Any changes made to the config 
-	 * in this group will be mirrored across all writable sources.  
+	 * Load a configuration group. Searches all the config sources, merging all the
+	 * directives found into a single config group.  Any changes made to the config
+	 * in this group will be mirrored across all writable sources.
 	 *
 	 *     $array = Config::load($name);
 	 *
@@ -129,8 +129,8 @@ class Gleez_Config {
 			// Split the config group and path
 			list ($group, $path) = explode('.', $group, 2);
 		}
-		
-		if(isset(Config::$_items[$group])) 
+
+		if(isset(Config::$_items[$group]))
 		{
 			if (isset($path))
 			{
@@ -138,7 +138,7 @@ class Gleez_Config {
 			}
 			return Config::$_items[$group];
 		}
-		
+
 		$config = array();
 
 		// We search from the "lowest" source and work our way up
@@ -154,14 +154,14 @@ class Gleez_Config {
 				}
 			}
 		}
-		
+
 		if ( ! isset(Config::$_items[$group]) )
 		{
 			Config::$_items[$group] = array();
 		}
-	
+
 		Config::$_items[$group] = new Config_group($config, $group);
-	
+
 		if (isset($path))
 		{
 			return Arr::path($config, $path, NULL, '.');
@@ -178,7 +178,7 @@ class Gleez_Config {
 	 * @return  mixed               the config setting or default if not found
 	 */
 	public static function get($item, $default = null)
-	{ 
+	{
 		if (strpos($item, '.') !== FALSE)
 		{
 			// Split the config group and path
@@ -188,15 +188,15 @@ class Gleez_Config {
 		{
 			$group = $item;
 		}
-	
+
 		$config = Config::load($group);
-	
+
 		//if empty or no config return default
 		if(empty($config) OR ($config === FALSE))
 		{
 			return $default;
 		}
-		
+
 		if (isset($path))
 		{
 			return Arr::path($config->as_array(), $path, $default, '.');
@@ -204,7 +204,7 @@ class Gleez_Config {
 
 		return Config::$_items[$group];
 	}
-	
+
 	/**
 	 * To store changes made to configuration
 	 *
@@ -224,7 +224,7 @@ class Gleez_Config {
 
 		return $status;
 	}
-	
+
 	/**
 	 * Deletes a config item
 	 *
@@ -239,14 +239,14 @@ class Gleez_Config {
 		{
 			$status = $source->delete($group, $key);
 		}
-		
+
 		return $status;
 	}
 
 	/**
 	 * To store changes made to configuration
 	 * Experimental
-	 * 
+	 *
 	 * @param string    $key    Path of variable eg: group.key or group.key.option1
 	 * @param mixed     $value  The new value
 	 * @return boolean
@@ -258,7 +258,7 @@ class Gleez_Config {
 		// Split the config group, item and path
 		list ($group, $item, $_path) = explode('.', $key, 3);
 		$path = (isset($_path) AND !empty($_path)) ? $item.'.'.$_path : $item;
-	
+
 		//load and override config array
 		$config = Config::load($group);
 		Arr::set_path($config, $path, $value, '.');
@@ -272,5 +272,5 @@ class Gleez_Config {
 
 		return $status;
 	}
-	
+
 }
