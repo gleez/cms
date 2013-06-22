@@ -163,7 +163,7 @@ class Controller_User extends Template {
 			->set('providers',    array_filter($config->get('providers')))
 			->set('post',         $user)
 			->set('action',       $action)
-			->bind('errors',       $this->_errors);
+			->bind('errors',      $this->_errors);
 
 		if ($this->valid_post('login'))
 		{
@@ -235,9 +235,10 @@ class Controller_User extends Template {
 	 */
 	public function action_view()
 	{
-		$id      = (int) $this->request->param('id', 0);
-		$user    = ORM::factory('user', $id);
-		$account = FALSE;
+		$id       = (int) $this->request->param('id', 0);
+		$user     = ORM::factory('user', $id);
+		$account  = FALSE;
+		$is_owner = FALSE;
 
 		if ( ! $user->loaded())
 		{
@@ -260,6 +261,10 @@ class Controller_User extends Template {
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
+		elseif (ACL::check('access profiles') AND $user->status AND $user->id > 1)
+		{
+			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
+		}
 		else
 		{
 			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges.');
@@ -267,7 +272,10 @@ class Controller_User extends Template {
 			throw new HTTP_Exception_403('Attempt to access without required privileges.');
 		}
 
-		$is_owner = ($user->id === $account->id) ? TRUE : FALSE;
+		if ($account AND ($user->id === $account->id))
+		{
+			$is_owner = TRUE;
+		}
 
 		$view = View::factory('user/profile')
 				->set('user',     $user)
@@ -434,7 +442,7 @@ class Controller_User extends Template {
 		$this->response->body($view);
 	}
 
-	/*
+	/**
 	 * Confirm signup by email link validation
 	 */
 	public function action_confirm()
