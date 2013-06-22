@@ -92,14 +92,15 @@
 
     Gleez.URLEncode = function (s) {
 	s = encodeURIComponent (s);
-	//s = s.replace (/\~/g, '%7E').replace (/\!/g, '%21').replace (/\(/g, '%28').replace (/\)/g, '%29').replace (/\'/g, '%27');
-	//s = s.replace (/%20/g, '+');
+	//s = s.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+	////s = s.replace (/\~/g, '%7E').replace (/\!/g, '%21').replace (/\(/g, '%28').replace (/\)/g, '%29').replace (/\'/g, '%27');
+	////s = s.replace (/%20/g, '+');
 	s = s.replace (/%2F/g, '/'); //escape slash for admin/menu autocomplete
 	return s;
     };
     
     Gleez.URLDecode = function (s) {
-	//s = s.replace (/\+/g, '%20');
+	////s = s.replace (/\+/g, '%20');
 	s = s.replace (/\//g, '%2F');
 	s = decodeURIComponent (s);
 	return s;
