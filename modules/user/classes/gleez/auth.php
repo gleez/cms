@@ -1,11 +1,11 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * User authorization library
  *
  * Handles user login and logout, as well as secure
  * password hashing.
  *
- * @package    Gleez\User
+ * @package    Gleez\Auth\Base
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -14,21 +14,18 @@ abstract class Gleez_Auth {
 
 	/**
 	 * Auth instances
-	 *
 	 * @var string
 	 */
 	protected static $_instance;
 
 	/**
 	 * Kohana session object
-	 *
 	 * @var object
 	 */
 	protected $_session;
 
 	/**
 	 * Kohana config object
-	 *
 	 * @var object
 	 */
 	protected $_config;
@@ -105,7 +102,7 @@ abstract class Gleez_Auth {
 	 *
 	 * Returns NULL if no user is currently logged in.
 	 *
-	 * @param   mixed  $default  Default value to return
+	 * @param   mixed  $default  Default value to return [Optional]
 	 * @return  mixed
 	 */
 	public function get_user($default = NULL)
@@ -127,12 +124,11 @@ abstract class Gleez_Auth {
 	 * Check if there is an active session. Optionally allows checking for a
 	 * specific role.
 	 *
-	 * @param   string   role name
+	 * @param   string  $role  Role name [Optional]
 	 * @return  mixed
 	 */
 	public function logged_in($role = NULL)
 	{
-		//return ($this->get_user() !== NULL);
 		return ($this->get_user() !== NULL);
 	}
 
@@ -191,8 +187,8 @@ abstract class Gleez_Auth {
 	/**
 	 * Log out a user by removing the related session variables.
 	 *
-	 * @param   boolean  completely destroy the session
-	 * @param   boolean  remove all tokens for user
+	 * @param   boolean  $destroy     Completely destroy the session [Optional]
+	 * @param   boolean  $logout_all  Remove all tokens for user [Optional]
 	 * @return  boolean
 	 */
 	public function logout($destroy = FALSE, $logout_all = FALSE)
@@ -229,8 +225,8 @@ abstract class Gleez_Auth {
 	/**
 	 * Allows a model use email, username and OAuth provider id as unique identifiers for login
 	 *
-	 * @param   string  unique value
-	 * @param   string  OAuth provider name
+	 * @param   string  $value           Unique value
+	 * @param   string  $oauth_provider  OAuth provider name [Optional]
 	 * @return  string  field name
 	 */
 	public function unique_key($value, $oauth_provider = NULL)
