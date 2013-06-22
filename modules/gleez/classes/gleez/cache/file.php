@@ -148,6 +148,13 @@ class Gleez_Cache_File extends Cache {
 				// If we're at the EOF at this point, corrupted!
 				if ($data->eof())
 				{
+					// if cache gets corrupted ignore silently and log in production
+					if (Kohana::$environment == Kohana::PRODUCTION)
+					{
+						Kohana::$log->add(Log::ERROR, 'corrupted cache file!');
+						return $default;
+					}
+					
 					throw new Cache_Exception(__METHOD__.' corrupted cache file!');
 				}
 
