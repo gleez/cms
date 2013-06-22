@@ -109,6 +109,11 @@ class Kohana {
 	public static $caching = FALSE;
 
 	/**
+	 * @var  array default cache driver info
+	 */
+	public static $cache = array('driver' => 'file', 'default_expire' => 3600);
+	
+	/**
 	 * @var  boolean  Whether to enable [profiling](kohana/profiling). Set by [Kohana::init]
 	 */
 	public static $profiling = TRUE;
@@ -885,14 +890,16 @@ class Kohana {
 			$lifetime = Kohana::$cache_life;
 		}
 
+		$config = array_merge(Kohana::$cache, array('cache_dir' => Kohana::$cache_dir));
+		
 		//no data provided we read
 		if ($data === NULL)
 		{
-		    //return Cache::instance()->get($name);
+		    return Cache::instance(NULL, $config)->get($name);
 		}
 		else
 		{
-		    //return Cache::instance()->set($name, $data, $lifetime);
+		    return Cache::instance(NULL, $config)->set($name, $data, $lifetime);
 		}
 	}
 
