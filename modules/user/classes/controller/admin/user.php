@@ -80,7 +80,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$view = View::factory('admin/user/form')
 						->bind('all_roles', $all_roles)
 						->set('user_roles', array())
-						->bind('errors',    $errors)
+						->bind('errors',    $this->_errors)
 						->bind('post',      $post);
 
 		$post = ORM::factory('user');
@@ -113,7 +113,7 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors =  $e->errors('models');
+				$this->_errors =  $e->errors('models');
 			}
 		}
 
@@ -151,8 +151,9 @@ class Controller_Admin_User extends Controller_Admin {
 
 		$view = View::factory('admin/user/form')
 					->set('user_roles', $user_roles)
-					->set('all_roles', $all_roles)
-					->set('post', $post);
+					->set('all_roles',  $all_roles)
+					->set('post',       $post)
+					->bind('errors',    $this->_errors);
 
 		if ($this->valid_post('user'))
 		{
@@ -200,7 +201,7 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$view->errors = count($_POST) ? $e->errors() : array();
+				$this->_errors = count($_POST) ? $e->errors() : array();
 			}
 		}
 
