@@ -94,7 +94,7 @@ abstract class Gleez_Cache {
 	 * @return  Cache
 	 * @throws  Cache_Exception
 	 */
-	public static function instance($group = NULL)
+	public static function instance($group = NULL, array $config = NULL)
 	{
 		// If there is no group supplied
 		if ($group === NULL)
@@ -109,30 +109,31 @@ abstract class Gleez_Cache {
 			return Cache::$instances[$group];
 		}
 
-		$config = Kohana::$config->load('cache');
-		$collection = $group;
-
-		if ( ! $config->offsetExists($group))
+		if(empty($config))
 		{
-			// Use the default setting by gleez
-			$group = Cache::$default;
-
-			if (isset(Cache::$instances[$group]))
-			{
-				// Return the current group if initiated already
-				return Cache::$instances[$group];
-			}
-
+			$config = Kohana::$config->load('cache');
+	
 			if ( ! $config->offsetExists($group))
 			{
-				throw new Cache_Exception('Failed to load Gleez Cache group: :group',
-					array(':group' => $group)
-				);
+				// Use the default setting by gleez
+				$group = Cache::$default;
+	
+				if (isset(Cache::$instances[$group]))
+				{
+					// Return the current group if initiated already
+					return Cache::$instances[$group];
+				}
+	
+				if ( ! $config->offsetExists($group))
+				{
+					throw new Cache_Exception('Failed to load Gleez Cache group: :group',
+						array(':group' => $group)
+					);
+				}
 			}
+			
+			$config = $config->get($group);
 		}
-
-		$config = $config->get($group);
-		$config['collection'] = 'cache_'.$collection;
 
 		// Create a new cache type instance
 		$cache_class = 'Cache_'.ucfirst($config['driver']);
