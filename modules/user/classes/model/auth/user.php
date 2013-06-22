@@ -201,12 +201,12 @@ class Model_Auth_User extends ORM {
 		{
 			return array();
 		}
-		
+
 		$data = unserialize($this->data);
-		
+
 		return isset($data['permissions']) ? $data['permissions'] : array();
 	}
-	
+
 	/**
 	 * Gets all roles
 	 */
@@ -214,7 +214,7 @@ class Model_Auth_User extends ORM {
 	{
 		return $this->_roles();
 	}
-	
+
 	/**
 	 * Override the create method with defaults
 	 *
@@ -244,38 +244,38 @@ class Model_Auth_User extends ORM {
 		{
 			throw new Gleez_Exception('Cannot Update :model model because it is not loaded.', array(':model' => $this->_object_name));
 		}
-		
+
 		$this->data = $this->_data();
-		
+
 		return parent::update($validation);
 	}
-	
+
 	/**
 	 * Override the relation add method to reset user roles
 	 */
 	public function add($alias, $far_keys, $data = NULL)
 	{
 		parent::add($alias, $far_keys, $data);
-		
+
 		//update data roles
 		$this->_set_roles();
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Override the relation remove method to reset user roles
 	 */
 	public function remove($alias, $far_keys = NULL)
 	{
 		parent::remove($alias, $far_keys);
-		
+
 		//update data roles
 		$this->_set_roles();
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Override the find_all method
 	 *
@@ -929,12 +929,12 @@ class Model_Auth_User extends ORM {
 		$data = $this->_original_values['data'];
 		$olddata =  unserialize($data);
 		$newdata = is_array($this->data) ? $this->data : array();
-		
+
 		if (empty($data) OR ! $olddata)
 		{
 			return empty($this->data) ? NULL : serialize($newdata);
 		}
-		
+
 		foreach ($newdata AS $key => $value)
 		{
 			if ($value === NULL)
@@ -946,16 +946,16 @@ class Model_Auth_User extends ORM {
 				$olddata[$key] = $value;
 			}
 		}
-		
+
 		return empty($olddata) ? NULL : serialize($olddata);
 	}
 
 	/**
 	 * Gets or sets all roles
-	 * 
+	 *
 	 * This simplifies the caching the roles in data column
 	 * to improve performance
-	 * 
+	 *
 	 */
 	protected function _roles()
 	{
@@ -966,13 +966,13 @@ class Model_Auth_User extends ORM {
 			{
 				return $data['roles'];
 			}
-		
+
 			if(empty($data['roles']))
 			{
 				return $this->_set_roles();
 			}
 		}
-		
+
 		return $this->roles->find_all()->as_array('id', 'name');
 	}
 
@@ -984,14 +984,14 @@ class Model_Auth_User extends ORM {
 		if ($this->_loaded)
 		{
 			$roles = $this->roles->find_all()->as_array('id', 'name');
-		
+
 			//save to data field for performance
 			$this->data = array('roles' => $roles);
 			$this->update();
-			
+
 			return $roles;
 		}
-		
+
 		return array();
 	}
 }
