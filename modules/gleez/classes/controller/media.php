@@ -53,8 +53,8 @@ class Controller_Media extends Controller {
 	 */
 	public function action_serve()
 	{
-		// Get file type from the request
-		$type = $this->request->param('type', FALSE);
+		// Get file theme from the request
+		$theme = $this->request->param('theme', FALSE);
 
 		// Get the file path from the request
 		$file = $this->request->param('file');
@@ -86,9 +86,9 @@ class Controller_Media extends Controller {
 				$path = $this->config->get('public_dir', 'media');
 			
 				// Override path if we're in admin
-				if ($type)
+				if ($theme)
 				{
-					$path = $path.DIRECTORY_SEPARATOR . 'admin';
+					$path = $path.DIRECTORY_SEPARATOR . $theme;
 				}
 				
 				// Save the contents to the public directory for future requests
