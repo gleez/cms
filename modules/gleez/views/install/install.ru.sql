@@ -430,19 +430,18 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
-(1, 'static/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '1,2', 1, 'Если вы используете Gleez CMS, мы просим вас пожертвовать для обеспечения возможности будущего развития.', 1, 'icon-gift'),
+(1, 'admin/donate', 'Пожертвование', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '4', 1, NULL, 1, 'icon-gift'),
 (2, 'menu/main-menu', 'Главное меню', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
 (3, 'menu/management', 'Управление', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'icon-cog'),
 (4, 'menu/navigation', 'Навигация', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
 (5, 'menu/user-menu', 'Меню пользователя', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
-(6, 'admin/donate', 'Пожертвование', 'gleez', 'fluid', 1, 'dashboard', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-gift'),
-(7, 'admin/welcome', 'Добро пожаловать', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
-(8, 'admin/info', 'Система', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
-(9, 'user/login', 'Авторизация', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
-(10, 'comment/recent', 'Комментарии', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
-(11, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark'),
-(12, 'blog/recent',	'Последние блоги',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book'),
-(13, 'blog/announce',	'Анонсы последних блогов',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book');
+(6, 'admin/welcome', 'Добро пожаловать', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
+(7, 'admin/info', 'Система', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
+(8, 'user/login', 'Авторизация', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
+(9, 'comment/recent', 'Комментарии', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
+(10, 'admin/shortcut', 'Ярлыки', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark'),
+(11, 'blog/recent',	'Последние блоги',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book'),
+(12, 'blog/announce',	'Анонсы последних блогов',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
