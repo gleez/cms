@@ -5,7 +5,7 @@
 
 	<?php echo Form::open(Route::get('admin/menu/item')->uri(array('action' => 'confirm', 'id' => $id)), array('id'=>'menu-form', 'class'=>'form')); ?>
 
-	<table id="menu-admin-list" class="table table-bordered table-striped">
+	<table id="menu-admin-list" class="table table-striped table-bordered table-highlight">
 		<thead>
 			<tr>
 				<th><?php echo __('Name') ?></th>
