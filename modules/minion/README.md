@@ -1,3 +1,39 @@
+#Version for 3.2
+
+This version was forked from 3.3/master, and classes names replaced from uppercase to lowercase in 3.2 style.
+Class names changes too.
+
+To ran tasks you need also add this to your Kohana 3.2 bootstrap.php file:
+
+    if (PHP_SAPI == 'cli') // Try and load minion
+    {
+        class_exists('Minion_Task') OR die('Please enable the Minion module for CLI support.');
+        set_exception_handler(array('Minion_Exception', 'handler'));
+
+        Minion_Task::factory(Minion_CLI::options())->execute();
+    }
+    else
+    {
+
+        echo Request::factory()
+                ->execute()
+                ->send_headers(TRUE)
+                ->body();
+    }
+
+And now you can use it like 3.3 minion module.
+
+    class Task_Welcome extends Minion_Task {
+        protected function _execute(array $params)
+        {
+            Minion_CLI::write('hello world!');
+        }
+    }
+
+./minion --task=welcome
+
+---------------
+
 # Minion
 
 Minion is a framework for running tasks via the CLI.

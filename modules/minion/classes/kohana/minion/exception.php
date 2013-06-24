@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Minipn exception
  *
@@ -8,7 +8,7 @@
  * @copyright  (c) 2009-2011 Kohana Team
  * @license    http://kohanaframework.org/license
  */
-class Kohana_Minion_Exception extends Kohana_Exception {
+class Kohana_Minion_Exception extends Gleez_Exception {
 	/**
 	 * Inline exception handler, displays the error message, source of the
 	 * exception, and the stack trace of the error.
@@ -31,7 +31,7 @@ class Kohana_Minion_Exception extends Kohana_Exception {
 			}
 			else
 			{
-				echo Kohana_Exception::text($e);
+				echo Gleez_Exception::text($e);
 			}
 			
 			$exit_code = $e->getCode();
@@ -50,7 +50,7 @@ class Kohana_Minion_Exception extends Kohana_Exception {
 			ob_get_level() and ob_clean();
 
 			// Display the exception text
-			echo Kohana_Exception::text($e), "\n";
+			echo Gleez_Exception::text($e), "\n";
 
 			// Exit with an error status
 			exit(1);
@@ -59,6 +59,6 @@ class Kohana_Minion_Exception extends Kohana_Exception {
 
 	public function format_for_cli()
 	{
-		return Kohana_Exception::text($e);
+		return Gleez_Exception::text($e);
 	}
 }
