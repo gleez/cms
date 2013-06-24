@@ -52,7 +52,8 @@ The latest documentation is available on the [Gleez Wiki](https://github.com/gle
 * [Installation](https://github.com/gleez/cms/wiki/Installation)
 * [Developers](https://github.com/gleez/cms/wiki/Developers)
 
-Chat with fellow Gleez users at [#gleez](irc://irc.freenode.net/gleez) on Freenode
+Chat with fellow Gleez users at [#gleez on Freenode](http://webchat.freenode.net/?channels=gleez)
+
 
 ***
 
