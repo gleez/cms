@@ -112,18 +112,18 @@ abstract class Gleez_Cache {
 		if(empty($config))
 		{
 			$config = Kohana::$config->load('cache');
-	
+
 			if ( ! $config->offsetExists($group))
 			{
 				// Use the default setting by gleez
 				$group = Cache::$default;
-	
+
 				if (isset(Cache::$instances[$group]))
 				{
 					// Return the current group if initiated already
 					return Cache::$instances[$group];
 				}
-	
+
 				if ( ! $config->offsetExists($group))
 				{
 					throw new Cache_Exception('Failed to load Gleez Cache group: :group',
@@ -131,7 +131,7 @@ abstract class Gleez_Cache {
 					);
 				}
 			}
-			
+
 			$config = $config->get($group);
 		}
 
