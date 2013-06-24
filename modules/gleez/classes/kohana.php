@@ -674,10 +674,11 @@ class Kohana {
 	 * @param   string  $file   filename with subdirectory
 	 * @param   string  $ext    extension to search for
 	 * @param   boolean $array  return an array of files?
+	 * @param   string  $theme  theme name or defaults to active
 	 * @return  array   a list of files when $array is TRUE
 	 * @return  string  single file path
 	 */
-	public static function find_file($dir, $file, $ext = NULL, $array = FALSE)
+	public static function find_file($dir, $file, $ext = NULL, $array = FALSE, $theme = NULL)
 	{
 		if ($ext === NULL)
 		{
@@ -695,13 +696,20 @@ class Kohana {
 			$ext = '';
 		}
 
+		//theme class may not be available during initial init phase
+		if ($theme === NULL AND class_exists('theme'))
+		{
+			// Use the active theme
+			$theme = Theme::$active;
+		}
+
 		// Create a partial path of the filename
 		$path = $dir.DIRECTORY_SEPARATOR.$file.$ext;
 
-		if (Kohana::$caching === TRUE AND isset(Kohana::$_files[$path.($array ? '_array' : '_path')]))
+		if (Kohana::$caching === TRUE AND isset(Kohana::$_files[$path.($array ? '_array' : '_path')][$theme]))
 		{
 			// This path has been cached
-			return Kohana::$_files[$path.($array ? '_array' : '_path')];
+			return Kohana::$_files[$path.($array ? '_array' : '_path')][$theme];
 		}
 
 		if (Kohana::$profiling === TRUE AND class_exists('Profiler', FALSE))
@@ -748,7 +756,7 @@ class Kohana {
 		if (Kohana::$caching === TRUE)
 		{
 			// Add the path to the cache
-			Kohana::$_files[$path.($array ? '_array' : '_path')] = $found;
+			Kohana::$_files[$path.($array ? '_array' : '_path')][$theme] = $found;
 
 			// Files have been changed
 			Kohana::$_files_changed = TRUE;
