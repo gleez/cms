@@ -7,7 +7,7 @@ Writing a task in minion is very easy. Simply create a new class called `Task_<T
 	class Task_Demo extends Minion_Task
 	{
 		protected $_defaults = array(
-			'foo' => 'bar',
+			'foo' = 'bar',
 			'bar' => NULL,
 		);
 
@@ -55,7 +55,7 @@ Tasks can have built-in help. Minion will read class docblocks that you specify:
 
 	/**
 	 * This is a demo task.
-	 *
+	 * 
 	 * It can accept the following options:
 	 *  - foo: this parameter does something. It is required.
 	 *  - bar: this parameter does something else. It should be numeric.
