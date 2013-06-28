@@ -514,6 +514,21 @@ class Controller_User extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Reset confirm password
+	 *
+	 * Validates the confirmation link for a password reset and shows 'New password' form
+	 *
+	 * @uses  Request::redirect
+	 * @uses  Request::current
+	 * @uses  Request::post
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  URL::query
+	 * @uses  Model_User::confirm_reset_password_link
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 */
 	public function action_reset_confirm_password()
 	{
 		if($this->_auth->logged_in())
@@ -523,36 +538,37 @@ class Controller_User extends Template {
 		}
 
 		// Grab the user id, token and timestamp from the confirmation link.
-		$id = (int) $this->request->param('id');
+		$id    = (int) $this->request->param('id');
 		$token = (string) $this->request->param('token');
-		$time = (int) $this->request->param('time');
+		$time  = (int) $this->request->param('time');
 
 		// Make sure nobody else is logged in
 		$this->prevent_user_collision($id);
 
 		// Validate the confirmation link first
-		if( ! $this->_user->confirm_reset_password_link($id, $token, $time))
+		if ( ! $this->_user->confirm_reset_password_link($id, $token, $time))
 		{
-			Message::error('The confirmation link to reset your password has expired or is invalid. Please request a new one using the form below.');
+			Message::error(__('The confirmation link to reset your password has expired or is invalid. Please request a new one using the form below.'));
 			$this->request->redirect('user/reset/password');
 		}
 
 		// Show form
 		$this->title = __('Choose a new password');
 		$view = View::factory('user/confirm_reset_password')
+			->set('action',  Request::current()->uri().URL::query())
 			->bind('post',   $post)
 			->bind('errors', $this->_errors);
 
 		// Form submitted
-		if( $this->valid_post('password_confirm'))
+		if ($this->valid_post('password_confirm'))
 		{
-			if($this->_user->confirm_reset_password_form($post = $this->request->post()))
+			if ($this->_user->confirm_reset_password_form($post = $this->request->post()))
 			{
-				Message::success('You can now sign in with your new password.');
+				Message::success(__('You can now sign in with your new password.'));
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$this->_errors = $post->errors('models');
+			$this->_errors = $post->errors('models', TRUE);
 		}
 
 		$this->response->body($view);
