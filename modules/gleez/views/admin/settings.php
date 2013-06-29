@@ -59,6 +59,12 @@
 		<?php echo Form::select('admin_theme', Theme::available(), $post['admin_theme'], array('class' => 'span12')); ?>
 	</div>
 
+	<div class="control-group <?php echo isset($errors['feed_ttl']) ? 'error': ''; ?>">
+		<?php echo Form::label('feed_ttl', __('Feed lifetime (min.)'), array('class' => 'control-label')) ?>
+		<?php echo Form::select('feed_ttl', Date::amounts_min(), $post['feed_ttl'], array('class' => 'span12')); ?>
+		<span class="help-block"><?php _e("It's a number of minutes that indicates how long a channel can be cached before refreshing from the source."); ?></span>
+	</div>
+
 	</div>
 
 	<div id="settings-right"  class="span6">
@@ -124,6 +130,7 @@
 
 </div>
 <div class="clearfix"></div>
+<hr>
 <?php echo Form::submit('settings', __('Save Changes'), array('class' => 'btn btn-primary btn-large')) ?>
 <?php echo Form::close() ?>
 

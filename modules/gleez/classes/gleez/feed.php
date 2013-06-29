@@ -4,13 +4,11 @@
  *
  * @package    Gleez\Helpers
  * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Feed {
-
-	/** Default format is RSS 2.0 */
-	const DEFAULT_FORMAT = 'rss2';
 
 	/**
 	 * Parses a remote feed into an array.
@@ -18,11 +16,18 @@ class Gleez_Feed {
 	 * @param   string   $feed   Remote feed URL
 	 * @param   integer  $limit  Item limit to fetch [Optional]
 	 * @return  array
+	 * @throws  Gleez_Exception
 	 *
 	 * @uses    Valid::url
 	 */
 	public static function parse($feed, $limit = 0)
 	{
+		// Check if SimpleXML is installed
+		if ( ! class_exists('SimpleXMLElement'))
+		{
+			throw new Gleez_Exception('SimpleXML must be installed!');
+		}
+
 		// Make limit an integer
 		$limit = (int) $limit;
 
@@ -44,7 +49,7 @@ class Gleez_Feed {
 			return array();
 		}
 
-		$namespaces = $feed->getNamespaces(true);
+		$namespaces = $feed->getNamespaces(TRUE);
 
 		// Detect the feed type. RSS 1.0/2.0 and Atom 1.0 are supported.
 		$feed = isset($feed->channel) ? $feed->xpath('//item') : $feed->entry;
@@ -74,25 +79,23 @@ class Gleez_Feed {
 	 *
 	 * @param   array   $info      Feed information
 	 * @param   array   $items     Items to add to the feed
-	 * @param   string  $format    RSS Format [Optional]
 	 * @param   string  $encoding  Define which encoding to use [Optional]
 	 * @return  string
 	 * @throws  Gleez_Exception
 	 *
-	 * @todo    Different formats support (eg. rss 1.0, atom, etc.)
+	 * @todo    More formats support (eg. rss 1.0, rss 2.0, atom 1.0, etc.)
 	 *
 	 * @uses    Arr::merge
 	 * @uses    URL::is_absolute
+	 * @uses    URL::site
 	 */
-	public static function create(array $info, array $items, $format = NULL, $encoding = NULL)
+	public static function create(array $info, array $items, $encoding = NULL)
 	{
 		$generator = array(
-			'title'     => 'Generated Feed',
+			'title'     => 'Gleez Feed Generator',
 			'link'      => '',
 			'generator' => Feed::generator()
 		);
-
-		$format   = is_null($format) ? Feed::DEFAULT_FORMAT : $format;
 
 		$info = Arr::merge($generator, $info);
 		$feed = Feed::prepare_xml($encoding);
@@ -109,10 +112,10 @@ class Gleez_Feed {
 					throw new Gleez_Exception('Feed images require a link, url, and title');
 				}
 
-				if (URL::is_absolute($value['link']))
+				if (URL::is_absolute($value['url']))
 				{
 					// Convert URIs to URLs
-					$value['link'] = URL::site($value['link'], 'http');
+					$value['url'] = URL::site($value['url'], TRUE);
 				}
 
 				// Create the image elements
@@ -130,7 +133,7 @@ class Gleez_Feed {
 				elseif (($name === 'link' OR $name === 'docs') AND URL::is_absolute($value))
 				{
 					// Convert URIs to URLs
-					$value = URL::site($value, 'http');
+					$value = URL::site($value, TRUE);
 				}
 				// Add the info to the channel
 				$feed->channel->addChild($name, $value);
@@ -152,7 +155,7 @@ class Gleez_Feed {
 				elseif (($name === 'link' OR $name === 'guid') AND URL::is_absolute($value))
 				{
 					// Convert URIs to URLs
-					$value = URL::site($value, 'http');
+					$value = URL::site($value, TRUE);
 				}
 
 				// Add the info to the row
@@ -184,11 +187,12 @@ class Gleez_Feed {
 	/**
 	 * Gets Feed Generator Title
 	 *
-	 * @return string
+	 * @return  string
+	 * @uses    Gleez::get_version
 	 */
 	public static function generator()
 	{
-		return 'Gleez CMS v'. Gleez::VERSION . ' ' . '(http://gleezcms.org)';
+		return Gleez::get_version(TRUE, TRUE) . ' ' . '(http://gleezcms.org)';
 	}
 
 	/**
@@ -208,26 +212,28 @@ class Gleez_Feed {
 	}
 
 	/**
-	 * Gets prepared header for XML document
+	 * Gets default prepared header for XML document
 	 *
-	 * @param   Config  $config  Site config
+	 * @param   Config_Group  $config  Site config
 	 * @return  array
 	 *
 	 * @uses    Config_Group::get
 	 * @uses    URL::site
+	 * @uses    Route::url
 	 */
-	public static function info($config)
+	public static function info(Config_Group $config)
 	{
 		$info = array(
 			'title'       => $config->get('site_name', 'Gleez CMS'),
 			'description' => $config->get('site_mission', __('Recently added posts')),
 			'pubDate'     => time(),
 			'generator'   => Feed::generator(),
-			'link'        => $config->get('site_url', URL::site(NULL, TRUE)),
+			'link'        => Route::url('rss', NULL, TRUE),
 			'copyright'   => '2011-'.date('Y') . ' ' . $config->get('site_name', 'Gleez Technologies'),
-			'language'    => i18n::$lang,
+			'language'    => I18n::$lang,
+			'ttl'         => $config->get('feed_ttl', Date::HOUR * 60),
 			'image'	      => array(
-				'link'  => $config->get('site_url', URL::site(NULL, TRUE)),
+				'link'  => URL::site(NULL, TRUE),
 				'url'   => URL::site('/media/images/logo.png', TRUE),
 				'title' => $config->get('site_name', 'Gleez CMS')
 			),
