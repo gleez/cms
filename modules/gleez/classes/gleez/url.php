@@ -238,12 +238,11 @@ class Gleez_URL {
 	 *     echo URL::site('foo/bar');
 	 *
 	 * @param   string  $uri        Site URI to convert
-	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from
-	 * @param   boolean $index		Include the index_page in the URL
+	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from [Optional]
+	 * @param   boolean $index		Include the index_page in the URL [Optional]
 	 * @return  string
 	 *
-	 * @uses    URL::base
-	 * @uses    URL::_rawurlencode_callback
+	 * @uses    UTF8::is_ascii
 	 */
 	public static function site($uri = '', $protocol = NULL, $index = TRUE)
 	{
@@ -256,7 +255,7 @@ class Gleez_URL {
 			$path = preg_replace_callback('~([^/]+)~', 'URL::_rawurlencode_callback', $path);
 		}
 
-		// Concat the URL
+		// Concatenation URL
 		return URL::base($protocol, $index).$path;
 	}
 	
@@ -374,12 +373,13 @@ class Gleez_URL {
 	}
 
 	/**
-	* Determine current url
-	* 
-	* @param mixed $protocol
-	* @param boolean $index
-	* @param boolean $with_query_params
-	*/
+	 * Determine current url
+	 *
+	 * @param   mixed    $protocol
+	 * @param   boolean  $index
+	 * @param   boolean  $with_query_params
+	 * @return  string
+	 */
 	public static function current($protocol = NULL, $index = FALSE, $with_query_params = TRUE)
 	{
 		static $uri;
@@ -398,11 +398,11 @@ class Gleez_URL {
 	}
 
 	/**
-	* Determine if current url is active
-	*
-	* @param string $url
-	* @return boolean
-	*/
+	 * Determine if current url is active
+	 *
+	 * @param   string  $url
+	 * @return  boolean
+	 */
 	public static function is_active($url)
 	{
 		$current = explode('/', trim(str_replace(URL::base(), '', URL::current()), '/'));
