@@ -37,7 +37,7 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 			foreach($posts as $post)
 			{
 				$item = array();
-				$item['id']          = $post->id;
+				$item['guid']        = $post->id;
 				$item['title']       = $post->title;
 				$item['link']        = URL::site($post->url, TRUE);
 				if ($config->get('use_submitted', FALSE))

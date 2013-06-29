@@ -35,7 +35,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			foreach($blogs as $blog)
 			{
 				$item = array();
-				$item['id']          = $blog->id;
+				$item['guid']        = $blog->id;
 				$item['title']       = $blog->title;
 				$item['link']        = URL::site($blog->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
@@ -100,7 +100,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			foreach($posts as $blog)
 			{
 				$item = array();
-				$item['id']          = $blog->id;
+				$item['guid']        = $blog->id;
 				$item['title']       = $blog->title;
 				$item['link']        = URL::site($blog->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
@@ -162,7 +162,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			foreach($posts as $blog)
 			{
 				$item = array();
-				$item['id']          = $blog->id;
+				$item['guid']        = $blog->id;
 				$item['title']       = $blog->title;
 				$item['link']        = URL::site($blog->url, TRUE);
 				if ($config->get('use_submitted', FALSE))

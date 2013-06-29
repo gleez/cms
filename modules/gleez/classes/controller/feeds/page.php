@@ -36,7 +36,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 			foreach($pages as $page)
 			{
 				$item = array();
-				$item['id']          = $page->id;
+				$item['guid']        = $page->id;
 				$item['title']       = $page->title;
 				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
@@ -101,7 +101,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 			foreach($posts as $page)
 			{
 				$item = array();
-				$item['id']          = $page->id;
+				$item['guid']        = $page->id;
 				$item['title']       = $page->title;
 				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
@@ -163,7 +163,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 			foreach($posts as $page)
 			{
 				$item = array();
-				$item['id']          = $page->id;
+				$item['guid']        = $page->id;
 				$item['title']       = $page->title;
 				$item['link']        = URL::site($page->url, TRUE);
 				if ($config->get('use_submitted', FALSE))
