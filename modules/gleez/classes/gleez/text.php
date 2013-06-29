@@ -8,7 +8,7 @@
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovkev - Gleez
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -732,8 +732,8 @@ class Gleez_Text {
 	 *
 	 * When entering more than one carriage return, only the first will be honored.
 	 *
-	 * @param $text
-	 *   The text to be checked or processed.
+	 * @param   string|array  $text  The text to be checked or processed
+	 * @return  mixed
 	 */
 	public static function emptyparagraph($text)
 	{
@@ -744,6 +744,7 @@ class Gleez_Text {
 	 * Scan input and make sure that all HTML tags are properly closed and nested.
 	 *
 	 * @param   string   Text string to filter html
+	 * @return  mixed
 	 */
 	public static function htmlcorrector($text)
 	{
@@ -761,10 +762,8 @@ class Gleez_Text {
 	 *   The partial (X)HTML snippet to load. Invalid mark-up
 	 *   will be corrected on import.
 	 *
-	 * @param   string   Text string to filter html
-	 *
-	 * @return
-	 *   A DOMDocument that represents the loaded (X)HTML snippet.
+	 * @param   string       Text string to filter html
+	 * @return  DOMDocument  A DOMDocument that represents the loaded (X)HTML snippet.
 	 */
 	static function dom_load($text)
 	{
@@ -919,28 +918,32 @@ class Gleez_Text {
 	 * validation stage of the Form API. You should for example never make a preview
 	 * of content in a disallowed format.
 	 *
-	 * @param $text
-	 *   The text to be filtered.
-	 * @param $format_id
-	 *   The format id of the text to be filtered. If no format is assigned, the
-	 *   fallback format will be used.
-	 * @param $langcode
-	 *   Optional: the language code of the text to be filtered, e.g. 'en' for
-	 *   English. This allows filters to be language aware so language specific
-	 *   text replacement can be implemented.
-	 * @param $cache
-	 *   Boolean whether to cache the filtered output in the {cache_filter} table.
-	 *   The caller may set this to FALSE when the output is already cached
-	 *   elsewhere to avoid duplicate cache lookups and storage.
+	 * @param   string   $text       The text to be filtered
+	 * @param   integer  $format_id  The format id of the text to be filtered. If no format is assigned, the fallback format will be used [Optional]
+	 * @param   string   $langcode   The language code of the text to be filtered, e.g. 'en' for English. This allows filters to be language aware so language specific text replacement can be implemented [Optional]
+	 * @param   boolean  $cache      Boolean whether to cache the filtered output in the {cache_filter} table. The caller may set this to FALSE when the output is already cached elsewhere to avoid duplicate cache lookups and storage [Optional]
+	 * @return  mixed
+	 *
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
+	 * @uses    Cache::get
+	 * @uses    Cache::set
+	 * @uses    Module::event
+	 * @uses    Filter::process
+	 *
+	 * @todo    Make @params description shorter
 	 */
-	public static function markup($text, $format_id = FALSE, $langcode = FALSE, $cache = FALSE)
+	public static function markup($text, $format_id = NULL, $langcode = NULL, $cache = FALSE)
 	{
-		//save some cpu cycles if text is empty or null
-		if(empty($text)) return $text;
+		// Save some cpu cycles if text is empty or null
+		if(empty($text))
+		{
+			return $text;
+		}
 
 		$config = Kohana::$config->load('inputfilter');
-		$format_id = isset($format_id) ? (int) $format_id : (int) $config->get('default_format', 1);
-		$langcode  = isset($langcode) ? $langcode : I18n::$lang;
+		$format_id = is_null($format_id) ? $config->get('default_format', 1) : $format_id;
+		$langcode  = is_null($langcode) ? I18n::$lang : $langcode;
 
 		// Check for a cached version of this piece of text.
 		$cache_id = $format_id . ':' . $langcode . ':' . hash('sha256', $text);
@@ -965,12 +968,12 @@ class Gleez_Text {
 
 		$text = (is_string($textObj->text)) ? $textObj->text : $text;
 
-		$text = Filter::process($textObj); //run all filters
+		$text = Filter::process($textObj); // run all filters
 
 		// Store in cache with a minimum expiration time of 1 day.
 		if ($cache)
 		{
-			Cache::instance('cache_filter')->set($cache_id, $text, null, time() + (60 * 60 * 24));
+			Cache::instance('cache_filter')->set($cache_id, $text, null, time() + Date::DAY);
 		}
 
 		return $text;
