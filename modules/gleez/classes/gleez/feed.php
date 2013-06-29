@@ -231,6 +231,7 @@ class Gleez_Feed {
 			'link'        => Route::url('rss', NULL, TRUE),
 			'copyright'   => '2011-'.date('Y') . ' ' . $config->get('site_name', 'Gleez Technologies'),
 			'language'    => I18n::$lang,
+			'ttl'         => $config->get('feed_ttl', Date::HOUR * 60),
 			'image'	      => array(
 				'link'  => URL::site(NULL, TRUE),
 				'url'   => URL::site('/media/images/logo.png', TRUE),
