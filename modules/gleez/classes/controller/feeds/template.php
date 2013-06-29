@@ -48,13 +48,13 @@ class Controller_Feeds_Template extends Controller {
 
 	/**
 	 * The configuration settings
-	 * @var Kohana_Config
+	 * @var Config
 	 */
 	protected $_config;
 
 	/**
 	 * Feed Cache
-	 * @var Kohana_Cache
+	 * @var Cache
 	 */
 	protected $_cache;
 
