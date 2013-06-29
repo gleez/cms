@@ -94,6 +94,7 @@ return array
 	'Loading data from server' => 'Загрузка ',
 	'Login' => 'Вход',
 	'Login with :provider account' => 'Войти с помощью учётной записи :provider',
+	'Login with :provider' => 'Войти с помощью учётной записи :provider',
 	// M
 	'Mail' => 'Почта',
 	'Mail must be a valid email address.' => 'Email адрес должен быть в правильном формате.',
