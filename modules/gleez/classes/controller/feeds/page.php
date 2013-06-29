@@ -49,7 +49,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 				$items[] = $item;
 			}
 
-			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
+			$this->_cache->set($this->_cache_key, $items, $this->_ttl);
 			$this->_items = $items;
 		}
 
@@ -115,7 +115,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 			}
 
 			$items['title'] = $term->name;
-			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
+			$this->_cache->set($this->_cache_key, $items, $this->_ttl);
 			$this->_items = $items;
 		}
 
@@ -177,7 +177,7 @@ class Controller_Feeds_Page extends Controller_Feeds_Template {
 			}
 
 			$items['title'] = $tag->name;
-			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
+			$this->_cache->set($this->_cache_key, $items, $this->_ttl);
 			$this->_items = $items;
 		}
 

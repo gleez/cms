@@ -77,6 +77,12 @@ class Controller_Feeds_Template extends Controller {
 	protected $_info;
 
 	/**
+	 * Feed ttl (min.)
+	 * @var integer
+	 */
+	protected $_ttl;
+
+	/**
 	 * Preparing feed
 	 *
 	 * @uses  Arr::get
@@ -106,6 +112,9 @@ class Controller_Feeds_Template extends Controller {
 
 		// Getting site URL
 		$this->_site_url = $this->_config->get('site_url', URL::site(NULL, TRUE));
+
+		// Getting TTL
+		$this->_ttl = $this->_config->get('feed_ttl', Date::HOUR * 60);
 
 		// Initiate cache
 		$this->_cache = Cache::instance('feeds');
