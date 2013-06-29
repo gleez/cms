@@ -4,10 +4,31 @@
  *
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Date extends Kohana_Date {
+
+	/**
+	 * Amounts of minutes for various time increments
+	 *
+	 * @return  array
+	 */
+	public static function amounts_min()
+	{
+		$amounts = array(
+			1         => __('Minute'),
+			30        => __('Half an hour'),
+			60        => __('Hour'),
+			1440      => __('Day'),
+			10080     => __('Week'),
+			302400    => __('Month'),
+			107654400 => __('Yar'),
+		);
+
+		return $amounts;
+	}
 
 	/**
 	 * Return month start timestamp
