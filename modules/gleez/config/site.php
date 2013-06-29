@@ -125,6 +125,12 @@ return array(
 	'xmlrpc' => 'xmlrpc',
 
 	/**
+	 * Number of minutes, which indicates how long the channel can be cached without updating
+	 * @var integer
+	 */
+	'feed_ttl' => 60,
+
+	/**
 	 * Meta defaults
 	 * @var array
 	 */
