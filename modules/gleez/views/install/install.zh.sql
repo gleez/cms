@@ -31,7 +31,7 @@ CREATE TABLE {posts} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {posts} (`id`, `version`, `author`, `title`, `body`, `teaser`, `status`, `promote`, `moderate`, `sticky`, `type`, `format`, `created`, `updated`, `pubdate`, `password`, `comment`, `lang`) VALUES
-(1, 0, 0, '欢迎使用 Gleez 内容管理系统！', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！\r\n\r\n注重安全性和功能性的Gleez CMS是一个专业的、强大的系统，适用于任何企业或组织的网站。由PHP编程语言和MySQL数据库打造，Gleez CMS对任何规模的网站都提供卓越的性能。\r\n\r\n下载：\r\nwww.gleezcms.org', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！', 'publish', 0, 0, 0, 'post', 1, 1304978011, 1305488194, 1304978011, '', 0, 'zh');
+(1, 0, 2, '欢迎使用 Gleez 内容管理系统！', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！\r\n\r\n注重安全性和功能性的Gleez CMS是一个专业的、强大的系统，适用于任何企业或组织的网站。由PHP编程语言和MySQL数据库打造，Gleez CMS对任何规模的网站都提供卓越的性能。\r\n\r\n下载：\r\nwww.gleezcms.org', '什么是Gleez CMS？\r\n\r\nGleez CMS是一个用户友好的网站内容管理系统。使用Gleez CMS你只需点击你的鼠标，就可以很容易地在短短的几分钟内建立动态网站！在世界都任何都可以维护你的网页内容，导航，甚至可以限制哪些组或特定用户才能访问，只需一个Web浏览器！', 'publish', 0, 0, 0, 'page', 1, 1304978011, 1305488194, 1304978011, '', 0, 'zh');
 
 DROP TABLE IF EXISTS {tags};
 CREATE TABLE {tags} (
