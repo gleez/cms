@@ -160,6 +160,7 @@ return array
 	'Date Format' => 'Формат даты',
 	'Date Time Format' => 'Формат времени и даты',
 	'Dashboard' => 'Консоль управления',
+	'Day' => 'День',
 	'Deactivated: %names' => 'Деактивировано: %names',
 	'Default Page Status' => 'Статус страницы по умолчанию',
 	'Default Blog Status' => 'Статус публикации по умолчанию',
@@ -227,6 +228,7 @@ return array
 	'Failed to load locale: :locale' => 'Не удалось загрузить локаль: :locale',
 	'Failed to autodetect of Locale!' => 'Не удалось автоматически определить локаль!',
 	'Favicon' => 'Иконка',
+	'Feed lifetime (min.)' => 'Время жизни подписки на канал (в минутах)',
 	'Feedback' => 'Обратная связь',
 	'Filters Enabled' => 'Фильтрация данных',
 	'Finish' => 'Окончание',
@@ -252,10 +254,12 @@ return array
 	'Gleez Team' => 'Комманда Gleez',
 	'Gleez Version' => 'Версия Gleez',
 	// H
+	'Half an hour' => 'Полчаса',
 	'Hello!' => 'Здравствуйте!',
 	'Hide' => 'Спрятать',
 	'Host' => 'Хост',
 	'Host Name' => 'Имя хоста',
+	'Hour' => 'Час',
 	// I
 	'Icon' => 'Иконка',
 	'Iconv Extension' => 'Расширение Iconv',
@@ -267,6 +271,7 @@ return array
 	'Installed'=> 'Установлено',
 	'Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host. Everything else will do Gleez Installer. But first we need to check your system on compliance to the minimum requirements.' => 'Установка Gleez очень проста. Всё что нам сейчас нужно будет знать, так это &mdash; параметры доступа к базе данных MySQL и место для хранения ваших конфигурационных файлов. Всё остальное за вас сделает Установщик Gleez. Но сначала нам нужно проверить вашу систему на соответствие минимальным требованиям.',
 	'Invalid URL Path' => 'Неверный URL путь',
+	"It's a number of minutes that indicates how long a channel can be cached before refreshing from the source." => 'Это число в минутах, которое показывает, насколько долго канал может быть кэширован без обновления из источника.',
 	'Items for %vocab' => 'Пункты меню %vocab',
 	// J
 	'JavaScript Object Notation (JSON)' => 'Поддержка JavaScript Object Notation (JSON)',
@@ -309,12 +314,14 @@ return array
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Убедитесь, что эта папка доступна для записи веб-сервером или на неё установлены права 777.',
 	'Mbstring Not Overloaded' => 'Mbstring не перегружен',
 	'Mission' => 'Миссия',
+	'Minute' => 'Минута',
 	'Module' => 'Модуль',
 	'modules' => 'модули',
 	'Modules' => 'Модули',
 	'Modules Directory' => 'Каталог модулей',
 	'Most of the tasks associated with the administration of the contents of this website associated with this permission' => 'Большинство задач, связанных с введением в содержание этого сайта, связанные с этим разрешением',
 	'Monday' => 'Понедельник',
+	'Month' => 'Месяц',
 	'Move to Trash' => 'Перенести в корзину',
 	'MySQL Version' => 'Версия MySQL',
 	// N
@@ -560,6 +567,7 @@ return array
 	'Webmaster :site' => 'Вебмастер :site',
 	'Website' => 'Вебсайт',
 	'Welcome to the administration section. Here you may control how your site functions.' => 'Добро пожаловать в административный раздел. Здесь вы можете контролировать функциональность вашего сайта.',
+	'Week' => 'Неделя',
 	'Week Starts On' => 'Первый день недели',
 	'Webserver' => 'Веб сервер',
 	'Website address' => 'Адрес сайта',
@@ -574,6 +582,7 @@ return array
 	'Wrong username or password' => 'Имя пользователя или пароль не верны',
 	// X
 	// Y
+	'Yar' => 'Год',
 	'Yes' => 'Да',
 	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Вы используете :out браузер. Пожалуйста :url или :frame чтоб расширить возможности браузера',
 	'You must provide mail body.' => 'Вы должны ввести тело сообщения',
