@@ -19,9 +19,10 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 	 */
 	public function action_list()
 	{
-		if ($this->_items === NULL OR empty($this->_items))
+		if (empty($this->_items))
 		{
 			$config = Kohana::$config->load('blog');
+
 			// Cache is Empty so Re-Cache
 			$blogs = ORM::factory('blog')
 				->where('status', '=', 'publish')
@@ -47,13 +48,14 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 				$items[] = $item;
 			}
 
-			$this->_cache->set($this->_cache_key, $items, DATE::HOUR); // 1 Hour
+			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
 			$this->_items = $items;
 		}
 
 		if (isset($this->_items[0]))
 		{
 			$this->_info['title']   = __('Pages - Recent updates');
+			$this->_info['link']    = Route::url('rss', array('controller' => 'blog'), TRUE);
 			$this->_info['pubDate'] = $this->_items[0]['pubDate'];
 		}
 	}
@@ -70,7 +72,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 	 */
 	public function action_term()
 	{
-		if ($this->_items === NULL OR empty($this->_items))
+		if (empty($this->_items))
 		{
 			$config = Kohana::$config->load('blog');
 			// Cache is Empty so Re-Cache
@@ -84,7 +86,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			if ( ! $term->loaded())
 			{
 				Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent blog term feed');
-				throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term' => $id));
+				throw new HTTP_Exception_404('Term ":term" Not Found', array(':term' => $id));
 			}
 
 			$posts = $term->posts
@@ -112,13 +114,14 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			}
 
 			$items['title'] = $term->name;
-			$this->_cache->set($this->_cache_key, $items, Date::HOUR); // 1 Hour
+			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
 			$this->_items = $items;
 		}
 
 		if (isset($this->_items[0]))
 		{
 			$this->_info['title'] = __(':term - Recent updates', array(':term' => ucfirst($this->_items['title'])));
+			$this->_info['link']    = Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => (int) $this->request->param('id')), TRUE);
 			$this->_info['pubDate'] = $this->_items[0]['pubDate'];
 		}
 	}
@@ -135,7 +138,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 	 */
 	public function action_tag()
 	{
-		if ($this->_items === NULL OR empty($this->_items))
+		if (empty($this->_items))
 		{
 			$config = Kohana::$config->load('blog');
 			// Cache is Empty so Re-Cache
@@ -145,7 +148,7 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			if ( ! $tag->loaded())
 			{
 				Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent blog tag feed');
-				throw new HTTP_Exception_404(__('Tag ":tag" Not Found'), array(':tag' => $id));
+				throw new HTTP_Exception_404('Tag ":tag" Not Found', array(':tag' => $id));
 			}
 
 			$posts = $tag->posts
@@ -173,13 +176,14 @@ class Controller_Feeds_Blog extends Controller_Feeds_Template {
 			}
 
 			$items['title'] = $tag->name;
-			$this->_cache->set($this->_cache_key, $items, Date::HOUR); // 1 Hour
+			$this->_cache->set($this->_cache_key, $items, Date::HOUR);
 			$this->_items = $items;
 		}
 
 		if( isset($this->_items[0]))
 		{
 			$this->_info['title']   = __(':tag - Recent updates', array(':tag' => ucfirst($this->_items['title'])));
+			$this->_info['link']    = Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => (int) $this->request->param('id')), TRUE);
 			$this->_info['pubDate'] = $this->_items[0]['pubDate'];
 		}
 	}
