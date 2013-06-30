@@ -171,26 +171,12 @@ return array(
 	 * @var array
 	 */
 	'installed_locales' => array(
-		'en' => array(
-			'LINUX'   => 'en_US.utf-8',
-			'WINDOWS' => 'english',
-		),
-		'it' => array(
-			'LINUX'   => 'it_IT.utf-8',
-			'WINDOWS' => 'italian',
-		),
-		'ro' => array(
-			'LINUX'   => 'ro_RO.utf-8',
-			'WINDOWS' => 'romanian',
-		),
-		'ru' => array(
-			'LINUX'   => 'ru_RU.utf-8',
-			'WINDOWS' => 'russian',
-		),
-		'zh' => array(
-			'LINUX'   => 'zh_CN.utf-8',
-			'WINDOWS' => 'chinese-simplified',
-		),
+		'en_US', // English
+		'et_EE', // Estonian
+		'it_IT', // Italian
+		'ro_RO', // Romanian
+		'ru_RU', // Russian
+		'zh_CN', // Chinese (Simplified)
 	),
 
 	/**
