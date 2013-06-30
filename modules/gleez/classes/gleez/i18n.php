@@ -38,6 +38,72 @@ class Gleez_I18n {
 	 */
 	protected static $_cache = array();
 
+	public static function initialize()
+	{
+		//Installed Locales
+		$installed_locales = Config::get('site.installed_locales', array());
+		$timezone	   = Config::get('site.timezone', 'UTC');
+
+		// 1. Check the session specific preference (cookie)
+		$locale = I18n::cookie_locale($installed_locales);
+	
+		// 2. Check the user's preference
+		if(!$locale)
+		{
+			//@todo get from user object
+		}
+	
+		// 3. Check the browser's / OS' preference
+		if(!$locale)
+		{
+			$locale = I18n::request_locale($installed_locales);
+		}
+	
+		// 4. Default locale preference
+		if(!$locale)
+		{
+			$locale = 'en_US';
+		}
+	
+		//set the locale
+		I18n::lang($locale);
+		setlocale(LC_ALL, $locale.'.utf-8');
+		
+		//time zone set in the config
+		date_default_timezone_set($timezone);
+	}
+
+	public static function request_locale( array $installed_locales )
+	{
+		$requested_locales	= Request::accept_lang();
+		//@todo score comparison
+		foreach($requested_locales as $locale => $score)
+		{
+			if (isset($installed_locales[$locale])) 
+			{
+				return $locale;
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function cookie_locale( array $installed_locales )
+	{
+		$cookie_data = Cookie::get('user_language');
+		
+		//double check cookie data
+		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
+		{
+			$requested_locale = $matches[1];
+			if (isset($installed_locales[$requested_locale])) 
+			{
+				return $requested_locale;
+			}
+		}
+		
+		return FALSE;
+	}
+	
 	/**
 	 * Get and set the target language.
 	 *
