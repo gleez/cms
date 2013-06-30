@@ -391,7 +391,8 @@ class Gleez_URL {
 	
 		if (empty($uri))
 		{
-			$uri = Arr::get($_SERVER, 'REQUEST_URI', '/');
+			//$uri = Arr::get($_SERVER, 'REQUEST_URI', '/');
+			$uri = URL::site(Request::current()->uri());
 		}
 	
 		return URL::base($protocol, $index) . str_replace($query, '', ltrim($uri, '/'));
@@ -405,16 +406,23 @@ class Gleez_URL {
 	 */
 	public static function is_active($url)
 	{
+		if (preg_match('#^[A-Z][A-Z0-9+.\-]+://#i', $url))
+		{
+			// Don't check URIs with a scheme ... not really a URI is it?
+			return FALSE;
+		}
+		
 		$current = explode('/', trim(str_replace(URL::base(), '', URL::current()), '/'));
 		ksort($current);
 		$url = explode('/', trim(str_replace(URL::base(), '', $url), '/'));
 		ksort($url);
+		
 		if (0 == count(array_diff($url, $current)))
 		{
-			return true;
+			return TRUE;
 		}
 	
-		$result = false;
+		$result = FALSE;
 	
 		if (count($url) < count($current))
 		{

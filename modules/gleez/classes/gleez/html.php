@@ -482,11 +482,6 @@ class Gleez_HTML {
 		{
 			$output = '<ul'. HTML::attributes($attributes) .'>';
 
-			if (is_null(HTML::$current_route))
-			{
-				HTML::$current_route = URL::site(Request::current()->uri());
-			}
-
 			$num_links = count($links);
 			$i = 1;
 
@@ -547,11 +542,6 @@ class Gleez_HTML {
 
 		if (count($tabs) > 0)
 		{
-			if (is_null(HTML::$current_route))
-			{
-				HTML::$current_route = URL::site(Request::current()->uri());
-			}
-
 			$output = '<ul'. HTML::attributes($attributes) .'>';
 
 			$num_links = count($tabs);
@@ -605,19 +595,7 @@ class Gleez_HTML {
 	 */
 	public static function is_active($uri)
 	{
-		if (preg_match('#^[A-Z][A-Z0-9+.\-]+://#i', $uri))
-		{
-			// Don't check URIs with a scheme ... not really a URI is it?
-			return FALSE;
-		}
-		elseif ($uri)
-		{
-			return strpos(HTML::$current_route, URL::site($uri)) === 0;
-		}
-		else
-		{
-			return HTML::$current_route == URL::base();
-		}
+		return URL::is_active($uri);
 	}
 
 	/**
