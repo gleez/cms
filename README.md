@@ -39,7 +39,8 @@ You can visit our demo site to become familiar with the basic features of Gleez 
 The available locale(s) in Gleez are:
 
 + English
-+ Chinese
++ Estonian
++ Chinese (Simplified)
 + Russian
 + Italian
 + Romanian
