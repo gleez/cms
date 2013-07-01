@@ -41,14 +41,16 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
 // -- Configuration and initialization -----------------------------------------
 
 /**
- * Set Kohana::$environment if a 'KOHANA_ENV' environment variable has been supplied.
+ * Set Kohana::$environment if a 'GLEEZ_ENV' environment variable has been supplied.
  *
- * Note: If you supply an invalid environment name, a PHP warning will be thrown
+ * [!!] Note: If you supply an invalid environment name, a PHP warning will be thrown
  * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
+ *
+ * @todo In the future Kohana::$environment should be moved to Gleez Core as Gleez::$environment
  */
-if (isset($_SERVER['KOHANA_ENV']))
+if (isset($_SERVER['GLEEZ_ENV']))
 {
-	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['KOHANA_ENV']));
+	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']));
 }
 
 /**
