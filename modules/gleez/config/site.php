@@ -180,17 +180,38 @@ return array(
 	),
 
 	/**
-	 * Blocked ips.
-	 * Default to null, comma separated ip-addresses to block
+	 * Default locale.
+	 * Default to 'en_US'
 	 * @var string
 	 */
-	'blocked_ips' =>  NULL,
+	'locale' =>  'en_US',
 
+	/**
+	 * Allow locale override.
+	 * Change the default locale, accepted values: FALSE|ALL|USER|CLIENT
+	 * @var string
+	 */
+	'locale_override' =>  FALSE,
+	
 	/**
 	 * Default timezone
 	 * @var string
 	 */
 	'timezone' => 'Asia/Kolkata',
+	
+	/**
+	 * Allow timezone override.
+	 * Change the default timezone, accepted values: TRUE|FALSE
+	 * @var boolean
+	 */
+	'timezone_override' =>  FALSE,
+	
+	/**
+	 * Blocked ips.
+	 * Default to null, comma separated ip-addresses to block
+	 * @var string
+	 */
+	'blocked_ips' =>  NULL,
 
 	/**
 	 * Default date first day

@@ -42,19 +42,26 @@ class Gleez_I18n {
 	{
 		//Installed Locales
 		$installed_locales = Config::get('site.installed_locales', array());
+		$default_locale    = Config::get('site.locale', 'en_US');
+		
+		//allow the user or browser to override the default locale
+		$locale_override   = Config::get('site.locale_override', FALSE);
+		$timezone_override = Config::get('site.timezone_override', FALSE);
+	
+		// Default timezone from config
 		$timezone	   = Config::get('site.timezone', 'UTC');
 
 		// 1. Check the session specific preference (cookie)
 		$locale = I18n::cookie_locale($installed_locales);
 	
 		// 2. Check the user's preference
-		if(!$locale)
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
-			//@todo get from user object
+			$locale   = I18n::user_locale($installed_locales);
 		}
 	
-		// 3. Check the browser's / OS' preference
-		if(!$locale)
+		// 3. Check the request client/browser's preference
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
 			$locale = I18n::request_locale($installed_locales);
 		}
@@ -62,12 +69,18 @@ class Gleez_I18n {
 		// 4. Default locale preference
 		if(!$locale)
 		{
-			$locale = 'en_US';
+			$locale = $default_locale;
 		}
 	
 		//set the locale
 		I18n::lang($locale);
 		setlocale(LC_ALL, $locale.'.utf-8');
+	
+		if($timezone_override)
+		{
+			//@todo check timezone is valid
+			$timezone = User::active_user()->timezone;
+		}
 		
 		//time zone set in the config
 		date_default_timezone_set($timezone);
@@ -83,6 +96,16 @@ class Gleez_I18n {
 			{
 				return $locale;
 			}
+		}
+		return FALSE;
+	}
+
+	public static function user_locale( array $installed_locales )
+	{
+		$locale	= User::active_user()->language;
+		if (isset($installed_locales[$locale])) 
+		{
+			return $locale;
 		}
 		return FALSE;
 	}

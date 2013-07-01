@@ -111,9 +111,9 @@ CREATE TABLE {users} (
   updated int(11) NOT NULL DEFAULT '0',
   access int(11) NOT NULL DEFAULT '0',
   login int(11) NOT NULL DEFAULT '0',
-  `status` tinyint(4) NOT NULL DEFAULT '0',
-  timezone varchar(32) DEFAULT NULL,
-  `language` varchar(12) DEFAULT NULL,
+  status tinyint(4) NOT NULL DEFAULT '0',
+  timezone varchar(32) DEFAULT 'UTC',
+  language varchar(12) DEFAULT 'en_US',
   picture varchar(255) DEFAULT NULL,
   init varchar(254) DEFAULT NULL,
   `hash` char(32) DEFAULT NULL,
@@ -125,8 +125,8 @@ CREATE TABLE {users} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {users} (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
-(1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', NULL, 0, 0, 0, 0, 1, NULL, '', '', '', NULL, NULL),
-(2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, NULL, '', '', 'webmaster@gleez.com', NULL, NULL);
+(1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', NULL, 0, 0, 0, 0, 1, 'UTC', 'en_US', '', '', NULL, NULL),
+(2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, 'UTC', 'en_US', '', 'webmaster@gleez.com', NULL, NULL);
 
 DROP TABLE IF EXISTS {config};
 CREATE TABLE {config} (
