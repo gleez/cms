@@ -76,7 +76,8 @@ class Gleez_I18n {
 		I18n::lang($locale);
 		setlocale(LC_ALL, $locale.'.utf-8');
 	
-		if($timezone_override)
+		//change timezone only if valid user and allow override is set
+		if($timezone_override AND User::is_guest() == FALSE)
 		{
 			//@todo check timezone is valid
 			$timezone = User::active_user()->timezone;
@@ -97,16 +98,27 @@ class Gleez_I18n {
 				return $locale;
 			}
 		}
+		
 		return FALSE;
 	}
 
 	public static function user_locale( array $installed_locales )
 	{
-		$locale	= User::active_user()->language;
+		//Can't set guest users locale, default's to site locale
+		if(User::is_guest()) 
+		{
+			$locale = Config::get('site.locale', 'en_US');
+		}
+		else
+		{
+			$locale	= User::active_user()->language;
+		}
+		
 		if (isset($installed_locales[$locale])) 
 		{
 			return $locale;
 		}
+		
 		return FALSE;
 	}
 	
