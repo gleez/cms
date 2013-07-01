@@ -1,6 +1,12 @@
 # Set environment variables (Optional)
-# SetEnv KOHANA_ENV development
-# SetEnv KOHANA_ENV production
+#
+# Common environment type:
+#
+# SetEnv GLEEZ_ENV production
+# SetEnv GLEEZ_ENV staging
+# SetEnv GLEEZ_ENV testing
+# SetEnv GLEEZ_ENV development
+#
 # SetEnv KOHANA_BASE /
 # SetEnv BASE_URL http://www.example.com
 
