@@ -1,6 +1,6 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.'); ?>
-<?php echo "<?php" ?> defined("SYSPATH") or die("No direct script access.");
-
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+    echo Kohana::FILE_SECURITY.PHP_EOL
+?>
 return array
 (
 	'default' => array
