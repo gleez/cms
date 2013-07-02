@@ -185,6 +185,7 @@ return array
 	'Deleting Term %name' => 'Удаление термина %name',
 	'Demote from front page' => 'Убрать с главной страницы',
 	'Description' => 'Описание',
+	'Description for search engines' => 'Описание для поисковых систем',
 	'Did something go wrong? Try the :github.' => 'Что-то пошло не так? Попробуйте обратиться к :github.',
 	'Directory :dir must be writable' => 'Каталог :dir должен быть доступен для записи',
 	'Disabled' => 'Отключено',
@@ -276,6 +277,7 @@ return array
 	// J
 	'JavaScript Object Notation (JSON)' => 'Поддержка JavaScript Object Notation (JSON)',
 	// K
+	'Keywords for search engines' => 'Ключевые слова для поисковых систем',
 	// L
 	'Language' => 'Язык',
 	'Language must be at least :param2 characters long' => 'Язык должен содержать не менее :param1 символов',
