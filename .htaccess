@@ -1,14 +1,11 @@
 # Set environment variables (Optional)
 #
 # Common environment type:
-#
+# ------------------------
 # SetEnv GLEEZ_ENV production
 # SetEnv GLEEZ_ENV staging
 # SetEnv GLEEZ_ENV testing
 # SetEnv GLEEZ_ENV development
-#
-# SetEnv KOHANA_BASE /
-# SetEnv BASE_URL http://www.example.com
 
 # Use UTF-8 encoding for anything served text/plain or text/html
 AddDefaultCharset utf-8
