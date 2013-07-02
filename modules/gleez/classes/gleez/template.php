@@ -533,11 +533,16 @@ abstract class Gleez_Template extends Controller {
 	 *
 	 * @uses    Meta::tags
 	 * @uses    Arr::get
+	 * @uses    Arr::merge
 	 */
 	protected function _set_default_meta_tags()
 	{
-		$meta = $this->_config->get('meta', array());
+		$meta        = $this->_config->get('meta', array());
+		$keywords    = $this->_config->get('keywords', '');
+		$description = $this->_config->get('description', '');
+
 		$tags = Arr::get($meta, 'tags');
+		$tags = Arr::merge($tags, array('keywords' => $keywords), array('description' => $description));
 
 		if ($tags)
 		{

@@ -7,7 +7,7 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<?php //make sure a valid sitename is set ?>
+	<?php // @todo Move to controller ?>
 	<?php $post['site_url'] = ($post['site_url'] === 'www.example.com') ? URL::site(NULL, TRUE) : $post['site_url']; ?>
 
 <div class="row-fluid">
@@ -39,7 +39,17 @@
 		<?php echo Form::textarea('site_mission', $post['site_mission'], array('class' => 'textarea span12', 'rows' => 6)) ?>
 	</div>
 
-		<div class="control-group <?php echo isset($errors['site_logo']) ? 'error': ''; ?>">
+	<div class="control-group <?php echo isset($errors['keywords']) ? 'error': ''; ?>">
+		<?php echo Form::label('keywords', __('Keywords for search engines'), array('class' => 'control-label')) ?>
+		<?php echo Form::textarea('keywords', $post['keywords'], array('class' => 'textarea span12', 'rows' => 3)) ?>
+	</div>
+
+	<div class="control-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
+		<?php echo Form::label('description', __('Description for search engines'), array('class' => 'control-label')) ?>
+		<?php echo Form::input('description', $post['description'], array('class' => 'text span12')) ?>
+	</div>
+
+	<div class="control-group <?php echo isset($errors['site_logo']) ? 'error': ''; ?>">
 		<?php echo Form::label('site_logo', __('Logo'), array('class' => 'control-label')) ?>
 		<?php echo Form::input('site_logo', $post['site_logo'], array('class' => 'text span12')); ?>
 	</div>
