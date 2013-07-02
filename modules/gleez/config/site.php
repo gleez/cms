@@ -45,6 +45,18 @@ return array(
 	'site_mission' => '',
 
 	/**
+	 * Keywords for search engines
+	 * @var string
+	 */
+	'keywords' => 'cms, cmf, gleez, kohana, php framework, site building',
+
+	/**
+	 * Description for search engines
+	 * @var string
+	 */
+	'description' => 'Light, Simple, Flexible Content Management System',
+
+	/**
 	 * Site title separator
 	 * @var string
 	 */
@@ -160,8 +172,6 @@ return array(
 			'author'           => 'Gleez Team',
 			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2013. All rights reserved.',
 			'robots'           => 'index, follow, noodp',
-			'keywords'         => 'cms, cmf, gleez, kohana, php framework, site building',
-			'description'      => 'Light, Simple, Flexible Content Management System',
 			'viewport'         => 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
 		),
 	),
@@ -192,20 +202,20 @@ return array(
 	 * @var string
 	 */
 	'locale_override' =>  FALSE,
-	
+
 	/**
 	 * Default timezone
 	 * @var string
 	 */
 	'timezone' => 'Asia/Kolkata',
-	
+
 	/**
 	 * Allow timezone override.
 	 * Change the default timezone, accepted values: TRUE|FALSE
 	 * @var boolean
 	 */
 	'timezone_override' =>  FALSE,
-	
+
 	/**
 	 * Blocked ips.
 	 * Default to null, comma separated ip-addresses to block
