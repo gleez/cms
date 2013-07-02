@@ -236,7 +236,7 @@ class Controller_Install_Install extends Controller_Template {
 				'pass' => $password = $_POST['pass'],
 				'hostname' => $hostname = $_POST['hostname'],
 				'database' => $database = $_POST['database'],
-				'table_prefix' => $table_prefix = $_POST['table_prefix'] // TODO
+				'table_prefix' => $table_prefix = $_POST['table_prefix']
 			);
 
 			try
@@ -444,12 +444,7 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
 
-		$sql_file = MODPATH . "gleez/views/install/install.".I18n::lang().".sql";
-
-		if ( ! file_exists($sql_file))
-		{
-			$sql_file = MODPATH . "gleez/views/install/install.sql";
-		}
+		$sql_file = MODPATH . "gleez/views/install/install.sql";
 
 		foreach (file($sql_file) as $line)
 		{
