@@ -184,7 +184,6 @@ if ( ! Route::cache())
 // -- Gleez frontend routes ----------------------------------------------------
 
 	Route::set('autocomplete', 'autocomplete/<action>(/<type>)(/<string>)', array(
-		//'string'     => '([A-Za-z0-9\-\,\s\+]+)',
 		'string'     => '(.*)',
 		'action'     => 'index|user|nick|tag',
 		'type'       => 'page|blog|forum'
