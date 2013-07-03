@@ -83,6 +83,12 @@ class Controller_Feeds_Template extends Controller {
 	protected $_ttl;
 
 	/**
+	 * Current post type (page|blog|etc.)
+	 * @var string
+	 */
+	protected $_type = 'page';
+
+	/**
 	 * Preparing feed
 	 *
 	 * @uses  Arr::get
