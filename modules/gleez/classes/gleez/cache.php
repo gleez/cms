@@ -90,7 +90,8 @@ abstract class Gleez_Cache {
 	 *     // Access an instantiated group directly
 	 *     $foo_group = Cache::$instances['default'];
 	 *
-	 * @param   string  $group  the name of the cache group to use [Optional]
+	 * @param   string  $group   The name of the cache group to use [Optional]
+	 * @param   array   $config  Cache config [Optional]
 	 * @return  Cache
 	 * @throws  Cache_Exception
 	 */
