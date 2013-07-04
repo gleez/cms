@@ -95,11 +95,12 @@ class Controller_Page extends Template {
 		$view = View::factory('page/list')
 					->set('teaser',      TRUE)
 					->set('config',      $config)
+					->bind('rss_link',   $rss_link)
 					->bind('pagination', $pagination)
 					->bind('posts',      $posts);
 
-		$url = Route::get('page')->uri();
-
+		$url        = Route::get('page')->uri();
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'page'));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
@@ -485,10 +486,11 @@ class Controller_Page extends Template {
 
 		$this->title = __(':term', array(':term' => $term->name));
 		$view = View::factory('page/list')
-					->set('teaser', TRUE)
-					->set('config', $config)
+					->set('teaser',      TRUE)
+					->set('config',      $config)
+					->bind('rss_link',   $rss_link)
 					->bind('pagination', $pagination)
-					->bind('posts', $posts);
+					->bind('posts',      $posts);
 
 		$posts = $term->posts;
 
@@ -505,7 +507,7 @@ class Controller_Page extends Template {
 			$this->response->body( View::factory('forum/none') );
 			return;
 		}
-
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'page', 'action' => 'term', 'id' => $term->id));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
@@ -555,10 +557,11 @@ class Controller_Page extends Template {
 
 		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name) ) );
 		$view        = View::factory('page/list')
-					->set('teaser', TRUE)
-					->set('config', $config)
+					->set('teaser',      TRUE)
+					->set('config',      $config)
+					->bind('rss_link',   $rss_link)
 					->bind('pagination', $pagination)
-					->bind('posts', $posts);
+					->bind('posts',      $posts);
 
 		$posts = $tag->posts;
 
@@ -576,6 +579,7 @@ class Controller_Page extends Template {
 			return;
 		}
 
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
