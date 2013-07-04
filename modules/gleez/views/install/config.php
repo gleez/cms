@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-    echo Kohana::FILE_SECURITY.PHP_EOL
+    echo Gleez::FILE_SECURITY.PHP_EOL
 ?>
 return array
 (
