@@ -30,9 +30,9 @@ class Controller_Admin_Page extends Controller_Admin {
 	{
 		// Tabs
 		$this->_tabs =  array(
-			array('link' => Route::get('admin/page')->uri( array('action' =>'index')), 'text' => __('Statistics')),
-			array('link' => Route::get('admin/page')->uri( array('action' =>'list')), 'text' => __('List')),
-			array('link' => Route::get('admin/page')->uri( array('action' =>'settings')),'text' => __('Settings')),
+			array('link' => Route::get('admin/page')->uri(array('action' =>'index')), 'text' => __('Statistics')),
+			array('link' => Route::get('admin/page')->uri(array('action' =>'list')), 'text' => __('List')),
+			array('link' => Route::get('admin/page')->uri(array('action' =>'settings')),'text' => __('Settings')),
 		);
 
 		parent::after();
@@ -84,11 +84,13 @@ class Controller_Admin_Page extends Controller_Admin {
 					->set('post',    $post)
 					->set('action',  $action);
 
-		$vocabs = Arr::merge($vocabs, ORM::factory('term')
-				     ->where('lft', '=', 1)
-				     ->where('type', '=', 'page')
-				     ->find_all()->as_array('id', 'name')
-				     );
+		$vocabs = Arr::merge($vocabs,
+			ORM::factory('term')
+				->where('lft', '=', 1)
+				->where('type', '=', 'page')
+				->find_all()
+				->as_array('id', 'name')
+		);
 
 		if ($this->valid_post('page_settings'))
 		{
