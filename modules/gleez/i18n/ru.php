@@ -92,6 +92,7 @@ return array
 	'Apply' => 'Применить',
 	'Approved' => 'Разрешённые',
 	'Archive' => 'Архив',
+	'archive' => 'архив',
 	'Attempt to access disabled feature' => 'Попытка доступа к отключённой возможности',
 	'Attempted to load an invalid or missing module \':module\' at \':path\'' => 'Попытка загрузить испорченый или отсутствующий модуль \':module\' из \':path\'',
 	'Author' => 'Автор',
@@ -191,6 +192,7 @@ return array
 	'Disabled' => 'Отключено',
 	'Discussion' => 'Обсуждение',
 	'Draft' => 'Черновик',
+	'draft' => 'черновик',
 	// E
 	'E-mail address' => 'E-mail адрес',
 	'Edit' => 'Изменить',
@@ -398,11 +400,13 @@ return array
 	'Powered by :gleez' => 'Создано с помощью :gleez',
 	'Primary Image' => 'Первичное изображение',
 	'Privacy' => 'Конфиденциально',
+	'private' => 'личное',
 	'Profile' => 'Профиль',
 	'Promote this Post' => 'Выделить материал',
 	'Promote to front page' => 'Разместить на главной странице',
 	'Publication' => 'Публикация',
 	'Publish' => 'Опубликовано',
+	'publish' => 'опубликовано',
 	// Q
 	// R
 	'Read only' => 'Только чтение',
