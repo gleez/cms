@@ -1,23 +1,27 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
  * Gleez Core class
  *
  * @package    Gleez
- * @version    0.9.25
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @version    0.9.26
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.25';
+	const VERSION = '0.9.26';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
 
 	/** Default message for maintenance mode */
-	const MAINTENANCE_MESSAGE = "This site is down for maintenance";
+	const MAINTENANCE_MESSAGE = 'This site is down for maintenance';
+
+	/* Security check that is added to all generated PHP files */
+	const FILE_SECURITY = '<?php defined(\'SYSPATH\') OR die(\'No direct script access allowed.\');';
 
 	/**
 	 * Gleez installed?
@@ -412,7 +416,7 @@ class Gleez {
 	 * @param   boolean  $full    If set, return the full version with `Gleez CMS` prefix [Optional]
 	 * @return  string   The version of Gleez
 	 */
-	public static function get_version($with_v = TRUE, $full = FALSE)
+	public static function getVersion($with_v = TRUE, $full = FALSE)
 	{
 		$version = $with_v ? 'v' . Gleez::VERSION : Gleez::VERSION;
 		$version = $full ? 'Gleez CMS ' . $version : $version;
