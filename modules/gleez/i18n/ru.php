@@ -231,6 +231,7 @@ return array
 	'Failed to load locale: :locale' => 'Не удалось загрузить локаль: :locale',
 	'Failed to autodetect of Locale!' => 'Не удалось автоматически определить локаль!',
 	'Favicon' => 'Иконка',
+	'Feed images require a link, url, and title' => 'Изображения в подписках должны содержать ссылку на сайт, ссылку на расположение самой картинки и подпись',
 	'Feed lifetime (min.)' => 'Время жизни подписки на канал (в минутах)',
 	'Feedback' => 'Обратная связь',
 	'Filters Enabled' => 'Фильтрация данных',
@@ -442,6 +443,7 @@ return array
 	'Sign Out' => 'Выход',
 	'Sign Up' => 'Регистрация',
 	'SimpleXML Extension' => 'Расширение SimpleXML',
+	'SimpleXML must be installed!' => 'Поддержка SimpleXML должна быть включена!',
 	'Site' => 'Сайт',
 	'Site configuration updated!' => 'Конфигурация сайта успешно сохранена!',
 	'Site running in maintenance mode!' => 'Сайт запущен в режиме обслуживания!',
@@ -588,7 +590,7 @@ return array
 	'Wrong username or password' => 'Имя пользователя или пароль не верны',
 	// X
 	// Y
-	'Yar' => 'Год',
+	'Year' => 'Год',
 	'Yes' => 'Да',
 	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Вы используете :out браузер. Пожалуйста :url или :frame чтоб расширить возможности браузера',
 	'You must provide mail body.' => 'Вы должны ввести тело сообщения',
