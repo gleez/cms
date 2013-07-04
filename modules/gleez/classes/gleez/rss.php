@@ -1,33 +1,27 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
- * RSS and Atom feed helper
+ * RSS news aggregator
  *
- * @package    Gleez\Helpers
+ * @package    Gleez\Feed\RSS
  * @author     Sergey Yakovlev - Gleez
- * @version    1.0.1
+ * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Gleez_Feed {
+class Gleez_Rss extends Feed {
 
 	/**
-	 * Parses a remote feed into an array.
+	 * Parse a remote feed into an array.
 	 *
 	 * @param   string   $feed   Remote feed URL
 	 * @param   integer  $limit  Item limit to fetch [Optional]
+	 *
 	 * @return  array
-	 * @throws  Gleez_Exception
 	 *
 	 * @uses    Valid::url
 	 */
-	public static function parse($feed, $limit = 0)
+	public function parse($feed, $limit = 0)
 	{
-		// Check if SimpleXML is installed
-		if ( ! class_exists('SimpleXMLElement'))
-		{
-			throw new Gleez_Exception('SimpleXML must be installed!');
-		}
-
 		// Make limit an integer
 		$limit = (int) $limit;
 
@@ -44,15 +38,15 @@ class Gleez_Feed {
 		error_reporting($error_level);
 
 		// Feed could not be loaded
-		if ($feed === FALSE)
+		if ( ! $feed)
 		{
 			return array();
 		}
 
 		$namespaces = $feed->getNamespaces(TRUE);
 
-		// Detect the feed type. RSS 1.0/2.0 and Atom 1.0 are supported.
-		$feed = isset($feed->channel) ? $feed->xpath('//item') : $feed->entry;
+		// This only for RSS 1.0/2.0 are supported
+		$feed = $feed->xpath('//item');
 
 		$i = 0;
 		$items = array();
@@ -75,30 +69,30 @@ class Gleez_Feed {
 	}
 
 	/**
-	 * Creates a feed from the given parameters
+	 * Create a feed from the given parameters
 	 *
 	 * @param   array   $info      Feed information
 	 * @param   array   $items     Items to add to the feed
 	 * @param   string  $encoding  Define which encoding to use [Optional]
-	 * @return  string
-	 * @throws  Gleez_Exception
 	 *
-	 * @todo    More formats support (eg. rss 1.0, rss 2.0, atom 1.0, etc.)
+	 * @return  string
+	 *
+	 * @throws  Feed_Exception
 	 *
 	 * @uses    Arr::merge
 	 * @uses    URL::is_absolute
 	 * @uses    URL::site
 	 */
-	public static function create(array $info, array $items, $encoding = NULL)
+	public function create(array $info, array $items, $encoding = NULL)
 	{
 		$generator = array(
-			'title'     => 'Gleez Feed Generator',
+			'title'     => Feed::NAME,
 			'link'      => '',
-			'generator' => Feed::generator()
+			'generator' => Feed::getGenerator()
 		);
 
 		$info = Arr::merge($generator, $info);
-		$feed = Feed::prepare_xml($encoding);
+		$feed = $this->prepareXML($encoding);
 
 		foreach ($info as $name => $value)
 		{
@@ -109,7 +103,7 @@ class Gleez_Feed {
 
 				if ( ! isset($value['link'], $value['url'], $value['title']))
 				{
-					throw new Gleez_Exception('Feed images require a link, url, and title');
+					throw new Feed_Exception('Feed images require a link, url, and title');
 				}
 
 				if (URL::is_absolute($value['url']))
@@ -185,61 +179,54 @@ class Gleez_Feed {
 	}
 
 	/**
-	 * Gets Feed Generator Title
-	 *
-	 * @return  string
-	 * @uses    Gleez::get_version
-	 */
-	public static function generator()
-	{
-		return Gleez::get_version(TRUE, TRUE) . ' ' . '(http://gleezcms.org)';
-	}
-
-	/**
 	 * Prepare XML skeleton
 	 *
-	 * @link    http://php.net/manual/en/function.simplexml-load-string.php
-	 *
+	 * @link    http://php.net/manual/en/function.simplexml-load-string.php simplexml_load_string()
 	 * @param   string  $encoding  Define which encoding to use [Optional]
 	 * @return  SimpleXMLElement
 	 */
-	public static function prepare_xml($encoding = NULL)
+	public function prepareXML($encoding = NULL)
 	{
 		$encoding = is_null($encoding) ? Kohana::$charset : $encoding;
-		$feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
+		$feed = '<?xml version="1.0" encoding="'.strtoupper($encoding).'"?><rss version="2.0"><channel></channel></rss>';
 
 		return simplexml_load_string($feed);
 	}
 
 	/**
-	 * Gets default prepared header for XML document
+	 * Get default prepared header for XML document
 	 *
-	 * @param   Config_Group  $config  Site config
 	 * @return  array
-	 *
-	 * @uses    Config_Group::get
-	 * @uses    URL::site
-	 * @uses    Route::url
 	 */
-	public static function info(Config_Group $config)
+	public function getInfo()
 	{
-		$info = array(
-			'title'       => $config->get('site_name', 'Gleez CMS'),
-			'description' => $config->get('site_mission', __('Recently added posts')),
+		return $this->_info;
+	}
+
+	/**
+	 * Set default prepared header for XML document
+	 *
+	 * @uses  Arr::get
+	 * @uses  Route::url
+	 * @uses  I18n::lang
+	 * @uses  URL::site
+	 */
+	public function setInfo()
+	{
+		$this->_info = array(
+			'title'       => Arr::get($this->_config, 'site_name', 'Gleez CMS'),
+			'description' => Arr::get($this->_config, 'site_mission', __('Recently added posts')),
 			'pubDate'     => time(),
-			'generator'   => Feed::generator(),
+			'generator'   => Feed::getGenerator(),
 			'link'        => Route::url('rss', NULL, TRUE),
-			'copyright'   => '2011-'.date('Y') . ' ' . $config->get('site_name', 'Gleez Technologies'),
-			'language'    => I18n::$lang,
-			'ttl'         => $config->get('feed_ttl', Date::HOUR * 60),
+			'copyright'   => '2011-'.date('Y') . ' ' . Arr::get($this->_config, 'site_name', 'Gleez Technologies'),
+			'language'    => I18n::lang(),
+			'ttl'         => Arr::get($this->_config, 'feed_ttl', Feed::DEFAULT_TTL),
 			'image'	      => array(
 				'link'  => URL::site(NULL, TRUE),
 				'url'   => URL::site('/media/images/logo.png', TRUE),
-				'title' => $config->get('site_name', 'Gleez CMS')
+				'title' => Arr::get($this->_config, 'site_name', 'Gleez CMS')
 			),
 		);
-
-		return $info;
 	}
-
 }

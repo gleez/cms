@@ -6,7 +6,7 @@
 
 <ul class="nav nav-tabs">
     <li class="active"><a href="#general" data-toggle="tab"><?php echo __('General'); ?></a></li>
-    <li><a href="#theme" data-toggle="tab"><?php echo __('Appearence'); ?></a></li>
+    <li><a href="#theme" data-toggle="tab"><?php echo __('Appearance'); ?></a></li>
     <li><a href="#timezone" data-toggle="tab"><?php echo __('Date & Time'); ?></a></li>
     <li><a href="#seo" data-toggle="tab"><?php echo __('SEO & Tracking'); ?></a></li>
     <li><a href="#offline" data-toggle="tab"><?php echo __('Maintenance'); ?></a></li>
