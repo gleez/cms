@@ -33,7 +33,7 @@
 			<?php print Form::select('status', array(0 => 'Blocked', 1 => 'Active'), $post->status, array('class' => 'list small')); ?>
 </div>
 
-<table class="table table-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered table-highlight">
 	<thead>
 		<tr>
 			<th>#</th>

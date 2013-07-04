@@ -92,16 +92,16 @@ class Controller_Blog extends Template {
 		$config = Kohana::$config->load('blog');
 
 		$this->title = __('Blogs');
-		$feed = Route::get('rss')->uri(array('controller' => 'blog'));
 
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
 			->set('config',      $config)
-			->set('feed',        $feed)
+			->bind('rss_link',   $rss_link)
 			->bind('pagination', $pagination)
 			->bind('posts',      $posts);
 
-		$url = Route::get('blog')->uri();
+		$url        = Route::get('blog')->uri();
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'blog'));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
@@ -498,6 +498,7 @@ class Controller_Blog extends Template {
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
 			->set('config',      $config)
+			->bind('rss_link',   $rss_link)
 			->bind('pagination', $pagination)
 			->bind('posts',       $posts);
 
@@ -517,6 +518,7 @@ class Controller_Blog extends Template {
 			return;
 		}
 
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'blog', 'action' => 'term', 'id' => $term->id));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
@@ -568,6 +570,7 @@ class Controller_Blog extends Template {
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
 			->set('config',      $config)
+			->bind('rss_link',   $rss_link)
 			->bind('pagination', $pagination)
 			->bind('posts',      $posts);
 
@@ -587,6 +590,7 @@ class Controller_Blog extends Template {
 			return;
 		}
 
+		$rss_link   = Route::get('rss')->uri(array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id));
 		$pagination = Pagination::factory(array(
 			'current_page'   => array('source'=>'cms', 'key'=>'page'),
 			'total_items'    => $total,
