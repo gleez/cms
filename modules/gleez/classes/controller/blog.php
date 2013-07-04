@@ -478,7 +478,7 @@ class Controller_Blog extends Template {
 	{
 		$config = Kohana::$config->load('blog');
 
-		if( ! $config->use_category)
+		if ( ! $config->use_category)
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
 			throw new HTTP_Exception_403(__('Attempt to access disabled feature'));
@@ -488,13 +488,13 @@ class Controller_Blog extends Template {
 		$array = array('id' => $id, 'type' => 'blog');
 		$term  = ORM::factory('term', $array)->where('lvl', '!=', 1);
 
-		if( ! $term->loaded())
+		if ( ! $term->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
 			throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term'=>$id));
 		}
 
-		$this->title = __(':term', array(':term' => $term->name ));
+		$this->title = __(':term', array(':term' => $term->name));
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
 			->set('config',      $config)
@@ -503,7 +503,7 @@ class Controller_Blog extends Template {
 
 		$posts = $term->posts;
 
-		if( ! ACL::check('administer terms') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer terms') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -536,7 +536,14 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			//Meta::links(Route::url('blog', array('action' => 'category', 'id' => $term->id), TRUE ), array('rel' => 'shortlink'));
+			Meta::links(Route::url('blog', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+				'rel' => 'shortlink'
+			));
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id)), array(
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
+				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $term->name,
+			));
 		}
 	}
 
@@ -551,7 +558,7 @@ class Controller_Blog extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'blog'));
 
-		if( ! $tag->loaded())
+		if ( ! $tag->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent blog tag');
 			throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag'=>$id));
@@ -566,7 +573,7 @@ class Controller_Blog extends Template {
 
 		$posts = $tag->posts;
 
-		if( ! ACL::check('administer tags') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer tags') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -598,7 +605,14 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE ), array('rel' => 'shortlink'));
+			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+				'rel' => 'shortlink'
+			));
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id)), array(
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
+				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $tag->name,
+			));
 		}
 	}
 }
