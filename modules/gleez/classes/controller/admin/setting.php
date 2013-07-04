@@ -26,7 +26,7 @@ class Controller_Admin_Setting extends Controller_Admin {
 	 */
 	public function action_index()
 	{
-		$this->title = __('General Settings');
+		$this->title = __('Settings');
 		$config = Kohana::$config->load('site');
 
 		if (isset($config['maintenance_mode']) AND $config['maintenance_mode'] == 1)

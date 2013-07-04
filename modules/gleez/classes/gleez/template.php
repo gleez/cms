@@ -230,7 +230,7 @@ abstract class Gleez_Template extends Controller {
 			$this->auto_render = FALSE;
 		}
 
-		$this->response->headers('X-Powered-By', Gleez::get_version(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
+		$this->response->headers('X-Powered-By', Gleez::getVersion(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
 
 		$this->_config = Kohana::$config->load('site');
 		$this->_auth   = Auth::instance();
@@ -479,7 +479,7 @@ abstract class Gleez_Template extends Controller {
 	protected function _set_default_server_headers()
 	{
 		$headers = $this->_config->get('headers', array());
-		$headers['X-Gleez-Version'] = Gleez::get_version(TRUE, TRUE) . ' ('.Gleez::CODENAME.')';
+		$headers['X-Gleez-Version'] = Gleez::getVersion(TRUE, TRUE) . ' ('.Gleez::CODENAME.')';
 
 		$xmlrpc = $this->_config->get('xmlrpc', NULL);
 
