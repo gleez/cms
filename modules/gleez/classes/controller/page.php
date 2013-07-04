@@ -477,13 +477,13 @@ class Controller_Page extends Template {
 		$array = array('id' => $id, 'type' => 'page');
 		$term  = ORM::factory('term', $array )->where('lvl', '!=', 1);
 
-		if( ! $term->loaded())
+		if ( ! $term->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
 			throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term'=>$id));
 		}
 
-		$this->title = __(':term', array(':term' => $term->name ));
+		$this->title = __(':term', array(':term' => $term->name));
 		$view = View::factory('page/list')
 					->set('teaser', TRUE)
 					->set('config', $config)
@@ -492,7 +492,7 @@ class Controller_Page extends Template {
 
 		$posts = $term->posts;
 
-		if( ! ACL::check('administer terms') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer terms') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -525,7 +525,14 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			//Meta::links(Route::url('page', array('action' => 'category', 'id' => $term->id), TRUE ), array('rel' => 'shortlink'));
+			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+				'rel' => 'shortlink'
+			));
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id)), array(
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
+				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $term->name,
+			));
 		}
 	}
 
@@ -540,7 +547,7 @@ class Controller_Page extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
 
-		if( ! $tag->loaded())
+		if ( ! $tag->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page tag');
 			throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag'=>$id));
@@ -555,7 +562,7 @@ class Controller_Page extends Template {
 
 		$posts = $tag->posts;
 
-		if( ! ACL::check('administer tags') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer tags') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -587,7 +594,14 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array('rel' => 'shortlink'));
+			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+				'rel' => 'shortlink'
+			));
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id)), array(
+				'rel'   => 'alternate',
+				'type'  => 'application/rss+xml',
+				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $tag->name,
+			));
 		}
 	}
 
