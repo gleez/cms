@@ -24,7 +24,7 @@ class Gleez_Date extends Kohana_Date {
 			1440      => __('Day'),
 			10080     => __('Week'),
 			302400    => __('Month'),
-			107654400 => __('Yar'),
+			107654400 => __('Year'),
 		);
 
 		return $amounts;
