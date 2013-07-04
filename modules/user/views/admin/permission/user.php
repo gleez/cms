@@ -8,7 +8,7 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<table id="permissions" class="table table-striped table-bordered">
+	<table id="permissions" class="table table-striped table-bordered table-highlight">
 		<thead>
 		<tr>
 			<th><?php echo __('Module'); ?></th>

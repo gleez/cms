@@ -7,6 +7,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -695,7 +696,25 @@ class Gleez_HTML {
 	 */
 	public static function label($text, $label = 'default')
 	{
-		return '<span class="label label-'.$label.'">'.$text.'</span>';
+		switch ($label)
+		{
+			case 'publish':
+				$status = 'success';
+			break;
+			case 'private':
+				$status = 'info';
+			break;
+			case 'archive':
+				$status = 'inverse';
+			break;
+			case 'draft':
+				$status = 'default';
+			break;
+			default:
+				$status = $label;
+		}
+
+		return '<span class="label label-'.$status.'">'.$text.'</span>';
 	}
 
 	/**
