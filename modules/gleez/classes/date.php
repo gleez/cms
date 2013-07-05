@@ -984,7 +984,7 @@ class Date {
 	 * @param  string  $key       The key with the value of the configuration file [Optional]
 	 * @return string
 	 */
-	public static function date($timestamp, $config = 'site', $key = 'date_format')
+	public static function date_format($timestamp, $config = 'site', $key = 'date_format')
 	{
 		return date(Kohana::$config->load($config)->get($key), $timestamp);
 	}
