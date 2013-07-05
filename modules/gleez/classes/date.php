@@ -33,7 +33,7 @@ class Date {
 
 	/**
 	 * Timezone for formatted_time
-	 * @link http://uk2.php.net/manual/en/timezones.php
+	 * @link http://php.net/timezones
 	 * @var  string
 	 */
 	public static $timezone = 'UTC';
@@ -44,8 +44,7 @@ class Date {
 	 *
 	 *     $seconds = Date::offset('America/Chicago', 'GMT');
 	 *
-	 * [!!] A list of time zones that PHP supports can be found at
-	 * <http://php.net/timezones>.
+	 * @link    http://php.net/timezones A list of time zones that PHP supports
 	 *
 	 * @param   string  $remote timezone that to find the offset of
 	 * @param   string  $local  timezone used as the baseline
@@ -218,8 +217,8 @@ class Date {
 	 *
 	 *     Date::days(4, 2010); // 1, 2, 3, ..., 28, 29, 30
 	 *
-	 * @param   integer $month  number of month
-	 * @param   integer $year   number of year to check month, defaults to the current year
+	 * @param   integer          $month  Number of month
+	 * @param   boolean|integer  $year   Number of year to check month, defaults to the current year [Optional]
 	 * @return  array   A mirrored (foo => foo) array of the days.
 	 */
 	public static function days($month, $year = FALSE)
@@ -260,7 +259,7 @@ class Date {
 	 * By default a mirrored array of $month_number => $month_number is returned
 	 *
 	 *     Date::months();
-	 *     // aray(1 => 1, 2 => 2, 3 => 3, ..., 12 => 12)
+	 *     // array(1 => 1, 2 => 2, 3 => 3, ..., 12 => 12)
 	 *
 	 * But you can customise this by passing in either Date::MONTHS_LONG
 	 *
@@ -302,8 +301,8 @@ class Date {
 	 *
 	 *     $years = Date::years(2000, 2010); // 2000, 2001, ..., 2009, 2010
 	 *
-	 * @param   integer $start  starting year (default is current year - 5)
-	 * @param   integer $end    ending year (default is current year + 5)
+	 * @param   boolean|integer  $start  Starting year (default is current year - 5) [Optional]
+	 * @param   boolean|integer  $end    Ending year (default is current year + 5) [Optional]
 	 * @return  array
 	 */
 	public static function years($start = FALSE, $end = FALSE)
@@ -533,7 +532,7 @@ class Date {
 	 *
 	 *     $dos = Date::unix2dos($unix);
 	 *
-	 * @param   integer $timestamp  UNIX timestamp
+	 * @param   boolean|integer  $timestamp  UNIX timestamp [Optional]
 	 * @return  integer
 	 */
 	public static function unix2dos($timestamp = FALSE)
@@ -561,7 +560,7 @@ class Date {
 	 *
 	 *     $unix = Date::dos2unix($dos);
 	 *
-	 * @param   integer $timestamp  DOS timestamp
+	 * @param   boolean|integer  $timestamp  DOS timestamp [Optional]
 	 * @return  integer
 	 */
 	public static function dos2unix($timestamp = FALSE)
@@ -984,10 +983,12 @@ class Date {
 	 * @param  string  $config    The configuration file [Optional]
 	 * @param  string  $key       The key with the value of the configuration file [Optional]
 	 * @return string
+	 *
+	 * @uses   Config::get
 	 */
 	public static function date_time($timestamp, $config = 'site', $key = 'date_time_format')
 	{
-		return date(Kohana::$config->load($config)->get($key), $timestamp);
+		return date(Config::get($config.$key), $timestamp);
 	}
 
 	/**
@@ -997,10 +998,12 @@ class Date {
 	 * @param  string  $config    The configuration file [Optional]
 	 * @param  string  $key       The key with the value of the configuration file [Optional]
 	 * @return string
+	 *
+	 * @uses   Config::get
 	 */
 	public static function date_format($timestamp, $config = 'site', $key = 'date_format')
 	{
-		return date(Kohana::$config->load($config)->get($key), $timestamp);
+		return date(Config::get($config.$key), $timestamp);
 	}
 
 	/**
@@ -1010,10 +1013,12 @@ class Date {
 	 * @param  string  $config    The configuration file [Optional]
 	 * @param  string  $key       The key with the value of the configuration file [Optional]
 	 * @return string
+	 *
+	 * @uses   Config::get
 	 */
 	public static function time($timestamp, $config = 'site', $key = 'time_format')
 	{
-		return date(Kohana::$config->load($config)->get($key), $timestamp);
+		return date(Config::get($config.$key), $timestamp);
 	}
 
 }
