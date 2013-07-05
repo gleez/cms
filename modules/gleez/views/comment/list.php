@@ -22,7 +22,7 @@
 						?>
 					</span>
 					<span class="DateCreated">
-						<?php echo Date::date($comment->created) ?>
+						<?php echo Date::date_format($comment->created) ?>
 					</span>
 
 					<?php if ($comment->user_can('edit') ): ?>

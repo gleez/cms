@@ -19,7 +19,7 @@
 					?>
 					</span>
 	
-					<span class="DateCreated"><?php echo Date::date($post->created); ?></span>
+					<span class="DateCreated"><?php echo Date::date_format($post->created); ?></span>
 				</div>
 			<?php endif;?>
 		
