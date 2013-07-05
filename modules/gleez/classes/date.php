@@ -36,7 +36,7 @@ class Date {
 	 * @link http://uk2.php.net/manual/en/timezones.php
 	 * @var  string
 	 */
-	public static $timezone;
+	public static $timezone = 'UTC';
 
 	/**
 	 * Returns the offset (in seconds) between two time zones. Use this to
@@ -589,10 +589,24 @@ class Date {
 	 */
 	public static function formatted_time($datetime_str = 'now', $timestamp_format = NULL, $timezone = NULL)
 	{
+		$settimezone  = ($timezone === NULL) ? Date::$timezone : $timezone;
+	
+		//Display Dates in site defined timezone format
+		if(Config::get('site.timezone_override', FALSE) AND $timezone === NULL)
+		{
+			// Default timezone from config
+			$settimezone = Config::get('site.timezone', 'UTC');
+		}
+	
+		//convert timestamp to support datetime class
+		if(is_numeric($datetime_str))
+		{
+			$datetime_str = '@'.$datetime_str;
+		}
+	
 		$timestamp_format = ($timestamp_format == NULL) ? Date::$timestamp_format : $timestamp_format;
-		$timezone         = ($timezone === NULL) ? Date::$timezone : $timezone;
 
-		$tz   = new DateTimeZone($timezone ? $timezone : date_default_timezone_get());
+		$tz   = new DateTimeZone($settimezone ? $settimezone : date_default_timezone_get());
 		$time = new DateTime($datetime_str, $tz);
 
 		if ($time->getTimeZone()->getName() !== $tz->getName())
