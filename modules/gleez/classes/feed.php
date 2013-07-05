@@ -65,7 +65,7 @@ abstract class Feed {
 		$config = Config::load('site')->as_array();
 
 		// Create a new feed instance
-		$feed_class = 'Gleez_'.ucfirst($driver);
+		$feed_class = 'Feed_'.ucfirst($driver);
 		Feed::$instances[$driver] = new $feed_class($config);
 
 		// Return the instance
