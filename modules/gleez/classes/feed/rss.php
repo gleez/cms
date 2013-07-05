@@ -8,7 +8,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Gleez_Rss extends Feed {
+class Feed_Rss extends Feed {
 
 	/**
 	 * Parse a remote feed into an array.
@@ -224,7 +224,7 @@ class Gleez_Rss extends Feed {
 			'ttl'         => Arr::get($this->_config, 'feed_ttl', Feed::DEFAULT_TTL),
 			'image'	      => array(
 				'link'  => URL::site(NULL, TRUE),
-				'url'   => URL::site('/media/images/logo.png', TRUE),
+				'url'   => URL::site(Arr::get($this->_config, 'site_logo', 'media/images/logo.png'), TRUE),
 				'title' => Arr::get($this->_config, 'site_name', 'Gleez CMS')
 			),
 		);
