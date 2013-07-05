@@ -747,7 +747,7 @@ class Date {
 			if (isset($zone[1]) != '')
 			{
 				// Creates array(DateTimeZone => 'Friendly name')
-				$locations[$zone[0]][__($zone[0] . '/' . $zone[1])] = __(str_replace('_', ' ', $zone[1]));
+				$locations[__($zone[0])]["{$zone[0]}/{$zone[1]}"] = __(str_replace('_', ' ', $zone[1]));
 			}
 		}
 
