@@ -126,6 +126,12 @@ abstract class Template extends Controller {
 	protected $_tabs;
 
 	/**
+	 * Quick Links navigation
+	 * @var  array
+	 */
+	protected $_actions;
+	
+	/**
 	 * Benchmark token
 	 * @var string
 	 */
@@ -288,6 +294,7 @@ abstract class Template extends Controller {
 				->set('front',         FALSE)
 				->set('mission',       FALSE)
 				->set('tabs',          FALSE)
+				->set('actions',       FALSE)
 				->set('_user',         $this->_auth->get_user())
 				->bind('datatables',   $this->_datatables);
 
@@ -402,6 +409,10 @@ abstract class Template extends Controller {
 				$this->template->tabs = View::factory('tabs')->set('tabs', $this->_tabs);
 			}
 
+			if (count($this->_actions) > 0)
+			{
+				$this->template->actions = View::factory('actions')->set('actions', $this->_actions);
+			}
 
 			// And profiler if debug is true
 			if (Kohana::$environment !== Kohana::PRODUCTION AND $this->debug)
