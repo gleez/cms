@@ -46,10 +46,6 @@ class I18n {
 		
 		//allow the user or browser to override the default locale
 		$locale_override   = Config::get('site.locale_override', FALSE);
-		$timezone_override = Config::get('site.timezone_override', FALSE);
-	
-		// Default timezone from config
-		$timezone	   = Config::get('site.timezone', 'UTC');
 
 		// 1. Check the session specific preference (cookie)
 		$locale = I18n::cookie_locale($installed_locales);
@@ -75,16 +71,6 @@ class I18n {
 		//set the locale
 		I18n::lang($locale);
 		setlocale(LC_ALL, $locale.'.utf-8');
-	
-		//change timezone only if valid user and allow override is set
-		if($timezone_override AND User::is_guest() == FALSE)
-		{
-			//@todo check timezone is valid
-			$timezone = User::active_user()->timezone;
-		}
-		
-		//time zone set in the config
-		date_default_timezone_set($timezone);
 	}
 
 	public static function request_locale( array $installed_locales )
