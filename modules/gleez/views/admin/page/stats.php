@@ -1,27 +1,27 @@
-<?php defined('SYSPATH') or die('No direct script access.'); ?>
+<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
 
 <ul class="page-stats">
 	<li>
-		<h3><?php echo __('Categories'); ?></h3>
+		<h3><?php _e('Categories'); ?></h3>
 		<ul>
-			<li><?php echo __('Total:'); ?> <?php echo $stats['categories']['total'] ?></li>
+			<li><?php _e('Total'); ?>: <?php echo $stats['categories']['total'] ?></li>
 		</ul>
 	</li>
 	<li>
-		<h3><?php echo __('Tags'); ?></h3>
+		<h3><?php _e('Tags'); ?></h3>
 		<ul>
-			<li><?php echo __('Total:'); ?> <?php echo $stats['tags']['total'] ?></li>
+			<li><?php _e('Total'); ?>: <?php echo $stats['tags']['total'] ?></li>
 		</ul>
 	</li>
 	<li>
-		<h3><?php echo __('Posts'); ?></h3>
+		<h3><?php _e('Posts'); ?></h3>
 		<ul>
-			<li><?php echo __('Total:'); ?> <?php echo $stats['articles']['total'] ?></li>
+			<li><?php _e('Total'); ?>: <?php echo $stats['articles']['total'] ?></li>
 		</ul>
 	</li>
 	<li>
-		<h3><?php echo __('Comments'); ?></h3>
+		<h3><?php _e('Comments'); ?></h3>
 		<ul>
-			<li><?php echo __('Total:'); ?> <?php echo $stats['comments']['total'] ?></li>
+			<li><?php _e('Total'); ?>: <?php echo $stats['comments']['total'] ?></li>
 	</li>
 </ul>
