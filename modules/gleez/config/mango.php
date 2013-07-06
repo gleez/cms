@@ -4,7 +4,7 @@ return array(
 	/**
 	 * Configuration Name
 	 *
-	 * You use this name when initializing a new [Gleez Mango](gleez/mango/index) instance
+	 * You use this name when initializing a new Gleez Mango instance
 	 *
 	 * Example:<br>
 	 * <code>
@@ -32,7 +32,8 @@ return array(
 				/**
 				 * The following extra options are available for MongoDB:
 				 *
-				 * string   db                Database to connect to
+				 * string   db                Database to connect to. Cannot contain " ", "." or be the empty string.
+				 *                            The name "system" is also reserved.
 				 * integer  connectTimeoutMS  Default timeout. It is measured in milliseconds.
 				 *                            FALSE and '' are identical
 				 * boolean  connect           Connect to DB on creation connection. How do you want to deal with
