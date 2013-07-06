@@ -192,7 +192,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 						HTML::anchor($blog->url, $blog->title),
 						HTML::anchor($blog->user->url, $blog->user->nick),
 						HTML::label(__($blog->status), $blog->status),
-						date('M d, Y', $blog->updated),
+						Date::formatted_time($blog->updated, 'M d, Y'),
 						HTML::icon($blog->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Blog'))) . '&nbsp;' .
 							HTML::icon($blog->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Blog')))
 					)

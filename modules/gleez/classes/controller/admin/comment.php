@@ -66,7 +66,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 						HTML::anchor($post->url, $post->title, array('class'=>'action-view','title' => Text::limit_words( $post->rawbody, 128, ' ...'))),
 						$author,
 						HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')),
-						date('M d, Y', $post->created),
+						Date::formatted_time($post->created, 'M d, Y'),
 						HTML::icon($post->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
 						HTML::icon($post->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete')))
 					)
