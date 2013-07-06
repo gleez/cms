@@ -229,6 +229,10 @@ class Mango {
 		// Create MongoClient object (but don't connect just yet)
 		$this->_connection = new MongoClient($server, Arr::merge(array('connect' => FALSE), $options));
 
+		// Save profiling option in a public variable
+		// @todo Kohana::$profiling => Gleez::$profiling
+		$this->profiling = (isset($config['profiling']) AND $config['profiling']) AND Kohana::$profiling;
+
 		// Optional connect
 		if (Arr::get($options, 'connect', TRUE))
 		{
@@ -237,10 +241,6 @@ class Mango {
 
 		// Set the collection class name
 		$this->setCollectionClass();
-
-		// Save profiling option in a public variable
-		// @todo Kohana::$profiling => Gleez::$profiling
-		$this->profiling = (isset($config['profiling']) AND $config['profiling']) AND Kohana::$profiling;
 
 		// Store the database instance
 		Mango::$instances[$name] = $this;
@@ -381,11 +381,12 @@ class Mango {
 
 		if ($this->profiling)
 		{
+			$json_args = array();
 			foreach($arguments as $argument)
 			{
-				$json_arguments[] = json_encode((is_array($argument) ? (object)$argument : $argument));
+				$json_args[]      = json_encode((is_array($argument) ? (object)$argument : $argument));
 				$method           = ($name == 'command' ? 'runCommand' : $name);
-				$this->_benchmark = Profiler::start("Mango::$this->_name", "db.$method(" . implode(', ', $json_arguments) . ")");
+				$this->_benchmark = Profiler::start("Mango::{$this->_name}", "db.{$method}(" . implode(', ', $json_args) . ")");
 			}
 		}
 
@@ -430,7 +431,7 @@ class Mango {
 			if ($this->profiling)
 			{
 				// Start a new benchmark
-				$this->_benchmark = Profiler::start("Mango::$this->_name", 'connect()');
+				$this->_benchmark = Profiler::start("Mango::{$this->_name}", 'connect()');
 			}
 
 			// Connecting to the server
