@@ -994,7 +994,7 @@ class Date {
 	 */
 	public static function date_time($timestamp, $config = 'site', $key = 'date_time_format')
 	{
-		return date(Config::get("{$config}.{$key}"), $timestamp);
+		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
 	}
 
 	/**
@@ -1009,7 +1009,7 @@ class Date {
 	 */
 	public static function date_format($timestamp, $config = 'site', $key = 'date_format')
 	{
-		return date(Config::get("{$config}.{$key}"), $timestamp);
+		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
 	}
 
 	/**
@@ -1024,7 +1024,7 @@ class Date {
 	 */
 	public static function time($timestamp, $config = 'site', $key = 'time_format')
 	{
-		return date(Config::get("{$config}.{$key}"), $timestamp);
+		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
 	}
 
 }
