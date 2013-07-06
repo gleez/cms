@@ -427,7 +427,7 @@ return array
 	'Time Zone' => 'Fuso orario',
 	'Title' => 'Titolo',
 	'Top Region' => 'Regione superiore',
-	'Total:' => 'Totale:',
+	'Total' => 'Totale',
 	'Type' => 'Tipo',
 	// U
 	'Unavailable' => 'Non disponibile',
