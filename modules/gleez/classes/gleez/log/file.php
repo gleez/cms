@@ -6,6 +6,7 @@
  *
  * @package    Gleez\Logging
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -26,8 +27,7 @@ class Gleez_Log_File extends Log_Writer {
 	/**
 	 * Class constructor
 	 *
-	 * - Creates a new file logger
-	 * - Checks that the directory exists and is writable
+	 * Creates a new file logger
 	 *
 	 * Example:<br>
 	 * <code>
@@ -35,32 +35,12 @@ class Gleez_Log_File extends Log_Writer {
 	 * </code>
 	 *
 	 * @param   string  $directory  Log directory
-	 * @throws  Gleez_Exception
 	 *
-	 * @uses    System::mkdir
-	 * @uses    Debug::path
+	 * @throws  Gleez_Exception
 	 */
 	public function __construct($directory)
 	{
-		if ( ! is_dir($directory))
-		{
-			try
-			{
-				// Create the log directory
-				System::mkdir($directory);
-			}
-			catch (Exception $e)
-			{
-				throw new Gleez_Exception('Could not create cache directory :dir',
-					array(':dir' => Debug::path($directory)));
-			}
-		}
-
-		if ( ! is_writable($directory))
-		{
-			throw new Gleez_Exception('Directory :dir must be writable',
-				array(':dir' => Debug::path($directory)));
-		}
+		$this->_checkDir($directory);
 
 		// Determine the directory path
 		$this->_directory = realpath($directory).DIRECTORY_SEPARATOR;
@@ -79,16 +59,12 @@ class Gleez_Log_File extends Log_Writer {
 	 * </code>
 	 *
 	 * @param   array  $messages  Log messages
-	 * @throws  Gleez_Exception
 	 *
-	 * @uses    System::mkdir
-	 * @uses    Debug::path
 	 * @uses    Arr::merge
 	 * @uses    Request::$client_ip
 	 * @uses    Request::$user_agent
 	 * @uses    Request::uri
 	 * @uses    Request::initial
-	 * @uses    User::active_user
 	 * @uses    Text::plain
 	 */
 	public function write(array $messages)
@@ -96,36 +72,10 @@ class Gleez_Log_File extends Log_Writer {
 		// Set the yearly directory name
 		$directory = $this->_directory.date('Y');
 
-		if ( ! is_dir($directory))
-		{
-			try
-			{
-				// Create the cache directory
-				System::mkdir($directory);
-			}
-			catch (Exception $e)
-			{
-				throw new Gleez_Exception('Could not create log directory :dir',
-					array(':dir' => Debug::path($directory)));
-			}
-		}
+		$this->_checkDir($directory);
 
 		// Add the month to the directory
 		$directory .= DIRECTORY_SEPARATOR.date('m');
-
-		if ( ! is_dir($directory))
-		{
-			try
-			{
-				// Create the yearly directory
-				System::mkdir($directory);
-			}
-			catch (Exception $e)
-			{
-				throw new Gleez_Exception('Could not create log directory :dir',
-					array(':dir' => Debug::path($directory)));
-			}
-		}
 
 		// Set the name of the log file
 		$filename = $directory.DIRECTORY_SEPARATOR.date('d').EXT;
@@ -154,6 +104,40 @@ class Gleez_Log_File extends Log_Writer {
 			file_put_contents($filename, PHP_EOL.$this->format_message($message, Log_File::$format_string), FILE_APPEND);
 		}
 
+	}
+
+	/**
+	 * Check that the directory exists and is writable
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   $directory
+	 *
+	 * @uses    System::mkdir
+	 * @uses    Debug::path
+	 *
+	 * @throws  Gleez_Exception
+	 */
+	protected function _checkDir($directory)
+	{
+		if ( ! is_dir($directory))
+		{
+			try
+			{
+				// Create the yearly directory
+				System::mkdir($directory);
+			}
+			catch (Exception $e)
+			{
+				throw new Gleez_Exception('Could not create log directory :dir',
+					array(':dir' => Debug::path($directory)));
+			}
+		}
+		if ( ! is_writable($directory))
+		{
+			throw new Gleez_Exception('Directory :dir must be writable',
+				array(':dir' => Debug::path($directory)));
+		}
 	}
 
 }
