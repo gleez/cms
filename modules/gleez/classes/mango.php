@@ -367,6 +367,7 @@ class Mango {
 	 *
 	 * @uses    Profiler::start
 	 * @uses    Profiler::stop
+	 * @uses    JSON::encode
 	 */
 	public function __call($name, $arguments)
 	{
@@ -382,9 +383,9 @@ class Mango {
 		if ($this->profiling)
 		{
 			$json_args = array();
-			foreach($arguments as $argument)
+			foreach($arguments as $arg)
 			{
-				$json_args[]      = json_encode((is_array($argument) ? (object)$argument : $argument));
+				$json_args[]      = JSON::encode((is_array($arg) ? (object)$arg : $arg));
 				$method           = ($name == 'command' ? 'runCommand' : $name);
 				$this->_benchmark = Profiler::start("Mango::{$this->_name}", "db.{$method}(" . implode(', ', $json_args) . ")");
 			}
