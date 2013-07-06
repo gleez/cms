@@ -427,7 +427,7 @@ return array
 	'Time Zone' => 'Fus Orar',
 	'Title' => 'Titlu',
 	'Top Region' => 'Regiune Superioară',
-	'Total:' => 'Total:',
+	'Total' => 'Total',
 	'Type' => 'Tip',
 	// U
 	'Unavailable' => 'Indisponibil',

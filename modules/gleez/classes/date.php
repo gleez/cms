@@ -747,7 +747,7 @@ class Date {
 			if (isset($zone[1]) != '')
 			{
 				// Creates array(DateTimeZone => 'Friendly name')
-				$locations[$zone[0]][__($zone[0] . '/' . $zone[1])] = __(str_replace('_', ' ', $zone[1]));
+				$locations[__($zone[0])]["{$zone[0]}/{$zone[1]}"] = __(str_replace('_', ' ', $zone[1]));
 			}
 		}
 
@@ -844,6 +844,8 @@ class Date {
 	 *
 	 * @param boolean $timestamp Unix timestamp [Optional]
 	 * @return array
+	 *
+	 * @todo   Need add i18n ability
 	 */
 	public static function date_time_formats($timestamp = FALSE)
 	{
@@ -903,6 +905,8 @@ class Date {
 	 *
 	 * @param  boolean $timestamp Unix timestamp [Optional]
 	 * @return array
+	 *
+	 * @todo   Need add i18n ability
 	 */
 	public static function date_formats($timestamp = FALSE)
 	{
@@ -951,6 +955,8 @@ class Date {
 	 *
 	 * @param  boolean $timestamp Unix timestamp [Optional]
 	 * @return array
+	 *
+	 * @todo   Need add i18n ability
 	 */
 	public static function time_formats($timestamp = FALSE)
 	{
