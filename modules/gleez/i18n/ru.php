@@ -239,6 +239,7 @@ return array
 	'Copenhagen' => 'Копенгаген',
 	'Could not connect to host' => 'Не удалось подключиться к хосту',
 	'Could not create cache directory :dir' => 'Не удалось создать каталог для кеша :dir',
+	'Could not create log directory :dir' => 'Не удалось создать каталог для журнала :dir',
 	'Could not find the host' => 'Не удалось найти хост',
 	'Could not select the database' => 'Не удалось выбрать базу данных',
 	'Couldn\'t create application/config/database.php' => 'Не удалось создать application/config/database.php',
