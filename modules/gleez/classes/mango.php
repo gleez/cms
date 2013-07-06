@@ -36,7 +36,7 @@
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4 or higher
  *
- * @package    Gleez\Mango
+ * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
  * @version    0.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies

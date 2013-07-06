@@ -35,8 +35,6 @@ class Gleez_Log_File extends Log_Writer {
 	 * </code>
 	 *
 	 * @param   string  $directory  Log directory
-	 *
-	 * @throws  Gleez_Exception
 	 */
 	public function __construct($directory)
 	{
