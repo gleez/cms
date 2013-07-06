@@ -17,7 +17,7 @@ class JSON {
 	 * Converts a PHP variable into its Javascript equivalent
 	 * We use HTML-safe strings, i.e. with <, > and & escaped.
 	 *
-	 * @link    http://www.php.net/manual/en/json.constants.php SON Predefined Constants
+	 * @link    http://www.php.net/manual/en/json.constants.php JSON Predefined Constants
 	 *
 	 * @param   mixed    $value    This function only works with UTF-8 encoded data
 	 * @param   integer  $options  Bitmask consisting of JSON Predefined Constants [Optional]
