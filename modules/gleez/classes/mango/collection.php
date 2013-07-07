@@ -109,7 +109,7 @@ class Mango_Collection {
 					$json_args[] = JSON::encode($arg);
 				}
 
-				$this->_benchmark = Profiler::start("Mango::{$this->_db}", "db.{$this->_name}.{$name}(" . implode(', ', $json_args) . ")");
+				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", "db.{$this->_name}.{$name}(" . implode(', ', $json_args) . ")");
 			}
 
 			$return_value = call_user_func_array(array($this->getCollection(), $name), $arguments);
