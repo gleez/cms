@@ -328,7 +328,7 @@ class Controller_Page extends Template {
 				->set('action',       $action)
 				->set('config',       $config)
 				->set('path',         FALSE)
-				->set('created',      date('Y-m-d H:i:s O', $post->created))
+				->set('created',      Date::formatted_time($post->created, 'Y-m-d H:i:s O'))
 				->set('author',       $post->user->name)
 				->set('tags',         Tags::implode($post->tags_form))
 				->bind('errors',      $this->_errors)

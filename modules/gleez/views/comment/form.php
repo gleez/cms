@@ -23,7 +23,7 @@
 
 					<div class="control-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
 						<?php echo Form::label('author_date', __('Date'), array('class' => 'aboveconten') ) ?>
-						<?php echo Form::input('author_date', Date::date_time($post->created), array('class' => 'text large')); ?>
+						<?php echo Form::input('author_date', Date::formatted_time($post->created), array('class' => 'text large')); ?>
 					</div>
 				</div>
 
