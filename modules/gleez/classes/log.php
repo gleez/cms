@@ -189,6 +189,18 @@ class Log {
 
 		is_null($additional) OR ($additional = array());
 
+		$request = Request::current();
+		$uri = '';
+		
+		if($request instanceof Request)
+		{
+			$uri = Request::initial()->uri();
+		}
+		elseif(!Kohana::$is_cli)
+		{
+			$uri = Request::detect_uri();
+		}
+		
 		// Create a new message and timestamp it
 		$this->_messages[] = array
 		(
@@ -201,6 +213,10 @@ class Log {
 			'class'      => isset($trace[0]['class']) ? $trace[0]['class'] : NULL,
 			'function'   => isset($trace[0]['function']) ? $trace[0]['function'] : NULL,
 			'additional' => $additional,
+			'hostname'   => Request::$client_ip,
+			'user_agent' => Request::$user_agent,
+			'referer'    => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
+			'url'        => Text::plain($uri),
 		);
 
 		if (Log::$write_on_add)
