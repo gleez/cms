@@ -309,10 +309,11 @@ class Mango {
 	/**
 	 * Returns the instance name
 	 *
-	 * @return  string  Instance name
+	 * @return  string
 	 */
 	final public function __toString()
 	{
+		// Current instance name
 		return $this->_name;
 	}
 
@@ -385,7 +386,7 @@ class Mango {
 			$json_args = array();
 			foreach($arguments as $arg)
 			{
-				$json_args[]      = JSON::encode((is_array($arg) ? (object)$arg : $arg));
+				$json_args[]      = JSON::encode($arg);
 				$method           = ($name == 'command' ? 'runCommand' : $name);
 				$this->_benchmark = Profiler::start("Mango::{$this->_name}", "db.{$method}(" . implode(', ', $json_args) . ")");
 			}
@@ -571,6 +572,7 @@ class Mango {
 	 * Wraps MongoCollection
 	 *
 	 * @param   string  $prefix  The prefix for the files and chunks collections [Optional]
+	 *
 	 * @return  Mango_Collection
 	 */
 	public function getGridFS($prefix = 'fs')

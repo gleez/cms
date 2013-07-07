@@ -89,7 +89,7 @@ class Mango_Collection {
 	protected $_benchmark = NULL;
 
 	/**
-	 * MongoCollection methods
+	 * MongoCollection methods that need profiling
 	 * @var array
 	 */
 	protected static $_db_methods = array(
@@ -172,8 +172,8 @@ class Mango_Collection {
 				$json_args = array();
 				foreach($arguments as $arg)
 				{
-					$json_args[]      = JSON::encode((is_array($arg) ? (object)$arg : $arg));
-					$this->_benchmark = Profiler::start("Mango::{$this->_db}", "db.{$this->_name}.{$name}(".implode(',',$json_args).")");
+					$json_args[]      = JSON::encode($arg);
+					$this->_benchmark = Profiler::start("Mango::{$this->_db}", "db.{$this->_name}.{$name}(" . implode(', ', $json_args) . ")");
 				}
 			}
 
