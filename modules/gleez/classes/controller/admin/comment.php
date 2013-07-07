@@ -83,8 +83,8 @@ class Controller_Admin_Comment extends Controller_Admin {
 		$view = View::factory('admin/comment/list')
 				->bind('datatables',   $this->_datatables)
 				->set('is_datatables', $is_datatables)
-				->set('bulk_actions', $bulk_actions)
-				->set('destination',  $destination)
+				->set('bulk_actions',  $bulk_actions)
+				->set('destination',   $destination)
 				->set('url',           $url);
 
 		$this->response->body($view);
