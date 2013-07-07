@@ -70,11 +70,11 @@ class Gleez_Log_File extends Log_Writer {
 		// Set the yearly directory name
 		$directory = $this->_directory.date('Y');
 
-		$this->_checkDir($directory);
-
 		// Add the month to the directory
 		$directory .= DIRECTORY_SEPARATOR.date('m');
 
+		$this->_checkDir($directory);
+	
 		// Set the name of the log file
 		$filename = $directory.DIRECTORY_SEPARATOR.date('d').EXT;
 
@@ -87,17 +87,8 @@ class Gleez_Log_File extends Log_Writer {
 			chmod($filename, 0666);
 		}
 
-		$info = array(
-			'hostname'   => Request::$client_ip,
-			'user_agent' => Request::$user_agent,
-			'url'        => Text::plain(Request::initial()->uri()),
-			'referer'    => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
-		);
-
 		foreach ($messages as $message)
 		{
-			$message = Arr::merge($message, $info);
-
 			// Write each message into the log file
 			file_put_contents($filename, PHP_EOL.$this->format_message($message, Log_File::$format_string), FILE_APPEND);
 		}

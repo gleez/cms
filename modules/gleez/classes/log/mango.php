@@ -80,14 +80,6 @@ class Log_Mango extends Log_Writer {
 	 */
 	public function write(array $messages)
 	{
-		// Descriptive array
-		$info = array(
-			'hostname'   => Request::$client_ip,
-			'user_agent' => Request::$user_agent,
-			'url'        => Text::plain(Request::initial()->uri()),
-			'refer'      => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
-		);
-
 		$logs      = array();
 		$exception = NULL;
 
@@ -108,7 +100,7 @@ class Log_Mango extends Log_Writer {
 			unset($message['additional'], $message['trace']);
 
 			// Merging descriptive array and the current message
-			$logs[] = Arr::merge($info, $message);
+			$logs[] = $message;
 		}
 
 		// Write messages
