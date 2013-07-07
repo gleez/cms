@@ -48,8 +48,8 @@ class Controller_Admin_User extends Controller_Admin {
 					array(
 						HTML::anchor($user->url, Text::plain($user->nick)),
 						Text::auto_link($user->mail),
-						date('M d, Y', $user->created),
-						($user->login > 0) ? date('M d, Y',$user->login) : __('Never'),
+						Date::formatted_time($user->created, 'M d, Y'),
+						($user->login > 0) ? Date::formatted_time($user->login, 'M d, Y') : __('Never'),
 						User::roles($user),
 						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
 						HTML::icon(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), 'icon-edit',  array('class'=>'action-edit', 'title'=> __('Edit User'))) . '&nbsp;' .

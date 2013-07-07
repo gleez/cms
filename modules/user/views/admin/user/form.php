@@ -14,8 +14,8 @@
 </div>
 
 <div class="control-group <?php echo isset($errors['pass']) ? 'error': ''; ?>">
-		<?php echo Form::label('password', __('Password')) ?>
-		<?php echo Form::Password('pass', null, array('class' => 'text small')) ?>
+	<?php echo Form::label('password', __('Password')) ?>
+	<?php echo Form::Password('pass', null, array('class' => 'text small')) ?>
 </div>
 
 <div class="control-group <?php echo isset($errors['nick']) ? 'error': ''; ?>">
@@ -29,8 +29,8 @@
 </div>
 
 <div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
-			<?php echo Form::label('active', __('Status')) ?>
-			<?php print Form::select('status', array(0 => 'Blocked', 1 => 'Active'), $post->status, array('class' => 'list small')); ?>
+	<?php echo Form::label('active', __('Status')) ?>
+	<?php print Form::select('status', array(0 => 'Blocked', 1 => 'Active'), $post->status, array('class' => 'list small')); ?>
 </div>
 
 <table class="table table-striped table-bordered table-highlight">
