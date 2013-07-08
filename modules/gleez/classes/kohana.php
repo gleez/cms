@@ -896,7 +896,12 @@ class Kohana {
 		}
 
 		$config = array_merge(Kohana::$cache, array('cache_dir' => Kohana::$cache_dir));
-
+		$config['ignore_on_delete']   = array(
+			'.gitignore',
+			'.git',
+			'.svn'
+		);
+		
 		//no data provided we read
 		if ($data === NULL)
 		{
