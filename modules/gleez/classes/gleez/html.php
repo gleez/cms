@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
  * HTML Helper
  *
@@ -7,19 +7,22 @@
  *
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_HTML {
 
 	/**
-	 * @var  string  Current route
+	 * Current route
+	 * @var string
 	 */
 	public static $current_route;
 
 	/**
-	 * @var  array  preferred order of attributes
+	 * Preferred order of attributes
+	 * @var array
 	 */
 	public static $attribute_order = array
 	(
@@ -696,7 +699,7 @@ class Gleez_HTML {
 	 */
 	public static function label($text, $label = 'default')
 	{
-		switch ($label)
+		switch (strtolower($label))
 		{
 			case 'publish':
 				$status = 'success';
@@ -707,8 +710,22 @@ class Gleez_HTML {
 			case 'archive':
 				$status = 'inverse';
 			break;
+			case 'debug':
 			case 'draft':
 				$status = 'default';
+			break;
+			case 'critical':
+				$status = 'important';
+			break;
+			case 'alert':
+				$status = 'warning';
+			break;
+			case 'error':
+			case 'emergency':
+				$status = 'inverse';
+			break;
+			case 'notice':
+				$status = 'info';
 			break;
 			default:
 				$status = $label;

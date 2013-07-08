@@ -2,17 +2,6 @@
 /**
  * Mango Collection
  *
- * This class wraps the functionality of MongoCollection
- *
- * @method     mixed          batchInsert(array $a, array $options = array())
- * @method     array          findOne(array $query = array(), array $fields = array())
- * @method     array          getDBRef(array $ref)
- * @method     array          group(mixed $keys, array $initial ,MongoCode $reduce, array $options = array())
- * @method     boolean|array  insert(array $a, array $options = array())
- * @method     boolean|array  remove(array $criteria = array(), array $options = array())
- * @method     mixed          save(array $a, array $options = array())
- * @method     boolean|array  update(array $criteria, array $new_object, array $options = array())
- *
  * ### System Requirements
  *
  * - PHP 5.3 or higher
@@ -47,34 +36,10 @@ class Mango_Collection {
 	protected $_gridFS = FALSE;
 
 	/**
-	 * The class name or instance of the corresponding document model or NULL if direct mode
+	 * Benchmark token
 	 * @var string
 	 */
-	protected $_model;
-
-	/**
-	 * The MongoCursor instance in use while iterating a collection
-	 * @var MongoCursor
-	 */
-	protected $_cursor;
-
-	/**
-	 * The current query criteria (with field names translated)
-	 * @var array
-	 */
-	protected $_query = array();
-
-	/**
-	 * The current query fields (a hash of 'field' => 1)
-	 * @var array
-	 */
-	protected $_fields = array();
-
-	/**
-	 * The current query options
-	 * @var array
-	 */
-	protected $_options = array();
+	protected $_benchmark = NULL;
 
 	/**
 	 * A cache of MongoCollection instances for performance
@@ -83,69 +48,43 @@ class Mango_Collection {
 	protected static $_collections = array();
 
 	/**
-	 * Benchmark token
-	 * @var string
-	 */
-	protected $_benchmark = NULL;
-
-	/**
-	 * MongoCollection methods
-	 * @var array
-	 */
-	protected static $_db_methods = array(
-		'batchInsert',
-		'findOne',
-		'getDBRef',
-		'group',
-		'insert',
-		'remove',
-		'save',
-		'update',
-	);
-
-	/**
 	 * Class constructor
 	 *
 	 * Instantiate a new collection object, can be used for querying, updating, etc..
 	 *
-	 * @param  string          $name    The collection name [Optional]
-	 * @param  string          $db      The database configuration name [Optional]
-	 * @param  boolean         $gridFS  Is the collection a gridFS instance? [Optional]
-	 * @param  boolean|string  $model   Class name of template model for new documents [Optional]
+	 * Example:<br>
+	 * <code>
+	 *   $posts = new Mango_Collection('posts');
+	 * </code>
+	 *
+	 * @param  string   $name    The collection name
+	 * @param  string   $db      The database configuration name [Optional]
+	 * @param  boolean  $gridFS  Is the collection a gridFS instance? [Optional]
 	 */
-	public function __construct($name = NULL, $db = NULL, $gridFS = FALSE, $model = FALSE)
+	public function __construct($name, $db = NULL, $gridFS = FALSE)
 	{
-		if ( ! is_null($name))
+		if (is_null($db))
 		{
-			if (is_null($db))
-			{
-				$db = Mango::$default;
-			}
-
-			$this->_db     = $db;
-			$this->_name   = $name;
-			$this->_gridFS = $gridFS;
+			$db = Mango::$default;
 		}
 
-		if ($model)
-		{
-			$this->_model = $model;
-		}
+		$this->_name   = $name;
+		$this->_db     = $db;
+		$this->_gridFS = $gridFS;
 	}
 
 	/**
-	 * Cloned objects have uninitialized cursors
+	 * Return the collection name
+	 *
+	 * @return string
 	 */
-	public function __clone()
+	public function  __toString()
 	{
-		// Reset the state of the query
-		$this->reset(TRUE);
+		return $this->_name;
 	}
 
 	/**
 	 * Magic method override
-	 *
-	 * Passes on method calls to either the MongoCursor or the MongoCollection.
 	 *
 	 * @param   string  $name       Name of the method being called
 	 * @param   array   $arguments  Enumerated array containing the parameters passed to the `$name`
@@ -160,24 +99,20 @@ class Mango_Collection {
 	 */
 	public function __call($name, $arguments)
 	{
-		if ($this->_cursor AND method_exists($this->_cursor, $name))
+		if (method_exists($this->getCollection(), $name))
 		{
-			return call_user_func_array(array($this->_cursor, $name), $arguments);
-		}
-
-		if (method_exists($this->collection(), $name))
-		{
-			if ($this->db()->profiling AND in_array($name, self::$_db_methods))
+			if ($this->db()->profiling)
 			{
 				$json_args = array();
 				foreach($arguments as $arg)
 				{
-					$json_args[]      = JSON::encode((is_array($arg) ? (object)$arg : $arg));
-					$this->_benchmark = Profiler::start("Mango::{$this->_db}", "db.{$this->_name}.{$name}(".implode(',',$json_args).")");
+					$json_args[] = JSON::encode($arg);
 				}
+
+				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", "db.{$this->_name}.{$name}(" . implode(', ', $json_args) . ")");
 			}
 
-			$return_value = call_user_func_array(array($this->collection(), $name), $arguments);
+			$return_value = call_user_func_array(array($this->getCollection(), $name), $arguments);
 
 			if ($this->_benchmark)
 			{
@@ -199,36 +134,11 @@ class Mango_Collection {
 	}
 
 	/**
-	 * Reset the state of the query
-	 *
-	 * [!!] This method must be called manually if re-using a collection for a new query.
-	 *
-	 * Pass `FALSE` to avoid full resetting:<br>
-	 * <code>
-	 *   $collection->reset(FALSE);
-	 * </code>
-	 *
-	 * @param   boolean  $cursor_only  Resetting only MongoCursor? [Optional]
-	 * @return  Mango_Collection
-	 */
-	public function reset($cursor_only = FALSE)
-	{
-		if( ! $cursor_only)
-		{
-			$this->_query = $this->_fields = $this->_options = array();
-		}
-
-		$this->_cursor = NULL;
-
-		return $this;
-	}
-
-	/**
 	 * Get the corresponding MongoCollection instance
 	 *
 	 * @return  MongoCollection
 	 */
-	public function collection()
+	public function getCollection()
 	{
 		$name = "{$this->_db}.{$this->_name}.{$this->_gridFS}";
 
