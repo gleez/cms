@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
  * Provides simple benchmarking and profiling. To display the statistics that
  * have been collected, load the `profiler/stats` [View]:
@@ -38,11 +38,11 @@ class Kohana_Profiler {
 		static $counter = 0;
 
 		// Create a unique token based on the counter
-		$token = 'kp/'.base_convert($counter++, 10, 32);
+		$token = 'gleez_profiler/'.base_convert($counter++, 10, 32);
 
 		Profiler::$_marks[$token] = array
 		(
-			'group' => strtolower($group),
+			'group' => $group,
 			'name'  => (string) $name,
 
 			// Start the benchmark
