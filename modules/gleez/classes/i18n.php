@@ -9,14 +9,17 @@
  *
  *     // Display a translated message
  *     echo __('Hello, world');
+ *     _e('Hello, world');
  *
  *     // With parameter replacement
  *     echo __('Hello, :user', array(':user' => $username));
+ *     _e('Hello, :user', array(':user' => $username));
  *
  * @package    Gleez\I18n
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
@@ -232,7 +235,7 @@ class I18n {
 		// Load the translation table
 		$table = I18n::load(I18n::$lang);
 
-		$key = Gleez_I18n::get_plural_key(I18n::$lang, $count);
+		$key = I18n::get_plural_key(I18n::$lang, $count);
 
 		// Return the translated string if it exists
 		return isset($table[$string][$key]) ? $table[$string][$key]: $string;
