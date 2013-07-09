@@ -705,6 +705,7 @@ class Gleez_HTML {
 				$status = 'success';
 			break;
 			case 'private':
+			case 'notice':
 				$status = 'info';
 			break;
 			case 'archive':
@@ -715,17 +716,12 @@ class Gleez_HTML {
 				$status = 'default';
 			break;
 			case 'critical':
+			case 'error':
+			case 'emergency':
 				$status = 'important';
 			break;
 			case 'alert':
 				$status = 'warning';
-			break;
-			case 'error':
-			case 'emergency':
-				$status = 'inverse';
-			break;
-			case 'notice':
-				$status = 'info';
 			break;
 			default:
 				$status = $label;
