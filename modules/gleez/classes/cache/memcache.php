@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * [Gleez Cache](api/Gleez_Cache) Memcache driver
+ * [Cache](api/Cache) Memcache driver
  *
  * ### Supported cache engines
  *
@@ -68,8 +68,6 @@
  *
  * ### System requirements
  *
- * *  Kohana 3.0.x
- * *  PHP 5.2.4 or greater
  * *  Memcache (plus Memcached-tags for native tagging support)
  * *  Zlib
  *
