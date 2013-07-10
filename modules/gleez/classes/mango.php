@@ -393,7 +393,7 @@ class Mango {
 			}
 
 			$method           = ($name == 'command' ? 'runCommand' : $name);
-			$this->_benchmark = Profiler::start("Mango::{$this->_name}", "db.{$method}(" . implode(', ', $json_args) . ")");
+			$this->_benchmark = Profiler::start(__CLASS__."::{$this->_name}", "db.{$method}(" . implode(', ', $json_args) . ")");
 		}
 
 		$return_value = call_user_func_array(array($this->_db, $name), $arguments);
@@ -437,7 +437,7 @@ class Mango {
 			if ($this->profiling)
 			{
 				// Start a new benchmark
-				$this->_benchmark = Profiler::start("Mango::{$this->_name}", 'connect()');
+				$this->_benchmark = Profiler::start(__CLASS__."::{$this->_name}", 'connect()');
 			}
 
 			// Connecting to the server
