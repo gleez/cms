@@ -167,12 +167,11 @@ class Gleez_Form {
 			$attrs['class'] = isset($attrs['class']) ? $attrs['class'].' form-autocomplete' : 'form-autocomplete';
 			$attrs['id'] = $name;
 			$attrs['autocomplete'] = "off";
+			$attrs['data-url']     = URL::site($url, TRUE);
+			$attrs['data-provide'] = 'typeahead';
 
 			// Assign the autocomplete js file
-			Assets::js('autocomplete', 'media/js/autocomplete.js', 'gleez');
-
-			$attrs['data-url'] = URL::site($url, TRUE);
-			//$attrs['data-autocomplete-smart'] = $smart;
+			Assets::js('autocomplete', 'media/js/gleez.typeahead.js', 'gleez');
 		}
 
 		$out .= '<input'.HTML::attributes($attrs).'>';
