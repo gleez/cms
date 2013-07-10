@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * [Gleez Cache](api/Gleez_Cache) Wincache driver
+ * [Cache](api/Cache) Wincache driver
  *
- * Provides an opcode based driver for the Kohana Gleez library.
+ * Provides an opcode based driver for the Gleez Cache library.
  *
  * ### Configuration example
  *

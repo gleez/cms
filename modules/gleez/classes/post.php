@@ -328,7 +328,7 @@ class Post extends ORM_Versioned {
 	 * Updates or Creates the record depending on loaded()
 	 *
 	 * @param   Validation $validation Validation object [Optional]
-	 * @return  Gleez_Post
+	 * @return  Post
 	 *
 	 * @uses    URL::site
 	 * @uses    User::active_user
@@ -476,7 +476,7 @@ class Post extends ORM_Versioned {
 	/**
 	 * Deletes a single post or multiple posts, ignoring relationships
 	 *
-	 * @return  Gleez_Post
+	 * @return  Post
 	 * @throws  Gleez_Exception
 	 *
 	 * @uses    Cache::delete
