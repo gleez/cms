@@ -6,7 +6,7 @@
  *
  * - PHP 5.3 or higher
  * - MondoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4 or higher
+ * - PHP-extension MongoDB 1.4.0 or higher
  *
  * @package    Gleez\Logging
  * @author     Sergey Yakovlev - Gleez
