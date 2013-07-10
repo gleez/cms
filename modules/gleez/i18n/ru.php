@@ -886,6 +886,7 @@ return array
 	'The :spl extension is either not loaded or not compiled in.' => 'Библиотека :spl не загружена, либо PHP собран без её поддержки.',
 	'The ability to create pages' => 'Возможность создавать страницы',
 	'The admin menu provides quick access to all of :cms_url\'s options and settings. Here are a few of the most used options to get you started.' => 'Меню администратора предоставляет быстрый доступ ко всем опциям и настройкам :cms_url. Вот некоторые из наиболее часто используемых опций которые помогут вам начать.',
+	'The code must be a string or an instance of MongoCode' => 'Код должен быть строкой или экземпляром MongoCode',
 	'The configured :application directory does not exist or does not contain required files.' => 'Настроенный каталог для приложения :application не существует или не содержит требуемых файлов.',
 	'The configured :modules directory does not exist or does not contain required files.' => 'Настроенный каталог для модулей :modules не существует или не содержит требуемых файлов.',
 	'The configured :system directory does not exist or does not contain required files.' => 'Настроенный каталог для системы :system не существует или не содержит требуемых файлов.',

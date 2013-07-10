@@ -34,11 +34,11 @@
  *
  * - PHP 5.3 or higher
  * - MongoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4 or higher
+ * - PHP-extension MongoDB 1.4.0 or higher
  *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.2.0
+ * @version    0.3.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -250,14 +250,17 @@ class Mango {
 	 * Sets default hostname and port
 	 *
 	 * [!!] This is called automatically by [Mango::__construct].
+	 *
+	 * - [MongoClient::DEFAULT_HOST] is localhost
+	 * - [MongoClient::DEFAULT_PORT] is 27017
 	 */
 	protected function _setDSN()
 	{
 		$default_host = ini_get('mongo.default_host');
 		$default_port = ini_get('mongo.default_port');
 
-		$this->_default_host = (is_null($default_host) OR empty($default_host)) ? MongoClient::DEFAULT_HOST : $default_host;
-		$this->_default_port = (is_null($default_port) OR empty($default_port)) ? MongoClient::DEFAULT_PORT : $default_port;
+		$this->_default_host = (empty($default_host)) ? MongoClient::DEFAULT_HOST : $default_host;
+		$this->_default_port = (empty($default_port)) ? MongoClient::DEFAULT_PORT : $default_port;
 	}
 
 	/**
@@ -581,5 +584,86 @@ class Mango {
 		$this->_connected OR $this->connect();
 
 		return new $this->_collection_class($prefix, $this->_name, TRUE);
+	}
+
+	/**
+	 * Runs JavaScript code on the database server
+	 *
+	 * This method allows you to run arbitrary JavaScript on the database.
+	 * Same usage as MongoDB::execute except it throws an exception on error.
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   $db->execute_safe('db.foo.count();');
+	 * </code>
+	 *
+	 * @since   0.3.0
+	 * @link    http://php.net/manual/en/mongodb.execute.php MongoDB::execute
+	 *
+	 * @param   string|MongoCode  $code   MongoCode or string to execute
+	 * @param   array             $args   Arguments to be passed to code [Optional]
+	 * @param   array             $scope  The scope to use for the code if `$code` is a string [Optional]
+	 *
+	 * @return  mixed
+	 *
+	 * @throws  Mango_Exception
+	 * @throws  MongoException
+	 */
+	public function execute_safe($code, array $args = array(), $scope = array())
+	{
+		if ( ! is_string($code) AND ! $code instanceof MongoCode)
+		{
+			throw new Mango_Exception('The code must be a string or an instance of MongoCode');
+		}
+
+		if ( ! $code instanceof MongoCode)
+		{
+			$code = new MongoCode($code, $scope);
+		}
+
+		$result = $this->execute($code, $args);
+
+		if (empty($result['ok']))
+		{
+			throw new MongoException($result['errmsg'], $result['errno']);
+		}
+
+		return $result['retval'];
+	}
+
+	/**
+	 * Execute a database command
+	 *
+	 * Almost everything that is not a CRUD operation can be done with a this method.
+	 * Same usage as MongoDB::command except it throws an exception on error.
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   $ages = $db->command_safe(array("distinct" => "people", "key" => "age"));
+	 * </code>
+	 *
+	 * @since   0.3.0
+	 * @link    http://www.php.net/manual/en/mongodb.command.php MongoDB::command
+	 *
+	 * @param   array  $command  The query to send
+	 * @param   array  $options  An associative array of command options [Optional]
+	 *
+	 * @return  array
+	 *
+	 * @throws  MongoException
+	 */
+	public function command_safe(array $command, array $options = array())
+	{
+		$result = $this->command($command, $options);
+
+		if (empty($result['ok']))
+		{
+			$message = isset($result['errmsg']) ? $result['errmsg'] : 'Error: ' . json_encode($result);
+			$code    = isset($result['errno']) ? $result['errno'] : 0;
+
+			throw new MongoException($message, $code);
+		}
+
+		return $result;
 	}
 }
