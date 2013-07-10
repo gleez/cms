@@ -91,7 +91,8 @@
     }
 
     // Query changed
-    that.query = query;
+    that.query = query
+    this.results  = {}
 
     // Cancel last timer if set
     if (that.ajax.timerId) {
