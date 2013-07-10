@@ -111,7 +111,7 @@ class Model_Blog extends Post {
 	 * Deletes a single record or multiple records, ignoring relationships
 	 *
 	 * @param   integer  $id  Row ID. The search criteria [Optional]
-	 * @return  Gleez_Post
+	 * @return  Post
 	 */
 	public function delete($id = NULL)
 	{
