@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * [Gleez Cache](api/Gleez_Cache) File driver
+ * [Cache](api/Cache) File driver
  *
  * Provides a file based driver for the Gleez Cache library.
  * This is one of the slowest caching methods.
