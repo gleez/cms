@@ -5,7 +5,7 @@
  * @package    Gleez\Helpers
  * @author     Sergey Yakovlev - Gleez
  * @author     Igal Alkon <igal.alkon@gmail.com>
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -98,7 +98,7 @@ class JSON {
 	}
 
 	/**
-	 * Encode an array or object into a Mongo-like JSON string
+	 * Encode `$value` into a Mongo-like JSON string
 	 *
 	 * @param   mixed  $value  Array or object
 	 *
@@ -108,11 +108,6 @@ class JSON {
 	 */
 	public static function encodeMongo($value)
 	{
-		if ( ! is_array($value) OR ! is_object($value))
-		{
-			throw new Gleez_Exception('The value to encode must be an array or object');
-		}
-
 		$json = json_encode($value);
 		$json = preg_replace('/{"\$id":"(\w+)"}/','ObjectId("$1")', $json);
 

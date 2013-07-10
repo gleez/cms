@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * [Gleez Cache](api/Gleez_Cache) APC driver
+ * [Cache](api/Cache) APC driver
  *
  * Provides an opcode based driver for the Gleez Cache library.
  *

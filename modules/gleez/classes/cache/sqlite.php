@@ -1,8 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Kohana Cache Sqlite Driver
+ * [Cache](api/Cache) Sqlite driver
  *
- * Requires SQLite3 and PDO
+ * ### System requirements
+ *
+ * *  SQLite3
+ * *  PDO
  *
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
@@ -368,7 +371,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		{
 			$statement->execute(array(':id' => $this->_sanitize_id($this->config('prefix').$id)));
 		}
-		catch (PDOExeption $e)
+		catch (PDOException $e)
 		{
 			throw new Cache_Exception('There was a problem querying the local SQLite3 cache. :error', array(':error' => $e->getMessage()));
 		}
