@@ -18,9 +18,11 @@ class JSON {
 	 * i.e. with <, > and & escaped. For more details For more details please refer to
 	 * [[http://www.php.net/manual/en/function.json-encode.php]]
 	 *
+	 * [!!] This function only works with UTF-8 encoded data
+	 *
 	 * @link    http://www.php.net/manual/en/json.constants.php JSON Predefined Constants
 	 *
-	 * @param   mixed    $value    This function only works with UTF-8 encoded data
+	 * @param   mixed    $value    The data to be encoded
 	 * @param   integer  $options  Bitmask consisting of JSON Predefined Constants [Optional]
 	 * @param   integer  $depth    PHP 5.5 or higher [Optional]
 	 * @return  string
@@ -108,12 +110,14 @@ class JSON {
 	/**
 	 * Encodes the given value into a Mongo-like JSON string
 	 *
+	 * [!!] This function only works with UTF-8 encoded data
+	 *
 	 * Example:<br>
 	 * <code>
 	 *   $j = JSON::encodeMongo(array('$id' => 1234567890));
 	 * </code>
 	 *
-	 * @param   mixed  $value  Array or object
+	 * @param   mixed  $value  The data to be encoded
 	 *
 	 * @return  string
 	 */
