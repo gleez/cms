@@ -5,17 +5,18 @@
  * @package    Gleez\Helpers
  * @author     Sergey Yakovlev - Gleez
  * @author     Igal Alkon <igal.alkon@gmail.com>
- * @version    1.2.1
+ * @version    1.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class JSON {
 	
 	/**
-	 * Returns a string containing the JSON representation of value
+	 * Encodes the given value into a JSON string
 	 *
-	 * Converts a PHP variable into its Javascript equivalent
-	 * We use HTML-safe strings, i.e. with <, > and & escaped.
+	 * Converts a PHP variable into its Javascript equivalent  We use HTML-safe strings,
+	 * i.e. with <, > and & escaped. For more details For more details please refer to
+	 * [[http://www.php.net/manual/en/function.json-encode.php]]
 	 *
 	 * @link    http://www.php.net/manual/en/json.constants.php JSON Predefined Constants
 	 *
@@ -40,16 +41,18 @@ class JSON {
 	}
 
 	/**
-	 * Takes a JSON encoded string and converts it into a PHP variable
+	 * Decodes the given JSON string into a PHP data structure
 	 *
-	 * Converts an HTML-safe JSON string into its PHP equivalent.
+	 * [!!] This function only works with UTF-8 encoded data
+	 *
+	 * For more details please refer to [[http://www.php.net/manual/en/function.json-decode.php]]
 	 *
 	 * Example:<br>
 	 * <code>
 	 *   $j = JSON::decode('{"Organization": "Gleez"}');
 	 * </code>
 	 *
-	 * @param   string   $json     This function only works with UTF-8 encoded data
+	 * @param   string   $json     The JSON string to be decoded
 	 * @param   boolean  $assoc    When TRUE, returned objects will be converted into associative arrays [Optional]
 	 * @param   integer  $depth    User specified recursion depth [Optional]
 	 * @param   integer  $options  Bitmask of JSON decode options. PHP 5.4 or higher [Optional]
@@ -69,14 +72,17 @@ class JSON {
 			$result = json_decode($json, $assoc, $depth);
 		}
 
+		$error = '';
 
 		switch(json_last_error())
 		{
+			case JSON_ERROR_NONE:
+			break;
 			case JSON_ERROR_DEPTH:
-				$error = 'Maximum stack depth exceeded';
+				$error = 'The maximum stack depth has been exceeded';
 			break;
 			case JSON_ERROR_CTRL_CHAR:
-				$error = 'Unexpected control character found';
+				$error = 'Control character error, possibly incorrectly encoded';
 			break;
 			case JSON_ERROR_STATE_MISMATCH:
 				$error = 'Invalid or malformed JSON';
@@ -84,9 +90,11 @@ class JSON {
 			case JSON_ERROR_SYNTAX:
 				$error = 'Syntax error';
 			break;
-			case JSON_ERROR_NONE:
+			case JSON_ERROR_UTF8:
+				$error = 'Malformed UTF-8 characters, possibly incorrectly encoded';
+			break;
 			default:
-				$error = '';
+				$error = 'Unknown JSON decoding error';
 		}
 
 		if ( ! empty($error))
@@ -98,13 +106,16 @@ class JSON {
 	}
 
 	/**
-	 * Encode `$value` into a Mongo-like JSON string
+	 * Encodes the given value into a Mongo-like JSON string
+	 *
+	 * Example:<br>
+	 * <code>
+	 *   $j = JSON::encodeMongo(array('$id' => 1234567890));
+	 * </code>
 	 *
 	 * @param   mixed  $value  Array or object
 	 *
 	 * @return  string
-	 *
-	 * @throws  Gleez_Exception
 	 */
 	public static function encodeMongo($value)
 	{
