@@ -74,7 +74,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.1
+ * @version    0.3.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -187,10 +187,10 @@ class Mango {
 	{
 		if (is_null($name))
 		{
-			$name = Mango::$default;
+			$name = self::$default;
 		}
 
-		if ($override OR ! isset(Mango::$instances[$name]))
+		if ($override OR ! isset(self::$instances[$name]))
 		{
 			if (is_null($config))
 			{
@@ -209,10 +209,10 @@ class Mango {
 			}
 
 			// Create the Mango instance
-			new Mango($name, $config);
+			new self($name, $config);
 		}
 
-		return Mango::$instances[$name];
+		return self::$instances[$name];
 	}
 
 	/**
@@ -276,7 +276,7 @@ class Mango {
 		$this->setCollectionClass();
 
 		// Store the database instance
-		Mango::$instances[$name] = $this;
+		self::$instances[$name] = $this;
 	}
 
 	/**
