@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Gleez Cache Tagging Interface
+ * Gleez [Cache](api/Cache) Tagging Interface
  *
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
@@ -17,10 +17,11 @@ interface Cache_Tagging {
 	 *
 	 * [!!] Note: Some caching engines don't support tagging
 	 *
-	 * @param   string   $id        id
-	 * @param   mixed    $data      data
-	 * @param   integer  $lifetime  lifetime [Optional]
-	 * @param   array    $tags      tags [Optional]
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      Data to set to cache
+	 * @param   integer  $lifetime  Lifetime in seconds [Optional]
+	 * @param   array    $tags      Tags [Optional]
+	 *
 	 * @return  boolean
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL);
@@ -36,6 +37,7 @@ interface Cache_Tagging {
 	 * Find cache entries based on a tag
 	 *
 	 * @param   string  $tag  tag
+	 *
 	 * @return  array
 	 */
 	public function find($tag);
