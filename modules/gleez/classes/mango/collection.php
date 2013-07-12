@@ -6,10 +6,14 @@
  *
  * ### Usage
  *
- * <pre>
+ * ~~~
  *   $collection = new Mongo_Collection('users');
- *   $users = collection->sort_desc('published')->limit(10)->as_array(); // array of arrays
- * </pre>
+ *
+ *   // $users now is array of arrays
+ *   $users = collection->sort_desc('published')
+ *                      ->limit(10)
+ *                      ->toArray();
+ * ~~~
  *
  * ### System Requirements
  *
@@ -17,9 +21,34 @@
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
+ * This class has appeared thanks to such wonderful projects as:
+ *
+ * + [Wouterrr/MangoDB](https://github.com/Wouterrr/MangoDB)
+ * + [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ *
+ * @method     mixed          batchInsert(array $a, array $options = array())
+ * @method     array          createDBRef(array $a)
+ * @method     array          deleteIndex(mixed $keys)
+ * @method     array          deleteIndexes()
+ * @method     array          drop()
+ * @method     boolean        ensureIndex(mixed $keys, array $options = array())
+ * @method     array          getDBRef(array $ref)
+ * @method     array          getIndexInfo()
+ * @method     string         getName()
+ * @method     array          getReadPreference()
+ * @method     boolean        getSlaveOkay()
+ * @method     array          group(mixed $keys, array $initial, MongoCode $reduce, array $options = array())
+ * @method     boolean|array  insert(array $data, array $options = array())
+ * @method     boolean|array  remove(array $criteria = array(), array $options = array())
+ * @method     mixed          save(array $a, array $options = array())
+ * @method     boolean        setReadPreference(string $read_preference, array $tags = array())
+ * @method     boolean        setSlaveOkay(boolean $ok = TRUE)
+ * @method     boolean|array  update(array $criteria, array $new_object, array $options = array())
+ * @method     array          validate(boolean $scan_data = FALSE)
+ *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.0
+ * @version    0.4.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -91,10 +120,10 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * Instantiate a new collection object, can be used for querying, updating, etc..
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   $posts = new Mango_Collection('posts');
-	 * </code>
+	 * ~~~
 	 *
 	 * @param   string   $name    The collection name
 	 * @param   string   $db      The database configuration name [Optional]
@@ -197,6 +226,59 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Merge two distinct arrays __recursively__
+	 *
+	 * MongoDB implementation.
+	 * Return an array of values resulted from merging the arguments together
+	 *
+	 * [!!] This method doesn't change the datatypes of the values in the arrays
+	 *
+	 * @todo    May be should be merged with Arr Helper
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   array  $array1  Initial array to merge
+	 * @param   array  $array2  Array to recursively merge
+	 *
+	 * @return  array
+	 */
+	protected static function _mergeDistinctArrays(array $array1, array $array2)
+	{
+		if ( ! count($array1))
+		{
+			return $array2;
+		}
+
+		foreach ($array2 as $key => $value)
+		{
+			if (is_array($value) AND isset($array1[$key]) AND is_array($array1[$key]))
+			{
+				// Intersect $in queries
+				if ($key == '$in')
+				{
+					$array1[$key] = array_intersect($array1[$key], $value);
+				}
+				// Union $nin and $all queries
+				elseif ($key == '$nin' OR $key == '$all')
+				{
+					$array1[$key] = array_unique(array_splice($array1[$key], count($array1[$key]), 0, $value));
+				}
+				// Recursively merge all other queries/values
+				else
+				{
+					$array1 [$key] = self::_mergeDistinctArrays($array1 [$key], $value);
+				}
+			}
+			else
+			{
+				$array1[$key] = $value;
+			}
+		}
+
+		return $array1;
+	}
+
+	/**
 	 * Is the query iterating yet?
 	 *
 	 * @link    http://www.php.net/manual/en/mongocursor.info.php MongoCursor::info
@@ -223,6 +305,35 @@ class Mango_Collection implements Iterator, Countable {
 		}
 
 		return $info['started_iterating'];
+	}
+
+	/**
+	 * Is the query executed yet?
+	 *
+	 * @since   0.4.0
+	 *
+	 * @return  boolean
+	 */
+	public function is_loaded()
+	{
+		return isset($this->_cursor);
+	}
+
+	/**
+	 * Is capped collection?
+	 *
+	 * [!!] Use [Capped Collection](http://docs.mongodb.org/manual/core/capped-collections/)
+	 *      to support high-bandwidth inserts
+	 *
+	 * @since   0.4.0
+	 *
+	 * @return  boolean
+	 */
+	public function is_caped()
+	{
+		$stats = $this->getStats();
+
+		return ( ! empty($stats['capped']));
 	}
 
 	/**
@@ -308,6 +419,225 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Set some criteria for the query
+	 *
+	 * Unlike [MongoCollection::find](http://www.php.net/manual/en/mongocollection.find.php),
+	 * this can be called multiple times and the query parameters will be merged together.
+	 *
+	 * The possible values for `$query`:
+	 *
+	 * + `$query` is an array
+	 * + `$query` is a field name and `$value` is the value to search for
+	 * + `$query` is a JSON string that will be interpreted as the query criteria
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   mixed  $query  An array of parameters or a key [Optional]
+	 * @param   mixed  $value  If $query is a key, this is the value [Optional]
+	 *
+	 * @return  Mango_Collection
+	 *
+	 * @throws  MongoCursorException
+	 * @throws  Mango_Exception
+	 *
+	 * @uses    JSON::decode
+	 */
+	public function find($query = array(), $value = NULL)
+	{
+		if ($this->_cursor)
+		{
+			throw new MongoCursorException('The cursor has already been instantiated');
+		}
+
+		if ( ! is_array($query))
+		{
+			if ($query[0] == "{")
+			{
+				$query = JSON::decode($query, TRUE);
+			}
+			else
+			{
+				$query = array($query => $value);
+			}
+		}
+
+		// Translate field aliases
+		$query_fields = array();
+
+		foreach ($query as $field => $value)
+		{
+			// Special purpose condition
+			if ($field[0] == '$')
+			{
+				// $or and $where and possibly other special values
+				if ($field == '$or' AND ! is_int(key($value)))
+				{
+					if ( ! isset($this->_query['$or']))
+					{
+						$this->_query['$or'] = array();
+					}
+					$this->_query['$or'][] = $value;
+				}
+				elseif ($field == '$where')
+				{
+					$this->_query['$where'] = $value;
+				}
+				else
+				{
+					$query_fields[$field] = $value;
+				}
+			}
+			// Simple key = value condition
+			else
+			{
+				$query_fields[$this->getFieldName($field)] = $value;
+			}
+		}
+
+		$this->_query = self::_mergeDistinctArrays($this->_query, $query_fields);
+
+		return $this;
+	}
+
+	/**
+	 * Queries this collection, returning a single element
+	 *
+	 * Wrapper for [MongoCollection::findOne] which adds field name translations
+	 * and allows query to be a single `_id`.
+	 *
+	 * Return record matching query or NULL
+	 *
+	 * @param   mixed  $query   An _id, a JSON encoded query or an array by which to search [Optional]
+	 * @param   array  $fields  Fields of the results to return [Optional]
+	 *
+	 * @return  mixed
+	 *
+	 * @uses    JSON::decode
+	 */
+	public function findOne($query = array(), $fields = array())
+	{
+		// String query is either JSON encoded or an _id
+		if ( ! is_array($query))
+		{
+			if ($query[0] == "{")
+			{
+				$query = JSON::decode($query, TRUE);
+			}
+			else
+			{
+				$query = array('_id' => $query);
+			}
+		}
+
+		// Translate field aliases
+		$query_trans = array();
+		foreach ($query as $field => $value)
+		{
+			$query_trans[$this->getFieldName($field)] = $value;
+		}
+
+		$fields_trans = array();
+		if ($fields AND is_int(key($fields)))
+		{
+			$fields = array_fill_keys($fields, 1);
+		}
+		foreach ($fields as $field => $value)
+		{
+			$fields_trans[$this->getFieldName($field)] = $value;
+		}
+
+		return $this->__call('findOne', array($query_trans, $fields_trans));
+	}
+
+	/**
+	 * Simple findAndModify helper
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   array  $command  The query to send
+	 *
+	 * @return  mixed
+	 *
+	 * @uses    Mango::findAndModify
+	 */
+	public function findAndModify(array $command)
+	{
+		return $this->getDB()->findAndModify($this->_name, $command);
+	}
+
+	/**
+	 * Retrieve a list of distinct values for the given key across a collection
+	 *
+	 * Same usage as MongoCollection::distinct except it throws an exception on error.
+	 *
+	 * @since   0.4.0
+	 *
+	 * @link    http://www.php.net/manual/en/mongocollection.distinct.php MongoCollection::distinct
+	 *
+	 * @param   string  $key    The key to use
+	 * @param   array   $query  An optional query parameters [Optional]
+	 *
+	 * @return  array
+	 *
+	 * @throws  MongoException
+	 *
+	 * @uses    Mango::command_safe
+	 */
+	public function distinct($key, array $query = array())
+	{
+		return $this->getDB()->command_safe(array(
+			'distinct' => $this->_name,
+			'key'      => (string)$key,
+			'query'    => $query
+		));
+	}
+
+	/**
+	 * Perform an aggregation using the aggregation framework
+	 *
+	 * Same usage as MongoCollection::aggregate except it throws an exception on error.
+	 *
+	 * [!!] This method accepts either a variable amount of pipeline operators,
+	 *      or a single array of operators constituting the pipeline.
+	 *
+	 * Example:
+	 * ~~~
+	 * // Return all states with a population greater than 10 million:
+	 * $results = $collection->aggregate(
+	 *     array(
+	 *         '$group' => array(
+	 *             '_id' => '$state',
+	 *             'totalPop' => array('$sum' => '$pop')
+	 *         )
+	 *     ),
+	 *     array(
+	 *         '$match' => array('totalPop' => array('$gte' => 10*1000*1000))
+	 *     )
+	 * );
+	 * ~~~
+	 *
+	 * @since   0.4.0
+	 *
+	 * @link    http://www.php.net/manual/en/mongocollection.aggregate.php MongoCollection::aggregate
+	 *
+	 * @param   array  $pipeline  An array of pipeline operators, or just the first operator
+	 * @param   array  $op        The second pipeline operator [Optional]
+	 *
+	 * @return  array
+	 *
+	 * @throws  MongoException
+	 *
+	 * @uses    Mango::command_safe
+	 */
+	public function aggregate(array $pipeline, array $op = array())
+	{
+		return $this->getDB()->command_safe(array(
+			'aggregate' => $this->_name,
+			'pipeline'  => array($pipeline, $op),
+		));
+	}
+
+	/**
 	 * Reset the state of the query
 	 *
 	 * [!!] This method must be called manually if re-using a collection for a new query
@@ -333,13 +663,13 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Returns the current query results as an array
 	 *
-	 * @since   0.3.0
+	 * @since   0.4.0
 	 *
 	 * @param   boolean  $objects  Pass FALSE to get raw data
 	 *
 	 * @return  array
 	 */
-	public function as_array($objects = TRUE)
+	public function toArray($objects = TRUE)
 	{
 		$array = array();
 
@@ -437,6 +767,46 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Translate a field name according to aliases defined in the model if they exist
+	 *
+	 * @todo
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   string  $name  Field name
+	 *
+	 * @return  string
+	 */
+	public function getFieldName($name)
+	{
+		return $name;
+	}
+
+	/**
+	 * Get a variety of storage statistics for a given collection
+	 *
+	 * [!!] The `collStats` command returns a variety of storage
+	 *      statistics for a given collection.
+	 *
+	 * Example:
+	 * ~~~
+	 * $output = $collection->getStats();
+	 * ~~~
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   mixed  $scale  Argument to scale the output [Optional]
+	 * @return  array
+	 */
+	public function getStats($scale = 1024)
+	{
+		return $this->getDB()->command_safe(array(
+			'collStats' => $this->_name,
+			'scale'     => $scale
+		));
+	}
+
+	/**
 	 * Set a cursor option
 	 *
 	 * Will apply to currently loaded cursor if it has not started iterating.
@@ -484,6 +854,24 @@ class Mango_Collection implements Iterator, Countable {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Gives the database a hint about the query
+	 *
+	 * If a string is passed, it should correspond to an index name.
+	 * If an array or object is passed, it should correspond to the
+	 * specification used to create the index
+	 *
+	 * @since   0.4.0
+	 *
+	 * @param   mixed  $index  Index to use for the query
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function hint($index)
+	{
+		return $this->setOption('hint', $index);
 	}
 
 	/**
@@ -570,7 +958,7 @@ class Mango_Collection implements Iterator, Countable {
 				}
 			}
 
-			$this->_options['sort'][$field] = $direction;
+			$this->_options['sort'][$this->getFieldName($field)] = $direction;
 		}
 
 		return $this;
@@ -737,7 +1125,7 @@ class Mango_Collection implements Iterator, Countable {
 			// Profile count operation for cursor
 			if ($this->getDB()->profiling)
 			{
-				$this->_benchmark = Profiler::start("Mango::{$this->_db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
+				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
 			}
 
 			$this->_cursor OR $this->load(TRUE);
@@ -749,17 +1137,13 @@ class Mango_Collection implements Iterator, Countable {
 			if (is_string($query) AND $query[0] == "{")
 			{
 				$query = JSON::decode($query, TRUE);
-				if (is_null($query))
-				{
-					throw new Exception('Unable to parse query from JSON string');
-				}
 			}
 
 			$query_trans = array();
 
 			foreach ($query as $field => $value)
 			{
-				$query_trans[$field] = $value;
+				$query_trans[$this->getFieldName($field)] = $value;
 			}
 
 			$query = $query_trans;
@@ -767,7 +1151,7 @@ class Mango_Collection implements Iterator, Countable {
 			// Profile count operation for collection
 			if ($this->getDB()->profiling)
 			{
-				$this->_benchmark = Profiler::start("Mango::{$this->_db}", "db.{$this->_name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
+				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", "db.{$this->_name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
 			}
 
 			$count = $this->getCollection()->count($query);
