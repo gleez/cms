@@ -48,7 +48,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.4.0
+ * @version    0.4.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -620,8 +620,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @link    http://www.php.net/manual/en/mongocollection.aggregate.php MongoCollection::aggregate
 	 *
-	 * @param   array  $pipeline  An array of pipeline operators, or just the first operator
-	 * @param   array  $op        The second pipeline operator [Optional]
+	 * @param   array  $pipeline  An array of pipeline operators
 	 *
 	 * @return  array
 	 *
@@ -629,11 +628,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @uses    Mango::command_safe
 	 */
-	public function aggregate(array $pipeline, array $op = array())
+	public function aggregate(array $pipeline)
 	{
 		return $this->getDB()->command_safe(array(
 			'aggregate' => $this->_name,
-			'pipeline'  => array($pipeline, $op),
+			'pipeline'  => $pipeline,
 		));
 	}
 
