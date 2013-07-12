@@ -48,7 +48,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.4.1
+ * @version    0.4.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -566,6 +566,122 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Perform an update, throw exception on errors
+	 *
+	 * Same usage as MongoCollection::update except it throws an exception on error.
+	 *
+	 * Return values depend on type of update:
+	 *
+	 * + __multiple__:        return number of documents updated on success
+	 * + __upsert__:          return upserted id if upsert resulted in new document
+	 * + __updatedExisting__: flag for all other cases
+	 *
+	 * @since   0.4.2
+	 *
+	 * @param   array  $criteria    Description of the objects to update
+	 * @param   array  $new_object  The object with which to update the matching records
+	 * @param   array  $options     This parameter is an associative array of
+	 *                              the form `array("optionname" => <boolean>, ...)`
+	 *
+	 * @return  array|bool
+	 *
+	 * @throws  MongoException
+	 *
+	 * @uses    Arr::merge
+	 */
+	public function safeUpdate(array $criteria, array $new_object, $options = array())
+	{
+		$options = Arr::merge(
+			array(
+				'safe'     => TRUE,
+				'multiple' => FALSE,
+				'upsert'   => FALSE
+			),
+			$options
+		);
+
+		$result = $this->update($criteria, $new_object, $options);
+
+		// In case 'safe' was overridden and disabled, just return the result
+		if ( ! $options['safe'])
+		{
+			return $result;
+		}
+
+		// According to the driver docs an exception should have already been
+		// thrown if there was an error, but just in case
+		if ( ! $result['ok'])
+		{
+			throw new MongoException($result['err']);
+		}
+
+		// Return the number of documents updated for multiple updates or
+		// the updatedExisting flag for single updates
+		if ($options['multiple'])
+		{
+			return $result['n'];
+		}
+		// Return the upserted id if a document was upserted with a new _id
+		elseif ($options['upsert'] AND ! $result['updatedExisting'] AND isset($result['upserted']))
+		{
+			return $result['upserted'];
+		}
+		// Return the updatedExisting flag for single, non-upsert updates
+		else
+		{
+			return $result['updatedExisting'];
+		}
+	}
+
+	/**
+	 * Remove, throw exception on errors
+	 *
+	 * Same usage as MongoCollection::remove except it throws an exception on error.
+	 *
+	 * Returns number of documents removed if "safe",
+	 * otherwise just if the operation was successfully sent.
+	 *
+	 * [!!] Note: You cannot use this method with a capped collection.
+	 *
+	 * @since   0.4.2
+	 *
+	 * @param   array $criteria  Description of records to remove
+	 * @param   array $options   Options for remove [Optional]
+	 *
+	 * @return  array|bool
+	 *
+	 * @throws  MongoException
+	 */
+	public function safeRemove(array $criteria, $options = array())
+	{
+		$options = Arr::merge(
+			array(
+				'safe'    => TRUE,
+				'justOne' => FALSE, // To limit the deletion to just one document, set to true
+			),
+			$options
+		);
+
+		$result = $this->remove($criteria, $options);
+
+		// In case 'safe' was overridden and disabled, just return the result
+		if ( ! $options['safe'])
+		{
+			return $result;
+		}
+
+		// According to the driver docs an exception should have already been
+		// thrown if there was an error, but just in case
+		if ( ! $result['ok'])
+		{
+			throw new MongoException($result['err']);
+		}
+
+		// Return the number of documents removed
+		return $result['n'];
+	}
+
+	/**
 	 * Retrieve a list of distinct values for the given key across a collection
 	 *
 	 * Same usage as MongoCollection::distinct except it throws an exception on error.
@@ -581,11 +697,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @throws  MongoException
 	 *
-	 * @uses    Mango::command_safe
+	 * @uses    Mango::safeCommand
 	 */
 	public function distinct($key, array $query = array())
 	{
-		return $this->getDB()->command_safe(array(
+		return $this->getDB()->safeCommand(array(
 			'distinct' => $this->_name,
 			'key'      => (string)$key,
 			'query'    => $query
@@ -626,11 +742,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @throws  MongoException
 	 *
-	 * @uses    Mango::command_safe
+	 * @uses    Mango::safeCommand
 	 */
 	public function aggregate(array $pipeline)
 	{
-		return $this->getDB()->command_safe(array(
+		return $this->getDB()->safeCommand(array(
 			'aggregate' => $this->_name,
 			'pipeline'  => $pipeline,
 		));
@@ -799,7 +915,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function getStats($scale = 1024)
 	{
-		return $this->getDB()->command_safe(array(
+		return $this->getDB()->safeCommand(array(
 			'collStats' => $this->_name,
 			'scale'     => $scale
 		));
@@ -851,6 +967,29 @@ class Mango_Collection implements Iterator, Countable {
 
 			$this->_options[$name] = $value;
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Unset a cursor option to be set before executing the query
+	 *
+	 * @since   0.4.2
+	 *
+	 * @param   string  $name  Option name
+	 *
+	 * @return  Mango_Collection
+	 *
+	 * @throws  MongoCursorException
+	 */
+	public function unsetOption($name)
+	{
+		if ($this->is_iterating())
+		{
+			throw new MongoCursorException('The cursor has already started iterating');
+		}
+
+		unset($this->_options[$name]);
 
 		return $this;
 	}
