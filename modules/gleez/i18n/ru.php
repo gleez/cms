@@ -953,7 +953,6 @@ return array
 	'Unavailable' => 'Не доступно',
 	'Updated' => 'Обновлено',
 	'Unable to connect to MongoDB server. MongoDB said :message' => 'Не удалось подключиться к серверу MongoDB. Ответ MongoDB :message',
-	'Unable to parse query from JSON string' => 'Не удалось разобрать запрос из строки JSON',
 	'Unable to set the Cookie!' => 'Не удалось установить кукисы!',
 	'Unknown JSON decoding error' => 'Неопределимая ошибка декодирования JSON',
 	'Unpublish' => 'Снять с публикации',
