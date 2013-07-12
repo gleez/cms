@@ -106,15 +106,16 @@ class Cache_Memcache extends Cache {
 	/**
 	 * Constructs the memcache Kohana_Cache object
 	 *
-	 * @param   array  $config  configuration
+	 * @param   array  $config  Cache configuration
+	 *
 	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
 	{
-		// Check for the memcache extention
+		// Check for the memcache extension
 		if ( ! class_exists('Memcache'))
 		{
-			throw new Cache_Exception('Memcache PHP extention not loaded');
+			throw new Cache_Exception('Memcache PHP extension not loaded');
 		}
 
 		parent::__construct($config);
@@ -268,12 +269,15 @@ class Cache_Memcache extends Cache {
 	 *     // Delete 'foo' entry from the apc group
 	 *     Cache::instance('memcache')->delete_pattern('foo:**:bar');
 	 *
-	 * @param   string  $pattern The cache key pattern
+	 * @param   string  $pattern  The cache key pattern
+	 *
 	 * @return  boolean
+	 *
+	 * @throws  Cache_Exception
 	 */
 	public function delete_pattern($pattern)
 	{
-		if (!$this->config('storeCacheInfo', false))
+		if ( ! $this->config('storeCacheInfo', FALSE))
 		{
 			throw new Cache_Exception('To use the "removePattern" method, you must set the "storeCacheInfo" option to "true".');
 		}
@@ -290,14 +294,15 @@ class Cache_Memcache extends Cache {
 	}
 
 	/**
-	 * Delete all cache entries.
+	 * Delete all cache entries
 	 *
-	 * Beware of using this method when
-	 * using shared memory cache systems, as it will wipe every
-	 * entry within the system for all clients.
+	 * Beware of using this method when using shared memory cache systems,
+	 * as it will wipe every entry within the system for all clients.
 	 *
 	 *     // Delete all cache entries in the default group
 	 *     Cache::instance('memcache')->delete_all();
+	 *
+	 * @param   integer  $mode  The clean mode [Optional]
 	 *
 	 * @return  boolean
 	 */
