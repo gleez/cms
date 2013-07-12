@@ -38,7 +38,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 
 		if ($database === NULL)
 		{
-			throw new Cache_Exception('Database path not available in Kohana Cache configuration');
+			throw new Cache_Exception('Database path not available in Gleez Cache configuration');
 		}
 
 		// Load new Sqlite DB
@@ -54,7 +54,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 
 			if ($database_schema === NULL)
 			{
-				throw new Cache_Exception('Database schema not found in Kohana Cache configuration');
+				throw new Cache_Exception('Database schema not found in Gleez Cache configuration');
 			}
 
 			try
@@ -125,11 +125,14 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	}
 
 	/**
-	 * Set a value based on an id. Optionally add tags.
+	 * Set a value based on an id
 	 *
-	 * @param   string   $id        id
-	 * @param   mixed    $data      data
-	 * @param   integer  $lifetime  lifetime [Optional]
+	 * Optionally add tags.
+	 *
+	 * @param   string   $id        ID
+	 * @param   mixed    $data      The data to cache
+	 * @param   integer  $lifetime  Lifetime [Optional]
+	 *
 	 * @return  boolean
 	 */
 	public function set($id, $data, $lifetime = NULL)
@@ -224,11 +227,13 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Set a value based on an id. Optionally add tags.
 	 *
-	 * @param   string   $id        id
-	 * @param   mixed    $data      data
-	 * @param   integer  $lifetime  lifetime [Optional]
-	 * @param   array    $tags      tags [Optional]
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      Data to set to cache
+	 * @param   integer  $lifetime  Lifetime in seconds [Optional]
+	 * @param   array    $tags      Tags [Optional]
+	 *
 	 * @return  boolean
+	 *
 	 * @throws  Cache_Exception
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
