@@ -4,30 +4,39 @@
  *
  * ### Introduction
  *
- * This class wraps the functionality of MongoClient (connection)
- * and MongoDB (database object) into one class and can be instantiated simply by:
+ * This class wraps the functionality of MongoClient (connection) and MongoDB (database object)
+ * into one Mango class and can be instantiated simply by:
  *
- * <code>
+ * ~~~
  *   $db = Mango::instance();
- * </code>
+ * ~~~
  *
  * The above will assume the 'default' configuration from the `config/mango.php` file.
  * Alternatively it may be instantiated with the name and configuration specified as arguments:
  *
- * <pre>
- *   $db = Mongo_Database::instance('test', array(
+ * ~~~
+ *   $db = Mango::instance('test', array(
  *     'test' => array(
  *       'connection' => array(
  *         'hostnames'  => 'mongodb://whisky:13000/?replicaset=seta',
- *         'options'    => array('db' => 'MyDB', ...)
+ *         'options'    => array(
+ *             'db'       => 'MyDB',
+ *             'username' => 'username',
+ *             'password' => 'password',
+ *             ...
+ *         )
  *       ),
  *       'profiling' => TRUE,
  *       ...
  *     )
  *   ));
- * </pre>
+ * ~~~
  *
- * [Mango] can proxy all methods of MongoDB to the database instance as well as select collections
+ * The [Mango_Collection] class will gain access to the server by calling the instance method with a
+ * configuration name, so if the configuration name is not present in the config file then the
+ * instance should be created before using any classes that extend [Mango_Collection].
+ *
+ * Mango can proxy all methods of MongoDB to the database instance as well as select collections
  * using the [Mango::__get] magic method and allows for easy benchmarking if profiling is enabled.
  *
  * ### System Requirements
@@ -36,9 +45,36 @@
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
+ * This class has appeared thanks to such wonderful projects as:
+ *
+ * + [Wouterrr/MangoDB](https://github.com/Wouterrr/MangoDB)
+ * + [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ *
+ * @method     array           authenticate(string $username, string $password)
+ * @method     array           command(array $data, array $options = array())
+ * @method     MongoCollection createCollection(string $name, array $options = array())
+ * @method     array           createDBRef(string $collection, mixed $a)
+ * @method     array           drop()
+ * @method     array           dropCollection(mixed $coll)
+ * @method     array           execute(mixed $code, array $args = array())
+ * @method     boolean         forceError()
+ * @method     array           getCollectionNames(boolean $includeSystemCollections = FALSE)
+ * @method     array           getDBRef(array $ref)
+ * @method     integer         getProfilingLevel()
+ * @method     array           getReadPreference()
+ * @method     boolean         getSlaveOkay()
+ * @method     array           lastError()
+ * @method     array           listCollections(boolean $includeSystemCollections = FALSE)
+ * @method     array           prevError()
+ * @method     array           repair(boolean $preserve_cloned_files = FALSE, boolean $backup_original_files = FALSE)
+ * @method     array           resetError()
+ * @method     integer         setProfilingLevel(integer $level)
+ * @method     boolean         setReadPreference(integer $read_preference, array $tags = array())
+ * @method     boolean         setSlaveOkay(boolean $ok = TRUE)
+ *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.0
+ * @version    0.3.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -126,38 +162,35 @@ class Mango {
 	 *   file using the same group as the name
 	 * - If no group is supplied the [Mango::$default] group is used
 	 *
-	 * @param   string  $name    Config group name [Optional]
-	 * @param   array   $config  Pass a configuration array to bypass the Gleez config [Optional]
+	 * @param   string  $name      Config group name [Optional]
+	 * @param   array   $config    Pass a configuration array to bypass the Gleez config [Optional]
+	 * @param   boolean $override  Overrides current instance with a new one (useful for testing) [Optional]
 	 *
 	 * ### Usage
 	 *
-	 * Load the default database:<br>
-	 * <code>
+	 * ~~~
+	 *   // Load the default database
 	 *   $db = Mango::instance();
-	 * </code>
 	 *
-	 * Create a custom configured instance:<br>
-	 * <code>
+	 *   // Create a custom configured instance:
 	 *   $db = Mango::instance('custom', $config);
-	 * </code>
 	 *
-	 * Access an instantiated group directly:<br>
-	 * <code>
+	 *   // Access an instantiated group directly:
 	 *   $foo_group = Mango::$instances['foo'];
-	 * </code>
+	 * ~~~
 	 *
 	 * @return  Mango
 	 *
 	 * @throws  Mango_Exception
 	 */
-	public static function instance($name = NULL, array $config = NULL)
+	public static function instance($name = NULL, array $config = NULL, $override = FALSE)
 	{
 		if (is_null($name))
 		{
 			$name = Mango::$default;
 		}
 
-		if ( ! isset(Mango::$instances[$name]))
+		if ($override OR ! isset(Mango::$instances[$name]))
 		{
 			if (is_null($config))
 			{
@@ -356,10 +389,10 @@ class Mango {
 	 * Profiles all methods that have database interaction if profiling is enabled.
 	 * The database connection is established lazily.
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $db->getCollectionNames(TRUE);
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 *   $db->selectCollectionNames(TRUE);
+	 * ~~~
 	 *
 	 * @since   0.2.0
 	 *
@@ -505,10 +538,10 @@ class Mango {
 	/**
 	 * Get an instance of MongoDB directly
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   Mango::instance()->db();
-	 * </code>
+	 * ~~~
 	 *
 	 * @return MongoDB
 	 */
@@ -520,28 +553,6 @@ class Mango {
 	}
 
 	/**
-	 * Get a [Mango_Collection] instance
-	 *
-	 * Wraps MongoCollection
-	 *
-	 * The name of the called class can be changed directly in the configuration.
-	 *
-	 * [!!] This is called automatically by [Mango::__get].
-	 *
-	 * @since   0.2.0
-	 *
-	 * @param   string  $name  Collection name
-	 *
-	 * @return  Mango_Collection
-	 */
-	public function selectCollection($name)
-	{
-		$this->_connected OR $this->connect();
-
-		return new $this->_collection_class($name, $this->_name);
-	}
-
-	/**
 	 * Allows one to override the default [Mango_Collection] class
 	 *
 	 * Class name must be defined in config.
@@ -549,10 +560,10 @@ class Mango {
 	 *
 	 * [!!] This is called automatically by [Mango::__construct].
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   $db->setCollectionClass('MyClass');
-	 * </code>
+	 * ~~~
 	 *
 	 * @since   0.2.0
 	 *
@@ -575,6 +586,11 @@ class Mango {
 	 *
 	 * Wraps MongoCollection
 	 *
+	 * Example:
+	 * ~~~
+	 *   $collection = $db->getGridFS('myfs');
+	 * ~~~
+	 *
 	 * @param   string  $prefix  The prefix for the files and chunks collections [Optional]
 	 *
 	 * @return  Mango_Collection
@@ -587,15 +603,42 @@ class Mango {
 	}
 
 	/**
+	 * Get a [Mango_Collection] instance
+	 *
+	 * Wraps MongoCollection
+	 *
+	 * The name of the called class can be changed directly in the configuration.
+	 *
+	 * [!!] This is called automatically by [Mango::__get].
+	 *
+	 * Example:
+	 * ~~~
+	 *   $collection = $db->selectCollection('users');
+	 * ~~~
+	 *
+	 * @since   0.3.1
+	 *
+	 * @param   string  $name  Collection name
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function selectCollection($name)
+	{
+		$this->_connected OR $this->connect();
+
+		return new $this->_collection_class($name, $this->_name);
+	}
+
+	/**
 	 * Runs JavaScript code on the database server
 	 *
 	 * This method allows you to run arbitrary JavaScript on the database.
 	 * Same usage as MongoDB::execute except it throws an exception on error.
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   $db->execute_safe('db.foo.count();');
-	 * </code>
+	 * ~~~
 	 *
 	 * @since   0.3.0
 	 * @link    http://php.net/manual/en/mongodb.execute.php MongoDB::execute
@@ -637,10 +680,10 @@ class Mango {
 	 * Almost everything that is not a CRUD operation can be done with a this method.
 	 * Same usage as MongoDB::command except it throws an exception on error.
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   $ages = $db->command_safe(array("distinct" => "people", "key" => "age"));
-	 * </code>
+	 * ~~~
 	 *
 	 * @since   0.3.0
 	 * @link    http://www.php.net/manual/en/mongodb.command.php MongoDB::command
@@ -665,5 +708,29 @@ class Mango {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Update a document and return it
+	 *
+	 * Simple findAndModify helper
+	 *
+	 * @since   0.3.1
+	 *
+	 * @link    http://www.php.net/manual/en/mongocollection.findandmodify.php MongoCollection::findAndModify
+	 *
+	 * @param   string  $collection  Collection name
+	 * @param   array   $command     The query to send
+	 *
+	 * @return  mixed
+	 *
+	 * @throws  MongoException
+	 */
+	public function findAndModify($collection, array $command)
+	{
+		$command = array_merge(array('findAndModify' => (string)$collection), $command);
+		$result  = $this->command_safe($command);
+
+		return $result['value'];
 	}
 }
