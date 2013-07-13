@@ -41,6 +41,8 @@
  */
 class Cache_Apc extends Cache {
 
+	const CACHE_TYPE = 'user';
+
 	/**
 	 * Check for existence of the APC extension
 	 *
@@ -152,12 +154,15 @@ class Cache_Apc extends Cache {
 	 * ~~~
 	 *
 	 * @param   string  $pattern  The cache key pattern
+	 *
 	 * @return  boolean
 	 */
 	public function delete_pattern($pattern)
 	{
-		$infos = apc_cache_info('user');
-		if (!is_array($infos['cache_list']))
+		// Retrieve cached information from APC's data store
+		$infos = apc_cache_info(self::CACHE_TYPE);
+
+		if ( ! is_array($infos['cache_list']))
 		{
 			return;
 		}
@@ -194,7 +199,7 @@ class Cache_Apc extends Cache {
 	{
 		if (Cache::ALL === $mode)
 		{
-			return apc_clear_cache('user');
+			return apc_clear_cache(self::CACHE_TYPE);
 		}
 		else
 		{
