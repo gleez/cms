@@ -98,17 +98,20 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Set a value to cache with id and lifetime
 	 *
-	 *     $data = 'bar';
+	 * Example:
+	 * ~~~
+	 * $data = 'bar';
 	 *
-	 *     // Set 'bar' to 'foo' in wincache group, using default expiry
-	 *     Cache::instance('wincache')->set('foo', $data);
+	 * // Set 'bar' to 'foo' in wincache group, using default expiry
+	 * Cache::instance('wincache')->set('foo', $data);
 	 *
-	 *     // Set 'bar' to 'foo' in wincache group for 30 seconds
-	 *     Cache::instance('wincache')->set('foo', $data, 30);
+	 * // Set 'bar' to 'foo' in wincache group for 30 seconds
+	 * Cache::instance('wincache')->set('foo', $data, 30);
+	 * ~~~
 	 *
-	 * @param   string   $id        id of cache entry
-	 * @param   string   $data      data to set to cache
-	 * @param   integer  $lifetime  lifetime in seconds
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      The data to cache
+	 * @param   integer  $lifetime  Lifetime [Optional]
 	 *
 	 * @return  boolean
 	 *
@@ -127,10 +130,13 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete 'foo' entry from the wincache group
-	 *     Cache::instance('wincache')->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the wincache group
+	 * Cache::instance('wincache')->delete('foo');
+	 * ~~~
 	 *
-	 * @param   string  $id  id to remove from cache
+	 * @param   string  $id  ID of cache entry
 	 *
 	 * @return  boolean
 	 *
@@ -144,8 +150,11 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('wincache')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('wincache')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
 	 * @param   string  $pattern The cache key pattern
 	 * @return  boolean
@@ -163,8 +172,11 @@ class Cache_Wincache extends Cache {
 	 * Beware of using this method when using shared memory cache systems,
 	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the wincache group
-	 *     Cache::instance('wincache')->delete_all();
+	 * Example:
+	 * ~~~
+	 * // Delete all cache entries in the wincache group
+	 * Cache::instance('wincache')->delete_all();
+	 * ~~~
 	 *
 	 * @param   integer  $mode  The clean mode [Optional]
 	 *

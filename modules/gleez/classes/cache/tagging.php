@@ -29,14 +29,14 @@ interface Cache_Tagging {
 	/**
 	 * Delete cache entries based on a tag
 	 *
-	 * @param   string  $tag  tag
+	 * @param   string  $tag  Tag of cache entry
 	 */
 	public function delete_tag($tag);
 
 	/**
 	 * Find cache entries based on a tag
 	 *
-	 * @param   string  $tag  tag
+	 * @param   string  $tag  Tag of cache entry
 	 *
 	 * @return  array
 	 */
