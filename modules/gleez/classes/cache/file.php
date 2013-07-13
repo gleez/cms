@@ -60,10 +60,14 @@ class Cache_File extends Cache {
 	protected $_cache_dir;
 
 	/**
-	 * Constructs the file cache driver. This method cannot be invoked externally. The file cache driver must
-	 * be instantiated using the `Cache::instance()` method.
+	 * Constructs the file cache driver
 	 *
-	 * @param   array  $config  config
+	 * [!!] Note: This method cannot be invoked externally.
+	 *
+	 * The file cache driver must be instantiated using the `Cache::instance()` method.
+	 *
+	 * @param   array  $config  Config for file cache driver
+	 *
 	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
@@ -108,16 +112,20 @@ class Cache_File extends Cache {
 	}
 
 	/**
-	 * Retrieve a cached value entry by id.
+	 * Retrieve a cached value entry by id
 	 *
-	 *     // Retrieve cache entry from file group
-	 *     $data = Cache::instance('file')->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from file group
+	 * $data = Cache::instance('file')->get('foo');
 	 *
-	 *     // Retrieve cache entry from file group and return 'bar' if miss
-	 *     $data = Cache::instance('file')->get('foo', 'bar');
+	 * // Retrieve cache entry from file group and return 'bar' if miss
+	 * $data = Cache::instance('file')->get('foo', 'bar');
+	 * ~~~
 	 *
-	 * @param   string  $id       id of cache to entry
-	 * @param   string  $default  default value to return if cache miss
+	 * @param   string  $id       ID of cache to entry
+	 * @param   mixed   $default  Default value to return if cache miss [Optional]
+	 *
 	 * @return  mixed
 	 *
 	 * @throws  Cache_Exception
@@ -197,17 +205,21 @@ class Cache_File extends Cache {
 	/**
 	 * Set a value to cache with id and lifetime
 	 *
-	 *     $data = 'bar';
+	 * Examples:
+	 * ~~~
+	 * $data = 'bar';
 	 *
-	 *     // Set 'bar' to 'foo' in file group, using default expiry
-	 *     Cache::instance('file')->set('foo', $data);
+	 * // Set 'bar' to 'foo' in file group, using default expiry
+	 * Cache::instance('file')->set('foo', $data);
 	 *
-	 *     // Set 'bar' to 'foo' in file group for 30 seconds
-	 *     Cache::instance('file')->set('foo', $data, 30);
+	 * // Set 'bar' to 'foo' in file group for 30 seconds
+	 * Cache::instance('file')->set('foo', $data, 30);
+	 * ~~~
 	 *
-	 * @param   string   $id        id of cache entry
-	 * @param   string   $data      data to set to cache
-	 * @param   integer  $lifetime  lifetime in seconds
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      The data to cache
+	 * @param   integer  $lifetime  Lifetime [Optional]
+	 *
 	 * @return  boolean
 	 *
 	 * @throws  ErrorException
@@ -233,6 +245,7 @@ class Cache_File extends Cache {
 		if ( ! $dir->isDir())
 		{
 			// Create the directory
+			// @todo use System::mkdir
 			if ( ! mkdir($directory, 0777, TRUE))
 			{
 				throw new Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
@@ -248,7 +261,7 @@ class Cache_File extends Cache {
 
 		try
 		{
-			$data = $lifetime."\n".serialize($data);
+			$data = $lifetime.PHP_EOL.serialize($data);
 			$file->fwrite($data, strlen($data));
 			return (bool) $file->fflush();
 		}
