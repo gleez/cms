@@ -32,6 +32,7 @@
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -63,11 +64,14 @@ class Cache_Apc extends Cache {
 	/**
 	 * Retrieve a cached value entry by id.
 	 *
-	 *     // Retrieve cache entry from apc group
-	 *     $data = Cache::instance('apc')->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from apc group
+	 * $data = Cache::instance('apc')->get('foo');
 	 *
-	 *     // Retrieve cache entry from apc group and return 'bar' if miss
-	 *     $data = Cache::instance('apc')->get('foo', 'bar');
+	 * // Retrieve cache entry from apc group and return 'bar' if miss
+	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * ~~~
 	 *
 	 * @param   string  $id       ID of cache to entry
 	 * @param   string  $default  Default value to return if cache miss [Optional]
@@ -75,10 +79,12 @@ class Cache_Apc extends Cache {
 	 * @return  mixed
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
-		$data = apc_fetch($this->_sanitize_id($this->config('prefix').$id), $success);
+		$data = apc_fetch(System::sanitize_id($this->config('prefix').$id), $success);
 
 		return $success ? $data : $default;
 	}
@@ -97,7 +103,10 @@ class Cache_Apc extends Cache {
 	 * @param   string   $id        ID of cache entry
 	 * @param   string   $data      Data to set to cache
 	 * @param   integer  $lifetime  Lifetime in seconds [Optional]
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
@@ -106,7 +115,7 @@ class Cache_Apc extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return apc_store($this->_sanitize_id($this->config('prefix').$id), $data, $lifetime);
+		return apc_store(System::sanitize_id($this->config('prefix').$id), $data, $lifetime);
 	}
 
 	/**
@@ -116,11 +125,14 @@ class Cache_Apc extends Cache {
 	 *     Cache::instance('apc')->delete('foo');
 	 *
 	 * @param   string  $id  ID to remove from cache
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
-		return apc_delete($this->_sanitize_id($this->config('prefix').$id));
+		return apc_delete(System::sanitize_id($this->config('prefix').$id));
 	}
 
 	/**
@@ -182,10 +194,12 @@ class Cache_Apc extends Cache {
 	 * @param   integer  $step  Step value to increment by [Optional]
 	 *
 	 * @return  integer|boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function increment($id, $step = 1)
 	{
-		return apc_inc($this->_sanitize_id($this->config('prefix').$id), $step);
+		return apc_inc(System::sanitize_id($this->config('prefix').$id), $step);
 	}
 
 	/**
@@ -198,9 +212,11 @@ class Cache_Apc extends Cache {
 	 * @param   integer  $step  Step value to decrement by [Optional]
 	 *
 	 * @return  integer|boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function decrement($id, $step = 1)
 	{
-		return apc_dec($this->_sanitize_id($this->config('prefix').$id), $step);
+		return apc_dec(System::sanitize_id($this->config('prefix').$id), $step);
 	}
 }
