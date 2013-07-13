@@ -43,7 +43,7 @@ class Cache_File extends Cache {
 	 * to create shorter unique IDs for each cache filename.
 	 *
 	 *     // Create the cache filename
-	 *     $filename = Cache_File::filename($this->_sanitize_id($id));
+	 *     $filename = Cache_File::filename(System::sanitize_id($id));
 	 *
 	 * @param   string  $string  string to hash into filename
 	 * @return  string
@@ -130,10 +130,12 @@ class Cache_File extends Cache {
 	 *
 	 * @throws  Cache_Exception
 	 * @throws  ErrorException
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// Wrap operations in try/catch to handle notices
@@ -225,10 +227,12 @@ class Cache_File extends Cache {
 	 * @throws  ErrorException
 	 * @throws  Cache_Exception
 	 * @throws  Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// If lifetime is NULL
@@ -286,11 +290,14 @@ class Cache_File extends Cache {
 	 *     Cache::instance('file')->delete('foo');
 	 *
 	 * @param   string   $id  id to remove from cache
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		return $this->_delete_file(new SplFileInfo($directory.$filename), NULL, TRUE);

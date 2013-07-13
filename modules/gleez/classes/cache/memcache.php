@@ -72,7 +72,7 @@
  * *  Zlib
  *
  * @package    Gleez\Cache\Base
- * @version    2.0
+ * @version    2.1
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2009-2012 Kohana Team
@@ -163,23 +163,30 @@ class Cache_Memcache extends Cache {
 	}
 
 	/**
-	 * Retrieve a cached value entry by id.
+	 * Retrieve a cached value entry by id
 	 *
-	 *     // Retrieve cache entry from memcache group
-	 *     $data = Cache::instance('memcache')->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from memcache group
+	 * $data = Cache::instance('apc')->get('foo');
 	 *
-	 *     // Retrieve cache entry from memcache group and return 'bar' if miss
-	 *     $data = Cache::instance('memcache')->get('foo', 'bar');
+	 * // Retrieve cache entry from memcache group and return 'bar' if miss
+	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * ~~~
 	 *
-	 * @param   string  $id       id of cache to entry
-	 * @param   string  $default  default value to return if cache miss
+	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $default  Default value to return if cache miss [Optional]
+	 *
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
 		// Get the value from Memcache
-		$value = $this->_memcache->get($this->_sanitize_id($this->config('prefix').$id));
+		$value = $this->_memcache->get(System::sanitize_id($this->config('prefix').$id));
 
 		// If the value wasn't found, normalise it
 		if ($value === FALSE)
@@ -205,8 +212,11 @@ class Cache_Memcache extends Cache {
 	 *
 	 * @param   string   $id        id of cache entry
 	 * @param   mixed    $data      data to set to cache
-	 * @param   integer  $lifetime  lifetime in seconds, maximum value 2592000
+	 * @param   integer  $lifetime  lifetime in seconds, maximum value 2592000 [Optional]
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = 3600)
 	{
@@ -238,7 +248,7 @@ class Cache_Memcache extends Cache {
 		}
 
 		// Set the data to memcache
-		return $this->_memcache->set($this->_sanitize_id($this->config('prefix').$id), $data, $this->_flags, $lifetime);
+		return $this->_memcache->set(System::sanitize_id($this->config('prefix').$id), $data, $this->_flags, $lifetime);
 	}
 
 	/**
@@ -252,7 +262,10 @@ class Cache_Memcache extends Cache {
 	 *
 	 * @param   string   $id       id of entry to delete
 	 * @param   integer  $timeout  timeout of entry, if zero item is deleted immediately, otherwise the item will delete after the specified value in seconds
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id, $timeout = 0)
 	{
@@ -260,7 +273,7 @@ class Cache_Memcache extends Cache {
 		$this->_memcache->delete($this->config('prefix').'_metadata'.self::SEPARATOR.$key);
 
 		// Delete the id
-		return $this->_memcache->delete($this->_sanitize_id($this->config('prefix').$id), $timeout);
+		return $this->_memcache->delete(System::sanitize_id($this->config('prefix').$id), $timeout);
 	}
 
 	/**
@@ -372,14 +385,16 @@ class Cache_Memcache extends Cache {
 	 * Useful for shared counters and other persistent integer based
 	 * tracking.
 	 *
-	 * @param   string    id of cache entry to increment
-	 * @param   int       step value to increment by
-	 * @return  integer
-	 * @return  boolean
+	 * @param   string   $id    ID of cache entry to increment
+	 * @param   integer  $step  Step value to increment by [Optional]
+	 *
+	 * @return  integer|boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function increment($id, $step = 1)
 	{
-		return $this->_memcache->increment($this->_sanitize_id($this->config('prefix').$id), $step);
+		return $this->_memcache->increment(System::sanitize_id($this->config('prefix').$id), $step);
 	}
 
 	/**
@@ -387,14 +402,16 @@ class Cache_Memcache extends Cache {
 	 * Useful for shared counters and other persistent integer based
 	 * tracking.
 	 *
-	 * @param   string    id of cache entry to decrement
-	 * @param   int       step value to decrement by
-	 * @return  integer
-	 * @return  boolean
+	 * @param   string   $id    ID of cache entry to decrement
+	 * @param   integer  $step  Step value to decrement by [Optional]
+	 *
+	 * @return  integer|boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function decrement($id, $step = 1)
 	{
-		return $this->_memcache->decrement($this->_sanitize_id($this->config('prefix').$id), $step);
+		return $this->_memcache->decrement(System::sanitize_id($this->config('prefix').$id), $step);
 	}
 
 	/**

@@ -3,7 +3,7 @@
  * See [Cache_Memcache]
  *
  * @package    Gleez\Cache\Base
- * @version    2.0
+ * @version    2.1
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2009-2012 Kohana Team
@@ -36,11 +36,14 @@ class Cache_MemcacheTag extends Cache_Memcache implements Cache_Tagging {
 	 * @param   mixed    $data      data
 	 * @param   integer  $lifetime  lifetime [Optional]
 	 * @param   array    $tags      tags [Optional]
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
-		$id = $this->_sanitize_id($this->config('prefix').$id);
+		$id = System::sanitize_id($this->config('prefix').$id);
 
 		$result = $this->set($id, $data, $lifetime);
 

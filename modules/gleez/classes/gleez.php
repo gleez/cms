@@ -167,10 +167,13 @@ class Gleez {
 	 * @param   string   $name      Name of the cache
 	 * @param   mixed    $data      Data to cache [Optional]
 	 * @param   integer  $lifetime  Number of seconds the cache is valid for [Optional]
+	 *
 	 * @return  mixed    For getting
 	 * @return  boolean  For setting
 	 *
 	 * @todo    add more support for more cache drivers
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public static function cache($name, $data = NULL, $lifetime = 3600)
 	{
@@ -198,7 +201,7 @@ class Gleez {
 			try
 			{
 				// Return the cache
-				return apc_fetch(self::_sanitize_id($name));
+				return apc_fetch(System::sanitize_id($name));
 			}
 			catch (Exception $e)
 			{
@@ -215,7 +218,7 @@ class Gleez {
 		{
 			try
 			{
-				return apc_store(self::_sanitize_id($name), $data, $lifetime);
+				return apc_store(System::sanitize_id($name), $data, $lifetime);
 			}
 			catch (Exception $e)
 			{
@@ -245,29 +248,9 @@ class Gleez {
 		// For each cache instance
 		foreach (Cache::$instances as $group => $instance)
 		{
+			/** @var $instance Cache */
 			$instance->delete_all();
 		}
-	}
-
-	/**
-	 * Replaces troublesome characters with underscores.
-	 *
-	 * Sanitize a cache id:<br>
-	 * <code>
-	 * 	$id = $this->_sanitize_id($id);
-	 * </code>
-	 *
-	 * @param   string   $id  ID of cache to sanitize
-	 * @return  string
-	 */
-	protected static function _sanitize_id($id)
-	{
-		// Change slashes and spaces to underscores
-		return str_replace(array(
-			'/',
-			'\\',
-			' '
-		), '_', $id);
 	}
 
 	/**

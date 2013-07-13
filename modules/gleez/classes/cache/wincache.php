@@ -39,6 +39,7 @@
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
@@ -69,20 +70,27 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Retrieve a cached value entry by id.
 	 *
-	 *     // Retrieve cache entry from wincache group
-	 *     $data = Cache::instance('wincache')->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from wincache group
+	 * $data = Cache::instance('apc')->get('foo');
 	 *
-	 *     // Retrieve cache entry from wincache group and return 'bar' if miss
-	 *     $data = Cache::instance('wincache')->get('foo', 'bar');
+	 * // Retrieve cache entry from wincache group and return 'bar' if miss
+	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * ~~~
 	 *
-	 * @param   string  $id       id of cache to entry
-	 * @param   string  $default  default value to return if cache miss
+	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $default  Default value to return if cache miss [Optional]
+	 *
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
-		$data = wincache_ucache_get($this->_sanitize_id($this->config('prefix').$id), $success);
+		$data = wincache_ucache_get(System::sanitize_id($this->config('prefix').$id), $success);
 
 		return $success ? $data : $default;
 	}
@@ -101,7 +109,10 @@ class Cache_Wincache extends Cache {
 	 * @param   string   $id        id of cache entry
 	 * @param   string   $data      data to set to cache
 	 * @param   integer  $lifetime  lifetime in seconds
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
@@ -110,7 +121,7 @@ class Cache_Wincache extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return wincache_ucache_set($this->_sanitize_id($this->config('prefix').$id), $data, $lifetime);
+		return wincache_ucache_set(System::sanitize_id($this->config('prefix').$id), $data, $lifetime);
 	}
 
 	/**
@@ -120,11 +131,14 @@ class Cache_Wincache extends Cache {
 	 *     Cache::instance('wincache')->delete('foo');
 	 *
 	 * @param   string  $id  id to remove from cache
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
-		return wincache_ucache_delete($this->_sanitize_id($this->config('prefix').$id));
+		return wincache_ucache_delete(System::sanitize_id($this->config('prefix').$id));
 	}
 
 	/**
