@@ -1,17 +1,21 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Security helper class.
+ * Security helper class
  *
- * @package    Kohana
- * @category   Security
+ * @package    Gleez\Helpers
  * @author     Kohana Team
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2007-2012 Kohana Team
+ * @license    http://gleezcms.org/license  Gleez CMS License
  * @license    http://kohanaframework.org/license
  */
-class Kohana_Security {
+class Security {
 
 	/**
-	 * @var  string  key name used for token storage
+	 * Key name used for token storage
+	 * @var string
 	 */
 	public static $token_name = 'security_token';
 
@@ -19,23 +23,30 @@ class Kohana_Security {
 	 * Generate and store a unique token which can be used to help prevent
 	 * [CSRF](http://wikipedia.org/wiki/Cross_Site_Request_Forgery) attacks.
 	 *
-	 *     $token = Security::token();
+	 * Example:
+	 * ~~~
+	 * $token = Security::token();
+	 * ~~~
 	 *
 	 * You can insert this token into your forms as a hidden field:
-	 *
-	 *     echo Form::hidden('csrf', Security::token());
+	 * ~~~
+	 * echo Form::hidden('csrf', Security::token());
+	 * ~~~
 	 *
 	 * And then check it when using [Validation]:
-	 *
-	 *     $array->rules('csrf', array(
-	 *         'not_empty'       => NULL,
-	 *         'Security::check' => NULL,
-	 *     ));
+	 * ~~~
+	 * $array->rules('csrf', array(
+	 *     'not_empty'       => NULL,
+	 *     'Security::check' => NULL,
+	 * ));
+	 * ~~~
 	 *
 	 * This provides a basic, but effective, method of preventing CSRF attacks.
 	 *
-	 * @param   boolean $new    force a new token to be generated?
+	 * @param   boolean  $new  Force a new token to be generated?
+	 *
 	 * @return  string
+	 *
 	 * @uses    Session::instance
 	 */
 	public static function token($new = FALSE)
@@ -60,13 +71,18 @@ class Kohana_Security {
 	/**
 	 * Check that the given token matches the currently stored security token.
 	 *
-	 *     if (Security::check($token))
-	 *     {
-	 *         // Pass
-	 *     }
+	 * Example:
+	 * ~~~
+	 * if (Security::check($token))
+	 * {
+	 *     // Pass
+	 * }
+	 * ~~~
 	 *
-	 * @param   string  $token  token to check
+	 * @param   string  $token  Token to check
+	 *
 	 * @return  boolean
+	 *
 	 * @uses    Security::token
 	 */
 	public static function check($token)
@@ -75,11 +91,15 @@ class Kohana_Security {
 	}
 
 	/**
-	 * Remove image tags from a string.
+	 * Remove image tags from a string
 	 *
-	 *     $str = Security::strip_image_tags($str);
+	 * Example:
+	 * ~~~
+	 * $str = Security::strip_image_tags($str);
+	 * ~~~
 	 *
-	 * @param   string  $str    string to sanitize
+	 * @param   string  $str  String to sanitize
+	 *
 	 * @return  string
 	 */
 	public static function strip_image_tags($str)
@@ -88,11 +108,15 @@ class Kohana_Security {
 	}
 
 	/**
-	 * Encodes PHP tags in a string.
+	 * Encodes PHP tags in a string
 	 *
-	 *     $str = Security::encode_php_tags($str);
+	 * Example:
+	 * ~~~
+	 * $str = Security::encode_php_tags($str);
+	 * ~~~
 	 *
-	 * @param   string  $str    string to sanitize
+	 * @param   string  $str  String to sanitize
+	 *
 	 * @return  string
 	 */
 	public static function encode_php_tags($str)
@@ -100,4 +124,4 @@ class Kohana_Security {
 		return str_replace(array('<?', '?>'), array('&lt;?', '?&gt;'), $str);
 	}
 
-} // End security
+}

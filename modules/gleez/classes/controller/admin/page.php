@@ -24,7 +24,8 @@ class Controller_Admin_Page extends Controller_Admin {
 	/**
 	 * The after() method is called after controller action
 	 *
-	 * @uses  Route::url
+	 * @uses  Route::get
+	 * @uses  Route::uri
 	 */
 	public function after()
 	{
