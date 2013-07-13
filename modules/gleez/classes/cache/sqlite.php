@@ -4,12 +4,13 @@
  *
  * ### System requirements
  *
- * *  SQLite3
- * *  PDO
+ * * SQLite3
+ * * PDO
  *
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
@@ -24,10 +25,10 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	protected $_db;
 
 	/**
-	 * Sets up the PDO SQLite table and
-	 * initialises the PDO connection
+	 * Sets up the PDO SQLite table and initialises the PDO connection
 	 *
 	 * @param  array  $config  configuration
+	 *
 	 * @throws  Cache_Exception
 	 */
 	protected function __construct(array $config)
@@ -75,10 +76,23 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Retrieve a value based on an id
 	 *
-	 * @param   string  $id       id
-	 * @param   string  $default  default [Optional] Default value to return if id not found
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from sqlite group
+	 * $data = Cache::instance('apc')->get('foo');
+	 *
+	 * // Retrieve cache entry from sqlite group and return 'bar' if miss
+	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * ~~~
+	 *
+	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $default  Default value to return if cache miss [Optional]
+	 *
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
@@ -88,7 +102,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Try and load the cache based on id
 		try
 		{
-			$statement->execute(array(':id' => $this->_sanitize_id($id)));
+			$statement->execute(array(':id' => System::sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -129,7 +143,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 *
 	 * Optionally add tags.
 	 *
-	 * @param   string   $id        ID
+	 * @param   string   $id        ID of cache entry
 	 * @param   mixed    $data      The data to cache
 	 * @param   integer  $lifetime  Lifetime [Optional]
 	 *
@@ -143,9 +157,13 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 * @param   string  $id  id
+	 * @param   string  $id  ID of cache entry
+	 *
 	 * @return  boolean
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
@@ -155,7 +173,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Remove the entry
 		try
 		{
-			$statement->execute(array(':id' => $this->_sanitize_id($id)));
+			$statement->execute(array(':id' => System::sanitize_id($id)));
 		}
 		catch (PDOException $e)
 		{
@@ -168,14 +186,19 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('sqlite')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('sqlite')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
 	 * @param   string  $pattern The cache key pattern
 	 *
 	 * @return  boolean
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete_pattern($pattern)
 	{
@@ -187,7 +210,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Remove the entry
 		try
 		{
-			$statement->execute(array(':id' => $this->_sanitize_id($regexp)));
+			$statement->execute(array(':id' => System::sanitize_id($regexp)));
 		}
 		catch (PDOException $e)
 		{
@@ -235,6 +258,8 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 * @return  boolean
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
@@ -261,7 +286,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 		// Try to insert
 		try
 		{
-			$statement->execute(array(':id' => $this->_sanitize_id($this->config('prefix').$id), ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
+			$statement->execute(array(':id' => System::sanitize_id($this->config('prefix').$id), ':cache' => $data, ':expiration' => $lifetime, ':tags' => $tags));
 		}
 		catch (PDOException $e)
 		{
@@ -274,8 +299,10 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Delete cache entries based on a tag
 	 *
-	 * @param   string  $tag  tag
+	 * @param   string  $tag  Tag of cache entry
+	 *
 	 * @return  boolean
+	 *
 	 * @throws  Cache_Exception
 	 */
 	public function delete_tag($tag)
@@ -299,7 +326,8 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Find cache entries based on a tag
 	 *
-	 * @param   string  $tag  tag
+	 * @param   string  $tag  Tag of cache entry
+	 *
 	 * @return  array
 	 *
 	 * @throws  Cache_Exception
@@ -342,8 +370,6 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 * Garbage collection method that cleans any expired
 	 * cache entries from the cache.
 	 *
-	 * @return  void
-	 *
 	 * @throws  Cache_Exception
 	 */
 	public function garbage_collect()
@@ -364,17 +390,20 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	/**
 	 * Tests whether an id exists or not
 	 *
-	 * @param   string  $id  id
+	 * @param   string  $id  ID of cache entry
+	 *
 	 * @return  boolean
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	protected function exists($id)
 	{
 		$statement = $this->_db->prepare('SELECT id FROM caches WHERE id = :id');
 		try
 		{
-			$statement->execute(array(':id' => $this->_sanitize_id($this->config('prefix').$id)));
+			$statement->execute(array(':id' => System::sanitize_id($this->config('prefix').$id)));
 		}
 		catch (PDOException $e)
 		{
