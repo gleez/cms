@@ -295,7 +295,7 @@ class Cache_Memcache extends Cache {
 			throw new Cache_Exception('To use the "removePattern" method, you must set the "storeCacheInfo" option to "true".');
 		}
 
-		$regexp = $this->_regxp_pattern($this->config('prefix').$pattern);
+		$regexp = $this->_regexp_pattern($this->config('prefix').$pattern);
 
 		foreach ($this->getCacheInfo() as $key)
 		{
