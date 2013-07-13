@@ -53,7 +53,7 @@
  * Details of the settings specific to each driver are available within the drivers documentation.
  *
  * @package    Gleez\Cache
- * @version    2.0
+ * @version    2.1
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -78,20 +78,25 @@ abstract class Cache {
 	public static $instances = array();
 
 	/**
-	 * Creates a singleton of a Cache group. If no group is supplied
-	 * the __default__ cache group is used.
+	 * Creates a singleton of a Cache group
 	 *
-	 *     // Create an instance of the default group
-	 *     $default_group = Cache::instance();
+	 * If no group is supplied the __default__ cache group is used.
 	 *
-	 *     // Create an instance of a group
-	 *     $foo_group = Cache::instance('foo');
+	 * Examples:
+	 * ~~~
+	 * // Create an instance of the default group
+	 * $default_group = Cache::instance();
 	 *
-	 *     // Access an instantiated group directly
-	 *     $foo_group = Cache::$instances['default'];
+	 * // Create an instance of a group
+	 * $foo_group = Cache::instance('foo');
+	 *
+	 * // Access an instantiated group directly
+	 * $foo_group = Cache::$instances['default'];
+	 * ~~~
 	 *
 	 * @param   string  $group   The name of the cache group to use [Optional]
 	 * @param   array   $config  Cache config [Optional]
+	 *
 	 * @return  Cache
 	 * @throws  Cache_Exception
 	 */
@@ -145,6 +150,7 @@ abstract class Cache {
 	}
 
 	/**
+	 * Current cache driver configuration
 	 * @var  Config
 	 */
 	protected $_config = array();
@@ -227,18 +233,23 @@ abstract class Cache {
 	/**
 	 * Retrieve a cached value entry by id.
 	 *
-	 *     // Retrieve cache entry from default group
-	 *     $data = Cache::instance()->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from default group
+	 * $data = Cache::instance()->get('foo');
 	 *
-	 *     // Retrieve cache entry from default group and return 'bar' if miss
-	 *     $data = Cache::instance()->get('foo', 'bar');
+	 * // Retrieve cache entry from default group and return 'bar' if miss
+	 * $data = Cache::instance()->get('foo', 'bar');
 	 *
-	 *     // Retrieve cache entry from memcache group
-	 *     $data = Cache::instance('memcache')->get('foo');
+	 * // Retrieve cache entry from memcache group
+	 * $data = Cache::instance('memcache')->get('foo');
+	 * ~~~
 	 *
-	 * @param   string  $id       id of cache to entry
-	 * @param   string  $default  default value to return if cache miss
+	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $default  Default value to return if cache miss [Otional]
+	 *
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
 	 */
 	abstract public function get($id, $default = NULL);
@@ -372,21 +383,6 @@ abstract class Cache {
 		);
 
 		return '#^'.$regexp.'$#';
-	}
-
-	/**
-	 * Replaces troublesome characters with underscores.
-	 *
-	 *     // Sanitize a cache id
-	 *     $id = $this->_sanitize_id($id);
-	 *
-	 * @param   string  $id  id of cache to sanitize
-	 * @return  string
-	 */
-	protected function _sanitize_id($id)
-	{
-		// Change slashes and spaces to underscores
-		return str_replace(array('/', '\\', ' '), '_', $id);
 	}
 }
 
