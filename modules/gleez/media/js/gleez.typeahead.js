@@ -2,8 +2,8 @@
  * This is a highly modified version of the bootstrap Typeahead.
  * 
  * @package    Gleez\Typeahead
- * @version    1.0
- * @requires   jQuery v1.8 or later
+ * @version    1.1
+ * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2005-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -32,6 +32,8 @@
     this.render      = this.options.render  || this.render
     this.select      = this.options.select  || this.select
     this.highlighter = this.options.highlighter || this.highlighter
+    
+    this.hiddenElementID  = this.options.field || false
   
     if (!this.source.length) {
       this.ajax = $.extend({}, $.fn.typeahead.defaults, { url: this.options.url })
@@ -48,10 +50,28 @@
     return this.hide()
   }
   
+  Typeahead.prototype.hiddenElement = function (label, value) {
+    //set value in hidden element if its set
+    if(label && value){
+      $('input[name='+label+']').val(value)
+    }
+  }
+  
   Typeahead.prototype.updater = function (item) {
     var terms = this.autocompleteSplit(this.query)
+
+    if(typeof this.results[item] !== 'undefined'){
+      var data  = this.results[item]
+      
+      if (data.hasOwnProperty(this.options.value)) {
+	var value = data[this.options.value]
+	this.hiddenElement(this.hiddenElementID, value)
+      }
+    }
+    
     // Remove the current input.
     terms.pop()
+    
     // Add the selected item.
     terms.push(item)
 
@@ -68,10 +88,11 @@
       .css({
 	top: pos.top + pos.height
       , left: pos.left
+      , width: this.$element.innerWidth() + 'px'
       })
       .show()
 
-	this.shown = true
+    this.shown = true
     return this
   }
   
@@ -79,110 +100,6 @@
     this.$menu.hide()
     this.shown = false
     return this
-  }
-
-  // Handle AJAX source
-  Typeahead.prototype.ajaxer = function () {
-    var that = this,
-	query = that.$element.val();
-    
-    if (query === that.query) {
-	return that;
-    }
-
-    // Query changed
-    that.query = query
-    this.results  = {}
-
-    // Cancel last timer if set
-    if (that.ajax.timerId) {
-	clearTimeout(that.ajax.timerId);
-	that.ajax.timerId = null;
-    }
-    
-    if (!query || query.length < that.ajax.triggerLength) {
-	// Cancel the ajax callback if in progress
-	if (that.ajax.xhr) {
-	    that.ajax.xhr.abort();
-	    that.ajax.xhr = null;
-	    that.ajaxToggleLoadClass(false);
-	}
-
-	return that.shown ? that.hide() : that;
-    }
-    
-    // Query is good to send, set a timer
-    that.ajax.timerId = setTimeout(function() {
-	$.proxy(that.ajaxExecute(query), that)
-    }, that.ajax.timeout);
-  
-    return that;
-  }
-
-  // Execute an AJAX request
-  Typeahead.prototype.ajaxExecute = function(query) {
-    var that = this
-    
-    this.ajaxToggleLoadClass(true)
-    
-    // Cancel last call if already in progress
-    if (this.ajax.xhr) this.ajax.xhr.abort()
-    
-    // Get the desired term and construct the autocomplete URL for it.
-    var term = this.autocompleteExtractLast(query)
-    
-    var params = this.ajax.preDispatch ? this.ajax.preDispatch(query) : ''
-    var jAjax  = (this.ajax.method === "post") ? $.post : $.get
-    var url    = this.ajax.url+'/'+ this.URLEncode(term)
-    
-    this.ajax.xhr = jAjax(url, params, $.proxy(this.ajaxLookup, this))
-    
-    this.ajax.xhr.fail(function (jqXHR, textStatus, errorThrown) {
-      //remove the throbbing class
-      that.ajaxToggleLoadClass(false)
-      alert(Gleez.ajaxError(jqXHR, url))
-    })
-    
-    this.ajax.timerId = null
-  }
-
-  // Perform a lookup in the AJAX results
-  Typeahead.prototype.ajaxLookup = function (data) {
-    var items;
-    
-    this.ajaxToggleLoadClass(false)
-  
-    if (!this.ajax.xhr) return
-    
-    if (this.ajax.preProcess) {
-	data = this.ajax.preProcess(data)
-    }
-  
-    // Save for selection retrevial
-    this.ajax.data = data
-  
-    items = this.grepper(this.ajax.data)
-  
-    if (!items || !items.length) {
-	return this.shown ? this.hide() : this
-    }
-  
-    this.ajax.xhr = null;
-    
-    //set the width of the list
-    this.$menu
-	.insertAfter(this.$element)
-	.css({
-	  width: this.$element.innerWidth() + 'px',
-	})
-    
-    return this.render(items.slice(0, this.options.items)).show()
-  }
-
-  // Toggle the loading class
-  Typeahead.prototype.ajaxToggleLoadClass = function (enable) {
-    if (!this.ajax.loadingClass) return
-    this.$element.toggleClass(this.ajax.loadingClass, enable)
   }
   
   Typeahead.prototype.lookup = function (event) {
@@ -236,6 +153,7 @@
     // Gleez returns an object array, but we need a string array.
     $.map(data, function(result, item){
       var label
+      ,	  save = false
       
       //check if the result is object or string
       if(typeof result == 'string' || result instanceof String){
@@ -243,19 +161,22 @@
       }
       else if (result.hasOwnProperty(that.options.display)) {
 	label = result[that.options.display]
+	save =  true
       }
       
       //for each item returned, if the display name is already included 
       //(e.g. multiple "John Smith" records) then add a unique value to the end
       //so that the user can tell them apart.
       if(that.in_array(label, that.results)){
-	label = label + ' #' + result.id;
+	label = label + ' #' + new Date().getTime();
       }
       
       items.push(label)
       
-      //also store a mapping to get from label back to ID
-      that.results[label] = result;
+      //also store a mapping to get from label back to object
+      if(save){
+	that.results[label] = result;
+      }
     });
 
     items = $.grep(items, function (item) {
@@ -263,37 +184,6 @@
     })
 
     return this.sorter(items)
-  }
-  
-  Typeahead.prototype.in_array = function (needle, haystack) {
-    for(var i in haystack) {
-        if(haystack[i] == needle) return true;
-    }
-    return false;
-  }
-
-  Typeahead.prototype.autocompleteSplit = function(val) {
-    return val.split(/,\s*/);
-  }
-  
-  Typeahead.prototype.autocompleteExtractLast = function(term) {
-    return this.autocompleteSplit(term).pop();
-  }
-
-  Typeahead.prototype.URLEncode = function (s) {
-    s = encodeURIComponent (s);
-    //s = s.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
-    ////s = s.replace (/\~/g, '%7E').replace (/\!/g, '%21').replace (/\(/g, '%28').replace (/\)/g, '%29').replace (/\'/g, '%27');
-    ////s = s.replace (/%20/g, '+');
-    s = s.replace (/%2F/g, '/'); //escape slash for admin/menu autocomplete
-    return s;
-  }
-  
-  Typeahead.prototype.URLDecode = function (s) {
-    ////s = s.replace (/\+/g, '%20');
-    s = s.replace (/\//g, '%2F');
-    s = decodeURIComponent (s);
-    return s;
   }
   
   Typeahead.prototype.sorter = function (items) {
@@ -329,7 +219,7 @@
     
     markup +="</div>";
     
-    return markup;
+    return markup
   }
   
   Typeahead.prototype.highlighter = function (item) {
@@ -491,6 +381,134 @@
     if (!this.focused && this.shown) this.hide()
   }
 
+  // Handle AJAX source
+  Typeahead.prototype.ajaxer = function () {
+    var that = this
+    , query = that.$element.val()
+    
+    if (query === that.query) {
+      return that
+    }
+
+    // Query changed
+    that.query = query
+    this.results  = {}
+    this.hiddenElement(this.hiddenElementID, '0')
+
+    // Cancel last timer if set
+    if (that.ajax.timerId) {
+      clearTimeout(that.ajax.timerId)
+      that.ajax.timerId = null
+    }
+    
+    if (!query || query.length < that.ajax.triggerLength) {
+      // Cancel the ajax callback if in progress
+      if (that.ajax.xhr) {
+	that.ajax.xhr.abort()
+	that.ajax.xhr = null
+	that.ajaxToggleLoadClass(false)
+      }
+
+      return that.shown ? that.hide() : that
+    }
+    
+    // Query is good to send, set a timer
+    that.ajax.timerId = setTimeout(function() {
+	$.proxy(that.ajaxExecute(query), that)
+    }, that.ajax.timeout);
+  
+    return that;
+  }
+
+  // Execute an AJAX request
+  Typeahead.prototype.ajaxExecute = function(query) {
+    var that = this
+    
+    this.ajaxToggleLoadClass(true)
+    
+    // Cancel last call if already in progress
+    if (this.ajax.xhr) this.ajax.xhr.abort()
+    
+    // Get the desired term and construct the autocomplete URL for it.
+    var term = this.autocompleteExtractLast(query)
+    
+    var params = this.ajax.preDispatch ? this.ajax.preDispatch(query) : ''
+    var jAjax  = (this.ajax.method === "post") ? $.post : $.get
+    var url    = this.ajax.url+'/'+ this.URLEncode(term)
+    
+    this.ajax.xhr = jAjax(url, params, $.proxy(this.ajaxLookup, this))
+    
+    this.ajax.xhr.fail(function (jqXHR, textStatus, errorThrown) {
+      //remove the throbbing class
+      that.ajaxToggleLoadClass(false)
+      alert(Gleez.ajaxError(jqXHR, url))
+    })
+    
+    this.ajax.timerId = null
+  }
+
+  // Perform a lookup in the AJAX results
+  Typeahead.prototype.ajaxLookup = function (data) {
+    var items;
+    
+    this.ajaxToggleLoadClass(false)
+  
+    if (!this.ajax.xhr) return
+    
+    if (this.ajax.preProcess) {
+	data = this.ajax.preProcess(data)
+    }
+  
+    // Save for selection retrevial
+    this.ajax.data = data
+  
+    items = this.grepper(this.ajax.data)
+  
+    if (!items || !items.length) {
+      return this.shown ? this.hide() : this
+    }
+  
+    this.ajax.xhr = null
+
+    return this.render(items.slice(0, this.options.items)).show()
+  }
+
+  // Toggle the loading class
+  Typeahead.prototype.ajaxToggleLoadClass = function (enable) {
+    if (!this.ajax.loadingClass) return
+    this.$element.toggleClass(this.ajax.loadingClass, enable)
+  }
+  
+  Typeahead.prototype.in_array = function (needle, haystack) {
+    for(var i in haystack) {
+      if(haystack[i] == needle) return true
+    }
+    return false;
+  }
+
+  Typeahead.prototype.autocompleteSplit = function(val) {
+    return val.split(/,\s*/)
+  }
+  
+  Typeahead.prototype.autocompleteExtractLast = function(term) {
+    return this.autocompleteSplit(term).pop()
+  }
+
+  Typeahead.prototype.URLEncode = function (s) {
+    s = encodeURIComponent (s);
+    //s = s.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    ////s = s.replace (/\~/g, '%7E').replace (/\!/g, '%21').replace (/\(/g, '%28').replace (/\)/g, '%29').replace (/\'/g, '%27');
+    ////s = s.replace (/%20/g, '+');
+    s = s.replace (/%2F/g, '/'); //escape slash for admin/menu autocomplete
+    return s;
+  }
+  
+  Typeahead.prototype.URLDecode = function (s) {
+    ////s = s.replace (/\+/g, '%20');
+    s = s.replace (/\//g, '%2F');
+    s = decodeURIComponent (s);
+    return s;
+  }
 
   /* TYPEAHEAD PLUGIN DEFINITION
    * =========================== */
@@ -514,9 +532,9 @@
     , item: '<li><a href="#"></a></li>'
     , minLength: 3
     , display: 'name'
-    , val: 'id'
+    , field: false
+    , value: false
     , loadingClass: 'throbbing'
-    , displayField: null
     , preDispatch: null
     , preProcess: null
     , url: null
