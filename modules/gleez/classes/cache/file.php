@@ -43,7 +43,7 @@ class Cache_File extends Cache {
 	 * to create shorter unique IDs for each cache filename.
 	 *
 	 *     // Create the cache filename
-	 *     $filename = Cache_File::filename($this->_sanitize_id($id));
+	 *     $filename = Cache_File::filename(System::sanitize_id($id));
 	 *
 	 * @param   string  $string  string to hash into filename
 	 * @return  string
@@ -130,10 +130,12 @@ class Cache_File extends Cache {
 	 *
 	 * @throws  Cache_Exception
 	 * @throws  ErrorException
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// Wrap operations in try/catch to handle notices
@@ -225,10 +227,12 @@ class Cache_File extends Cache {
 	 * @throws  ErrorException
 	 * @throws  Cache_Exception
 	 * @throws  Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		// If lifetime is NULL
@@ -282,15 +286,21 @@ class Cache_File extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete 'foo' entry from the file group
-	 *     Cache::instance('file')->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the file group
+	 * Cache::instance('file')->delete('foo');
+	 * ~~~
 	 *
-	 * @param   string   $id  id to remove from cache
+	 * @param   string   $id  ID of cache entry
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
-		$filename = Cache_File::filename($this->_sanitize_id($this->config('prefix').$id));
+		$filename = Cache_File::filename(System::sanitize_id($this->config('prefix').$id));
 		$directory = $this->_resolve_directory($filename);
 
 		return $this->_delete_file(new SplFileInfo($directory.$filename), NULL, TRUE);
@@ -299,12 +309,17 @@ class Cache_File extends Cache {
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('file')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('file')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
-	 * @param   string  $pattern The cache key pattern
+	 * @param   string  $pattern  The cache key pattern
 	 * @return  boolean
 	 * @throws  Cache_Exception
+	 *
+	 * @todo
 	 */
 	public function delete_pattern($pattern)
 	{
@@ -314,19 +329,29 @@ class Cache_File extends Cache {
 	/**
 	 * Delete all cache entries.
 	 *
-	 * Beware of using this method when
-	 * using shared memory cache systems, as it will wipe every
-	 * entry within the system for all clients.
+	 * Beware of using this method when using shared memory cache systems,
+	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the file group
-	 *     Cache::instance('file')->delete_all();
+	 * Example:
+	 * ~~~
+	 * // Delete all cache entries in the file group
+	 * Cache::instance('file')->delete_all();
+	 * ~~~
 	 *
-	 * @param   integer  $mode
+	 * @param   integer  $mode  The clean mode [Optional]
+	 *
 	 * @return  boolean
 	 */
 	public function delete_all($mode = Cache::ALL)
 	{
-		return $this->_delete_file($this->_cache_dir, TRUE);
+		if ($mode == Cache::ALL)
+		{
+			return $this->_delete_file($this->_cache_dir, TRUE);
+		}
+		else
+		{
+			// @todo
+		}
 	}
 
 	/**
@@ -344,8 +369,11 @@ class Cache_File extends Cache {
 	/**
 	 * Deletes files recursively and returns FALSE on any errors
 	 *
-	 *     // Delete a file or folder whilst retaining parent directory and ignore all errors
-	 *     $this->_delete_file($folder, TRUE, TRUE);
+	 * Example:
+	 * ~~~
+	 * // Delete a file or folder whilst retaining parent directory and ignore all errors
+	 * $this->_delete_file($folder, TRUE, TRUE);
+	 * ~~~
 	 *
 	 * @param   SplFileInfo  $file                     file
 	 * @param   boolean      $retain_parent_directory  retain the parent directory
@@ -472,8 +500,11 @@ class Cache_File extends Cache {
 	/**
 	 * Resolves the cache directory real path from the filename
 	 *
-	 *      // Get the realpath of the cache folder
-	 *      $realpath = $this->_resolve_directory($filename);
+	 * Example:
+	 * ~~~
+	 * // Get the realpath of the cache folder
+	 * $realpath = $this->_resolve_directory($filename);
+	 * ~~~
 	 *
 	 * @param   string  $filename  filename to resolve
 	 * @return  string
@@ -484,16 +515,22 @@ class Cache_File extends Cache {
 	}
 
 	/**
-	 * Makes the cache directory if it doesn't exist. Simply a wrapper for
-	 * `mkdir` to ensure DRY principles
+	 * Makes the cache directory if it doesn't exist
+	 *
+	 * Simply a wrapper for `mkdir` to ensure DRY principles
 	 *
 	 * @link    http://php.net/manual/en/function.mkdir.php
+	 *
 	 * @param   string    $directory
 	 * @param   integer   $mode
 	 * @param   boolean   $recursive
 	 * @param   resource  $context
+	 *
 	 * @return  SplFileInfo
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @todo    Use here System::mkdir
 	 */
 	protected function _make_directory($directory, $mode = 0777, $recursive = FALSE, $context = NULL)
 	{

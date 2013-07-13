@@ -5,7 +5,7 @@
  * @package    Gleez\Core
  * @author     Sergey Yakovlev - Gleez
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.1.0
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -585,6 +585,31 @@ class System {
 		}
 
 		return $status;
+	}
+
+	/**
+	 * Sanitize id
+	 *
+	 * Replaces troublesome characters with underscores
+	 *
+	 * ~~~
+	 * 	$id = System::sanitize_id($id);
+	 * ~~~
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   string  $id  ID to sanitize
+	 *
+	 * @return  string
+	 */
+	public static function sanitize_id($id)
+	{
+		// Change slashes and spaces to underscores
+		return str_replace(array(
+			'/',
+			'\\',
+			' '
+		), '_', $id);
 	}
 
 	/**

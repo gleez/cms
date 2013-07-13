@@ -39,6 +39,7 @@
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
@@ -69,20 +70,27 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Retrieve a cached value entry by id.
 	 *
-	 *     // Retrieve cache entry from wincache group
-	 *     $data = Cache::instance('wincache')->get('foo');
+	 * Examples:
+	 * ~~~
+	 * // Retrieve cache entry from wincache group
+	 * $data = Cache::instance('apc')->get('foo');
 	 *
-	 *     // Retrieve cache entry from wincache group and return 'bar' if miss
-	 *     $data = Cache::instance('wincache')->get('foo', 'bar');
+	 * // Retrieve cache entry from wincache group and return 'bar' if miss
+	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * ~~~
 	 *
-	 * @param   string  $id       id of cache to entry
-	 * @param   string  $default  default value to return if cache miss
+	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $default  Default value to return if cache miss [Optional]
+	 *
 	 * @return  mixed
+	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function get($id, $default = NULL)
 	{
-		$data = wincache_ucache_get($this->_sanitize_id($this->config('prefix').$id), $success);
+		$data = wincache_ucache_get(System::sanitize_id($this->config('prefix').$id), $success);
 
 		return $success ? $data : $default;
 	}
@@ -90,18 +98,24 @@ class Cache_Wincache extends Cache {
 	/**
 	 * Set a value to cache with id and lifetime
 	 *
-	 *     $data = 'bar';
+	 * Example:
+	 * ~~~
+	 * $data = 'bar';
 	 *
-	 *     // Set 'bar' to 'foo' in wincache group, using default expiry
-	 *     Cache::instance('wincache')->set('foo', $data);
+	 * // Set 'bar' to 'foo' in wincache group, using default expiry
+	 * Cache::instance('wincache')->set('foo', $data);
 	 *
-	 *     // Set 'bar' to 'foo' in wincache group for 30 seconds
-	 *     Cache::instance('wincache')->set('foo', $data, 30);
+	 * // Set 'bar' to 'foo' in wincache group for 30 seconds
+	 * Cache::instance('wincache')->set('foo', $data, 30);
+	 * ~~~
 	 *
-	 * @param   string   $id        id of cache entry
-	 * @param   string   $data      data to set to cache
-	 * @param   integer  $lifetime  lifetime in seconds
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      The data to cache
+	 * @param   integer  $lifetime  Lifetime [Optional]
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function set($id, $data, $lifetime = NULL)
 	{
@@ -110,34 +124,46 @@ class Cache_Wincache extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return wincache_ucache_set($this->_sanitize_id($this->config('prefix').$id), $data, $lifetime);
+		return wincache_ucache_set(System::sanitize_id($this->config('prefix').$id), $data, $lifetime);
 	}
 
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete 'foo' entry from the wincache group
-	 *     Cache::instance('wincache')->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the wincache group
+	 * Cache::instance('wincache')->delete('foo');
+	 * ~~~
 	 *
-	 * @param   string  $id  id to remove from cache
+	 * @param   string  $id  ID of cache entry
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    System::sanitize_id
 	 */
 	public function delete($id)
 	{
-		return wincache_ucache_delete($this->_sanitize_id($this->config('prefix').$id));
+		return wincache_ucache_delete(System::sanitize_id($this->config('prefix').$id));
 	}
 
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('wincache')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('wincache')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
 	 * @param   string  $pattern The cache key pattern
 	 * @return  boolean
+	 *
+	 * @throws  Cache_Exception
 	 */
 	public function delete_pattern($pattern)
 	{
+		throw new Cache_Exception('Not implemented yet!');
 	}
 
 	/**
@@ -146,8 +172,11 @@ class Cache_Wincache extends Cache {
 	 * Beware of using this method when using shared memory cache systems,
 	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the wincache group
-	 *     Cache::instance('wincache')->delete_all();
+	 * Example:
+	 * ~~~
+	 * // Delete all cache entries in the wincache group
+	 * Cache::instance('wincache')->delete_all();
+	 * ~~~
 	 *
 	 * @param   integer  $mode  The clean mode [Optional]
 	 *
