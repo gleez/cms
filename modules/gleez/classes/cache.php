@@ -23,21 +23,22 @@
  *
  * #### Configuration example
  *
- * Below is an example of a _memcache_ server configuration.
- *
- *     return array(
- *          'default' => array(          // Default group
- *              'driver'  => 'memcache', // Using Memcache driver
- *              'servers' => array(      // Available server definitions
- *                  array(
- *                      'host'       => 'localhost',
- *                      'port'       => 11211,
- *                      'persistent' => FALSE
- *                  )
- *              ),
- *              'compression' => FALSE,  // Use compression?
- *          ),
- *     )
+ * Below is an example of a _memcache_ server configuration:
+ * ~~~~
+ * return array(
+ *     'default' => array(          // Default group
+ *         'driver'  => 'memcache', // Using Memcache driver
+ *         'servers' => array(      // Available server definitions
+ *             array(
+ *                 'host'       => 'localhost',
+ *                 'port'       => 11211,
+ *                 'persistent' => FALSE
+ *             )
+ *         ),
+ *         'compression' => FALSE,  // Use compression?
+ *     ),
+ * )
+ * ~~~
  *
  * In cases where only one cache group is required, if the group is named `default` there is
  * no need to pass the group name when instantiating a cache instance.
@@ -246,7 +247,7 @@ abstract class Cache {
 	 * ~~~
 	 *
 	 * @param   string  $id       ID of cache to entry
-	 * @param   string  $default  Default value to return if cache miss [Otional]
+	 * @param   string  $default  Default value to return if cache miss [Optional]
 	 *
 	 * @return  mixed
 	 *
@@ -257,24 +258,28 @@ abstract class Cache {
 	/**
 	 * Set a value to cache with id and lifetime
 	 *
-	 *     $data = 'bar';
+	 * Examples:
+	 * ~~~
+	 * $data = 'bar';
 	 *
-	 *     // Set 'bar' to 'foo' in default group, using default expiry
-	 *     Cache::instance()->set('foo', $data);
+	 * // Set 'bar' to 'foo' in default group, using default expiry
+	 * Cache::instance()->set('foo', $data);
 	 *
-	 *     // Set 'bar' to 'foo' in default group for 30 seconds
-	 *     Cache::instance()->set('foo', $data, 30);
+	 * // Set 'bar' to 'foo' in default group for 30 seconds
+	 * Cache::instance()->set('foo', $data, 30);
 	 *
-	 *     // Set 'bar' to 'foo' in memcache group for 10 minutes
-	 *     if (Cache::instance('memcache')->set('foo', $data, 600))
-	 *     {
-	 *          // Cache was set successfully
-	 *          return
-	 *     }
+	 * // Set 'bar' to 'foo' in memcache group for 10 minutes
+	 * if (Cache::instance('memcache')->set('foo', $data, 600))
+	 * {
+	 *     // Cache was set successfully
+	 *     return
+	 * }
+	 * ~~~
 	 *
-	 * @param   string   $id        id of cache entry
-	 * @param   string   $data      data to set to cache
-	 * @param   integer  $lifetime  lifetime in seconds
+	 * @param   string   $id        ID of cache entry
+	 * @param   mixed    $data      The data to cache
+	 * @param   integer  $lifetime  Lifetime [Optional]
+	 *
 	 * @return  boolean
 	 */
 	abstract public function set($id, $data, $lifetime = 3600);
@@ -282,23 +287,33 @@ abstract class Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete 'foo' entry from the default group
-	 *     Cache::instance()->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the default group
+	 * Cache::instance()->delete('foo');
 	 *
-	 *     // Delete 'foo' entry from the memcache group
-	 *     Cache::instance('memcache')->delete('foo')
+	 * // Delete 'foo' entry from the memcache group
+	 * Cache::instance('memcache')->delete('foo')
+	 * ~~~
 	 *
-	 * @param   string  $id  id to remove from cache
+	 * @param   string  $id  ID of cache entry
+	 *
 	 * @return  boolean
 	 */
 	abstract public function delete($id);
 
 	/**
-	 * Delete cache entries that matches the given pattern.
+	 * Delete cache entries that matches the given pattern
+	 *
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('sqlite')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
 	 * @param  string  $pattern The cache key pattern
 	 *
-	 * @return Boolean true if no problem
+	 * @return boolean
 	 *
 	 * @see patternToRegexp
 	 */
@@ -315,19 +330,17 @@ abstract class Cache {
 	 *  + `Cache::ALL`: remove all keys (default)
 	 *  + `Cache::OLD`: remove all expired keys
 	 *
-	 * ### Examples
+	 * Examples:
+	 * ~~~
+	 * // Delete all cache entries in the default group
+	 * Cache::instance()->delete_all();
 	 *
-	 * Delete all cache entries in the default group:<br>
-	 * <code>
-	 *   Cache::instance()->delete_all();
-	 * </code>
-	 *
-	 * Delete all cache entries in the memcache group:
-	 * <code>
+	 * // Delete all cache entries in the memcache group
 	 *   Cache::instance('memcache')->delete_all();
-	 * </code>
+	 * ~~~
 	 *
 	 * @param   integer  $mode  The clean mode [Optional]
+	 *
 	 * @return  boolean  TRUE if no problem
 	 */
 	abstract public function delete_all($mode = Cache::ALL);
@@ -374,7 +387,7 @@ abstract class Cache {
 	 *
 	 * @return string A regular expression
 	 */
-	protected function _regxp_pattern($pattern)
+	protected function _regexp_pattern($pattern)
 	{
 		$regexp = str_replace(
 			array('\\*\\*', '\\*'),
