@@ -254,33 +254,34 @@ class Cache_Memcache extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete the 'foo' cache entry immediately
-	 *     Cache::instance('memcache')->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete the 'foo' cache entry immediately
+	 * Cache::instance('memcache')->delete('foo');
+	 * ~~~
 	 *
-	 *     // Delete the 'bar' cache entry after 30 seconds
-	 *     Cache::instance('memcache')->delete('bar', 30);
-	 *
-	 * @param   string   $id       id of entry to delete
-	 * @param   integer  $timeout  timeout of entry, if zero item is deleted immediately, otherwise the item will delete after the specified value in seconds
+	 * @param   string   $id  ID of cache entry
 	 *
 	 * @return  boolean
 	 *
 	 * @uses    System::sanitize_id
 	 */
-	public function delete($id, $timeout = 0)
+	public function delete($id)
 	{
 		// Delete the metadata
 		$this->_memcache->delete($this->config('prefix').'_metadata'.self::SEPARATOR.$key);
 
 		// Delete the id
-		return $this->_memcache->delete(System::sanitize_id($this->config('prefix').$id), $timeout);
+		return $this->_memcache->delete(System::sanitize_id($this->config('prefix').$id));
 	}
 
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('memcache')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('memcache')->delete_pattern('foo:**:bar');
 	 *
 	 * @param   string  $pattern  The cache key pattern
 	 *
@@ -312,8 +313,11 @@ class Cache_Memcache extends Cache {
 	 * Beware of using this method when using shared memory cache systems,
 	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the default group
-	 *     Cache::instance('memcache')->delete_all();
+	 * Example:
+	 * ~~~
+	 * // Delete all cache entries in the default group
+	 * Cache::instance('memcache')->delete_all();
+	 * ~~~
 	 *
 	 * @param   integer  $mode  The clean mode [Optional]
 	 *
@@ -429,8 +433,8 @@ class Cache_Memcache extends Cache {
 	/**
 	 * Stores metadata about a key in the cache.
 	 *
-	 * @param  string $key A cache key
-	 * @param  string $key The lifetime
+	 * @param  string  $key       The lifetime
+	 * @param  mixed   $lifetime  Lifetime - string or integer
 	 */
 	protected function setMetadata($key, $lifetime)
 	{
