@@ -114,7 +114,7 @@ class Gleez_Exception extends Exception {
 	 * for display.
 	 *
 	 * @param   Exception  $e  Exception
-	 * @return  mixed
+	 * @return  Response
 	 */
 	public static function _handler(Exception $e)
 	{
