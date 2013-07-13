@@ -74,7 +74,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.2
+ * @version    0.3.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -603,6 +603,18 @@ class Mango {
 	}
 
 	/**
+	 * Get the currently referenced database
+	 *
+	 * @since   0.3.3
+	 *
+	 * @return  string
+	 */
+	public function getDbName()
+	{
+		return $this->_config['connection']['options']['db'];
+	}
+
+	/**
 	 * Get a [Mango_Collection] instance
 	 *
 	 * Wraps MongoCollection
@@ -637,10 +649,11 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $db->execute_safe('db.foo.count();');
+	 *   $db->safeExecute('db.foo.count();');
 	 * ~~~
 	 *
-	 * @since   0.3.0
+	 * @since   0.3.3
+	 *
 	 * @link    http://php.net/manual/en/mongodb.execute.php MongoDB::execute
 	 *
 	 * @param   string|MongoCode  $code   MongoCode or string to execute
@@ -652,7 +665,7 @@ class Mango {
 	 * @throws  Mango_Exception
 	 * @throws  MongoException
 	 */
-	public function execute_safe($code, array $args = array(), $scope = array())
+	public function safeExecute($code, array $args = array(), $scope = array())
 	{
 		if ( ! is_string($code) AND ! $code instanceof MongoCode)
 		{
@@ -682,10 +695,11 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $ages = $db->command_safe(array("distinct" => "people", "key" => "age"));
+	 *   $ages = $db->safeCommand(array("distinct" => "people", "key" => "age"));
 	 * ~~~
 	 *
-	 * @since   0.3.0
+	 * @since   0.3.3
+	 *
 	 * @link    http://www.php.net/manual/en/mongodb.command.php MongoDB::command
 	 *
 	 * @param   array  $command  The query to send
@@ -695,7 +709,7 @@ class Mango {
 	 *
 	 * @throws  MongoException
 	 */
-	public function command_safe(array $command, array $options = array())
+	public function safeCommand(array $command, array $options = array())
 	{
 		$result = $this->command($command, $options);
 
@@ -729,8 +743,26 @@ class Mango {
 	public function findAndModify($collection, array $command)
 	{
 		$command = array_merge(array('findAndModify' => (string)$collection), $command);
-		$result  = $this->command_safe($command);
+		$result  = $this->safeCommand($command);
 
 		return $result['value'];
+	}
+
+	/**
+	 * Checks for the $collection in the currently referenced database
+	 *
+	 * @since   0.3.3
+	 *
+	 * @param   string  $collection  Collection name
+	 *
+	 * @return  boolean
+	 */
+	public function exists($collection)
+	{
+		$result = $this->db()->system->namespaces->findOne(
+			array('name'=>"{$this->getDbName()}." . $collection)
+		);
+
+		return ( ! is_null($result));
 	}
 }

@@ -8,12 +8,13 @@
  *
  * ### Supported cache engines
  *
- * *  [APC](http://php.net/manual/en/book.apc.php)
- * *  File
- * *  [Memcache](http://memcached.org/)
- * *  [Memcached-tags](http://code.google.com/p/memcached-tags/)
- * *  [SQLite](http://www.sqlite.org/)
- * *  [Wincache](http://php.net/manual/en/book.wincache.php)
+ * * [APC](http://php.net/manual/en/book.apc.php)
+ * * File
+ * * [Memcache](http://memcached.org/)
+ * * [Memcached-tags](http://code.google.com/p/memcached-tags/)
+ * * [SQLite](http://www.sqlite.org/)
+ * * [Wincache](http://php.net/manual/en/book.wincache.php)
+ * * [MongoDB](http://www.mongodb.org/)
  *
  * ### Configuration settings
  *
@@ -25,17 +26,17 @@
  * Below is an example of a _memcache_ server configuration.
  *
  *     return array(
- *          'default'       => array(                      // Default group
- *                  'driver'         => 'memcache',        // using Memcache driver
- *                  'servers'        => array(             // Available server definitions
- *                         array(
- *                              'host'       => 'localhost',
- *                              'port'       => 11211,
- *                              'persistent' => FALSE
- *                         )
- *                  ),
- *                  'compression'    => FALSE,             // Use compression?
- *           ),
+ *          'default' => array(          // Default group
+ *              'driver'  => 'memcache', // Using Memcache driver
+ *              'servers' => array(      // Available server definitions
+ *                  array(
+ *                      'host'       => 'localhost',
+ *                      'port'       => 11211,
+ *                      'persistent' => FALSE
+ *                  )
+ *              ),
+ *              'compression' => FALSE,  // Use compression?
+ *          ),
  *     )
  *
  * In cases where only one cache group is required, if the group is named `default` there is
@@ -71,7 +72,7 @@ abstract class Cache {
 	public static $default = 'file';
 
 	/**
-	 * Gleez_Cache instances
+	 * Cache instances
 	 * @var array
 	 */
 	public static $instances = array();
@@ -161,30 +162,39 @@ abstract class Cache {
 	}
 
 	/**
-	 * Getter and setter for the configuration. If no argument provided, the
-	 * current configuration is returned. Otherwise the configuration is set
-	 * to this class.
+	 * Getter and setter for the configuration
 	 *
-	 *     // Overwrite all configuration
-	 *     $cache->config(array('driver' => 'memcache', '...'));
+	 * If no argument provided, the current configuration is returned.
+	 * Otherwise the configuration is set to this class.
 	 *
-	 *     // Set a new configuration setting
-	 *     $cache->config('servers', array(
-	 *          'foo' => 'bar',
-	 *          '...'
-	 *          ));
+	 * Examples:
+	 * ~~~
+	 * // Overwrite all configuration
+	 * $cache->config(array('driver' => 'memcache', '...'));
 	 *
-	 *     // Get a configuration setting
-	 *     $servers = $cache->config('servers);
+	 * // Set a new configuration setting
+	 * $cache->config('servers', array(
+	 *      'foo' => 'bar',
+	 *      '...'
+	 *      ));
+	 *
+	 * // Get a configuration setting
+	 * $servers = $cache->config('servers');
+	 * ~~~
 	 *
 	 * @param   mixed  $key    Key to set to array, either array or config path [Optional]
 	 * @param   mixed  $value  Value to associate with key [Optional]
+	 *
 	 * @return  mixed
+	 *
+	 * @uses    Arr::get
 	 */
 	public function config($key = NULL, $value = NULL)
 	{
-		if ($key === NULL)
+		if (is_null($key))
+		{
 			return $this->_config;
+		}
 
 		if (is_array($key))
 		{
@@ -192,8 +202,10 @@ abstract class Cache {
 		}
 		else
 		{
-			if ($value === NULL)
+			if (is_null($value))
+			{
 				return Arr::get($this->_config, $key);
+			}
 
 			$this->_config[$key] = $value;
 		}
@@ -209,7 +221,7 @@ abstract class Cache {
 	 */
 	final public function __clone()
 	{
-		throw new Cache_Exception('Cloning of Gleez_Cache objects is forbidden');
+		throw new Cache_Exception('Cloning of Cache objects is forbidden');
 	}
 
 	/**
@@ -304,7 +316,7 @@ abstract class Cache {
 	 *   Cache::instance('memcache')->delete_all();
 	 * </code>
 	 *
-	 * @param   integer  $mode The clean mode [Optional]
+	 * @param   integer  $mode  The clean mode [Optional]
 	 * @return  boolean  TRUE if no problem
 	 */
 	abstract public function delete_all($mode = Cache::ALL);
