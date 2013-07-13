@@ -202,7 +202,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 */
 	public function delete_pattern($pattern)
 	{
-		$regexp = $this->_regxp_pattern($this->config('prefix').$pattern);
+		$regexp = $this->_regexp_pattern($this->config('prefix').$pattern);
 
 		// Prepare statement
 		$statement = $this->_db->prepare('DELETE FROM caches WHERE REGEXP(:id, id)');

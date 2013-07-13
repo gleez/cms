@@ -318,6 +318,8 @@ class Cache_File extends Cache {
 	 * @param   string  $pattern  The cache key pattern
 	 * @return  boolean
 	 * @throws  Cache_Exception
+	 *
+	 * @todo
 	 */
 	public function delete_pattern($pattern)
 	{

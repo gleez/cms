@@ -149,9 +149,12 @@ class Cache_Wincache extends Cache {
 	 *
 	 * @param   string  $pattern The cache key pattern
 	 * @return  boolean
+	 *
+	 * @throws  Cache_Exception
 	 */
 	public function delete_pattern($pattern)
 	{
+		throw new Cache_Exception('Not implemented yet!');
 	}
 
 	/**
