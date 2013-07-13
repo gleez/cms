@@ -6,13 +6,14 @@
  *
  * ### Configuration example
  *
- * Below is an example of an _apc_ server configuration.
- *
+ * Below is an example of an _apc_ server configuration:
+ * ~~~
  *     return array(
- *          'apc' => array(            // Driver group
- *                  'driver' => 'apc', // using APC driver
- *           ),
+ *         'apc' => array(        // Driver group
+ *             'driver' => 'apc', // using APC driver
+ *         ),
  *     )
+ * ~~~
  *
  * In cases where only one cache group is required, if the group is named `default` there is
  * no need to pass the group name when instantiating a cache instance.
@@ -32,7 +33,7 @@
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -92,13 +93,16 @@ class Cache_Apc extends Cache {
 	/**
 	 * Set a value to cache with id and lifetime
 	 *
-	 *     $data = 'bar';
+	 * Example:
+	 * ~~~
+	 * $data = 'bar';
 	 *
-	 *     // Set 'bar' to 'foo' in apc group, using default expiry
-	 *     Cache::instance('apc')->set('foo', $data);
+	 * // Set 'bar' to 'foo' in apc group, using default expiry
+	 * Cache::instance('apc')->set('foo', $data);
 	 *
-	 *     // Set 'bar' to 'foo' in apc group for 30 seconds
-	 *     Cache::instance('apc')->set('foo', $data, 30);
+	 * // Set 'bar' to 'foo' in apc group for 30 seconds
+	 * Cache::instance('apc')->set('foo', $data, 30);
+	 * ~~~
 	 *
 	 * @param   string   $id        ID of cache entry
 	 * @param   string   $data      Data to set to cache
@@ -121,8 +125,11 @@ class Cache_Apc extends Cache {
 	/**
 	 * Delete a cache entry based on id
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('apc')->delete('foo');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('apc')->delete('foo');
+	 * ~~~
 	 *
 	 * @param   string  $id  ID to remove from cache
 	 *
@@ -138,8 +145,11 @@ class Cache_Apc extends Cache {
 	/**
 	 * Delete a cache entry based on regex pattern
 	 *
-	 *     // Delete 'foo' entry from the apc group
-	 *     Cache::instance('apc')->delete_pattern('foo:**:bar');
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the apc group
+	 * Cache::instance('apc')->delete_pattern('foo:**:bar');
+	 * ~~~
 	 *
 	 * @param   string  $pattern  The cache key pattern
 	 * @return  boolean
@@ -152,7 +162,7 @@ class Cache_Apc extends Cache {
 			return;
 		}
 
-		$regexp = $this->_regxp_pattern($this->config('prefix').$pattern);
+		$regexp = $this->_regexp_pattern($this->config('prefix').$pattern);
 
 		foreach ($infos['cache_list'] as $info)
 		{
@@ -169,8 +179,12 @@ class Cache_Apc extends Cache {
 	 * Beware of using this method when using shared memory cache systems,
 	 * as it will wipe every entry within the system for all clients.
 	 *
-	 *     // Delete all cache entries in the apc group
-	 *     Cache::instance('apc')->delete_all();
+	 * Example:
+	 * ~~~
+	 * // Delete all cache entries in the apc group
+	 * Cache::instance('apc')->delete_all();
+	 * ~~~
+	 *
 	 *
 	 * @param   integer  $mode  The clean mode [Optional]
 	 *
@@ -181,6 +195,10 @@ class Cache_Apc extends Cache {
 		if (Cache::ALL === $mode)
 		{
 			return apc_clear_cache('user');
+		}
+		else
+		{
+			// @todo
 		}
 	}
 
