@@ -21,6 +21,9 @@
 				<tr class="region-title region-title-<?php echo $region?>">
 					<td colspan="4"><?php echo HTML::chars($title) ?></td>
 				</tr>
+				<tr class="region-message region-<?php print $region?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
+					<td colspan="4"><em><?php echo __('No Widgets in this region'); ?></em></td>
+				</tr>
 				<?php foreach ($widgets[$region] as $i => $widget): ?>
 					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">
 						<?php
