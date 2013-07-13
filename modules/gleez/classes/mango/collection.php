@@ -48,7 +48,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.4.2
+ * @version    0.4.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -593,7 +593,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		$options = Arr::merge(
 			array(
-				'safe'     => TRUE,
+				'w'        => TRUE,
 				'multiple' => FALSE,
 				'upsert'   => FALSE
 			),
@@ -602,9 +602,10 @@ class Mango_Collection implements Iterator, Countable {
 
 		$result = $this->update($criteria, $new_object, $options);
 
-		// In case 'safe' was overridden and disabled, just return the result
-		if ( ! $options['safe'])
+		// In case 'w' was overridden and disabled, just return the result
+		if ( ! $options['w'])
 		{
+			/** @var $result boolean */
 			return $result;
 		}
 
@@ -656,7 +657,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		$options = Arr::merge(
 			array(
-				'safe'    => TRUE,
+				'w'       => TRUE,
 				'justOne' => FALSE, // To limit the deletion to just one document, set to true
 			),
 			$options
@@ -665,8 +666,9 @@ class Mango_Collection implements Iterator, Countable {
 		$result = $this->remove($criteria, $options);
 
 		// In case 'safe' was overridden and disabled, just return the result
-		if ( ! $options['safe'])
+		if ( ! $options['w'])
 		{
+			/** @var $result boolean */
 			return $result;
 		}
 
