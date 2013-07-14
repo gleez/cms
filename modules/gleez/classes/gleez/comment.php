@@ -176,7 +176,7 @@ class Gleez_Comment {
 				),
 			),
 			'spam' => array(
-				'label' => __('Mark Selected Comments as Spam'),
+				'label' => __('Mark the selected comments as Spam'),
 				'callback' => 'Comment::bulk_update',
 				'arguments' => array(
 					'updates' => array('status' => 'spam')
