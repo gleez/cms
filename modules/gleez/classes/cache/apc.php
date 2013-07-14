@@ -149,7 +149,7 @@ class Cache_Apc extends Cache {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the apc cache
 	 * Cache::instance('apc')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *
