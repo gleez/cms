@@ -15,21 +15,21 @@
  * Alternatively it may be instantiated with the name and configuration specified as arguments:
  *
  * ~~~
- *   $db = Mango::instance('test', array(
+ * $db = Mango::instance('test', array(
  *     'test' => array(
- *       'connection' => array(
- *         'hostnames'  => 'mongodb://whisky:13000/?replicaset=seta',
- *         'options'    => array(
- *             'db'       => 'MyDB',
- *             'username' => 'username',
- *             'password' => 'password',
- *             ...
- *         )
- *       ),
- *       'profiling' => TRUE,
- *       ...
+ *         'connection' => array(
+ *             'hostnames'  => 'mongodb://whisky:13000/?replicaset=seta',
+ *             'options'    => array(
+ *                 'db'       => 'MyDB',
+ *                 'username' => 'username',
+ *                 'password' => 'password',
+ *                 ...
+ *             )
+ *         ),
+ *         'profiling' => TRUE,
+ *         ...
  *     )
- *   ));
+ * ));
  * ~~~
  *
  * The [Mango_Collection] class will gain access to the server by calling the instance method with a
@@ -74,7 +74,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.3
+ * @version    0.3.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -166,17 +166,16 @@ class Mango {
 	 * @param   array   $config    Pass a configuration array to bypass the Gleez config [Optional]
 	 * @param   boolean $override  Overrides current instance with a new one (useful for testing) [Optional]
 	 *
-	 * ### Usage
-	 *
+	 * Examples:
 	 * ~~~
-	 *   // Load the default database
-	 *   $db = Mango::instance();
+	 * // Load the default database
+	 * $db = Mango::instance();
 	 *
-	 *   // Create a custom configured instance:
-	 *   $db = Mango::instance('custom', $config);
+	 * // Create a custom configured instance:
+	 * $db = Mango::instance('custom', $config);
 	 *
-	 *   // Access an instantiated group directly:
-	 *   $foo_group = Mango::$instances['foo'];
+	 * // Access an instantiated group directly:
+	 * $foo_group = Mango::$instances['foo'];
 	 * ~~~
 	 *
 	 * @return  Mango
@@ -391,7 +390,7 @@ class Mango {
 	 *
 	 * Usage:
 	 * ~~~
-	 *   $db->selectCollectionNames(TRUE);
+	 * $db->selectCollectionNames(TRUE);
 	 * ~~~
 	 *
 	 * @since   0.2.0
@@ -540,7 +539,7 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   Mango::instance()->db();
+	 * Mango::instance()->db();
 	 * ~~~
 	 *
 	 * @return MongoDB
@@ -556,13 +555,13 @@ class Mango {
 	 * Allows one to override the default [Mango_Collection] class
 	 *
 	 * Class name must be defined in config.
-	 * By default using [Mango::$_collection_class] it [Mango_Collection].
+	 * By default when using [Mango::$_collection_class] it [Mango_Collection].
 	 *
 	 * [!!] This is called automatically by [Mango::__construct].
 	 *
 	 * Example:
 	 * ~~~
-	 *   $db->setCollectionClass('MyClass');
+	 * $db->setCollectionClass('MyClass');
 	 * ~~~
 	 *
 	 * @since   0.2.0
@@ -588,7 +587,7 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $collection = $db->getGridFS('myfs');
+	 * $collection = $db->getGridFS('myfs');
 	 * ~~~
 	 *
 	 * @param   string  $prefix  The prefix for the files and chunks collections [Optional]
@@ -615,6 +614,30 @@ class Mango {
 	}
 
 	/**
+	 * Get an instance of MongoClient
+	 *
+	 * Example:
+	 * ~~~
+	 * // Get Mango instance
+	 * $db = Mango::instance();
+	 *
+	 * // Get MongoClient instance
+	 * $connection = $db->getConnection();
+	 *
+	 * // For example, list databases
+	 * $connection->listDBs()
+	 * ~~~
+	 *
+	 * @since   0.3.4
+	 *
+	 * @return  MongoClient
+	 */
+	public function getConnection()
+	{
+		return $this->_connection;
+	}
+
+	/**
 	 * Get a [Mango_Collection] instance
 	 *
 	 * Wraps MongoCollection
@@ -625,7 +648,7 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $collection = $db->selectCollection('users');
+	 * $collection = $db->selectCollection('users');
 	 * ~~~
 	 *
 	 * @since   0.3.1
@@ -649,7 +672,7 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $db->safeExecute('db.foo.count();');
+	 * $db->safeExecute('db.foo.count();');
 	 * ~~~
 	 *
 	 * @since   0.3.3
@@ -695,7 +718,7 @@ class Mango {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $ages = $db->safeCommand(array("distinct" => "people", "key" => "age"));
+	 * $ages = $db->safeCommand(array("distinct" => "people", "key" => "age"));
 	 * ~~~
 	 *
 	 * @since   0.3.3

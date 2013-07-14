@@ -48,7 +48,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.4.3
+ * @version    0.4.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -684,6 +684,27 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Drop collection, throw exception on errors
+	 *
+	 * @since   0.4.4
+	 *
+	 * @return  boolean
+	 *
+	 * @throws  Mango_Exception
+	 */
+	public function safeDrop()
+	{
+		$result = $this->drop();
+
+		if ( ! $result['ok'])
+		{
+			throw new Mango_Exception($result['msg']);
+		}
+
+		return TRUE;
+	}
+
+	/**
 	 * Retrieve a list of distinct values for the given key across a collection
 	 *
 	 * Same usage as MongoCollection::distinct except it throws an exception on error.
@@ -727,9 +748,9 @@ class Mango_Collection implements Iterator, Countable {
 	 *             '_id' => '$state',
 	 *             'totalPop' => array('$sum' => '$pop')
 	 *         )
-	 *     ),
-	 *     array(
-	 *         '$match' => array('totalPop' => array('$gte' => 10*1000*1000))
+	 *         '$match' => array(
+	 *             'totalPop' => array('$gte' => 10*1000*1000)
+	 *         )
 	 *     )
 	 * );
 	 * ~~~
@@ -994,6 +1015,37 @@ class Mango_Collection implements Iterator, Countable {
 		unset($this->_options[$name]);
 
 		return $this;
+	}
+
+	/**
+	 * See if a cursor has an option to be set before executing the query
+	 *
+	 * Example:
+	 * ~~~
+	 * // Set option
+	 * $collection->limit(50)->skip(100);
+	 *
+	 * //
+	 * if ($collection->hasOption('limit'))
+	 * {
+	 *     // some actions...
+	 * }
+	 * ~~~
+	 *
+	 * @since   0.4.4
+	 *
+	 * @param   string  $name  Option name
+	 *
+	 * @return  boolean
+	 */
+	public function hasOption($name)
+	{
+		if (is_string($name))
+		{
+			return array_key_exists($name, $this->_options);
+		}
+
+		return FALSE;
 	}
 
 	/**
