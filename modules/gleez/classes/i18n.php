@@ -15,7 +15,7 @@
  *     echo __('Hello, :user', array(':user' => $username));
  *     _e('Hello, :user', array(':user' => $username));
  *
- * @package    Gleez\I18n
+ * @package    Gleez\Internationalization
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez

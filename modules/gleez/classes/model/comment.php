@@ -420,35 +420,40 @@ class Model_Comment extends ORM {
 	 *
 	 * Similar to Comment::access but this return True/False instead of exception
 	 *
-	 * @param String $action The action view|edit|delete default view
-	 * @param Object $user   The user object to check permission,
-	 * 				defaults to logded in user
-	 * @param String $misc	 The misc element usually id|slug for logging purpose
+	 * @param   bool|string $action  The action view|edit|delete default view
+	 * @param   Model_User  $user    The user object to check permission, defaults to logged in user
+	 * @param   string      $misc    The misc element usually id|slug for logging purpose
 	 *
-	 * @return Bool
+	 * @throws  HTTP_Exception_404
 	 *
+	 * @return  boolean|Model_Comment
+	 *
+	 * @uses    Log::add
+	 * @uses    User::active_user
+	 * @uses    ACL::check
+	 * @uses    Module::event
 	 */
-	public function user_can( $action = FALSE, Model_User $user = NULL, $misc = NULL)
+	public function user_can($action = FALSE, Model_User $user = NULL, $misc = NULL)
 	{
-		if( !$action ) $action = 'view';
+		if( ! $action) $action = 'view';
 
-				if (!in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
+		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to non-existent action :act.', array(
-				':act' => $action
-			));
+			Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to non-existent action :act.',
+				array(':act' => $action)
+			);
 			return FALSE;
 		}
 
-		if (! $this->loaded() )
+		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-						throw new HTTP_Exception_404('Attempt to non-existent comment.');
+			throw new HTTP_Exception_404('Attempt to non-existent comment.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
-		if( empty( $user ) )   $user = User::active_user();
+		if (empty($user)) $user = User::active_user();
 
 		if (ACL::check('bypass comment access', $user))
 		{
@@ -458,76 +463,72 @@ class Model_Comment extends ORM {
 		//allow other modules to interact with access
 		Module::event('comment_access', $action, $this);
 
+		// can view?
 		if ($action === 'view')
 		{
-			if( $this->status === 'publish' AND ACL::check('access comment', $user))
+			if ($this->status === 'publish' AND ACL::check('access comment', $user))
 			{
 				return $this;
 			}
 			// Check if commenters can view their own unpublished comments.
-			elseif( $this->status != 'publish' AND $this->author == (int)$user->id AND $user->id != 1 )
+			elseif ($this->status != 'publish' AND $this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to view comment :post.', array(
-										':post' => $this->id
-								));
+				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to view comment :post.',
+					array(':post' => $this->id)
+				);
 				return FALSE;
 			}
-
 		}
 
+		// can edit?
 		if ($action === 'edit')
 		{
-
-			if( ACL::check('edit own comment') AND $this->author == (int)$user->id AND $user->id != 1 )
+			if (ACL::check('edit own comment') AND $this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to edit comment :post.', array(
-										':post' => $this->id
-								));
-
+				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to edit comment :post.',
+					array(':post' => $this->id)
+				);
 				return FALSE;
 			}
-
 		}
 
+		// can delete?
 		if ($action === 'delete')
 		{
-
-			if( ( ACL::check('delete own comment') OR ACL::check('delete any comment') ) AND
-				$this->author == (int)$user->id AND $user->id != 1 )
+			if ((ACL::check('delete own comment') OR ACL::check('delete any comment')) AND
+				$this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
 			}
-			elseif( ACL::check('administer comment', $user) )
+			elseif (ACL::check('administer comment', $user))
 			{
 				return $this;
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to delete comment :post.', array(
-										':post' => $this->id
-								));
+				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to delete comment :post.',
+					array(':post' => $this->id)
+				);
 				return FALSE;
 			}
-
 		}
 
-				return TRUE;
+		return TRUE;
 	}
-
 }
