@@ -311,7 +311,7 @@ class Cache_File extends Cache {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the file cache
 	 * Cache::instance('file')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *

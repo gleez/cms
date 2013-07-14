@@ -152,7 +152,7 @@ class Cache_Wincache extends Cache {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the wincache cache
 	 * Cache::instance('wincache')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *
