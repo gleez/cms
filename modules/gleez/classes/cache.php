@@ -307,7 +307,7 @@ abstract class Cache {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the current cache
 	 * Cache::instance('sqlite')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *
