@@ -280,7 +280,7 @@ class Cache_Memcache extends Cache {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the memcache cache
 	 * Cache::instance('memcache')->delete_pattern('foo:**:bar');
 	 *
 	 * @param   string  $pattern  The cache key pattern
