@@ -1034,9 +1034,9 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.4.4
 	 *
-	 * @param   mixed  $name  Option name
+	 * @param   string  $name  Option name
 	 *
-	 * @return  bool|array
+	 * @return  boolean
 	 */
 	public function hasOption($name)
 	{
@@ -1044,15 +1044,8 @@ class Mango_Collection implements Iterator, Countable {
 		{
 			return array_key_exists($name, $this->_options);
 		}
-		elseif (is_array($name))
-		{
 
-		}
-		else
-		{
-			return FALSE;
-		}
-
+		return FALSE;
 	}
 
 	/**
