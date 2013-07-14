@@ -188,7 +188,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo' entry from the apc group
+	 * // Delete 'foo:**' entries from the sqlite cache
 	 * Cache::instance('sqlite')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *
