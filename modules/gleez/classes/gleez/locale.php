@@ -10,9 +10,9 @@
  * [ref-zend]: http://framework.zend.com/
  * [ref-wiki]: http://en.wikipedia.org/wiki/Internationalization_and_localization
  *
- * @package    Gleez\Base
+ * @package    Gleez\Internationalization
  * @author     Sergey Yakovlev - Gleez
- * @version    0.0.2
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -110,39 +110,31 @@ class Gleez_Locale {
 	 *
 	 * __Search order is__:
 	 *
-	 *   1. Given Locale
-	 *   2. HTTP Client
-	 *   3. Server Environment
-	 *   4. Framework Standard
+	 * 1. Given Locale
+	 * 2. HTTP Client
+	 * 3. Server Environment
+	 * 4. Framework Standard
 	 *
-	 * ### Examples:
+	 * Examples:
+	 * ~~~
+	 * // Choosing a specific locale
+	 * $locale = new Gleez_Locale('de_DE');
 	 *
-	 * Choosing a specific locale:<br>
-	 * <code>
-	 *   $locale = new Gleez_Locale('de_DE');
-	 * </code>
+	 * // Automatically selecting a locale
+	 * $locale = new Gleez_Locale();
 	 *
-	 * Automatically selecting a locale:<br>
-	 * <code>
-	 *   $locale = new Gleez_Locale();
-	 * </code>
+	 * // Default behavior, same as above:
+	 * $locale = new Gleez_Locale(Gleez_Locale::CLIENT);
 	 *
-	 * Default behavior, same as above:<br>
-	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::CLIENT);
-	 * </code>
+	 * // Prefer settings on host server
+	 * $locale = new Gleez_Locale(Gleez_Locale::ENVIRONMENT);
 	 *
-	 * Prefer settings on host server:<br>
-	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::ENVIRONMENT);
-	 * </code>
-	 *
-	 * Prefer Gleez framework settings:<br>
-	 * <code>
-	 *   $locale = new Gleez_Locale(Gleez_Locale::FRAMEWORK);
-	 * </code>
+	 * // Prefer Gleez framework settings
+	 * $locale = new Gleez_Locale(Gleez_Locale::FRAMEWORK);
+	 * ~~~
 	 *
 	 * @param   string|Gleez_Locale  $locale  Locale for parsing input [Optional]
+	 *
 	 * @throws  Locale_Exception
 	 */
 	public function __construct($locale = NULL)
@@ -165,10 +157,10 @@ class Gleez_Locale {
 	/**
 	 * Returns a string representation of the object
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   print $locale->toString();
-	 * </code>
+	 * Example
+	 * ~~~
+	 * print $locale->toString();
+	 * ~~~
 	 *
 	 * @return  string
 	 */
@@ -192,11 +184,13 @@ class Gleez_Locale {
 	 *
 	 * @param   string|Gleez_Locale  $locale  Locale to work on
 	 * @param   boolean              $strict  Strict preparation [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @throws  Locale_Exception
 	 *
-	 * @uses    Locale_Data::locale_data
-	 * @uses    Locale_Data::territory_data
+	 * @uses    Locale_Data::getLocaleData
+	 * @uses    Locale_Data::getTerritoryData
 	 */
 	private static function _prepare_locale($locale, $strict = FALSE)
 	{
@@ -257,8 +251,8 @@ class Gleez_Locale {
 		}
 
 		$parts          = explode('_', $locale);
-		$locale_data    = Locale_Data::locale_data();
-		$territory_data = Locale_Data::territory_data();
+		$locale_data    = Locale_Data::getLocaleData();
+		$territory_data = Locale_Data::getTerritoryData();
 
 		if ( ! isset($locale_data[$parts[0]]))
 		{
@@ -288,17 +282,21 @@ class Gleez_Locale {
 	 *
 	 * [!!] Expects RFC compliant header
 	 *
-	 * The notation can be (examples):<br>
-	 * <pre>
-	 *   ru,en-US;q=0.8,en;q=0.6
-	 *   de,en-UK-US;q=0.5,fr-FR;q=0.2
-	 *   fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4
-	 * </pre>
+	 * __The notation can be (examples):__
 	 *
-	 * For example `$locale->get_client_locales();`<br>
-	 * returned an array, i.e: `array('fr_FR' => 1.0, 'fr' => 1.0, 'en_US' => 0.6, 'en' => 0.6)`
+	 * +  ru,en-US;q=0.8,en;q=0.6
+	 * +  de,en-UK-US;q=0.5,fr-FR;q=0.2
+	 * +  fr-FR,fr;q=0.8,en-US;q=0.6,en;q=0.4
+	 *
+	 * Example:
+	 * ~~~
+	 * $locale->get_client_locales();
+	 * // returned an array, i.e:
+	 * // array('fr_FR' => 1.0, 'fr' => 1.0, 'en_US' => 0.6, 'en' => 0.6)
+	 * ~~~
 	 *
 	 * @return  array
+	 *
 	 * @link    http://php.net/manual/en/function.getenv.php getenv()
 	 */
 	public static function get_client_locales()
@@ -367,12 +365,12 @@ class Gleez_Locale {
 	/**
 	 * Expects the Systems standard locale
 	 *
-	 * For Windows `LC_COLLATE=C;LC_CTYPE=German_Austria.1252;LC_MONETARY=C`<br>
+	 * For Windows `LC_COLLATE=C;LC_CTYPE=German_Austria.1252;LC_MONETARY=C`
 	 * would be recognised as `de_AT`
 	 *
 	 * @return  array
 	 *
-	 * @uses    Locale_Data::locale_data
+	 * @uses    Locale_Data::getLocaleData
 	 * @uses    Locale_Data::$languages
 	 * @uses    Locale_Data::$regions
 	 *
@@ -389,7 +387,7 @@ class Gleez_Locale {
 		$language      = setlocale(LC_ALL, 0);
 		$languages     = explode(';', $language);
 		$languagearray = array();
-		$locale_data   = Locale_Data::locale_data();
+		$locale_data   = Locale_Data::getLocaleData();
 
 		foreach ($languages as $locale)
 		{
@@ -460,11 +458,12 @@ class Gleez_Locale {
 	 * Only real locales are returned, the internal locale 'root' are suppressed.
 	 *
 	 * @return  array
-	 * @uses    Gleez_Locale_Data::locale_data
+	 *
+	 * @uses    Gleez_Locale_Data::getLocaleData
 	 */
 	public static function get_locale_list()
 	{
-		$list = Gleez_Locale_Data::locale_data();
+		$list = Locale_Data::getLocaleData();
 		unset($list['root']);
 
 		return $list;
@@ -476,6 +475,7 @@ class Gleez_Locale {
 	 * Static alias for [Gleez_Locale::get_language]
 	 *
 	 * @param   string  $locale  Locale (eg. en_US, ru_RU, ar_JO, ...)
+	 *
 	 * @return  string
 	 */
 	public static function get_language_by_locale($locale)
@@ -508,10 +508,10 @@ class Gleez_Locale {
 	/**
 	 * Returns the language part of the locale
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   print $locale->get_language();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * print $locale->get_language();
+	 * ~~~
 	 *
 	 * @return string
 	 */
@@ -525,12 +525,14 @@ class Gleez_Locale {
 	/**
 	 * Returns the region part of the locale if available
 	 *
-	 * For example, if locale is 'de_AT' then 'AT' will be returned as region:
-	 * <code>
-	 *   print $locale->get_region();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * // For example, locale is 'de_AT'
+	 * print $locale->get_region(); // 'AT'
+	 * ~~~
 	 *
 	 * @return  string   Region part of the locale if available
+	 *
 	 * @return  boolean  FALSE if not available
 	 */
 	public function get_region()
@@ -550,12 +552,12 @@ class Gleez_Locale {
 	 *
 	 * @param  string|Gleez_Locale  $locale  New locale to set [Optional]
 	 *
-	 * @uses   Locale_Data::locale_data
+	 * @uses   Locale_Data::getLocaleData
 	 */
 	public function set_locale($locale = NULL)
 	{
 		$locale      = self::_prepare_locale($locale);
-		$locale_data = Locale_Data::locale_data();
+		$locale_data = Locale_Data::getLocaleData();
 
 		if ( ! isset($locale_data[(string)$locale]))
 		{
@@ -591,10 +593,10 @@ class Gleez_Locale {
 	 * If provided you can set a quality between 0 and 1 (or 2 and 100) which represents
 	 * the percent of quality the browser requested within HTTP
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   Gleez_Locale::set_default('de');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * Gleez_Locale::set_default('de');
+	 * ~~~
 	 *
 	 * @param   string|Gleez_Locale  $locale   Locale to set
 	 * @param   integer              $quality  The quality to set from 0 to 1 [Optional]
@@ -620,7 +622,7 @@ class Gleez_Locale {
 		}
 
 		$locale      = self::_prepare_locale($locale);
-		$locale_data = Locale_Data::locale_data();
+		$locale_data = Locale_Data::getLocaleData();
 
 		if (isset($locale_data[(string)$locale]))
 		{
@@ -646,17 +648,17 @@ class Gleez_Locale {
 	/**
 	 * Returns true if both locales are equal
 	 *
-	 * Example:<br>
-	 * <pre>
-	 *   $locale = new Gleez_Locale();
-	 *   $mylocale = new Gleez_Locale('en_US');
+	 * Example:
+	 * ~~~
+	 * $locale = new Gleez_Locale();
+	 * $mylocale = new Gleez_Locale('en_US');
 	 *
-	 *   // Check if locales are equal
-	 *   if ($locale->equals($mylocale))
-	 *   {
+	 * // Check if locales are equal
+	 * if ($locale->equals($mylocale))
+	 * {
 	 *     // ...
-	 *   }
-	 * </pre>
+	 * }
+	 * ~~~
 	 *
 	 * @param   Gleez_Locale  $locale  Locale to check for equality
 	 * @return  boolean
