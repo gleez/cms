@@ -4,6 +4,7 @@
  *
  * @package    Gleez\Modules
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -188,7 +189,7 @@ class Gleez_Module {
 	}
 
 	/**
-	 * Allow modules to indicate the impact of deactivating the specifeid module
+	 * Allow modules to indicate the impact of deactivating the specified module
 	 * @param string $module_name
 	 * @return array an array of warning or error messages to be displayed
 	 */
@@ -234,8 +235,8 @@ class Gleez_Module {
 			$module->save();
 		}
 
-		//clear any cache for sure
-		Gleez::cache('load_modules', '');
+		// clear any cache for sure
+		Cache::instance()->delete('load_modules');
 
 		Module::load_modules(TRUE);
 
@@ -309,8 +310,8 @@ class Gleez_Module {
 			self::deactivate($module_name);
 		}
 
-		//clear any cache for sure
-		Gleez::cache('load_modules', '');
+		// clear any cache for sure
+		Cache::instance()->delete('load_modules');
 
 		Module::load_modules(TRUE);
 
@@ -348,8 +349,8 @@ class Gleez_Module {
 			$module->save();
 		}
 
-		//clear any cache for sure
-		Gleez::cache('load_modules', '');
+		// clear any cache for sure
+		Cache::instance()->delete('load_modules');
 
 		Module::load_modules(TRUE);
 
@@ -383,8 +384,8 @@ class Gleez_Module {
 			$module->save();
 		}
 
-		//clear any cache for sure
-		Gleez::cache('load_modules', '');
+		// clear any cache for sure
+		Cache::instance()->delete('load_modules');
 
 		Module::load_modules(TRUE);
 
@@ -415,8 +416,8 @@ class Gleez_Module {
 
 		Module::load_modules(TRUE);
 
-		//remove widgets when the module is uninstalled
-		Widget::uninstall($module_name);
+		// remove widgets when the module is uninstalled
+		Widgets::uninstall($module_name);
 
 		Kohana::$log->add(LOG::INFO, 'Uninstalled module :module_name', array(':module_name' => $module_name) );
 	}
