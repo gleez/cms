@@ -91,7 +91,6 @@ Kohana::modules(array(
 	'captcha'     => MODPATH.'captcha',    // Captcha implementation
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
-	'userguide'   => MODPATH.'userguide',  // User guide and API documentation
 	//'mango'       => MODPATH.'mango',      // Gleez Mango
 ));
 
