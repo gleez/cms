@@ -396,7 +396,7 @@ class Mango {
 	 * @since   0.2.0
 	 *
 	 * @param   string  $name       Name of the method being called
-	 * @param   array   $arguments  Enumerated array containing the parameters passed to the `$name`
+	 * @param   array   $arguments  Enumerated array containing the parameters passed to the $name
 	 * @return  mixed
 	 *
 	 * @throws  Mango_Exception
@@ -681,7 +681,7 @@ class Mango {
 	 *
 	 * @param   string|MongoCode  $code   MongoCode or string to execute
 	 * @param   array             $args   Arguments to be passed to code [Optional]
-	 * @param   array             $scope  The scope to use for the code if `$code` is a string [Optional]
+	 * @param   array             $scope  The scope to use for the code if $code is a string [Optional]
 	 *
 	 * @return  mixed
 	 *
