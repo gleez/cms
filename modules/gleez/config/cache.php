@@ -66,5 +66,11 @@ return array
 			'.git',
 			'.svn'
 		)
-	)
+	),
+	'mango'  => array(
+		'driver'             => 'mango',
+		'default_expire'     => 3600,
+		'mango_config'       => 'default',
+		'collection'         => 'Cache',
+	),
 );

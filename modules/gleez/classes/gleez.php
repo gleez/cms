@@ -5,14 +5,14 @@
  * @package    Gleez
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    0.9.26
+ * @version    0.9.27
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.26';
+	const VERSION = '0.9.27';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
@@ -371,25 +371,6 @@ class Gleez {
 		throw new Gleez_Exception('Unable to locate file `:file`. No file exists with the specified file name.', array(
 			':file' => $file
 		));
-	}
-
-	/**
-	 * Check the supplied integer in given range
-	 *
-	 * @param   integer   $min
-	 * @param   integer   $max
-	 * @param   integer   $from_user supplied integer
-	 * @return  boolean
-	 */
-	public static function check_in_range($min, $max, $from_user)
-	{
-		// Convert to int
-		$start = (int) $min;
-		$end   = (int) $max;
-		$user  = (int) $from_user;
-
-		// Check that user data is between start & end
-		return (($user > $start) AND ($user < $end));
 	}
 
 	/**
