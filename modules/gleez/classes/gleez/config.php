@@ -9,7 +9,7 @@
  * Directives from sources high in the sources list will override ones from those
  * below them.
  *
- * @package    Gleez\Config
+ * @package    Gleez\Configuration
  * @version    2.0
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -27,7 +27,7 @@ class Gleez_Config {
 	 */
 	protected static $_sources = array();
 
-		/**
+	/**
 	 * @var config instance
 	 */
 	protected static $_instance;
@@ -55,8 +55,8 @@ class Gleez_Config {
 	 *     $config->attach($source);        // Try first
 	 *     $config->attach($source, FALSE); // Try last
 	 *
-	 * @param   Gleez_Config_Source    $source instance
-	 * @param   boolean                 $first  add the source as the first used object
+	 * @param   Config_Source    $source instance
+	 * @param   boolean          $first  add the source as the first used object
 	 * @return  $this
 	 */
 	public function attach(Config_Source $source, $first = TRUE)
@@ -80,7 +80,7 @@ class Gleez_Config {
 	 *
 	 *     $config->detach($source);
 	 *
-	 * @param   Gleez_Config_Source    $source instance
+	 * @param   Config_Source    $source instance
 	 * @return  $this
 	 */
 	public function detach(Config_Source $source)
@@ -103,7 +103,7 @@ class Gleez_Config {
 	 *
 	 * See [Gleez_Config] for more info
 	 *
-	 * @param   string  configuration group name
+	 * @param   string  $group  configuration group name
 	 * @return  object  Gleez_Config
 	 * @throws  Gleez_Exception
 	 */
@@ -259,7 +259,7 @@ class Gleez_Config {
 		list ($group, $item, $_path) = explode('.', $key, 3);
 		$path = (isset($_path) AND !empty($_path)) ? $item.'.'.$_path : $item;
 
-		//load and override config array
+		// load and override config array
 		$config = Config::load($group);
 		Arr::set_path($config, $path, $value, '.');
 

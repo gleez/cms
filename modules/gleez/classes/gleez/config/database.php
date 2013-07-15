@@ -126,7 +126,7 @@ class Gleez_Config_Database implements Config_Source {
 	 * @param   string  $group   The config group
 	 * @param   string  $key     The config key to write to
 	 * @param   array   $config  The serialized configuration to write
-	 * @return  Gleez_Config_Database
+	 * @return  Config_Database
 	 */
 	protected function _insert($group, $key, $config)
 	{
@@ -143,7 +143,7 @@ class Gleez_Config_Database implements Config_Source {
 	 * @param   string  $group  The config group
 	 * @param   string  $key    The config key to write to
 	 * @param   array   $config The serialized configuration to write
-	 * @return  Gleez_Config_Database
+	 * @return  Config_Database
 	 */
 	protected function _update($group, $key, $config)
 	{
@@ -161,7 +161,7 @@ class Gleez_Config_Database implements Config_Source {
 	 *
 	 * @param   string  $group  The config group
 	 * @param   string  $key    The config key to delete
-	 * @return  Gleez_Config_Database
+	 * @return  Config_Database
 	 */
 	public function delete($group, $key)
 	{
