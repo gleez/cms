@@ -268,16 +268,18 @@ class Num {
 	/**
 	 * Check the supplied integer in given range
 	 *
+	 * Attempts to convert to integer and check range
+	 *
 	 * Example:
 	 * ~~~
-	 * Num::check_in_range(12.23, '100', 89); // TRUE
+	 * Num::inRange(12.23, '100', 89); // TRUE
 	 * ~~~
 	 *
 	 * @since   1.0.1
 	 *
-	 * @param   integer   $min        Minimum
-	 * @param   integer   $max        Maximum
-	 * @param   integer   $from_user  Supplied integer
+	 * @param   mixed   $min        Minimum
+	 * @param   mixed   $max        Maximum
+	 * @param   mixed   $from_user  Supplied integer
 	 *
 	 * @return  boolean
 	 */
