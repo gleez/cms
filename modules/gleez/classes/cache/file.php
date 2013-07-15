@@ -54,8 +54,8 @@ class Cache_File extends Cache {
 	}
 
 	/**
-	 * The caching directory
-	 * @var string
+	 * The SplFileInfo object
+	 * @var SplFileInfo
 	 */
 	protected $_cache_dir;
 
@@ -81,12 +81,12 @@ class Cache_File extends Cache {
 		{
 			$this->_cache_dir = new SplFileInfo($directory);
 		}
-			// PHP < 5.3 exception handle
+		// PHP < 5.3 exception handle
 		catch (ErrorException $e)
 		{
 			$this->_cache_dir = $this->_make_directory($directory, 0777, TRUE);
 		}
-			// PHP >= 5.3 exception handle
+		// PHP >= 5.3 exception handle
 		catch (UnexpectedValueException $e)
 		{
 			$this->_cache_dir = $this->_make_directory($directory, 0777, TRUE);

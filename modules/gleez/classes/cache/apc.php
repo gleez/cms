@@ -65,7 +65,10 @@ class Cache_Apc extends Cache {
 	}
 
 	/**
-	 * Retrieve a cached value entry by id.
+	 * Retrieve a cached value entry by id
+	 *
+	 * Return the stored variable or array of variables on success
+	 * or $default FALSE on failure
 	 *
 	 * Examples:
 	 * ~~~
@@ -76,20 +79,34 @@ class Cache_Apc extends Cache {
 	 * $data = Cache::instance('apc')->get('foo', 'bar');
 	 * ~~~
 	 *
+	 * @link    http://www.php.net/manual/en/function.apc-fetch.php apc_fetch()
+	 *
 	 * @param   string  $id       ID of cache to entry
 	 * @param   string  $default  Default value to return if cache miss [Optional]
 	 *
 	 * @return  mixed
 	 *
-	 * @throws  Cache_Exception
-	 *
 	 * @uses    System::sanitize_id
+	 * @uses    Log::add
 	 */
 	public function get($id, $default = NULL)
 	{
-		$data = apc_fetch(System::sanitize_id($this->config('prefix').$id), $success);
+		//  Try to fetch a stored variable from the cache
+		try
+		{
+			// Return the cache
+			return apc_fetch(System::sanitize_id($this->config('prefix').$id));
+		}
+		catch (Exception $e)
+		{
+			// Cache is corrupt or not exists, let return happen normally
+			Kohana::$log->add(LOG::ERROR, 'An error occurred retrieving corrupt or not exists cache name: [:name]',
+				array(':name' => $id)
+			);
+		}
 
-		return $success ? $data : $default;
+		// Cache not found, return default value
+		return $default;
 	}
 
 	/**
@@ -121,7 +138,19 @@ class Cache_Apc extends Cache {
 			$lifetime = Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE);
 		}
 
-		return apc_store(System::sanitize_id($this->config('prefix').$id), $data, $lifetime);
+		try
+		{
+			return apc_store(System::sanitize_id($this->config('prefix').$id), $data, $lifetime);
+		}
+		catch (Exception $e)
+		{
+			Kohana::$log->add(LOG::ERROR, 'An error occurred setting [:name] to cache',
+				array(':name' => $id)
+			);
+		}
+
+		// Failed to write cache
+		return FALSE;
 	}
 
 	/**
