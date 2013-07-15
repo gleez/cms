@@ -5,14 +5,14 @@
  * @package    Gleez
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    0.9.27
+ * @version    0.9.28
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.27';
+	const VERSION = '0.9.28';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
@@ -157,75 +157,6 @@ class Gleez {
 
 		// Load the active theme(s)
 		Theme::load_themes();
-	}
-
-	/**
-	 * APC cache
-	 *
-	 * Provides an opcode based cache.
-	 *
-	 * @param   string   $name      Name of the cache
-	 * @param   mixed    $data      Data to cache [Optional]
-	 * @param   integer  $lifetime  Number of seconds the cache is valid for [Optional]
-	 *
-	 * @return  mixed    For getting
-	 * @return  boolean  For setting
-	 *
-	 * @todo    add more support for more cache drivers
-	 *
-	 * @uses    System::sanitize_id
-	 */
-	public static function cache($name, $data = NULL, $lifetime = 3600)
-	{
-		// Enable cache only in production environment
-		if (Kohana::$environment !== Kohana::PRODUCTION)
-		{
-			Kohana::$log->add(LOG::DEBUG, 'Gleez Caching only available in production');
-			return FALSE;
-		}
-
-		// Check for existence of the APC extension
-		if ( ! extension_loaded('apc'))
-		{
-			Kohana::$log->add(LOG::INFO, 'PHP APC extension is not available');
-			return FALSE;
-		}
-
-		if (isset($_SERVER['HTTP_HOST']))
-		{
-			$name .= $_SERVER['HTTP_HOST'];
-		}
-
-		if (is_null($data))
-		{
-			try
-			{
-				// Return the cache
-				return apc_fetch(System::sanitize_id($name));
-			}
-			catch (Exception $e)
-			{
-				// Cache is corrupt, let return happen normally
-				Kohana::$log->add(LOG::ERROR, "Cache name: `:name` is corrupt", array(
-					':name' => $name
-				));
-			}
-
-			// Cache not found
-			return FALSE;
-		}
-		else
-		{
-			try
-			{
-				return apc_store(System::sanitize_id($name), $data, $lifetime);
-			}
-			catch (Exception $e)
-			{
-				// Failed to write cache
-				return FALSE;
-			}
-		}
 	}
 
 	/**
@@ -392,10 +323,10 @@ class Gleez {
 	 * Set default cookie [salt](gleez/cookie/config#salt)
 	 * and [lifetime](gleez/cookie/config#expiration)
 	 *
-	 * Also you can define a salt for the `Cookie` class in bootstrap.php:<br>
-	 * <code>
-	 *   Cookie::$salt = [really-long-cookie-salt-here]
-	 * </code>
+	 * Also you can define a salt for the `Cookie` class in bootstrap.php:
+	 * ~~~
+	 * Cookie::$salt = [really-long-cookie-salt-here]
+	 * ~~~
 	 */
 	protected static function _set_cookie()
 	{
