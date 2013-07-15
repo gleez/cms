@@ -29,10 +29,10 @@ class Gleez_Config_File implements Config_Source {
 	/**
 	 * Load and merge all of the configuration files in this group.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $config->load($name);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $config->load($name);
+	 * ~~~
 	 *
 	 * @param   string  $group  Configuration group name
 	 * @return  $this   Current object

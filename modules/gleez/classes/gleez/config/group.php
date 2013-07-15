@@ -58,6 +58,8 @@ class Gleez_Config_Group implements ArrayAccess {
 	 *     $config['var'];
 	 *
 	 * @param string $key   The key of the config item we're getting
+	 *
+	 * @return  mixed
 	 */
 	public function __get($key)
 	{
@@ -106,7 +108,7 @@ class Gleez_Config_Group implements ArrayAccess {
 	 *
 	 * @param   string  $key    array key
 	 * @param   mixed   $value  array value
-	 * @return  $this
+	 * @return  Config_Group
 	 */
 	public function set($key, $value)
 	{
@@ -123,6 +125,8 @@ class Gleez_Config_Group implements ArrayAccess {
 	 *     $config['var'];
 	 *
 	 * @param string $key   The key of the config item we're getting
+	 *
+	 * @return  mixed
 	 */
 	public function offsetGet($key)
 	{
@@ -146,6 +150,8 @@ class Gleez_Config_Group implements ArrayAccess {
 	 *
 	 * @param string $key   The key of the config item we're changing
 	 * @param mixed  $value The new array value
+	 *
+	 * @return  Config_Group
 	 */
 	public function offsetSet($key, $value)
 	{
@@ -160,6 +166,8 @@ class Gleez_Config_Group implements ArrayAccess {
 	 * Removes a given config item (key)
 	 *
 	 * @param string $key   The key of the config item we're removing
+	 *
+	 * @return  Config_Group
 	 */
 	public function offsetUnset($key)
 	{
@@ -176,6 +184,8 @@ class Gleez_Config_Group implements ArrayAccess {
 	 * Check if a given config item(key) exists
 	 *
 	 * @param string $key   The key of the config item we're checking
+	 *
+	 * @return  boolean
 	 */
 	public function offsetExists($key)
 	{
