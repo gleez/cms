@@ -239,12 +239,12 @@ class Cache_Memcache extends Cache {
 		}
 
 		// save metadata
-		$this->setMetadata($key, $lifetime);
+		$this->setMetadata($id, $lifetime);
 
 		// save key for delete_pattern()
 		if ($this->config('storeCacheInfo', false))
 		{
-			$this->setCacheInfo($key);
+			$this->setCacheInfo($id);
 		}
 
 		// Set the data to memcache
@@ -269,7 +269,7 @@ class Cache_Memcache extends Cache {
 	public function delete($id)
 	{
 		// Delete the metadata
-		$this->_memcache->delete($this->config('prefix').'_metadata'.self::SEPARATOR.$key);
+		$this->_memcache->delete($this->config('prefix').'_metadata'.self::SEPARATOR.$id);
 
 		// Delete the id
 		return $this->_memcache->delete(System::sanitize_id($this->config('prefix').$id));
@@ -433,12 +433,12 @@ class Cache_Memcache extends Cache {
 	/**
 	 * Stores metadata about a key in the cache.
 	 *
-	 * @param  string  $key       The lifetime
-	 * @param  mixed   $lifetime  Lifetime - string or integer
+	 * @param  string  $key       A cache key
+	 * @param  mixed   $lifetime  The lifetime
 	 */
 	protected function setMetadata($key, $lifetime)
 	{
-		$this->_memcache->set($this->config('prefix').'_metadata'.self::SEPARATOR.$key, array('lastModified' => time(), 'timeout' => time() + $lifetime), false, $lifetime);
+		$this->_memcache->set($this->config('prefix').'_metadata'.self::SEPARATOR.$key, array('lastModified' => time(), 'timeout' => time() + $lifetime), FALSE, $lifetime);
 	}
 
 	/**

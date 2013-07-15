@@ -1,0 +1,6 @@
+name = "Userguide"
+description = "User guide and API. After enabling will be enabled public URL http://yoursite.com/guide"
+version = 1
+author = "Kohana Team"
+authorURL = http://kohanaframework.org/
+
