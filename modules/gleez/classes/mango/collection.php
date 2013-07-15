@@ -48,7 +48,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Sergey Yakovlev - Gleez
- * @version    0.4.4
+ * @version    0.4.5
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -164,7 +164,7 @@ class Mango_Collection implements Iterator, Countable {
 	 * Passes on method calls to either the MongoCursor or the MongoCollection
 	 *
 	 * @param   string  $name       Name of the method being called
-	 * @param   array   $arguments  Enumerated array containing the parameters passed to the `$name`
+	 * @param   array   $arguments  Enumerated array containing the parameters passed to the $name
 	 *
 	 * @return  mixed
 	 *
@@ -578,10 +578,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.4.2
 	 *
-	 * @param   array  $criteria    Description of the objects to update
-	 * @param   array  $new_object  The object with which to update the matching records
-	 * @param   array  $options     This parameter is an associative array of
-	 *                              the form `array("optionname" => <boolean>, ...)`
+	 * @param   array    $criteria    Description of the objects to update
+	 * @param   array    $new_object  The object with which to update the matching records
+	 * @param   array    $options     Associative array of the form array("optionname" => <boolean>, ...) [Optional]
+	 * @param   boolean  $upsert      If no document matches $criteria, a new document will be inserted [Optional]
+	 * @param   boolean  $multi       All documents matching $criteria will be updated? [Optional]
 	 *
 	 * @return  array|bool
 	 *
@@ -589,13 +590,13 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @uses    Arr::merge
 	 */
-	public function safeUpdate(array $criteria, array $new_object, $options = array())
+	public function safeUpdate(array $criteria, array $new_object, $options = array(), $upsert = FALSE, $multi = FALSE)
 	{
 		$options = Arr::merge(
 			array(
 				'w'        => TRUE,
-				'multiple' => FALSE,
-				'upsert'   => FALSE
+				'upsert'   => $upsert,
+				'multiple' => $multi
 			),
 			$options
 		);
@@ -698,7 +699,7 @@ class Mango_Collection implements Iterator, Countable {
 
 		if ( ! $result['ok'])
 		{
-			throw new Mango_Exception($result['msg']);
+			throw new Mango_Exception($result['errmsg']);
 		}
 
 		return TRUE;
@@ -1092,6 +1093,27 @@ class Mango_Collection implements Iterator, Countable {
 	public function skip($num)
 	{
 		return $this->setOption('skip', (int)$num);
+	}
+
+	/**
+	 * Create Tailable Cursor
+	 *
+	 * Sets whether this cursor will be left open after fetching the last results.
+	 *
+	 * By default, MongoDB will automatically close a cursor when the client has
+	 * exhausted all results in the cursor. However, for capped collections you
+	 * may use a Tailable Cursor that remains open after the client exhausts the
+	 * results in the initial cursor.
+	 *
+	 * @since   0.4.5
+	 *
+	 * @param   boolean  $tail  If TRUE will be sets tailable option
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function tailable($tail = TRUE)
+	{
+		return $this->setOption('tailable', $tail);
 	}
 
 	/**
