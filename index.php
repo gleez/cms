@@ -103,12 +103,6 @@ define('THEMEPATH', realpath($themes).DIRECTORY_SEPARATOR);
 // Clean up the configuration vars
 unset($application, $modules, $system, $themes);
 
-if (file_exists('install'.EXT))
-{
-	// Load the installation check
-	return include 'install'.EXT;
-}
-
 /**
  * Define the start time of the application, used for profiling.
  */

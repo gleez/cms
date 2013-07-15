@@ -4,6 +4,7 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -12,15 +13,17 @@ class Controller_Admin_Modules extends Controller_Admin {
 	/**
 	 * Module list
 	 *
-	 * @uses  Gleez::cache
+	 * @uses  Cache::delete
 	 * @uses  Module::load_modules
 	 * @uses  Module::available
+	 * @uses  Route::uri
+	 * @uses  Route::get
 	 */
 	public function action_list()
 	{
 		// Clear any cache for sure
 		// Note: Gleez Caching only available in production
-		Gleez::cache('load_modules', '');
+		Cache::instance()->delete('load_modules');
 
 		// Load modules
 		Module::load_modules(TRUE);
@@ -39,14 +42,17 @@ class Controller_Admin_Modules extends Controller_Admin {
 	 * Confirm action
 	 *
 	 * @throws  HTTP_Exception_403
+	 *
 	 * @uses    Arr::get
 	 * @uses    Module::available
 	 * @uses    Module::is_active
 	 * @uses    Module::can_deactivate
 	 * @uses    Module::is_active
 	 * @uses    Module::can_activate
-	 * @uses    Gleez::cache_delete
+	 * @uses    Cache::delete_all
 	 * @uses    Route::uri
+	 * @uses    Route::get
+	 * @uses    Request::redirect
 	 */
 	public function action_confirm()
 	{
@@ -81,7 +87,7 @@ class Controller_Admin_Modules extends Controller_Admin {
 		}
 
 		// Clear any cache for sure
-		Gleez::cache_delete();
+		Cache::instance()->delete_all();
 
 		if (empty($messages["error"]) AND empty($messages["warn"]))
 		{
@@ -112,7 +118,9 @@ class Controller_Admin_Modules extends Controller_Admin {
 	 * @uses  Module::install
 	 * @uses  Module::activate
 	 * @uses  Module::event
-	 * @uses  Gleez::cache_delete
+	 * @uses  Cache::delete_all
+	 * @uses  Log::add
+	 * @uses  Gleez_Exception::text
 	 */
 	private function _do_save()
 	{
@@ -175,7 +183,7 @@ class Controller_Admin_Modules extends Controller_Admin {
 		}
 
 		// Clear any cache for sure
-		Gleez::cache_delete();
+		Cache::instance()->delete_all();
 	}
 
 }
