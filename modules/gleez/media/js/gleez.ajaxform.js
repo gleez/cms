@@ -47,10 +47,21 @@
     }
 
     Ajaxform.prototype.init = function(element, options) {
+		this.$element = element
 		$(element).ajaxSubmit(options).removeData('jqxhr')
     }
 
     Ajaxform.prototype.beforeSubmit = function(formData, form, options) {
+		//add submit button to form array if its from popup request
+		if(options.button && options.button.length == 1){
+			var button   = Array()
+			button.name  = options.button.attr('name')
+			button.value = options.button.attr('value')
+			button.type  = options.button.attr('type')
+			
+			formData.push(button)
+		}
+		
 		// Hide any errorContainers
 		$(form).find('.error-message-container').slideUp(250)
 		$(form).find('[type=submit]').attr('disabled', true).addClass('InProgress1')
@@ -63,11 +74,12 @@
 		}
 		else if (data.FormSaved == true){
 			//Lets check if the form is in popup window
-			var popup = $(form).find('[type=submit]').data('popup')
+			var popup = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
 			$(form).remove()
 
 			if(popup){
 				$(popup).find('.popup-body').html('Success')
+				$(popup).find('.popup-footer').html('&nbsp')
 			}
 
 		}
@@ -250,6 +262,7 @@
       , beforesubmit: false
       , resetform: false
       , clearform: false
+      , button: false
       , target: false
       , success: false
       , context: false
@@ -282,12 +295,12 @@
 
     $(document).on('submit.ajaxform.data-api, click.ajaxform.data-api', '[data-toggle="ajaxform"]', function (e) {
 	var $this = $(this)
-	, $target = $this.parents('form')
+	, $target = $this.data('form') || $this.parents('form')
 	, option  = $.extend({}, $target.data(), $this.data())
 
 	// if event has been canceled, don't proceed
 	if (!e.isDefaultPrevented()) {
-	    e.preventDefault();
+	    e.preventDefault()
 	    $target.removeData('ajaxform').aform(option)
 	}
     })

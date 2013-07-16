@@ -24,6 +24,7 @@
 		this.$element  = $(element).delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
 		this.$backdrop =
 		this.isShown   = null
+		this.forms     = false
 
 		this.options.loading && this.loading()
 		this.local()
@@ -70,7 +71,7 @@
 			data = $.base64Decode(json.Body)
 
 			if (typeof json.title !== undefined){
-				this.options.title = json.title
+				this.options.title = json.title || this.options.title
 			}
 		}
 
@@ -79,18 +80,57 @@
 		// Now, if there are any forms in the popup, hijack them if necessary.
 		// Pass the popup object to the form as data() to handle popup events from form
 		if (data && this.options.consumeform) {
-			$data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
-				 .attr('data-toggle', 'ajaxform')
-				 .data('popup', popup.$element)
-		
-			//add close handler to no/cancel buttons
-			var button = $data.find('[type=submit]input[name="no"], [type=submit]input[name="cancel"]')
-			$(button).attr('data-dismiss', 'popup')
-				 .delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
+			this.forms = $data.filter('form')
+			
+			//if only one form, remove and create custom buttons in popup footer
+			if(this.forms.length == 1){
+				//pull the submit button
+				var button    = $data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
+				,   submitBtn = $('<a>Save changes</a>')
+				,   closeBtn  = $('<a>Close</a>')
+				
+				//hide all buttons in popup body
+				$data.find('[type=submit]').hide()
+				$data.find('[type=button]').hide()
+				$data.find('form-actions').hide()
+			
+				//add the popup element to form data
+				$(this.forms).attr('data-popup', 'true').data('popup', this.$element)
+			
+				//create submit and cancel buttons in popup footer
+				$(submitBtn).attr('data-toggle', 'ajaxform')
+					 .attr('class', 'btn btn-primary')
+					 .attr('href', '#')
+					 .data('popup', this.$element)
+					 .data('form', this.forms)
+					 .data('button', button)
+				
+				$(closeBtn).attr('class', 'btn')
+					.attr('href', '#')
+					.attr('data-dismiss', 'popup')
+					.delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
+				
+				// Append the buttons to popup footer
+				this.$element.find('.popup-footer').html(closeBtn).append(submitBtn)
+			}
+			else if(this.forms.length > 1){
+				$data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
+					 .attr('data-toggle', 'ajaxform')
+					 .data('popup', popup.$element)
+			
+				//add close handler to no/cancel buttons
+				var buttons = $data.find('[type=submit]input[name="no"], [type=submit]input[name="cancel"]')
+				$(buttons).attr('data-dismiss', 'popup')
+					 .delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
+			}
+			
+			//add the content and title to popup
+			this.$element.find('.popup-title').html(this.options.title)
+			this.$element.find('.popup-body').html($data)
 		}
 
 		// Prevent blank popups
-		if (data) {
+		if (data && !this.forms) {
 			this.$element.find('.popup-title').html(this.options.title)
 			this.$element.find('.popup-body').html($data)
 		}
