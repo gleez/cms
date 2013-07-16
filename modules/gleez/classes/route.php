@@ -27,21 +27,26 @@
  * Routes also provide a way to generate URIs (called "reverse routing"), which
  * makes them an extremely powerful and flexible way to generate internal links.
  *
- * @package    Kohana
- * @category   Base
+ * @package    Gleez\Base
+ * @version    2.1.0
+ * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
  * @author     Kohana Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
+ * @license    http://gleezcms.org/license  Gleez CMS License
  * @license    http://kohanaframework.org/license
  */
 class Route {
 
-	// Defines the pattern of a <segment>
+	/* Defines the pattern of a <segment> */
 	const REGEX_KEY     = '<([a-zA-Z0-9_]++)>';
 
-	// What can be part of a <segment> value
+	/* What can be part of a <segment> value */
 	const REGEX_SEGMENT = '[^/.,;?\n]++';
 
-	// What must be escaped in the route regex
+	/* What must be escaped in the route regex */
 	const REGEX_ESCAPE  = '[.\\+*?[^\\]${}=!|]';
 
 	/**
@@ -136,42 +141,53 @@ class Route {
 	}
 
 	/**
-	 * Saves or loads the route cache. If your routes will remain the same for
-	 * a long period of time, use this to reload the routes from the cache
-	 * rather than redefining them on every page load.
+	 * Setter/Getter for the route
 	 *
-	 *     if ( ! Route::cache())
-	 *     {
-	 *         // Set routes here
-	 *         Route::cache(TRUE);
-	 *     }
+	 * If your routes will remain the same for a long period of time,
+	 * use this to reload the routes from the cache rather than redefining
+	 * them on every page load.
 	 *
-	 * @param   boolean $save   cache the current routes
-	 * @param   boolean $append append, rather than replace, cached routes when loading
-	 * @return  void    when saving routes
-	 * @return  boolean when loading routes
-	 * @uses    Kohana::cache
+	 * Example:
+	 * ~~~
+	 * if ( ! Route::cache())
+	 * {
+	 *     // Set routes here
+	 *     Route::cache(TRUE);
+	 * }
+	 * ~~~
+	 *
+	 * @param   boolean $save    Cache the current routes [Optional]
+	 * @param   boolean $append  Append, rather than replace, cached routes when loading [Optional]
+	 *
+	 * @return  boolean
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Cache::get
+	 * @uses    Cache::set
 	 */
 	public static function cache($save = FALSE, $append = FALSE)
 	{
-		if ($save === TRUE)
+		$cache = Cache::instance();
+
+		if ($save)
 		{
 			try
 			{
 				// Cache all defined routes
-				Kohana::cache('Route::cache()', Route::$_routes);
+				return $cache->set('Route::cache()', Route::$_routes);
 			}
 			catch (Exception $e)
 			{
 				// We most likely have a lambda in a route, which cannot be cached
-				throw new Gleez_Exception('One or more routes could not be cached (:message)', array(
-						':message' => $e->getMessage(),
-					), 0, $e);
+				throw new Gleez_Exception('One or more routes could not be cached (:message)',
+					array(':message' => $e->getMessage()),	0,	$e
+				);
 			}
 		}
 		else
 		{
-			if ($routes = Kohana::cache('Route::cache()'))
+			if ($routes = $cache->get('Route::cache()'))
 			{
 				if ($append)
 				{
