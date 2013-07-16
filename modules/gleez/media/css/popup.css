@@ -138,6 +138,21 @@
 .popup-footer .btn-block + .btn-block {
   margin-left: 0;
 }
+.popup-body > form.well{
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+.popup-body > form{
+    margin: 0;
+}
 
 @media screen and (min-width: 768px) {
   .popup-dialog {
