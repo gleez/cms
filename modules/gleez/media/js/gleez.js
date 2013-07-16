@@ -534,7 +534,7 @@ jQuery.noConflict();
     });
     
     $.postParseJson = function(json) {
-	if (json.Data) json.Data = $.base64Decode(json.Data);
+	if (json.Body) json.Body = $.base64Decode(json.Body);
 	return json;
     }
 

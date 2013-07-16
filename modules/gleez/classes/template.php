@@ -835,7 +835,7 @@ abstract class Template extends Controller {
 		{
 			if ($this->_response_format === 'application/json')
 			{
-				$this->SetJson('body', base64_encode($this->response->body()));
+				$this->SetJson('Body', base64_encode($this->response->body()));
 			}
 		}
 
@@ -854,9 +854,9 @@ abstract class Template extends Controller {
 			$this->SetJson('css',        $styles);
 			$this->SetJson('js',         $scripts);
 
-			if ( ! Text::check_utf8($this->_json['body']))
+			if ( ! Text::check_utf8($this->_json['Body']))
 			{
-				$this->_json['body'] = utf8_encode($this->_json['body']);
+				$this->_json['Body'] = utf8_encode($this->_json['Body']);
 			}
 
 			$this->_json['Data'] = JSON::encode($this->_json);
