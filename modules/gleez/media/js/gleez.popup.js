@@ -73,9 +73,14 @@
 		// Now, if there are any forms in the popup, hijack them if necessary.
 		// Pass the popup object to the form as data() to handle popup events from form
 		if (data && this.options.consumeform) {
-			$data.find('[type=submit]')
+			$data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
 				 .attr('data-toggle', 'ajaxform')
 				 .data('popup', popup.$element)
+		
+			//add close handler to no/cancel buttons
+			var button = $data.find('[type=submit]input[name="no"], [type=submit]input[name="cancel"]')
+			$(button).attr('data-dismiss', 'popup')
+				 .delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
 		}
 
 		// Prevent blank popups
