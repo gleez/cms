@@ -42,10 +42,11 @@
 			$.ajax({
 				url: this.options.remote,
 				type: "GET",
+				dataType: this.options.type,
 				cache: this.options.cache
 			}, 300)
 			.done(function(data, textStatus, jqXHR){
-				that.reveal(data, that)
+				that.reveal(data, that, jqXHR)
 			})
 			.fail(function (jqXHR, textStatus, errorThrown) {
 				that.$element.find('.popup-title').text(textStatus)
@@ -54,18 +55,23 @@
 		}
 	}
 
-	Popup.prototype.reveal = function (data, popup) {
+	Popup.prototype.reveal = function (data, popup, jqXHR) {
 		var json = false
 
 		// First see if we've retrieved json or something else
 		try {
-			json = $.parseJSON(data);
+			json = $.parseJSON(jqXHR.responseText)
 		} catch (e) {
-			json = false;
+			json = false
+			console.log(e)
 		}
 
-		if (json) {
-			data = json['Data'];
+		if (json && typeof json.Body !== undefined) {
+			data = $.base64Decode(json.Body)
+
+			if (typeof json.title !== undefined){
+				this.options.title = json.title
+			}
 		}
 
 		var $data = $($.parseHTML(data))
@@ -419,6 +425,7 @@
 	  , focusOn: false
 	  , replace: false
 	  , resize: false
+	  , type: 'json'
 	  , manager: 'body'
 	  , icon: false
 	  , title: '&nbsp;'
