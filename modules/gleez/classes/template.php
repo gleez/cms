@@ -828,7 +828,7 @@ abstract class Template extends Controller {
 
 			if ($this->_response_format === 'application/json')
 			{
-					$this->SetJson('body', FALSE);
+				$this->SetJson('Body', FALSE);
 			}
 		}
 		else
