@@ -267,7 +267,7 @@ class Debug {
 		{
 			$file = 'MODPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(MODPATH));
 		}
-		elseif (strpos($file, DOCROOT) === 0)
+		elseif (strpos($file, THEMEPATH) === 0)
 		{
 			$file = 'THEMEPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(THEMEPATH));
 		}
