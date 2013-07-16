@@ -42,6 +42,12 @@ abstract class Template extends Controller {
 	public $title = NULL;
 
 	/**
+	 * The page sub title
+	 * @var string
+	 */
+	public $subtitle = FALSE;
+	
+	/**
 	 * The delimiter page header and site name
 	 * @var string
 	 */
@@ -290,6 +296,7 @@ abstract class Template extends Controller {
 				->set('main_column',   12)
 				->set('head_title',    $this->title)
 				->set('title',         $this->title)
+				->set('subtitle',      $this->subtitle)
 				->set('icon',          $this->icon)
 				->set('front',         FALSE)
 				->set('mission',       FALSE)
@@ -398,6 +405,7 @@ abstract class Template extends Controller {
 				->set('page_class',   $page_class)
 				->set('primary_menu', $primary_menu)
 				->set('title',        $this->title)
+				->set('subtitle',     $this->subtitle)
 				->set('icon',         $this->icon)
 				->set('mission',      $this->template->mission)
 				->set('content',      $this->response->body())
