@@ -1,23 +1,28 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Contains debugging and dumping tools.
+ * Contains debugging and dumping tools
  *
- * @package    Kohana
- * @category   Base
+ * @package    Gleez\Debug
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2007-2012 Kohana Team
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ * @license    http://kohanaframework.org/license
  */
-class Kohana_Debug {
+class Debug {
 
 	/**
 	 * Returns an HTML string of debugging information about any number of
 	 * variables, each wrapped in a "pre" tag:
 	 *
-	 *     // Displays the type and value of each variable
-	 *     echo Debug::vars($foo, $bar, $baz);
+	 * Example:
+	 * ~~~
+	 * // Displays the type and value of each variable
+	 * echo Debug::vars($foo, $bar, $baz);
+	 * ~~~
 	 *
-	 * @param   mixed   $var,...    variable to debug
 	 * @return  string
 	 */
 	public static function vars()
@@ -34,7 +39,7 @@ class Kohana_Debug {
 			$output[] = Debug::_dump($var, 1024);
 		}
 
-		return '<pre class="debug">'.implode("\n", $output).'</pre>';
+		return '<pre class="debug">'.implode(PHP_EOL, $output).'</pre>';
 	}
 
 	/**
@@ -42,9 +47,10 @@ class Kohana_Debug {
 	 *
 	 * Borrows heavily on concepts from the Debug class of [Nette](http://nettephp.com/).
 	 *
-	 * @param   mixed   $value              variable to dump
-	 * @param   integer $length             maximum length of strings
-	 * @param   integer $level_recursion    recursion limit
+	 * @param   mixed   $value            Variable to dump
+	 * @param   integer $length           Maximum length of strings [Optional]
+	 * @param   integer $level_recursion  Recursion limit [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function dump($value, $length = 128, $level_recursion = 10)
@@ -55,10 +61,11 @@ class Kohana_Debug {
 	/**
 	 * Helper for Debug::dump(), handles recursion in arrays and objects.
 	 *
-	 * @param   mixed   $var    variable to dump
-	 * @param   integer $length maximum length of strings
-	 * @param   integer $limit  recursion limit
-	 * @param   integer $level  current recursion level (internal usage only!)
+	 * @param   mixed    $var     Variable to dump
+	 * @param   integer  $length  Maximum length of strings [Optional]
+	 * @param   integer  $limit   Recursion limit [Optional]
+	 * @param   integer  $level   Current recursion level (internal usage only!) [Optional]
+	 *
 	 * @return  string
 	 */
 	protected static function _dump( & $var, $length = 128, $limit = 10, $level = 0)
@@ -85,13 +92,9 @@ class Kohana_Debug {
 				{
 					$file = $meta['uri'];
 
-					if (function_exists('stream_is_local'))
+					if (stream_is_local($file))
 					{
-						// Only exists on PHP >= 5.2.4
-						if (stream_is_local($file))
-						{
-							$file = Debug::path($file);
-						}
+						$file = Debug::path($file);
 					}
 
 					return '<small>resource</small><span>('.$type.')</span> '.htmlspecialchars($file, ENT_NOQUOTES, Kohana::$charset);
@@ -236,14 +239,18 @@ class Kohana_Debug {
 	}
 
 	/**
-	 * Removes application, system, modpath, or docroot from a filename,
-	 * replacing them with the plain text equivalents. Useful for debugging
-	 * when you want to display a shorter path.
+	 * Removes application, system, modpath, theme path or docroot
+	 * from a filename, replacing them with the plain text equivalents.
+	 * Useful for debugging when you want to display a shorter path.
 	 *
-	 *     // Displays SYSPATH/classes/kohana.php
-	 *     echo Debug::path(Kohana::find_file('classes', 'kohana'));
+	 * Examples:
+	 * ~~~
+	 * // Displays SYSPATH/classes/kohana.php
+	 * echo Debug::path(Kohana::find_file('classes', 'kohana'));
+	 * ~~~
 	 *
-	 * @param   string  $file   path to debug
+	 * @param   string  $file  Path to debug
+	 *
 	 * @return  string
 	 */
 	public static function path($file)
@@ -262,6 +269,10 @@ class Kohana_Debug {
 		}
 		elseif (strpos($file, DOCROOT) === 0)
 		{
+			$file = 'THEMEPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(THEMEPATH));
+		}
+		elseif (strpos($file, DOCROOT) === 0)
+		{
 			$file = 'DOCROOT'.DIRECTORY_SEPARATOR.substr($file, strlen(DOCROOT));
 		}
 
@@ -275,11 +286,12 @@ class Kohana_Debug {
 	 *     // Highlights the current line of the current file
 	 *     echo Debug::source(__FILE__, __LINE__);
 	 *
-	 * @param   string  $file           file to open
-	 * @param   integer $line_number    line number to highlight
-	 * @param   integer $padding        number of padding lines
+	 * @param   string   $file         File to open
+	 * @param   integer  $line_number  Line number to highlight
+	 * @param   integer  $padding      Number of padding lines [Optional]
+	 *
 	 * @return  string   source of file
-	 * @return  FALSE    file is unreadable
+	 * @return  boolean  FALSE    file is unreadable
 	 */
 	public static function source($file, $line_number, $padding = 5)
 	{
@@ -338,10 +350,14 @@ class Kohana_Debug {
 	/**
 	 * Returns an array of HTML strings that represent each step in the backtrace.
 	 *
-	 *     // Displays the entire current backtrace
-	 *     echo implode('<br/>', Debug::trace());
+	 * Example:
+	 * ~~~
+	 * // Displays the entire current backtrace
+	 * echo implode('<br/>', Debug::trace());
+	 * ~~~
 	 *
-	 * @param   array   $trace
+	 * @param   array  $trace [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function trace(array $trace = NULL)
