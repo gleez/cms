@@ -132,6 +132,12 @@ abstract class Template extends Controller {
 	protected $_tabs;
 
 	/**
+	 * Sub Tabs navigation
+	 * @var array
+	 */
+	protected $_subtabs;
+	
+	/**
 	 * Quick Links navigation
 	 * @var  array
 	 */
@@ -301,6 +307,7 @@ abstract class Template extends Controller {
 				->set('front',         FALSE)
 				->set('mission',       FALSE)
 				->set('tabs',          FALSE)
+				->set('subtabs',       FALSE)
 				->set('actions',       FALSE)
 				->set('_user',         $this->_auth->get_user())
 				->bind('datatables',   $this->_datatables);
@@ -417,6 +424,11 @@ abstract class Template extends Controller {
 				$this->template->tabs = View::factory('tabs')->set('tabs', $this->_tabs);
 			}
 
+			if (count($this->_subtabs) > 0)
+			{
+				$this->template->subtabs = View::factory('tabs')->set('tabs', $this->_subtabs);
+			}
+	
 			if (count($this->_actions) > 0)
 			{
 				$this->template->actions = View::factory('actions')->set('actions', $this->_actions);
