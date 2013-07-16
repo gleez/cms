@@ -1,17 +1,18 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Base session class
  *
  * @package    Gleez\Session
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Gleez_Session extends Kohana_Session {
-        
-        /**
-         * Overload catch exception with session destory and log
-         * 
+
+	/**
+	 * Overload catch exception with session destroy and log
+	 *
 	 * Loads existing session data.
 	 *
 	 *     $session->read();
@@ -48,17 +49,13 @@ abstract class Gleez_Session extends Kohana_Session {
 		}
 		catch (Exception $e)
 		{
-                        // Destroy the session
-                        $this->destroy();
-                        
-			// Error reading the session, usually
-			// a corrupt session.
-			//throw new Session_Exception('Error reading session data.', NULL, Session_Exception::SESSION_CORRUPT);
-                        
-                        // Log & ignore all errors when a read fails
-                        Kohana::$log->add(Log::ERROR, Kohana_Exception::text($e))->write();
-                        
-                        return;
+			// Destroy the session
+			$this->destroy();
+
+			// Log & ignore all errors when a read fails
+			Kohana::$log->add(Log::ERROR, Gleez_Exception::text($e))->write();
+
+			return;
 		}
 
 		if (is_array($data))
