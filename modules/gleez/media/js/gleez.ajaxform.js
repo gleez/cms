@@ -79,13 +79,18 @@
 	    var datatable = $(form).data('datatable') || false
 	    $(form).remove()
 
-	    //redraw dataTables if its a dataTable popup or form add/edit/delete
-	    if( datatable /*&& $.fn.DataTable.fnIsDataTable(datatable) */){
+	    if(datatable){
+		//redraw dataTables if its a dataTable popup or form add/edit/delete
 		$(datatable).dataTable().fnDraw()
 	    }
     
 	    //Lets check if the form is in popup window
-	    if(popup){
+	    if(popup && typeof data.messages !== undefined){
+		$(popup).find('.popup-title').html(data.messages[0].type)
+		$(popup).find('.popup-body').html(data.messages[0].text)
+		$(popup).find('.popup-footer').html('&nbsp')
+	    }
+	    else if(popup){
 		$(popup).find('.popup-body').html('Success')
 		$(popup).find('.popup-footer').html('&nbsp')
 	    }
