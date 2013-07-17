@@ -160,7 +160,7 @@ class Controller_Page extends Template {
 
 		if (ACL::post('edit', $post))
 		{
-			$this->_tabs[] = array('link' => $post->rawurl, 'text' => __('View'));
+			$this->_tabs[] = array('link' => $post->url, 'text' => __('View'));
 			$this->_tabs[] = array('link' => $post->edit_url, 'text' => __('Edit'));
 		}
 
