@@ -104,6 +104,7 @@
 					 .data('popup', this.$element)
 					 .data('form', this.forms)
 					 .data('button', button)
+					 .text($(button).val())
 				
 				$(closeBtn).attr('class', 'btn')
 					.attr('href', '#')
