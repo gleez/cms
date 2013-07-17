@@ -99,7 +99,7 @@ class Controller_Comment extends Template {
 	{
 		$id          = (int) $this->request->param('id', 0);
 		$comment     = ORM::factory('comment', $id)->access('delete');
-		$this->title = __('Delete Comment :title', array(':title' => $comment->title));
+		$this->title = __('Are you absolutely sure?');
 		$destination = empty($this->redirect) ? array() : array('destination' => $this->redirect);
 		$post        = $this->request->post();
 		$route       = Route::get('comment')->uri(array('action' => 'view', 'id' => $comment->id));
@@ -123,14 +123,14 @@ class Controller_Comment extends Template {
 			try
 			{
 				$comment->delete();
-				Message::success(__('Comment %title deleted successful!', array(':title' => $title)));
+				Message::success(__('Comment %title deleted successful!', array('%title' => $title)));
 				Kohana::$log->add(LOG::INFO, 'Comment: :title deleted.', array(':title' => $title));
 			}
 			catch (Exception $e)
 			{
 				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting comment id: :id, :message',
 					array(':id' => $comment->id, ':message' => $e->getMessage()));
-				Message::error('An error occurred deleting comment %post.',array(':post' => $title));
+				Message::error('An error occurred deleting comment %post.',array('%post' => $title));
 			}
 
 			$redirect = empty($destination) ? $redirect : $this->redirect;
