@@ -330,7 +330,7 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw new HTTP_Exception_403('Unauthorised attempt to non-existent action :act.',
+			throw new HTTP_Exception_404('Unauthorised attempt to non-existent action :act.',
 				array(':act' => $action));
 		}
 
