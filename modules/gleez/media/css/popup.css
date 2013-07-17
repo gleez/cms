@@ -90,6 +90,7 @@
 .popup-title {
   margin: 0;
   line-height: 1.428571429;
+  text-transform:capitalize;
 }
 
 .popup-body {
