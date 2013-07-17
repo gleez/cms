@@ -75,10 +75,16 @@
 	    Ajaxform.prototype.validationErrors(data, form);
 	}
 	else if (data.FormSaved == true){
-	    //Lets check if the form is in popup window
-	    var popup = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
+	    var popup     = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
+	    var datatable = $(form).data('datatable') || false
 	    $(form).remove()
 
+	    //redraw dataTables if its a dataTable popup or form add/edit/delete
+	    if( datatable && $.fn.DataTable.fnIsDataTable(datatable) ){
+		datatable.fnDraw()
+	    }
+    
+	    //Lets check if the form is in popup window
 	    if(popup){
 		$(popup).find('.popup-body').html('Success')
 		$(popup).find('.popup-footer').html('&nbsp')
@@ -303,6 +309,7 @@
 	// if event has been canceled, don't proceed
 	if (!e.isDefaultPrevented()) {
 	    e.preventDefault()
+	    
 	    option.clkbtn = $this
 	    $target.data('clkbtn', $this)
 	    $target.removeData('ajaxform').aform(option)
