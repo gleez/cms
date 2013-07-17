@@ -132,6 +132,8 @@ class Controller_Page extends Template {
 	/**
 	 * Page view
 	 *
+	 * @throws  HTTP_Exception_403
+	 *
 	 * @uses    ACL::post
 	 * @uses    ACL::check
 	 * @uses    Post::dcache
@@ -142,7 +144,6 @@ class Controller_Page extends Template {
 	 * @uses    Route::uri
 	 * @uses    User::providers
 	 * @uses    Comment::form
-	 * @throws  HTTP_Exception_403
 	 */
 	public function action_view()
 	{
@@ -159,7 +160,7 @@ class Controller_Page extends Template {
 
 		if (ACL::post('edit', $post))
 		{
-			$this->_tabs[] = array('link' => $post->url, 'text' => __('View'));
+			$this->_tabs[] = array('link' => $post->rawurl, 'text' => __('View'));
 			$this->_tabs[] = array('link' => $post->edit_url, 'text' => __('Edit'));
 		}
 
@@ -291,8 +292,10 @@ class Controller_Page extends Template {
 	/**
 	 * Page edit
 	 *
+	 * @throws HTTP_Exception_403
+	 *
 	 * @uses    ACL::post
-	 * @uses    Gleez_Config::load
+	 * @uses    Config::load
 	 * @uses    Request::query
 	 * @uses    Request::redirect
 	 * @uses    Route::get
@@ -302,7 +305,6 @@ class Controller_Page extends Template {
 	 * @uses    Path::load
 	 * @uses    Message::success
 	 * @uses    Log::add
-	 * @throws HTTP_Exception_403
 	 */
 	public function action_edit()
 	{
@@ -316,7 +318,7 @@ class Controller_Page extends Template {
 		}
 
 		$this->title = $post->title;
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
@@ -388,6 +390,8 @@ class Controller_Page extends Template {
 	/**
 	 * Delete page
 	 *
+	 * @throws  HTTP_Exception_403
+	 *
 	 * @uses    ACL::post
 	 * @uses    Request::query
 	 * @uses    Request::redirect
@@ -399,7 +403,6 @@ class Controller_Page extends Template {
 	 * @uses    Message::success
 	 * @uses    Message::error
 	 * @uses    Log::add
-	 * @throws  HTTP_Exception_403
 	 */
 	public function action_delete()
 	{
@@ -463,15 +466,25 @@ class Controller_Page extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 *
+	 * @uses    Config::load
+	 * @uses    Config::get
+	 * @uses    Log::add
+	 * @uses    ACL::check
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    Route::url
+	 * @uses    Meta::links
+	 * @uses    URL::canonical
 	 */
 	public function action_term()
 	{
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 
 		if( ! $config->use_category)
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
-			throw new HTTP_Exception_403(__('Attempt to access disabled feature'));
+			throw new HTTP_Exception_403('Attempt to access disabled feature');
 		}
 
 		$id    = (int) $this->request->param('id', 0);
@@ -481,7 +494,7 @@ class Controller_Page extends Template {
 		if ( ! $term->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
-			throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term'=>$id));
+			throw new HTTP_Exception_404('Term ":term" Not Found', array(':term'=>$id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
@@ -494,7 +507,7 @@ class Controller_Page extends Template {
 
 		$posts = $term->posts;
 
-		if ( ! ACL::check('administer terms') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer terms') AND ! ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -504,7 +517,7 @@ class Controller_Page extends Template {
 		if ($total == 0)
 		{
 			Kohana::$log->add(Log::INFO, 'No topics found');
-			$this->response->body( View::factory('forum/none') );
+			$this->response->body(View::factory('forum/none'));
 			return;
 		}
 		$rss_link   = Route::get('rss')->uri(array('controller' => 'page', 'action' => 'term', 'id' => $term->id));
@@ -541,21 +554,31 @@ class Controller_Page extends Template {
 	/**
 	 * Tags view
 	 *
-	 * @throw HTTP_Exception_404
+	 * @throw  HTTP_Exception_404
+	 *
+	 * @uses   Config::load
+	 * @uses   Config::get
+	 * @uses   Log::add
+	 * @uses   Text::ucfirst
+	 * @uses   Route::get
+	 * @uses   Route::uri
+	 * @uses   Route::url
+	 * @uses   Meta::links
+	 * @uses   URL::canonical
 	 */
 	public function action_tag()
 	{
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 		$id = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
 
 		if ( ! $tag->loaded())
 		{
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page tag');
-			throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag'=>$id));
+			throw new HTTP_Exception_404('Tag ":tag" Not Found', array(':tag'=>$id));
 		}
 
-		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name) ) );
+		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name)));
 		$view        = View::factory('page/list')
 					->set('teaser',      TRUE)
 					->set('config',      $config)
@@ -565,7 +588,7 @@ class Controller_Page extends Template {
 
 		$posts = $tag->posts;
 
-		if ( ! ACL::check('administer tags') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer tags') AND ! ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -575,7 +598,7 @@ class Controller_Page extends Template {
 		if ($total == 0)
 		{
 			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body( View::factory('page/none') );
+			$this->response->body(View::factory('page/none'));
 			return;
 		}
 
