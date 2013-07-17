@@ -80,8 +80,8 @@
 	    $(form).remove()
 
 	    //redraw dataTables if its a dataTable popup or form add/edit/delete
-	    if( datatable && $.fn.DataTable.fnIsDataTable(datatable) ){
-		datatable.fnDraw()
+	    if( datatable /*&& $.fn.DataTable.fnIsDataTable(datatable) */){
+		$(datatable).dataTable().fnDraw()
 	    }
     
 	    //Lets check if the form is in popup window
