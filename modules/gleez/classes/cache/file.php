@@ -249,8 +249,8 @@ class Cache_File extends Cache {
 		if ( ! $dir->isDir())
 		{
 			// Create the directory
-			// @todo use System::mkdir
-			if ( ! mkdir($directory, 0777, TRUE))
+		
+			if (!_make_directory($directory, 0777, TRUE))
 			{
 				throw new Cache_Exception(__METHOD__.' unable to create directory : :directory', array(':directory' => $directory));
 			}
@@ -319,7 +319,7 @@ class Cache_File extends Cache {
 	 * @return  boolean
 	 * @throws  Cache_Exception
 	 *
-	 * @todo
+	 *
 	 */
 	public function delete_pattern($pattern)
 	{
@@ -350,7 +350,7 @@ class Cache_File extends Cache {
 		}
 		else
 		{
-			// @todo
+			// @todo...
 		}
 	}
 
@@ -530,11 +530,13 @@ class Cache_File extends Cache {
 	 *
 	 * @throws  Cache_Exception
 	 *
-	 * @todo    Use here System::mkdir
+	 *
 	 */
 	protected function _make_directory($directory, $mode = 0777, $recursive = FALSE, $context = NULL)
 	{
-		if ( ! mkdir($directory, $mode, $recursive, $context))
+		if ($recursive) {$recursive = "-p";}
+		
+		if (system("mkdir ".$recursive." ".$context.$directory." -m ".$mode)) //( ! mkdir($directory, $mode, $recursive, $context))
 		{
 			throw new Cache_Exception('Failed to create the defined cache directory : :directory', array(':directory' => $directory));
 		}
