@@ -95,7 +95,6 @@
 .popup-body {
   position: relative;
   padding: 20px;
-  padding-bottom: 0;
   background-color: #fff;
 }
 
@@ -126,7 +125,6 @@
 
 .popup-body > form > div.control-group:last-of-type{
   margin-bottom: 0;
-  padding-bottom: 5px;
 }
 
 .popup-body .form-actions {
