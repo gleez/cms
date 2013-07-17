@@ -9,20 +9,23 @@
  */
 class Controller_Comment extends Template {
 
-	protected $_route;
-
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 */
 	public function before()
 	{
 		ACL::required('access comment');
-		$this->_route = Route::get('comment')->uri(array('action' => 'list'));
 
 		parent::before();
 	}
 
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id       = (int) $this->request->param('id', 0);
 		$comment  = ORM::factory('comment', $id)->access();
+		$route    =  Route::get('comment')->uri(array('action' => 'list'));
 
 		if ( ! $comment->loaded())
 		{
@@ -31,7 +34,7 @@ class Controller_Comment extends Template {
 
 			if ( ! $this->_internal)
 			{
-				$this->request->redirect($this->_route, 404);
+				$this->request->redirect($route, 404);
 			}
 		}
 
@@ -43,21 +46,25 @@ class Controller_Comment extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Edit comment
+	 *
+	 * @uses  Request::query
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  URL::query
+	 * @uses  Message::success
+	 * @uses  Log::add
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
 		$comment  = ORM::factory('comment', $id)->access('edit');
 
-		if ( ! $comment->loaded())
-		{
-			Message::error(__('Comment doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
-
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($this->_route, 404);
-			}
-		}
+		// Set form destination
+		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
+		// Set form action
+		$action = Route::get('comment')->uri(array('id' => $id, 'action' => 'edit')).URL::query($destination);
 
 		$this->title = __('Edit Comment');
 		$view = View::factory('comment/form')
@@ -65,30 +72,29 @@ class Controller_Comment extends Template {
 					->set('is_edit',      TRUE)
 					->set('auth',         Auth::instance())
 					->set('item',         $comment)
-					->set('action',       Request::current()->uri())
-					->set('destination',  array('destination' => $this->redirect))
+					->set('action',       $action)
+					->set('destination',  $destination)
 					->bind('errors',      $this->_errors)
 					->bind('post',        $comment);
 
 		if ($this->valid_post('comment'))
 		{
-			$redirect = empty($this->redirect) ? $this->_route : $this->redirect ;
-
 			try
 			{
+				/** @var $comment ORM */
 				$comment->values($_POST)->save();
-				Message::success(__('Comment has been updated.'));
+
+				Message::success(__('Comment %title has been updated.', array('%title' => $comment->title)));
 				Kohana::$log->add(LOG::INFO, 'Comment: :title updated.', array(':title' => $comment->title));
 
 				if ( ! $this->_internal)
 				{
-					$this->request->redirect($redirect, 200);
+					$this->request->redirect(empty($destination) ? $comment->url : $this->request->query('destination'));
 				}
 			}
 			catch (ORM_Validation_Exception $e)
 			{
 				$this->_errors = $e->errors('models', TRUE);
-				Message::error(__('Please see the errors below!'));
 			}
 		}
 
