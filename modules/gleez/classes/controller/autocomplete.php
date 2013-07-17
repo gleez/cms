@@ -18,8 +18,8 @@ class Controller_AutoComplete extends Controller {
                                      ':type' => $this->request->uri(),
                               ));
 		}
-		
-		ACL::Required('access content');
+
+		ACL::required('access content');
 		parent::before();
 	}
 	
