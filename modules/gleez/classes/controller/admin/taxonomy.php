@@ -9,9 +9,15 @@
  */
 class Controller_Admin_Taxonomy extends Controller_Admin {
 
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 */
 	public function before()
 	{
-		ACL::Required('administer terms');
+		ACL::required('administer terms');
+
 		parent::before();
 	}
 
