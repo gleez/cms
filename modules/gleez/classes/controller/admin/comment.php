@@ -12,33 +12,18 @@
 class Controller_Admin_Comment extends Controller_Admin {
 
 	/**
-	 * Currently destination (for Datatables)
-	 * @var string
-	 */
-	private $destination;
-
-	/**
-	 * Currently form action (for Datatables)
-	 * @var string
-	 */
-	private $bulk_action;
-
-	/**
 	 * The before() method is called before controller action
 	 *
 	 * @uses  ACL::required
-	 * @uses  Route::get
-	 * @uses  Route::uri
-	 * @uses  Request::action
 	 */
 	public function before()
 	{
 		ACL::required('administer comment');
 
-		parent::before();
+		$this->_destination = '?destination='.Route::get('admin/comment')->uri(array('action' => $this->request->action()));
+		$this->_form_action = Route::get('admin/comment')->uri(array('action' => 'process')).$this->_destination;
 
-		$this->destination = '?destination='.Route::get('admin/comment')->uri(array('action' => $this->request->action()));
-		$this->bulk_action = Route::get('admin/comment')->uri(array('action' => 'process')).$this->destination;
+		parent::before();
 	}
 
 	/**
@@ -63,20 +48,20 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'publish'));
 
 		$this->title = __('Comments');
 
-		if (isset($bulk_actions['publish']))
-		{
-			unset($bulk_actions['publish']);
-		}
-		
 		$view = View::factory('admin/comment/list')
 				->bind('datatables',   $this->_datatables)
 				->set('is_datatables', Request::is_datatables())
 				->set('bulk_actions',  Comment::bulk_actions(TRUE))
-				->set('action',        $this->bulk_action)
+				->set('action',        $this->_form_action)
 				->set('url',           Route::url('admin/comment', array('action' => 'list'), TRUE));
 
 		$this->response->body($view);
@@ -112,20 +97,20 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_pending()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'draft'));
 
 		$this->title = __('Pending Comments');
-
-		if (isset($bulk_actions['publish']))
-		{
-			unset($bulk_actions['publish']);
-		}
 
 		$view = View::factory('admin/comment/list')
 			->bind('datatables',   $this->_datatables)
 			->set('is_datatables', Request::is_datatables())
 			->set('bulk_actions',  Comment::bulk_actions(TRUE))
-			->set('action',        $this->bulk_action)
+			->set('action',        $this->_form_action)
 			->set('url',           Route::url('admin/comment', array('action' => 'pending'), TRUE));
 
 		$this->response->body($view);
@@ -136,20 +121,20 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_spam()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'spam'));
 
 		$this->title = __('Spam Comments');
-
-		if (isset($bulk_actions['publish']))
-		{
-			unset($bulk_actions['publish']);
-		}
 
 		$view = View::factory('admin/comment/list')
 			->bind('datatables',   $this->_datatables)
 			->set('is_datatables', Request::is_datatables())
 			->set('bulk_actions',  Comment::bulk_actions(TRUE))
-			->set('action',        $this->bulk_action)
+			->set('action',        $this->_form_action)
 			->set('url',           Route::url('admin/comment', array('action' => 'pending'), TRUE));
 
 		$this->response->body($view);
@@ -304,17 +289,15 @@ class Controller_Admin_Comment extends Controller_Admin {
 					$author = HTML::anchor(Route::get('user')->uri(array('action' => 'profile', 'id' => $post->author)), $post->user->nick, array());
 				}
 
-				$this->_datatables->add_row(
-					array(
+				$this->_datatables->add_row(array(
 						Form::checkbox('comments['.$post->id.']', $post->id, isset($_POST['comments'][$post->id]) ),
-						HTML::anchor($post->url, $post->title, array('class'=>'action-view','title' => Text::limit_words($post->rawbody, 128, ' ...'))),
+						HTML::anchor($post->url, Text::limit_chars($post->title,40), array('class'=>'action-view','title' => Text::limit_chars($post->rawbody, 120))),
 						$author,
 						HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')),
 						Date::formatted_time($post->created),
-						HTML::icon($post->edit_url.$this->destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
-						HTML::icon($post->delete_url.$this->destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete')))
-					)
-				);
+						HTML::icon($post->edit_url.$this->_destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
+						HTML::icon($post->delete_url.$this->_destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete'), 'data-title' => __('Delete Comment'), 'data-toggle' => 'popup'))
+				));
 			}
 		}
 	}

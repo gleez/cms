@@ -16,7 +16,7 @@ class Controller_Admin_Path extends Controller_Admin {
 	 */
 	public function before()
 	{
-		ACL::Required('administer paths');
+		ACL::required('administer paths');
 
 		parent::before();
 	}
