@@ -25,7 +25,8 @@
 		this.$backdrop =
 		this.isShown   = null
 		this.forms     = false
-
+	
+		this.options.datatable = $(this.options.click).closest('table.dataTable').data('datatable')
 		this.options.loading && this.loading()
 		this.local()
 		this.remote()
@@ -88,15 +89,16 @@
 				var button    = $data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
 				,   submitBtn = $('<a>Save changes</a>')
 				,   closeBtn  = $('<a>Close</a>')
-				
+
 				//hide all buttons in popup body
 				$data.find('[type=submit]').hide()
 				$data.find('[type=button]').hide()
-				$data.find('form-actions').hide()
+				$data.find('.form-actions').hide()
 			
 				//add the popup element to form data
 				$(this.forms).attr('data-popup', 'true')
-					     .data('popup', this.$element)
+					     .data('popup',	 this.$element)
+					     .data('datatable',	 this.options.datatable)
 			
 				//create submit and cancel buttons in popup footer
 				$(submitBtn).attr('data-toggle', 'ajaxform')
@@ -464,9 +466,11 @@
 	  , modaloverflow: true
 	  , consumetab: true
 	  , consumeform: true
+	  , datatable: false
 	  , focusOn: false
 	  , replace: false
 	  , resize: false
+	  , click: false
 	  , type: 'json'
 	  , manager: 'body'
 	  , icon: false
@@ -498,6 +502,9 @@
 
 		e.preventDefault()
 
+		//reference the click handler for further use
+		option.click = $this
+	
 		$target
 		  .popup(option)
 		  .one('hide', function () {
