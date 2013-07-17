@@ -95,14 +95,15 @@
 				$data.find('form-actions').hide()
 			
 				//add the popup element to form data
-				$(this.forms).attr('data-popup', 'true').data('popup', this.$element)
+				$(this.forms).attr('data-popup', 'true')
+					     .data('popup', this.$element)
 			
 				//create submit and cancel buttons in popup footer
 				$(submitBtn).attr('data-toggle', 'ajaxform')
-					 .attr('class', 'btn btn-primary')
-					 .attr('href', '#')
-					 .data('popup', this.$element)
-					 .data('form', this.forms)
+					 .attr('class',  'btn btn-primary')
+					 .attr('href',   '#')
+					 .data('popup',  this.$element)
+					 .data('form',   this.forms)
 					 .data('button', button)
 					 .text($(button).val())
 				

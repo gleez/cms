@@ -3,8 +3,8 @@
  * without a refresh. Requires jquery form plugin @link
  *
  * @package    	Gleez\AjaxForm
- * @version    	1.0
- * @requires   	jQuery v1.8 or later
+ * @version    	1.1
+ * @requires   	jQuery v1.9 or later
  * @author     	Sandeep Sangamreddi - Gleez
  * @copyright  	(c) 2011-2013 Gleez Technologies
  * @license    	http://gleezcms.org/license Gleez CMS License
@@ -17,105 +17,106 @@
     // ======================
 
     var Ajaxform = function (element, options) {
-		//Set the options
-		options.dataType        = options.datatype
-		options.beforeSerialize = options.beforeserialize
-		options.beforeSubmit    = options.beforesubmit || Ajaxform.prototype.beforeSubmit
-		options.success       	= options.success || Ajaxform.prototype.showResponse
-		options.error       	= options.error || Ajaxform.prototype.errorResponse
-		options.resetForm       = options.resetform
-		options.clearForm       = options.clearform
-		options.closeKeepAlive  = options.closekeepalive
-		options.extraData       = options.extradata
-		options.replaceTarget   = options.replacetarget
-		options.includeHidden   = options.includehidden
-		options.uploadProgress  = options.uploadprogress
+	//Set the options
+	options.dataType        = options.datatype
+	options.beforeSerialize = options.beforeserialize
+	options.beforeSubmit    = options.beforesubmit || Ajaxform.prototype.beforeSubmit
+	options.success       	= options.success || Ajaxform.prototype.showResponse
+	options.error       	= options.error || Ajaxform.prototype.errorResponse
+	options.resetForm       = options.resetform
+	options.clearForm       = options.clearform
+	options.closeKeepAlive  = options.closekeepalive
+	options.extraData       = options.extradata
+	options.replaceTarget   = options.replacetarget
+	options.includeHidden   = options.includehidden
+	options.uploadProgress  = options.uploadprogress
 
-		//delete unsed options
-		delete options.datatype
-		delete options.beforeserialize
-		delete options.beforesubmit
-		delete options.resetform
-		delete options.clearform
-		delete options.closekeepalive
-		delete options.extradata
-		delete options.replacetarget
-		delete options.includehidden
-		delete options.uploadprogress
+	//delete unsed options
+	delete options.datatype
+	delete options.beforeserialize
+	delete options.beforesubmit
+	delete options.resetform
+	delete options.clearform
+	delete options.closekeepalive
+	delete options.extradata
+	delete options.replacetarget
+	delete options.includehidden
+	delete options.uploadprogress
 
-		this.init(element, options)
+	this.init(element, options)
     }
 
     Ajaxform.prototype.init = function(element, options) {
-		this.$element = element
-		$(element).ajaxSubmit(options).removeData('jqxhr')
+	this.$element   = element
+	$(element).ajaxSubmit(options).removeData('jqxhr')
     }
 
     Ajaxform.prototype.beforeSubmit = function(formData, form, options) {
-		//add submit button to form array if its from popup request
-		if(options.button && options.button.length == 1){
-			var button   = Array()
-			button.name  = options.button.attr('name')
-			button.value = options.button.attr('value')
-			button.type  = options.button.attr('type')
-			
-			formData.push(button)
-		}
-		
-		// Hide any errorContainers
-		$(form).find('.error-message-container').slideUp(250)
-		$(form).find('[type=submit]').attr('disabled', true).addClass('InProgress1')
-		return true;
+	//add submit button to form array if its from popup request
+	if(options.button && options.button.length == 1){
+	    var subButton   = Array()
+	    subButton.name  = options.button.attr('name')
+	    subButton.value = options.button.attr('value')
+	    subButton.type  = options.button.attr('type')
+	    
+	    //append to form data
+	    formData.push(subButton)
+	}
+
+	// Hide any errorContainers
+	$(form).find('.error-message-container').slideUp(250)
+	$(options.clkbtn).attr('disabled', true).addClass('InProgress')
+
+	return true
     }
 
     Ajaxform.prototype.showResponse = function(data, status, xhr, form) {
-		if (data.FormSaved == false && data.errors){
-			Ajaxform.prototype.validationErrors(data, form);
-		}
-		else if (data.FormSaved == true){
-			//Lets check if the form is in popup window
-			var popup = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
-			$(form).remove()
+	if (data.FormSaved == false && data.errors){
+	    Ajaxform.prototype.validationErrors(data, form);
+	}
+	else if (data.FormSaved == true){
+	    //Lets check if the form is in popup window
+	    var popup = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
+	    $(form).remove()
 
-			if(popup){
-				$(popup).find('.popup-body').html('Success')
-				$(popup).find('.popup-footer').html('&nbsp')
-			}
-
-		}
+	    if(popup){
+		$(popup).find('.popup-body').html('Success')
+		$(popup).find('.popup-footer').html('&nbsp')
+	    }
+	}
     }
 
     Ajaxform.prototype.errorResponse = function(xhr, status, error, form) {
-		console.log('Error Response')
-		console.log(error)
+	console.log('Error Response')
+	console.log(error)
     }
 
     Ajaxform.prototype.validationErrors = function(data, form) {
-		var title = 'Error'
-		  , tmpl = '<div class="alert alert-error alert-block">'
+	var title = 'Error'
+	  , tmpl = '<div class="alert alert-error alert-block">'
 
-		tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>';
-			// Loop through the errors
-			$.each(data.errors, function(i, value) {
-			// And add the error to the list.
-			tmpl += '<li>' + value + '</li>';
-			// Let's guesstimate the input that gave us an error
-			var $inputField = $('[name*="'+i+'"]')
+	tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>';
+		// Loop through the errors
+		$.each(data.errors, function(i, value) {
+		// And add the error to the list.
+		tmpl += '<li>' + value + '</li>';
+		// Let's guesstimate the input that gave us an error
+		var $inputField = $('[name*="'+i+'"]')
 
-			if ($inputField.length){
-				$($inputField).parent('div.controls').parent('div.control-group').addClass('error')
-			}
-			});
-		tmpl += '</ul></div>';
-
-		// If the target block doesn't exist..
-		if (!$('.error-message-container').length){
-			$(form).prepend('<div class="error-message-container" style="display:none"></div>')
+		if ($inputField.length){
+			$($inputField).parent('div.controls').parent('div.control-group').addClass('error')
 		}
+		});
+	tmpl += '</ul></div>';
 
-		// Empty any previous error messages, insert the new errors and slide it in to view.
-		$(form).find('.error-message-container').empty().html(tmpl).slideDown(250)
-		$(form).find('[type=submit]').removeAttr('disabled')
+	// If the target block doesn't exist..
+	if (!$('.error-message-container').length){
+	    $(form).prepend('<div class="error-message-container" style="display:none"></div>')
+	}
+
+	// Empty any previous error messages, insert the new errors and slide it in to view.
+	$(form).find('.error-message-container').empty().html(tmpl).slideDown(250)
+	$(form).data('clkbtn').removeAttr('disabled').removeClass('InProgress')
     }
 
     Ajaxform.prototype.processData = function(data, $el) {
@@ -263,6 +264,7 @@
       , resetform: false
       , clearform: false
       , button: false
+      , clkbtn: false
       , target: false
       , success: false
       , context: false
@@ -301,6 +303,8 @@
 	// if event has been canceled, don't proceed
 	if (!e.isDefaultPrevented()) {
 	    e.preventDefault()
+	    option.clkbtn = $this
+	    $target.data('clkbtn', $this)
 	    $target.removeData('ajaxform').aform(option)
 	}
     })
