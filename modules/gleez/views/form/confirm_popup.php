@@ -1,3 +1,4 @@
+<?php defined("SYSPATH") or die("No direct script access.") ?>
 
 <?php echo Form::open($action, array('id'=>'delete-form ', 'class'=>'form form-horizontal')); ?>
 	<p class="warning"><?php _e("Unexpected bad things will happen if you don't read this!"); ?></p>
