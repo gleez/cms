@@ -81,7 +81,7 @@ return array (
   'Comment doesn\'t exists!' => '评论 不存在！',
   'Comment :id' => '评论 :id',
   'Comment display mode' => '评论显示方式',
-  'Comment has been updated.' => '评论已被更新。',
+  'Comment %title has been updated.' => '评论已被更新。',
   'Comment Order' => '评论顺序',
   'Comments' => '评论',
   'Comments per page' => '每页评论数',

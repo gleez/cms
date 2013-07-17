@@ -125,7 +125,7 @@ return array
 	'Comment display mode' => 'Kuvarezhiim kommentaare',
 	'Comment doesn\'t exists!' => 'Kommentaar pole leited!',
 	'Comment Order' => 'Järjekord kommentaare',
-	'Comment has been updated.' => 'Kommentaar edukalt uuendatud.',
+	'Comment %title has been updated.' => 'Kommentaar %title edukalt uuendatud.',
 	'Comments' => 'Kommetaar',
 	'Comments per page' => 'Kommentaare lehel',
 	'Comments should be displayed with the older/new comments at the top of each page' => 'Mida märkusi tuleks kuvatakse iga lehekülje ülaosas',
