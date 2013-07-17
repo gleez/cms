@@ -710,9 +710,8 @@ abstract class Template extends Controller {
 
 		if (Request::post_max_size_exceeded())
 		{
-			Message::error(__('Max file size of :max Bytes exceeded!',
-				array(':max' => Request::get_post_max_size())
-			));
+			$this->_errors = array('_action' => __('Max file size of :max Bytes exceeded!',
+				array(':max' => Request::get_post_max_size())) );
 			return FALSE;
 		}
 
@@ -720,7 +719,7 @@ abstract class Template extends Controller {
 		{
 			if ( ! isset($_POST[$submit]))
 			{
-				Message::error(__('This form has altered. Please try submitting it again.'));
+				$this->_errors = array('_action' => __('This form has altered. Please try submitting it again.'));
 				return FALSE;
 			}
 		}
