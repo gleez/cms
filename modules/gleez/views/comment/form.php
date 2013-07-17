@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
+<?php defined('SYSPATH') OR die('No direct script access allowed.') ?>
 
 <?php echo Form::open($action.URL::query($destination), array('id'=>'comment-form', 'class'=>'comment-form form')) ?>
 
@@ -12,7 +12,7 @@
 			<div class='inside' id="submitpost">
 				<div id="minor-publishing">
 					<div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
-						<?php echo Form::label('status', __('Status'), array('class' => 'aboveconten')) ?>
+						<?php echo Form::label('status', __('Change Status'), array('class' => 'abovecontent')) ?>
 						<?php echo Form::select('status', Comment::status(), $post->status, array('class' => 'list large')); ?>
 					</div>
 
@@ -22,7 +22,7 @@
 					</div>
 
 					<div class="control-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
-						<?php echo Form::label('author_date', __('Date'), array('class' => 'aboveconten') ) ?>
+						<?php echo Form::label('author_date', __('Date'), array('class' => 'abovecontent') ) ?>
 						<?php echo Form::input('author_date', Date::formatted_time($post->created), array('class' => 'text large')); ?>
 					</div>
 				</div>
@@ -35,7 +35,7 @@
 					<?php endif; ?>
 
 					<div id="publishing-action">
-						<?php echo Form::submit('comment', __('Submit'), array('class' => 'btn btn-primary')) ?>
+						<?php echo Form::submit('comment', __('Save'), array('class' => 'btn')) ?>
 					</div>
 				</div>
 			</div>
@@ -94,7 +94,8 @@
 <?php endif; ?>
 
 <?php if ( ! ACL::check('administer comment') OR ! $is_edit) : ?>
-	<?php echo Form::submit('comment', __('Post Comment'), array('class' => 'btn btn-primary')) ?>
+	<br>
+	<?php echo Form::submit('comment', __('Post Comment'), array('class' => 'btn')) ?>
 <?php endif; ?>
 
 <?php echo Form::close() ?>
