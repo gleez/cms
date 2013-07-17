@@ -259,8 +259,11 @@ ul.ss-box li.ss-result p span.ss-result-title {
 }
 .postarea .textarea
 {
-	width: 98%;
+	width: 97.5%;
 	border: none;
+}
+.comment-edit #comment-form .postarea .textarea {
+	min-height: 270px;
 }
 .error .inside{
     border: 1px solid #C20F2E;
@@ -274,6 +277,9 @@ ul.ss-box li.ss-result p span.ss-result-title {
 }
 .page-view #comment-form .postarea{
 	float: left;
+	width: 58%;
+}
+.comment-edit #comment-form .postarea{
 	width: 58%;
 }
 .page-view #comment-form .stuffbox{
@@ -297,7 +303,7 @@ ul.ss-box li.ss-result p span.ss-result-title {
     float: right;
     position: relative;
 }
-.postbox h3, .stuffbox h3{
+.postbox h3, .stuffbox h3, .postarea h3{
     border-bottom-color: #DFDFDF;
     box-shadow: 0 1px 0 #FFFFFF;
     text-shadow: 0 1px 0 #FFFFFF;
@@ -344,6 +350,7 @@ ul.ss-box li.ss-result p span.ss-result-title {
     border-top: medium none;
     clear: both;
     padding: 10px 1px;
+    min-height: 30px;
 }
 .form #delete-action {
     float: left;
@@ -353,11 +360,11 @@ ul.ss-box li.ss-result p span.ss-result-title {
 }
 .form #publishing-action {
     line-height: 23px;
-    text-align: right;
+    /*text-align: right;*/
 }
 
 .format-wrapper input, textarea, select, .uneditable-input {
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 .format-wrapper .input-prepend .add-on, .input-prepend .btn {
     /*margin-right: -5px;*/
