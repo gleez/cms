@@ -935,6 +935,7 @@ return array
 	'There are no Terms that have been created for %vocab.' => 'Нет ни одного термина, который был бы создан для %vocab.',
 	'These settings may be overridden for individual posts.' => 'Эти настройки могут быть перекрыты индивидуально для каждой публикации.',
 	'Thimphu' => 'Тхимпху',
+	'This action cannot be undone.' => 'Это действие нельзя будет удалить',
 	'This form has altered. Please try submitting it again.' => 'Данные изменились. Пожалуйста попробуйте отправить форму ещё раз.',
 	'This form has expired. Please try submitting it again.' => 'Данные устарели. Пожалуйста попробуйте отправить форму ещё раз.',
 	'This is your administration dashboard and it provides a quick overview of status messages, recent updates, and frequently used options.' => 'Это ваша приборная панель администратора. Она обеспечивает быстрый просмотр сообщений о состоянии, последних обновлений и доступ к часто используемым опциям.',
