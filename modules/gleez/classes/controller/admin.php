@@ -1,32 +1,48 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
  * Admin Base Controller
  *
  * @package    Gleez\Controller\Admin
  * @author     Sandeep Sangamreddi - Gleez
+ * @author     Sergey Yakovlev - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin extends Template {
 
-	// Currently logged in user
+	/**
+	 * Currently destination
+	 * @var string
+	 */
+	protected $_destination;
+
+	/**
+	 * Currently form action
+	 * @var string
+	 */
+	protected $_form_action;
+
+	/**
+	 * Currently logged in user
+	 * @var
+	 */
 	protected $_current_user;
 
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 * @uses  Theme::$is_admin
+	 */
 	public function before()
 	{
 		// Inform tht we're in admin section for themers/developers
 		Theme::$is_admin = TRUE;
 
-		if ( class_exists('ACL') )
-		{
-			ACL::required('administer site');
-		}
-		parent::before();
-	}
+		ACL::required('administer site');
 
-	final public function action_skip()
-	{
-		// Do nothing
+		parent::before();
 	}
 
 	public function after()
@@ -36,6 +52,6 @@ class Controller_Admin extends Template {
 
 	public function index()
 	{
-		$this->response->body( __('Welcome to admin') );
+		$this->response->body(__('Welcome to admin'));
 	}
 }

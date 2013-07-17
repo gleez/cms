@@ -45,7 +45,6 @@
 
 .popup-content {
   position: relative;
-  /*background-color: #fff;*/
   background-color: #f7f7f7;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -96,12 +95,36 @@
 .popup-body {
   position: relative;
   padding: 20px;
+  padding-bottom: 0;
   background-color: #fff;
+}
+
+.popup-body .warning {
+  background-color: #f8eec7;
+  border-color: #f2e09a;
+  margin: 0 -20px 15px;
+  padding: 10px 15px;
+  border-style: solid;
+  border-width: 1px 0;
+}
+
+.popup-body .form-actions {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.popup-body .form-actions .btn {
+  margin: 0 10px;
+}
+
+.popup-body .form-horizontal,
+.popup-body form {
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 .popup-footer {
   padding: 19px 20px 20px;
-  /*margin-top: 15px;*/
   text-align: right;
   border-top: 1px solid #e5e5e5;
 }

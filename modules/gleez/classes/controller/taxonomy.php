@@ -18,8 +18,8 @@ class Controller_Taxonomy extends Template {
                                         ':type' => $this->request->uri(),
                                 ));
 		}
-	
-		ACL::Required('access content');
+
+		ACL::required('access content');
 		parent::before();
 	}
 	
