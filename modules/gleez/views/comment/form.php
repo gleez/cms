@@ -4,8 +4,8 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-<div id="side-info-column" class="inner-sidebar">
-	<?php if (ACL::check('administer comment') AND $is_edit): ?>
+<?php if (ACL::check('administer comment') AND $is_edit): ?>
+	<div id="side-info-column" class="inner-sidebar">
 		<div id="submitdiv" class="stuffbox">
 			<h3 class='hndle'><?php echo __('Status') ?></h3>
 
@@ -40,8 +40,8 @@
 				</div>
 			</div>
 		</div>
-	<?php endif; ?>
-</div>
+	</div>
+<?php endif; ?>
 
 <div id="post-body">
 
