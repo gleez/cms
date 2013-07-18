@@ -8,23 +8,24 @@
 	<?php endif;?>
 </div>
 
-<div class="list-comments">
-	<?php if (isset($comments)): ?>
+<?php if (isset($comments)): ?>
+	<div class="list-comments">
 		<div class="post-comments">
 			<?php echo $comments; ?>
 		</div>
-	<?php endif;?>
-</div>
+	</div>
+<?php endif;?>
 
+<?php if(isset($provider_buttons) or isset($comment_form)): ?>
 <div class="post-comment-form-wrapper">
 	<?php if (isset($provider_buttons) AND ! isset($comment_form)): ?>
-		<p>
+		<div id="post-auth-request">
 			<?php
 			_e('Only authorized users can post comments. :register or login using one of these services:',
 				array(':register' => HTML::anchor(Route::get('user')->uri(array('action' => 'register')), __('Please register')))
 			);
 			?>
-		</p>
+		</div>
 		<div id="post-provider-buttons">
 			<?php echo $provider_buttons; ?>
 		</div>
@@ -36,3 +37,4 @@
 		</div>
 	<?php endif;?>
 </div>
+<?php endif;?>
