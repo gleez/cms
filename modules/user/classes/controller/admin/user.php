@@ -113,7 +113,7 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors =  $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -201,7 +201,7 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = count($_POST) ? $e->errors() : array();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -272,6 +272,7 @@ class Controller_Admin_User extends Controller_Admin {
 					)
 				);
 				Message::error(__('An error occured deleting user, :user.', array(':user' => $user->name)));
+				$this->_errors = array(__('An error occured deleting user, :user.', array(':user' => $user->name)));
 
 				if ( ! $this->_internal)
 				{
