@@ -86,9 +86,16 @@
 	    //if only one form, remove and create custom buttons in popup footer
 	    if(this.forms.length == 1){
 		//pull the submit button
-		var button    = $data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
+		var button
 		,   submitBtn = $('<a>Save changes</a>')
 		,   closeBtn  = $('<a>Close</a>')
+		
+		//get valid submit button
+		button  = $data.find('[type=submit]:first')
+					.not('input[name^="no"]')
+					.not('input[name^="cancel"]')
+					.not('input[name$="no"]')
+					.not('input[name$="cancel"]')
 
 		//hide all buttons in popup body
 		$data.find('[type=submit]').hide()
