@@ -658,7 +658,7 @@ abstract class Template extends Controller {
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
-		Assets::css('theme', "media/css/{$theme}.css", array('default'), array('weight' => 2));
+		Assets::css('theme', "media/css/{$theme}.css", array('default'), array('weight' => 20));
 	}
 
 	/**
