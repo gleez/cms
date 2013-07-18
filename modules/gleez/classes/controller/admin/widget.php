@@ -100,10 +100,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			Message::success(__('The Widget settings have been updated.'));
 			Cache::instance('widgets')->delete_all();
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/widget')->uri());
-			}
+			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
 
 		$this->response->body($view);
@@ -154,10 +151,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 				Cache::instance('widgets')->delete_all();
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/widget')->uri());
-				}
+				$this->request->redirect(Route::get('admin/widget')->uri());
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -182,10 +176,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			Message::error(__('Widget doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent widget');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/widget')->uri());
-			}
+			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
 
 		$widget_regions = array();
@@ -236,10 +227,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 				Cache::instance('widgets')->delete_all();
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/widget')->uri());
-				}
+				$this->request->redirect(Route::get('admin/widget')->uri());
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -264,10 +252,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			Message::error(__('Widget doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent widget');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/widget')->uri());
-			}
+			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
 
 		$split_name = explode('/', $widget->name);
@@ -308,22 +293,19 @@ class Controller_Admin_Widget extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occured deleting widget id: :id, :message',
+				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting widget id: :id, :message',
 					array(
 						':id' => $widget->id,
 						':message' => $e->getMessage()
 					)
 				);
-				Message::error(__('An error occured deleting widget %title', array(':title' => $widget->title)));
+				Message::error(__('An error occurred deleting widget %title', array(':title' => $widget->title)));
 			}
 
 			$redirect = empty($destination) ? Route::get('admin/widget')->uri() :
 			$this->request->query('destination');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		$this->response->body($view);

@@ -116,10 +116,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 			Message::success(__('Page Settings updated!'));
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/page')->uri(array('action' =>'settings')), 200);
-			}
+			$this->request->redirect(Route::get('admin/page')->uri(array('action' =>'settings')), 200);
 		}
 
 		$this->response->body($view);
@@ -130,6 +127,11 @@ class Controller_Admin_Page extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$url         = Route::url('admin/page', array('action' => 'list'), TRUE);
 		$redirect    = Route::get('admin/page')->uri(array('action' => 'list'));
 		$form_action = Route::get('admin/page')->uri(array('action' => 'bulk'));
@@ -152,7 +154,7 @@ class Controller_Admin_Page extends Controller_Admin {
 						HTML::label(__($page->status), $page->status),
 						Date::formatted_time($page->updated, 'M d, Y'),
 						HTML::icon($page->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
-						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page')))
+						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page'), 'data-toggle' => 'popup', 'data-title' => __('Delete Page')))
 					)
 				);
 			}
@@ -203,10 +205,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 			Message::success(__('The delete has been performed!'));
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		if ($this->valid_post('page-bulk-actions'))
@@ -242,10 +241,7 @@ class Controller_Admin_Page extends Controller_Admin {
 				$this->_bulk_update($post);
 
 				Message::success(__('The update has been performed!'));
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+				$this->request->redirect($redirect);
 			}
 			catch( Exception $e)
 			{
