@@ -37,11 +37,13 @@ class Widget_User extends Widget {
 			return;
 		}
 
+		Assets::css('user', 'media/css/user.css', array('weight' => 2));
+
 		// Create form action
 		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
 		$params      = array('action' => 'login');
 		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
-		$config      = Kohana::$config->load('auth');
+		$config      = Config::load('auth');
 
 		return View::factory('user/login')
 				->set('register',     $config->get('register'))
