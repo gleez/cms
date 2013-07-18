@@ -275,23 +275,10 @@ body div.Overlay {
    background: rgba(255,255,255,0.7);
    z-index: 5000;
 }
-
 .MSIE .Overlay {
    background: gray;
    filter: alpha(opacity=0);
    position: static;
-}
-div.Popup {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 5000;
-  text-align: center;
-}
-div.Popup .Body {
-    background: none repeat scroll 0 0 #FFFFFF;
-    float: left;
 }
 .Loading {
    height: 100px;
@@ -307,80 +294,6 @@ div.Popup .Body {
    box-shadow: none !important;
    color: transparent !important;
    text-shadow: none !important;
-}
-div.Popup .Loading {
-    display: block;
-    width: 200px;
-    text-align: center;
-    margin: 0 auto !important;
-}
-div.Popup .Border {
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
-    display: inline-block;
-    margin: 0 auto;
-    max-width: 700px;
-    position: relative;
-    text-align: left;
-    background: none repeat scroll 0 0 rgba(82, 82, 82, 0.7);
-    padding: 10px;
-}
-div.Popup div.Body .Content.well{
-    background-color: #ffffff;
-    margin-bottom: 0;
-    padding: 2px;
-}
-
-div.Popup h1 {
-    margin-top: 0;
-    border-bottom: 1px solid #CED6E1;
-    padding: 8px 5px !important;
-    position: relative;
-    font-size: 18px;
-    line-height: normal;
-    background-color: #38ABE3;
-    background-image: -moz-linear-gradient(top, #00A0D1, #008DB8);
-    background-image: -ms-linear-gradient(top, #00A0D1, #008DB8);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#00A0D1), to(#008DB8));
-    background-image: -webkit-linear-gradient(top, #00A0D1, #008DB8);
-    background-image: -o-linear-gradient(top, #00A0D1, #008DB8);
-    background-image: linear-gradient(top, #00A0D1, #008DB8);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00A0D1', endColorstr='#008DB8', GradientType=0);
-    color: #FFFFFF;
-}
-
-div.Popup .Footer {
-	border: none;
-	background: none;
-	padding: 0;
-	margin: 0;
-	text-align: right;
-}
-div.Popup h3 {
-	font-size: 120%;
-	font-weight: bold;
-	padding: 20px 0 10px;
-}
-div.Popup p {
-	padding: 6px 10px 10px;
-}
-div.Popup .Legal p {
-	padding: 6px 0 10px;
-}
-div.Popup small {
-	font-size: 11px;
-}
-div.Popup form p {
-	padding: 0;
-}
-
-div.Popup .form-actions {
-    margin-bottom: 1px;
-}
-div.Popup form {
-    margin-bottom: 1px;
 }
 
 #multiupload-form {
