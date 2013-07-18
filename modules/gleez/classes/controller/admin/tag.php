@@ -222,6 +222,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 							array(':id' => $tag->id, ':message' => $e->getMessage()));
 
 				Message::error('An error occurred deleting tag %tag',array('%tag' => $tag->name));
+				$this->_errors = array(__('An error occurred deleting tag %tag',array('%tag' => $tag->name));
 
 				if ( ! $this->_internal)
 				{
