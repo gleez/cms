@@ -105,11 +105,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
-				}
-
+				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -134,10 +130,7 @@ class Controller_Admin_User extends Controller_Admin {
 			Message::error(__("User doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
-			}
+			$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
 		}
 
 		$user_roles = $post->roles->find_all()->as_array('id', 'name');
@@ -193,11 +186,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/user')->uri());
-				}
-
+				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -222,20 +211,14 @@ class Controller_Admin_User extends Controller_Admin {
 			Message::error(__("User doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/user')->uri());
-			}
+			$this->request->redirect(Route::get('admin/user')->uri());
 		}
 		elseif ($user->id < 3)
 		{
 			Message::error(__('User: can\'t delete system user'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/user')->uri());
-			}
+			$this->request->redirect(Route::get('admin/user')->uri());
 		}
 
 		$this->title = __('Delete :title', array(':title' => $user->name));
@@ -258,10 +241,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$user->delete();
 				Message::success(__('User: :name deleted successful!', array(':name' => $user->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/user')->uri());
-				}
+				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 			catch (Exception $e)
 			{
@@ -273,12 +253,7 @@ class Controller_Admin_User extends Controller_Admin {
 				);
 				Message::error(__('An error occured deleting user, :user.', array(':user' => $user->name)));
 				$this->_errors = array(__('An error occured deleting user, :user.', array(':user' => $user->name)));
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/user')->uri());
-				}
-
+				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 		}
 
