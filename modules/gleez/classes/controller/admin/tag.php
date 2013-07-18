@@ -33,6 +33,11 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$is_datatables = Request::is_datatables();
 
 		if ($is_datatables)
@@ -49,7 +54,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 						Text::plain($tag->type),
 
 						HTML::icon($tag->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
-						HTML::icon($tag->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Tag')))
+						HTML::icon($tag->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-title' => __('Delete Tag')))
 					)
 				);
 			}
@@ -203,7 +208,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 							array(':id' => $tag->id, ':message' => $e->getMessage()));
 
 				Message::error('An error occurred deleting tag %tag',array('%tag' => $tag->name));
-				$this->_errors = array(__('An error occurred deleting tag %tag',array('%tag' => $tag->name));
+				$this->_errors = array(__('An error occurred deleting tag %tag',array('%tag' => $tag->name)));
 				$this->request->redirect(Route::get('admin/tag')->uri(), 503);
 			}
 		}

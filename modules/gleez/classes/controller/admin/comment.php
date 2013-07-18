@@ -80,13 +80,11 @@ class Controller_Admin_Comment extends Controller_Admin {
 			Message::error( __('Comment doesn\'t exists!') );
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/comment')->uri(array('action' => 'list')));
-			}
+			// Redirect to listing
+			$this->request->redirect(Route::get('admin/comment')->uri());
 		}
 
-		$this->title = __('Comment :id', array('id' => $comment->id) );
+		$this->title = __('Comment :name', array(':name' => Text::limit_chars($comment->title, 40)));
 		$view = View::factory('comment/view')->set('comment', $comment);
 
 		$this->response->body($view);
@@ -164,10 +162,8 @@ class Controller_Admin_Comment extends Controller_Admin {
 			Module::event('comment_bulk_delete', $comments);
 
 			Message::success(__('The delete has been performed!'));
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+
+			$this->request->redirect($redirect);
 		}
 
 		if ($this->valid_post('comment-bulk-actions'))
@@ -176,10 +172,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 			{
 				$this->_errors = array(__('No items selected.'));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+				$this->request->redirect($redirect);
 			}
 
 			try
@@ -207,10 +200,8 @@ class Controller_Admin_Comment extends Controller_Admin {
 				$this->_bulk_update($post);
 
 				Message::success(__('The update has been performed!'));
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+
+				$this->request->redirect($redirect);
 			}
 			catch( Exception $e)
 			{
@@ -296,7 +287,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 						HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')),
 						Date::formatted_time($post->created),
 						HTML::icon($post->edit_url.$this->_destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
-						HTML::icon($post->delete_url.$this->_destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete'), 'data-toggle' => 'popup'))
+						HTML::icon($post->delete_url.$this->_destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete'), 'data-toggle' => 'popup', 'data-title' => __('Delete')))
 				));
 			}
 		}
