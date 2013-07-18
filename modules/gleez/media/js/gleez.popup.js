@@ -65,18 +65,18 @@
 
 	// First see if we've retrieved json or something else
 	try {
-		json = $.parseJSON(jqXHR.responseText)
+	    json = $.parseJSON(jqXHR.responseText)
 	} catch (e) {
-		json = false
-		console.log(e)
+	    json = false
+	    console.log(e)
 	}
 
 	if (json && typeof json.Body !== undefined) {
-		data = $.base64Decode(json.Body)
+	    data = $.base64Decode(json.Body)
 
-		if (typeof json.title !== undefined){
-			this.options.title = json.title || this.options.title
-		}
+	    if (typeof json.title !== undefined){
+		this.options.title = json.title || this.options.title
+	    }
 	}
 
 	var $data = $($.parseHTML(data))
@@ -88,17 +88,16 @@
 	    
 	    //if only one form, remove and create custom buttons in popup footer
 	    if(this.forms.length == 1){
-		//pull the submit button
 		var button
 		,   submitBtn = $('<a>Save changes</a>')
 		,   closeBtn  = $('<a>Close</a>')
 		
-		//get valid submit button
-		button  = $data.find('[type=submit]:first')
-					.not('input[name^="no"]')
-					.not('input[name^="cancel"]')
-					.not('input[name$="no"]')
-					.not('input[name$="cancel"]')
+		//pull the valid submit button
+		button = $data.find('[type=submit]:first')
+			      .not('input[name^="no"]')
+			      .not('input[name^="cancel"]')
+			      .not('input[name$="no"]')
+			      .not('input[name$="cancel"]')
 
 		//hide all buttons in popup body
 		$data.find('[type=submit]').hide()
@@ -112,12 +111,12 @@
 	
 		//create submit and cancel buttons in popup footer
 		$(submitBtn).attr('data-toggle', 'ajaxform')
-			 .attr('class',  'btn btn-primary')
-			 .attr('href',   '#')
-			 .data('popup',  this.$element)
-			 .data('form',   this.forms)
-			 .data('button', button)
-			 .text($(button).val())
+			    .attr('class',  'btn btn-primary')
+			    .attr('href',   '#')
+			    .data('popup',  this.$element)
+			    .data('form',   this.forms)
+			    .data('button', button)
+			    .text($(button).val())
 		
 		$(closeBtn).attr('class', 'btn')
 			.attr('href', '#')
@@ -128,14 +127,20 @@
 		this.$element.find('.popup-footer').html(closeBtn).append(submitBtn)
 	    }
 	    else if(this.forms.length > 1){
-		$data.find('[type=submit]input[name!="no"]input[name!="cancel"]')
-			 .attr('data-toggle', 'ajaxform')
-			 .data('popup', popup.$element)
+		
+		//the valid submit button
+		$data.find('[type=submit]:first')
+		     .not('input[name^="no"]')
+		     .not('input[name^="cancel"]')
+		     .not('input[name$="no"]')
+		     .not('input[name$="cancel"]')
+		     .attr('data-toggle', 'ajaxform')
+		     .data('popup', popup.$element)
 	
 		//add close handler to no/cancel buttons
-		var buttons = $data.find('[type=submit]input[name="no"], [type=submit]input[name="cancel"]')
+		var buttons = $data.find('[type=submit]input[name^="no"], [type=submit]input[name^="cancel"]')
 		$(buttons).attr('data-dismiss', 'popup')
-			 .delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
+			  .delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
 	    }
 	    
 	    //add the content and title to popup
