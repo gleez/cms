@@ -32,6 +32,11 @@ class Controller_Admin_Path extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$is_datatables = Request::is_datatables();
 		$paths         = ORM::factory('path');
 
@@ -46,7 +51,7 @@ class Controller_Admin_Path extends Controller_Admin {
 						Text::plain($path->source),
 						Text::plain($path->alias),
 						HTML::icon($path->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias'))) . '&nbsp;' .
-						HTML::icon($path->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Alias')))
+						HTML::icon($path->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Alias'), 'data-toggle' => 'popup', 'data-title' => __('Delete Alias')))
 					)
 				);
 			}
@@ -95,11 +100,7 @@ class Controller_Admin_Path extends Controller_Admin {
 
 				Message::success(__('Alias %name saved successful!', array('%name' => $post->alias)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 200);
-				}
-
+				$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -130,10 +131,7 @@ class Controller_Admin_Path extends Controller_Admin {
 			Message::error(__('Alias doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent alias');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 404);
-			}
+			$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 404);
 		}
 
 		$this->title = __('Edit Alias %name', array('%name' => $post->source));
@@ -155,10 +153,7 @@ class Controller_Admin_Path extends Controller_Admin {
 
 				Message::success(__('Alias %name saved successful!', array('%name' => $post->source)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 200);
-				}
+				$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -187,10 +182,7 @@ class Controller_Admin_Path extends Controller_Admin {
 			Message::error(__('Alias doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent alias');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 404);
-			}
+			$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 404);
 		}
 
 		$this->title = __('Delete Alias %title', array('%title' => $path->source));
@@ -213,10 +205,7 @@ class Controller_Admin_Path extends Controller_Admin {
 				$path->delete();
 				Message::success(__('Alias %name deleted successful!', array('%name' => $path->alias)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 200);
-				}
+				$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 200);
 			}
 			catch (Exception $e)
 			{
@@ -224,10 +213,7 @@ class Controller_Admin_Path extends Controller_Admin {
 					array(':id' => $path->id, ':message' => $e->getMessage()));
 				Message::error('An error occurred deleting alias %path',array(':path' => $path->alias));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 503);
-				}
+				$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 503);
 			}
 		}
 

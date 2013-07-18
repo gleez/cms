@@ -42,7 +42,7 @@ class Controller_Admin_Format extends Controller_Admin {
 		}
 
 		$view = View::factory('admin/format/list')
-					->set('formats', $formats);
+			->set('formats', $formats);
 
 		$this->response->body($view);
 
@@ -57,6 +57,9 @@ class Controller_Admin_Format extends Controller_Admin {
 	 *
 	 * @uses  InputFilter::filters
 	 * @uses  Assets::tabledrag
+	 * @uses  Config::load
+	 * @uses  Message::error
+	 * @uses  Filter::all
 	 */
 	public function action_configure()
 	{
@@ -64,26 +67,23 @@ class Controller_Admin_Format extends Controller_Admin {
 
 		// Get required format
 		$format = $this->_format->get($id);
-                $config = Kohana::$config->load('inputfilter');
-        
-                if (is_null($format))
+		$config = Config::load('inputfilter');
+
+		if (is_null($format))
 		{
 			Message::error(__('Text Format doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent format id :id', array(':id' => $id));
-			
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/format')->uri(), 404);
-			}
+
+			$this->request->redirect(Route::get('admin/format')->uri(), 404);
 		}
-	
-                $fallback_format = (int) $config->default_format;
-                $formats = $this->_format->get_all();
-                $formats[$id]['id'] = $id;
-        
-                $all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
-                $filters = Filter::all();
-                $enabled_filters = $formats[$id]['filters'];
+
+		$fallback_format = (int) $config->default_format;
+		$formats = $this->_format->get_all();
+		$formats[$id]['id'] = $id;
+
+		$all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
+		$filters = Filter::all();
+		$enabled_filters = $formats[$id]['filters'];
 
 		// Form attributes
 		$params = array('id' => $id, 'action' => 'configure');
@@ -91,11 +91,11 @@ class Controller_Admin_Format extends Controller_Admin {
 		$this->title = __('Configure %name format', array('%name' => $format['name']));
 
 		$view = View::factory('admin/format/form')
-					->set('roles', $all_roles)
-					->set('filters', $filters)
-					->set('enabled_filters', $enabled_filters)
-					->set('format', $format)
-					->set('params', $params);
+			->set('roles', $all_roles)
+			->set('filters', $filters)
+			->set('enabled_filters', $enabled_filters)
+			->set('format', $format)
+			->set('params', $params);
 
 		if ($this->valid_post('filter'))
 		{

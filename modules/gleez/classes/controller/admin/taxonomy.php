@@ -23,6 +23,11 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$is_datatables = Request::is_datatables();
 		$terms  = ORM::factory('term')->where('lft', '=', 1);
 
@@ -38,7 +43,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Terms'))),
 						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Term'))),
 						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Vocab'))),
-						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Vocab')))
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Vocab'), 'data-toggle' => 'popup', 'data-title' => __('Delete Vocab')))
 					)
 				);
 			}
@@ -73,9 +78,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				Message::success(__('Vocab: %name saved successful!', array('%name' => $post->name)));
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-					$this->request->redirect( Route::get('admin/taxonomy')->uri() );
-
+				$this->request->redirect(Route::get('admin/taxonomy')->uri());
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -96,8 +99,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			Message::error(__('Vocab: doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent Vocab');
 
-			if ( ! $this->_internal)
-				$this->request->redirect( Route::get('admin/taxonomy')->uri() );
+			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
 		$this->title = __( 'Edit Vocab: :name', array(':name' => $post->name) );
@@ -113,9 +115,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				Message::success(__('Vocab: %name saved successful!', array('%name' => $post->name)));
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-					$this->request->redirect( Route::get('admin/taxonomy')->uri() );
-
+				$this->request->redirect( Route::get('admin/taxonomy')->uri() );
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -136,8 +136,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			Message::error(__('Taxonomy: doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent taxonomy');
 
-			if ( ! $this->_internal)
-				$this->request->redirect(Route::get('admin/taxonomy')->uri( array('action' => 'list') ));
+			$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 		}
 
 		$this->title = __('Delete Taxonomy :title', array(':title' => $term->name ));
@@ -147,30 +146,28 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				->set('title', $term->name);
 
 		// If deletion is not desired, redirect to list
-                if ( isset($_POST['no']) AND $this->valid_post() )
-                        $this->request->redirect(Route::get('admin/taxonomy')->uri());
+		if ( isset($_POST['no']) AND $this->valid_post() )
+		{
+			$this->request->redirect(Route::get('admin/taxonomy')->uri());
+		}
 
 		// If deletion is confirmed
-                if ( isset($_POST['yes']) AND $this->valid_post() )
-                {
+		if ( isset($_POST['yes']) AND $this->valid_post() )
+		{
 			try
 			{
 				$term->delete();
 				Message::success(__('Taxonomy: :name deleted successful!', array(':name' => $term->name)));
 
-				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/taxonomy')->uri( array('action' => 'list') ));
+				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting taxonomy id: :id, :message',
+				Kohana::$log->add(Log::ERROR, 'Error occurred deleting taxonomy id: :id, :message',
 							array(':id' => $term->id, ':message' => $e->getMessage()));
-				Message::error('An error occured deleting taxonomy, :term.',array(':term' => $term->name));
+				Message::error(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
 
-				$this->_errors = array(__('An error occured deleting taxonomy, :term.',array(':term' => $term->name)));
-				
-				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/taxonomy')->uri( array('action' => 'list') ));
+				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
 		}
 
