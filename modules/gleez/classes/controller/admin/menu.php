@@ -27,9 +27,21 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 * @uses  ORM::reset
 	 * @uses  ORM::dataTables
 	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Route::url
+	 * @uses  Assets::css
+	 * @uses  Assets::js
+	 * @uses  Request::is_datatables
+	 * @uses  Text::plain
+	 * @uses  HTML::icon
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$is_datatables = Request::is_datatables();
 		$menus         = ORM::factory('menu')->where('lft', '=', 1);
 
@@ -45,7 +57,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 						HTML::icon(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
 						HTML::icon(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
 						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
-						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu')))
+						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-title' => __('Delete Menu')))
 					)
 				);
 			}
@@ -75,6 +87,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 * @uses  ORM::make_root
 	 * @uses  Message::success
 	 * @uses  Cache::delete
+	 * @uses  Message::success
 	 */
 	public function action_add()
 	{
@@ -95,10 +108,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -132,16 +142,13 @@ class Controller_Admin_Menu extends Controller_Admin {
 		$id = (int) $this->request->param('id', 0);
 		$post = ORM::factory('menu', $id);
 
-		if (! $post->loaded())
+		if ( ! $post->loaded())
 		{
 			Message::error(__('Menu doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent Menu');
 
 			// Redirect to listing
-			if (! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
 
 		$this->title = __('Edit %name menu', array('%name' => $post->title));
@@ -157,11 +164,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 				Cache::instance('menus')->delete($post->name);
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
-				}
-
+				$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -186,6 +189,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 	 * @uses  Request::uri
 	 * @uses  Route::get
 	 * @uses  Route::uri
+	 * @uses  Route::url
 	 * @uses  Cache::delete
 	 * @uses  ORM::delete
 	 * @uses  DB::delete
@@ -202,10 +206,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
 			// Redirect to listing
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri(), 403);
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
 
 		$this->title = __('Delete Menu :title', array(':title' => $menu->title));
@@ -234,8 +235,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 				$menu->delete();
 				Message::success(__('Menu %name deleted successful!', array('%name' => $name)));
 
-				if ( ! $this->_internal)
-					$this->request->redirect(Route::get('admin/menu')->uri(), 200);
+				$this->request->redirect(Route::get('admin/menu')->uri(), 200);
 			}
 			catch (Exception $e)
 			{
@@ -248,10 +248,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 					)
 				);
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu')->uri(), 503);
-				}
+				$this->request->redirect(Route::get('admin/menu')->uri(), 500);
 			}
 		}
 
