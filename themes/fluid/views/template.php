@@ -25,9 +25,8 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-
 					<a href="<?php echo $site_url ?>" title="<?php echo $site_name ?>" class="brand">
-						<img class="logo" title="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" alt="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" src="<?php echo URL::site('media/logo.png')?>">
+						<img class="logo" title="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" alt="<?php echo __('Gleez CMS Light, Simple, Flexible Content Management System') ?>" src="<?php echo URL::site($site_logo)?>">
 					</a>
 
 					<div class="nav-collapse">
