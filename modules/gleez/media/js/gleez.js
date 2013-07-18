@@ -270,7 +270,7 @@ jQuery.noConflict();
 		    })
 		    .fail(function (jqXHR, textStatus, errorThrown) {
 			//var ierror = Gleez.informError(jqXHR, false, true);
-			var errorText = '<div class="empty_page alert alert-block"><i class="icon-info-sign"></i>'+errorThrown+'</div>'
+			var errorText = '<div class="empty_page alert alert-block"><i class="icon-info-sign"></i>&nbsp'+errorThrown+'</div>'
 			$(oSettings.oInstance).parent().html(errorText)
 		    })
 		}

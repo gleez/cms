@@ -300,7 +300,7 @@ div.Popup .Body {
 }
 .InProgress {
    color: transparent !important;
-   background: url('../images/progress_sm.gif') center center no-repeat !important;
+   background: url('../images/progress.gif') center center no-repeat !important;
    border-color: transparent !important;
    -moz-box-shadow: none !important;
    -webkit-box-shadow: none !important;

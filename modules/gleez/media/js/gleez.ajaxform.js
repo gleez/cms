@@ -80,26 +80,28 @@
 	    $(form).remove()
 
 	    if(datatable){
-		//redraw dataTables if its a dataTable popup or form add/edit/delete
-		$(datatable).dataTable().fnDraw()
+			//redraw dataTables if its a dataTable popup or form add/edit/delete
+			$(datatable).dataTable().fnDraw()
 	    }
     
 	    //Lets check if the form is in popup window
-	    if(popup && typeof data.messages !== undefined){
-		$(popup).find('.popup-title').html(data.messages[0].type)
-		$(popup).find('.popup-body').html(data.messages[0].text)
-		$(popup).find('.popup-footer').html('&nbsp')
+	    if(popup && typeof data.messages !== undefined && data.messages.length > 0){
+			var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
+			$(popup).find('.popup-title').html(data.messages[0].type)
+			$(popup).find('.popup-body').html(text)
+			$(popup).find('.popup-footer').html('&nbsp')
 	    }
 	    else if(popup){
-		$(popup).find('.popup-body').html('Success')
-		$(popup).find('.popup-footer').html('&nbsp')
+			var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
+			$(popup).find('.popup-body').html(text)
+			$(popup).find('.popup-footer').html('&nbsp')
 	    }
 	}
     }
 
     Ajaxform.prototype.errorResponse = function(xhr, status, error, form) {
-	console.log('Error Response')
-	console.log(error)
+		console.log('Error Response')
+		console.log(error)
     }
 
     Ajaxform.prototype.validationErrors = function(data, form) {
@@ -149,22 +151,22 @@
 	      , remove_closest_selector = $el.attr('data-remove-closest')
 
 	    if (replace_selector) {
-		$(replace_selector).replaceWith(data.html)
+			$(replace_selector).replaceWith(data.html)
 	    }
 	    if (replace_closest_selector) {
-		$el.closest(replace_closest_selector).replaceWith(data.html)
+			$el.closest(replace_closest_selector).replaceWith(data.html)
 	    }
 	    if (replace_inner_selector) {
-		$(replace_inner_selector).html(data.html)
+			$(replace_inner_selector).html(data.html)
 	    }
 	    if (replace_closest_inner_selector) {
-		$el.closest(replace_closest_inner_selector).html(data.html)
+			$el.closest(replace_closest_inner_selector).html(data.html)
 	    }
 	    if (append_selector) {
-		$(append_selector).append(data.html)
+			$(append_selector).append(data.html)
 	    }
 	    if (prepend_selector) {
-		$(prepend_selector).prepend(data.html)
+			$(prepend_selector).prepend(data.html)
 	    }
 	    if (refresh_selector) {
 		$.each($(refresh_selector), function(index, value) {
@@ -181,37 +183,37 @@
 		})
 	    }
 	    if (clear_selector) {
-		$(clear_selector).html('')
+			$(clear_selector).html('')
 	    }
 	    if (remove_selector) {
-		$(remove_selector).remove()
+			$(remove_selector).remove()
 	    }
 	    if (clear_closest_selector) {
-		$el.closest(clear_closest_selector).html('')
+			$el.closest(clear_closest_selector).html('')
 	    }
 	    if (remove_closest_selector) {
-		$el.closest(remove_closest_selector).remove()
+			$el.closest(remove_closest_selector).remove()
 	    }
 	}
 
 	if (data.fragments) {
 	    for (var s in data.fragments) {
-		$(s).replaceWith(data.fragments[s])
+			$(s).replaceWith(data.fragments[s])
 	    }
 	}
 	if (data['inner-fragments']) {
 	    for (var i in data['inner-fragments']) {
-		$(i).html(data['inner-fragments'][i])
+			$(i).html(data['inner-fragments'][i])
 	    }
 	}
 	if (data['append-fragments']) {
 	    for (var a in data['append-fragments']) {
-		$(a).append(data['append-fragments'][a])
+			$(a).append(data['append-fragments'][a])
 	    }
 	}
 	if (data['prepend-fragments']) {
 	    for (var p in data['prepend-fragments']) {
-		$(p).prepend(data['prepend-fragments'][p])
+			$(p).prepend(data['prepend-fragments'][p])
 	    }
 	}
 
@@ -220,32 +222,32 @@
 
     Ajaxform.prototype.captureSubmittingElement = function(e) {
 	var target = e.target;
-	var $el = $(target);
-	if (!($el.is("[type=submit],[type=image]"))) {
-	    // is this a child element of the submit el?  (ex: a span within a button)
-	    var t = $el.closest('[type=submit]');
-	    if (t.length === 0) {
-		return;
-	    }
-	    target = t[0];
-	}
-	var form = this;
-	form.clk = target;
-	if (target.type == 'image') {
-	    if (e.offsetX !== undefined) {
-		form.clk_x = e.offsetX;
-		form.clk_y = e.offsetY;
-	    } else if (typeof $.fn.offset == 'function') {
-		var offset = $el.offset();
-		form.clk_x = e.pageX - offset.left;
-		form.clk_y = e.pageY - offset.top;
-	    } else {
-		form.clk_x = e.pageX - target.offsetLeft;
-		form.clk_y = e.pageY - target.offsetTop;
-	    }
-	}
-	// clear form vars
-	setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
+		var $el = $(target);
+		if (!($el.is("[type=submit],[type=image]"))) {
+			// is this a child element of the submit el?  (ex: a span within a button)
+			var t = $el.closest('[type=submit]');
+			if (t.length === 0) {
+			return;
+			}
+			target = t[0];
+		}
+		var form = this;
+		form.clk = target;
+		if (target.type == 'image') {
+			if (e.offsetX !== undefined) {
+			form.clk_x = e.offsetX;
+			form.clk_y = e.offsetY;
+			} else if (typeof $.fn.offset == 'function') {
+			var offset = $el.offset();
+			form.clk_x = e.pageX - offset.left;
+			form.clk_y = e.pageY - offset.top;
+			} else {
+			form.clk_x = e.pageX - target.offsetLeft;
+			form.clk_y = e.pageY - target.offsetTop;
+			}
+		}
+		// clear form vars
+		setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
     }
 
     // AJAXFROM PLUGIN DEFINITION
@@ -311,14 +313,14 @@
 	, $target = $this.data('form') || $this.parents('form')
 	, option  = $.extend({}, $target.data(), $this.data())
 
-	// if event has been canceled, don't proceed
-	if (!e.isDefaultPrevented()) {
-	    e.preventDefault()
-	    
-	    option.clkbtn = $this
-	    $target.data('clkbtn', $this)
-	    $target.removeData('ajaxform').aform(option)
-	}
+		// if event has been canceled, don't proceed
+		if (!e.isDefaultPrevented()) {
+			e.preventDefault()
+			
+			option.clkbtn = $this
+			$target.data('clkbtn', $this)
+			$target.removeData('ajaxform').aform(option)
+		}
     })
 
     $(document.body).on('submit.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
