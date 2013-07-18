@@ -79,7 +79,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -119,7 +119,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors();
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -167,6 +167,8 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 							array(':id' => $term->id, ':message' => $e->getMessage()));
 				Message::error('An error occured deleting taxonomy, :term.',array(':term' => $term->name));
 
+				$this->_errors = array(__('An error occured deleting taxonomy, :term.',array(':term' => $term->name)));
+				
 				if ( ! $this->_internal)
 					$this->request->redirect(Route::get('admin/taxonomy')->uri( array('action' => 'list') ));
 			}
