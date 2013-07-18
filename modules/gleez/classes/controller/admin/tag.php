@@ -87,12 +87,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 			{
 				$post->save();
 				Message::success(__('Tag %name saved successful!', array('%name' => $post->name)));
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
-				}
-
+				$this->request->redirect(Route::get('admin/tag')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -129,10 +124,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 			Message::error(__('Tag doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/tag')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
 
 		$this->title = __('Edit Tag %name', array('%name' => $post->name));
@@ -146,10 +138,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 				Message::success(__('Tag %name saved successful!', array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('admin/tag')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -184,11 +173,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 		{
 			Message::error(__('Tag doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
-
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/tag')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
 
 		$this->title = __('Delete Tag %title', array('%title' => $tag->name));
@@ -210,11 +195,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 			{
 				$tag->delete();
 				Message::success(__('Tag %name deleted successful!', array('%name' => $tag->name)));
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/tag')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('admin/tag')->uri(), 200);
 			}
 			catch (Exception $e)
 			{
@@ -223,11 +204,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 				Message::error('An error occurred deleting tag %tag',array('%tag' => $tag->name));
 				$this->_errors = array(__('An error occurred deleting tag %tag',array('%tag' => $tag->name));
-
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/tag')->uri(), 503);
-				}
+				$this->request->redirect(Route::get('admin/tag')->uri(), 503);
 			}
 		}
 
