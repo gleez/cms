@@ -26,7 +26,10 @@
 	this.isShown   = null
 	this.forms     = false
 
-	this.options.datatable = this.options.datatable || $(this.options.click).closest('table.dataTable')
+	//find dataTable detection
+	var dataTable = $(this.options.click).closest('table.dataTable')
+	if(dataTable.length > 0) this.options.datatable = dataTable
+
 	this.options.loading && this.loading()
 	this.local()
 	this.remote()
