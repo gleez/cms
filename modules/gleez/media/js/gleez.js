@@ -262,7 +262,7 @@ jQuery.noConflict();
 			"data": aoData,
 			"dataType": "json",
 			"cache": false,
-			"type": oSettings.sServerMethod,
+			"type": oSettings.sServerMethod
 		    }, 300)
 		    .done(function(data, textStatus, jqXHR){
 			$(oSettings.oInstance).trigger('xhr', oSettings)
