@@ -146,10 +146,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 			}
 
 			Message::success(__('Blog Settings updated!'));
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/blog')->uri(array('action' =>'settings')));
-			}
+			$this->request->redirect(Route::get('admin/blog')->uri(array('action' =>'settings')));
 		}
 
 		$this->response->body($view);
@@ -243,10 +240,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 
 			Message::success(__('The delete has been performed!'));
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		if ($this->valid_post('blog-bulk-actions'))
@@ -283,10 +277,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 				$this->_bulk_update($post);
 
 				Message::success(__('The update has been performed!'));
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($redirect);
-				}
+				$this->request->redirect($redirect);
 			}
 			catch( Exception $e)
 			{

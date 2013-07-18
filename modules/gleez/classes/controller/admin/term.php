@@ -36,10 +36,7 @@ class Controller_Admin_Term extends Controller_Admin {
 			Message::error(__('Vocabulary doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent vocabulary');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
 
 		$this->title = __('Terms for %vocab', array('%vocab' => $vocab->name));
@@ -96,10 +93,7 @@ class Controller_Admin_Term extends Controller_Admin {
 			Message::error(__('Vocabulary doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent vocabulary');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/taxonomy')->uri());
-			}
+			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
 		$this->title = __('Add Term for %vocab', array('%vocab' => $vocab->name));
@@ -127,12 +121,7 @@ class Controller_Admin_Term extends Controller_Admin {
 
 				Message::success(__('Term %name saved successful!', array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-
-				}
-					$this->request->redirect(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $vocab->id)), 200);
-
+				$this->request->redirect(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $vocab->id)), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -163,10 +152,7 @@ class Controller_Admin_Term extends Controller_Admin {
 			Message::error(__('Term doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Term');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/taxonomy')->uri());
-			}
+			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
 		$this->title = __('Edit Term %name', array('%name' => $term->name));
@@ -192,11 +178,7 @@ class Controller_Admin_Term extends Controller_Admin {
 				Message::success(__('Term %name saved successful!', array('%name' => $term->name)));
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/term')->uri( array('id'=> $term->root())));
-				}
-
+				$this->request->redirect(Route::get('admin/term')->uri( array('id'=> $term->root())));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -227,10 +209,7 @@ class Controller_Admin_Term extends Controller_Admin {
 			Message::error(__('Term doesn\'t exists!'));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Term');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
 
 		$action = Route::get('admin/term')->uri(array('action' =>'delete', 'id' => $term->id));
@@ -255,20 +234,16 @@ class Controller_Admin_Term extends Controller_Admin {
 				$term->delete();
 				Message::success(__('Term %name deleted successful!', array('%name' => $name)) );
 
-				if ( ! $this->_internal)
-					$this->request->redirect( Route::get('admin/taxonomy')->uri(array('action' =>'list')) );
+				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' =>'list')));
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occured deleting term id: :id, :message',
+				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting term id: :id, :message',
 					array(':id' => $term->id, ':message' => $e->getMessage()));
 
-				Message::error( __('An error occured deleting term %term.', array('%term' => $term->name)) );
+				Message::error( __('An error occurred deleting term %term.', array('%term' => $term->name)) );
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/term')->uri(array('action' =>'list', 'id' => $term->id )), 500);
-				}
+				$this->request->redirect(Route::get('admin/term')->uri(array('action' =>'list', 'id' => $term->id )), 500);
 			}
 		}
 
