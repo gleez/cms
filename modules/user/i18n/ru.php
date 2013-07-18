@@ -111,7 +111,7 @@ return array
 	'No more than 800 characters' => 'Не более 800 символов',
 	// O
 	'Old password is incorrect.' => 'Текущий пароль введён неверно',
-	'Only authorized users can post comments. :register or login using one of these services:' => 'Только авторизованные пользователи могут оставлять комментарии. :register или войдите с помощью одного их этих сервисов:',
+	'Only authorized users can post comments. :register or login using one of these services:' => 'Только авторизованные пользователи могут оставлять комментарии. :register или войдите для того, чтоб иметь возможность оставлять комментарии:',
 	// P
 	'Password' => 'Пароль',
 	'Password or username is incorrect.' => 'Пароль или имя пользователя не верны.',
