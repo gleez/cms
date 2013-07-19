@@ -271,7 +271,7 @@ class Post extends ORM_Versioned {
 		{
 			if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
 			{
-				$allowed_types = Kohana::$config->load('media')->get('supported_image_formats', array('jpg', 'png', 'gif'));
+				$allowed_types = Config::load('media')->get('supported_image_formats', array('jpg', 'png', 'gif'));
 				$data = Validation::factory($_FILES)
 					->rule('image', 'Upload::not_empty')
 					->rule('image', 'Upload::valid')
@@ -303,21 +303,23 @@ class Post extends ORM_Versioned {
 	 *
 	 * @uses  System::mkdir
 	 * @uses  Upload::save
+	 * @uses  Debug::path
+	 * @uses  File::getUnique
 	 */
 	protected function before_save()
 	{
 		if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
 		{
-			//create directory if not
+			// create directory if not
 			System::mkdir($this->_image_path);
 
-			//delete previous image if exists, to cleanup stale images
+			// delete previous image if exists, to cleanup stale images
 			$this->_delete_image();
 	
-			//generate a unqiue filename to avoid conflicts
-			$filename = uniqid().preg_replace('/\s+/u', '-', $_FILES['image']['name']);
+			// generate a unique filename to avoid conflicts
+			$filename = File::getUnique($_FILES['image']['name']);
 
-			if( $file = Upload::save($_FILES['image'], $filename, $this->_image_path) )
+			if ($file = Upload::save($_FILES['image'], $filename, $this->_image_path))
 			{
 				$this->image = $filename;
 			}
@@ -603,7 +605,7 @@ class Post extends ORM_Versioned {
 			'archive' => __('Archive'),
 			'draft'   => __('Draft'),
 			'private' => __('Private'),
-			'publish' => __('Publish'),
+			'publish' => __('Published'),
 		);
 
 		$values = Module::action('post_status', $states);
@@ -982,9 +984,10 @@ class Post extends ORM_Versioned {
 		return ( ! empty($post)) ? $post : FALSE;
 	}
 
-	/*
+	/**
 	 * Deletes the primary image; used during upload and delete
-	 * 
+	 *
+	 * @return Post
 	 */
 	protected function _delete_image()
 	{
