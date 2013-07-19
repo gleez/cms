@@ -35,7 +35,24 @@ The [source code](https://github.com/gleez/cms) for Gleez is hosted with [GitHub
   git submodule update --init --recursive
 ~~~
 
+### ArchLinux Installation
+
+You can install Gleez in ArchLinux using [Yaourt](https://wiki.archlinux.org/index.php/Yaourt):
+
+~~~
+yaourt -S gleez
+~~~
+
+
 Follow from step 3 of the above instructions
+
+Also you can search Gleez & Gleez Modules for ArchLinux by following command:
+
+~~~
+yaourt gleez
+# OR
+yaourt -Ss gleez
+~~~
 
 ### Putting Gleez in a subfolder
 
