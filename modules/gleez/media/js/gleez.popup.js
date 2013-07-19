@@ -26,12 +26,7 @@
 	this.isShown   = null
 	this.forms     = false
 
-	//find dataTable detection
-	var dataTable = $(this.options.click).closest('table.dataTable')
-	if(dataTable.length > 0) this.options.datatable = dataTable
-
 	this.options.loading && this.loading()
-	
 	this.local()
 	this.remote()
     }
@@ -39,7 +34,7 @@
     Popup.prototype.local = function () {
 	//not implemented yet
     }
-
+    
     Popup.prototype.remote = function () {
 	if (this.options.remote){
 	    var that = this
@@ -61,15 +56,14 @@
 		that.$element.find('.popup-title').text(textStatus)
 		that.$element.find('.popup-body').text(errorThrown)
 	    })
-	    .always(function() {
-		that.show()
-	    })
 	}
     }
 
     Popup.prototype.reveal = function (data, popup, jqXHR) {
 	var json = false
 
+	this.dataTable()
+	
 	// First see if we've retrieved json or something else
 	try {
 	    json = $.parseJSON(jqXHR.responseText)
@@ -123,7 +117,7 @@
 
 	this.$element.trigger(e)
     
-	//Guess the valid submit button
+	//Do auto valid submit button detection
 	sButton = response.find('[type=submit]')
 			 .not('input[name^="no"]')
 			 .not('input[name^="cancel"]')
@@ -131,7 +125,7 @@
 			 .not('input[name$="cancel"]')
 			 .first()
 
-	//Guess the valid no/cancel button
+	//Do auto valid cancel button detection
 	cButton = response
 		  .find('[type=submit]input[name^="no"],[type=submit]input[name^="cancel"],[type=submit]input[name$="no"],[type=submit]input[name$="cancel"]')
 		  .first()
@@ -144,7 +138,7 @@
 	//add the popup element to form data
 	$(this.forms).attr('data-popup', 'true')
 		     .data('popup',	 this.$element)
-		     .data('datatable',	 this.options.datatable)
+		     .data('datatable',	 this.options.table)
 
 	//Generate a valid buttons text
 	sText = $(sButton).val() || 'Save changes'
@@ -194,6 +188,18 @@
 	//add the content and title to popup
 	this.$element.find('.popup-title').html(this.options.title)
 	this.$element.find('.popup-body').html(response)
+    }
+
+    Popup.prototype.dataTable = function () {
+	if (this.options.consumedt && this.options.table){
+	    var dTable = $(this.options.table)
+	    this.options.table = false
+	    if(dTable.length > 0) this.options.table = dTable
+	}
+	else if (this.options.consumedt && !this.options.table){
+	    var dTable = $(this.options.click).closest('table.dataTable')
+	    if(dTable.length > 0) this.options.table = dTable
+	}
     }
     
     Popup.prototype.tab = function () {
@@ -268,45 +274,36 @@
     }
 
     Popup.prototype.layout = function () {
-	var prop = this.options.height ? 'height' : 'max-height'
-	, value = this.options.height || this.options.maxHeight
-
 	if (this.options.width){
 	    this.$element.css('width', this.options.width);
-
-	//    var that = this
-	//    this.$element.css('margin-left', function () {
-	//	if (/%/ig.test(that.options.width)){
-	//	    return -(parseInt(that.options.width) / 2) + '%';
-	//	} else {
-	//	    return -($(this).width() / 2) + 'px';
-	//	}
-	//    })
-	} else {
-	    //this.$element.css('width', '');
-	    //this.$element.css('margin-left', '')
+	    var that = this
+	    this.$element.css('margin-left', function () {
+		if (/%/ig.test(that.options.width)){
+		    return -(parseInt(that.options.width) / 2) + '%';
+		} else {
+		    return -($(this).width() / 2) + 'px';
+		}
+	    })
+	}
+	
+	if (this.options.height){
+	    var prop = this.options.height ? 'height' : 'max-height'
+	    , value = this.options.height || this.options.maxHeight
+	    
+	    if (value){
+	        this.$element.find('.popup-body')
+	    	.css('overflow', 'auto')
+	    	.css(prop, value)
+	    }
 	}
 
-	//this.$element.find('.popup-body')
-	//    .css('overflow', '')
-	//    .css(prop, '')
-
-	if (value){
-	//    this.$element.find('.popup-body')
-	//	.css('overflow', 'auto')
-	//	.css(prop, value)
-	}
-
-	var modalOverflow = $(window).height() - 10 < this.$element.height();
-
-	if (modalOverflow || this.options.modaloverflow) {
-	    this.$element
-		.css('margin-top', 0)
-		//.addClass('popup-overflow')
-	} else {
-	    this.$element
-		.css('margin-top', 0 - this.$element.height() / 2)
-		//.removeClass('popup-overflow')
+	if (this.options.modaloverflow){
+	    var modalOverflow = $(window).height() - 10 < this.$element.height()
+	    if (modalOverflow || this.options.modaloverflow) {
+		this.$element
+		    .css('margin-top', 0)
+		    .addClass('popup-overflow')
+	    }
 	}
     }
 
@@ -334,7 +331,7 @@
 	    var transition = $.support.transition && that.$element.hasClass('fade')
   
 	    if (!that.$element.parent().length) {
-		//that.layout()
+		that.layout()
 		that.$element.appendTo(that.options.manager) //don't move modals dom position
 	    }
 
@@ -511,10 +508,11 @@
       , minHeight : 100
       , maxWidth : 9999
       , maxHeight : 9999
-      , modaloverflow: true
+      , modaloverflow: false
       , consumetab: true
       , consumeform: true
-      , datatable: false
+      , consumedt: true
+      , table: false
       , focusOn: false
       , replace: false
       , resize: false
