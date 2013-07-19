@@ -26,6 +26,7 @@ return array(
 			 *
 			 * string  hostnames  Server hostname, or socket. Separate multiple hosts by commas.
 			 *                    FALSE and '' are identical. Optional value
+			 * array   options    Options array. Only 'db' is required
 			 */
 			'hostnames'  => 'localhost:27017', // Optional
 			'options'    => array(
@@ -35,7 +36,6 @@ return array(
 				 * string   db                Database to connect to. Cannot contain " ", "." or be the empty string.
 				 *                            The name "system" is also reserved.
 				 * integer  connectTimeoutMS  Default timeout. It is measured in milliseconds.
-				 *                            FALSE and '' are identical
 				 * boolean  connect           Connect to DB on creation connection. How do you want to deal with
 				 *                            connection errors. TRUE - Mango::instance fails and an exception is
 				 *                            thrown. Next call to Mango::instance will try to connect again.
