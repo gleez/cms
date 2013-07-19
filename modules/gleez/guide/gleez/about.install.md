@@ -27,13 +27,32 @@ To install Gleez, follow these instructions:
 
 ### Git Clone Installation
 
+The [source code](https://github.com/gleez/cms) for Gleez is hosted with [GitHub](http://github.com). To install Gleez using the github source code first you need to install [git](http://git-scm.com/).  Visit [http://help.github.com](http://help.github.com) for details on how to install git on your platform.
+
 ~~~
   git clone https://github.com/gleez/cms.git gleezcms
   cd gleezcms
   git submodule update --init --recursive
 ~~~
 
+### ArchLinux Installation
+
+You can install Gleez in ArchLinux using [Yaourt](https://wiki.archlinux.org/index.php/Yaourt):
+
+~~~
+yaourt -S gleez
+~~~
+
+
 Follow from step 3 of the above instructions
+
+Also you can search Gleez & Gleez Modules for ArchLinux by following command:
+
+~~~
+yaourt gleez
+# OR
+yaourt -Ss gleez
+~~~
 
 ### Putting Gleez in a subfolder
 

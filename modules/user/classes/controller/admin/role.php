@@ -96,10 +96,7 @@ class Controller_Admin_Role extends Controller_Admin {
 				$post->save();
 				Message::success(__('Role %name saved successful!', array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/role')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('admin/role')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -130,10 +127,7 @@ class Controller_Admin_Role extends Controller_Admin {
 			Message::error(__("Role doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent role');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/role')->uri());
-			}
+			$this->request->redirect(Route::get('admin/role')->uri());
 		}
 
 		$this->title = __('Edit role %name', array('%name' => $post->name));
@@ -154,10 +148,7 @@ class Controller_Admin_Role extends Controller_Admin {
 
 				Message::success(__('Role %name updated successful!', array('%name' => $post->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/role')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('admin/role')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -201,10 +192,7 @@ class Controller_Admin_Role extends Controller_Admin {
 				$role->delete(); //delete the role
 				Message::success(__('Role: :name deleted successful!', array(':name' => $role->name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/role')->uri());
-				}
+				$this->request->redirect(Route::get('admin/role')->uri());
 			}
 			catch (Exception $e)
 			{
@@ -213,10 +201,7 @@ class Controller_Admin_Role extends Controller_Admin {
 				);
 				Message::error('An error occured deleting blog, :post.',array(':post' => $post->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/role')->uri());
-				}
+				$this->request->redirect(Route::get('admin/role')->uri());
 			}
 		}
 

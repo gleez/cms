@@ -30,15 +30,10 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 		{
 			Message::error(__('Menu: doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu id: `:id`',
-				array(
-					':id' => $id
-				)
+				array(':id' => $id)
 			);
 
-			if (! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri());
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri());
 		}
 
 		$this->title  = __('Items for %vocab', array('%vocab' => $menu->title));
@@ -82,17 +77,14 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			Message::error(__("Menu doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
 
 		$this->title = __('Add Item for %menu', array('%menu' => $menu->title));
 		$view = View::factory('admin/menu/item/form')
 					->bind('menu', $menu)
 					->bind('post', $post)
-					->bind('errors', $errors);
+					->bind('errors', $this->_errors);
 
 		$post = ORM::factory('menu')->values($_POST);
 
@@ -104,14 +96,11 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Message::success(__('Menu Item %name saved successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete($menu->name);
 
-				if (! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id )));
-				}
+				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id )));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models');
+				$this->_errors = $e->errors('models');
 			}
 		}
 
@@ -141,10 +130,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			Message::error(__("Menu doesn't exists!"));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri());
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri());
 		}
 
 		$this->title = __('Edit Item :name', array(':name' => $menu->title));
@@ -164,10 +150,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Message::success(__('Menu Item %name updated successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete_all();
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->scp)), 200);
-				}
+				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->scp)), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -202,10 +185,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			Message::error(__("Menu item doesn't exists!"));
 			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu Item #'.$id);
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/menu')->uri(), 404);
-			}
+			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
 
 		$action = Route::get('admin/menu/item')->uri(array('action' =>'delete', 'id' => $menu->id));
@@ -230,10 +210,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Cache::instance('menus')->delete_all();
 				Message::success(__('Menu Item %name deleted successful!', array('%name' => $name)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu')->uri(array('action' =>'list')), 200);
-				}
+				$this->request->redirect(Route::get('admin/menu')->uri(array('action' =>'list')), 200);
 			}
 			catch (Exception $e)
 			{
@@ -242,11 +219,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				);
 				Message::error(__('An error occurred deleting menu item %term', array('%term' => $menu->title)));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/menu')->uri(array('action' =>'list', 'id' => $menu->scp)));
-				}
-
+				$this->request->redirect(Route::get('admin/menu')->uri(array('action' =>'list', 'id' => $menu->scp)));
 			}
 		}
 

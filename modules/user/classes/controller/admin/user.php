@@ -245,14 +245,14 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting user id: :id, :message',
+				Kohana::$log->add(Log::ERROR, 'Error occurred deleting user id: :id, :message',
 					array(
 						':id' => $user->id,
 						':message' => $e->getMessage()
 					)
 				);
-				Message::error(__('An error occured deleting user, :user.', array(':user' => $user->name)));
-				$this->_errors = array(__('An error occured deleting user, :user.', array(':user' => $user->name)));
+				Message::error(__('An error occurred deleting user, :user.', array(':user' => $user->name)));
+				$this->_errors = array(__('An error occurred deleting user, :user.', array(':user' => $user->name)));
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 		}
