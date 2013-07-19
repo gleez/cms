@@ -101,10 +101,7 @@ class Controller_Contact extends Template {
 				);
 
 				// Always redirect after a successful POST to prevent refresh warnings
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('contact')->uri(), 200);
-				}
+				$this->request->redirect(Route::get('contact')->uri(), 200);
 			}
 			else
 			{

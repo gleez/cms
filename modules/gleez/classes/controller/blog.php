@@ -275,11 +275,7 @@ class Controller_Blog extends Template {
 				Message::success(__('Blog %title created', array('%title' => $post->title)));
 				Kohana::$log->add(LOG::INFO, 'Blog :title created.', array(':title' => $post->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($post->url);
-				}
-
+				$this->request->redirect($post->url);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -371,10 +367,7 @@ class Controller_Blog extends Template {
 				Message::success(__('Blog %title updated', array('%title' => $post->title)));
 				Kohana::$log->add(LOG::INFO, 'Blog :title updated.', array(':title' => $post->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
-				}
+				$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -460,10 +453,7 @@ class Controller_Blog extends Template {
 			$redirect = empty($destination) ? Route::get('blog')->uri(array('action' => 'list')) :
 				$this->request->query('destination');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		$this->response->body($view);

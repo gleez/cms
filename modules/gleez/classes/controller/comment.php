@@ -32,10 +32,7 @@ class Controller_Comment extends Template {
 			Message::error(__('Comment doesn\'t exists!'));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($route, 404);
-			}
+			$this->request->redirect($route, 404);
 		}
 
 		$this->title = $comment->title;
@@ -87,10 +84,7 @@ class Controller_Comment extends Template {
 				Message::success(__('Comment %title has been updated.', array('%title' => $comment->title)));
 				Kohana::$log->add(LOG::INFO, 'Comment: :title updated.', array(':title' => $comment->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(empty($destination) ? $comment->url : $this->request->query('destination'));
-				}
+				$this->request->redirect(empty($destination) ? $comment->url : $this->request->query('destination'));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -141,10 +135,7 @@ class Controller_Comment extends Template {
 
 			$redirect = empty($destination) ? $redirect : $this->redirect;
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		$this->response->body($view);
