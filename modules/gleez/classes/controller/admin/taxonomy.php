@@ -65,7 +65,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 	public function action_add()
 	{
 		$this->title = __('Add Vocab');
-		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $errors);
+		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $this->_errors);
 		$post = ORM::factory('term');
 
 		if ($this->valid_post('vocab'))
@@ -103,7 +103,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		}
 
 		$this->title = __( 'Edit Vocab: :name', array(':name' => $post->name) );
-		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $errors);
+		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $this->_errors);
 
 		if ($this->valid_post('vocab'))
 		{
@@ -166,6 +166,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				Kohana::$log->add(Log::ERROR, 'Error occurred deleting taxonomy id: :id, :message',
 							array(':id' => $term->id, ':message' => $e->getMessage()));
 				Message::error(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
+				$this->_errors = array(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
