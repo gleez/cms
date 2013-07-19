@@ -10,6 +10,29 @@ The __Gleez Log__ component monitors your website, capturing system events in a 
 + __Syslog__ - Writes out messages to syslog
 + __Mango__ -  Writes out messages to with using [MongoDB DBMS](http://www.mongodb.org)
 
+## Usage
+
+You can specify the log writer at bootstrap time in `/application/bootstrap.php` file:
+
+~~~
+// Using file log writer
+Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+
+// Using STDERR log writer
+Kohana::$log->attach(new Log_StdErr());
+
+// Using STDOUT log writer
+Kohana::$log->attach(new Log_StdOut());
+
+// Using Syslog log writer
+Kohana::$log->attach(new Log_Syslog());
+
+// Using Gleez Mango Log
+Kohana::$log->attach(new Log_Mango());
+~~~
+
+Multiple writers are supported.
+
 ## Mango Log Writer
 
 Mango Log Writer uses __Gleez Mango__ component. In its turn __Gleez Mango__ uses configuration groups to create MongoDB instances.
@@ -17,10 +40,15 @@ Mango Log Writer uses __Gleez Mango__ component. In its turn __Gleez Mango__ use
 The default configuration group is loaded based on the `Mango::$default` setting.
 It is set to the `default` group as standard, however this can be changed within the `/application/bootstrap.php` file:
 
-    // Change the default config group
-    Mango::$default = 'mygroup';
+~~~
+// Change the default config group
+Mango::$default = 'mygroup';
 
-## Settings
+// Using Gleez Mango Log
+Kohana::$log->attach(new Log_Mango());
+~~~
+
+### Mango Settings
 
 Below are the default Mango configuration group setting:
 
