@@ -27,6 +27,8 @@ To install Gleez, follow these instructions:
 
 ### Git Clone Installation
 
+The [source code](https://github.com/gleez/cms) for Gleez is hosted with [GitHub](http://github.com). To install Gleez using the github source code first you need to install [git](http://git-scm.com/).  Visit [http://help.github.com](http://help.github.com) for details on how to install git on your platform.
+
 ~~~
   git clone https://github.com/gleez/cms.git gleezcms
   cd gleezcms
