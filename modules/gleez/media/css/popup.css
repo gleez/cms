@@ -95,7 +95,7 @@
 
 .popup-body {
   position: relative;
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   background-color: #fff;
 }
 
@@ -136,7 +136,6 @@
 .popup-footer {
   padding: 10px;
   text-align: right;
-  margin-right: 10px;
   border-top: 1px solid #e5e5e5;
 }
 
