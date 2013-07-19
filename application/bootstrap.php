@@ -91,42 +91,12 @@ Kohana::modules(array(
 	'captcha'     => MODPATH.'captcha',    // Captcha implementation
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
-	//'mango'       => MODPATH.'mango',      // Gleez Mango
+	'mango'       => MODPATH.'mango',      // Gleez Mango
 ));
 
 /**
- * ### Attach the file write to logging
- *
+ * Attach the file write to logging.
  * Multiple writers are supported.
- *
- * ### Usage:
- *
- * Using file log writer:<br>
- * <code>
- *   Kohana::$log->attach(new Log_File(APPPATH.'logs'));
- * </code>
- *
- * Using STDERR log writer:<br>
- * <code>
- *   Kohana::$log->attach(new Log_StdErr());
- * </code>
- *
- * Using STDOUT log writer:<br>
- * <code>
- *   Kohana::$log->attach(new Log_StdOut());
- * </code>
- *
- * Using Syslog log writer:<br>
- * <code>
- *   Kohana::$log->attach(new Log_Syslog());
- * </code>
- *
- * Using Gleez Mango Log:<br>
- * <code>
- *   Kohana::$log->attach(new Log_Mango());
- * </code>
- *
- * @todo Add guide about this to the userguide and wiki
  */
 Kohana::$log->attach(new Log_File(APPPATH.'logs'));
 
@@ -142,14 +112,14 @@ Upload::$default_directory = APPPATH.'uploads';
  * Each route must have a minimum of a name,
  * a URI and a set of defaults for the URI.
  *
- * Example:<br>
- * <code>
+ * Example:
+ * ~~~
  *	Route::set('frontend/page', 'page(/<action>)')
  *		->defaults(array(
  *			'controller' => 'page',
  *			'action' => 'view',
  *	));
- * </code>
+ * ~~~
  *
  * @uses  Path::lookup
  * @uses  Route::cache
