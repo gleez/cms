@@ -18,7 +18,7 @@ return array
 				 	'status'   => TRUE,
 					'settings' => array(
 						'html_nofollow' => TRUE,
-						'allowed_html'  => '<h2> <h3> <h4> <h5> <h6> <a> <abbr> <address> <em> <strong> <b> <i> <br> <hr> <p> <cite> <blockquote> <q> <code> <ul> <ol> <li> <dl> <dt> <dd> <img> <sub> <sup> <s> <center>',
+						'allowed_html'  => '<h2> <h3> <h4> <h5> <h6> <a> <abbr> <address> <em> <strong> <b> <i> <br> <hr> <p> <cite> <blockquote> <q> <code> <ul> <ol> <li> <dl> <dt> <dd> <img> <sub> <sup> <s>',
 						'url_length'    => 72,
 					)
 				),
