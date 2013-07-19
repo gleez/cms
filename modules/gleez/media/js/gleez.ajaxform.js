@@ -76,25 +76,25 @@
 	}
 	else if (data.FormSaved == true){
 	    var popup     = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
-	    var datatable = $(form).data('datatable') || false
+	    var dataTable = $(form).data('datatable') || false
 	    $(form).remove()
 
-	    if(datatable){
-			//redraw dataTables if its a dataTable popup or form add/edit/delete
-			$(datatable).dataTable().fnDraw()
+	    if(dataTable){
+		//redraw dataTables if its a dataTable popup or form add/edit/delete
+		$(dataTable).dataTable().fnDraw()
 	    }
     
 	    //Lets check if the form is in popup window
 	    if(popup && typeof data.messages !== undefined && data.messages.length > 0){
-			var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
-			$(popup).find('.popup-title').html(data.messages[0].type)
-			$(popup).find('.popup-body').html(text)
-			$(popup).find('.popup-footer').html('&nbsp')
+		var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
+		$(popup).find('.popup-title').html(data.messages[0].type)
+		$(popup).find('.popup-body').html(text)
+		$(popup).find('.popup-footer').html('&nbsp')
 	    }
 	    else if(popup){
-			var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
-			$(popup).find('.popup-body').html(text)
-			$(popup).find('.popup-footer').html('&nbsp')
+		var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
+		$(popup).find('.popup-body').html(text)
+		$(popup).find('.popup-footer').html('&nbsp')
 	    }
 	}
     }
@@ -198,22 +198,22 @@
 
 	if (data.fragments) {
 	    for (var s in data.fragments) {
-			$(s).replaceWith(data.fragments[s])
+		$(s).replaceWith(data.fragments[s])
 	    }
 	}
 	if (data['inner-fragments']) {
 	    for (var i in data['inner-fragments']) {
-			$(i).html(data['inner-fragments'][i])
+		$(i).html(data['inner-fragments'][i])
 	    }
 	}
 	if (data['append-fragments']) {
 	    for (var a in data['append-fragments']) {
-			$(a).append(data['append-fragments'][a])
+		$(a).append(data['append-fragments'][a])
 	    }
 	}
 	if (data['prepend-fragments']) {
 	    for (var p in data['prepend-fragments']) {
-			$(p).prepend(data['prepend-fragments'][p])
+		$(p).prepend(data['prepend-fragments'][p])
 	    }
 	}
 
@@ -313,14 +313,14 @@
 	, $target = $this.data('form') || $this.parents('form')
 	, option  = $.extend({}, $target.data(), $this.data())
 
-		// if event has been canceled, don't proceed
-		if (!e.isDefaultPrevented()) {
-			e.preventDefault()
-			
-			option.clkbtn = $this
-			$target.data('clkbtn', $this)
-			$target.removeData('ajaxform').aform(option)
-		}
+	// if event has been canceled, don't proceed
+	if (!e.isDefaultPrevented()) {
+	    e.preventDefault()
+	    
+	    option.clkbtn = $this
+	    $target.data('clkbtn', $this)
+	    $target.removeData('ajaxform').aform(option)
+	}
     })
 
     $(document.body).on('submit.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
