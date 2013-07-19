@@ -5,10 +5,10 @@
    - [Installation](about.install)
    - [Configuration](config)
    - [HMVC](about.hmvc)
-- [Assets Manager](assets)
-- [Breadcrumb](breadcrumb)
-- [Gleez Mango](mango/index)
-  - [Configuration](mango/config)
+- Basic Usage
+   - [Logging](logging)
+   - [Assets](assets)
+   - [Breadcrumb](breadcrumb)
 
 #### Cache
 - [Getting Started](cache/index)

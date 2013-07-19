@@ -115,11 +115,7 @@ class Controller_User extends Template {
 
 				Message::success(__('Account %title created successful!', array('%title' => $post->nick)));
 
-				if( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')));
-				}
-
+				$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
