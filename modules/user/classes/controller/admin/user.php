@@ -54,11 +54,16 @@ class Controller_Admin_User extends Controller_Admin {
 						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
 						HTML::icon(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), 'icon-edit',  array('class'=>'action-edit', 'title'=> __('Edit User'))) . '&nbsp;' .
 						HTML::icon(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $user->id)), 'icon-key',  array('class'=>'', 'title'=> __('Edit Permission'))) . '&nbsp;' .
-						HTML::icon($user->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete User')))
+						HTML::icon($user->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete User'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-users'))
 					)
 				);
 			}
 		}
+
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
 
 		$this->title = __('Users');
 		$url         = Route::url('admin/user', array('action' => 'list'), TRUE);
