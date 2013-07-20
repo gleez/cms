@@ -191,7 +191,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 						HTML::label(__($blog->status), $blog->status),
 						Date::formatted_time($blog->updated, 'M d, Y'),
 						HTML::icon($blog->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Blog'))) . '&nbsp;' .
-							HTML::icon($blog->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Blog')))
+						HTML::icon($blog->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Blog'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-blogs'))
 					)
 				);
 			}
