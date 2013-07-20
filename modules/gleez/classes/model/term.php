@@ -197,15 +197,15 @@ class Model_Term extends ORM_MPTT {
 			break;
 			case 'url':
 			case 'link':
-				// Model specefic links; view, edit, delete url's.
+				// Model specific links; view, edit, delete url's.
 				return ($path = Path::load($this->rawurl)) ? $path['alias'] : $this->rawurl;
 			break;
 			case 'edit_url':
-				// Model specefic links; view, edit, delete url's.
+				// Model specific links; view, edit, delete url's.
 				return Route::get('admin/term')->uri(array('id' => $this->id, 'action' => 'edit'));
 			break;
 			case 'delete_url':
-				// Model specefic links; view, edit, delete url's.
+				// Model specific links; view, edit, delete url's.
 				return Route::get('admin/term')->uri(array('id' => $this->id, 'action' => 'delete'));
 			break;
 		}
