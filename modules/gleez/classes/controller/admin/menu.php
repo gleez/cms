@@ -57,7 +57,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 						HTML::icon(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
 						HTML::icon(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
 						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
-						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-title' => __('Delete Menu')))
+						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-menus'))
 					)
 				);
 			}
