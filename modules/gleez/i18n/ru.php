@@ -744,7 +744,7 @@ return array
 	'Promote to front page' => 'Разместить на главной странице',
 	'Publication' => 'Публикация',
 	'Publish' => 'Опубликовать',
-	'publish' => 'опубликовать',
+	'publish' => 'опубликовано',
 	'Publish the selected comments' => 'Опубликовать выбранные комментарии',
 	'Published' => 'Опубликовано',
 	'Puerto Rico' => 'Пуэрто-Рико',
