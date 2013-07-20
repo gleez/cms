@@ -22,7 +22,7 @@
 					</div>
 				</div>
 			</fieldset>
-			<table id = "admin-list-paths" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1","desc"],["2","asc"],["4","desc"]]'>
+			<table id="admin-list-comments" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1","desc"],["2","asc"],["4","desc"]]'>
 				<thead>
 					<tr>
 						<th width="5%">#</th>
