@@ -73,21 +73,22 @@ class Model_Auth_User extends ORM {
 	 * The password rules should be enforced outside the model or with a model helper method.
 	 *
 	 * @return array Rules
+	 *
+	 * @uses  Config::get
 	 */
 	public function rules()
 	{
-		$config = Kohana::$config->load('auth.name');
 		return array(
 			'name' => array(
 				array('not_empty'),
-				array('min_length', array(':value', max((int)$config['length_min'], 4)) ),
-				array('max_length', array(':value', min((int)$config['length_max'], 32)) ),
-				array('regex', array(':value', '/^[' . $config['chars'] . ']+$/ui') ),
+				array('min_length', array(':value', Config::get('auth.name.length_min', 4))),
+				array('max_length', array(':value', Config::get('auth.name.length_max', 32))),
+				array('regex', array(':value', '/^[' . Config::get('auth.name.chars', 'a-zA-Z0-9_\-\^\.') . ']+$/ui') ),
 				array(array($this, 'unique'), array('name', ':value')),
 			),
 			'pass' => array(
 				array('not_empty'),
-				array('min_length', array(':value', 4)),
+				array('min_length', array(':value', Config::get('auth.password.length_min', 4))),
 			),
 			'mail' => array(
 				array('not_empty'),
@@ -432,7 +433,7 @@ class Model_Auth_User extends ORM {
 	 *
 	 * @uses    System::mkdir Making dir for uploading photo
 	 * @uses    Message::error
-	 * @uses    Kohana_log::add
+	 * @uses    Log::add
 	 * @uses    Text::plain
 	 * @uses    Upload::valid
 	 * @uses    Upload::save
@@ -446,12 +447,12 @@ class Model_Auth_User extends ORM {
 		{
 			if( ! System::mkdir($profile_path))
 			{
-				Message::error(__('Failed to create directory %dir for uploading prfile image. Check the permissions the web server to create this directory.',
+				Message::error(__('Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.',
 					array('%dir' => Text::plain($profile_path))
 				));
 
-				Kohana::$log->add(Log::ERROR, 'Failed to create directory %dir for uploading profile image.',
-					array('%dir' => Text::plain($profile_path))
+				Kohana::$log->add(Log::ERROR, 'Failed to create directory :dir for uploading profile image.',
+					array(':dir' => Text::plain($profile_path))
 				);
 			}
 		}
@@ -459,7 +460,7 @@ class Model_Auth_User extends ORM {
 		// Check if there is an uploaded file
 		if (Upload::valid($file))
 		{
-			$filename = uniqid().preg_replace('/\s+/u', '-', $file['name']);
+			$filename = File::getUnique($file['name']);
 			$path = Upload::save($file, $filename, $profile_path);
 
 			if ($path)
@@ -781,7 +782,7 @@ class Model_Auth_User extends ORM {
 		$labels = $this->labels();
 		$rules  = $this->rules();
 
-		$config = Kohana::$config->load('site');
+		$config = Config::load('site');
 
 		$data = Validation::factory($data)
 				->rule('mail', 'not_empty')
@@ -858,7 +859,7 @@ class Model_Auth_User extends ORM {
 			return FALSE;
 
 		// Confirmation link expired
-		if ($time + Kohana::$config->load('site.reset_password_expiration') < time())
+		if ($time + Config::get('site.reset_password_expiration', 86400) < time())
 			return FALSE;
 
 		//clear any loaded object in memory
