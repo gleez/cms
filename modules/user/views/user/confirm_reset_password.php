@@ -14,5 +14,5 @@
 		<?php echo Form::password('pass_confirm', NULL, array('class' => 'text medium')); ?>
 	</div>
 
-	<?php echo Form::submit('password_confirm', __('Apply new password'), array('class' => 'btn btn-primary')) ?>
+	<?php echo Form::submit('password_confirm', __('Apply new password'), array('class' => 'btn btn-success')) ?>
 <?php echo Form::close() ?>

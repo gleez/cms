@@ -33,6 +33,6 @@
 	</div>
 </div>
 
-<?php echo Form::submit('term', __('Save'), array('class' => 'btn btn-primary btn-large')); ?>
+<?php echo Form::submit('term', __('Save'), array('class' => 'btn btn-success pull-right')); ?>
 
 <?php echo Form::close() ?>
