@@ -359,10 +359,7 @@ class Controller_Page extends Template {
 				Message::success(__('Page %title updated', array('%title' => $post->title)));
 				Kohana::$log->add(LOG::INFO, 'Page: :title updated.', array(':title' => $post->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
-				}
+				$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -405,7 +402,7 @@ class Controller_Page extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
-		if( ! ACL::post('delete', $post))
+		if ( ! ACL::post('delete', $post))
 		{
 			// If the post was not loaded, we return access denied.
 			throw new HTTP_Exception_403('Access denied!');
@@ -417,12 +414,11 @@ class Controller_Page extends Template {
 					array('destination' => $this->request->query('destination')) : array();
 
 		$view = View::factory('form/confirm')
-					->set('action', Route::get('page')
-					->uri(array('action' => 'delete', 'id' => $post->id)).URL::query($destination))
-					->set('title', $post->title);
+					->set('action', $post->delete_url.URL::query($destination))
+					->set('title',  $post->title);
 
 		// If deletion is not desired, redirect to post
-		if(isset($_POST['no']) AND $this->valid_post())
+		if (isset($_POST['no']) AND $this->valid_post())
 		{
 			$this->request->redirect($post->url);
 		}
@@ -435,9 +431,8 @@ class Controller_Page extends Template {
 				$title = $post->title;
 				$post->delete();
 
-				Cache::instance('page')->delete('page-'.$id);
 				Message::success(__('Page: :title deleted successful!', array(':title' => $title)));
-				Kohana::$log->add(LOG::INFO, 'Page: :title deleted.', array(':title' => $title) );
+				Kohana::$log->add(LOG::INFO, 'Page: :title deleted.', array(':title' => $title));
 			}
 			catch (Exception $e)
 			{
@@ -446,13 +441,9 @@ class Controller_Page extends Template {
 				Message::error(__('An error occurred deleting page %post',array('%post' => $post->title)));
 			}
 
-			$redirect = empty($destination) ? Route::get('page')->uri(array('action' => 'list')) :
-						$this->request->query('destination');
+			$redirect = empty($destination) ? Route::get('page')->uri() : $this->request->query('destination');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect($redirect);
-			}
+			$this->request->redirect($redirect);
 		}
 
 		$this->response->body($view);

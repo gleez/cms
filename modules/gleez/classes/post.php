@@ -202,8 +202,7 @@ class Post extends ORM_Versioned {
 	 * @param   string      $field       Field name
 	 *
 	 * @uses    Valid::numeric
-	 * @uses    Config::load
-	 * @uses    Config_Group::get
+	 * @uses    Config::get
 	 */
 	public function is_valid($name, Validation $validation, $field)
 	{
@@ -271,7 +270,7 @@ class Post extends ORM_Versioned {
 		{
 			if (isset($_FILES['image']['name']) AND ! empty($_FILES['image']['name']))
 			{
-				$allowed_types = Config::load('media')->get('supported_image_formats', array('jpg', 'png', 'gif'));
+				$allowed_types = Config::get('media.supported_image_formats', array('jpg', 'png', 'gif'));
 				$data = Validation::factory($_FILES)
 					->rule('image', 'Upload::not_empty')
 					->rule('image', 'Upload::valid')
@@ -334,7 +333,7 @@ class Post extends ORM_Versioned {
 	 *
 	 * @uses    URL::site
 	 * @uses    User::active_user
-	 * @uses    Config::load
+	 * @uses    Config::get
 	 * @uses    Cache::delete
 	 */
 	public function save(Validation $validation = NULL)
@@ -352,7 +351,7 @@ class Post extends ORM_Versioned {
 		$this->image   = empty($this->rawimage) ? NULL : $this->rawimage;
 		$this->type    = empty($this->type)     ? $this->_post_type : $this->type;
 		$this->author  = empty($this->author)   ? User::active_user()->id : $this->author;
-		$this->format  = empty($this->format)   ? Kohana::$config->load('inputfilter.default_format', 1) : $this->format;
+		$this->format  = empty($this->format)   ? Config::get('inputfilter.default_format', 1) : $this->format;
 
 		// Always save only raw text, unformated text
 		$this->teaser  = empty($this->rawteaser) ? $this->_teaser() : $this->rawteaser;

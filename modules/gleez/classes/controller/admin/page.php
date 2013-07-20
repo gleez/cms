@@ -154,7 +154,7 @@ class Controller_Admin_Page extends Controller_Admin {
 						HTML::label(__($page->status), $page->status),
 						Date::formatted_time($page->updated, 'M d, Y'),
 						HTML::icon($page->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
-						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page'), 'data-toggle' => 'popup', 'data-title' => __('Delete Page')))
+						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-pages'))
 					)
 				);
 			}
