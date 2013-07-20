@@ -195,6 +195,6 @@
 </div>
 <div class="clearfix"></div>
 <hr>
-<?php echo Form::submit('settings', __('Save Changes'), array('class' => 'btn btn-primary btn-large')) ?>
+<?php echo Form::submit('settings', __('Save Changes'), array('class' => 'btn btn-success pull-right')) ?>
 <?php echo Form::close() ?>
 

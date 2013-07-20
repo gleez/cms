@@ -25,7 +25,7 @@ class Model_Page extends Post {
 	 * Updates or Creates the record depending on loaded()
 	 *
 	 * @param   Validation $validation Validation object [Optional]
-	 * @return  Gleez_Post
+	 * @return  Post
 	 */
 	public function save(Validation $validation = NULL)
 	{
@@ -104,7 +104,7 @@ class Model_Page extends Post {
 	 * Deletes a single record or multiple records, ignoring relationships
 	 *
 	 * @param   integer  $id  Row ID. The search criteria [Optional]
-	 * @return  Gleez_Post
+	 * @return  Post
 	 */
 	public function delete($id = NULL)
 	{

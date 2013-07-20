@@ -14,7 +14,7 @@
 
 		<div class="modal-body-text">
 			<p><?php echo __('Your picture will be changed proportionally to the size of :w&times;:h', array(':w' => 150, ':h' => 150)); ?></p>
-			<?php /** @todo Show info about supported formats.. */ ?>
+			<p><?php echo __('Allowed image formats: :formats', array(':formats' => '<strong>'.implode('</strong>, <strong>', $allowed_types).'</strong>')) ?></p>
 		</div>
 
 		<div id="status"></div>
@@ -24,7 +24,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<?php echo Form::submit('user_edit', __('Upload'), array('class' => 'btn btn-primary')) ?>
+		<?php echo Form::submit('user_edit', __('Upload'), array('class' => 'btn btn-success')) ?>
 		<?php echo Form::button('change_passwd', __('Close'), array('class' => 'btn', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')); ?>
 	</div>
 

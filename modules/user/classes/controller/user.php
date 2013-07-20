@@ -251,6 +251,11 @@ class Controller_User extends Template {
 
 		if ($account AND $account->id == $user->id)
 		{
+			Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+			Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+			Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+			Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 			$this->title = __('My Account');
 		}
 		elseif ($account AND ((ACL::check('access profiles') AND $user->status) OR ACL::check('administer users')))
@@ -407,13 +412,14 @@ class Controller_User extends Template {
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
 		}
 
-		$config = Kohana::$config->load('media');
+		$allowed_types = Config::get('media.supported_image_formats', array('jpg', 'png', 'gif'));
 		$user = $this->_auth->get_user();
 		$this->title =  __('Upload Photo');
 
 		$view = View::factory('user/photo')
-					->set('user',    $user)
-					->bind('errors', $this->_errors);
+					->set('user',          $user)
+					->set('allowed_types', $allowed_types)
+					->bind('errors',       $this->_errors);
 
 		// Form submitted
 		if ($this->valid_post('user_edit'))

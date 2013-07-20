@@ -89,6 +89,6 @@
 		</div>
 	</div>
 
-	<?php echo Form::submit('blog_settings', __('Save'), array('class' => 'btn btn-primary pull-right')); ?>
+	<?php echo Form::submit('blog_settings', __('Save'), array('class' => 'btn btn-success pull-right')); ?>
 	<div class="clearfix"></div><br>
 <?php echo Form::close() ?>
