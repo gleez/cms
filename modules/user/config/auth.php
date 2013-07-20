@@ -75,6 +75,14 @@ return array
 	),
 
 	/**
+	 * Password rules for validation
+	 * @var  array
+	 */
+	'password' => array(
+		'length_min' => 4,
+	),
+
+	/**
 	 * Use confirm password field in registration?
 	 * @var  boolean
 	 */
