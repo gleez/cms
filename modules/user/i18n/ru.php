@@ -165,7 +165,7 @@ return array
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',
 	'Upload' => 'Загрузить',
-	'Uploading Photos' => 'Загрузка фотографии',
+	'Upload Photo' => 'Загрузка фотографии',
 	'User Account' => 'Аккаунт пользователя',
 	"User doesn't exists!" => "Пользователь не найден!",
 	'User Registration' => 'Регистрация пользователя',
