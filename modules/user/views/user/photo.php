@@ -24,7 +24,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<?php echo Form::submit('user_edit', __('Upload'), array('class' => 'btn btn-primary')) ?>
+		<?php echo Form::submit('user_edit', __('Upload'), array('class' => 'btn btn-success')) ?>
 		<?php echo Form::button('change_passwd', __('Close'), array('class' => 'btn', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')); ?>
 	</div>
 

@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-	<?php echo Form::button('add_path', __('Save'), array('class' => 'btn btn-primary', 'type' => 'submit')); ?>
+	<?php echo Form::button('add_path', __('Save'), array('class' => 'btn btn-success pull-right', 'type' => 'submit')); ?>
 	<div class="clearfix"></div><br>
 
 <?php echo Form::close() ?>

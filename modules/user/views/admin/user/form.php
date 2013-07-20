@@ -51,6 +51,6 @@
 </table>
 
 <?php echo Form::hidden('site_url', URL::site(NULL, TRUE), array('id'=>'site_url')) ?>
-<?php echo Form::submit('user', __('Save'), array('class' => 'btn btn-primary')) ?>
+<?php echo Form::submit('user', __('Save'), array('class' => 'btn btn-success pull-right')) ?>
 
 <?php echo Form::close(); ?>

@@ -23,6 +23,6 @@
 	</div>
 
 	<div class="clearfix"></div>
-	<?php echo Form::submit('menu', __('Save'), array('class' => 'btn btn-primary btn-large')) ?>
+	<?php echo Form::submit('menu', __('Save'), array('class' => 'btn btn-success pull-right')) ?>
 
 <?php echo Form::close() ?>

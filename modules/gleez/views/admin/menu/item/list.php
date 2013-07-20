@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access.') ?>
 
-<?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $id)), '<i class="icon-plus icon-white"></i>'.__('Add New Item'), array('title'=>__('Add New Item'), 'class' => 'btn btn-danger pull-right')); ?>
+<?php echo HTML::anchor(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $id)), '<i class="icon-plus icon-white"></i>'.__('Add New Item'), array('title'=>__('Add New Item'), 'class' => 'btn btn-success pull-right')); ?>
 <div class='clearfix'></div><br/>
 
 	<?php echo Form::open(Route::get('admin/menu/item')->uri(array('action' => 'confirm', 'id' => $id)), array('id'=>'menu-form', 'class'=>'form')); ?>
@@ -47,6 +47,6 @@
 			<?php endforeach ?>
 		</tbody>
 	</table>
-	<?php echo Form::submit('menu-item-list', __('Save'), array('class'=>'btn btn-primary pull-right')); ?>
+	<?php echo Form::submit('menu-item-list', __('Save'), array('class'=>'btn btn-success pull-right')); ?>
     <div class="clearfix"></div><br>
 <?php echo Form::close(); ?>
