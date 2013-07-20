@@ -167,6 +167,11 @@ class Controller_Admin_Blog extends Controller_Admin {
 	 */
 	public function action_list()
 	{
+		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
+		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
+		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+
 		$this->title = __('Blog List');
 
 		$url         = Route::url('admin/blog', array('action' => 'list'), TRUE);
@@ -191,7 +196,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 						HTML::label(__($blog->status), $blog->status),
 						Date::formatted_time($blog->updated, 'M d, Y'),
 						HTML::icon($blog->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Blog'))) . '&nbsp;' .
-							HTML::icon($blog->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Blog')))
+						HTML::icon($blog->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Blog'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-blogs'))
 					)
 				);
 			}
