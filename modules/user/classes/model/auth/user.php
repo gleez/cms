@@ -101,7 +101,7 @@ class Model_Auth_User extends ORM {
 				array('url'),
 			),
 			'bio' => array(
-				array('max_length', array(':value', 1024)),
+				array('max_length', array(':value', 800)),
 			),
 		);
 	}
