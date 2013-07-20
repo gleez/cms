@@ -56,6 +56,6 @@
 		</div>
 	</div>
 
-	<?php echo Form::submit('user_edit', __('Update Profile'), array('class' => 'btn btn-primary pull-right')) ?>
+	<?php echo Form::submit('user_edit', __('Update Profile'), array('class' => 'btn btn-success pull-right')) ?>
 	<div class="clearfix"></div><br>
 <?php echo Form::close() ?>
