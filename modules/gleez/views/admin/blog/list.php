@@ -17,11 +17,11 @@
 					<div class="span8">
 						<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
 							<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'blog'), '', array('class' => 'span6')); ?>
-							<?php echo Form::submit('blog-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
+							<?php echo Form::submit('blog-bulk-actions', __('Apply'), array('class'=>'btn')); ?>
 						</div>
 					</div>
 					<div class="span4">
-						<?php echo HTML::anchor(Route::get('blog')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> '.__('New entry'), array('class'=>'bulk-add pull-right')); ?>
+						<?php echo HTML::anchor(Route::get('blog')->uri(array('action' => 'add')), '<i class="icon-plus icon-white"></i> '.__('New entry'), array('class'=>'btn btn-success pull-right')); ?>
 					</div>
 				</div>
 			</fieldset>
