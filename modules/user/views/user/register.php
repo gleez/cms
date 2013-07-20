@@ -80,7 +80,7 @@
 				</div>
 			<?php endif; ?>
 		</div>
-		<?php echo Form::submit('register', __('Register new account'), array('class' => 'btn btn-danger btn-block btn-large')) ?>
+		<?php echo Form::submit('register', __('Register new account'), array('class' => 'btn btn-block btn-large')) ?>
 		</div>
 		</div>
 		<?php echo Form::close(); ?>

@@ -57,6 +57,6 @@
 		<?php endforeach ?>
 
 	</table>
-	<?php echo Form::submit('permissions', __('Save Permissions'), array('class' => 'btn btn-primary pull-right')) ?>
+	<?php echo Form::submit('permissions', __('Save Permissions'), array('class' => 'btn btn-success pull-right')) ?>
 	<div class="clearfix"></div><br>
 	<?php echo Form::close() ?>

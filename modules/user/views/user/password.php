@@ -28,6 +28,6 @@
 </div>
 
 <div class="form-actions">
-	<?php echo Form::submit('change_pass', __('Save'), array('class' => 'btn btn-primary pull-right')); ?>
+	<?php echo Form::submit('change_pass', __('Save'), array('class' => 'btn btn-success pull-right')); ?>
 </div>
 <?php echo Form::close() ?>

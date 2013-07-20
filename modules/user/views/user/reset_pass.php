@@ -14,6 +14,6 @@
 		</div>
 	</div>
 
-	<?php echo Form::submit('reset_pass', __('Reset'), array('class' => 'btn btn-primary')); ?>
+	<?php echo Form::submit('reset_pass', __('Reset'), array('class' => 'btn btn-danger')); ?>
 
 <?php echo Form::close() ?>

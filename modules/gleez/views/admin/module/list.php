@@ -44,6 +44,6 @@
 		</tbody>
 	</table>
 
-	<?php echo Form::submit('modules', __('Save'), array('class'=>'btn btn-primary pull-right')); ?>
-	<div class="clearfix"></div><br>
+	<?php echo Form::submit('modules', __('Save'), array('class'=>'btn btn-success pull-right')); ?>
+
 <?php echo Form::close(); ?>

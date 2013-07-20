@@ -17,7 +17,7 @@
 					<div class="span12">
 						<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
 							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'span6')); ?>
-							<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn btn-danger')); ?>
+							<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn')); ?>
 						</div>
 					</div>
 				</div>

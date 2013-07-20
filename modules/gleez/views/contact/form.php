@@ -62,7 +62,7 @@
 		</div>
 	</div>
 
-	<?php echo Form::submit('contact', __('Send message'), array('class' => 'btn btn-primary pull-right')); ?>
+	<?php echo Form::submit('contact', __('Send message'), array('class' => 'btn pull-right')); ?>
 	<div class="clearfix"></div><br>
 
 <?php echo Form::close() ?>

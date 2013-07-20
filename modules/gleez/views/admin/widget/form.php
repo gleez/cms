@@ -106,6 +106,6 @@
 
 	<div class="clearfix"></div>
 
-	<?php echo Form::hidden('widget', $widget->name ); ?>
-	<?php echo Form::submit('widget', __('Save'), array('class' => 'btn btn-primary btn-large')); ?>
+	<?php echo Form::hidden('widget', $widget->name); ?>
+	<?php echo Form::submit('widget', __('Save'), array('class' => 'btn btn-success pull-right')); ?>
 <?php echo Form::close(); ?>

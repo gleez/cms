@@ -29,7 +29,7 @@
 		</div>
 	</div>
 
-	<?php echo Form::submit('tag', __('Save'), array('class' => 'btn btn-primary pull-right')); ?>
+	<?php echo Form::submit('tag', __('Save'), array('class' => 'btn btn-success pull-right')); ?>
 	<div class="clearfix"></div><br>
 
 <?php echo Form::close() ?>
