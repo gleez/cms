@@ -746,6 +746,7 @@ return array
 	'Publish' => 'Опубликовать',
 	'publish' => 'опубликовать',
 	'Publish the selected comments' => 'Опубликовать выбранные комментарии',
+	'Published' => 'Опубликовано',
 	'Puerto Rico' => 'Пуэрто-Рико',
 	'Pyongyang' => 'Пхеньян',
 	// Q

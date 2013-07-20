@@ -231,7 +231,7 @@ class Controller_Page extends Template {
 		ACL::required('create page');
 
 		$this->title = __('Add Page');
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
@@ -273,11 +273,7 @@ class Controller_Page extends Template {
 				Message::success(__('Page %title created', array('%title' => $post->title)));
 				Kohana::$log->add(LOG::INFO, 'Page :title created.', array(':title' => $post->title));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect($post->url);
-				}
-
+				$this->request->redirect($post->url);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
