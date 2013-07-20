@@ -25,7 +25,7 @@
 					</div>
 				</div>
 			</fieldset>
-			<table id ="blog-admin-list" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>
+			<table id="admin-list-blogs" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["4", "desc"]]'>
 				<thead>
 					<tr>
 						<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>
