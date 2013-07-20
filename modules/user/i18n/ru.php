@@ -70,6 +70,7 @@ return array
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
+	'Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.' => 'Не удалось создать каталог %dir для загрузки изображения профиля. Проверьте права доступа веб-сервера на создание этого каталога.',
 	'Fill in the information below to register' => 'Для регистрации заполните регистрационную анкету ниже',
 	'First Visit' => 'Первое посещение',
 	'Forgot Password?' => 'Забыли пароль?',
