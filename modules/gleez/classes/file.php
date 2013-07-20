@@ -5,6 +5,7 @@
  * @package    Gleez\SPL
  * @author     Sergey Yakovlev - Gleez
  * @author     Kohana Team
+ * @version    1.0.1
  * @copyright  (c) 2007-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -390,5 +391,19 @@ class File extends SplFileInfo {
 		}
 
 		return $pieces;
+	}
+
+	/**
+	 * Generate a unique filename to avoid conflicts
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   string  $name  Filename
+	 *
+	 * @return  string
+	 */
+	public static function getUnique($name)
+	{
+		return uniqid().preg_replace('/\s+/u', '-', $name);
 	}
 }
