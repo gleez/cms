@@ -210,7 +210,7 @@ class Controller_Admin_Page extends Controller_Admin {
 
 		if ($this->valid_post('page-bulk-actions'))
 		{
-			if(isset($post['operation']) AND empty($post['operation']))
+			if (isset($post['operation']) AND empty($post['operation']))
 			{
 				Message::error(__('No bulk operation selected.'));
 				$this->request->redirect($redirect);
@@ -229,10 +229,15 @@ class Controller_Admin_Page extends Controller_Admin {
 					$pages = array_filter($post['posts']); // Filter out unchecked posts
 					$this->title = __('Delete Pages');
 
-					$items = DB::select('id', 'title')->from('posts')
-								->where('id', 'IN', $pages)->execute()->as_array('id', 'title');
+					$items = DB::select('id', 'title')
+							->from('posts')
+							->where('id', 'IN', $pages)
+							->execute()
+							->as_array('id', 'title');
 
-					$view = View::factory('form/confirm_multi')->set('action', '')->set('items', $items );
+					$view = View::factory('form/confirm_multi')
+							->set('action', '')
+							->set('items', $items);
 
 					$this->response->body($view);
 					return;
@@ -249,7 +254,7 @@ class Controller_Admin_Page extends Controller_Admin {
 			}
 		}
 		
-		//always redirect to list, if no action performed
+		// always redirect to list, if no action performed
 		$this->request->redirect($redirect);
 	}
 	
@@ -257,6 +262,9 @@ class Controller_Admin_Page extends Controller_Admin {
 	 * Bulk updates
 	 *
 	 * @param  array  $post
+	 *
+	 * @uses   Post::bulk_actions
+	 * @uses   Arr::callback
 	 */
 	private function _bulk_update($post)
 	{
