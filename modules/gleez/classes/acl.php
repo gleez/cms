@@ -16,7 +16,7 @@
  * - Any ORM implementation
  *
  * @package    Gleez\ACL
- * @version    2.0.0
+ * @version    2.1.0
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -107,18 +107,19 @@ class ACL {
 	/**
 	 * Sets up a named Permission and returns it.
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *  ACL::set('admin/widgets',
 	 *    array(
 	 *      'administer site widgets',
 	 *      'administer admin widgets'
 	 *    )
 	 * );
-	 * </code>
+	 * ~~~
 	 *
 	 * @param   string  $name          Permission name
 	 * @param   array   $access_names  Access keys
+	 *
 	 * @return  ACL
 	 */
 	public static function set($name, array $access_names)
@@ -130,10 +131,10 @@ class ACL {
 	/**
 	 * Retrieves all named permissions
 	 *
-	 * Example:<br>
-	 * <code>
-	 *  $permissions = ACL::all();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $permissions = ACL::all();
+	 * ~~~
 	 *
 	 * @return  array  Perms by name
 	 */
@@ -143,38 +144,41 @@ class ACL {
 	}
 
 	/**
-	 * Saves or loads the ACL cache
+	 * Setter/Getter for ACL cache
 	 *
-	 * If your perms will remain the same for a long period of time,
-	 * use this to reload the ACL from the cache rather than
-	 * redefining them on every page load.
+	 * If your perms will remain the same for a long period of time, use this
+	 * to reload the ACL from the cache rather than redefining them on every page load.
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *  if ( ! ACL::cache())
 	 *  {
 	 *    // Set perms here
 	 *    ACL::cache(TRUE);
 	 *  }
-	 * </code>
+	 * ~~~
 	 *
-	 * @param   boolean $save   Cache the current perms
-	 * @param   boolean $append Append, rather than replace, cached perms when loading
-	 * @return  void            When saving perms
-	 * @return  boolean         When loading perms
-	 * @uses    Kohana::cache
+	 * @param   boolean  $save    Cache the current perms [Optional]
+	 * @param   boolean  $append  Append, rather than replace, cached perms when loading [Optional]
+	 *
+	 * @return  boolean
+	 *
+	 * @uses    Cache::set
+	 * @uses    Cache::get
 	 * @uses    Arr::merge
 	 */
 	public static function cache($save = FALSE, $append = FALSE)
 	{
+		$cache = Cache::instance();
+
 		if ($save)
 		{
 			// Cache all defined perms
-			Kohana::cache('ACL::cache()', ACL::$_all_perms);
+			return $cache->set('ACL::cache()', ACL::$_all_perms);
 		}
 		else
 		{
-			if ($perms = Kohana::cache('ACL::cache()'))
+			if ($perms = $cache->get('ACL::cache()'))
 			{
 				if ($append)
 				{
@@ -204,26 +208,28 @@ class ACL {
 	 * If the user doesn't have this permission,
 	 * failed with an HTTP_Exception_403 or execute `$callback` if it is defined
 	 *
-	 * Example with a callable function:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
+	 * // Example with a callable function
 	 * ACL::required(
 	 *    'administer site',
 	 *    NULL,
 	 *    $this->request->redirect(Route::get('user')->uri(array('action' => 'login')))
 	 * );
-	 * </code>
 	 *
-	 * Simple check:<br>
-	 * <code>
+	 * // Simple check
 	 *   ACL::required('administer site');
-	 * </code>
+	 * ~~~
 	 *
 	 * @since     2.0
+	 *
 	 * @param     string      $perm_name  Permission name
 	 * @param     Model_User  $user       User object [Optional]
 	 * @param     callable    $callback   A callable function that execute if it is defined [Optional]
 	 * @param     array       $args       The callback arguments
+	 *
 	 * @return    boolean
+	 *
 	 * @throws    HTTP_Exception_403 If the user doesn't have permission
 	 * @throws    Exception          if the `$callback` is a not valid callback
 	 */
@@ -264,7 +270,9 @@ class ACL {
 	 * @param  string  $perm_name  Permission name
 	 * @param  string  $route      Route name [Optional]
 	 * @param  array   $uri        Additional route params [Optional]
+	 *
 	 * @throws HTTP_Exception_403
+	 *
 	 * @uses   Request::redirect()
 	 * @uses   Route::get()
 	 */
@@ -297,7 +305,9 @@ class ACL {
 	 *
 	 * @param   string      $perm_name  Permission name
 	 * @param   Model_User  $user       User object [Optional]
+	 *
 	 * @return  boolean
+	 *
 	 * @uses    User::active_user
 	 */
 	public static function check($perm_name, Model_User $user = NULL)
@@ -371,6 +381,7 @@ class ACL {
 	 * Added cache support for performance.
 	 *
 	 * @since   2.0
+	 *
 	 * @return  boolean  FALSE If the role(s) doesn't have any permission
 	 * @return  array    Role(s) with permission(s) as array
 	 */
@@ -453,8 +464,11 @@ class ACL {
 	 * @param   ORM        $post    The post object
 	 * @param   Model_User $user    The user object to check permission, defaults to loaded in user
 	 * @param   string     $misc    The misc element usually `id|slug` for logging purpose
+	 *
 	 * @return  boolean
+	 *
 	 * @throws  HTTP_Exception_404
+	 *
 	 * @uses    User::active_user
 	 * @uses    Module::event
 	 */
@@ -554,8 +568,11 @@ class ACL {
 	 * @param   ORM        $comment  The comment object
 	 * @param   Model_User $user     The user object to check permission, defaults to loaded in user
 	 * @param   string     $misc     The misc element usually `id|slug` for logging purpose
+	 *
 	 * @return  boolean
+	 *
 	 * @throws  HTTP_Exception_404
+	 *
 	 * @uses    User::active_user
 	 * @uses    Module::event
 	 */
