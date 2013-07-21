@@ -51,7 +51,7 @@
 			<?php endif; ?>
 
 			<div class="control-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
-				<?php echo Form::label('content', __(''), array('class' => 'control-label') ) ?>
+				<?php echo Form::label('body', __('Content'), array('class' => 'control-label')) ?>
 				<div class="controls">
 					<?php echo Form::textarea('body', $blog->rawbody, array('class' => 'textarea span12', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
 				</div>
