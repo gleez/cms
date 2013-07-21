@@ -2,7 +2,7 @@
  * This is a highly modified version of the bootstrap popup dialog.
  *
  * @package    Gleez\Popup
- * @version    1.2
+ * @version    1.3
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -25,6 +25,9 @@
 	this.$backdrop =
 	this.isShown   = null
 	this.forms     = false
+	
+	this.windowWidth	= $(window).width()
+	this.windowHeight	= $(window).height()
 
 	this.options.loading && this.loading()
 	this.local()
@@ -214,7 +217,7 @@
 		if (e.keyCode && e.keyCode == 9){
 		    var $next = $(this)
 		    ,   $rollover = $(this)
-
+		    
 		    that.$element.find('[data-tabindex]:enabled:not([readonly])').each(function (e) {
 			if (!e.shiftKey){
 			    $next = $next.data('tabindex') < $(this).data('tabindex') ?
@@ -226,9 +229,9 @@
 					$rollover = $(this);
 			}
 		    })
-
+		    
 		    $next[0] !== $(this)[0] ? $next.focus() : $rollover.focus()
-
+		    
 		    e.preventDefault()
 		}
 	    })
@@ -276,18 +279,22 @@
 	    callback(this.isLoading);
 	}
     }
-
+    
     Popup.prototype.layout = function () {
-	if (this.options.width){
-	    this.$element.css('width', this.options.width);
+	if (this.options.width && this.windowWidth > 768){
+	    this.$element.find('.popup-dialog').css('width', this.options.width)
 	    var that = this
-	    this.$element.css('margin-left', function () {
+	    this.$element.find('.popup-dialog').css('margin-left', function () {
 		if (/%/ig.test(that.options.width)){
-		    return -(parseInt(that.options.width) / 2) + '%';
+		    return -(parseInt(that.options.width) / 2) + '%'
 		} else {
-		    return -($(this).width() / 2) + 'px';
+		    return -($(this).width() / 2) + 'px'
 		}
 	    })
+	}
+	else if (this.options.width && this.windowWidth < 769){
+	    this.$element.find('.popup-dialog').css('width', 'auto')
+	    this.$element.find('.popup-dialog').css('margin-left', '0')
 	}
 	
 	if (this.options.height){
@@ -311,6 +318,16 @@
 	}
     }
 
+    Popup.prototype.modalResize = function () {
+	if (!this.isShown) return
+	if (!this.options.width && !this.options.height) return
+	
+	this.windowWidth  = $(window).width()
+	this.windowHeight = $(window).height()
+	
+	this.layout()
+    }
+    
     Popup.prototype.toggle = function () {
 	return this[!this.isShown ? 'show' : 'hide']()
     }
@@ -330,6 +347,7 @@
 	this.tab()
 
 	this.options.loading && this.loading()
+	$(window).on('resize.popup.data-api', $.proxy(this.modalResize, this))
 
 	this.backdrop(function () {
 	    var transition = $.support.transition && that.$element.hasClass('fade')
@@ -540,7 +558,6 @@
 	return this
     }
 
-
    // POPUP DATA-API
    // ==============
 
@@ -561,7 +578,7 @@
 		$this.focus()
 	})
     })
-
+    
     var $body = $(document.body)
       .on('shown.popup',  '.popup', function () { $body.addClass('popup-open') })
       .on('hidden.popup', '.popup', function () { $body.removeClass('popup-open') })
