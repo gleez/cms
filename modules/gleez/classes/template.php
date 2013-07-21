@@ -850,6 +850,7 @@ abstract class Template extends Controller {
 			$this->SetJson('errors',     $this->_errors);
 			$this->SetJson('redirect',   Request::$redirect_url);
 			$this->SetJson('title',      $this->title);
+			$this->SetJson('subtitle',   $this->subtitle);
 			$this->SetJson('css',        $styles);
 			$this->SetJson('js',         $scripts);
 
