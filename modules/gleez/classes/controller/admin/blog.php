@@ -164,13 +164,11 @@ class Controller_Admin_Blog extends Controller_Admin {
 	 * @uses  HTML::label
 	 * @uses  HTML::icon
 	 * @uses  Post::bulk_actions
+	 * @uses  Assets::popup
 	 */
 	public function action_list()
 	{
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
-		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
-		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+		Assets::popup();
 
 		$this->title = __('Blog List');
 

@@ -21,12 +21,14 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		parent::before();
 	}
 
+	/**
+	 * Lists Vocabularies
+	 *
+	 * @uses  Assets::popup
+	 */
 	public function action_list()
 	{
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
-		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
-		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+		Assets::popup();
 
 		$is_datatables = Request::is_datatables();
 		$terms  = ORM::factory('term')->where('lft', '=', 1);
