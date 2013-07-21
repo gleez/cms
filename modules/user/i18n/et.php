@@ -38,8 +38,8 @@ return array
 	// B
 	'Best Regards' => 'Parimate soovidega',
 	'Bio' => 'Bio',
-	'Bio must be less than :param2 characters long.' => 'Адрес должен быть не больше :param2 символов.',
-	'Birthday' => Sünipäev',
+	'Bio must be less than :param2 characters long' => 'Адрес должен быть не больше :param2 символов',
+	'Birthday' => 'Sünipäev',
 	// C
 	'Change Avatar' => 'Vahetada pilt',
 	'Change own username' => 'Vahetada login',
@@ -94,7 +94,7 @@ return array
 	'Login with :provider account' => 'Войти с помощью учётной записи :provider',
 	// M
 	'Mail' => 'Post',
-	'Mail must be a valid email address.' => 'Email адрес должен быть в правильном формате.',
+	'Mail must be a valid email address' => 'Email адрес должен быть в правильном формате',
 	'Male' => 'Мужской',
 	'Managing user authority' => 'Управление аутентификацией пользователей',
 	'Minimum password length &mdash; :count characters' => 'Минимальная длина пароля &mdash; :count символа(ов)',
@@ -107,13 +107,13 @@ return array
 	'New password (again)' => 'Kordage parool',
 	'No more than 800 characters' => 'Не более 800 символов',
 	// O
-	'Old password is incorrect.' => 'praegune parool on vale',
+	'Old password is incorrect' => 'praegune parool on vale',
 	'Only authorized users can post comments. :register or login using one of these services:' => 'Только авторизованные пользователи могут оставлять комментарии. :register или войдите с помощью одного их этих сервисов:',
 	// P
 	'Password' => 'parool',
 	'Password or username is incorrect.' => 'Parool või kasutaja nimi on vale',
-	'Password Confirm must be the same as Password.' => 'Подтверждение пароля должно соответствовать паролю.',
-	'Password must be at least :param2 characters long.' => 'Пароль должен быть не короче :param2 символов.',
+	'Password Confirm must be the same as Password' => 'Подтверждение пароля должно соответствовать паролю',
+	'Password must be at least :param2 characters long' => 'Пароль должен быть не короче :param2 символов',
 	'Password successfully changed! We hope you feel safer now.' => 'Пароль успешно изменён! Мы надеемся теперь вы чувствуете себя в безопасности.',
 	'Private' => 'Личное',
 	'Permission' => 'Полномочие',
@@ -149,11 +149,11 @@ return array
 	// T
 	'The ability to change own username' => 'On võimalus paranada oma nime (login)',
 	'The ability to change profile' => 'On võimalus parandada profileid',
-	'The username must be at least :param2 characters long.' => 'Имя пользователя должно быть не менее :param2 символов.',
-	'The username must be less than :param2 characters long.' => 'Имя пользователя должно быть не менее :param2 символов.',
+	'The username must be at least :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
+	'The username must be less than :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
 	'The values you entered in the password fields didn\'t match.' => 'Значения введённые вами в поля для паролей не совпадают.',
 	'This account is blocked' => 'Se akaunt on lukustatud',
-	"This email don't exists." => 'Se email adress pole leitud.',
+	"This email don't exists" => 'Se email adress pole leitud',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Это одноразовая ссылка и она может быть использована одни раз. Срок действия ссылки один день и ничего не произойдёт если она за это время не используется.',
 	'Try to come up with a complex password' => 'Proovige mõelda valja raske parool',
 	// U
@@ -183,11 +183,11 @@ return array
 	// Y
 	'You can sign in from any of the following services:' => 'Вы можете авторизоваться с помощью одного из этих сервисов:',
 	'You may now log in to !uri_brief clicking on this link or copying and pasting it in your browser.' => 'Теперь вы можете войти на сайт нажав на ссылку !uri_brief или скопировав и вставив её в адресную строку браузера',
-	'You must confirm password.' => 'Te peate kinnitama oma parool.',
-	'You must provide a password.' => 'Teie peate kirjutama parool.',
-	'You must provide a username.' => 'Teie peate kirjutama kasutaja nime.',
-	'You must provide an email address.' => 'Teie peate kirjutama email adress.',
-	'You must provide old password.' => 'Teie peate kirjutama praegune parool.',
+	'You must confirm password' => 'Te peate kinnitama oma parool',
+	'You must provide a password' => 'Teie peate kirjutama parool',
+	'You must provide a username' => 'Teie peate kirjutama kasutaja nime',
+	'You must provide an email address' => 'Teie peate kirjutama email adress',
+	'You must provide old password' => 'Teie peate kirjutama praegune parool',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
 	// Z
 );
