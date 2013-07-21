@@ -172,7 +172,7 @@ return array(
 			'author'           => 'Gleez Team',
 			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2013. All rights reserved.',
 			'robots'           => 'index, follow, noodp',
-			'viewport'         => 'width=device-width, initial-scale=1.0, maximum-scale=1.0',
+			'viewport'         => 'width=device-width, initial-scale=1.0',
 		),
 	),
 
