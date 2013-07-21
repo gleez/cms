@@ -853,7 +853,7 @@ class Gleez_Assets {
 	}
 
 	/**
-	 * Popup Modal windows
+	 * Sets CSS and JS assets for popup modal windows
 	 */
 	public static function popup()
 	{
@@ -869,7 +869,7 @@ class Gleez_Assets {
 	/**
 	 * Enforce static usage
 	 */
-	private function __contruct() {}
+	private function __construct() {}
 	private function __clone() {}
 
 	/**
