@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -45,13 +45,12 @@ class Controller_Admin_Comment extends Controller_Admin {
 
 	/**
 	 * List comments
+	 *
+	 * @uses  Assets::popup
 	 */
 	public function action_list()
 	{
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
-		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
-		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+		Assets::popup();
 
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'publish'));
 
@@ -92,13 +91,12 @@ class Controller_Admin_Comment extends Controller_Admin {
 
 	/**
 	 * Pending comments
+	 *
+	 * @uses  Assets::popup
 	 */
 	public function action_pending()
 	{
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
-		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
-		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+		Assets::popup();
 
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'draft'));
 
@@ -116,13 +114,12 @@ class Controller_Admin_Comment extends Controller_Admin {
 
 	/**
 	 * Spam Comments
+	 *
+	 * @uses  Assets::popup
 	 */
 	public function action_spam()
 	{
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
-		Assets::js('form', 'media/js/jquery.form.min.js', NULL, FALSE, array('weight' => 15));
-		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('popup', 'media/js/gleez.popup.js', NULL, FALSE, array('weight' => 20));
+		Assets::popup();
 
 		$this->_prepare_list(ORM::factory('comment')->where('status', '=', 'spam'));
 
