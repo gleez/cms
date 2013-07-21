@@ -5,14 +5,14 @@
  * @package    Gleez
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    0.9.28
+ * @version    0.10.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
 	/** Release version */
-	const VERSION = '0.9.28';
+	const VERSION = '0.10.0';
 
 	/** Release codename */
 	const CODENAME = 'Turdus obscurus';
