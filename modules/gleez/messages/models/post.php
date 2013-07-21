@@ -18,7 +18,6 @@ return array(
 	),
 	'status' => array(
 		'not_empty'  => ':field must not be empty',
-		'not_empty'  => '',
 	),
 	'categories' => array(
 		'not_empty'  => ':field must not be empty',
