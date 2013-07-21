@@ -37,7 +37,7 @@ return array
 	// B
 	'Best Regards' => 'Cordiali Saluti',
 	'Bio' => 'Biografia',
-	'Bio must be less than :param2 characters long.' => 'La Biografia deve essere inferiore a :param2 caratteri.',
+	'Bio must be less than :param2 characters long' => 'La Biografia deve essere inferiore a :param2 caratteri',
 	'Birthday' => 'Compleanno',
 	// C
 	'Change Avatar' => 'Cambia avatar',
@@ -93,7 +93,7 @@ return array
 	'Login with :provider' => 'Accedi con :provider',
 	// M
 	'Mail' => 'Email',
-	'Mail must be a valid email address.' => 'L\'Email deve essere un indirizzo valido.',
+	'Mail must be a valid email address' => 'L\'Email deve essere un indirizzo valido',
 	'Male' => 'Maschio',
 	'Managing user authority' => 'Gestione autenticazione utente',
 	'Minimum password length &mdash; :count characters' => 'Lunghezza minima passoword &mdash; :count caratteri',
@@ -106,12 +106,12 @@ return array
 	'New password (again)' => 'Reinserisci la nuova password',
 	'No more than 800 characters' => 'Non più di 800 caratteri',
 	// O
-	'Old password is incorrect.' => 'La vecchia password è sbagliata',
+	'Old password is incorrect' => 'La vecchia password è sbagliata',
 	// P
 	'Password' => 'Password',
-	'Password or username is incorrect.' => 'Password o username errati.',
-	'Password Confirm must be the same as Password.' => 'il campo \'Conferma la password\' deve essere uguale al campo \'Password\'.',
-	'Password must be at least :param2 characters long.' => 'La password deve essere lunga almeno :param2 caratteri.',
+	'Password or username is incorrect' => 'Password o username errati',
+	'Password Confirm must be the same as Password' => 'il campo \'Conferma la password\' deve essere uguale al campo \'Password\'',
+	'Password must be at least :param2 characters long' => 'La password deve essere lunga almeno :param2 caratteri',
 	'Password successfully changed! We hope you feel safer now.' => 'La password è stata modificata con successo! Speriamo che tu adesso ti senta sicuro.',
 	'Private' => 'Privato',
 	'Permission' => 'Permesso',
@@ -145,11 +145,11 @@ return array
 	// T
 	'The ability to change own username' => 'Possibilit&agrave; di cambiare il proprio username',
 	'The ability to change profile' => 'Possibilit&agrave; di cambiare il profilo',
-	'The username must be at least :param2 characters long.' => 'Lo username deve essere lungo almeno .param2 caratteri.',
-	'The username must be less than :param2 characters long.' => 'lo username deve essere lungo meno di :param2 caratteri.',
+	'The username must be at least :param2 characters long' => 'Lo username deve essere lungo almeno .param2 caratteri',
+	'The username must be less than :param2 characters long' => 'lo username deve essere lungo meno di :param2 caratteri',
 	'The values you entered in the password fields didn\'t match.' => 'I valori immessi nei campo per le password non corrispondono.',
 	'This account is blocked' => 'Qusto account è bloccato',
-	"This email don't exists." => 'Questa email non esiste.',
+	"This email don't exists" => 'Questa email non esiste',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Questo è un URL monouso, quindi pu&#328; essere usato una sola volta. Scadr&agrave; dopo un giorno e non accadr&agrave; nulla se non viene utilizzato.',
 	'Try to come up with a complex password' => 'Prova una password più complessa',
 	// U
@@ -179,11 +179,11 @@ return array
 	// Y
 	'You can sign in from any of the following services:' => 'Si pu&#328; effettuare il login utilizzando uno dei seguenti servizi:',
 	'You may now log in to !uri_brief clicking on this link or copying and pasting it in your browser.' => 'Ora è possibile accedere facendo clic sul link !uri_brief o copiandolo e incollandolo nel tuo browser.',
-	'You must confirm password.' => 'Devi confermare la password.',
-	'You must provide a password.' => 'Devi specificare la password.',
-	'You must provide a username.' => 'Devi specificare lo username.',
-	'You must provide an email address.' => 'Devi specificare l\'email.',
-	'You must provide old password.' => 'Devi specificare la vecchia password.',
+	'You must confirm password' => 'Devi confermare la password',
+	'You must provide a password' => 'Devi specificare la password',
+	'You must provide a username' => 'Devi specificare lo username',
+	'You must provide an email address' => 'Devi specificare l\'email',
+	'You must provide old password' => 'Devi specificare la vecchia password',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'La tua foto verr&agrave; modificata in proporzione alle dimensioni :w&times;:h',
 	// Z
 );

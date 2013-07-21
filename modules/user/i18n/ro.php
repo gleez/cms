@@ -37,7 +37,7 @@ return array
 	// B
 	'Best Regards' => 'Cu stima',
 	'Bio' => 'Biografie',
-	'Bio must be less than :param2 characters long.' => 'Biografia trebuie să fie mai scurtă de :param2 caractere.',
+	'Bio must be less than :param2 characters long' => 'Biografia trebuie să fie mai scurtă de :param2 caractere',
 	'Birthday' => 'Data Nașterii',
 	// C
 	'Change Avatar' => 'Schimbă avatar',
@@ -93,7 +93,7 @@ return array
 	'Login with :provider' => 'Autentificare cu :provider',
 	// M
 	'Mail' => 'Email',
-	'Mail must be a valid email address.' => 'Email trebuie să fie o adresă de email validă.',
+	'Mail must be a valid email address' => 'Email trebuie să fie o adresă de email validă',
 	'Male' => 'Masculin',
 	'Managing user authority' => 'Gestionare autoritate utilizator',
 	'Minimum password length &mdash; :count characters' => 'Lungimea minima a parolei &mdash; :count caractere',
@@ -106,12 +106,12 @@ return array
 	'New password (again)' => 'Parolă nouă (din nou)',
 	'No more than 800 characters' => 'Nu mai mult de 800 caractere',
 	// O
-	'Old password is incorrect.' => 'Parola veche icorecta.',
+	'Old password is incorrect' => 'Parola veche icorecta',
 	// P
 	'Password' => 'Parola',
-	'Password or username is incorrect.' => 'Parolă sau utilizator eronat.',
-	'Password Confirm must be the same as Password.' => 'Confirmare Parolă trebuie să coincidă cu Parola.',
-	'Password must be at least :param2 characters long.' => 'Parola trebuie să conțina minim :param2 caractere.',
+	'Password or username is incorrect' => 'Parolă sau utilizator eronat',
+	'Password Confirm must be the same as Password' => 'Confirmare Parolă trebuie să coincidă cu Parola',
+	'Password must be at least :param2 characters long' => 'Parola trebuie să conțina minim :param2 caractere',
 	'Password successfully changed! We hope you feel safer now.' => 'Parolă schimbată cu succes! Sperăm ca te simți mai in siguranță acum.',
 	'Private' => 'Privat',
 	'Permission' => 'Permisiune',
@@ -145,11 +145,11 @@ return array
 	// T
 	'The ability to change own username' => 'Capacitatea de a modifica numele de utilizator propriu',
 	'The ability to change profile' => 'Capacitatea de a modifica profilul',
-	'The username must be at least :param2 characters long.' => 'Numele de utilizator trebui sa conțină minim :param2 caractere.',
-	'The username must be less than :param2 characters long.' => 'Numele de utilizator trebuie să fie mai scurt de :param2 caractere.',
-	'The values you entered in the password fields didn\'t match.' => 'Valorile introduse în câmpurile parolă nu coincid.',
+	'The username must be at least :param2 characters long' => 'Numele de utilizator trebui sa conțină minim :param2 caractere',
+	'The username must be less than :param2 characters long' => 'Numele de utilizator trebuie să fie mai scurt de :param2 caractere',
+	'The values you entered in the password fields didn\'t match' => 'Valorile introduse în câmpurile parolă nu coincid',
 	'This account is blocked' => 'Acest cont este blocat',
-	"This email don't exists." => 'Acest email nu exista.',
+	"This email don't exists" => 'Acest email nu exista',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Acest URL expira după prima utilizare sau după o zi.',
 	'Try to come up with a complex password' => 'Încearcă să folosești o parolă complexă',
 	// U
@@ -179,11 +179,11 @@ return array
 	// Y
 	'You can sign in from any of the following services:' => 'Te poți autentifica cu oricare dintre serviciile următoare:',
 	'You may now log in to !uri_brief clicking on this link or copying and pasting it in your browser.' => 'Te poți autentifica la !uri_brief făcând click pe link sau introducându-l în browser.',
-	'You must confirm password.' => 'Trebuie să confirmi parola.',
-	'You must provide a password.' => 'Trebuie să introduci o parolă.',
-	'You must provide a username.' => 'Trebuie să introduci un nume de utilizator.',
-	'You must provide an email address.' => 'Trebuie să introduci o adresa de email.',
-	'You must provide old password.' => 'Trebuie să introduci parola veche.',
+	'You must confirm password' => 'Trebuie să confirmi parola',
+	'You must provide a password' => 'Trebuie să introduci o parolă',
+	'You must provide a username' => 'Trebuie să introduci un nume de utilizator',
+	'You must provide an email address' => 'Trebuie să introduci o adresa de email',
+	'You must provide old password' => 'Trebuie să introduci parola veche',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Poza va fi redimensionată proporțional să se încadreze în :w&times;:h',
 	// Z
 );
