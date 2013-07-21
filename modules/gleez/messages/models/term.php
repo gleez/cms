@@ -2,6 +2,6 @@
 
 return array(
 	'name' => array(
-		'not_empty' => 'Tag name can\'t be empty.',
+		'not_empty' => "Name of the vocabulary can't be empty",
 	),
 );
