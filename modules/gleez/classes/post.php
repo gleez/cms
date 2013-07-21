@@ -348,7 +348,10 @@ class Post extends ORM_Versioned {
 		$this->pubdate = empty($this->pubdate) ? time() : $this->pubdate;
 		$this->updated = empty($this->updated) ? time() : $this->updated;
 
-		$this->image   = empty($this->rawimage) ? NULL : $this->rawimage;
+		//Ugly existing image check, not sure why empty behaves strange on $this->rawimage
+		$image = isset($this->_original_values['image']) ? $this->_original_values['image'] : FALSE;
+
+		$this->image   = empty($image) 		? NULL : $image;
 		$this->type    = empty($this->type)     ? $this->_post_type : $this->type;
 		$this->author  = empty($this->author)   ? User::active_user()->id : $this->author;
 		$this->format  = empty($this->format)   ? Config::get('inputfilter.default_format', 1) : $this->format;
