@@ -2,7 +2,7 @@
  * This is a highly modified version of the bootstrap popup dialog.
  *
  * @package    Gleez\Popup
- * @version    1.1
+ * @version    1.2
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -111,6 +111,8 @@
 	,   cButton
 	,   sText
 	,   cText
+	,   sAttr
+	,   cAttr
 	,   submitBtn = $('<a>Save changes</a>')
 	,   closeBtn  = $('<a>Close</a>')
 	,   e         = $.Event('form.show.popup')
@@ -143,17 +145,19 @@
 	//Generate a valid buttons text
 	sText = $(sButton).val() || 'Save changes'
 	cText = $(cButton).val() || 'Close'
+	sAttr = $(sButton).attr('class') || 'btn btn-primary'
+	cAttr = $(cButton).attr('class') || 'btn'
     
 	//create submit and cancel buttons in popup footer
 	$(submitBtn).attr('data-toggle', 'ajaxform')
-		    .attr('class',  'btn btn-primary')
+		    .attr('class',  sAttr)
 		    .attr('href',   '#')
 		    .data('popup',  this.$element)
 		    .data('form',   this.forms)
 		    .data('button', sButton)
 		    .text(sText)
 	
-	$(closeBtn).attr('class', 'btn')
+	$(closeBtn).attr('class',  cAttr)
 		   .attr('href', '#')
 		   .attr('data-dismiss', 'popup')
 		   .text(cText)
