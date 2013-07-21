@@ -6,7 +6,7 @@ return array(
 	),
 	'body' => array(
 		'not_empty'  => ':field must not be empty',
-		'min_length' => '',
+		'min_length' => 'Body must be at least :param2 characters long',
 	),
 	'author' => array(
 		'not_empty'  => ':field must not be empty',
@@ -21,7 +21,7 @@ return array(
 	),
 	'categories' => array(
 		'not_empty'  => ':field must not be empty',
-		'invalid'    => '',
+		'invalid'    => 'You must select at least one category',
 	),
 	'pubdate' => array(
 		'not_empty'  => ':field must not be empty',
