@@ -88,12 +88,14 @@
 								<?php
 									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE;
 									$promote = (isset($post->promote) AND $post->promote == 1) ? TRUE : FALSE;
+									echo Form::hidden('sticky', 0);
+									echo Form::hidden('promote', 0);
 								?>
 								<div class="controls">
-									<?php echo Form::label('sticky', Form::checkbox('sticky', 1, $sticky).__('Sticky this Post'), array('class' => 'checkbox')) ?>
+									<?php echo Form::label('sticky', Form::checkbox('sticky', TRUE, $sticky).__('Sticky this Post'), array('class' => 'checkbox')) ?>
 								</div>
 								<div class="controls">
-									<?php echo Form::label('promote', Form::checkbox('promote', 1, $promote).__('Promote this Post'), array('class' => 'checkbox')) ?>
+									<?php echo Form::label('promote', Form::checkbox('promote', TRUE, $promote).__('Promote this Post'), array('class' => 'checkbox')) ?>
 								</div>
 							</div>
 
