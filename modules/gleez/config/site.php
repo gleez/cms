@@ -143,6 +143,12 @@ return array(
 	'feed_ttl' => 60,
 
 	/**
+	 * Use Gravatar service?
+	 * @var boolean
+	 */
+	'use_gravatars' => FALSE,
+
+	/**
 	 * Meta defaults
 	 * @var array
 	 */
