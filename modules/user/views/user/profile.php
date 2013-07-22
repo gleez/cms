@@ -1,20 +1,16 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
+<?php $use_gravatar = Config::get('site.use_gravatars', FALSE); ?>
 <div class="row-fluid" itemscope itemtype="http://schema.org/Person">
 
 	<div id="Panel" class="span4">
 		<div id="photo" class="well">
-			<div class="Photo">
-				<?php if ($is_owner): ?>
-					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>'; ?>
-				<?php else: ?>
-					<?php echo ( ! empty($user->picture)) ? HTML::resize($user->picture, array('alt' => $user->nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image')) : '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>'; ?>
-				<?php endif; ?>
-			</div>
+			<?php echo $avatar; ?>
 
 			<?php if ($is_owner OR ACL::check('administer users')): ?>
 				<ul class="nav nav-list">
-					<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
+					<?php if ( ! $use_gravatar): ?>
+						<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
+					<?php endif; ?>
 					<li><?php echo HTML::anchor('user/edit', '<i class="icon-pencil"></i>'.__('Edit Account')) ?></li>
 					<li><?php echo HTML::anchor('user/password', '<i class="icon-cog"></i>'.__('Change Password')) ?></li>
 				</ul>

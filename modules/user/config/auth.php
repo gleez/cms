@@ -125,6 +125,32 @@ return array
 	),
 
 	/**
+	 * Gravatar config
+	 * @var array
+	 */
+	'gravatar' => array(
+
+		/**
+		 * The gravatar service URL
+		 * @var string
+		 */
+		'service' => 'http://www.gravatar.com/avatar.php',
+
+		/**
+		 * The size of the returned gravatar (pixel dimension in percentages).
+		 * By default, Gravatar return images at 80px by 80px (100%)
+		 * @var integer
+		 */
+		'size' => 250,
+
+		/**
+		 * The default rating
+		 * @var string
+		 */
+		'rating' => Gravatar::RATING_G,
+	),
+
+	/**
 	 * 3rd party providers supported/allowed.
 	 */
 	'providers' => array(
