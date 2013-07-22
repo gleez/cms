@@ -30,7 +30,7 @@
 
 <div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
 	<?php echo Form::label('active', __('Status')) ?>
-	<?php print Form::select('status', array(0 => 'Blocked', 1 => 'Active'), $post->status, array('class' => 'list small')); ?>
+	<?php print Form::select('status', array(0 => __('Blocked'), 1 => __('Active')), $post->status, array('class' => 'list small')); ?>
 </div>
 
 <table class="table table-striped table-bordered table-highlight">
