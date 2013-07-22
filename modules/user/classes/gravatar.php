@@ -27,8 +27,8 @@ class Gravatar {
 	/** The gravatar service URL */
 	const SERVICE   = 'http://www.gravatar.com/avatar.php';
 
-	/** The size of the returned gravatar */
-	const SIZE      = 100;
+	/** The size of the returned gravatar (Percentage) */
+	const SIZE      = 250;
 
 	/**
 	 * Static instances
@@ -115,9 +115,9 @@ class Gravatar {
 	public function getURL()
 	{
 		return $this->_config['service'] .
-				'?gravatar_id=' . md5($this->email) .
-				'&amp;s=' . $this->_config['size'] .
-				'&amp;r=' . $this->_config['rating'];
+				'?gravatar_id=' . md5(strtolower(trim($this->email))) .
+				'&s=' . $this->_config['size'] .
+				'&r=' . $this->_config['rating'];
 	}
 
 	/**
