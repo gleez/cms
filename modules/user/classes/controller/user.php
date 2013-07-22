@@ -4,6 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -229,6 +230,7 @@ class Controller_User extends Template {
 	 * @uses    ACL::check
 	 * @uses    Text::ucfirst
 	 * @uses    Assets::popup
+	 * @uses    User::getAvatar
 	 */
 	public function action_view()
 	{
@@ -278,7 +280,8 @@ class Controller_User extends Template {
 
 		$view = View::factory('user/profile')
 				->set('user',     $user)
-				->set('is_owner', $is_owner);
+				->set('is_owner', $is_owner)
+				->set('avatar',   User::getAvatar($user));
 
 		$this->response->body($view);
 	}

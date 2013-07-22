@@ -989,6 +989,7 @@ return array
 	'URI Determination' => 'URI определения',
 	'URL Path' => 'Адрес',
 	'Urumqi' => 'Урумчи',
+	'Use Gravatars' => 'Использовать Gravatar',
 	'Use Primary Image' => 'Использовать первичное изображение',
 	'User' => 'Пользователь',
 	'username: :username' => 'имя пользователя: :username',
