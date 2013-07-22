@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
+<?php $use_gravatar = Config::get('site.use_gravatars', FALSE); ?>
 <div class="row-fluid" itemscope itemtype="http://schema.org/Person">
 
 	<div id="Panel" class="span4">
@@ -8,7 +8,7 @@
 
 			<?php if ($is_owner OR ACL::check('administer users')): ?>
 				<ul class="nav nav-list">
-					<?php if (FALSE === Config::get('site.use_gravatars', FALSE)): ?>
+					<?php if ( ! $use_gravatar): ?>
 						<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
 					<?php endif; ?>
 					<li><?php echo HTML::anchor('user/edit', '<i class="icon-pencil"></i>'.__('Edit Account')) ?></li>
