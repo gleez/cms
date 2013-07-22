@@ -125,6 +125,31 @@ return array
 	),
 
 	/**
+	 * Gravatar config
+	 * @var array
+	 */
+	'gravatar' => array(
+
+		/**
+		 * The gravatar service URL
+		 * @var string
+		 */
+		'service' => 'http://www.gravatar.com/avatar.php',
+
+		/**
+		 * The size of the returned gravatar
+		 * @var integer
+		 */
+		'size' => 100,
+
+		/**
+		 * The default rating
+		 * @var string
+		 */
+		'rating' => Gravatar::RATING_G,
+	),
+
+	/**
 	 * 3rd party providers supported/allowed.
 	 */
 	'providers' => array(
