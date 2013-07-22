@@ -137,10 +137,11 @@ return array
 		'service' => 'http://www.gravatar.com/avatar.php',
 
 		/**
-		 * The size of the returned gravatar
+		 * The size of the returned gravatar (pixel dimension in percentages).
+		 * By default, Gravatar return images at 80px by 80px (100%)
 		 * @var integer
 		 */
-		'size' => 100,
+		'size' => 250,
 
 		/**
 		 * The default rating
