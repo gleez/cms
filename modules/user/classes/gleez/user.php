@@ -5,6 +5,7 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -299,4 +300,48 @@ class Gleez_User {
 		
 		return $roles;
 	}
+
+	/**
+	 * Get user avatar
+	 *
+	 * Optionally, if it is allowed, used [Gravatar].
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   string  $email  User email
+	 *
+	 * @return  View
+	 *
+	 * @uses    Config::get
+	 * @uses    Gravatar::instance
+	 * @uses    User::lookup_by_mail
+	 */
+	public static function getAvatar($email)
+	{
+		$use_gravatar = Config::get('site.use_gravatars', FALSE);
+		$avatar       = FALSE;
+		$user         = User::lookup_by_mail($email);
+
+		// Each theme can determine its view for this
+		$view = View::factory('user/avatar');
+
+		if ($use_gravatar)
+		{
+			$avatar = Gravatar::instance($user->mail);
+			$view->set('nick', $user->nick);
+		}
+		else
+		{
+			if ( ! empty($user->picture))
+			{
+				$avatar = $user->picture;
+				$view->set('nick', $user->nick);
+			}
+		}
+
+		$view->set('avatar', $avatar);
+
+		return $view;
+	}
+
 }
