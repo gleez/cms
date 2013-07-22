@@ -281,7 +281,7 @@ class Controller_User extends Template {
 		$view = View::factory('user/profile')
 				->set('user',     $user)
 				->set('is_owner', $is_owner)
-				->set('avatar',   User::getAvatar($user->mail));
+				->set('avatar',   User::getAvatar($user));
 
 		$this->response->body($view);
 	}

@@ -308,19 +308,17 @@ class Gleez_User {
 	 *
 	 * @since   1.1.0
 	 *
-	 * @param   string  $email  User email
+	 * @param   ORM  $user  User model
 	 *
 	 * @return  View
 	 *
 	 * @uses    Config::get
 	 * @uses    Gravatar::instance
-	 * @uses    User::lookup_by_mail
 	 */
-	public static function getAvatar($email)
+	public static function getAvatar(ORM $user)
 	{
 		$use_gravatar = Config::get('site.use_gravatars', FALSE);
 		$avatar       = FALSE;
-		$user         = User::lookup_by_mail($email);
 
 		// Each theme can determine its view for this
 		$view = View::factory('user/avatar');
