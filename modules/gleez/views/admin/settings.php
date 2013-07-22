@@ -116,7 +116,17 @@
 				<?php echo Form::select('admin_theme', Theme::available(), $post['admin_theme'], array('class' => 'span6')); ?>
 			</div>
 		</div>
-		
+
+		<div class="control-group <?php echo isset($errors['use_gravatars']) ? 'error': ''; ?>">
+			<?php echo Form::label('use_gravatars', __('Use Gravatars'), array('class' => 'control-label')); ?>
+			<div class="controls">
+				<?php
+					// @important the hidden filed should be before checkbox
+					echo Form::hidden('use_gravatars', 0);
+					echo Form::label('use_gravatars', Form::checkbox('use_gravatars', TRUE, (isset($post['use_gravatars']) AND $post['use_gravatars'] == 1) ? TRUE : FALSE));
+				?>
+			</div>
+		</div>
 	</div>
 
 	<div class="tab-pane" id="offline">
