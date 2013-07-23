@@ -106,17 +106,17 @@ unset($application, $modules, $system, $themes);
 /**
  * Define the start time of the application, used for profiling.
  */
-if ( ! defined('KOHANA_START_TIME'))
+if ( ! defined('GLEEZ_START_TIME'))
 {
-	define('KOHANA_START_TIME', microtime(TRUE));
+	define('GLEEZ_START_TIME', microtime(TRUE));
 }
 
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-if ( ! defined('KOHANA_START_MEMORY'))
+if ( ! defined('GLEEZ_START_MEMORY'))
 {
-	define('KOHANA_START_MEMORY', memory_get_usage());
+	define('GLEEZ_START_MEMORY', memory_get_usage());
 }
 
 // Bootstrap the application
