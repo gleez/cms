@@ -21,7 +21,7 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 * Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
-* Other Details like SEO, Media, etc.
+* Other Details like SEO, Media, Gravatar, etc.
 
 ## Demo
 
