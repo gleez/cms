@@ -131,10 +131,10 @@ return array
 	'gravatar' => array(
 
 		/**
-		 * The gravatar service URL
-		 * @var string
+		 * Should we use the secure (HTTPS) URL base?
+		 * @var boolean
 		 */
-		'service' => 'http://www.gravatar.com/avatar.php',
+		'secure_url' => FALSE,
 
 		/**
 		 * The size of the returned gravatar (pixel dimension in percentages).
@@ -144,10 +144,25 @@ return array
 		'size' => 250,
 
 		/**
-		 * The default rating
+		 * The maximum rating to allow for the avatar
+		 * Possible values: G, PG, R, X
 		 * @var string
 		 */
-		'rating' => Gravatar::RATING_G,
+		'rating' => 'G',
+
+		/**
+		 * The default image if Gravatar is not found, FALSE uses Gravatar default.
+		 * Possible values:  404, mm, identicon, monsterid, wavatar, retro, blank
+		 * @var string
+		 */
+		'default_image' => FALSE,
+
+		/**
+		 * If for some reason you wanted to force the default image to always load
+		 * set it to TRUE
+		 * @var boolean
+		 */
+		'force_default' => FALSE,
 	),
 
 	/**
