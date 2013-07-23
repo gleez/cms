@@ -321,12 +321,11 @@ class Gleez_User {
 		$avatar       = FALSE;
 
 		// Each theme can determine its view for this
-		$view = View::factory('user/avatar');
+		$view = View::factory('user/avatar')->set('nick', $user->nick);;
 
 		if ($use_gravatar)
 		{
 			$avatar = Gravatar::instance($user->mail);
-			$view->set('nick', $user->nick);
 		}
 		else
 		{

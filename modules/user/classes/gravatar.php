@@ -12,23 +12,15 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.0
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gravatar {
 
-	/** Gravatar rating */
-	const RATING_G  = 'G';
-	const RATING_PG = 'PG';
-	const RATING_R  = 'R';
-	const RATING_X  = 'X';
-
-	/** The gravatar service URL */
-	const SERVICE   = 'http://www.gravatar.com/avatar.php';
-
-	/** Default size of the returned gravatar (Percentage) */
-	const SIZE      = 100;
+	/** The gravatar service URLs */
+	const HTTP_URL  = 'http://www.gravatar.com/avatar/';
+	const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
 
 	/**
 	 * Static instances
@@ -43,10 +35,68 @@ class Gravatar {
 	protected $_config;
 
 	/**
+	 * Default size of the returned gravatar (Percentage)
+	 * + String of the gravatar-recognized default image "type" to use
+	 * + URL
+	 * + FALSE if using the default gravatar default image
+	 * @var string
+	 */
+	protected $_default_image = FALSE;
+
+	/**
+	 * Default size of the returned gravatar (Percentage)
+	 * @var integer
+	 */
+	protected $_size = 100;
+
+	/**
+	 * The maximum rating to allow for the avatar
+	 * @var string
+	 */
+	protected $_rating = 'G';
+
+	/**
+	 * Should we use the secure (HTTPS) URL base?
+	 * @var boolean
+	 */
+	protected $_secure_url = FALSE;
+
+	/**
 	 * The email address of the user
 	 * @var string
 	 */
-	public $email;
+	protected $_email;
+
+	/**
+	 * If default image shall be shown even if user the has an gravatar profile.
+	 * @var boolean
+	 */
+	protected $_default_force = FALSE;
+
+	/**
+	 * Gravatar defaults
+	 * @var array
+	 */
+	protected static $_default_gravatar = array(
+		'404'       => TRUE,
+		'mm'        => TRUE,
+		'identicon' => TRUE,
+		'monsterid' => TRUE,
+		'wavatar'   => TRUE,
+		'retro'     => TRUE,
+		'blank'     => TRUE
+	);
+
+	/**
+	 * Gravatar rating
+	 * @var array
+	 */
+	protected static $_ratings = array(
+		'G'  => TRUE,
+		'PG' => TRUE,
+		'R'  => TRUE,
+		'X'  => TRUE
+	);
 
 	/**
 	 * Get a singleton Gravatar instance
@@ -69,7 +119,7 @@ class Gravatar {
 			}
 
 			// Create the Gravatar instance
-			new self($email, $config);
+			self::$_instances[$email] = new Gravatar($email, $config);
 		}
 
 		return self::$_instances[$email];
@@ -86,13 +136,10 @@ class Gravatar {
 	protected function __construct($email, array $config)
 	{
 		// Set the email address
-		$this->email = $email;
+		$this->setEmail($email);
 
 		// Store the config locally
 		$this->_config = $this->_prepareConfig($config);
-
-		// Store the database instance
-		self::$_instances[$email] = $this;
 	}
 
 	/**
@@ -102,7 +149,7 @@ class Gravatar {
 	 */
 	public function __toString()
 	{
-		return (string) $this->getURL();
+		return (string) $this->buildURL();
 	}
 
 	/**
@@ -111,11 +158,42 @@ class Gravatar {
 	 * [!!] This is called automatically by [Gravatar::__toString].
 	 *
 	 * @return  string  The resulting Gravatar URL
+	 *
+	 * @uses    URL::query
 	 */
-	public function getURL()
+	public function buildURL()
 	{
-		return $this->_config['service'].
-			"?gravatar_id={$this->getEmail()}&s={$this->getSize()}&r={$this->getRating()}";
+		// Building the URL
+		if ($this->useSecureURL())
+		{
+			$url = Gravatar::HTTPS_URL;
+		}
+		else
+		{
+			$url = Gravatar::HTTP_URL;
+		}
+
+		$url .= $this->getEmailHash($this->_email);
+
+		$url .= URL::query(
+			array(
+				's' => $this->getSize(),
+				'r' => $this->getRating(),
+			),
+			FALSE
+		);
+
+		if ($this->getDefaultImage())
+		{
+			$url .= URL::query(array('d' => $this->getDefaultImage()), FALSE);
+		}
+
+		if ($this->isForceDefault())
+		{
+			$url .= URL::query(array('f' => 'y'), FALSE);
+		}
+
+		return $url;
 	}
 
 	/**
@@ -129,7 +207,7 @@ class Gravatar {
 	 */
 	public function getSize()
 	{
-		return (int)$this->_config['size'];
+		return $this->_size;
 	}
 
 	/**
@@ -143,11 +221,11 @@ class Gravatar {
 	 */
 	public function getRating()
 	{
-		return (int)$this->_config['rating'];
+		return $this->_rating;
 	}
 
 	/**
-	 * Get the email hash to use (after cleaning the string)
+	 * Get the email of currently user
 	 *
 	 * @since   1.1.0
 	 *
@@ -155,7 +233,32 @@ class Gravatar {
 	 */
 	public function getEmail()
 	{
-		return hash('md5', strtolower(trim($this->email)));
+		return $this->_email;
+	}
+
+	/**
+	 * Get the email hash to use
+	 *
+	 * @since   1.1.0
+	 *
+	 * @return string
+	 */
+	public function getEmailHash()
+	{
+		return hash('md5', $this->_email);
+	}
+
+	/**
+	 * Get the current default image
+	 *
+	 * @since   1.2.0
+	 *
+	 * @return  string   If one is set
+	 * @return  boolean  FALSE if no default image set
+	 */
+	public function getDefaultImage()
+	{
+		return $this->_default_image;
 	}
 
 	/**
@@ -178,12 +281,132 @@ class Gravatar {
 			throw new Gleez_Exception('Avatar size specified must be an integer');
 		}
 
-		if ((int)$size > 600 OR (int)$size < 0)
+		if ($size > 600 OR $size < 0)
 		{
-			throw new Gleez_Exception('Avatar size must be within 0 pixels and 600 pixels');
+			throw new Gleez_Exception('Avatar size must be within 0% and 600%');
 		}
 
-		$this->_config['size'] = (int) $size;
+		$this->_size = $size;
+
+		return $this;
+	}
+
+	/**
+	 * Set the email address for current user
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   string  $email  Email address of the user
+	 *
+	 * @return  Gravatar
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Valid::email
+	 */
+	public function setEmail($email)
+	{
+		// trim leading/trailing white spaces
+		$email = trim($email);
+
+		// make sure passed email address is valid
+		if ( ! Valid::email($email))
+		{
+			throw new Gleez_Exception('E-mail must be a valid email address');
+		}
+
+		// force lowercase and set property
+		$this->_email = strtolower($email);
+
+		return $this;
+	}
+
+	/**
+	 * Set the default image to use for avatars
+	 *
+	 * Possible $image formats:
+	 * + boolean FALSE for the gravatar default
+	 * + string containing a valid image URL
+	 * + a string specifying a recognized gravatar "default"
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   mixed  $image  The default image to use
+	 *
+	 * @return  Gravatar
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Valid::url
+	 */
+	public function setDefaultImage($image)
+	{
+		if($image === FALSE)
+		{
+			$this->default_image = FALSE;
+
+			return $this;
+		}
+
+		$image = strtolower($image);
+		if ( ! isset(self::$_default_gravatar[$image]))
+		{
+			if ( ! Valid::url($image))
+			{
+				throw new Gleez_Exception('The default image specified is not a recognized gravatar "default" and is not a valid URL');
+			}
+			else
+			{
+				$this->_default_image = rawurlencode($image);
+			}
+		}
+		else
+		{
+			$this->_default_image = $image;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set the maximum allowed rating for avatars
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   string  $rating   The maximum rating to use for avatars ('G', 'PG', 'R', 'X')
+	 *
+	 * @return  Gravatar
+	 *
+	 * @throws Gleez_Exception
+	 */
+	public function setRating($rating)
+	{
+		$rating = strtoupper($rating);
+
+		if ( ! isset(self::$_ratings[$rating]))
+		{
+			throw new Gleez_Exception('Invalid rating :rating specified, only "G", "PG", "R", or "X" are allowed to be used.',
+				array(':rating' => $rating)
+			);
+		}
+
+		$this->_rating = $rating;
+
+		return $this;
+	}
+
+	/**
+	 * Forces gravatar to display default image
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   boolean  $force  Force default?
+	 *
+	 * @return  Gravatar
+	 */
+	public function setForceDefault($force)
+	{
+		$this->_default_force = (bool)$force;
 
 		return $this;
 	}
@@ -199,22 +422,84 @@ class Gravatar {
 	 */
 	protected function _prepareConfig(array $config)
 	{
-		if ( ! isset($config['service']) OR ! $config['service'])
+		if (isset($config['secure_url']) AND $config['secure_url'])
 		{
-			$config['service'] = Gravatar::SERVICE;
+			$this->enableSecureURL();
 		}
 
-		if ( ! isset($config['size']) OR ! $config['size'])
+		if (isset($config['size']))
 		{
-			$config['size'] = Gravatar::SIZE;
+			$this->setSize($config['size']);
 		}
 
-		if ( ! isset($config['rating']) OR ! $config['rating'])
+		if (isset($config['rating']))
 		{
-			$config['rating'] = Gravatar::RATING_G;
+			$this->setRating($config['rating']);
+		}
+
+		if (isset($config['default_image']))
+		{
+			$this->setDefaultImage($config['default_image']);
+		}
+
+		if (isset($config['force_default']))
+		{
+			$this->setForceDefault($config['force_default']);
 		}
 
 		return $config;
+	}
+
+	/**
+	 * Check if we are using the secure protocol for the image URLs
+	 *
+	 * @since   1.2.0
+	 *
+	 * @return  boolean
+	 */
+	public function useSecureURL()
+	{
+		return $this->_secure_url;
+	}
+
+	/**
+	 * Enable the use of the secure protocol for image URLs
+	 *
+	 * @since   1.2.0
+	 *
+	 * @return  Gravatar
+	 */
+	public function enableSecureURL()
+	{
+		$this->_secure_url = TRUE;
+
+		return $this;
+	}
+
+	/**
+	 * Disable the use of the secure protocol for image URLs
+	 *
+	 * @since   1.2.0
+	 *
+	 * @return  Gravatar
+	 */
+	public function disableSecureURL()
+	{
+		$this->_secure_url = FALSE;
+
+		return $this;
+	}
+
+	/**
+		 * Check if need to force the default image to always load
+	 *
+	 * @since   1.2.0
+	 *
+	 * @return boolean
+	 */
+	public function isForceDefault()
+	{
+		return $this->_default_force;
 	}
 
 }
