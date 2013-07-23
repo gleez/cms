@@ -782,9 +782,9 @@ abstract class Template extends Controller {
 
 		// Get the total memory and execution time
 		$total = array(
-			'{memory_usage}'     => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024 / 1024, 2) . '&nbsp;' . __('MB'),
+			'{memory_usage}'     => number_format((memory_get_peak_usage() - GLEEZ_START_MEMORY) / 1024 / 1024, 2) . '&nbsp;' . __('MB'),
 			'{gleez_version}'    => Gleez::VERSION,
-			'{execution_time}'   => number_format(microtime(TRUE) - KOHANA_START_TIME, 3) . '&nbsp;' . __('seconds'),
+			'{execution_time}'   => number_format(microtime(TRUE) - GLEEZ_START_TIME, 3) . '&nbsp;' . __('seconds'),
 			'{included_files}'   => count(get_included_files()),
 			'{database_queries}' => $queries
 		);

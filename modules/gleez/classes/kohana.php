@@ -914,7 +914,7 @@ class Kohana {
 	}
 
 	/**
-	 * Get a message from a file. Messages are arbitary strings that are stored
+	 * Get a message from a file. Messages are arbitrary strings that are stored
 	 * in the `messages/` directory and reference by a key. Translation is not
 	 * performed on the returned values.  See [message files](kohana/files/messages)
 	 * for more information.

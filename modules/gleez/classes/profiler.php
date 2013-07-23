@@ -1,36 +1,51 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Provides simple benchmarking and profiling. To display the statistics that
- * have been collected, load the `profiler/stats` [View]:
+ * Provides simple benchmarking and profiling
  *
- *     echo View::factory('profiler/stats');
+ * To display the statistics that have been collected,
+ * load the `profiler/stats` [View]:
  *
- * @package    Kohana
- * @category   Helpers
+ * Example:
+ * ~~~
+ * echo View::factory('profiler/stats');
+ * ~~~
+ *
+ * @package    Gleez\Helpers
  * @author     Kohana Team
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
-class Kohana_Profiler {
+class Profiler {
 
 	/**
-	 * @var  integer   maximum number of application stats to keep
+	 * Maximum number of application stats to keep
+	 * @var integer
 	 */
 	public static $rollover = 1000;
 
 	/**
-	 * @var  array  collected benchmarks
+	 * Collected benchmarks
+	 * @var array
 	 */
 	protected static $_marks = array();
 
 	/**
-	 * Starts a new benchmark and returns a unique token. The returned token
-	 * _must_ be used when stopping the benchmark.
+	 * Starts a new benchmark and returns a unique token
 	 *
-	 *     $token = Profiler::start('test', 'profiler');
+	 * The returned token _must_ be used when stopping the benchmark.
 	 *
-	 * @param   string  $group  group name
-	 * @param   string  $name   benchmark name
+	 * Example:
+	 * ~~~
+	 * $token = Profiler::start('test', 'profiler');
+	 * ~~~
+	 *
+	 * @param   string  $group  Group name
+	 * @param   string  $name   Benchmark name
+	 *
 	 * @return  string
 	 */
 	public static function start($group, $name)
@@ -58,12 +73,14 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Stops a benchmark.
+	 * Stops a benchmark
 	 *
-	 *     Profiler::stop($token);
+	 * Example:
+	 * ~~~
+	 * Profiler::stop($token);
+	 * ~~~
 	 *
-	 * @param   string  $token
-	 * @return  void
+	 * @param  string  $token  Benchmark token
 	 */
 	public static function stop($token)
 	{
@@ -73,14 +90,17 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Deletes a benchmark. If an error occurs during the benchmark, it is
-	 * recommended to delete the benchmark to prevent statistics from being
-	 * adversely affected.
+	 * Deletes a benchmark
 	 *
-	 *     Profiler::delete($token);
+	 * If an error occurs during the benchmark, it is recommended to delete
+	 * the benchmark to prevent statistics from being adversely affected.
 	 *
-	 * @param   string  $token
-	 * @return  void
+	 * Example:
+	 * ~~~
+	 * Profiler::delete($token);
+	 * ~~~
+	 *
+	 * @param  string  $token  Benchmark token
 	 */
 	public static function delete($token)
 	{
@@ -89,9 +109,12 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Returns all the benchmark tokens by group and name as an array.
+	 * Returns all the benchmark tokens by group and name as an array
 	 *
-	 *     $groups = Profiler::groups();
+	 * Example:
+	 * ~~~
+	 * $groups = Profiler::groups();
+	 * ~~~
 	 *
 	 * @return  array
 	 */
@@ -109,13 +132,16 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Gets the min, max, average and total of a set of tokens as an array.
+	 * Gets the min, max, average and total of a set of tokens as an array
 	 *
-	 *     $stats = Profiler::stats($tokens);
+	 * Example:
+	 * ~~~
+	 * $stats = Profiler::stats($tokens);
+	 * ~~~
 	 *
-	 * @param   array   $tokens profiler tokens
+	 * @param   array   $tokens  Profiler tokens
+	 *
 	 * @return  array   min, max, average, total
-	 * @uses    Profiler::total
 	 */
 	public static function stats(array $tokens)
 	{
@@ -181,14 +207,16 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Gets the min, max, average and total of profiler groups as an array.
+	 * Gets the min, max, average and total of profiler groups as an array
 	 *
-	 *     $stats = Profiler::group_stats('test');
+	 * Example:
+	 * ~~~
+	 * $stats = Profiler::group_stats('test');
+	 * ~~~
 	 *
-	 * @param   mixed   $groups single group name string, or array with group names; all groups by default
+	 * @param   mixed   $groups  Single group name string, or array with group names; all groups by default
+	 *
 	 * @return  array   min, max, average, total
-	 * @uses    Profiler::groups
-	 * @uses    Profiler::stats
 	 */
 	public static function group_stats($groups = NULL)
 	{
@@ -267,12 +295,16 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Gets the total execution time and memory usage of a benchmark as a list.
+	 * Gets the total execution time and memory usage of a benchmark as a list
 	 *
-	 *     list($time, $memory) = Profiler::total($token);
+	 * Example:
+	 * ~~~
+	 * list($time, $memory) = Profiler::total($token);
+	 * ~~~
 	 *
-	 * @param   string  $token
-	 * @return  array   execution time, memory
+	 * @param   string  $token  Benchmark token
+	 *
+	 * @return  array   Execution time, memory
 	 */
 	public static function total($token)
 	{
@@ -297,18 +329,26 @@ class Kohana_Profiler {
 	}
 
 	/**
-	 * Gets the total application run time and memory usage. Caches the result
-	 * so that it can be compared between requests.
+	 * Gets the total application run time and memory usage
 	 *
-	 *     list($time, $memory) = Profiler::application();
+	 * Caches the result so that it can be compared between requests.
 	 *
-	 * @return  array  execution time, memory
-	 * @uses    Kohana::cache
+	 * Example:
+	 * ~~~
+	 * list($time, $memory) = Profiler::application();
+	 * ~~~
+	 *
+	 * @return  array  Execution time, memory
+	 *
+	 * @uses    Cache::get
+	 * @uses    Cache::set
 	 */
 	public static function application()
 	{
-		// Load the stats from cache, which is valid for 1 day
-		$stats = Kohana::cache('profiler_application_stats', NULL, 3600 * 24);
+		$cache = Cache::instance();
+
+		// Load the stats from cache
+		$stats = $cache->get('profiler_application_stats');
 
 		if ( ! is_array($stats) OR $stats['count'] > Profiler::$rollover)
 		{
@@ -327,10 +367,10 @@ class Kohana_Profiler {
 		}
 
 		// Get the application run time
-		$time = microtime(TRUE) - KOHANA_START_TIME;
+		$time = microtime(TRUE) - GLEEZ_START_TIME;
 
 		// Get the total memory usage
-		$memory = memory_get_usage() - KOHANA_START_MEMORY;
+		$memory = memory_get_usage() - GLEEZ_START_MEMORY;
 
 		// Calculate max time
 		if ($stats['max']['time'] === NULL OR $time > $stats['max']['time'])
@@ -370,8 +410,8 @@ class Kohana_Profiler {
 			'time'   => $stats['total']['time'] / $stats['count'],
 			'memory' => $stats['total']['memory'] / $stats['count']);
 
-		// Cache the new stats
-		Kohana::cache('profiler_application_stats', $stats);
+		// Cache the new stats for 1 day
+		$cache->set('profiler_application_stats', $stats, 3600 * 24);
 
 		// Set the current application execution time and memory
 		// Do NOT cache these, they are specific to the current request only
@@ -382,4 +422,4 @@ class Kohana_Profiler {
 		return $stats;
 	}
 
-} // End Profiler
+}
