@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.0.0
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -27,8 +27,8 @@ class Gravatar {
 	/** The gravatar service URL */
 	const SERVICE   = 'http://www.gravatar.com/avatar.php';
 
-	/** The size of the returned gravatar (Percentage) */
-	const SIZE      = 250;
+	/** Default size of the returned gravatar (Percentage) */
+	const SIZE      = 100;
 
 	/**
 	 * Static instances
@@ -114,10 +114,78 @@ class Gravatar {
 	 */
 	public function getURL()
 	{
-		return $this->_config['service'] .
-				'?gravatar_id=' . md5(strtolower(trim($this->email))) .
-				'&s=' . $this->_config['size'] .
-				'&r=' . $this->_config['rating'];
+		return $this->_config['service'].
+			"?gravatar_id={$this->getEmail()}&s={$this->getSize()}&r={$this->getRating()}";
+	}
+
+	/**
+	 * Get the currently set avatar size
+	 *
+	 * The current avatar size in use.
+	 *
+	 * @since   1.1.0
+	 *
+	 * @return  integer
+	 */
+	public function getSize()
+	{
+		return (int)$this->_config['size'];
+	}
+
+	/**
+	 * Get the current maximum allowed rating for avatars
+	 *
+	 * The string representing the current maximum allowed rating ('g', 'pg', 'r', 'x').
+	 *
+	 * @since   1.1.0
+	 *
+	 * @return  integer
+	 */
+	public function getRating()
+	{
+		return (int)$this->_config['rating'];
+	}
+
+	/**
+	 * Get the email hash to use (after cleaning the string)
+	 *
+	 * @since   1.1.0
+	 *
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return hash('md5', strtolower(trim($this->email)));
+	}
+
+	/**
+	 * Set the avatar size to use
+	 *
+	 * By default, Gravatar return images at 80px by 80px
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   integer  $size  The avatar size to use, must be less than 512 and greater than 0
+	 *
+	 * @return  Gravatar
+	 *
+	 * @throws Gleez_Exception
+	 */
+	public function setSize($size)
+	{
+		if ( ! is_int($size) AND ! ctype_digit($size))
+		{
+			throw new Gleez_Exception('Avatar size specified must be an integer');
+		}
+
+		if ((int)$size > 600 OR (int)$size < 0)
+		{
+			throw new Gleez_Exception('Avatar size must be within 0 pixels and 600 pixels');
+		}
+
+		$this->_config['size'] = (int) $size;
+
+		return $this;
 	}
 
 	/**
