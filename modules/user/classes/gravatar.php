@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -119,7 +119,7 @@ class Gravatar {
 			}
 
 			// Create the Gravatar instance
-			self::$_instances[$email] = new Gravatar($email, $config);
+			self::$_instances[$email] = new self($email, $config);
 		}
 
 		return self::$_instances[$email];
@@ -160,17 +160,17 @@ class Gravatar {
 	 * @return  string  The resulting Gravatar URL
 	 *
 	 * @uses    URL::query
+	 * @uses    Request::current
+	 * @uses    Request::secure
 	 */
 	public function buildURL()
 	{
+		$url = Gravatar::HTTP_URL;
+
 		// Building the URL
-		if ($this->useSecureURL())
+		if ($this->useSecureURL() OR Request::current()->secure())
 		{
 			$url = Gravatar::HTTPS_URL;
-		}
-		else
-		{
-			$url = Gravatar::HTTP_URL;
 		}
 
 		$url .= $this->getEmailHash($this->_email);
