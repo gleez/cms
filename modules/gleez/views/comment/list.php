@@ -14,7 +14,7 @@
 							$url  = $comment->user->url;
 							$img  = ( ! empty($comment->user->picture))
 								? HTML::resize($comment->user->picture, array('alt' => $comment->user->nick, 'height' => 24, 'width' => 24, 'type' => 'resize', 'class' => 'commentor_avatar'))
-								: HTML::image('media/images/commentor.jpg', array('title' => $nick, 'height' => 24, 'width' => 24, 'class' => 'commentor_avatar'));
+								: HTML::image('media/images/avatar-user-400.png', array('title' => $nick, 'height' => 24, 'width' => 24, 'class' => 'commentor_avatar'));
 
 							echo HTML::anchor($url, $img);
 							echo HTML::anchor($url, $nick, array('title' => $nick));
