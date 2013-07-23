@@ -4,6 +4,6 @@
 	<?php
 		echo $avatar
 			? HTML::resize($avatar, array('alt' => $nick, 'height' => 150, 'width' => 150, 'type' => 'resize', 'itemprop' => 'image'))
-			: '<div class="empty-photo"><i class="icon-camera-retro icon-4x"></i></div>';
+			: HTML::resize('media/images/avatar-user-400.png', array('alt' => $nick, 'height' => 150, 'width' => 150, 'type' => 'resize'));
 	?>
 </div>

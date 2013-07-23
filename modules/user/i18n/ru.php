@@ -39,7 +39,7 @@ return array
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	'Apply new password' => 'Принять новый пароль',
 	'Avatar size specified must be an integer' => 'Размер аватары должен быть числом',
-	'Avatar size must be within 0 pixels and 600 percent' => 'Размер аватары должен быть от 0 до 600 процентов',
+	'Avatar size must be within 0% and 600%' => 'Размер аватары должен быть от 0% до 600%',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
 	'Bio' => 'Биография',
@@ -73,6 +73,7 @@ return array
 	'Edit role %name' => 'Изменить роль %name',
 	'Edit User' => 'Изменить пользователя',
 	'Email' => 'E-mail',
+	'E-mail must be a valid email address' => 'E-mail адрес должен быть в правильном формате',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
@@ -92,6 +93,7 @@ return array
 	"If you don't use any of these services, you can create an account." => "Если вы не используете ни один из этих сервисов, вы можете зарегистрировать аккаунт.",
 	'Inherit' => 'Наследовать',
 	'Instructions to reset your password are being sent to your email address %mail.' => 'Инструкции для сброса вашего пароля были высланы на ваш email адрес %mail.',
+	'Invalid rating :rating specified, only "G", "PG", "R", or "X" are allowed to be used.' => 'Определён не правильный рейтинг :rating. Доступно только "G", "PG", "R", или "X"',
 	// J
 	'Joined on' => 'Участник с',
 	// K
@@ -162,6 +164,7 @@ return array
 	'The ability to change own username' => 'Возможность изменять собственное имя пользователя (логин)',
 	'The ability to change profile' => 'Возможность изменять профиль',
 	'The confirmation link to reset your password has expired or is invalid. Please request a new one using the form below.' => 'Подтверждающая ссылка для сброса пароля устарела или неправильная. Пожалуйста, запросите новую ссылку используя форму ниже.',
+	'The default image specified is not a recognized gravatar "default" and is not a valid URL' => 'Определяемо изображение как изображение по умолчанию не является допустимым изображением Gravatar, а так же не является допустимым URL адресом',
 	'The username must be at least :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
 	'The username must be less than :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
 	'The values you entered in the password fields didn\'t match.' => 'Значения введённые вами в поля для паролей не совпадают.',
