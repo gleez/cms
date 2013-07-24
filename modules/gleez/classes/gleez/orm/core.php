@@ -890,8 +890,8 @@ class Gleez_ORM_Core extends Model implements serializable {
 	 * Binds another one-to-one object to this model.  One-to-one objects
 	 * can be nested using 'object1:object2' syntax
 	 *
-	 * @param  string $target_path Target model to bind to
-	 * @return void
+	 * @param   string  $target_path  Target model to bind to
+	 * @return  $this
 	 */
 	public function with($target_path)
 	{
