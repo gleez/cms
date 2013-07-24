@@ -4,6 +4,7 @@
  *
  * @package    Gleez\ORM\Menu
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -28,7 +29,7 @@ class Model_Menu extends ORM_MPTT {
 		'lvl'    => array( 'type' => 'int' ),
 		'scp'    => array( 'type' => 'int' ),
 	);
-	
+
 	/**
 	 * Scope column name
 	 * @var string
@@ -54,7 +55,7 @@ class Model_Menu extends ORM_MPTT {
 			),
 		);
 	}
-	
+
 	/**
 	 * Labels for fields in this model
 	 *
@@ -68,7 +69,39 @@ class Model_Menu extends ORM_MPTT {
 			'url'    => __('Link'),
 		);
 	}
-	
+
+	/**
+	 * Reading data from inaccessible properties
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   string  $field
+	 * @return  mixed
+	 *
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 */
+	public function __get($field)
+	{
+		switch ($field)
+		{
+			case 'list_items_url':
+				return Route::get('admin/menu/item')->uri(array('id' => $this->id));
+			break;
+			case 'add_item_url':
+				return Route::get('admin/menu/item')->uri(array('id' => $this->id, 'action' => 'add'));
+			break;
+			case 'edit_url':
+				return Route::get('admin/menu')->uri(array('id' => $this->id, 'action' => 'edit'));
+			break;
+			case 'delete_url':
+				return Route::get('admin/menu')->uri(array('id' => $this->id, 'action' => 'delete'));
+			break;
+		}
+
+		return parent::__get($field);
+	}
+
 	/**
 	 * Validation callback
 	 *
@@ -89,7 +122,7 @@ class Model_Menu extends ORM_MPTT {
 			$this->name = $this->_unique_slug(URL::title($text));
 		}
 	}
-	
+
 	/**
 	 * Updates or Creates the record depending on loaded()
 	 *

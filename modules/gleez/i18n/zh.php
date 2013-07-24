@@ -51,7 +51,7 @@ return array (
   'An error occurred deleting page %post' => '删除页面 %post 时发生错误',
   'An error occurred deleting term %term' => '删除术语 %term 时发生错误',
   'An error occurred deleting widget %title' => '删除部件 %title 时发生错误',
-  'An error occurred deleting menu %menu' => '删除菜单 %menu 时发生错误',
+  'An error occurred deleting menu %menu: :message' => '删除菜单 %menu 时发生错误： :message',
   'An error occurred deleting menu item %term' => '删除菜单项 %term 时发生错误',
   'An error occurred while attempting to render the page!' => '渲染页面时发生错误！',
   'Application Directory' => '应用程序目录',
