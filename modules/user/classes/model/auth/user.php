@@ -252,6 +252,8 @@ class Model_Auth_User extends ORM {
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
 			throw new Gleez_Exception("You can't delete system users!");
 		}
+
+		parent::before_delete($id);
 	}
 
 	/**

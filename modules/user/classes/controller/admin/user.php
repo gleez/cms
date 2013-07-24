@@ -106,7 +106,7 @@ class Controller_Admin_User extends Controller_Admin {
 				$login_role = new Model_Role(array('name' =>'login'));
 				$post->add('roles',$login_role);
 
-				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
+				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
 
 				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
 			}
@@ -187,7 +187,7 @@ class Controller_Admin_User extends Controller_Admin {
 					$post->add('roles', ORM::factory('role')->where('name', '=', 'login')->find());
 				}
 
-				Message::success(__("User: %name saved successful!", array('%name' => $post->name)));
+				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
 
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
@@ -216,9 +216,10 @@ class Controller_Admin_User extends Controller_Admin {
 
 			$this->request->redirect(Route::get('admin/user')->uri());
 		}
+		// If it is an external request and id < 3
 		elseif ($user->id < 3)
 		{
-			Message::error(__('User: can\'t delete system user'));
+			Message::error(__("You can't delete system users!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
 
 			$this->request->redirect(Route::get('admin/user')->uri());
@@ -227,7 +228,7 @@ class Controller_Admin_User extends Controller_Admin {
 		$this->title = __('Delete :title', array(':title' => $user->name));
 
 		$view = View::factory('form/confirm')
-				->set('action', Route::url('admin/user', array('action' => 'delete', 'id' => $user->id) ))
+				->set('action',$user->delete_url)
 				->set('title', $user->name);
 
 		// If deletion is not desired, redirect to list
@@ -242,7 +243,7 @@ class Controller_Admin_User extends Controller_Admin {
 			try
 			{
 				$user->delete();
-				Message::success(__('User: :name deleted successful!', array(':name' => $user->name)));
+				Message::success(__('User %name deleted successful!', array('%name' => $user->name)));
 
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
@@ -250,12 +251,15 @@ class Controller_Admin_User extends Controller_Admin {
 			{
 				Kohana::$log->add(Log::ERROR, 'Error occurred deleting user id: :id, :message',
 					array(
-						':id' => $user->id,
+						':id'      => $user->id,
+						':message' => $e->getMessage()
+				));
+				$this->_errors = array(__('An error occurred deleting user %user: :message',
+					array(
+						'%user'    => $user->name,
 						':message' => $e->getMessage()
 					)
-				);
-				Message::error(__('An error occurred deleting user, :user.', array(':user' => $user->name)));
-				$this->_errors = array(__('An error occurred deleting user, :user.', array(':user' => $user->name)));
+				));
 				$this->request->redirect(Route::get('admin/user')->uri());
 			}
 		}
