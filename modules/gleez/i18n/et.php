@@ -80,7 +80,7 @@ return array
 	'An error occurred deleting alias %path' => 'Tekkis viga sünonüümi kustutamisel %path',
 	'An error occurred deleting blog %post' => 'Tekkis viga blogi kustutamisel %post',
 	'An error occurred deleting comment %post' => 'Tekkis viga kommentaari kustutamisel %post',
-	'An error occurred deleting menu %menu' => 'Viga menü kustutamisel %menu',
+	'An error occurred deleting menu %menu: :message' => 'Viga menü kustutamisel %menu: :message',
 	'An error occurred deleting menu item %term' => 'Tekkis viga menü kustutamisel %term',
 	'An error occurred deleting page %post' => 'Tekkis viga lehe kustutamisel %post',
 	'An error occurred deleting post %post' => 'Tekkis viga publikatsiooni kustutamisel %post',
