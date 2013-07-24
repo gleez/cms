@@ -59,8 +59,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		if (! $this->_internal)
 		{
-			Assets::tabledrag('menu-admin-list', 'match', 'parent', 'menu-plid', 'menu-plid', 'menu-mlid', TRUE, 15);
-			Assets::tabledrag('menu-admin-list', 'order', 'sibling', 'menu-weight');
+			Assets::tabledrag('admin-list-menu-items', 'match', 'parent', 'menu-plid', 'menu-plid', 'menu-mlid', TRUE, 15);
+			Assets::tabledrag('admin-list-menu-items', 'order', 'sibling', 'menu-weight');
 		}
 	}
 
