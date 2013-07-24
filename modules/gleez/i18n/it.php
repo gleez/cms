@@ -67,7 +67,7 @@ return array
 	'Allow people to post comments' => 'Permetti alle persone di inviare commenti',
 	'An alias defines a different name for an existing URL path &mdash; for example, the alias \'about\' for the URL path \'page/1\'. A URL path can have multiple aliases.' => 'Un alias definisce un nome differente per un URL esistente &mdash; per esempio, l\'alias \'about\' per l\'URL \'page/1\'. Un URL pu&#328; avere diversi alias.',
 	'An error occurred deleting alias %path' => 'Si &#269; verificato un errore durante l\'eliminazione dell\'alias %path',
-	'An error occurred deleting menu %menu' => 'Si &#269; verificato un errore durante l\'eliminazione del menu %menu',
+	'An error occurred deleting menu %menu: :message' => 'Si &#269; verificato un errore durante l\'eliminazione del menu %menu: :message',
 	'An error occurred deleting menu item %term' => 'Si &#269; verificato un errore durante l\'eliminazione della voce di menu %term',
 	'An error occurred deleting page %post' => 'Si &#269; verificato un errore durante l\'eliminazione della pagina %post',
 	'An error occurred deleting post %post' => 'Si &#269; verificato un errore durante l\'eliminazione del post %post',
