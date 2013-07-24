@@ -4,6 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -232,6 +233,25 @@ class Model_Auth_User extends ORM {
 		$this->status = (int) 1;
 
 		return parent::create($validation);
+	}
+
+	/**
+	 * Take actions before the user is deleted
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   integer  $id  User ID
+	 *
+	 * @throws  Gleez_Exception
+	 */
+	protected function before_delete($id)
+	{
+		// If it is an internal request (eg. popup dialog) and id < 3
+		if ($id < 3)
+		{
+			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
+			throw new Gleez_Exception("You can't delete system users!");
+		}
 	}
 
 	/**
