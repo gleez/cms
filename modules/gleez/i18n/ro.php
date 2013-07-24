@@ -67,7 +67,7 @@ return array
 	'Allow people to post comments' => 'Permite postarea de comentarii.',
 	'An alias defines a different name for an existing URL path &mdash; for example, the alias \'about\' for the URL path \'page/1\'. A URL path can have multiple aliases.' => 'Un alias definește un nume diferit pentru un URL existent. De exemplu, aliasul “despre” pentru URL-ul “page/1”. Un URL poate avea multiple aliasuri.',
 	'An error occurred deleting alias %path' => 'A intervenit o eroare îndepărtând aliasul %path',
-	'An error occurred deleting menu %menu' => 'A intervenit o eroare îndepărtând meniul %menu',
+	'An error occurred deleting menu %menu: :message' => 'A intervenit o eroare îndepărtând meniul %menu: :message',
 	'An error occurred deleting menu item %term' => 'A intervenit o eroare îndepărtând itemul %term din meniu',
 	'An error occurred deleting page %post' => 'A intervenit o eroare îndepărtând pagina %post',
 	'An error occurred deleting post %post' => 'A intervenit o eroare îndepărtând articolul %post',
