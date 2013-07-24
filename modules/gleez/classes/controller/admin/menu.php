@@ -208,7 +208,7 @@ class Controller_Admin_Menu extends Controller_Admin {
 		elseif ($menu->id == 2)
 		{
 			Message::error(__("You can't delete system menu!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
+			Kohana::$log->add(Log::ERROR, 'Attempt to delete system menu');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/menu')->uri(), 403);
