@@ -50,10 +50,10 @@ class Controller_Admin_Menu extends Controller_Admin {
 				$this->_datatables->add_row(
 					array(
 						Text::plain($menu->title).'<div class="description">'.Text::plain($menu->descp).'</div>',
-						HTML::icon(Route::get('admin/menu/item')->uri(array('id' => $menu->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
-						HTML::icon(Route::get('admin/menu/item')->uri(array('action' => 'add', 'id' => $menu->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
-						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'edit', 'id' => $menu->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
-						HTML::icon(Route::get('admin/menu')->uri(array('action' => 'delete', 'id' => $menu->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-menus'))
+						HTML::icon($menu->list_items_url, 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
+						HTML::icon($menu->add_item_url, 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
+						HTML::icon($menu->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
+						HTML::icon($menu->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-menus'))
 					)
 				);
 			}
@@ -198,19 +198,27 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
-			Message::error(__('Menu doesn\'t exists!'));
+			Message::error(__("Menu doesn't exists!"));
 			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
+		// If it is an external request and id == 2
+		elseif ($menu->id == 2)
+		{
+			Message::error(__("You can't delete system menu!"));
+			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
+
+			// Redirect to listing
+			$this->request->redirect(Route::get('admin/menu')->uri(), 403);
+		}
 
 		$this->title = __('Delete Menu :title', array(':title' => $menu->title));
-		$action =  Route::url('admin/menu', array('action' => 'delete', 'id' => $menu->id));
 
 		$view = View::factory('form/confirm')
-			->set('action',$action)
-			->set('title', $menu->title);
+			->set('action', $menu->delete_url)
+			->set('title',  $menu->title);
 
 
 		// If deletion is not desired, redirect to list
@@ -222,30 +230,42 @@ class Controller_Admin_Menu extends Controller_Admin {
 		// If deletion is confirmed
 		if (isset($_POST['yes']) AND $this->valid_post())
 		{
-			try
+			// If it is an internal request (eg. popup dialog) and id < 3
+			if ($menu->id == 2)
 			{
-				$name = $menu->title;
-				DB::delete('widgets')->where('name', '=', 'menu/'.$menu->name)->execute();
-				Cache::instance('menus')->delete($menu->name);
-
-				$menu->delete();
-				Message::success(__('Menu %name deleted successful!', array('%name' => $name)));
-
-				$this->request->redirect(Route::get('admin/menu')->uri(), 200);
+				$this->_errors = array(__("You can't delete system menu!"));
+				Kohana::$log->add(Log::ERROR, 'Attempt to delete system menu');
 			}
-			catch (Exception $e)
+			else
 			{
-				Message::error(__('An error occurred deleting menu %menu', array('%menu' => $menu->name)));
-				Kohana::$log->add(Log::ERROR, 'Error occurred deleting menu :term, id: :id, :message',
-					array(
-						':id'      => $menu->id,
-						':term'    => $menu->name,
-						':message' => $e->getMessage()
-					)
-				);
+				try
+				{
+					$name = $menu->title;
+					DB::delete('widgets')->where('name', '=', 'menu/'.$menu->name)->execute();
+					Cache::instance('menus')->delete($menu->name);
 
-				$this->request->redirect(Route::get('admin/menu')->uri(), 500);
+					$menu->delete();
+					Message::success(__('Menu %name deleted successful!', array('%name' => $name)));
+				}
+				catch (Exception $e)
+				{
+					Kohana::$log->add(Log::ERROR, 'Error occurred deleting menu :term, id: :id, :message',
+						array(
+							':id'      => $menu->id,
+							':term'    => $menu->name,
+							':message' => $e->getMessage()
+						)
+					);
+					$this->_errors = array(__('An error occurred deleting menu %menu: :message',
+						array(
+							'%menu'    => $menu->name,
+							':message' => $e->getMessage()
+						)
+					));
+				}
 			}
+
+			$this->request->redirect(Route::get('admin/menu')->uri());
 		}
 
 		$this->response->body($view);
