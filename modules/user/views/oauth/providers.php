@@ -8,7 +8,7 @@
 			$url = Route::get('user')->uri( array('action' => 'login'));
 			$url .= URL::query( array('destination' => Request::current()->uri()));
 
-			echo HTML::anchor($url, __('Log In'), array('class' => 'base', 'title' =>__('Login with :provider account', array(':provider' => ucfirst($site_name)))));
+			echo HTML::anchor($url, __('Log In'), array('class' => 'base', 'title' =>__('Login with :provider account', array(':provider' => $site_name))));
 			unset($url);
 		?>
 	</li>
