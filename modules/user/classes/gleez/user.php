@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -325,6 +325,7 @@ class Gleez_User {
 
 		if ($use_gravatar)
 		{
+			$view->set('is_gravatar', TRUE);
 			$avatar = Gravatar::instance($user->mail);
 		}
 		else
@@ -334,6 +335,7 @@ class Gleez_User {
 				$avatar = $user->picture;
 				$view->set('nick', $user->nick);
 			}
+			$view->set('is_gravatar', FALSE);
 		}
 
 		$view->set('avatar', $avatar);
