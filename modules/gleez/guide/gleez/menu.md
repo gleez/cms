@@ -10,6 +10,7 @@
    - [Assets](assets)
    - [Breadcrumb](breadcrumb)
    - [Gravatar](gravatar)
+   - [Helpers](helpers)
 
 #### Cache
 - [Getting Started](cache/index)
