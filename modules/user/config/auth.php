@@ -137,8 +137,7 @@ return array
 		'secure_url' => FALSE,
 
 		/**
-		 * The size of the returned gravatar (pixel dimension in percentages).
-		 * By default, Gravatar return images at 80px by 80px (100%)
+		 * The size of the returned gravatar
 		 * @var integer
 		 */
 		'size' => 250,
