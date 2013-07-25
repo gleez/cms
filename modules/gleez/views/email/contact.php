@@ -14,5 +14,5 @@
 <p>
 	<?php echo __('Best Regards'); ?>,<br>
 	<?php echo $config->get('site_url', 'www.gleezcms.org'); ?><br>
-	<?php echo $config->get('site_name', 'Gleez CMS'); ?>
+	<?php echo Template::getSiteName() ?>
 </p>

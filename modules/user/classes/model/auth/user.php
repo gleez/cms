@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -853,7 +853,7 @@ class Model_Auth_User extends ORM {
 				->subject(__(':site - Reset password for :name',
 					array(
 						':name' => $this->nick,
-						':site' => $config->site_name
+						':site' => Template::getSiteName()
 					)
 				))
 				->to($this->mail, $this->nick)
