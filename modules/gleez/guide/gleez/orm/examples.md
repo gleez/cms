@@ -1,7 +1,7 @@
 # Examples
 
-- [Simple](examples/simple): Basic, one table model examples.
-- [Validation](examples/validation): Full example of creating a user account and handling validation errors.
+- [Simple](orm/examples/simple): Basic, one table model examples.
+- [Validation](orm/examples/validation): Full example of creating a user account and handling validation errors.
 
 ## @TODO:
 
