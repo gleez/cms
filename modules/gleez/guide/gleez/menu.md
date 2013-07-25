@@ -9,6 +9,7 @@
    - [Logging](logging)
    - [Assets](assets)
    - [Breadcrumb](breadcrumb)
+   - [Gravatar](gravatar)
 
 #### Cache
 - [Getting Started](cache/index)
