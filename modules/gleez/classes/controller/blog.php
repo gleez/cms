@@ -89,7 +89,7 @@ class Controller_Blog extends Template {
 			return;
 		}
 
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 
 		$this->title = __('Blogs');
 
@@ -125,7 +125,7 @@ class Controller_Blog extends Template {
 			Meta::links(URL::site('rss/blog', TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . __('Blogs'),
+				'title' => Template::getSiteName() . ' : ' . __('Blogs'),
 			));
 		}
 	}
@@ -147,7 +147,7 @@ class Controller_Blog extends Template {
 	public function action_view()
 	{
 		$id = (int) $this->request->param('id', 0);
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 
 		$post = Post::dcache($id, 'blog', $config);
 
@@ -232,7 +232,7 @@ class Controller_Blog extends Template {
 		ACL::required('create blog');
 
 		$this->title = __('Add Blog');
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
@@ -316,7 +316,7 @@ class Controller_Blog extends Template {
 		}
 
 		$this->title = $post->title;
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
@@ -466,7 +466,7 @@ class Controller_Blog extends Template {
 	 */
 	public function action_term()
 	{
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 
 		if ( ! $config->use_category)
 		{
@@ -534,7 +534,7 @@ class Controller_Blog extends Template {
 			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id)), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $term->name,
+				'title' => Template::getSiteName() . ' : ' . $term->name,
 			));
 		}
 	}
@@ -546,7 +546,7 @@ class Controller_Blog extends Template {
 	 */
 	public function action_tag()
 	{
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 		$id = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'blog'));
 
@@ -605,7 +605,7 @@ class Controller_Blog extends Template {
 			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id)), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $tag->name,
+				'title' => Template::getSiteName() . ' : ' . $tag->name,
 			));
 		}
 	}

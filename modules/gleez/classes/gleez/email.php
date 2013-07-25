@@ -6,7 +6,7 @@
  *
  * @package    Gleez\Email
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.1
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -36,10 +36,10 @@ class Gleez_Email {
 		$this->mail = new PHPMailer(true);
 	
 		//Set some defaults
-		$this->mail->SetFrom($config->get('site_email', 'webmaster@example.com'), $config->get('site_name', 'Gleez'));
+		$this->mail->SetFrom($config->get('site_email', 'webmaster@example.com'), Template::getSiteName());
 		$this->mail->WordWrap   = 70;
 		$this->mail->CharSet    = 'UTF-8';
-		$this->mail->XMailer    = 'Gleez CMS (http://gleezcms.org)';
+		$this->mail->XMailer    = Gleez::getVersion(FALSE, TRUE);
 	}
 	
 	/**
