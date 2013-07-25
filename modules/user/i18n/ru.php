@@ -40,7 +40,7 @@ return array
 	'Already have an account? Choose how you would like to sign in' => 'Уже есть аккаунт? Выберите способ авторизации',
 	'Apply new password' => 'Принять новый пароль',
 	'Avatar size specified must be an integer' => 'Размер аватары должен быть числом',
-	'Avatar size must be within 0% and 600%' => 'Размер аватары должен быть от 0% до 600%',
+	'Avatar size must be within 0 pixels and 2048 pixels' => 'Размер аватары должен быть между 0 и 2048 пикселами',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
 	'Bio' => 'Биография',
@@ -165,7 +165,7 @@ return array
 	'The ability to change own username' => 'Возможность изменять собственное имя пользователя (логин)',
 	'The ability to change profile' => 'Возможность изменять профиль',
 	'The confirmation link to reset your password has expired or is invalid. Please request a new one using the form below.' => 'Подтверждающая ссылка для сброса пароля устарела или неправильная. Пожалуйста, запросите новую ссылку используя форму ниже.',
-	'The default image specified is not a recognized gravatar "default" and is not a valid URL' => 'Определяемо изображение как изображение по умолчанию не является допустимым изображением Gravatar, а так же не является допустимым URL адресом',
+	'The default image specified is not a recognized gravatar "default" and is not a valid URL' => 'Изображение по умолчанию не является допустимым изображением Gravatar и не является допустимым URL адресом',
 	'The username must be at least :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
 	'The username must be less than :param2 characters long' => 'Имя пользователя должно быть не менее :param2 символов',
 	'The values you entered in the password fields didn\'t match.' => 'Значения введённые вами в поля для паролей не совпадают.',
