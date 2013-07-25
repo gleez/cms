@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Gleez Gravatar
+ * [Gleez Gravatar](gleez/gravatar)
  *
  * [Gravatar's](http://en.gravatar.com) are universal avatars available
  * to all web sites and services. Users must register their email addresses
@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.2.1
+ * @version    1.3.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -35,19 +35,18 @@ class Gravatar {
 	protected $_config;
 
 	/**
-	 * Default size of the returned gravatar (Percentage)
-	 * + String of the gravatar-recognized default image "type" to use
-	 * + URL
-	 * + FALSE if using the default gravatar default image
+	 * The default image to use:
+	 * String of the gravatar-recognized default image "type" to use,
+	 * URL or FALSE if using the default gravatar default image.
 	 * @var string
 	 */
 	protected $_default_image = FALSE;
 
 	/**
-	 * Default size of the returned gravatar (Percentage)
+	 * Default size of the returned gravatar
 	 * @var integer
 	 */
-	protected $_size = 100;
+	protected $_size = 250;
 
 	/**
 	 * The maximum rating to allow for the avatar
@@ -162,36 +161,36 @@ class Gravatar {
 	 * @uses    URL::query
 	 * @uses    Request::current
 	 * @uses    Request::secure
+	 * @uses    Arr::merge
 	 */
 	public function buildURL()
 	{
-		$url = Gravatar::HTTP_URL;
+		$url = self::HTTP_URL;
 
 		// Building the URL
 		if ($this->useSecureURL() OR Request::current()->secure())
 		{
-			$url = Gravatar::HTTPS_URL;
+			$url = self::HTTPS_URL;
 		}
 
 		$url .= $this->getEmailHash($this->_email);
 
-		$url .= URL::query(
-			array(
-				's' => $this->getSize(),
-				'r' => $this->getRating(),
-			),
-			FALSE
+		$query = array(
+			's' => $this->getSize(),
+			'r' => $this->getRating(),
 		);
 
 		if ($this->getDefaultImage())
 		{
-			$url .= URL::query(array('d' => $this->getDefaultImage()), FALSE);
+			$query = Arr::merge($query, array('d' => $this->getDefaultImage()));
 		}
 
 		if ($this->isForceDefault())
 		{
-			$url .= URL::query(array('f' => 'y'), FALSE);
+			$query = Arr::merge($query, array('f' => 'y'));
 		}
+
+		$url .= URL::query($query, FALSE);
 
 		return $url;
 	}
@@ -221,7 +220,7 @@ class Gravatar {
 	 */
 	public function getRating()
 	{
-		return $this->_rating;
+		return strtolower($this->_rating);
 	}
 
 	/**
@@ -262,9 +261,44 @@ class Gravatar {
 	}
 
 	/**
+	 * Creates a image link
+	 *
+	 * Example:
+	 * ~~~
+	 * echo Gravatar::instance('username@site.com')->getImage();
+	 * ~~~
+	 *
+	 * @since   1.3.0
+	 *
+	 * @param   array    $attrs     Default attributes [Optional]
+	 * @param   mixed    $protocol  Protocol string, [Request], or boolean [Optional]
+	 * @param   boolean  $index     Add index file to URL? [Optional]
+	 *
+	 * @return  string
+	 *
+	 * @uses    Arr::merge
+	 * @uses    HTML::image
+	 */
+	public function getImage(array $attrs = NULL, $protocol = NULL, $index = FALSE)
+	{
+		// Set auto attributes
+		$attributes = array(
+			'width'    => $this->_size,
+			'height'   => $this->_size,
+			'itemprop' => 'image'
+		);
+
+		// Merge attributes
+		$attrs = Arr::merge($attributes, (array) $attrs);
+
+		// Return html
+		return HTML::image($this, $attrs, $protocol, $index);
+	}
+
+	/**
 	 * Set the avatar size to use
 	 *
-	 * By default, Gravatar return images at 80px by 80px
+	 * [!!] Note: By default, images from Gravatar.com will be returned as 80x80 px
 	 *
 	 * @since   1.1.0
 	 *
@@ -281,9 +315,9 @@ class Gravatar {
 			throw new Gleez_Exception('Avatar size specified must be an integer');
 		}
 
-		if ($size > 600 OR $size < 0)
+		if ($size > 2048 OR $size < 0)
 		{
-			throw new Gleez_Exception('Avatar size must be within 0% and 600%');
+			throw new Gleez_Exception('Avatar size must be within 0 pixels and 2048 pixels');
 		}
 
 		$this->_size = $size;
@@ -348,7 +382,7 @@ class Gravatar {
 			return $this;
 		}
 
-		$image = strtolower($image);
+		$image = strtolower(trim($image));
 		if ( ! isset(self::$_default_gravatar[$image]))
 		{
 			if ( ! Valid::url($image))
@@ -357,7 +391,7 @@ class Gravatar {
 			}
 			else
 			{
-				$this->_default_image = rawurlencode($image);
+				$this->_default_image = $image;
 			}
 		}
 		else
@@ -381,7 +415,7 @@ class Gravatar {
 	 */
 	public function setRating($rating)
 	{
-		$rating = strtoupper($rating);
+		$rating = strtolower($rating);
 
 		if ( ! isset(self::$_ratings[$rating]))
 		{
@@ -400,11 +434,11 @@ class Gravatar {
 	 *
 	 * @since   1.2.0
 	 *
-	 * @param   boolean  $force  Force default?
+	 * @param   boolean  $force  Force default? [Optional]
 	 *
 	 * @return  Gravatar
 	 */
-	public function setForceDefault($force)
+	public function setForceDefault($force = TRUE)
 	{
 		$this->_default_force = (bool)$force;
 
