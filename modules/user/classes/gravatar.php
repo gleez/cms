@@ -91,10 +91,10 @@ class Gravatar {
 	 * @var array
 	 */
 	protected static $_ratings = array(
-		'G'  => TRUE,
-		'PG' => TRUE,
-		'R'  => TRUE,
-		'X'  => TRUE
+		'g'  => TRUE,
+		'pg' => TRUE,
+		'r'  => TRUE,
+		'x'  => TRUE
 	);
 
 	/**
