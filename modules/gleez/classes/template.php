@@ -5,7 +5,7 @@
  * @package    Gleez\Template
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.2
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -260,7 +260,7 @@ abstract class Template extends Controller {
 		// Set response format to first matched element
 		$this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
 
-		$site_name = $this->_config->get('site_name', __('Gleez CMS'));
+		$site_name = Template::getSiteName();
 		$url       =  URL::site(NULL, TRUE);
 
 		View::bind_global('site_name', $site_name);
@@ -292,7 +292,7 @@ abstract class Template extends Controller {
 			$this->redirect = ($this->request->query('destination') !== NULL) ? $this->request->query('destination') : array();
 
 			// Bind the generic page variables
-			$this->template->set('site_name',      $this->_config->get('site_name', __('Gleez CMS')))
+			$this->template->set('site_name', Template::getSiteName())
 				->set('site_slogan',   $this->_config->get('site_slogan', __('Innovate IT')))
 				->set('site_url',      URL::site(NULL, TRUE))
 				->set('site_logo',     $this->_config->get('site_logo', FALSE))
@@ -892,5 +892,21 @@ abstract class Template extends Controller {
 			// Force true/false
 			$this->_formsaved = ($Saved) ? TRUE : FALSE;
 		}
+	}
+
+	/**
+	 * Get site name
+	 *
+	 * It is just helper, which gets site name
+	 *
+	 * @since   1.2.0
+	 *
+	 * @param   mixed  $default  The return value if the site name isn't found [Optional]
+	 *
+	 * @return  mixed
+	 */
+	public static function getSiteName($default = 'Gleez CMS')
+	{
+		return Config::get('site.site_name', $default);
 	}
 }
