@@ -99,7 +99,7 @@
 				<li class="provider base">
 					<?php
 						$url = Route::get('user')->uri(array('action' => 'login'));
-						echo HTML::anchor($url, __(':site Account', array(':site' => ucfirst($site_name) )), array('class' => 'picon-base', 'title' =>__('Login with :provider', array(':provider' => $site_name)), 'rel' => 'tooltip', 'data-placement' => 'right'));
+						echo HTML::anchor($url, __(':site Account', array(':site' => $site_name)), array('class' => 'picon-base', 'title' =>__('Login with :provider', array(':provider' => $site_name)), 'rel' => 'tooltip', 'data-placement' => 'right'));
 					?>
 				</li>
 				<?php foreach($providers as $provider => $key): ?>

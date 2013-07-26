@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Feed\RSS
  * @author     Sergey Yakovlev - Gleez
- * @version    1.0.0
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -214,18 +214,18 @@ class Feed_Rss extends Feed {
 	public function setInfo()
 	{
 		$this->_info = array(
-			'title'       => Arr::get($this->_config, 'site_name', 'Gleez CMS'),
+			'title'       => Template::getSiteName(),
 			'description' => Arr::get($this->_config, 'site_mission', __('Recently added posts')),
 			'pubDate'     => time(),
 			'generator'   => Feed::getGenerator(),
 			'link'        => Route::url('rss', NULL, TRUE),
-			'copyright'   => '2011-'.date('Y') . ' ' . Arr::get($this->_config, 'site_name', 'Gleez Technologies'),
+			'copyright'   => '2011-'.date('Y') . ' ' . Template::getSiteName(),
 			'language'    => I18n::lang(),
 			'ttl'         => Arr::get($this->_config, 'feed_ttl', Feed::DEFAULT_TTL),
 			'image'	      => array(
 				'link'  => URL::site(NULL, TRUE),
 				'url'   => URL::site(Arr::get($this->_config, 'site_logo', 'media/images/logo.png'), TRUE),
-				'title' => Arr::get($this->_config, 'site_name', 'Gleez CMS')
+				'title' => Template::getSiteName()
 			),
 		);
 	}

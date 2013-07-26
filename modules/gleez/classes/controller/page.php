@@ -88,7 +88,7 @@ class Controller_Page extends Template {
 			return;
 		}
 
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 
 		$this->title = __('Pages');
 
@@ -124,7 +124,7 @@ class Controller_Page extends Template {
 			Meta::links(URL::site('rss/page', TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . __('Pages'),
+				'title' => Template::getSiteName() . ' : ' . __('Pages'),
 			));
 		}
 	}
@@ -148,7 +148,7 @@ class Controller_Page extends Template {
 	public function action_view()
 	{
 		$id = (int) $this->request->param('id', 0);
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 
 		$post = Post::dcache($id, 'page', $config);
 
@@ -533,7 +533,7 @@ class Controller_Page extends Template {
 			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id)), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $term->name,
+				'title' => Template::getSiteName() . ' : ' . $term->name,
 			));
 		}
 	}
@@ -614,7 +614,7 @@ class Controller_Page extends Template {
 			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id)), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
-				'title' => $this->_config->get('site_name', 'Gleez CMS (RSS 2.0)') . ' : ' . $tag->name,
+				'title' => Template::getSiteName() . ' : ' . $tag->name,
 			));
 		}
 	}
