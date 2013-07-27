@@ -393,11 +393,6 @@ if ( ! ACL::cache())
 			'restrict access' => TRUE,
 			'description' => __('Administer Blog and Blog settings'),
 		),
-		'access blog' => array(
-			'title' => __('Access Blog'),
-			'restrict access' => FALSE,
-			'description' => '',
-		),
 		'create blog' => array(
 			'title' => __('Create Blog post'),
 			'restrict access' => FALSE,
