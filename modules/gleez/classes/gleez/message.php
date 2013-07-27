@@ -310,7 +310,8 @@ class Gleez_Message {
 	 */
 	public static function display($type = NULL, $delete = TRUE, $view = NULL)
 	{
-		if (($messages = self::get($type, NULL, $delete)) === NULL)
+		$messages = self::get($type, NULL, $delete);
+		if (empty($messages))
 		{
 			// No messages
 			return '';
