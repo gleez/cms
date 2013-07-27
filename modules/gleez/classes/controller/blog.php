@@ -31,7 +31,7 @@ class Controller_Blog extends Template {
 			$this->request->action('list');
 		}
 
-		ACL::required('access blog');
+		ACL::required('access content');
 
 		parent::before();
 	}
