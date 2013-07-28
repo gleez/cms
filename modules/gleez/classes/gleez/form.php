@@ -170,8 +170,8 @@ class Gleez_Form {
 			$attrs['data-url']     = URL::site($url, TRUE);
 			$attrs['data-provide'] = 'typeahead';
 
-			// Assign the autocomplete js file
-			Assets::js('autocomplete', 'media/js/gleez.typeahead.js', 'gleez');
+			// Assign the typeahead js file
+			Assets::js('greet.typeahead', 'media/js/greet.typeahead.js', 'gleez');
 		}
 
 		$out .= '<input'.HTML::attributes($attrs).'>';
