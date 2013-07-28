@@ -1,8 +1,9 @@
 /*
  * This turns any form into a "post-in-place" form so it is ajaxed to save
  * without a refresh. Requires jquery form plugin @link
+ *  https://github.com/gleez/greet
  *
- * @package    	Gleez\AjaxForm
+ * @package    	Greet\AjaxForm
  * @version    	1.1
  * @requires   	jQuery v1.9 or later
  * @author     	Sandeep Sangamreddi - Gleez
@@ -13,90 +14,90 @@
 
 !function ($) { "use strict";
 
-    // AJAXFROM CLASS DEFINITION
+    // GREET AJAXFROM CLASS DEFINITION
     // ======================
 
     var Ajaxform = function (element, options) {
-	//Set the options
-	options.dataType        = options.datatype
-	options.beforeSerialize = options.beforeserialize
-	options.beforeSubmit    = options.beforesubmit || Ajaxform.prototype.beforeSubmit
-	options.success       	= options.success || Ajaxform.prototype.showResponse
-	options.error       	= options.error || Ajaxform.prototype.errorResponse
-	options.resetForm       = options.resetform
-	options.clearForm       = options.clearform
-	options.closeKeepAlive  = options.closekeepalive
-	options.extraData       = options.extradata
-	options.replaceTarget   = options.replacetarget
-	options.includeHidden   = options.includehidden
-	options.uploadProgress  = options.uploadprogress
-
-	//delete unsed options
-	delete options.datatype
-	delete options.beforeserialize
-	delete options.beforesubmit
-	delete options.resetform
-	delete options.clearform
-	delete options.closekeepalive
-	delete options.extradata
-	delete options.replacetarget
-	delete options.includehidden
-	delete options.uploadprogress
-
-	this.init(element, options)
+		//Set the options
+		options.dataType        = options.datatype
+		options.beforeSerialize = options.beforeserialize
+		options.beforeSubmit    = options.beforesubmit || Ajaxform.prototype.beforeSubmit
+		options.success       	= options.success || Ajaxform.prototype.showResponse
+		options.error       	= options.error || Ajaxform.prototype.errorResponse
+		options.resetForm       = options.resetform
+		options.clearForm       = options.clearform
+		options.closeKeepAlive  = options.closekeepalive
+		options.extraData       = options.extradata
+		options.replaceTarget   = options.replacetarget
+		options.includeHidden   = options.includehidden
+		options.uploadProgress  = options.uploadprogress
+	
+		//delete unsed options
+		delete options.datatype
+		delete options.beforeserialize
+		delete options.beforesubmit
+		delete options.resetform
+		delete options.clearform
+		delete options.closekeepalive
+		delete options.extradata
+		delete options.replacetarget
+		delete options.includehidden
+		delete options.uploadprogress
+	
+		this.init(element, options)
     }
 
     Ajaxform.prototype.init = function(element, options) {
-	this.$element   = element
-	$(element).ajaxSubmit(options).removeData('jqxhr')
+		this.$element   = element
+		$(element).ajaxSubmit(options).removeData('jqxhr')
     }
 
     Ajaxform.prototype.beforeSubmit = function(formData, form, options) {
-	//add submit button to form array if its from popup request
-	if(options.button && options.button.length == 1){
-	    var subButton   = Array()
-	    subButton.name  = options.button.attr('name')
-	    subButton.value = options.button.attr('value')
-	    subButton.type  = options.button.attr('type')
-	    
-	    //append to form data
-	    formData.push(subButton)
-	}
-
-	// Hide any errorContainers
-	$(form).find('.error-message-container').slideUp(250)
-	$(options.clkbtn).attr('disabled', true).addClass('InProgress')
-
-	return true
+		//add submit button to form array if its from popup request
+		if(options.button && options.button.length == 1){
+			var subButton   = Array()
+			subButton.name  = options.button.attr('name')
+			subButton.value = options.button.attr('value')
+			subButton.type  = options.button.attr('type')
+			
+			//append to form data
+			formData.push(subButton)
+		}
+	
+		// Hide any errorContainers
+		$(form).find('.error-message-container').slideUp(250)
+		$(options.clkbtn).attr('disabled', true).addClass('InProgress')
+	
+		return true
     }
 
     Ajaxform.prototype.showResponse = function(data, status, xhr, form) {
-	if (data.FormSaved == false && data.errors){
-	    Ajaxform.prototype.validationErrors(data, form);
-	}
-	else if (data.FormSaved == true){
-	    var popup     = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
-	    var dataTable = $(form).data('datatable') || false
-	    $(form).remove()
-
-	    if(dataTable){
-		//redraw dataTables if its a dataTable popup or form add/edit/delete
-		$(dataTable).dataTable().fnDraw()
-	    }
-    
-	    //Lets check if the form is in popup window
-	    if(popup && typeof data.messages !== undefined && data.messages.length > 0){
-		var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
-		$(popup).find('.popup-title').html(data.messages[0].type)
-		$(popup).find('.popup-body').html(text)
-		$(popup).find('.popup-footer').html('&nbsp')
-	    }
-	    else if(popup){
-		var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
-		$(popup).find('.popup-body').html(text)
-		$(popup).find('.popup-footer').html('&nbsp')
-	    }
-	}
+		if (data.FormSaved == false && data.errors){
+			Ajaxform.prototype.validationErrors(data, form);
+		}
+		else if (data.FormSaved == true){
+			var popup     = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
+			var dataTable = $(form).data('datatable') || false
+			$(form).remove()
+	
+			if(dataTable){
+				//redraw dataTables if its a dataTable popup or form add/edit/delete
+				$(dataTable).dataTable().fnDraw()
+			}
+		
+			//Lets check if the form is in popup window
+			if(popup && typeof data.messages !== undefined && data.messages.length > 0){
+				var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
+				$(popup).find('.popup-title').html(data.messages[0].type)
+				$(popup).find('.popup-body').html(text)
+				$(popup).find('.popup-footer').html('&nbsp')
+			}
+			else if(popup){
+				var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
+				$(popup).find('.popup-body').html(text)
+				$(popup).find('.popup-footer').html('&nbsp')
+			}
+		}
     }
 
     Ajaxform.prototype.errorResponse = function(xhr, status, error, form) {
@@ -127,9 +128,9 @@
 	    $(form).prepend('<div class="error-message-container" style="display:none"></div>')
 	}
 
-	// Empty any previous error messages, insert the new errors and slide it in to view.
-	$(form).find('.error-message-container').empty().html(tmpl).slideDown(250)
-	$(form).data('clkbtn').removeAttr('disabled').removeClass('InProgress')
+		// Empty any previous error messages, insert the new errors and slide it in to view.
+		$(form).find('.error-message-container').empty().html(tmpl).slideDown(250)
+		$(form).data('clkbtn').removeAttr('disabled').removeClass('InProgress')
     }
 
     Ajaxform.prototype.processData = function(data, $el) {
@@ -169,18 +170,18 @@
 			$(prepend_selector).prepend(data.html)
 	    }
 	    if (refresh_selector) {
-		$.each($(refresh_selector), function(index, value) {
-		    $.getJSON($(value).data('refresh-url'), function(data) {
-			$(value).replaceWith(data.html)
-		    })
-		})
+			$.each($(refresh_selector), function(index, value) {
+				$.getJSON($(value).data('refresh-url'), function(data) {
+				$(value).replaceWith(data.html)
+				})
+			})
 	    }
 	    if (refresh_closest_selector) {
-		$.each($(refresh_closest_selector), function(index, value) {
-		    $.getJSON($(value).data('refresh-url'), function(data) {
-			$el.closest($(value)).replaceWith(data.html)
-		    })
-		})
+			$.each($(refresh_closest_selector), function(index, value) {
+				$.getJSON($(value).data('refresh-url'), function(data) {
+				$el.closest($(value)).replaceWith(data.html)
+				})
+			})
 	    }
 	    if (clear_selector) {
 			$(clear_selector).html('')
@@ -198,22 +199,22 @@
 
 	if (data.fragments) {
 	    for (var s in data.fragments) {
-		$(s).replaceWith(data.fragments[s])
+			$(s).replaceWith(data.fragments[s])
 	    }
 	}
 	if (data['inner-fragments']) {
 	    for (var i in data['inner-fragments']) {
-		$(i).html(data['inner-fragments'][i])
+			$(i).html(data['inner-fragments'][i])
 	    }
 	}
 	if (data['append-fragments']) {
 	    for (var a in data['append-fragments']) {
-		$(a).append(data['append-fragments'][a])
+			$(a).append(data['append-fragments'][a])
 	    }
 	}
 	if (data['prepend-fragments']) {
 	    for (var p in data['prepend-fragments']) {
-		$(p).prepend(data['prepend-fragments'][p])
+			$(p).prepend(data['prepend-fragments'][p])
 	    }
 	}
 
@@ -221,8 +222,9 @@
     }
 
     Ajaxform.prototype.captureSubmittingElement = function(e) {
-	var target = e.target;
-		var $el = $(target);
+		var target = e.target
+		var $el = $(target)
+		
 		if (!($el.is("[type=submit],[type=image]"))) {
 			// is this a child element of the submit el?  (ex: a span within a button)
 			var t = $el.closest('[type=submit]');
@@ -231,8 +233,9 @@
 			}
 			target = t[0];
 		}
-		var form = this;
-		form.clk = target;
+		
+		var form = this
+		form.clk = target
 		if (target.type == 'image') {
 			if (e.offsetX !== undefined) {
 			form.clk_x = e.offsetX;
@@ -247,80 +250,80 @@
 			}
 		}
 		// clear form vars
-		setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
+		setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100)
     }
 
-    // AJAXFROM PLUGIN DEFINITION
+    // GREET AJAXFROM PLUGIN DEFINITION
     // =======================
 
     var old = $.fn.aform
 
     $.fn.aform = function (option) {
-	return this.each(function () {
-	    var $this   = $(this)
-	    var data    = $this.data('ajaxform')
-	    var options = $.extend({}, $.fn.aform.defaults, $this.data(), typeof option == 'object' && option)
-
-	    if (!data) $this.data('ajaxform', (data = new Ajaxform(this, options)))
-	    if (typeof option == 'string') data[option]()
-	})
+		return this.each(function () {
+			var $this   = $(this)
+			var data    = $this.data('ajaxform')
+			var options = $.extend({}, $.fn.aform.defaults, $this.data(), typeof option == 'object' && option)
+	
+			if (!data) $this.data('ajaxform', (data = new Ajaxform(this, options)))
+			if (typeof option == 'string') data[option]()
+		})
     }
 
     $.fn.aform.defaults = {
-	keyboard: true
-      , loading: true
-      , delegation: true
-      , datatype: 'json'
-      , type: 'POST'
-      , beforeserialize: false
-      , beforesubmit: false
-      , resetform: false
-      , clearform: false
-      , button: false
-      , clkbtn: false
-      , target: false
-      , success: false
-      , context: false
-      , error: false
-      , complete: false
-      , traditional: false
-      , iframe: false
-      , semantic: false
-      , closekeepalive: false
-      , extradata: false
-      , replacetarget:'html'
-      , includehidden: true
-      , uploadprogress: false
+		keyboard: true
+		, loading: true
+		, delegation: true
+		, datatype: 'json'
+		, type: 'POST'
+		, beforeserialize: false
+		, beforesubmit: false
+		, resetform: false
+		, clearform: false
+		, button: false
+		, clkbtn: false
+		, target: false
+		, success: false
+		, context: false
+		, error: false
+		, complete: false
+		, traditional: false
+		, iframe: false
+		, semantic: false
+		, closekeepalive: false
+		, extradata: false
+		, replacetarget:'html'
+		, includehidden: true
+		, uploadprogress: false
     }
 
     $.fn.aform.Constructor = Ajaxform
 
 
-    // AJAXFROM NO CONFLICT
+    // GREET AJAXFROM NO CONFLICT
     // =================
 
     $.fn.aform.noConflict = function () {
-	$.fn.aform = old
-	return this
+		$.fn.aform = old
+		return this
     }
 
 
-   // AJAXFROM DATA-API
+   // GREET AJAXFROM DATA-API
    // ==============
 
     $(document).on('submit.ajaxform.data-api, click.ajaxform.data-api', '[data-toggle="ajaxform"]', function (e) {
-	var $this = $(this)
-	, $target = $this.data('form') || $this.parents('form')
-	, option  = $.extend({}, $target.data(), $this.data())
-
-	// if event has been canceled, don't proceed
-	if (!e.isDefaultPrevented()) {
-	    e.preventDefault()
-	    
-	    option.clkbtn = $this
-	    $target.data('clkbtn', $this)
-	    $target.removeData('ajaxform').aform(option)
-	}
+		var $this = $(this)
+		, $target = $this.data('form') || $this.parents('form')
+		, option  = $.extend({}, $target.data(), $this.data())
+	
+		// if event has been canceled, don't proceed
+		if (!e.isDefaultPrevented()) {
+			e.preventDefault()
+			
+			option.clkbtn = $this
+			$target.data('clkbtn', $this)
+			$target.removeData('ajaxform').aform(option)
+		}
     })
 
     $(document.body).on('submit.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)

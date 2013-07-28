@@ -1,5 +1,6 @@
 /*
  * This is a highly modified version of the bootstrap Typeahead.
+ * https://github.com/gleez/greet
  * 
  * @package    Greet\Typeahead
  * @version    1.1
