@@ -15,7 +15,7 @@
 						<?php echo HTML::anchor($post->user->url, User::getAvatar($post->user)); ?>
 						<?php echo HTML::anchor($post->user->url, $post->user->nick, array('title' => $post->user->nick)); ?>
 					</span>
-					<span class="DateCreated"> <?php echo Date::date_format($post->created); ?> </span>
+					<span class="date-created"> <?php echo Date::date_format($post->created); ?> </span>
 				</div>
 			<?php endif;?>
 	
