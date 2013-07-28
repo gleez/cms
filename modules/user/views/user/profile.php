@@ -61,7 +61,7 @@
 				<div class="ItemContent Activity">
 					<div class="Title"><?php echo __(':nick joined.', array(':nick' => $user->nick)); ?></div>
 					<div class="Excerpt"><?php echo __('Welcome to Gleez!') ?></div>
-					<div class="Meta"><span class="DateCreated"><?php echo __(Date::fuzzy_span($user->created)); ?></span></div>
+					<div class="meta"><span class="date-created"><?php echo __(Date::fuzzy_span($user->created)); ?></span></div>
 				</div>
 			</li>
 		</ul>
