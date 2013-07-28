@@ -1,7 +1,7 @@
 /*
  * This is a highly modified version of the bootstrap Typeahead.
  * 
- * @package    Gleez\Typeahead
+ * @package    Greet\Typeahead
  * @version    1.1
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
@@ -14,7 +14,7 @@
   "use strict"; // jshint ;_;
 
 
- /* TYPEAHEAD PUBLIC CLASS DEFINITION
+ /* GREET TYPEAHEAD PUBLIC CLASS DEFINITION
   * ================================= */
 
   var Typeahead = function (element, options) {
@@ -510,7 +510,7 @@
     return s;
   }
 
-  /* TYPEAHEAD PLUGIN DEFINITION
+  /* GREET TYPEAHEAD PLUGIN DEFINITION
    * =========================== */
 
   var old = $.fn.typeahead
@@ -546,7 +546,7 @@
   $.fn.typeahead.Constructor = Typeahead
 
 
- /* TYPEAHEAD NO CONFLICT
+ /* GREET TYPEAHEAD NO CONFLICT
   * =================== */
 
   $.fn.typeahead.noConflict = function () {
@@ -555,7 +555,7 @@
   }
 
 
- /* TYPEAHEAD DATA-API
+ /* GREET TYPEAHEAD DATA-API
   * ================== */
 
   $(document).on('focus.typeahead.data-api', '[data-provide="typeahead"]', function (e) {
