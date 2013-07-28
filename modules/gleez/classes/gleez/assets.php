@@ -858,12 +858,12 @@ class Gleez_Assets {
 	public static function popup()
 	{
 		Assets::css('form', 'media/css/form.css', array('weight' => 2));
-		Assets::css('popup', 'media/css/popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
+		Assets::css('greet.popup', 'media/css/greet.popup.css', array('bootstrap'), array('media' => 'screen', 'weight' => 15));
 		
 		Assets::js('form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 15));
 		Assets::js('ajaxform', 'media/js/gleez.ajaxform.js', NULL, FALSE, array('weight' => 17));
 		Assets::js('autocomplete', 'media/js/gleez.typeahead.js', 'gleez');
-		Assets::js('popup', 'media/js/gleez.popup.js', array('bootstrap'), FALSE, array('weight' => 20));
+		Assets::js('greet.popup', 'media/js/greet.popup.js', array('bootstrap'), FALSE, array('weight' => 20));
 	}
 	
 	/**

@@ -1,7 +1,8 @@
 /*
  * This is a highly modified version of the bootstrap popup dialog.
- *
- * @package    Gleez\Popup
+ * https://github.com/gleez/greet
+ * 
+ * @package    Greet\Popup
  * @version    1.3
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
@@ -12,7 +13,7 @@
 
 !function ($) { "use strict";
 
-    // POPUP CLASS DEFINITION
+    // GREET POPUP CLASS DEFINITION
     // ======================
 
     var Popup = function (element, options) {
@@ -501,7 +502,7 @@
     }
 
 
-   // POPUP PLUGIN DEFINITION
+   // GREET POPUP PLUGIN DEFINITION
    // =======================
 
     var old = $.fn.popup
@@ -550,7 +551,7 @@
     $.fn.popup.Constructor = Popup
 
 
-   // POPUP NO CONFLICT
+   // GREET POPUP NO CONFLICT
    // =================
 
     $.fn.popup.noConflict = function () {
@@ -558,7 +559,7 @@
 	return this
     }
 
-   // POPUP DATA-API
+   // GREET POPUP DATA-API
    // ==============
 
     $(document).on('click.popup.data-api', '[data-toggle="popup"]', function (e) {
