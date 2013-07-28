@@ -230,7 +230,6 @@ class Controller_User extends Template {
 	 * @uses    ACL::check
 	 * @uses    Text::ucfirst
 	 * @uses    Assets::popup
-	 * @uses    User::getAvatar
 	 */
 	public function action_view()
 	{
@@ -280,8 +279,7 @@ class Controller_User extends Template {
 
 		$view = View::factory('user/profile')
 				->set('user',     $user)
-				->set('is_owner', $is_owner)
-				->set('avatar',   User::getAvatar($user));
+				->set('is_owner', $is_owner);
 
 		$this->response->body($view);
 	}
