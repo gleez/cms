@@ -579,10 +579,6 @@ jQuery.noConflict();
 	    $("[rel='tooltip']").tooltip()
 	})
 	
-	$(window).on('load', function (e) {
-	    Gleez.dataTable()
-	});
-	
 	//Attach all behaviors.
 	Gleez.attachBehaviors(document, Gleez.settings)
 	$(document).trigger('attach', Gleez.settings)
