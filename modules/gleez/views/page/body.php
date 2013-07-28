@@ -12,18 +12,9 @@
 			<?php if ($config->use_submitted): ?>
 				<div class="span6">
 					<span class="author">
-					<?php
-						$nick = $post->user->nick;
-						$url  = $post->user->url;
-						$pic  = ( strlen($post->user->picture) > 4 ) ? $post->user->picture : 'media/images/avatar-user-400.png';
-						$img = HTML::resize($pic, array('title' => $nick, 'width' => 32, 'height' => 32, 'type' => 'resize') );
-	
-						echo HTML::anchor($url, $img);
-						echo HTML::anchor($url, $nick, array('title' => $nick));
-						unset($nick, $img, $url);
-					?>
+						<?php echo HTML::anchor($post->user->url, User::getAvatar($post->user)); ?>
+						<?php echo HTML::anchor($post->user->url, $post->user->nick, array('title' => $post->user->nick)); ?>
 					</span>
-	
 					<span class="DateCreated"> <?php echo Date::date_format($post->created); ?> </span>
 				</div>
 			<?php endif;?>
