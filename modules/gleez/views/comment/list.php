@@ -6,22 +6,12 @@
 	<?php foreach($comments as $i => $comment) : ?>
 		<li class="Comment Item <?php echo $comment->status; ?>" id="Comment_<?php echo $comment->id; ?>" >
 			<div class="Comment">
-				<div class="Meta">
-					<span class="Author">
-						<?php
-							// @todo Move to controller
-							$nick = $comment->user->nick;
-							$url  = $comment->user->url;
-							$img  = ( ! empty($comment->user->picture))
-								? HTML::resize($comment->user->picture, array('alt' => $comment->user->nick, 'height' => 24, 'width' => 24, 'type' => 'resize', 'class' => 'commentor_avatar'))
-								: HTML::image('media/images/avatar-user-400.png', array('title' => $nick, 'height' => 24, 'width' => 24, 'class' => 'commentor_avatar'));
-
-							echo HTML::anchor($url, $img);
-							echo HTML::anchor($url, $nick, array('title' => $nick));
-							unset($nick, $img, $url);
-						?>
+				<div class="meta">
+					<span class="author">
+						<?php echo HTML::anchor($comment->user->url, User::getAvatar($comment->user)); ?>
+						<?php echo HTML::anchor($comment->user->url, $comment->user->nick, array('title' => $comment->user->nick)); ?>
 					</span>
-					<span class="DateCreated">
+					<span class="date-created">
 						<?php echo Date::date_format($comment->created) ?>
 					</span>
 
