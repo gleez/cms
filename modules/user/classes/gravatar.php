@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.3.0
+ * @version    1.3.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -277,7 +277,7 @@ class Gravatar {
 	 * @return  string
 	 *
 	 * @uses    Arr::merge
-	 * @uses    HTML::image
+	 * @uses    HTML::resize
 	 */
 	public function getImage(array $attrs = NULL, $protocol = NULL, $index = FALSE)
 	{
@@ -292,7 +292,7 @@ class Gravatar {
 		$attrs = Arr::merge($attributes, (array) $attrs);
 
 		// Return html
-		return HTML::image($this, $attrs, $protocol, $index);
+		return HTML::resize($this, $attrs, $protocol, $index);
 	}
 
 	/**
