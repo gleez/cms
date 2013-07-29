@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -302,45 +302,80 @@ class Gleez_User {
 	}
 
 	/**
-	 * Get user avatar
+	 * Get user avatar, and creates a image link
 	 *
 	 * Optionally, if it is allowed, used [Gravatar].
 	 *
+	 * Example:
+	 * ~~~
+	 * $post = Post::dcache($id, 'page', $config);
+	 *
+	 * echo HTML::anchor($post->user->url, User::getAvatar($post->user));
+	 * ~~~
+	 *
 	 * @since   1.1.0
 	 *
-	 * @param   ORM  $user  User model
+	 * @param   ORM      $user      User model
+	 * @param   array    $attrs     Default attributes + type = crop|ratio [Optional]
+	 * @param   mixed    $protocol  Protocol to pass to `URL::base()` [Optional]
+	 * @param   boolean  $index     Include the index page [Optional]
 	 *
-	 * @return  View
+	 * @return  string
 	 *
 	 * @uses    Config::get
-	 * @uses    Gravatar::instance
+	 * @uses    Gravatar::setSize
+	 * @uses    Gravatar::setDefaultImage
+	 * @uses    Gravatar::getImage
+	 * @uses    URL::site
+	 * @uses    Arr::merge
 	 */
-	public static function getAvatar(ORM $user)
+	public static function getAvatar(ORM $user, array $attrs = array(), $protocol = NULL, $index = FALSE)
 	{
-		$use_gravatar = Config::get('site.use_gravatars', FALSE);
-		$avatar       = FALSE;
+		// Default user pic
+		$avatar = 'media/images/avatar-user-400.png';
 
-		// Each theme can determine its view for this
-		$view = View::factory('user/avatar')->set('nick', $user->nick);;
+		// Set default attributes
+		$attrs_default = array(
+			'size'          => 32,
+			'type'          => 'resize',
+			'itemprop'      => 'image',
+			'default_image' => URL::site($avatar, TRUE),
+		);
+
+		// Merge attributes
+		$attrs = Arr::merge($attrs_default, $attrs);
+
+		$use_gravatar = Config::get('site.use_gravatars', FALSE);
 
 		if ($use_gravatar)
 		{
-			$view->set('is_gravatar', TRUE);
-			$avatar = Gravatar::instance($user->mail);
+			$avatar = Gravatar::instance($user->mail)
+						->setSize($attrs['size'])
+						->setDefaultImage($attrs['default_image'])
+						->getImage(array(
+							'alt'      => $user->nick,
+							'itemprop' => $attrs['itemprop'],
+							'width'    => $attrs['size'],
+							'height'   => $attrs['size']
+						), $protocol, $index);
 		}
 		else
 		{
 			if ( ! empty($user->picture))
 			{
 				$avatar = $user->picture;
-				$view->set('nick', $user->nick);
 			}
-			$view->set('is_gravatar', FALSE);
+
+			$avatar = HTML::resize($avatar, array(
+				'alt'      => $user->nick,
+				'height'   => $attrs['size'],
+				'width'    => $attrs['size'],
+				'type'     => $attrs['type'],
+				'itemprop' => $attrs['itemprop'],
+			), $protocol, $index);
 		}
 
-		$view->set('avatar', $avatar);
-
-		return $view;
+		return $avatar;
 	}
 
 }
