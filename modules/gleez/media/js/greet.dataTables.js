@@ -14,6 +14,9 @@
 
 !function ($) { "use strict";
 
+    // GREET DATATABLE CLASS DEFINITION
+    // ======================
+
     var DataTable = function(table, options) {
 		var $table = $(table)
 		,   columns = []
