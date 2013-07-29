@@ -862,7 +862,7 @@ class Gleez_Assets {
 		
 		Assets::js('form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 15));
 		Assets::js('greet.ajaxform', 'media/js/greet.ajaxform.js', NULL, FALSE, array('weight' => 17));
-		Assets::js('greet.typeahead', 'media/js/gleez.typeahead.js', 'gleez');
+		Assets::js('greet.typeahead', 'media/js/greet.typeahead.js', 'gleez');
 		Assets::js('greet.popup', 'media/js/greet.popup.js', array('bootstrap'), FALSE, array('weight' => 20));
 	}
 	
