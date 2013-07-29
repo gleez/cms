@@ -28,7 +28,7 @@ class Widget_User extends Widget {
 
 	public function login()
 	{
-		$auth = Auth::instance();
+		$auth    = Auth::instance();
 		$request = Request::current();
 
 		// If user already signed-in / don't show the widget on user controller.
@@ -43,14 +43,13 @@ class Widget_User extends Widget {
 		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
 		$params      = array('action' => 'login');
 		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
-		$config      = Config::load('auth');
 
-		return View::factory('user/login')
-				->set('register',     $config->get('register'))
-				->set('use_username', $config->get('username'))
-				->set('providers',    array_filter($config->get('providers')))
+		return View::factory('widget/login')
+				->set('register',     Config::get('auth.register'))
+				->set('use_username', Config::get('auth.username'))
+				->set('providers',    array_filter(Config::get('auth.providers')))
 				->set('action',       $action)
 				->set('post',         ORM::factory('user'))
 				->render();
-		}
+	}
 }
