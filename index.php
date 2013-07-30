@@ -50,7 +50,7 @@ define('EXT', '.php');
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
- * @see  http://php.net/error_reporting
+ * @link  http://php.net/error_reporting
  *
  * When developing your application, it is highly recommended to enable notices
  * and strict warnings. Enable them by using: E_ALL | E_STRICT
