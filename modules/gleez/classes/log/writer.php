@@ -58,10 +58,10 @@ abstract class Log_Writer {
 	/**
 	 * Write an array of messages
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $writer->write($messages);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $writer->write($messages);
+	 * ~~~
 	 *
 	 * @param  array  $messages  Array of messages
 	 */
@@ -70,12 +70,13 @@ abstract class Log_Writer {
 	/**
 	 * Allows the writer to have a unique key when stored
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo $writer;
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo $writer;
+	 * ~~~
 	 *
 	 * @return  string  Returns the hash of the unique identifier for the object
+	 *
 	 * @link    http://php.net/manual/en/function.spl-object-hash.php spl_object_hash()
 	 */
 	final public function __toString()
@@ -104,6 +105,9 @@ abstract class Log_Writer {
 		$message['level'] = $this->_log_levels[$message['level']];
 
 		unset($message['additional'], $message['trace']);
+
+		// FIX: $message should consist of an array of strings
+		$message = array_filter($message, 'is_string');
 
 		$string = strtr($format,$message);
 
