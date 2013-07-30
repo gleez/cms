@@ -1,12 +1,12 @@
 <?php
 
 /**
-* The directory in which your site application specific resources are located.
-* The application directory must contain the bootstrap.php file.
-* This automatically detects multi-site configuration found in 'sites' directory
-*
-* @link  http://kohanaframework.org/guide/about.install#application
-*/
+ * The directory in which your site application specific resources are located.
+ * The application directory must contain the bootstrap.php file.
+ * This automatically detects multi-site configuration found in 'sites' directory
+ *
+ * @link  http://kohanaframework.org/guide/about.install#application
+ */
 $application = 'application';
 
 /**
