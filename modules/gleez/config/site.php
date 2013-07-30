@@ -169,10 +169,6 @@ return array(
 			),
 		),
 		'tags' => array(
-			'X-UA-Compatible'  => array(
-				'http_equiv' => TRUE,
-				'value'      => 'IE=edge,chrome=1'
-			),
 			'charset'          => 'utf-8',
 			'generator'        => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
 			'author'           => 'Gleez Team',
