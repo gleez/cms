@@ -1,11 +1,11 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
 	'db' => array(
 		/**
 		 * Database settings for session storage.
 		 *
-		 * string   group  configuation group name
+		 * string   group  configuration group name
 		 * string   table  session table name
 		 * integer  gc     number of requests before gc is invoked
 		 * columns  array  custom column names
@@ -25,5 +25,8 @@ return array(
                         'hostname'    => 'hostname',
                         'user_id'     => 'user_id'
 		),
+	),
+	'cookie' => array(
+		'encrypted' => FALSE,
 	),
 );
