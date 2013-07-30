@@ -6,7 +6,7 @@
  * @author     Kohana Team
  * @author     Sergey Yakovlev - Gleez
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -56,8 +56,11 @@ class Cookie {
 	 * Cookies without signatures will not be returned.
 	 * If the cookie signature is present, but invalid, the cookie will be deleted.
 	 *
-	 *     // Get the "theme" cookie, or use "blue" if the cookie does not exist
-	 *     $theme = Cookie::get('theme', 'blue');
+	 * Example:
+	 * ~~~
+	 * // Get the "theme" cookie, or use "blue" if the cookie does not exist
+	 * $theme = Cookie::get('theme', 'blue');
+	 * ~~~
 	 *
 	 * @param   string  $key      Cookie name
 	 * @param   mixed   $default  Default value to return [Optional]
@@ -101,8 +104,11 @@ class Cookie {
 	 *
 	 * [!!] Note that all cookie values must be strings and no automatic serialization will be performed!
 	 *
-	 *     // Set the "theme" cookie
-	 *     Cookie::set('theme', 'red');
+	 * Example:
+	 * ~~~
+	 * // Set the "theme" cookie
+	 * Cookie::set('theme', 'red');
+	 * ~~~
 	 *
 	 * @param   string   $name        Name of cookie
 	 * @param   string   $value       Value of cookie
@@ -138,8 +144,6 @@ class Cookie {
 	 * @param   string  $name  Cookie name
 	 *
 	 * @return  boolean
-	 *
-	 * @uses    Date::DAY
 	 */
 	public static function delete($name)
 	{
@@ -147,16 +151,16 @@ class Cookie {
 		unset($_COOKIE[$name]);
 
 		// Nullify the cookie and make it expire
-		return setcookie($name, NULL, -Date::DAY, Cookie::$path, Cookie::$domain, Cookie::$secure, Cookie::$httponly);
+		return setcookie($name, NULL, time() - 1, Cookie::$path, Cookie::$domain, Cookie::$secure, Cookie::$httponly);
 	}
 
 	/**
 	 * Generates a salt string for a cookie based on the name and value
 	 *
-	 * Example:<br>
-	 * <code>
+	 * Example:
+	 * ~~~
 	 *   $salt = Cookie::salt('theme', 'red');
-	 * </code>
+	 * ~~~
 	 *
 	 * Thanks to [rjd22](https://github.com/rjd22) and [birkir](https://github.com/birkir)
 	 *
