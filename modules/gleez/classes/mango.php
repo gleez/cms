@@ -268,7 +268,7 @@ class Mango {
 			$mongo_class = 'Mongo';
 		}
 
-		// Create MongoClient object (but don't connect just yet)
+		// Create MongoClient (or Mongo) object (but don't connect just yet)
 		$this->_connection = new $mongo_class($server, Arr::merge(array('connect' => FALSE), $options));
 
 		// Save profiling option in a public variable
