@@ -44,8 +44,7 @@ class Gleez_Validation implements ArrayAccess {
 	 * Sets the unique "any field" key and creates an ArrayObject from the
 	 * passed array.
 	 *
-	 * @param   array   $array  array to validate
-	 * @return  void
+	 * @param   array $array  array to validate
 	 */
 	public function __construct(array $array)
 	{
@@ -317,7 +316,7 @@ class Gleez_Validation implements ArrayAccess {
 		$expected = Arr::merge(array_keys($original), array_keys($this->_labels));
 
 		// Import the rules locally
-		$rules     = $this->_rules;
+		$rules = $this->_rules;
 
 		foreach ($expected as $field)
 		{
@@ -658,4 +657,4 @@ class Gleez_Validation implements ArrayAccess {
 		return array();
 	}
 	
-} // End Validation
+}

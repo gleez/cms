@@ -74,7 +74,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Sergey Yakovlev - Gleez
- * @version    0.3.4
+ * @version    0.3.5
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -258,8 +258,18 @@ class Mango {
 			$server = 'mongodb://' . $server;
 		}
 
+		// safe mode
+		if (class_exists('MongoClient'))
+		{
+			$mongo_class = 'MongoClient';
+		}
+		else
+		{
+			$mongo_class = 'Mongo';
+		}
+
 		// Create MongoClient object (but don't connect just yet)
-		$this->_connection = new MongoClient($server, Arr::merge(array('connect' => FALSE), $options));
+		$this->_connection = new $mongo_class($server, Arr::merge(array('connect' => FALSE), $options));
 
 		// Save profiling option in a public variable
 		// @todo Kohana::$profiling => Gleez::$profiling
