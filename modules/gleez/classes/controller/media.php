@@ -4,24 +4,17 @@
  *
  * @package    Gleez\Media\Controller
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.0
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License 
  */
 class Controller_Media extends Controller {
 	
 	/**
-	 * The configuration settings
-	 * @var Config
-	 */
-	public $config;
-	
-	/**
 	 * The before() method is called before controller action
 	 *
 	 * @uses  Request::param
 	 * @uses  Theme::set_theme
-	 * @uses  Config::load
 	 */
 	public function before()
 	{
@@ -31,9 +24,6 @@ class Controller_Media extends Controller {
 		}
 		
 		parent::before();
-		
-		// Load config
-		$this->config = Kohana::$config->load('media');
 	}
 	
 	/**
@@ -47,6 +37,7 @@ class Controller_Media extends Controller {
 	 * @uses  Response::headers
 	 * @uses  Response::status
 	 * @uses  File::mime_by_ext
+	 * @uses  File::getExt
 	 * @uses  Config::get
 	 * @uses  Log::add
 	 * @uses  System::mkdir
@@ -60,7 +51,7 @@ class Controller_Media extends Controller {
 		$file = $this->request->param('file');
 		
 		// Find the file extension
-		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		$ext = File::getExt($file);
 		
 		// Remove the extension from the filename
 		$file = substr($file, 0, -(strlen($ext) + 1));
@@ -80,19 +71,19 @@ class Controller_Media extends Controller {
 			// This is ignored by check_cache
 			$this->response->headers('cache-control', 'public, max-age=2592000');
 			
-			if ($this->config->get('cache', FALSE))
+			if (Config::get('media.cache', FALSE))
 			{
 				// Set base path
-				$path = $this->config->get('public_dir', 'media');
+				$path = Config::get('media.public_dir', 'media');
 			
 				// Override path if we're in admin
 				if ($theme)
 				{
-					$path = $path.DS . $theme;
+					$path = $path . DS . $theme;
 				}
 				
 				// Save the contents to the public directory for future requests
-				$public_path = $path.DS. $file . '.' . $ext;
+				$public_path = $path . DS . $file . '.' . $ext;
 				$directory   = dirname($public_path);
 				
 				if ( ! is_dir($directory))
