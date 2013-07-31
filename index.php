@@ -76,7 +76,7 @@ error_reporting(E_ALL | E_STRICT);
  */
 
 // Set the full path to the docroot
-define('DOCROOT', realpath(dirname(__FILE__)).DIRECTORY_SEPARATOR);
+define('DOCROOT', realpath(dirname(__FILE__)).DS);
 
 // Make the application relative to the docroot, for symlink'd index.php
 if ( ! is_dir($application) AND is_dir(DOCROOT.$application))
@@ -99,11 +99,11 @@ if ( ! is_dir($themes) AND is_dir(DOCROOT.$themes))
 	$themes = DOCROOT.$themes;
 
 // Define the absolute paths for configured directories
-define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
-define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
-define('GLZPATH', realpath($gleez).DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
-define('THEMEPATH', realpath($themes).DIRECTORY_SEPARATOR);
+define('APPPATH', realpath($application).DS);
+define('MODPATH', realpath($modules).DS);
+define('GLZPATH', realpath($gleez).DS);
+define('SYSPATH', realpath($system).DS);
+define('THEMEPATH', realpath($themes).DS);
 
 // Clean up the configuration vars
 unset($application, $modules, $system, $themes);
