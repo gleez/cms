@@ -5,7 +5,7 @@
  * @package    Gleez\SPL
  * @author     Sergey Yakovlev - Gleez
  * @author     Kohana Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2007-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -36,15 +36,13 @@ class File extends SplFileInfo {
 	/**
 	 * Creates a singleton of a File
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $file = File::instance();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $file = File::instance();
 	 *
-	 * Access an instantiated file directly:<br>
-	 * <code>
-	 *   $file = File::$instance;
-	 * </code>
+	 * // Access an instantiated file directly:
+	 * $file = File::$instance;
+	 * ~~~
 	 *
 	 * @param   string  $file_name  File name
 	 * @return  File
@@ -156,10 +154,10 @@ class File extends SplFileInfo {
 	 * This method is horribly unreliable, due to PHP being horribly unreliable
 	 * when it comes to determining the mime type of a file.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $mime = File::mime($file);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $mime = File::mime($file);
+	 * ~~~
 	 *
 	 * @param   string  $filename  File name or path
 	 * @return  string  Mime type on success
@@ -208,10 +206,10 @@ class File extends SplFileInfo {
 	/**
 	 * Return the mime type of an extension
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $mime = File::mime_by_ext('png'); // "image/png"
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $mime = File::mime_by_ext('png'); // "image/png"
+	 * ~~~
 	 *
 	 * @param   string  $extension  php, pdf, txt, etc
 	 * @return  string  mime type on success
@@ -220,7 +218,7 @@ class File extends SplFileInfo {
 	public static function mime_by_ext($extension)
 	{
 		// Load all of the mime types
-		$mimes = Kohana::$config->load('mimes');
+		$mimes = Config::load('mimes');
 
 		return isset($mimes[$extension]) ? $mimes[$extension][0] : FALSE;
 	}
@@ -234,7 +232,7 @@ class File extends SplFileInfo {
 	public static function mimes_by_ext($extension)
 	{
 		// Load all of the mime types
-		$mimes = Kohana::$config->load('mimes');
+		$mimes = Config::load('mimes');
 
 		return isset($mimes[$extension]) ? ( (array) $mimes[$extension]) : array();
 	}
@@ -252,7 +250,7 @@ class File extends SplFileInfo {
 		// Fill the static array
 		if (empty($types))
 		{
-			foreach (Kohana::$config->load('mimes') as $ext => $mimes)
+			foreach (Config::load('mimes') as $ext => $mimes)
 			{
 				foreach ($mimes as $mime)
 				{
@@ -293,10 +291,10 @@ class File extends SplFileInfo {
 	 *
 	 * Used when you need to split large files into smaller pieces for easy transmission.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $count = File::split($file);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $count = File::split($file);
+	 * ~~~
 	 *
 	 * @param   string   $filename    File to be split
 	 * @param   integer  $piece_size  Size, in MB, for each piece to be [Optional]
