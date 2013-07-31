@@ -257,23 +257,23 @@ class Debug {
 	{
 		if (strpos($file, APPPATH) === 0)
 		{
-			$file = 'APPPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(APPPATH));
+			$file = 'APPPATH'.DS.substr($file, strlen(APPPATH));
 		}
 		elseif (strpos($file, SYSPATH) === 0)
 		{
-			$file = 'SYSPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(SYSPATH));
+			$file = 'SYSPATH'.DS.substr($file, strlen(SYSPATH));
 		}
 		elseif (strpos($file, MODPATH) === 0)
 		{
-			$file = 'MODPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(MODPATH));
+			$file = 'MODPATH'.DS.substr($file, strlen(MODPATH));
 		}
 		elseif (strpos($file, THEMEPATH) === 0)
 		{
-			$file = 'THEMEPATH'.DIRECTORY_SEPARATOR.substr($file, strlen(THEMEPATH));
+			$file = 'THEMEPATH'.DS.substr($file, strlen(THEMEPATH));
 		}
 		elseif (strpos($file, DOCROOT) === 0)
 		{
-			$file = 'DOCROOT'.DIRECTORY_SEPARATOR.substr($file, strlen(DOCROOT));
+			$file = 'DOCROOT'.DS.substr($file, strlen(DOCROOT));
 		}
 
 		return $file;

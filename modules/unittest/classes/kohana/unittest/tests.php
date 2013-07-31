@@ -100,7 +100,7 @@ class Kohana_Unittest_Tests {
 		{
 			if (is_array($file))
 			{
-				if ($path != 'tests'.DIRECTORY_SEPARATOR.'test_data')
+				if ($path != 'tests'.DS.'test_data')
 				{					
 					self::addTests($suite, $file);
 				}
@@ -242,7 +242,7 @@ class Kohana_Unittest_Tests {
 			{
 				if ( ! isset(Unittest_tests::$cache[$file]))
 				{
-					$relative_path = substr($file, strrpos($file, 'classes'.DIRECTORY_SEPARATOR) + 8, -strlen(EXT));
+					$relative_path = substr($file, strrpos($file, 'classes'.DS) + 8, -strlen(EXT));
 					$cascading_file = Kohana::find_file('classes', $relative_path);
 
 					// The theory is that if this file is the highest one in the cascading filesystem
