@@ -991,11 +991,11 @@ class Gleez_Assets {
 
 		if(Theme::$is_admin == TRUE)
 		{
-			$path = $path.DIRECTORY_SEPARATOR.'admin';
+			$path = $path.DS.'admin';
 		}
 
 		//set unqiue filename based on criteria
-		$filename = $path.DIRECTORY_SEPARATOR.$type.DIRECTORY_SEPARATOR.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
+		$filename = $path.DS.$type.DS.$type.'-'.md5(implode("|", $files)).$last_modified.'.'.$type;
 		$directory   = dirname($filename);
 
 		if (!is_dir($directory))

@@ -31,6 +31,7 @@ return array(
 	 * @var array
 	 */
 	'supported_image_formats' => array(
+		'jpe',
 		'jpg',
 		'jpeg',
 		'gif',

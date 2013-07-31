@@ -322,7 +322,7 @@ abstract class Kohana_Controller_Userguide extends Controller_Template {
 		if (isset($info['extension'])
 			AND (($info['extension'] === 'md') OR ($info['extension'] === 'markdown')))
 		{
-			$page = $info['dirname'].DIRECTORY_SEPARATOR.$info['filename'];
+			$page = $info['dirname'].DS.$info['filename'];
 		}
 		return Kohana::find_file('guide', $page, 'md');
 	}

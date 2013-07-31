@@ -38,7 +38,7 @@ class Kohana_Unittest_Helpers {
 	 */
 	static public function dir_separator($path)
 	{
-		return str_replace('/', DIRECTORY_SEPARATOR, $path);
+		return str_replace('/', DS, $path);
 	}
 
 	/**
