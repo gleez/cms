@@ -5,7 +5,7 @@
  * @package    Gleez\SPL
  * @author     Sergey Yakovlev - Gleez
  * @author     Kohana Team
- * @version    1.0.2
+ * @version    1.1.0
  * @copyright  (c) 2007-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -218,7 +218,7 @@ class File extends SplFileInfo {
 	public static function mime_by_ext($extension)
 	{
 		// Load all of the mime types
-		$mimes = Config::load('mimes');
+		$mimes = Config::load('mimes')->as_array();
 
 		return isset($mimes[$extension]) ? $mimes[$extension][0] : FALSE;
 	}
@@ -232,7 +232,7 @@ class File extends SplFileInfo {
 	public static function mimes_by_ext($extension)
 	{
 		// Load all of the mime types
-		$mimes = Config::load('mimes');
+		$mimes = Config::load('mimes')->as_array();
 
 		return isset($mimes[$extension]) ? ( (array) $mimes[$extension]) : array();
 	}
@@ -250,7 +250,7 @@ class File extends SplFileInfo {
 		// Fill the static array
 		if (empty($types))
 		{
-			foreach (Config::load('mimes') as $ext => $mimes)
+			foreach (Config::load('mimes')->as_array() as $ext => $mimes)
 			{
 				foreach ($mimes as $mime)
 				{
@@ -351,10 +351,10 @@ class File extends SplFileInfo {
 	 *
 	 * Does the reverse of [File::split].
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $count = File::join($file);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $count = File::join($file);
+	 * ~~~
 	 *
 	 * @param   string  $filename   Split filename, without .000 extension
 	 * @return  integer The number of pieces that were joined.
@@ -403,5 +403,19 @@ class File extends SplFileInfo {
 	public static function getUnique($name)
 	{
 		return uniqid().preg_replace('/\s+/u', '-', $name);
+	}
+
+	/**
+	 * Get file extension from it name
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   string  $file  Filename
+	 *
+	 * @return  string
+	 */
+	public static function getExt($file)
+	{
+		return pathinfo($file, PATHINFO_EXTENSION);
 	}
 }
