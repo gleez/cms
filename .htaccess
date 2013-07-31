@@ -47,15 +47,29 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 	RewriteRule .* index.php/$0 [PT]
 </IfModule>
 
+# ----------------------------------------------------------------------
+# Better website experience for IE users
+# ----------------------------------------------------------------------
+<IfModule mod_setenvif.c>
+  <IfModule mod_headers.c>
+    BrowserMatch MSIE ie
+    Header set X-UA-Compatible "IE=Edge,chrome=1" env=ie
 
-<IfModule mod_headers.c>
-	# Better website experience for IE users
-	Header set X-UA-Compatible "IE=Edge,chrome=1"
 	<FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
 		Header unset X-UA-Compatible
 	</FilesMatch>
+  </IfModule>
+</IfModule>
 
-	# Webfont access
+<IfModule mod_headers.c>
+# Because X-UA-Compatible isn't sent to non-IE (to save header bytes),
+# We need to inform proxies that content changes based on UA
+  Header append Vary User-Agent
+# Cache control is set only if mod_headers is enabled, so that's unnecessary to declare
+</IfModule>
+
+# Webfont access
+<IfModule mod_headers.c>
 	<FilesMatch "\.(eot|font.css|otf|ttc|ttf|woff)$">
 		Header set Access-Control-Allow-Origin "*"
 	</FilesMatch>
