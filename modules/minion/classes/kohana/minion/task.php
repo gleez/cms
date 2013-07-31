@@ -342,7 +342,7 @@ abstract class Kohana_Minion_Task {
 
 		foreach ($files as $file => $path)
 		{
-			$file = substr($file, strrpos($file, DIRECTORY_SEPARATOR) + 1);
+			$file = substr($file, strrpos($file, DS) + 1);
 
 			if (is_array($path) AND count($path))
 			{

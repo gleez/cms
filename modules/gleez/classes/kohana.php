@@ -283,7 +283,7 @@ class Kohana {
 		Kohana::$is_cli = (PHP_SAPI === 'cli');
 
 		// Determine if we are running in a Windows environment
-		Kohana::$is_windows = (DIRECTORY_SEPARATOR === '\\');
+		Kohana::$is_windows = (DS === '\\');
 
 		// Determine if we are running in safe mode
 		Kohana::$safe_mode = (bool) ini_get('safe_mode');
@@ -590,7 +590,7 @@ class Kohana {
 			if (is_dir($path))
 			{
 				// Add the module to include paths
-				$paths[] = $modules[$name] = realpath($path).DIRECTORY_SEPARATOR;
+				$paths[] = $modules[$name] = realpath($path).DS;
 			}
 			else
 			{
@@ -701,7 +701,7 @@ class Kohana {
 		}
 
 		// Create a partial path of the filename
-		$path = $dir.DIRECTORY_SEPARATOR.$file.$ext;
+		$path = $dir.DS.$file.$ext;
 
 		if (Kohana::$caching === TRUE AND isset(Kohana::$_files[$path.($array ? '_array' : '_path')][$theme]))
 		{
@@ -787,7 +787,7 @@ class Kohana {
 		if ($directory !== NULL)
 		{
 			// Add the directory separator
-			$directory .= DIRECTORY_SEPARATOR;
+			$directory .= DS;
 		}
 
 		if ($paths === NULL)
