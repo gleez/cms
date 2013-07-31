@@ -38,7 +38,7 @@ define('EXT', '.php');
  * this bootstrap file somewhere else then you'll need to modify this value to 
  * compensate.
  */
-define('DOCROOT', realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR);
+define('DOCROOT', realpath(dirname(__FILE__).'/../../').DS);
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
@@ -81,9 +81,9 @@ if ( ! is_dir($system) AND is_dir(DOCROOT.$system))
 }
 
 // Define the absolute paths for configured directories
-define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
-define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
-define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
+define('APPPATH', realpath($application).DS);
+define('MODPATH', realpath($modules).DS);
+define('SYSPATH', realpath($system).DS);
 
 // Clean up the configuration vars
 unset($application, $modules, $system);

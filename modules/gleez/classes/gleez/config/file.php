@@ -23,7 +23,7 @@ class Gleez_Config_File implements Config_Source {
 	public function __construct($directory = 'config')
 	{
 		// Set the configuration directory name
-		$this->_directory = trim($directory, DIRECTORY_SEPARATOR);
+		$this->_directory = trim($directory, DS);
 	}
 	
 	/**

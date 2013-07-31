@@ -113,7 +113,7 @@ class Theme {
 	 */
 	public static function get_info($theme_name)
 	{
-		$info_file               = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
+		$info_file               = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
 		$theme_info              = (object) parse_ini_file($info_file, true);
 		$theme_info->title       = __($theme_info->title);
 		$theme_info->description = __($theme_info->description);
@@ -142,7 +142,7 @@ class Theme {
 
 		foreach (scandir(THEMEPATH) as $theme_name)
 		{
-			$info_file = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
+			$info_file = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
 			// File can be exists and can be readable
 			if (is_readable($info_file))
 			{
@@ -170,7 +170,7 @@ class Theme {
 		{
 			foreach (scandir(THEMEPATH) as $theme_name)
 			{
-				$info_file = THEMEPATH . $theme_name . DIRECTORY_SEPARATOR . Theme::INFO_FILE;
+				$info_file = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
 				
 				// File can be exists and can be readable
 				if (is_readable($info_file))

@@ -88,11 +88,11 @@ class Controller_Media extends Controller {
 				// Override path if we're in admin
 				if ($theme)
 				{
-					$path = $path.DIRECTORY_SEPARATOR . $theme;
+					$path = $path.DS . $theme;
 				}
 				
 				// Save the contents to the public directory for future requests
-				$public_path = $path.DIRECTORY_SEPARATOR. $file . '.' . $ext;
+				$public_path = $path.DS. $file . '.' . $ext;
 				$directory   = dirname($public_path);
 				
 				if ( ! is_dir($directory))

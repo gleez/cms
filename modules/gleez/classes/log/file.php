@@ -41,7 +41,7 @@ class Log_File extends Log_Writer {
 		$this->_checkDir($directory);
 
 		// Determine the directory path
-		$this->_directory = realpath($directory).DIRECTORY_SEPARATOR;
+		$this->_directory = realpath($directory).DS;
 	}
 
 	/**
@@ -71,12 +71,12 @@ class Log_File extends Log_Writer {
 		$directory = $this->_directory.date('Y');
 
 		// Add the month to the directory
-		$directory .= DIRECTORY_SEPARATOR.date('m');
+		$directory .= DS.date('m');
 
 		$this->_checkDir($directory);
 
 		// Set the name of the log file
-		$filename = $directory.DIRECTORY_SEPARATOR.date('d').EXT;
+		$filename = $directory.DS.date('d').EXT;
 
 		if ( ! file_exists($filename))
 		{

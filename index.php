@@ -49,6 +49,11 @@ $themes = 'themes';
 define('EXT', '.php');
 
 /**
+ * For convenience, shorten the name of the DIRECTORY_SEPARATOR constant
+ */
+define('DS', DIRECTORY_SEPARATOR);
+
+/**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
  * @link  http://php.net/error_reporting
  *
