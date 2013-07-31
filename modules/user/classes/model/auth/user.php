@@ -463,18 +463,18 @@ class Model_Auth_User extends ORM {
 	public function upload_photo($file)
 	{
 		// Uploads directory and url for profile pictures
-		$profile_path = APPPATH . self::DEFAULT_PATH;
+		$picture_path = APPPATH . self::DEFAULT_PATH;
 
-		if( ! is_dir($profile_path))
+		if ( ! is_dir($picture_path))
 		{
-			if( ! System::mkdir($profile_path))
+			if ( ! System::mkdir($picture_path))
 			{
 				Message::error(__('Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.',
-					array('%dir' => Text::plain($profile_path))
+					array('%dir' => Text::plain($picture_path))
 				));
 
 				Kohana::$log->add(Log::ERROR, 'Failed to create directory :dir for uploading profile image.',
-					array(':dir' => Text::plain($profile_path))
+					array(':dir' => Text::plain($picture_path))
 				);
 			}
 		}
@@ -483,11 +483,11 @@ class Model_Auth_User extends ORM {
 		if (Upload::valid($file))
 		{
 			$filename = File::getUnique($file['name']);
-			$path = Upload::save($file, $filename, $profile_path);
+			$path = Upload::save($file, $filename, $picture_path);
 
 			if ($path)
 			{
-				return self::DEFAULT_PATH.DIRECTORY_SEPARATOR.$filename;
+				return self::DEFAULT_PATH.DS.$filename;
 			}
 		}
 

@@ -202,7 +202,7 @@ class I18n {
 		do
 		{
 			// Create a path for this set of parts
-			$path = implode(DIRECTORY_SEPARATOR, $parts);
+			$path = implode(DS, $parts);
 
 			if ($files = Kohana::find_file('i18n', $path, NULL, TRUE))
 			{

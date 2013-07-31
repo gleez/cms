@@ -511,7 +511,7 @@ class Cache_File extends Cache {
 	 */
 	protected function _resolve_directory($filename)
 	{
-		return $this->_cache_dir->getRealPath().DIRECTORY_SEPARATOR.$filename[0].$filename[1].DIRECTORY_SEPARATOR;
+		return $this->_cache_dir->getRealPath().DS.$filename[0].$filename[1].DS;
 	}
 
 	/**
