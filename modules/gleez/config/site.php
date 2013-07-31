@@ -169,7 +169,7 @@ return array(
 			),
 		),
 		'tags' => array(
-			'charset'          => 'utf-8',
+			'charset'          => Kohana::$charset,
 			'generator'        => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
 			'author'           => 'Gleez Team',
 			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2013. All rights reserved.',
