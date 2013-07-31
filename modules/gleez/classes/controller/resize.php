@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Resize Controller
  *
@@ -42,7 +42,7 @@ class Controller_Resize extends Controller {
 		$this->response->body( Image::factory($this->resized_image)->render() );
 		$this->response->headers('last-modified', date('r', filemtime($this->resized_image)));
 
-	} // action_image
+	}
 
 	private function cache()
 	{
@@ -86,7 +86,7 @@ class Controller_Resize extends Controller {
 
 		return TRUE;
 
-	} // cache
+	}
 
 	private function is_valid($image_path)
 	{
@@ -117,4 +117,4 @@ class Controller_Resize extends Controller {
 		return strpos( strtolower($this->image_src), 'http://') !== false ;
 	}
 
-} // Controller_Resize
+}
