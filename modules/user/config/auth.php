@@ -162,6 +162,25 @@ return array
 		 * @var boolean
 		 */
 		'force_default' => FALSE,
+
+		/**
+		 * Valid picture formats for downloading
+		 * @var array
+		 */
+		'valid_formats' => array(
+			'jpe',
+			'jpg',
+			'jpeg',
+			'gif',
+			'png',
+			'bmp'
+		),
+
+		/**
+		 * Default store location for downloading pictures
+		 * @var string
+		 */
+		'store_location' => APPPATH . 'media/pictures',
 	),
 
 	/**
