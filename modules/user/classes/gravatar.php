@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Sergey Yakovlev - Gleez
- * @version    1.3.1
+ * @version    1.4.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -73,6 +73,19 @@ class Gravatar {
 	protected $_default_force = FALSE;
 
 	/**
+	 * List of valid picture formats for downloading
+	 * @var array
+	 */
+	protected $_valid_formats = array(
+		'jpe',
+		'jpg',
+		'jpeg',
+		'gif',
+		'png',
+		'bmp'
+	);
+
+	/**
 	 * Gravatar defaults
 	 * @var array
 	 */
@@ -96,6 +109,12 @@ class Gravatar {
 		'r'  => TRUE,
 		'x'  => TRUE
 	);
+
+	/**
+	 * Current store location for downloading user pictures
+	 * @var string
+	 */
+	protected $_store_location;
 
 	/**
 	 * Get a singleton Gravatar instance
@@ -136,6 +155,9 @@ class Gravatar {
 	{
 		// Set the email address
 		$this->setEmail($email);
+
+		// Set default picture location for downloading
+		$this->setStoreLocation();
 
 		// Store the config locally
 		$this->_config = $this->_prepareConfig($config);
@@ -296,6 +318,72 @@ class Gravatar {
 	}
 
 	/**
+	 * Get list of valid picture formats for downloading
+	 *
+	 * @since   1.4.0
+	 *
+	 * @return  array
+	 */
+	public function getValidFormats()
+	{
+		return $this->_valid_formats;
+	}
+
+	/**
+	 * Get list of valid picture mime types for downloading
+	 *
+	 * @since   1.4.0
+	 *
+	 * @return  array
+	 *
+	 * @uses    Config::get
+	 */
+	public function getValidTypes()
+	{
+		$valid_formats = array();
+
+		foreach($this->_valid_formats as $format)
+		{
+			$valid_formats[$format] = Config::get("mimes.{$format}");
+		}
+
+		$valid_types   = array();
+
+		foreach($valid_formats as $format => $types)
+		{
+			foreach ($types as $type)
+			{
+				$valid_types[] = $type;
+			}
+		}
+
+		return $valid_types;
+	}
+
+	/**
+	 * Get current store location for downloading pictures
+	 *
+	 * Example:
+	 * ~~~
+	 * echo Gravatar::instance('username@site.com')->getStoreLocation();
+	 * // For example /srv/http/public_html/site.com/application/media/pictures/
+	 *
+	 * echo Gravatar::instance('username@site.com')->getStoreLocation('filename');
+	 * // For example /srv/http/public_html/site.com/application/media/pictures/filename
+	 * ~~~
+	 *
+	 * @since   1.4.0
+	 *
+	 * @param   string  $filename File name [Optional]
+	 *
+	 * @return  string
+	 */
+	public function getStoreLocation($filename = NULL)
+	{
+		return $this->_store_location . $filename;
+	}
+
+	/**
 	 * Set the avatar size to use
 	 *
 	 * [!!] Note: By default, images from Gravatar.com will be returned as 80x80 px
@@ -321,6 +409,75 @@ class Gravatar {
 		}
 
 		$this->_size = $size;
+
+		return $this;
+	}
+
+	/**
+	 * Set list of valid picture formats for downloading
+	 *
+	 * @since   1.4.0
+	 *
+	 * @param   array  $formats  Array of valid picture formats (eg. array('jpg', 'gif', 'png', ...))
+	 *
+	 * @return  Gravatar
+	 */
+	public function setValidFormats(array $formats)
+	{
+		$this->_valid_formats = $formats;
+
+		return $this;
+	}
+
+	/**
+	 * Set store location for downloading pictures
+	 *
+	 * [!!] Note: If `$location` is NULL, by default used `APPPATH . 'media/pictures'`.
+	 *      If dir not exists and fails create it used sys_get_temp_dir()
+	 *
+	 * @since   1.4.0
+	 *
+	 * @link    http://www.php.net/manual/en/function.sys-get-temp-dir.php sys_get_temp_dir()
+	 *
+	 * @param   string  $location  Store location [Optional]
+	 *
+	 * @return  Gravatar
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Text::reduce_slashes
+	 * @uses    System::mkdir
+	 */
+	public function setStoreLocation($location = NULL)
+	{
+		if (is_null($location))
+		{
+			// Set default picture location for downloading
+			$this->_store_location = APPPATH . 'media/pictures';
+
+			// Make sure destination is a directory
+			if ( ! is_dir($this->_store_location))
+			{
+				if ( ! System::mkdir($this->_store_location))
+				{
+					$this->_store_location = sys_get_temp_dir();
+				}
+			}
+		}
+		else
+		{
+			$this->_store_location = Text::reduce_slashes($location);
+
+			// Make sure destination is writable
+			if ( ! is_writable($this->_store_location))
+			{
+				throw new Gleez_Exception('Download destination :desti is not writable',
+					array(':desti' => $location), 105
+				);
+			}
+		}
+
+		$this->_store_location = $this->_store_location . DS;
 
 		return $this;
 	}
@@ -481,6 +638,16 @@ class Gravatar {
 			$this->setForceDefault($config['force_default']);
 		}
 
+		if (isset($config['valid_formats']) and is_array($config['valid_formats']))
+		{
+			$this->setValidFormats($config['valid_formats']);
+		}
+
+		if (isset($config['store_location']) and is_string($config['store_location']))
+		{
+			$this->setStoreLocation($config['store_location']);
+		}
+
 		return $config;
 	}
 
@@ -525,7 +692,7 @@ class Gravatar {
 	}
 
 	/**
-		 * Check if need to force the default image to always load
+	 * Check if need to force the default image to always load
 	 *
 	 * @since   1.2.0
 	 *
@@ -534,6 +701,88 @@ class Gravatar {
 	public function isForceDefault()
 	{
 		return $this->_default_force;
+	}
+
+	/**
+	 * Downloads gravatar to location on server
+	 *
+	 * [!!] Note: If location is not set, by default use server tmp directory.
+	 *
+	 * Example:
+	 * ~~~
+	 * // get an image specific to a user
+	 * $avatar = Gravatar::instance('username@site.com');
+	 *
+	 * // download gravatar
+	 * $result = $avatar->download();
+	 *
+	 * // print result
+	 * echo __('Gravatar saved to :loc, file size: :len', array(
+	 *     ':loc' => $result->location,
+	 *     ':len' => $result->length
+	 * ));
+	 * ~~~
+	 *
+	 * @since   1.4.0
+	 *
+	 * @return  stdClass
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    File::ext_by_mime
+	 */
+	public function download()
+	{
+		try
+		{
+			$headers = get_headers($this, 1);
+		}
+		catch (ErrorException $e)
+		{
+			if ($e->getCode() === 2)
+			{
+				throw new Gleez_Exception('URL does not seem to exist', array(), 403);
+			}
+			else
+			{
+				throw new Gleez_Exception($e->getMessage(), array(), $e->getCode());
+			}
+		}
+
+		// Make sure content type exists
+		if ( ! isset($headers['Content-Type']))
+		{
+			throw new Gleez_Exception('Content-Type not found', array(), 300);
+		}
+
+		// Make sure content type is valid
+		if ( ! in_array($headers['Content-Type'], $this->getValidTypes()))
+		{
+			throw new Gleez_Exception('Content-Type :type is invalid', array(':type' => $headers['Content-Type']), 305);
+		}
+
+		// Set file name
+		$filename = $this->getEmailHash() . '.' . File::ext_by_mime($headers['Content-Type']);
+
+		// Try to download
+		try
+		{
+			file_put_contents($this->getStoreLocation($filename), file_get_contents($this));
+		}
+		catch (ErrorException $e)
+		{
+			throw new Gleez_Exception('File could not been downloaded: :msg', array(':msg' => $e->getMessage()), 400);
+		}
+
+		$result = new stdClass;
+
+		$result->filename  = $filename;
+		$result->extension = File::ext_by_mime($headers['Content-Type']);
+		$result->type      = $headers['Content-Type'];
+		$result->length    = $headers['Content-Length'];
+		$result->location  = $this->getStoreLocation($filename);
+
+		return $result;
 	}
 
 }
