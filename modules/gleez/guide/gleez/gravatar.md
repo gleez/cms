@@ -60,6 +60,37 @@ echo Gravatar::instance('username@site.com')
 		->getImage();
 ~~~
 
+Download gravatar (to the current picture directory):
+
+~~~
+// get an image specific to a user
+$avatar = Gravatar::instance('username@site.com');
+
+// download gravatar
+$result = $avatar->download();
+
+// print result
+echo __('Gravatar saved to :loc, file size: :len', array(
+     ':loc' => $result->location,
+    ':len' => $result->length
+));
+~~~
+
+Set custom location for downloading gravatars:
+
+~~~
+// get an image specific to a user
+$avatar = Gravatar::instance('username@site.com')->setStoreLocation('media');
+
+// download gravatar
+$result = $avatar->download();
+
+// print result
+echo __('Gravatar saved to :loc, file size: :len', array(
+    ':loc' => $result->location,
+    ':len' => $result->length
+));
+~~~
 
 ## Configuration
 
@@ -146,4 +177,28 @@ $avatar->setForceDefault(TRUE);
 
 // Disable
 $avatar->setForceDefault(FALSE);
+~~~
+
+### valid_formats
+
+An array of valid picture formats for downloading
+
+[!!] Note: There is no apparent reason to change the default settings of `valid_formats`
+
+Example:
+~~~
+$avatar->setValidFormats(array('jpg', 'png'));
+~~~
+
+### store_location
+
+Set store location for downloading pictures
+
+[!!] Note: If `store_location` is NULL, or not string, or not param exists, by default use `'media/pictures'`
+     from APPPATH. If dir not exists and fails create it used sys_get_temp_dir().
+     See [sys_get_temp_dir](http://www.php.net/manual/en/function.sys-get-temp-dir.php)
+
+Example:
+~~~
+$avatar->setStoreLocation('media');
 ~~~
