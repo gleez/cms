@@ -296,7 +296,7 @@ class Kohana_HTTP_Header extends ArrayObject {
 		 */
 		$input = array_change_key_case((array) $input, CASE_LOWER);
 
-		parent::__construct($input, $flags, $iterator_class);
+		parent::__construct($input, (int)$flags, $iterator_class);
 	}
 
 	/**

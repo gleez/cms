@@ -1,17 +1,23 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Cookie-based session class.
+ * Cookie-based session class
  *
- * @package    Kohana
- * @category   Session
+ * @package    Gleez\Session\Cookie
+ * @author     Gleez Team
  * @author     Kohana Team
+ * @version    1.0.1
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Kohana_Session_Cookie extends Session {
+class Session_Cookie extends Session {
 
 	/**
+	 * Loads the raw session data string and returns it
+	 *
 	 * @param   string  $id  session id
+	 *
 	 * @return  string
 	 */
 	protected function _read($id = NULL)
@@ -29,7 +35,9 @@ class Kohana_Session_Cookie extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Writes the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _write()
 	{
@@ -37,7 +45,9 @@ class Kohana_Session_Cookie extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Restarts the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _restart()
 	{
@@ -45,11 +55,13 @@ class Kohana_Session_Cookie extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Destroys the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _destroy()
 	{
 		return Cookie::delete($this->_name);
 	}
 
-} // End Session_Cookie
+}
