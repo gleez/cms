@@ -118,6 +118,29 @@ class Gleez_Valid {
 	}
 
 	/**
+	 * Check the supplied integer in given range
+	 *
+	 * Attempts to convert to integer and check range
+	 *
+	 * Example:
+	 * ~~~
+	 * Valid::in_range(12.23, '100', 89); // TRUE
+	 * ~~~
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   mixed   $min        Minimum value
+	 * @param   mixed   $max        Maximum value
+	 * @param   mixed   $from_user  Supplied integer
+	 *
+	 * @return  boolean
+	 */
+	public static function in_range($min, $max, $from_user)
+	{
+		return (((int) $from_user > (int) $min) AND ((int) $from_user < (int) $max));
+	}
+
+	/**
 	 * Check an email address for correct format.
 	 *
 	 * @link  http://www.iamcal.com/publish/articles/php/parsing_email/

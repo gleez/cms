@@ -6,8 +6,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Kohana Team
- * @author     Sergey Yakovlev - Gleez
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
  * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -263,29 +262,5 @@ class Num {
 		$bytes = $size * pow(2, Num::$byte_units[$unit]);
 
 		return $bytes;
-	}
-
-	/**
-	 * Check the supplied integer in given range
-	 *
-	 * Attempts to convert to integer and check range
-	 *
-	 * Example:
-	 * ~~~
-	 * Num::inRange(12.23, '100', 89); // TRUE
-	 * ~~~
-	 *
-	 * @since   1.0.1
-	 *
-	 * @param   mixed   $min        Minimum
-	 * @param   mixed   $max        Maximum
-	 * @param   mixed   $from_user  Supplied integer
-	 *
-	 * @return  boolean
-	 */
-	public static function inRange($min, $max, $from_user)
-	{
-		// Check that user data is between start & end
-		return (((int) $from_user > (int) $min) AND ((int) $from_user < (int) $max));
 	}
 }
