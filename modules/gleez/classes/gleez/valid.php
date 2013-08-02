@@ -1,18 +1,22 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Validation rules.
+ * Validation rules
  *
- * @package    Kohana
- * @category   Security
+ * @package    Gleez\Security
+ * @version    1.0.1
  * @author     Kohana Team
+ * @author     Gleez Team
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Valid {
 
 	/**
 	 * Checks if a field is not empty.
 	 *
+	 * @param   mixed  $value  value
 	 * @return  boolean
 	 */
 	public static function not_empty($value)
@@ -64,6 +68,22 @@ class Gleez_Valid {
 	}
 
 	/**
+	 * Tests if a value is within a range length
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   string   $value  Value to check
+	 * @param   integer  $min    Minimum value
+	 * @param   integer  $max    Maximum value
+	 *
+	 * @return  boolean
+	 */
+	public static function range_length($value, $min, $max)
+	{
+		return (strlen($value) >= $min AND strlen($value) <= $max);
+	}
+
+	/**
 	 * Checks that a field is exactly the right length.
 	 *
 	 * @param   string          $value  value
@@ -95,6 +115,29 @@ class Gleez_Valid {
 	public static function equals($value, $required)
 	{
 		return ($value === $required);
+	}
+
+	/**
+	 * Check the supplied integer in given range
+	 *
+	 * Attempts to convert to integer and check range
+	 *
+	 * Example:
+	 * ~~~
+	 * Valid::in_range(12.23, '100', 89); // TRUE
+	 * ~~~
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   mixed   $min        Minimum value
+	 * @param   mixed   $max        Maximum value
+	 * @param   mixed   $from_user  Supplied integer
+	 *
+	 * @return  boolean
+	 */
+	public static function in_range($min, $max, $from_user)
+	{
+		return (((int) $from_user > (int) $min) AND ((int) $from_user < (int) $max));
 	}
 
 	/**
@@ -242,7 +285,9 @@ class Gleez_Valid {
 	 * @param   integer         $number credit card number
 	 * @param   string|array    $type   card type, or an array of card types
 	 * @return  boolean
+	 *
 	 * @uses    Valid::luhn
+	 * @uses    Config::get
 	 */
 	public static function credit_card($number, $type = NULL)
 	{
@@ -267,7 +312,7 @@ class Gleez_Valid {
 			return FALSE;
 		}
 
-		$cards = Kohana::$config->load('credit_cards');
+		$cards = Config::get('credit_cards');
 
 		// Check card type
 		$type = strtolower($type);
@@ -547,5 +592,4 @@ class Gleez_Valid {
 	{
 		return ($array[$field] === $array[$match]);
 	}
-
 }

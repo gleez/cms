@@ -1,16 +1,21 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Native PHP session class.
+ * Native PHP session class
  *
- * @package    Kohana
- * @category   Session
+ * @package    Gleez\Session\Native
+ * @author     Gleez Team
  * @author     Kohana Team
+ * @version    1.0.1
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Kohana_Session_Native extends Session {
+class Session_Native extends Session {
 
 	/**
+	 * Get set the current session id
+	 *
 	 * @return  string
 	 */
 	public function id()
@@ -19,7 +24,10 @@ class Kohana_Session_Native extends Session {
 	}
 
 	/**
+	 * Loads the raw session data string
+	 *
 	 * @param   string  $id  session id
+	 *
 	 * @return  null
 	 */
 	protected function _read($id = NULL)
@@ -43,12 +51,15 @@ class Kohana_Session_Native extends Session {
 		session_start();
 
 		// Use the $_SESSION global for storing data
+		// @todo PHP 5.5 issue
 		$this->_data =& $_SESSION;
 
 		return NULL;
 	}
 
 	/**
+	 * Generate a new session id and return it
+	 *
 	 * @return  string
 	 */
 	protected function _regenerate()
@@ -60,7 +71,9 @@ class Kohana_Session_Native extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Writes the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _write()
 	{
@@ -71,7 +84,9 @@ class Kohana_Session_Native extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Restarts the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _restart()
 	{
@@ -85,7 +100,9 @@ class Kohana_Session_Native extends Session {
 	}
 
 	/**
-	 * @return  bool
+	 * Destroys the current session
+	 *
+	 * @return  boolean
 	 */
 	protected function _destroy()
 	{
@@ -103,5 +120,4 @@ class Kohana_Session_Native extends Session {
 
 		return $status;
 	}
-
-} // End Session_Native
+}
