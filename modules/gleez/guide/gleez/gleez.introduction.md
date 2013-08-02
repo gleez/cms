@@ -66,4 +66,4 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Wordpress      [(http://wordpress.org)](http://wordpress.org)
 * Zend Framework [(http://framework.zend.com/)](http://framework.zend.com/)
 
-We've lifted some codes from these applications and felt this is palce for giving credit to them as demanded!
+We've lifted some codes from these applications and felt this is place for giving credit to them as demanded!
