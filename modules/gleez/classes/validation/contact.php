@@ -3,8 +3,8 @@
  * Contact Validation Class
  *
  * @package    Gleez\Security
- * @version    1.0
- * @author     Sergey Yakovlev - Gleez
+ * @version    1.0.1
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -14,7 +14,7 @@ class Validation_Contact extends Gleez_Validation {
 	const SUBJECT_LEN = 80;
 
 	/** Default body length */
-	const BODY_LEN = 400;
+	const BODY_LEN = 600;
 
 	/**
 	 * Creates a new Validation instance.
@@ -40,12 +40,12 @@ class Validation_Contact extends Gleez_Validation {
 	/**
 	 * Sets the rules for Contact form
 	 *
-	 * @return array
+	 * @return  array
+	 *
+	 * @uses    Config::get
 	 */
 	protected function _rules()
 	{
-		$config = Kohana::$config->load('contact');
-
 		return array(
 			'name' => array(
 				array('not_empty'),
@@ -61,14 +61,14 @@ class Validation_Contact extends Gleez_Validation {
 			),
 			'subject' => array(
 				array('not_empty'),
-				array('max_length', array(':value', $config->get('subject_length', self::SUBJECT_LEN))),
+				array('max_length', array(':value', Config::get('contact.subject_length', self::SUBJECT_LEN))),
 			),
 			'category' => array(
 				array('not_empty'),
 			),
 			'body' => array(
 				array('not_empty'),
-				array('max_length', array(':value', $config->get('body_length', self::BODY_LEN))),
+				array('max_length', array(':value', Config::get('contact.body_length', self::BODY_LEN))),
 			),
 		);
 	}
