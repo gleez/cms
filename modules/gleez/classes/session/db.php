@@ -15,7 +15,7 @@
  * ) ENGINE = MYISAM;
  *~~~
  *
- * @package    Gleez\Session\Database
+ * @package    Gleez\Session\Db
  * @author     Gleez Team
  * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
