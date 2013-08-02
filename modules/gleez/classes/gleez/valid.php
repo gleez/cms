@@ -1,18 +1,22 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Validation rules.
+ * Validation rules
  *
- * @package    Kohana
- * @category   Security
+ * @package    Gleez\Security
+ * @version    1.0.1
  * @author     Kohana Team
+ * @author     Gleez Team
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Valid {
 
 	/**
 	 * Checks if a field is not empty.
 	 *
+	 * @param   mixed  $value  value
 	 * @return  boolean
 	 */
 	public static function not_empty($value)
@@ -61,6 +65,22 @@ class Gleez_Valid {
 	public static function max_length($value, $length)
 	{
 		return UTF8::strlen($value) <= $length;
+	}
+
+	/**
+	 * Tests if a value is within a range length
+	 *
+	 * @since   1.0.1
+	 *
+	 * @param   string   $value  Value to check
+	 * @param   integer  $min    Minimum value
+	 * @param   integer  $max    Maximum value
+	 *
+	 * @return  boolean
+	 */
+	public static function range_length($value, $min, $max)
+	{
+		return (strlen($value) >= $min AND strlen($value) <= $max);
 	}
 
 	/**
@@ -242,7 +262,9 @@ class Gleez_Valid {
 	 * @param   integer         $number credit card number
 	 * @param   string|array    $type   card type, or an array of card types
 	 * @return  boolean
+	 *
 	 * @uses    Valid::luhn
+	 * @uses    Config::get
 	 */
 	public static function credit_card($number, $type = NULL)
 	{
@@ -267,7 +289,7 @@ class Gleez_Valid {
 			return FALSE;
 		}
 
-		$cards = Kohana::$config->load('credit_cards');
+		$cards = Config::get('credit_cards');
 
 		// Check card type
 		$type = strtolower($type);
@@ -547,5 +569,4 @@ class Gleez_Valid {
 	{
 		return ($array[$field] === $array[$match]);
 	}
-
 }
