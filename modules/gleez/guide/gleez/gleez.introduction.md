@@ -37,7 +37,7 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
-* Other Details like SEO, Media, etc.
+* Other Details like SEO, Media, Gravatar, etc.
 
 ## Frameworks & Libraries
 
@@ -45,13 +45,15 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Bootstrap Twitter [(http://getbootstrap.com/)](http://getbootstrap.com/)
 * jQuery [(http://jquery.com/)](http://jquery.com/)
 * jQuery Form Plugin [http://malsup.com/jquery/form/](http://malsup.com/jquery/form/)
+* jQuery Tabledrag Plugin [(https://github.com/wadmiraal/jquery-tabledrag/)](https://github.com/wadmiraal/jquery-tabledrag/)
 * Font Awesome [(http://fortawesome.github.io/Font-Awesome/)](http://fortawesome.github.io/Font-Awesome/)
 * Select2 jQuery plugin [(http://ivaynberg.github.io/select2/)](http://ivaynberg.github.io/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
 * Redactor jQuery plugin [(https://github.com/dybskiy/redactor-js/)](https://github.com/dybskiy/redactor-js)
-* PHP Markdown [(http://michelf.ca/projects/php-markdown/)](http://michelf.ca/projects/php-markdown/)
+* PHP Markdown [(https://github.com/michelf/php-markdown)](https://github.com/michelf/php-markdown)
 * PHPMailer [(https://github.com/PHPMailer/PHPMailer)](https://github.com/PHPMailer/PHPMailer)
 * Minion [(https://github.com/seyfer/minion/)](https://github.com/seyfer/minion/)
+* JSMin [(https://github.com/rgrove/jsmin-php)](https://github.com/rgrove/jsmin-php)
 
 ## Credits
 
