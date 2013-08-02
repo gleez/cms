@@ -981,6 +981,7 @@ return array
 	'Updated' => 'Обновлено',
 	'Unable to connect to MongoDB server. MongoDB said :message' => 'Не удалось подключиться к серверу MongoDB. Ответ MongoDB :message',
 	'Unable to set the Cookie!' => 'Не удалось установить cookie!',
+	'Unauthorised access attempt to action :perm.' => 'Попытка несанкционированного доступа к полномочиям :perm.',
 	'Unknown JSON decoding error' => 'Неопределимая ошибка декодирования JSON',
 	'Unpublish' => 'Снять с публикации',
 	'Unpublish the selected comments' => 'Снять с публикации выбранные комментарии',
