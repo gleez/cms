@@ -16,9 +16,8 @@
  * - Any ORM implementation
  *
  * @package    Gleez\ACL
- * @version    2.1.0
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @version    2.1.1
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -249,12 +248,12 @@ class ACL {
 				return;
 			}
 
-			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :act.',
+			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :perm.',
 				array(':act' => $perm_name)
 			);
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw new HTTP_Exception_403('Unauthorised access attempt to action :act.',
+			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
 				array(':act' => $perm_name)
 			);
 		}
