@@ -42,11 +42,11 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 ## Frameworks & Libraries
 
 * Kohana [(http://kohanaframework.org)](http://kohanaframework.org)
-* Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
+* Bootstrap Twitter [(http://getbootstrap.com/)](http://getbootstrap.com/)
 * jQuery [(http://jquery.com/)](http://jquery.com/)
 * jQuery Form Plugin [http://malsup.com/jquery/form/](http://malsup.com/jquery/form/)
-* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
-* Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
+* Font Awesome [(http://fortawesome.github.io/Font-Awesome/)](http://fortawesome.github.io/Font-Awesome/)
+* Select2 jQuery plugin [(http://ivaynberg.github.io/select2/)](http://ivaynberg.github.io/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
 * Redactor jQuery plugin [(https://github.com/dybskiy/redactor-js/)](https://github.com/dybskiy/redactor-js)
 * PHP Markdown [(http://michelf.ca/projects/php-markdown/)](http://michelf.ca/projects/php-markdown/)
@@ -58,9 +58,9 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Drupal         [(http://www.drupal.org)](http://www.drupal.org)
 * Gallery3       [(http://gallery.menalto.com)](http://gallery.menalto.com)
 * Kerkness       [(http://kerkness.ca/wiki/doku.php)](http://kerkness.ca/wiki/doku.php)
-* BoltCMS        [(http://github.com/boltcms/bolt)](http://github.com/boltcms/bolt)
+* BoltCMS        [(https://github.com/bolt/bolt)](https://github.com/bolt/bolt)
 * s7nCMS         [(http://code.google.com/p/s7ncms/)](http://code.google.com/p/s7ncms/)
-* Kohanut        [(http://kohanut.com/)](http://kohanut.com/)
+* Kohanut        [(https://github.com/bluehawk/kohanut)](https://github.com/bluehawk/kohanut)
 * Wordpress      [(http://wordpress.org)](http://wordpress.org)
 * Zend Framework [(http://framework.zend.com/)](http://framework.zend.com/)
 
