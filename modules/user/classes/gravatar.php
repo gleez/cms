@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Gleez Team
- * @version    1.4.1
+ * @version    1.4.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -450,8 +450,9 @@ class Gravatar {
 	 */
 	public function setStoreLocation($location = NULL)
 	{
+		$location = Text::reduce_slashes(trim($location));
 		// Set default picture location for downloading
-		$this->_store_location = is_null(trim($location)) ?  APPPATH . 'media/pictures' : Text::reduce_slashes($location);
+		$this->_store_location = empty($location) ?  APPPATH . 'media/pictures' : $location;
 
 		// Make sure destination is a directory
 		if ( ! is_dir($this->_store_location))
