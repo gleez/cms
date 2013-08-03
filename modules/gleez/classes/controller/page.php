@@ -391,8 +391,7 @@ class Controller_Page extends Template {
 	 * @uses    Route::get
 	 * @uses    Route::uri
 	 * @uses    URL::query
-	 * @uses    ORM::delete
-	 * @uses    Cache::delete
+	 * @uses    Post::delete
 	 * @uses    Message::success
 	 * @uses    Message::error
 	 * @uses    Log::add
