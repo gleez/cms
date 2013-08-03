@@ -5,7 +5,7 @@
  * @package    Gleez\Template
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -854,7 +854,7 @@ abstract class Template extends Controller {
 			$this->SetJson('css',        $styles);
 			$this->SetJson('js',         $scripts);
 
-			if ( ! Text::check_utf8($this->_json['Body']))
+			if ( ! Valid::utf8($this->_json['Body']))
 			{
 				$this->_json['Body'] = utf8_encode($this->_json['Body']);
 			}

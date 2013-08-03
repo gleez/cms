@@ -25,7 +25,10 @@ class Gleez_Menu {
 	 */
 	protected $_attrs = array();
 
-	// Current URI
+	/**
+	 * Current URI
+	 * @var string
+	 */
 	protected $_current;
 
 	/**
@@ -276,7 +279,7 @@ class Gleez_Menu {
 	/**
 	 * Nicely outputs contents of $this->items as array
 	 *
-	 * @return   as array
+	 * @return array
 	 */
 	public function get_items()
 	{
@@ -294,10 +297,10 @@ class Gleez_Menu {
 	{
 		$cache = Cache::instance('menus');
 
-		if( ! $items = $cache->get($name) )
+		if ( ! $items = $cache->get($name))
 		{
 			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
-			if( ! $_menu) return;
+			if ( ! $_menu) return;
 
 			$_items = ORM::factory('menu')
 					->where('lft', '>', $_menu['lft'])
@@ -435,6 +438,7 @@ class Gleez_Menu {
 	 * @param   array    $array  The array of items
 	 * @param   string   $string The new value
 	 * @param   string   $op     The action title/url to change [Optional]
+	 *
 	 * @return  array
 	 */
 	private static function _change_title_url($needle, array $array, $string, $op = 'title')
@@ -460,7 +464,7 @@ class Gleez_Menu {
 	}
 
 	/**
-	 * private method to add menu based on its parent's unique name
+	 * Private method to add menu based on its parent's unique name
 	 *
 	 * @param   string   $needle   The parent unique name of the menu
 	 * @param   array    $array    The array of items
@@ -470,7 +474,8 @@ class Gleez_Menu {
 	 * @param   string   $descp    The additional text of url
 	 * @param   array    $params   The new params
 	 * @param   string   $image    The image or icon of url
-	 * @param   menu     $children The new children
+	 * @param   Menu     $children The new children
+	 *
 	 * @return  array
 	 */
 	private static function _add_child($needle, array $array, $id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, Menu $children = NULL)
