@@ -56,12 +56,11 @@ class Gleez_CSRF {
         }
         
         /**
-         * User specefic key used to generate unqiue tokens.
+         * User specific key used to generate unique tokens.
          *
-         * @return
-         *   The user specefic private key.
+         * @return string  The user specific private key.
          */
-        static function key()
+        public static function key()
         {
                 $token  = Session::instance()->id();
                 $secret = self::_private_key();
@@ -71,12 +70,13 @@ class Gleez_CSRF {
         /**
          * Ensure the private key variable used to generate tokens is set.
          *
-         * @return
-         *   The private key.
+         * @return  string  The private key.
+         *
+         * @uses    Config::load
          */
         private static function _private_key()
         {
-		$config = Kohana::$config->load('site');
+		$config = Config::load('site');
 		
                 if ( !($key = $config->get('gleez_private_key')) )
                 {
