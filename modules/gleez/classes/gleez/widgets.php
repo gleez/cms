@@ -425,11 +425,12 @@ abstract class Gleez_Widgets {
 
 			foreach($_widgets as $_widget)
 			{
+				/** @var $_widget ORM */
 				$widgets[] = (object)$_widget->as_array();
 			}
 
-			//set the cache
-			$cache->set('widgets', $widgets, DATE::DAY);
+			// set the cache
+			$cache->set('widgets', $widgets, Date::DAY);
 		}
 
 		foreach ($widgets as $widget)
