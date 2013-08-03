@@ -1,9 +1,8 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Database Model base class.
+ * Database Model base class
  *
- * @package    Kohana/Database
- * @category   Models
+ * @package    Kohana\Database\Models
  * @author     Kohana Team
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://kohanaframework.org/license
@@ -11,14 +10,25 @@
 abstract class Kohana_Model_Database extends Model {
 
 	/**
-	 * Create a new model instance. A [Database] instance or configuration
-	 * group name can be passed to the model. If no database is defined, the
-	 * "default" database group will be used.
+	 * Database instance
+	 * @var Database
+	 */
+	protected $_db;
+
+	/**
+	 * Create a new model instance
 	 *
-	 *     $model = Model::factory($name);
+	 * A [Database] instance or configuration group name can be passed to the model.
+	 * If no database is defined, the "default" database group will be used.
 	 *
-	 * @param   string   $name  model name
-	 * @param   mixed    $db    Database instance object or string
+	 * Example:
+	 * ~~~
+	 * $model = Model::factory($name);
+	 * ~~~
+	 *
+	 * @param   string   $name  Model name
+	 * @param   mixed    $db    Database instance object or string [Optional]
+	 *
 	 * @return  Model
 	 */
 	public static function factory($name, $db = NULL)
@@ -29,16 +39,15 @@ abstract class Kohana_Model_Database extends Model {
 		return new $class($db);
 	}
 
-	// Database instance
-	protected $_db;
-
 	/**
 	 * Loads the database.
 	 *
-	 *     $model = new Foo_Model($db);
+	 * Example:
+	 * ~~~
+	 * $model = new Foo_Model($db);
+	 * ~~~
 	 *
-	 * @param   mixed  $db  Database instance object or string
-	 * @return  void
+	 * @param  mixed  $db  Database instance object or string [Optional]
 	 */
 	public function __construct($db = NULL)
 	{
@@ -60,4 +69,4 @@ abstract class Kohana_Model_Database extends Model {
 		}
 	}
 
-} // End Model
+}
