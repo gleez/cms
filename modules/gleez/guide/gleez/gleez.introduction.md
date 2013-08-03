@@ -37,31 +37,33 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
-* Other Details like SEO, Media, etc.
+* Other Details like SEO, Media, Gravatar, etc.
 
 ## Frameworks & Libraries
 
 * Kohana [(http://kohanaframework.org)](http://kohanaframework.org)
-* Bootstrap Twitter [(http://twitter.github.com/bootstrap/)](http://twitter.github.com/bootstrap/)
+* Bootstrap Twitter [(http://getbootstrap.com/)](http://getbootstrap.com/)
 * jQuery [(http://jquery.com/)](http://jquery.com/)
 * jQuery Form Plugin [http://malsup.com/jquery/form/](http://malsup.com/jquery/form/)
-* Font Awesome [(http://fortawesome.github.com/Font-Awesome/)](http://fortawesome.github.com/Font-Awesome/)
-* Select2 jQuery plugin [(http://ivaynberg.github.com/select2/)](http://ivaynberg.github.com/select2/)
+* jQuery Tabledrag Plugin [(https://github.com/wadmiraal/jquery-tabledrag/)](https://github.com/wadmiraal/jquery-tabledrag/)
+* Font Awesome [(http://fortawesome.github.io/Font-Awesome/)](http://fortawesome.github.io/Font-Awesome/)
+* Select2 jQuery plugin [(http://ivaynberg.github.io/select2/)](http://ivaynberg.github.io/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)
 * Redactor jQuery plugin [(https://github.com/dybskiy/redactor-js/)](https://github.com/dybskiy/redactor-js)
-* PHP Markdown [(http://michelf.ca/projects/php-markdown/)](http://michelf.ca/projects/php-markdown/)
-* PHPMailer [(https://github.com/Synchro/PHPMailer/)](https://github.com/Synchro/PHPMailer/)
+* PHP Markdown [(https://github.com/michelf/php-markdown)](https://github.com/michelf/php-markdown)
+* PHPMailer [(https://github.com/PHPMailer/PHPMailer)](https://github.com/PHPMailer/PHPMailer)
 * Minion [(https://github.com/seyfer/minion/)](https://github.com/seyfer/minion/)
+* JSMin [(https://github.com/rgrove/jsmin-php)](https://github.com/rgrove/jsmin-php)
 
 ## Credits
 
 * Drupal         [(http://www.drupal.org)](http://www.drupal.org)
 * Gallery3       [(http://gallery.menalto.com)](http://gallery.menalto.com)
 * Kerkness       [(http://kerkness.ca/wiki/doku.php)](http://kerkness.ca/wiki/doku.php)
-* BoltCMS        [(http://github.com/boltcms/bolt)](http://github.com/boltcms/bolt)
+* BoltCMS        [(https://github.com/bolt/bolt)](https://github.com/bolt/bolt)
 * s7nCMS         [(http://code.google.com/p/s7ncms/)](http://code.google.com/p/s7ncms/)
-* Kohanut        [(http://kohanut.com/)](http://kohanut.com/)
+* Kohanut        [(https://github.com/bluehawk/kohanut)](https://github.com/bluehawk/kohanut)
 * Wordpress      [(http://wordpress.org)](http://wordpress.org)
 * Zend Framework [(http://framework.zend.com/)](http://framework.zend.com/)
 
-We've lifted some codes from these applications and felt this is palce for giving credit to them as demanded!
+We've lifted some codes from these applications and felt this is place for giving credit to them as demanded!
