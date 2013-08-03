@@ -8,7 +8,7 @@
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovkev - Gleez
- * @version    1.1.2
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -1416,47 +1416,13 @@ class Text {
 	}
 
 	/**
-	 * Checks whether a string is valid UTF-8.
-	 *
-	 * All functions designed to filter input should use drupal_validate_utf8
-	 * to ensure they operate on valid UTF-8 strings to prevent bypass of the
-	 * filter.
-	 *
-	 * When text containing an invalid UTF-8 lead byte (0xC0 - 0xFF) is presented
-	 * as UTF-8 to Internet Explorer 6, the program may misinterpret subsequent
-	 * bytes. When these subsequent bytes are HTML control characters such as
-	 * quotes or angle brackets, parts of the text that were deemed safe by filters
-	 * end up in locations that are potentially unsafe; An onerror attribute that
-	 * is outside of a tag, and thus deemed safe by a filter, can be interpreted
-	 * by the browser as if it were inside the tag.
-	 *
-	 * The function does not return FALSE for strings containing character codes
-	 * above U+10FFFF, even though these are prohibited by RFC 3629.
+	 * Simple fast string encryption
 	 *
 	 * @since   1.1.1
 	 *
-	 * @param   string   $string  The text to check.
-	 * @return  boolean  TRUE if the text is valid UTF-8, FALSE if not.
-	 */
-	public static function check_utf8($string)
-	{
-		if (strlen($string) == 0)
-		{
-			return TRUE;
-		}
-
-		// With the PCRE_UTF8 modifier 'u', preg_match() fails silently on strings
-		// containing invalid UTF-8 byte sequences. It does not reject character
-		// codes above U+10FFFF (represented by 4 or more octets), though.
-		return (preg_match('/^./us', $string) == 1);
-	}
-
-	/**
-	 * Simple fast string encyption
+	 * @param  string   $string  Text to encryption
+	 * @param  boolean  $key     Key [Optional]
 	 *
-	 * @since   1.1.1
-	 *
-	 * @uses    Gleez::private_key
 	 * @return  string
 	 */
 	public static function encode($string, $key = FALSE)
@@ -1468,7 +1434,7 @@ class Text {
 
 		if ( ! $key)
 		{
-			$key = Gleez::private_key();
+			$key = Config::get('site.gleez_private_key', sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true)));
 		}
 
 		$crypttext = mcrypt_encrypt(MCRYPT_GOST, $key, $string, MCRYPT_MODE_ECB);
@@ -1477,11 +1443,13 @@ class Text {
 	}
 
 	/**
-	 * Simple fast string decyption
+	 * Simple fast string decryption
 	 *
 	 * @since   1.1.1
 	 *
-	 * @uses    Gleez::private_key
+	 * @param  string   $string  Text to decryption
+	 * @param  boolean  $key     Key [Optional
+	 *
 	 * @return  string
 	 */
 	public static function decode($string, $key = FALSE)
@@ -1493,7 +1461,7 @@ class Text {
 
 		if ( ! $key)
 		{
-			$key = Gleez::private_key();
+			$key = Config::get('site.gleez_private_key', sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true)));
 		}
 
 		$crypttext = self::safe_b64decode($string);
@@ -1506,6 +1474,9 @@ class Text {
 	 * Url safe base64 encode
 	 *
 	 * @since   1.1.1
+	 *
+	 * @param   string   $string  Text to encode
+	 *
 	 * @return  string
 	 */
 	public static function safe_b64encode($string)
@@ -1520,6 +1491,9 @@ class Text {
 	 * Url safe base64 decode
 	 *
 	 * @since   1.1.1
+	 *
+	 * @param   string   $string  Text to decode
+	 *
 	 * @return  string
 	 */
 	public static function safe_b64decode($string)
