@@ -30,6 +30,8 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 * @param  array  $config  configuration
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @uses  Arr::get
 	 */
 	protected function __construct(array $config)
 	{
@@ -70,6 +72,7 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 			}
 		}
 
+		// Registers a User Defined Function for use in SQL statements
 		$this->_db->sqliteCreateFunction('regexp', array($this, 'removePatternRegexpCallback'), 2);
 	}
 
@@ -79,13 +82,13 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 * Examples:
 	 * ~~~
 	 * // Retrieve cache entry from sqlite group
-	 * $data = Cache::instance('apc')->get('foo');
+	 * $data = Cache::instance('sqlite')->get('foo');
 	 *
 	 * // Retrieve cache entry from sqlite group and return 'bar' if miss
-	 * $data = Cache::instance('apc')->get('foo', 'bar');
+	 * $data = Cache::instance('sqlite')->get('foo', 'bar');
 	 * ~~~
 	 *
-	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $id       ID of cache entry
 	 * @param   string  $default  Default value to return if cache miss [Optional]
 	 *
 	 * @return  mixed
@@ -143,6 +146,17 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 *
 	 * Optionally add tags.
 	 *
+	 * Examples:
+	 * ~~~
+	 * $data = 'bar';
+	 *
+	 * // Set 'bar' to 'foo' in sqlite group, using default expiry
+	 * Cache::instance('sqlite')->set('foo', $data);
+	 *
+	 * // Set 'bar' to 'foo' in sqlite group for 30 seconds
+	 * Cache::instance('sqlite')->set('foo', $data, 30);
+	 * ~~~
+	 *
 	 * @param   string   $id        ID of cache entry
 	 * @param   mixed    $data      The data to cache
 	 * @param   integer  $lifetime  Lifetime [Optional]
@@ -156,6 +170,12 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 
 	/**
 	 * Delete a cache entry based on id
+	 *
+	 * Example:
+	 * ~~~
+	 * // Delete 'foo' entry from the sqlite group
+	 * Cache::instance('sqlite')->delete('foo');
+	 * ~~~
 	 *
 	 * @param   string  $id  ID of cache entry
 	 *
@@ -228,6 +248,8 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	 * @return  boolean
 	 *
 	 * @throws  Cache_Exception
+	 *
+	 * @todo    Handle $mode variable
 	 */
 	public function delete_all($mode = Cache::ALL)
 	{
@@ -248,7 +270,9 @@ class Cache_Sqlite extends Cache implements Cache_Tagging {
 	}
 
 	/**
-	 * Set a value based on an id. Optionally add tags.
+	 * Set a value based on an id
+	 *
+	 * Optionally add tags.
 	 *
 	 * @param   string   $id        ID of cache entry
 	 * @param   mixed    $data      Data to set to cache
