@@ -6,7 +6,7 @@
  * Using Transactions instead of lock.
  *
  * @package    Gleez\ORM
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
  * @author     Mathew Davies
  * @author     Kiall Mac Innes
  * @author     Paul Banks
@@ -70,9 +70,8 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Checks if the current node has any children.
-	 * 
-	 * @access  public
-	 * @return  bool
+	 *
+	 * @return  boolean
 	 */
 	public function has_children()
 	{
@@ -82,8 +81,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Is the current node a leaf node?
 	 *
-	 * @access  public
-	 * @return  bool
+	 * @return  boolean
 	 */
 	public function is_leaf()
 	{
@@ -93,8 +91,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Is the current node a descendant of the supplied node.
 	 *
-	 * @access  public
-	 * @param   ORM_MPTT|int  ORM_MPTT object or primary key value of target node
+	 * @param   ORM_MPTT|integer  ORM_MPTT object or primary key value of target node
 	 * @return  bool
 	 */
 	public function is_descendant($target)
@@ -114,9 +111,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Checks if the current node is a direct child of the supplied node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  ORM_MPTT object or primary key value of target node
-	 * @return  bool
+	 * @param   ORM_MPTT|integer  ORM_MPTT object or primary key value of target node
+	 * @return  boolean
 	 */
 	public function is_child($target)
 	{
@@ -131,9 +127,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Checks if the current node is a direct parent of a specific node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  ORM_MPTT object or primary key value of child node
-	 * @return  bool
+	 * @param   ORM_MPTT|integer  ORM_MPTT object or primary key value of child node
+	 * @return  boolean
 	 */
 	public function is_parent($target)
 	{
@@ -149,9 +144,8 @@ class Gleez_ORM_MPTT extends ORM {
 	 * Checks if the current node is a sibling of a supplied node.
 	 * (Both have the same direct parent)
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  ORM_MPTT object or primary key value of target node
-	 * @return  bool
+	 * @param   ORM_MPTT|integer  ORM_MPTT object or primary key value of target node
+	 * @return  boolean
 	 */
 	public function is_sibling($target)
 	{
@@ -169,8 +163,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Checks if the current node is a root node.
 	 * 
-	 * @access  public
-	 * @return  bool
+	 * @return  boolean
 	 */
 	public function is_root()
 	{
@@ -180,9 +173,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Checks if the current node is one of the parents of a specific node.
 	 * 
-	 * @access  public
-	 * @param   int|object  id or object of parent node
-	 * @return  bool
+	 * @param   integer|object  ID or object of parent node
+	 * @return  boolean
 	 */
 	public function is_in_parents($target)
 	{
@@ -218,9 +210,11 @@ class Gleez_ORM_MPTT extends ORM {
 	 * Creates a new node as root, or moves a node to root
 	 *
 	 * @param   Validation $validation  Validation object
-	 * @param   integer    $scope  The new scope
+	 * @param   integer    $scope       The new scope [Optional]
+	 *
 	 * @return  ORM_MPTT|boolean
-	 * @throws  Validation_Exception
+	 *
+	 * @throws  ORM_Validation_Exception
 	 */
 	public function make_root(Validation $validation = NULL, $scope = NULL)
 	{
@@ -266,9 +260,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Sets the parent_column value to the given targets column value. Returns the target ORM_MPTT object.
 	 * 
-	 * @access  protected
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node
-	 * @param   string        name of the targets nodes column to use
+	 * @param   ORM_MPTT|integer  $target  primary key value or ORM_MPTT object of target node
+	 * @param   string            $column  name of the targets nodes column to use [Optional]
 	 * @return  ORM_MPTT
 	 */
 	protected function parent_from($target, $column = NULL)
@@ -298,8 +291,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Inserts a new node as the first child of the target node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node
+	 * @param   ORM_MPTT|integer  $target  primary key value or ORM_MPTT object of target node
 	 * @return  ORM_MPTT
 	 */
 	public function insert_as_first_child($target)
@@ -311,8 +303,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Inserts a new node as the last child of the target node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node
+	 * @param   ORM_MPTT|integer  $target  primary key value or ORM_MPTT object of target node
 	 * @return  ORM_MPTT
 	 */
 	public function insert_as_last_child($target)
@@ -324,8 +315,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Inserts a new node as a previous sibling of the target node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node
+	 * @param   ORM_MPTT|integer  $target  primary key value or ORM_MPTT object of target node
 	 * @return  ORM_MPTT
 	 */
 	public function insert_as_prev_sibling($target)
@@ -337,8 +327,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Inserts a new node as the next sibling of the target node.
 	 * 
-	 * @access  public
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node
+	 * @param   ORM_MPTT|integer  $target  primary key value or ORM_MPTT object of target node
 	 * @return  ORM_MPTT
 	 */
 	public function insert_as_next_sibling($target)
@@ -350,13 +339,12 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Insert the object
 	 *
-	 * @access  protected
-	 * @param   ORM_MPTT|int  primary key value or ORM_MPTT object of target node.
-	 * @param   string        target object property to take new left value from
-	 * @param   int           offset for left value
-	 * @param   int           offset for level value
+	 * @param   ORM_MPTT|integer  $target  primary  key value or ORM_MPTT object of target node.
+	 * @param   string            $copy_left_from   target object property to take new left value from
+	 * @param   integer           $left_offset      offset for left value
+	 * @param   integer           $level_offset     offset for level value
 	 * @return  ORM_MPTT
-	 * @throws  Validation_Exception
+	 * @throws  ORM_Validation_Exception
 	 */
 	protected function insert($target, $copy_left_from, $left_offset, $level_offset)
 	{
@@ -379,7 +367,6 @@ class Gleez_ORM_MPTT extends ORM {
 			$target->reload();
 		}
 		
-		//$this->lock();
 		// Start the transaction
 		$this->_db->begin();
 
@@ -398,12 +385,11 @@ class Gleez_ORM_MPTT extends ORM {
 		{
 			// We had a problem saving, make sure we clean up the tree
 			$this->delete_space($this->left());
-			//$this->unlock();
+
 			$this->_db->commit();
 			throw $e;
 		}
 		
-		//$this->unlock();
 		// Commit the transaction
 		$this->_db->commit();
 		
@@ -412,9 +398,8 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Deletes the current node and all descendants.
-	 * 
-	 * @access  public
-	 * @return  void
+	 *
+	 * @throws  Gleez_Exception
 	 */
 	public function delete($query = NULL)
 	{
@@ -423,7 +408,6 @@ class Gleez_ORM_MPTT extends ORM {
 			throw new Gleez_Exception('ORM_MPTT does not support passing a query object to delete()');
 		}
 		
-		//$this->lock();
 		// Start the transaction
 		$this->_db->begin();
 
@@ -439,12 +423,10 @@ class Gleez_ORM_MPTT extends ORM {
 		}
 		catch (Gleez_Exception $e)
 		{
-			//$this->unlock();
 			$this->_db->rollback();
 			throw $e;
 		}
 
-		//$this->unlock();
 		// Commit the transaction
 		$this->_db->commit();
 	}
@@ -481,13 +463,11 @@ class Gleez_ORM_MPTT extends ORM {
 		// store the changed parent id before reload
 		$parent_id = $this->{$this->parent_column};
 
-		// Make sure we have the most upto date version of this AFTER we lock
-		//$this->lock();
 		// Start the transaction
 		$this->_db->begin();
 		$this->reload();
 		 
-		// Catch any database or other excpetions and unlock
+		// Catch any database or other exceptions and unlock
 		try
 		{
 			if ( ! $target instanceof $this)
@@ -496,7 +476,6 @@ class Gleez_ORM_MPTT extends ORM {
 				 
 				if ( ! $target->loaded())
 				{
-					//$this->unlock();
 					$this->_db->rollback();
 					return FALSE;
 				}
@@ -511,7 +490,6 @@ class Gleez_ORM_MPTT extends ORM {
 				OR $this->{$this->primary_key()} === $target->{$this->primary_key()}
 				OR ($allow_root_target === FALSE AND $target->is_root()))
 			{
-				//$this->unlock();
 				$this->_db->rollback();
 				return FALSE;
 			}
@@ -548,8 +526,6 @@ class Gleez_ORM_MPTT extends ORM {
 		}
 		catch (Gleez_Exception $e)
 		{
-			// Unlock table and re-throw exception
-			//$this->unlock();
 			$this->_db->rollback();
 			throw $e;
 		}
@@ -561,7 +537,6 @@ class Gleez_ORM_MPTT extends ORM {
 			$this->save();
 		}
 
-		//$this->unlock();
 		// Commit the transaction
 		$this->_db->commit();
 		$this->reload();
@@ -572,9 +547,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the next available value for scope.
 	 *
-	 * @access  protected
-	 * @return  int
-	 **/
+	 * @return  integer
+	 */
 	protected function get_next_scope()
 	{
 		$scope = DB::select(DB::expr('IFNULL(MAX(`'.$this->scope_column.'`), 0) as scope'))
@@ -590,10 +564,12 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Returns the root node of the current object instance.
-	 * 
-	 * @access  public
-	 * @param   int             scope
-	 * @return  ORM_MPTT|FALSE
+	 *
+	 * @param   integer $scope  scope [Optional]
+	 *
+	 * @return  ORM_MPTT|boolean
+	 *
+	 * @throws  Gleez_Exception
 	 */
 	public function root($scope = NULL)
 	{
@@ -612,7 +588,6 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns all root node's
 	 * 
-	 * @access  public
 	 * @return  ORM_MPTT
 	 */
 	public function roots()
@@ -625,7 +600,6 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the parent node of the current node
 	 * 
-	 * @access  public
 	 * @return  ORM_MPTT
 	 */
 	public function parent()
@@ -639,11 +613,10 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns all of the current nodes parents.
 	 * 
-	 * @access  public
-	 * @param   bool      include root node
-	 * @param   bool      include current node
-	 * @param   string    direction to order the left column by
-	 * @param   bool      retrieve the direct parent only
+	 * @param   boolean  $root                include root node [optional
+	 * @param   boolean  $with_self           include current node [optional
+	 * @param   string   $direction           direction to order the left column by [optional
+	 * @param   boolean  $direct_parent_only  retrieve the direct parent only [Optional]
 	 * @return  ORM_MPTT
 	 */
 	public function parents($root = TRUE, $with_self = FALSE, $direction = 'ASC', $direct_parent_only = FALSE)
@@ -674,10 +647,9 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns direct children of the current node.
 	 * 
-	 * @access  public
-	 * @param   bool     include the current node
-	 * @param   string   direction to order the left column by
-	 * @param   int      number of children to get
+	 * @param   boolean          $self       include the current node [Optional]
+	 * @param   string           $direction  direction to order the left column by [Optional]
+	 * @param   integer|boolean  $limit      number of children to get [Optional]
 	 * @return  ORM_MPTT
 	 */
 	public function children($self = FALSE, $direction = 'ASC', $limit = FALSE)
@@ -688,8 +660,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns a full hierarchical tree, with or without scope checking.
 	 * 
-	 * @access  public
-	 * @param   bool    only retrieve nodes with specified scope
+	 * @param   boolean  $scope  only retrieve nodes with specified scope [Optional]
 	 * @return  object
 	 */
 	public function fulltree($scope = NULL)
@@ -712,9 +683,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the siblings of the current node
 	 *
-	 * @access  public
-	 * @param   bool  include the current node
-	 * @param   string  direction to order the left column by
+	 * @param   boolean  $self       include the current node [Optional]
+	 * @param   string   $direction  direction to order the left column by [Optional]
 	 * @return  ORM_MPTT
 	 */
 	public function siblings($self = FALSE, $direction = 'ASC')
@@ -736,10 +706,9 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Returns the leaves of the current node.
-	 * 
-	 * @access  public
-	 * @param   bool  include the current node
-	 * @param   string  direction to order the left column by
+	 *
+	 * @param   boolean  $self       include the current node [Optional]
+	 * @param   string   $direction  direction to order the left column by [Optional]
 	 * @return  ORM_MPTT
 	 */
 	public function leaves($self = FALSE, $direction = 'ASC')
@@ -748,14 +717,14 @@ class Gleez_ORM_MPTT extends ORM {
 	}
 	
 	/**
-	 * Returns the descendants of the current node.
+	 * Returns the descendants of the current node
 	 *
-	 * @access  public
-	 * @param   bool      include the current node
-	 * @param   string    direction to order the left column by.
-	 * @param   bool      include direct children only
-	 * @param   bool      include leaves only
-	 * @param   int       number of results to get
+	 * @param   boolean          $self                  include the current node [Optional]
+	 * @param   string           $direction             direction to order the left column by [Optional]
+	 * @param   boolean          $direct_children_only  include direct children only [Optional]
+	 * @param   boolean          $leaves_only           include leaves only [Optional]
+	 * @param   integer|boolean  $limit                 number of results to get [Optional]
+	 *
 	 * @return  ORM_MPTT
 	 */
 	public function descendants($self = FALSE, $direction = 'ASC', $direct_children_only = FALSE, $leaves_only = FALSE, $limit = FALSE)
@@ -799,10 +768,9 @@ class Gleez_ORM_MPTT extends ORM {
 	}
 
 	/**
-	 * Get all posible level values
-	 * 
-	 * @access	public
-	 * @param	int		restrict to the given scope
+	 * Get all possible level values
+	 *
+	 * @param	integer  $scope  restrict to the given scope [Optional]
 	 * @return	Database_Result
 	 */
 	public function get_levels($scope = NULL)
@@ -821,11 +789,9 @@ class Gleez_ORM_MPTT extends ORM {
 	
 	/**
 	 * Adds space to the tree for adding or inserting nodes.
-	 * 
-	 * @access  protected
-	 * @param   int    start position
-	 * @param   int    size of the gap to add [optional]
-	 * @return  void
+	 *
+	 * @param  integer  $start  start position
+	 * @param  integer  $size   size of the gap to add [Optional]
 	 */
 	protected function create_space($start, $size = 2)
 	{
@@ -844,11 +810,9 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Removes space from the tree after deleting or moving nodes.
-	 * 
-	 * @access  protected
-	 * @param   int    start position
-	 * @param   int    size of the gap to remove [optional]
-	 * @return  void
+	 *
+	 * @param  integer  $start  start position
+	 * @param  integer  $size   size of the gap to remove [Optional]
 	 */
 	protected function delete_space($start, $size = 2)
 	{
@@ -868,7 +832,6 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Locks the current table.
 	 * 
-	 * @access  protected
 	 * @return  void
 	 */
 	protected function lock()
@@ -878,9 +841,6 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Unlocks the current table.
-	 * 
-	 * @access  protected
-	 * @return  void
 	 */
 	protected function unlock()
 	{
@@ -889,9 +849,8 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Returns the value of the current nodes left column.
-	 * 
-	 * @access  public
-	 * @return  int
+	 *
+	 * @return  integer
 	 */
  	public function left()
 	{
@@ -900,9 +859,8 @@ class Gleez_ORM_MPTT extends ORM {
 
 	/**
 	 * Returns the value of the current nodes right column.
-	 * 
-	 * @access  public
-	 * @return  int
+	 *
+	 * @return  integer
 	 */
 	public function right()
 	{
@@ -912,8 +870,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the value of the current nodes level column.
 	 * 
-	 * @access  public
-	 * @return  int
+	 * @return  integer
 	 */
 	public function level()
 	{
@@ -923,8 +880,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the value of the current nodes scope column.
 	 * 
-	 * @access  public
-	 * @return  int
+	 * @return  integer
 	 */
 	public function scope()
 	{
@@ -934,8 +890,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the size of the current node.
 	 * 
-	 * @access  public
-	 * @return  int
+	 * @return  integer
 	 */
 	public function size()
 	{
@@ -945,8 +900,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Returns the number of descendants the current node has.
 	 * 
-	 * @access  public
-	 * @return  int
+	 * @return  integer
 	 */
 	public function count()
 	{
@@ -956,9 +910,8 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Checks if the supplied scope is available.
 	 * 
-	 * @access  protected
-	 * @param   int        scope to check availability of
-	 * @return  bool
+	 * @param   integer  $scope  scope to check availability of
+	 * @return  boolean
 	 */
 	protected function scope_available($scope)
 	{
@@ -973,10 +926,9 @@ class Gleez_ORM_MPTT extends ORM {
 	 * tree structure to eliminating any holes. If you have a child node that is outside of
 	 * the left/right constraints it will not be moved under the root.
 	 *
-	 * @access  public
-	 * @param   int       left    Starting value for left branch
-	 * @param   ORM_MPTT  target  Target node to use as root
-	 * @return  int
+	 * @param   integer   $left    Starting value for left branch [Optional]
+	 * @param   ORM_MPTT  $target  Target node to use as root [Optional]
+	 * @return  integer
 	 */
 	public function rebuild_tree($left = 1, $target = NULL)
 	{
@@ -1001,7 +953,6 @@ class Gleez_ORM_MPTT extends ORM {
 			$left = $target->{$target->left_column};
 		}
 
-		//$target->lock();
 		// Start the transaction
 		$this->_db->begin();
 		$right = $left + 1;
@@ -1025,8 +976,7 @@ class Gleez_ORM_MPTT extends ORM {
 	/**
 	 * Magic get function, maps field names to class functions.
 	 * 
-	 * @access  public
-	 * @param   string  name of the field to get
+	 * @param   string  $column  name of the field to get
 	 * @return  mixed
 	 */
 	public function __get($column)
@@ -1061,13 +1011,13 @@ class Gleez_ORM_MPTT extends ORM {
 	}
 
 	/**
-	 * Overloads the select_list method to
-	 * support indenting.
+	 * Overloads the select_list method to support indenting
 	 *
-	 * @param string $key first table column.
-	 * @param string $val second table column.
-	 * @param string $indent character used for indenting.
-	 * @return array
+	 * @param   string  $key     first table column [Optional]
+	 * @param   string  $value   second table column [Optional]
+	 * @param   string  $indent  character used for indenting [Optional]
+	 *
+	 * @return  array
 	 */
 	public function select_list($key = NULL, $value = NULL, $indent = NULL)
 	{
@@ -1096,7 +1046,6 @@ class Gleez_ORM_MPTT extends ORM {
 			$array = array('last' => '');
 			foreach ($result as $row)
 			{
-				//$array[$row->$key] = str_repeat($indent, ($row->{$this->_level_column} - 1)).$row->$value;
 				$array[$row[$key]] = str_repeat($indent, $row[$this->level_column] - 2).$row[$value];
 			}
 
@@ -1106,4 +1055,4 @@ class Gleez_ORM_MPTT extends ORM {
 		return $result->as_array($key, $value);
 	}
 	
-} // End ORM MPTT
+}
