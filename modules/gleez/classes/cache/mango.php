@@ -275,8 +275,9 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 * @return  array    Returns an array containing the status of the insertion if the "w" option is set
 	 * @return  boolean  Otherwise, returns TRUE if the inserted array is not empty
 	 *
+	 * @throws  Cache_Exception
+	 *
 	 * @uses    Mango_Collection::safeUpdate
-	 * @uses    Mango_Collection::insert
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
@@ -296,28 +297,28 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 			$lifetime = (0 === $lifetime) ? 0 : ($lifetime + time());
 		}
 
-		if ($this->exists($id))
-		{
-			$newdata = array(
-				'id'       => $id,
-				'data'     => $data,
-				'lifetime' => $lifetime,
-				'tags'     => $tags
-			);
+		$data = array(
+			'id'       => $id,
+			'data'     => $data,
+			'lifetime' => $lifetime,
+			'tags'     => $tags
+		);
 
-			$status = $this->_collection->safeUpdate(array('id'=> $id), $newdata);
-		}
-		else
+		$status = FALSE;
+
+		try
 		{
-			$status = $this->_collection->insert(array(
-					'id'       => $id,
-					'data'     => $data,
-					'lifetime' => $lifetime,
-					'tags'     => $tags
-				),
-				array('w' => 1)
+			$status = $this->_collection->safeUpdate(
+				array('id'=> $id),      // Condition
+				$data,                  // Data
+				array('upsert' => TRUE) // If no document matches $criteria, a new document will be inserted
 			);
 		}
+		catch(MongoException $e)
+		{
+			throw new Cache_Exception('An error occurred saving cache data: :err', array(':err' => $e->getMessage()));
+		}
+
 
 		return (is_bool($status) ? $status : (is_array($status) AND $status['ok'] == 1));
 	}
