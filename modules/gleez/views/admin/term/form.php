@@ -1,6 +1,6 @@
 <?php defined("SYSPATH") OR die("No direct script access.") ?>
 
-<?php echo Form::open($action, array('id'=>'term-form', 'class'=>'term-form form form-horizontal well')); ?>
+<?php echo Form::open($action, array('id'=>'term-form', 'class'=>'term-form form form-horizontal well clearfix')); ?>
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
