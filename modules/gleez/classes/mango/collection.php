@@ -7,17 +7,16 @@
  * ### Usage
  *
  * ~~~
- *   $collection = new Mongo_Collection('users');
+ * $collection = new Mango_Collection('users');
  *
- *   // $users now is array of arrays
- *   $users = collection->sort_desc('published')
- *                      ->limit(10)
- *                      ->toArray();
+ * // $users now is array of arrays
+ * $users = collection->sortDesc('published')
+ *                    ->limit(10)
+ *                    ->toArray();
  * ~~~
  *
  * ### System Requirements
  *
- * - PHP 5.3 or higher
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
@@ -47,8 +46,8 @@
  * @method     array          validate(boolean $scan_data = FALSE)
  *
  * @package    Gleez\Mango\Collection
- * @author     Sergey Yakovlev - Gleez
- * @version    0.4.5
+ * @author     Gleez Team
+ * @version    0.5.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -578,11 +577,9 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.4.2
 	 *
-	 * @param   array    $criteria    Description of the objects to update
-	 * @param   array    $new_object  The object with which to update the matching records
-	 * @param   array    $options     Associative array of the form array("optionname" => <boolean>, ...) [Optional]
-	 * @param   boolean  $upsert      If no document matches $criteria, a new document will be inserted [Optional]
-	 * @param   boolean  $multi       All documents matching $criteria will be updated? [Optional]
+	 * @param   array  $criteria    Description of the objects to update
+	 * @param   array  $new_object  The object with which to update the matching records
+	 * @param   array  $options     Associative array of the form array("optionname" => <boolean>, ...) [Optional]
 	 *
 	 * @return  array|bool
 	 *
@@ -590,21 +587,22 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @uses    Arr::merge
 	 */
-	public function safeUpdate(array $criteria, array $new_object, $options = array(), $upsert = FALSE, $multi = FALSE)
+	public function safeUpdate(array $criteria, array $new_object, $options = array())
 	{
 		$options = Arr::merge(
 			array(
-				'w'        => TRUE,
-				'upsert'   => $upsert,
-				'multiple' => $multi
+				'w'        => 1,      // The write will be acknowledged by the server
+				'upsert'   => FALSE,  // If no document matches $criteria, a new document will be inserted
+				'multiple' => FALSE   // All documents matching $criteria will be updated?
 			),
 			$options
 		);
 
 		$result = $this->update($criteria, $new_object, $options);
 
-		// In case 'w' was overridden and disabled, just return the result
-		if ( ! $options['w'])
+		// A write will not be followed up with a getLastError call,
+		// and therefore not checked ("fire and forget")
+		if ($options['w'] == 0)
 		{
 			/** @var $result boolean */
 			return $result;
@@ -647,18 +645,20 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.4.2
 	 *
-	 * @param   array $criteria  Description of records to remove
-	 * @param   array $options   Options for remove [Optional]
+	 * @param   array  $criteria  Description of records to remove [Optional]
+	 * @param   array  $options   Options for remove [Optional]
 	 *
 	 * @return  array|bool
 	 *
 	 * @throws  MongoException
+	 *
+	 * @uses    Arr::merge
 	 */
-	public function safeRemove(array $criteria, $options = array())
+	public function safeRemove(array $criteria = array(), array $options = array())
 	{
 		$options = Arr::merge(
 			array(
-				'w'       => TRUE,
+				'w'       => 1,     // The write will be acknowledged by the server
 				'justOne' => FALSE, // To limit the deletion to just one document, set to true
 			),
 			$options
@@ -666,8 +666,9 @@ class Mango_Collection implements Iterator, Countable {
 
 		$result = $this->remove($criteria, $options);
 
-		// In case 'safe' was overridden and disabled, just return the result
-		if ( ! $options['w'])
+		// A write will not be followed up with a getLastError call,
+		// and therefore not checked ("fire and forget")
+		if ($options['w'] == 0)
 		{
 			/** @var $result boolean */
 			return $result;
@@ -1056,6 +1057,8 @@ class Mango_Collection implements Iterator, Countable {
 	 * If an array or object is passed, it should correspond to the
 	 * specification used to create the index
 	 *
+	 * @link    http://www.php.net/manual/en/mongocursor.hint.php
+	 *
 	 * @since   0.4.0
 	 *
 	 * @param   mixed  $index  Index to use for the query
@@ -1068,7 +1071,28 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Sets whether this cursor will timeout
+	 *
+	 * Ordinarily, a cursor "dies" on the database server after a certain length of time
+	 * (approximately 10 minutes), to prevent inactive cursors from hogging resources.
+	 *
+	 * @link    http://php.net/manual/en/mongocursor.immortal.php
+	 *
+	 * @since   0.5.0
+	 *
+	 * @param   boolean|integer  $liveForever  If the cursor should be immortal [Optional]
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function immortal($liveForever = TRUE)
+	{
+		return $this->setOption('immortal', (bool)$liveForever);
+	}
+
+	/**
 	 * Limits the number of results returned
+	 *
+	 * @link    http://www.php.net/manual/en/mongocursor.limit.php
 	 *
 	 * @since   0.3.0
 	 *
@@ -1084,6 +1108,8 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Skips a number of results
 	 *
+	 * @link    http://www.php.net/manual/en/mongocursor.skip.php
+	 *
 	 * @since   0.3.0
 	 *
 	 * @param  integer  $num  The number of results to skip
@@ -1093,6 +1119,41 @@ class Mango_Collection implements Iterator, Countable {
 	public function skip($num)
 	{
 		return $this->setOption('skip', (int)$num);
+	}
+
+	/**
+	 * Sets whether this query can be done on a slave
+	 *
+	 * @link    http://www.php.net/manual/en/mongocursor.slaveokay.php
+	 *
+	 * @since   0.5.0
+	 *
+	 * @param   boolean|integer  $okay  If it is okay to query the secondary [Optional]
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function slaveOkay($okay = TRUE)
+	{
+		return $this->setOption('slaveOkay', (bool)$okay);
+	}
+
+	/**
+	 * Use snapshot mode for the query
+	 *
+	 * Snapshot mode assures no duplicates are returned, or objects missed,
+	 * which were present at both the start and end of the query's execution
+	 * (if an object is new during the query, or deleted during the query,
+	 * it may or may not be returned, even with snapshot mode).
+	 *
+	 * @link    http://www.php.net/manual/en/mongocursor.snapshot.php
+	 *
+	 * @since   0.5.0
+	 *
+	 * @return  Mango_Collection
+	 */
+	public function snapshot()
+	{
+		return$this->setOption('snapshot', NULL);
 	}
 
 	/**
