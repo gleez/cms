@@ -41,7 +41,6 @@
  *
  * ### System Requirements
  *
- * - PHP 5.3 or higher
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
@@ -73,8 +72,8 @@
  * @method     boolean         setSlaveOkay(boolean $ok = TRUE)
  *
  * @package    Gleez\Mango\Database
- * @author     Sergey Yakovlev - Gleez
- * @version    0.3.5
+ * @author     Gleez Team
+ * @version    0.3.6
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -146,6 +145,12 @@ class Mango {
 	 * @var array
 	 */
 	public static $instances = array();
+
+	/**
+	 * Default WriteConcern for new client driver
+	 * @var mixed
+	 */
+	public static $default_write_concern = 1;
 
 	/**
 	 * A flag to indicate if profiling is enabled and to allow it to be enabled/disabled on the fly
@@ -266,6 +271,7 @@ class Mango {
 		else
 		{
 			$mongo_class = 'Mongo';
+			unset($options['w']);
 		}
 
 		// Create MongoClient (or Mongo) object (but don't connect just yet)
@@ -346,6 +352,13 @@ class Mango {
 		if ( ! isset($config['connection']['options']['replicaSet']) OR ! $config['connection']['options']['replicaSet'])
 		{
 			unset($config['connection']['options']['replicaSet']);
+		}
+
+		// The 'w' option specifies the Write Concern for the driver
+		if ( ! isset($config['connection']['options']['w']))
+		{
+			// The default value is 1.
+			$config['connection']['options']['w'] = self::$default_write_concern;
 		}
 
 		return $config;

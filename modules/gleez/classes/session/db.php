@@ -3,7 +3,7 @@
  * Database-based session class.
  *
  * Sample schema:
- *~~~
+ * ~~~
  * CREATE TABLE  `sessions` (
  *     `session_id` VARCHAR( 24 ) NOT NULL,
  *     `last_active` INT UNSIGNED NOT NULL,
@@ -13,7 +13,7 @@
  *     PRIMARY KEY ( `session_id` ),
  *     INDEX ( `last_active` )
  * ) ENGINE = MYISAM;
- *~~~
+ * ~~~
  *
  * @package    Gleez\Session\Db
  * @author     Gleez Team
