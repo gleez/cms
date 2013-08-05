@@ -46,9 +46,9 @@ return array
 	'sqlite'   => array(
 		'driver'             => 'sqlite',
 		'default_expire'     => 3600,
-		'database'           => APPPATH.'cache/kohana-cache.sql3',
+		'database'           => APPPATH.'cache/gleez-cache.sql3',
 		'schema'             => 'CREATE TABLE caches(id VARCHAR(500) PRIMARY KEY, tags VARCHAR(255), expiration INTEGER, cache TEXT)',
-                'index'              => 'CREATE UNIQUE INDEX [cache_unique] ON [caches] ([id])',
+		'index'              => 'CREATE UNIQUE INDEX [cache_unique] ON [caches] ([id])',
 	),
 	'eaccelerator'           => array(
 		'driver'             => 'eaccelerator',

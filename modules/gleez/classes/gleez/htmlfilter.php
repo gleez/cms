@@ -101,6 +101,7 @@ class Gleez_HTMLFilter {
 		'ssh',
 		'telnet',
 		'webcal',
+		'git',
 	);
 
 	/**

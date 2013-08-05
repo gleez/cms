@@ -3,7 +3,7 @@
  * JSON helper class
  *
  * @package    Gleez\Helpers
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @author     Igal Alkon <igal.alkon@gmail.com>
  * @version    1.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -49,10 +49,10 @@ class JSON {
 	 *
 	 * For more details please refer to [[http://www.php.net/manual/en/function.json-decode.php]]
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $j = JSON::decode('{"Organization": "Gleez"}');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $j = JSON::decode('{"Organization": "Gleez"}');
+	 * ~~~
 	 *
 	 * @param   string   $json     The JSON string to be decoded
 	 * @param   boolean  $assoc    When TRUE, returned objects will be converted into associative arrays [Optional]
@@ -112,10 +112,10 @@ class JSON {
 	 *
 	 * [!!] This function only works with UTF-8 encoded data
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $j = JSON::encodeMongo(array('$id' => 1234567890));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $j = JSON::encodeMongo(array('$id' => 1234567890));
+	 * ~~~
 	 *
 	 * @param   mixed  $value  The data to be encoded
 	 *

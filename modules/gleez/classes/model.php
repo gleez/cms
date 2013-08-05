@@ -2,10 +2,10 @@
 /**
  * Model base class
  *
- * [!!]  All models should extend this class.
+ * [!!] Note: All models should extend this class.
  *
  * @package    Gleez\Models
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
