@@ -51,7 +51,7 @@ We create the documentation together with the community and other Gleez users/de
 The latest documentation is available on the [Gleez Wiki](https://github.com/gleez/cms/wiki).
 
 * [Installation](https://github.com/gleez/cms/wiki/Installation)
-* [Developers](https://github.com/gleez/cms/wiki/Developers)
+* [Contributing](https://github.com/gleez/cms/wiki/Contributing)
 
 Chat with fellow Gleez users at [#gleez on Freenode](http://webchat.freenode.net/?channels=gleez)
 
