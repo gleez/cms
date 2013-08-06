@@ -6,10 +6,10 @@ return array(
 	 *
 	 * You use this name when initializing a new Gleez Mango instance
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $db = Mango::instance('default');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db = Mango::instance('default');
+	 * ~~~
 	 *
 	 * @var array
 	 */
@@ -40,17 +40,22 @@ return array(
 				 *                            connection errors. TRUE - Mango::instance fails and an exception is
 				 *                            thrown. Next call to Mango::instance will try to connect again.
 				 *                            FALSE - Exception is thrown when you run first DB action.
-				 *                            Next call to Mango::instance will return same object
-				 * string   username          Database username. FALSE and '' are identical
-				 * string   password          Database password. FALSE and '' are identical
+				 *                            Next call to Mango::instance will return same object.
+				 * string   username          Database username. FALSE and '' are identical.
+				 * string   password          Database password. FALSE and '' are identical.
 				 * string   replicaSet        The name of the replica set to connect to. FALSE and '' are identical
+				 * mixed    w                 When a write is given a Write Concern option ("w") the driver will send
+				 *                            the query to MongoDB and piggy back a getLastError command (GLE) with
+				 *                            the Write Concern option at the same time.
+				 *                            See http://www.php.net/manual/ru/mongo.writeconcerns.php
 				 */
-				'db'               => 'Gleez', // Required
+				'db'               => 'gleez', // Required
 				'connectTimeoutMS' => 1000,    // Optional
 				'connect'          => FALSE,   // Optional
 				'username'         => FALSE,   // Optional
 				'password'         => FALSE,   // Optional
 				'replicaSet'       => FALSE,   // Optional
+				'w'                => 1,       // Optional
 			),
 		),
 		/**
