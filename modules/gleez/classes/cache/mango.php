@@ -9,7 +9,7 @@
  *
  * @package    Gleez\Cache\Base
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.2.0
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -19,13 +19,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 * Mango_Collection instance
 	 * @var Mango_Collection
 	 */
-	protected $_collection;
-
-	/**
-	 * The default configuration for the MongoDB
-	 * @var array
-	 */
-	protected $_default_config = array();
+	private $collection;
 
 	/**
 	 * Constructs the Mango cache driver
@@ -46,7 +40,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	public function __construct(array $config)
 	{
 		// Set default config
-		$this->_default_config = array(
+		$default = array(
 			'driver'         => 'mango',
 			'group'          => Mango::$default,
 			'collection'     => 'cache',
@@ -54,7 +48,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		);
 
 		// Merge config
-		$this->config(Arr::merge($this->_default_config, $config));
+		$this->config(Arr::merge($default, $config));
 
 		// Create default prefix
 		$this->_config['prefix'] = isset($config['prefix']) ? $config['prefix'].self::SEPARATOR : NULL;
@@ -63,7 +57,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		$collection  = $this->config('collection');
 
 		// Get Mango_Collection instance
-		$this->_collection = Mango::instance($this->config('group'))->{$collection};
+		$this->collection = Mango::instance($this->config('group'))->{$collection};
 	}
 
 	/**
@@ -90,7 +84,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		$id = System::sanitize_id($this->config('prefix').$id);
 
 		// Load the cache based on id
-		$result = $this->_collection->findOne(array('id' => $id));
+		$result = $this->collection->findOne(array('id' => $id));
 
 		if (is_null($result))
 		{
@@ -168,11 +162,11 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	public function delete($id)
 	{
 		$id = System::sanitize_id($this->config('prefix').$id);
-		$data = $this->_collection->findOne(array('id' => $id));
+		$data = $this->collection->findOne(array('id' => $id));
 
 		if ( ! is_null($data))
 		{
-			$status = $this->_collection->safeRemove(
+			$status = $this->collection->safeRemove(
 				array('id'      => $id),  // Event ID
 				array('justOne' => TRUE)  // Remove at most one record
 			);
@@ -215,7 +209,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		{
 			try
 			{
-				$response = $this->_collection->safeRemove();
+				$response = $this->collection->safeRemove();
 
 				return $response;
 			}
@@ -230,7 +224,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		{
 			try
 			{
-				$response = $this->_collection->safeRemove(array(
+				$response = $this->collection->safeRemove(array(
 					'lifetime' => array('$lte' => time())
 				));
 
@@ -261,7 +255,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 */
 	public function exists($id)
 	{
-		return (bool)$this->_collection->findOne(array('id' => $id));
+		return (bool)$this->collection->findOne(array('id' => $id));
 	}
 
 	/**
@@ -304,11 +298,10 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 			'tags'     => $tags
 		);
 
-		$status = FALSE;
-
 		try
 		{
-			$status = $this->_collection->safeUpdate(
+			// try to update/create document, throw exception on errors
+			$status = $this->collection->safeUpdate(
 				array('id'=> $id),      // Condition
 				$data,                  // Data
 				array('upsert' => TRUE) // If no document matches $criteria, a new document will be inserted
@@ -319,8 +312,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 			throw new Cache_Exception('An error occurred saving cache data: :err', array(':err' => $e->getMessage()));
 		}
 
-
-		return (is_bool($status) ? $status : (is_array($status) AND $status['ok'] == 1));
+		return (bool)($status);
 	}
 
 	/**
@@ -336,12 +328,43 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	/**
 	 * Find cache entries based on a tag
 	 *
+	 * @since   1.2.0
+	 *
 	 * @param   string  $tag  tag
 	 *
 	 * @return  array
+	 *
+	 * @throws  Cache_Exception
 	 */
 	public function find($tag)
 	{
-		// Not implemented yet
+		try
+		{
+			$result = $this->collection->find(array('tags' => array('$regex' => $tag)))->toArray();
+
+			if (empty($result))
+			{
+				return array();
+			}
+		}
+		catch(MongoCursorException $e)
+		{
+			throw new Cache_Exception('There was a problem querying the MongoDB cache. :error', array(':error' => $e->getMessage()));
+		}
+
+		$retval = array();
+
+		foreach ($result as $item)
+		{
+			// Disable notices for unserializing
+			$ER = error_reporting(~E_NOTICE);
+
+			$retval[$item['id']] = unserialize($item['data']);
+
+			// Turn notices back on
+			error_reporting($ER);
+		}
+
+		return $retval;
 	}
 }
