@@ -69,8 +69,8 @@ return array
 	),
 	'mango'  => array(
 		'driver'             => 'mango',
+		'group'              => 'default',
+		'collection'         => 'cache',
 		'default_expire'     => 3600,
-		'mango_config'       => 'default',
-		'collection'         => 'Cache',
 	),
 );

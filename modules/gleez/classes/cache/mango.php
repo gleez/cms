@@ -4,14 +4,12 @@
  *
  * ### System requirements
  *
- * - PHP 5.3 or higher
- * - Gleez CMS 0.9.26 or higher
  * - MondoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
  * @package    Gleez\Cache\Base
- * @author     Sergey Yakovlev - Gleez
- * @version    1.0.0
+ * @author     Gleez Team
+ * @version    1.1.0
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -50,9 +48,9 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		// Set default config
 		$this->_default_config = array(
 			'driver'         => 'mango',
+			'group'          => Mango::$default,
+			'collection'     => 'cache',
 			'default_expire' => Cache::DEFAULT_EXPIRE,
-			'mango_config'   => Mango::$default,
-			'collection'     => 'Cache',
 		);
 
 		// Merge config
@@ -65,7 +63,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		$collection  = $this->config('collection');
 
 		// Get Mango_Collection instance
-		$this->_collection = Mango::instance($this->config('mango_config'))->{$collection};
+		$this->_collection = Mango::instance($this->config('group'))->{$collection};
 	}
 
 	/**
@@ -74,13 +72,13 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 * Examples:
 	 * ~~~
 	 * // Retrieve cache entry from file group
-	 * $data = Cache::instance('file')->get('foo');
+	 * $data = Cache::instance('mango')->get('foo');
 	 *
 	 * // Retrieve cache entry from file group and return 'bar' if miss
-	 * $data = Cache::instance('file')->get('foo', 'bar');
+	 * $data = Cache::instance('mango')->get('foo', 'bar');
 	 * ~~~
 	 *
-	 * @param   string  $id       ID of cache to entry
+	 * @param   string  $id       ID of cache entry
 	 * @param   mixed   $default  Default value to return if cache miss [Optional]
 	 *
 	 * @return  mixed
@@ -89,8 +87,10 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 */
 	public function get($id, $default = NULL)
 	{
+		$id = System::sanitize_id($this->config('prefix').$id);
+
 		// Load the cache based on id
-		$result = $this->_collection->findOne(array('id' => $this->prepareID($id)));
+		$result = $this->_collection->findOne(array('id' => $id));
 
 		if (is_null($result))
 		{
@@ -108,8 +108,14 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		// Otherwise return cached object
 		else
 		{
+			// Disable notices for unserializing
+			$ER = error_reporting(~E_NOTICE);
+
 			// Return the valid cache data
 			$data = unserialize($result['data']);
+
+			// Turn notices back on
+			error_reporting($ER);
 
 			// Return the resulting data
 			return $data;
@@ -146,7 +152,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 * Delete a cache entry based on id
 	 *
 	 * ~~~
-	 * // Delete 'foo' entry from the file group
+	 * // Delete 'foo' entry from the mango group
 	 * Cache::instance('mango')->delete('foo');
 	 * ~~~
 	 *
@@ -161,13 +167,14 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 */
 	public function delete($id)
 	{
-		$data = $this->_collection->findOne(array('id' => $this->prepareID($id)));
+		$id = System::sanitize_id($this->config('prefix').$id);
+		$data = $this->_collection->findOne(array('id' => $id));
 
 		if ( ! is_null($data))
 		{
 			$status = $this->_collection->safeRemove(
-				array('id'      => $this->prepareID($id)), // Event ID
-				array('justOne' => TRUE)                   // Remove at most one record
+				array('id'      => $id),  // Event ID
+				array('justOne' => TRUE)  // Remove at most one record
 			);
 
 			return (is_bool($status) ? $status : (is_array($status) AND $status['ok'] == 1));
@@ -181,7 +188,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 *
 	 * Example:
 	 * ~~~
-	 * // Delete 'foo:**' entries from the mango cache
+	 * // Delete 'foo:**' entries from the mango group
 	 * Cache::instance('mango')->delete_pattern('foo:**:bar');
 	 * ~~~
 	 *
@@ -208,11 +215,11 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		{
 			try
 			{
-				$response = $this->_collection->safeDrop();
+				$response = $this->_collection->safeRemove();
 
 				return $response;
 			}
-			catch (Exception $e)
+			catch (MongoException $e)
 			{
 				throw new Cache_Exception('An error occurred when dropping the cache: :msg',
 					array(':msg' => $e->getMessage())
@@ -223,7 +230,9 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		{
 			try
 			{
-				$response = $this->_collection->safeRemove(array('lifetime' => array('$lte' => time())));
+				$response = $this->_collection->safeRemove(array(
+					'lifetime' => array('$lte' => time())
+				));
 
 				return (bool)$response;
 			}
@@ -239,71 +248,6 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 			return FALSE;
 		}
 
-	}
-
-	/**
-	 * Prepare ID of cache entry
-	 *
-	 * @param  string  $id  ID of cache entry
-	 *
-	 * @return string
-	 *
-	 * @uses   System::sanitize_id
-	 */
-	public function prepareID($id)
-	{
-		return System::sanitize_id($this->config('prefix').$id);
-	}
-
-	/**
-	 * Prepare data of cache entry
-	 *
-	 * @param   mixed  $data  Data to set to cache
-	 * @return  string
-	 */
-	public function prepareData($data)
-	{
-		return serialize($data);
-	}
-
-	/**
-	 * Prepare cache lifetime
-	 *
-	 * Uses [Cache::DEFAULT_EXPIRE] if the `default_expire`
-	 * option is missing or empty
-	 *
-	 * @param   integer  $lifetime  Cache lifetime
-	 *
-	 * @uses    Arr::get
-	 *
-	 * @return  integer
-	 */
-	public function prepareLifeTime($lifetime = NULL)
-	{
-		$default_expire = Arr::get($this->_config, 'default_expire', NULL);
-
-		// Setup lifetime
-		if (is_null($lifetime))
-		{
-			if ($default_expire === 0)
-			{
-				$lifetime = 0;
-			}
-			elseif (is_null($default_expire))
-			{
-				$lifetime = Cache::DEFAULT_EXPIRE + time();
-			}
-			else
-			{
-				$lifetime = (int)$default_expire + time();
-			}
-		}
-		else
-		{
-			$lifetime = (0 === $lifetime) ? 0 : ((int)$lifetime + time());
-		}
-
-		return $lifetime;
 	}
 
 	/**
@@ -331,41 +275,50 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 	 * @return  array    Returns an array containing the status of the insertion if the "w" option is set
 	 * @return  boolean  Otherwise, returns TRUE if the inserted array is not empty
 	 *
+	 * @throws  Cache_Exception
+	 *
 	 * @uses    Mango_Collection::safeUpdate
-	 * @uses    Mango_Collection::insert
 	 */
 	public function set_with_tags($id, $data, $lifetime = NULL, array $tags = NULL)
 	{
 		// Prepare ID
-		$id = $this->prepareID($id);
+		$id = System::sanitize_id($this->config('prefix').$id);
 
 		// Prepare data
-		$data = $this->prepareData($data);
+		$data = serialize($data);
 
-		// Prepare cache lifetime
-		$lifetime = $this->prepareLifeTime($lifetime);
-
-		if ($this->exists($id))
+		// Setup lifetime
+		if ($lifetime === NULL)
 		{
-			$newdata = array(
-				'data'     => $data,
-				'lifetime' => $lifetime,
-				'tags'     => $tags
-			);
-
-			$status = $this->_collection->safeUpdate(array('id'=> $id), $newdata);
+			$lifetime = (0 === Arr::get($this->_config, 'default_expire', NULL)) ? 0 : (Arr::get($this->_config, 'default_expire', Cache::DEFAULT_EXPIRE) + time());
 		}
 		else
 		{
-			$status = $this->_collection->insert(array(
-					'id'       => $id,
-					'data'     => $data,
-					'lifetime' => $lifetime,
-					'tags'     => $tags
-				),
-				array('w' => TRUE)
+			$lifetime = (0 === $lifetime) ? 0 : ($lifetime + time());
+		}
+
+		$data = array(
+			'id'       => $id,
+			'data'     => $data,
+			'lifetime' => $lifetime,
+			'tags'     => $tags
+		);
+
+		$status = FALSE;
+
+		try
+		{
+			$status = $this->_collection->safeUpdate(
+				array('id'=> $id),      // Condition
+				$data,                  // Data
+				array('upsert' => TRUE) // If no document matches $criteria, a new document will be inserted
 			);
 		}
+		catch(MongoException $e)
+		{
+			throw new Cache_Exception('An error occurred saving cache data: :err', array(':err' => $e->getMessage()));
+		}
+
 
 		return (is_bool($status) ? $status : (is_array($status) AND $status['ok'] == 1));
 	}
