@@ -73,7 +73,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Gleez Team
- * @version    0.3.6
+ * @version    0.4.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -627,13 +627,15 @@ class Mango {
 	/**
 	 * Get the currently referenced database
 	 *
-	 * @since   0.3.3
+	 * @since   0.4.0
+	 *
+	 * @link    http://docs.mongodb.org/manual/reference/method/db.getName/
 	 *
 	 * @return  string
 	 */
-	public function getDbName()
+	public function getName()
 	{
-		return $this->_config['connection']['options']['db'];
+		return $this->safeExecute('db.getName()');
 	}
 
 	/**
@@ -727,7 +729,7 @@ class Mango {
 
 		if (empty($result['ok']))
 		{
-			throw new MongoException($result['errmsg'], $result['errno']);
+			throw new MongoException($result['errmsg'], $result['code']);
 		}
 
 		return $result['retval'];
@@ -795,7 +797,7 @@ class Mango {
 	}
 
 	/**
-	 * Checks for the $collection in the currently referenced database
+	 * Checks if the given $collection exists in the currently referenced database
 	 *
 	 * @since   0.3.3
 	 *
@@ -806,7 +808,7 @@ class Mango {
 	public function exists($collection)
 	{
 		$result = $this->db()->system->namespaces->findOne(
-			array('name'=>"{$this->getDbName()}." . $collection)
+			array('name'=>"{$this->getName()}." . $collection)
 		);
 
 		return ( ! is_null($result));
