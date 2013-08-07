@@ -581,7 +581,7 @@ class Mango_Collection implements Iterator, Countable {
 	 * @param   array  $new_object  The object with which to update the matching records
 	 * @param   array  $options     Associative array of the form array("optionname" => <boolean>, ...) [Optional]
 	 *
-	 * @return  array|bool
+	 * @return  integer|boolean|MongoId
 	 *
 	 * @throws  MongoException
 	 *
@@ -604,7 +604,7 @@ class Mango_Collection implements Iterator, Countable {
 		// and therefore not checked ("fire and forget")
 		if ($options['w'] == 0)
 		{
-			/** @var $result boolean */
+			// boolean
 			return $result;
 		}
 
@@ -619,16 +619,19 @@ class Mango_Collection implements Iterator, Countable {
 		// the updatedExisting flag for single updates
 		if ($options['multiple'])
 		{
+			// integer
 			return $result['n'];
 		}
 		// Return the upserted id if a document was upserted with a new _id
 		elseif ($options['upsert'] AND ! $result['updatedExisting'] AND isset($result['upserted']))
 		{
+			// MongoId
 			return $result['upserted'];
 		}
 		// Return the updatedExisting flag for single, non-upsert updates
 		else
 		{
+			// boolean
 			return $result['updatedExisting'];
 		}
 	}
