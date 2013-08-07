@@ -3,7 +3,7 @@
 ## Introduction
 
 Caching should be implemented with consideration. Generally, caching the result of resources
-is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APC](http://php.net/manual/en/book.apc.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
+is faster than reprocessing them. Choosing what, how and when to cache is vital. [PHP APC](http://php.net/manual/en/book.apc.php) is one of the fastest caching systems available, closely followed by [Memcached](http://memcached.org/). The caching system based on [MongoDB](http://www.mongodb.org/) is a new and truly not fully researched. But yet this system is promising due to the use of flat files, the new document-oriented concept, speed reading and writing, as well as an arbitrary number of fields in the data source (collection like a tables in SQL databases). In general, MongoDB will work well for applications and components where you want to store data that are frequently used and which can quickly handle. [SQLite](http://www.sqlite.org/) and File caching are two of the slowest cache methods, however usually faster than reprocessing
 a complex set of instructions.
 
 Caching engines that use memory are considerably faster than file based alternatives. But
@@ -22,7 +22,8 @@ instances of cache engines through a grouped singleton pattern.
  *  Memcached ([Cache_Memcache])
  *  Memcached-tags ([Cache_Memcachetag])
  *  SQLite ([Cache_Sqlite])
- *  Wincache
+ *  Wincache ([Cache_Wincache])
+ *  MongoDB ([Cache_Mango])
 
 ## What the Gleez Cache module does (and does not do)
 
@@ -48,5 +49,6 @@ Wincache         | __Memory__   | Excellent | No       | No          | Yes | Win
 File             | __Disk__     | Poor      | No       | No          | No  | Marginally faster than execution
 Memcache (tag)   | __Memory__   | Good      | No (yes) | Yes         | Yes | Generally fast distributed solution, but has a speed hit due to variable network latency and serialization
 Sqlite           | __Disk__     | Poor      | Yes      | No          | No  | Marginally faster than execution
+Mango            | __Disk__     | Good      | Yes      | Yes         | Yes (not yes implemented) | The perspective direction that is only begun to develop
 
 It is possible to have hybrid cache solutions that use a combination of the engines above in different contexts. This is supported with _Gleez Cache_ as well
