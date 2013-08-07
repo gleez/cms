@@ -807,9 +807,7 @@ class Mango {
 	 */
 	public function exists($collection)
 	{
-		$result = $this->db()->system->namespaces->findOne(
-			array('name'=>"{$this->getName()}." . $collection)
-		);
+		$result = $this->safeExecute("db.{$collection}.exists()");
 
 		return ( ! is_null($result));
 	}
