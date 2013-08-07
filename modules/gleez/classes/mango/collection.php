@@ -121,7 +121,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * Example:
 	 * ~~~
-	 *   $posts = new Mango_Collection('posts');
+	 * $posts = new Mango_Collection('posts');
 	 * ~~~
 	 *
 	 * @param   string   $name    The collection name
@@ -1030,7 +1030,7 @@ class Mango_Collection implements Iterator, Countable {
 	 * // Set option
 	 * $collection->limit(50)->skip(100);
 	 *
-	 * //
+	 * // Check option
 	 * if ($collection->hasOption('limit'))
 	 * {
 	 *     // some actions...
