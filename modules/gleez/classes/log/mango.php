@@ -9,7 +9,7 @@
  *
  * @package    Gleez\Logging
  * @author     Gleez Team
- * @version    0.2.2
+ * @version    0.2.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -86,9 +86,8 @@ class Log_Mango extends Log_Writer {
 		{
 			$exception = isset($message['additional']['exception']) ? $message['additional']['exception'] : NULL;
 			$message['level'] = $this->_log_levels[$message['level']];
-			$message['time']  = new MongoDate(strtotime($message['time']));
 
-			unset($message['additional'], $message['trace']);
+			unset($message['additional'], $message['trace'], $message['time']);
 
 			$message = array_filter($message, 'is_string');
 
