@@ -28,16 +28,22 @@ abstract class Model {
 	 *
 	 * // Attempts to create the Document object
 	 * $model = Model::factory('\Document');
+	 *
+	 * // Attempts to create the \Document\Collection object
+	 * $model = Model::factory('\document\collection');
 	 * ~~~
 	 *
 	 * @param   string  $name  Model name
+	 *
 	 * @return  Model
+	 *
+	 * @uses    Text::reduce_slashes
 	 */
 	public static function factory($name)
 	{
 		if (FALSE !== strpos($name, '\\'))
 		{
-			$class = $name;
+			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));;
 		}
 		else
 		{
