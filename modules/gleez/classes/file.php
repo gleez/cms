@@ -396,15 +396,15 @@ class File extends SplFileInfo {
 	 *
 	 * @since   1.0.1
 	 *
-	 * @param   string  $name    Filename [Optional]
-	 * @param   integer $length  Length of filename to return [Optional]
+	 * @param   string   $name    Filename [Optional]
+	 * @param   integer  $length  Length of filename to return [Optional]
 	 *
 	 * @return  string
 	 *
 	 * @uses    Text::random
 	 * @uses    UTF8::strtolower
 	 */
-	public static function getUnique($name = NULL, $length = 8)
+	public static function getUnique($name = NULL, $length = 20)
 	{
 		if (is_null($name))
 		{
@@ -412,7 +412,10 @@ class File extends SplFileInfo {
 		}
 		else
 		{
-			return uniqid().preg_replace('/\s+/u', '-', $name);
+			$retval = uniqid().preg_replace('/\s+/u', '-', $name);
+			$retval = is_null($length) ? $retval : substr($retval, (int)$length);
+
+			return $retval;
 		}
 	}
 
