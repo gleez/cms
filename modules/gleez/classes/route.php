@@ -29,8 +29,7 @@
  *
  * @package    Gleez\Base
  * @version    2.1.0
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @author     Kohana Team
  * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
@@ -50,44 +49,54 @@ class Route {
 	const REGEX_ESCAPE  = '[.\\+*?[^\\]${}=!|]';
 
 	/**
-	 * @var  string  default protocol for all routes
+	 * Default protocol for all routes
+	 * @var string
 	 *
-	 * @example  'http://'
+	 * @example 'http://'
 	 */
 	public static $default_protocol = 'http://';
 
 	/**
-	 * @var  array   list of valid localhost entries
+	 * List of valid localhost entries
+	 * @var array
 	 */
 	public static $localhosts = array(FALSE, '', 'local', 'localhost');
 
 	/**
-	 * @var  string  default action for all routes
+	 * Default action for all routes
+	 * @var string
 	 */
 	public static $default_action = 'index';
 
 	/**
-	 * @var  bool Indicates whether routes are cached
+	 * Indicates whether routes are cached
+	 * @var boolean
 	 */
 	public static $cache = FALSE;
 
 	/**
+	 * List of routes
 	 * @var  array
 	 */
 	protected static $_routes = array();
 
 	/**
-	 * Stores a named route and returns it. The "action" will always be set to
-	 * "index" if it is not defined.
+	 * Stores a named route and returns it
 	 *
-	 *     Route::set('default', '(<controller>(/<action>(/<id>)))')
-	 *         ->defaults(array(
-	 *             'controller' => 'welcome',
-	 *         ));
+	 * The "action" will always be set to "index" if it is not defined.
 	 *
-	 * @param   string  $name           route name
-	 * @param   string  $uri            URI pattern
-	 * @param   array   $regex          regex patterns for route keys
+	 * Example:
+	 * ~~~
+	 * Route::set('default', '(<controller>(/<action>(/<id>)))')
+	 *     ->defaults(array(
+	 *         'controller' => 'welcome',
+	 *     ));
+	 * ~~~
+	 *
+	 * @param   string  $name   Route name
+	 * @param   string  $uri    URI pattern [Optional]
+	 * @param   array   $regex  Regex patterns for route keys [Optional]
+	 *
 	 * @return  Route
 	 */
 	public static function set($name, $uri = NULL, $regex = NULL)
@@ -96,12 +105,17 @@ class Route {
 	}
 
 	/**
-	 * Retrieves a named route.
+	 * Retrieves a named route
 	 *
-	 *     $route = Route::get('default');
+	 * Example:
+	 * ~~~
+	 * $route = Route::get('default');
+	 * ~~~
 	 *
-	 * @param   string  $name   route name
+	 * @param   string  $name  Route name
+	 *
 	 * @return  Route
+	 *
 	 * @throws  Gleez_Exception
 	 */
 	public static function get($name)
@@ -116,9 +130,12 @@ class Route {
 	}
 
 	/**
-	 * Retrieves all named routes.
+	 * Retrieves all named routes
 	 *
-	 *     $routes = Route::all();
+	 * Example:
+	 * ~~~
+	 * $routes = Route::all();
+	 * ~~~
 	 *
 	 * @return  array  routes by name
 	 */
@@ -128,9 +145,12 @@ class Route {
 	}
 
 	/**
-	 * Get the name of a route.
+	 * Get the name of a route
 	 *
-	 *     $name = Route::name($route)
+	 * Example:
+	 * ~~~
+	 * $name = Route::name($route)
+	 * ~~~
 	 *
 	 * @param   Route   $route  instance
 	 * @return  string
@@ -212,15 +232,18 @@ class Route {
 	}
 
 	/**
-	 * Create a URL from a route name. This is a shortcut for:
+	 * Create a URL from a route name
 	 *
-	 *     echo URL::site(Route::get($name)->uri($params), $protocol);
+	 * This is a shortcut for:
+	 * ~~~
+	 * echo URL::site(Route::get($name)->uri($params), $protocol);
+	 * ~~~
 	 *
-	 * @param   string  $name       route name
-	 * @param   array   $params     URI parameters
-	 * @param   mixed   $protocol   protocol string or boolean, adds protocol and domain
+	 * @param   string  $name       Route name
+	 * @param   array   $params     URI parameters [Optional]
+	 * @param   mixed   $protocol   Protocol string or boolean, adds protocol and domain [Optional]
+	 *
 	 * @return  string
-	 * @since   3.0.7
 	 * @uses    URL::site
 	 */
 	public static function url($name, array $params = NULL, $protocol = NULL)
@@ -235,16 +258,23 @@ class Route {
 	}
 
 	/**
-	 * Returns the compiled regular expression for the route. This translates
-	 * keys and optional groups to a proper PCRE regular expression.
+	 * Returns the compiled regular expression for the route
 	 *
-	 *     $compiled = Route::compile(
-	 *        '<controller>(/<action>(/<id>))',
-	 *         array(
-	 *           'controller' => '[a-z]+',
-	 *           'id' => '\d+',
-	 *         )
-	 *     );
+	 * This translates keys and optional groups to a proper PCRE regular expression.
+	 *
+	 * Example:
+	 * ~~~
+	 * $compiled = Route::compile(
+	 *    '<controller>(/<action>(/<id>))',
+	 *     array(
+	 *       'controller' => '[a-z]+',
+	 *       'id' => '\d+',
+	 *     )
+	 * );
+	 * ~~~
+	 *
+	 * @param   string  $uri    The uri string
+	 * @param   array   $regex  The regex variables [Optional]
 	 *
 	 * @return  string
 	 * @uses    Route::REGEX_ESCAPE
@@ -282,46 +312,54 @@ class Route {
 	}
 
 	/**
-	 * @var  array  route filters
+	 * Route filters
+	 * @var array
 	 */
 	protected $_filters = array();
 
 	/**
-	 * @var  string  route URI
+	 * Route URI
+	 * @var string
 	 */
 	protected $_uri = '';
 
 	/**
+	 * Route key patterns
 	 * @var  array
 	 */
 	protected $_regex = array();
 
 	/**
-	 * @var  array
+	 * @var array
 	 */
 	protected $_defaults = array('action' => 'index', 'host' => FALSE);
 
 	/**
-	 * @var  string
+	 * Route compiled regex
+	 * @var string
 	 */
 	protected $_route_regex;
 
 	/**
-	 * Creates a new route. Sets the URI and regular expressions for keys.
-	 * Routes should always be created with [Route::set] or they will not
-	 * be properly stored.
+	 * Creates a new route
 	 *
-	 *     $route = new Route($uri, $regex);
+	 * Sets the URI and regular expressions for keys.
+	 * Routes should always be created with [Route::set] or they will
+	 * not be properly stored.
+	 *
+	 * Example:
+	 * ~~~
+	 * $route = new Route($uri, $regex);
+	 * ~~~
 	 *
 	 * The $uri parameter should be a string for basic regex matching.
 	 *
+	 * @param   string  $uri    Route URI pattern [Optional]
+	 * @param   array   $regex  Key patterns [Optional]
 	 *
-	 * @param   string  $uri    route URI pattern
-	 * @param   array   $regex  key patterns
-	 * @return  void
 	 * @uses    Route::_compile
 	 */
-	public function __construct($uri = NULL, $regex = NULL)
+	public function __construct($uri = NULL, array $regex = NULL)
 	{
 		if ($uri === NULL)
 		{
@@ -344,18 +382,23 @@ class Route {
 	}
 
 	/**
-	 * Provides default values for keys when they are not present. The default
-	 * action will always be "index" unless it is overloaded here.
+	 * Provides default values for keys when they are not present
 	 *
-	 *     $route->defaults(array(
-	 *         'controller' => 'welcome',
-	 *         'action'     => 'index'
-	 *     ));
+	 * The default action will always be "index" unless it is overloaded here.
+	 *
+	 * Example:
+	 * ~~~
+	 * $route->defaults(array(
+	 *     'controller' => 'welcome',
+	 *     'action'     => 'index'
+	 * ));
+	 * ~~~
 	 *
 	 * If no parameter is passed, this method will act as a getter.
 	 *
-	 * @param   array   $defaults   key values
-	 * @return  $this or array
+	 * @param   array   $defaults   Key values
+	 *
+	 * @return  Route|array
 	 */
 	public function defaults(array $defaults = NULL)
 	{
@@ -370,32 +413,36 @@ class Route {
 	}
 
 	/**
-	 * Filters to be run before route parameters are returned:
+	 * Filters to be run before route parameters are returned
 	 *
-	 *     $route->filter(
-	 *         function(Route $route, $params, Request $request)
+	 * Example:
+	 * ~~~
+	 * $route->filter(
+	 *     function(Route $route, $params, Request $request)
+	 *     {
+	 *         if ($request->method() !== HTTP_Request::POST)
 	 *         {
-	 *             if ($request->method() !== HTTP_Request::POST)
-	 *             {
-	 *                 return FALSE; // This route only matches POST requests
-	 *             }
-	 *             if ($params AND $params['controller'] === 'welcome')
-	 *             {
-	 *                 $params['controller'] = 'home';
-	 *             }
-	 *
-	 *             return $params;
+	 *             return FALSE; // This route only matches POST requests
 	 *         }
-	 *     );
+	 *         if ($params AND $params['controller'] === 'welcome')
+	 *         {
+	 *             $params['controller'] = 'home';
+	 *         }
+	 *             return $params;
+	 *     }
+	 * );
+	 * ~~~
 	 *
-	 * To prevent a route from matching, return `FALSE`. To replace the route
-	 * parameters, return an array.
+	 * To prevent a route from matching, return `FALSE`.
+	 * To replace the route parameters, return an array.
 	 *
 	 * [!!] Default parameters are added before filters are called!
 	 *
 	 * @throws  Gleez_Exception
+	 *
 	 * @param   array   $callback   callback string, array, or closure
-	 * @return  $this
+	 *
+	 * @return  Route
 	 */
 	public function filter($callback)
 	{
@@ -410,23 +457,29 @@ class Route {
 	}
 
 	/**
-	 * Tests if the route matches a given URI. A successful match will return
-	 * all of the routed parameters as an array. A failed match will return
-	 * boolean FALSE.
+	 * Tests if the route matches a given URI
 	 *
-	 *     // Params: controller = users, action = edit, id = 10
-	 *     $params = $route->matches('users/edit/10');
+	 * A successful match will return all of the routed parameters as an array.
+	 * A failed match will return boolean FALSE.
+	 *
+	 * Example:
+	 * ~~~
+	 * // Params: controller = users, action = edit, id = 10
+	 * $params = $route->matches('users/edit/10');
+	 * ~~~
 	 *
 	 * This method should almost always be used within an if/else block:
+	 * ~~~
+	 * if ($params = $route->matches($uri))
+	 * {
+	 *     // Parse the parameters
+	 * }
+	 * ~~~
 	 *
-	 *     if ($params = $route->matches($uri))
-	 *     {
-	 *         // Parse the parameters
-	 *     }
+	 * @param   string  $uri  URI to match
 	 *
-	 * @param   string  $uri    URI to match
-	 * @return  array   on success
-	 * @return  FALSE   on failure
+	 * @return  array    Array on success
+	 * @return  boolean  FALSE on failure
 	 */
 	public function matches($uri)
 	{
@@ -485,8 +538,7 @@ class Route {
 	}
 
 	/**
-	 * Returns whether this route is an external route
-	 * to a remote controller.
+	 * Returns whether this route is an external route to a remote controller.
 	 *
 	 * @return  boolean
 	 */
@@ -496,18 +548,24 @@ class Route {
 	}
 
 	/**
-	 * Generates a URI for the current route based on the parameters given.
+	 * Generates a URI for the current route based on the parameters given
 	 *
-	 *     // Using the "default" route: "users/profile/10"
-	 *     $route->uri(array(
-	 *         'controller' => 'users',
-	 *         'action'     => 'profile',
-	 *         'id'         => '10'
-	 *     ));
+	 * Example:
+	 * ~~~
+	 * // Using the "default" route: "users/profile/10"
+	 * $route->uri(array(
+	 *     'controller' => 'users',
+	 *     'action'     => 'profile',
+	 *     'id'         => '10'
+	 * ));
+	 * ~~~
 	 *
-	 * @param   array   $params URI parameters
+	 * @param   array   $params URI parameters [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @throws  Gleez_Exception
+	 *
 	 * @uses    Route::REGEX_Key
 	 */
 	public function uri(array $params = NULL)
@@ -633,4 +691,4 @@ class Route {
 		return $uri;
 	}
 
-} // End Route
+}
