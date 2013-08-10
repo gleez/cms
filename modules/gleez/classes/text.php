@@ -6,9 +6,8 @@
  * Code taken from drupal filter module and and text class
  *
  * @package    Gleez\Helpers
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovkev - Gleez
- * @version    1.2.0
+ * @author     Gleez Team
+ * @version    1.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -155,32 +154,30 @@ class Text {
 	}
 
 	/**
-	 * Generates a random string of a given type and length.
+	 * Generates a random string of a given type and length
 	 *
-	 *
-	 *     $str = Text::random(); // 8 character random string
+	 * Example:
+	 * ~~~
+	 * // 8 character random string
+	 * $str = Text::random();
+	 * ~~~
 	 *
 	 * The following types are supported:
-	 *
-	 * alnum
-	 * :  Upper and lower case a-z, 0-9 (default)
-	 *
-	 * alpha
-	 * :  Upper and lower case a-z
-	 *
-	 * hexdec
-	 * :  Hexadecimal characters a-f, 0-9
-	 *
-	 * distinct
-	 * :  Uppercase characters and numbers that cannot be confused
+	 * * alnum:  Upper and lower case a-z, 0-9 (default)
+	 * * alpha:  Upper and lower case a-z
+	 * * hexdec:  Hexadecimal characters a-f, 0-9
+	 * * distinct:  Uppercase characters and numbers that cannot be confused
 	 *
 	 * You can also create a custom type by providing the "pool" of characters
 	 * as the type.
 	 *
-	 * @param   string  $type   a type of pool, or a string of characters to use as the pool
-	 * @param   integer $length length of string to return
+	 * @param   string  $type    A type of pool, or a string of characters to use as the pool [Optional]
+	 * @param   integer $length  Length of string to return [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    UTF8::split
+	 * @uses    Valid::utf8
 	 */
 	public static function random($type = NULL, $length = 8)
 	{
@@ -214,7 +211,7 @@ class Text {
 			break;
 			default:
 				$pool = (string) $type;
-				$utf8 = ! UTF8::is_ascii($pool);
+				$utf8 = Valid::utf8($pool);
 			break;
 		}
 
@@ -253,10 +250,15 @@ class Text {
 	 * Uppercase words that are not separated by spaces, using a custom
 	 * delimiter or the default.
 	 *
-	 *      $str = Text::ucfirst('content-type'); // returns "Content-Type"
+	 * Example:
+	 * ~~~
+	 * // returns "Content-Type"
+	 * $str = Text::ucfirst('content-type');
+	 * ~~~
 	 *
-	 * @param   string  $string     string to transform
-	 * @param   string  $delimiter  delimiter to use
+	 * @param   string  $string     String to transform
+	 * @param   string  $delimiter  Delimiter to use [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function ucfirst($string, $delimiter = '-')
@@ -266,11 +268,16 @@ class Text {
 	}
 
 	/**
-	 * Reduces multiple slashes in a string to single slashes.
+	 * Reduces multiple slashes in a string to single slashes
 	 *
-	 *     $str = Text::reduce_slashes('foo//bar/baz'); // "foo/bar/baz"
+	 * Example:
+	 * ~~~
+	 * // returns "foo/bar/baz"
+	 * $str = Text::reduce_slashes('foo//bar/baz');
+	 * ~~~
 	 *
-	 * @param   string  $str    string to reduce slashes of
+	 * @param   string  $str  String to reduce slashes of
+	 *
 	 * @return  string
 	 */
 	public static function reduce_slashes($str)
@@ -279,18 +286,23 @@ class Text {
 	}
 
 	/**
-	 * Replaces the given words with a string.
+	 * Replaces the given words with a string
 	 *
-	 *     // Displays "What the #####, man!"
-	 *     echo Text::censor('What the frick, man!', array(
-	 *         'frick' => '#####',
-	 *     ));
+	 * Example:
+	 * ~~~
+	 * // Displays "What the #####, man!"
+	 * echo Text::censor('What the frick, man!', array(
+	 *     'frick' => '#####',
+	 * ));
+	 * ~~~
 	 *
-	 * @param   string  $str                    phrase to replace words in
-	 * @param   array   $badwords               words to replace
-	 * @param   string  $replacement            replacement string
-	 * @param   boolean $replace_partial_words  replace words across word boundaries (space, period, etc)
+	 * @param   string  $str                    Phrase to replace words in
+	 * @param   array   $badwords               Words to replace
+	 * @param   string  $replacement            Replacement string [Optional]
+	 * @param   boolean $replace_partial_words  Replace words across word boundaries (space, period, etc) [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    UTF8::strlen
 	 */
 	public static function censor($str, $badwords, $replacement = '#', $replace_partial_words = TRUE)
@@ -320,9 +332,13 @@ class Text {
 	}
 
 	/**
-	 * Finds the text that is similar between a set of words.
+	 * Finds the text that is similar between a set of words
 	 *
-	 *     $match = Text::similar(array('fred', 'fran', 'free'); // "fr"
+	 * Example:
+	 * ~~~
+	 * // returns "fr"
+	 * $match = Text::similar(array('fred', 'fran', 'free');
+	 * ~~~
 	 *
 	 * @param   array   $words  words to find similar text of
 	 * @return  string
@@ -347,36 +363,36 @@ class Text {
 	}
 
 	/**
-	 * Converts text email addresses and anchors into links. Existing links
-	 * will not be altered.
+	 * Converts text email addresses and anchors into links
 	 *
-	 *     echo Text::auto_link($text);
+	 * Example:
+	 * ~~~
+	 * echo Text::auto_link($text);
+	 * ~~~
 	 *
-	 * [!!] This method is not foolproof since it uses regex to parse HTML.
+	 * @param   string  $text  Text to auto link
 	 *
-	 * @param   string   text to auto link
 	 * @return  string
-	 * @uses    Text::auto_link_urls
-	 * @uses    Text::auto_link_emails
 	 */
-	public static function auto_link($text, $format = FALSE, $filter = FALSE)
+	public static function auto_link($text)
 	{
-		// Auto link emails first to prevent problems with "www.domain.com@example.com"
-		//return Text::auto_link_urls(Text::auto_link_emails($text));
-
-		// Auto link emails first to prevent problems with "www.domain.com@example.com"
 		return Autolink::filter($text);
 	}
 
 	/**
 	 * Converts text anchors into links. Existing links will not be altered.
 	 *
-	 *     echo Text::auto_link_urls($text);
+	 * Example:
+	 * ~~~
+	 * echo Text::auto_link_urls($text);
+	 * ~~~
 	 *
 	 * [!!] This method is not foolproof since it uses regex to parse HTML.
 	 *
-	 * @param   string  $text   text to auto link
+	 * @param   string  $text  Text to auto link
+	 *
 	 * @return  string
+	 *
 	 * @uses    HTML::anchor
 	 */
 	public static function auto_link_urls($text)
@@ -528,17 +544,17 @@ class Text {
 	/**
 	 * Format a number to human-readable text
 	 *
-	 * Display: one thousand and twenty-four:<br>
-	 * <code>
-	 *   echo Text::number(1024);
-	 * </code>
+	 * Examples:
+	 * ~~~
+	 * // Display: one thousand and twenty-four
+	 * echo Text::number(1024);
 	 *
-	 * Display: five million, six hundred and thirty-two:<br>
-	 * <code>
-	 *   echo Text::number(5000632);
-	 * </code>
+	 * // Display: five million, six hundred and thirty-two
+	 * echo Text::number(5000632);
+	 * ~~~
 	 *
 	 * @param   integer  $number  Number to format
+	 *
 	 * @return  string
 	 */
 	public static function number($number)
@@ -695,7 +711,7 @@ class Text {
 		else
 		{
 			// Load the search group for this type
-			$group = Kohana::$config->load('user_agents')->$value;
+			$group = Config::get("user_agents.{$value}");
 
 			foreach ($group as $search => $name)
 			{
@@ -752,60 +768,53 @@ class Text {
 	}
 
 	/**
-	 * Parses an HTML snippet and returns it as a DOM object.
+	 * Parses an HTML snippet and returns it as a DOM object
 	 *
-	 * This function loads the body part of a partial (X)HTML document
-	 * and returns a full DOMDocument object that represents this document.
-	 * You can use dom_serialize() to serialize this DOMDocument
-	 * back to a XHTML snippet.
+	 * This function loads the body part of a partial HTML document and returns
+	 * a full DOMDocument object that represents this document.
 	 *
-	 *   The partial (X)HTML snippet to load. Invalid mark-up
-	 *   will be corrected on import.
+	 * You can use [Text::dom_serialize] to serialize this DOMDocument
+	 * back to a HTML snippet.
 	 *
 	 * @param   string       Text string to filter html
-	 * @return  DOMDocument  A DOMDocument that represents the loaded (X)HTML snippet.
+	 * @return  DOMDocument  A DOMDocument that represents the loaded HTML snippet.
 	 */
-	static function dom_load($text)
+	public static function dom_load($text)
 	{
 		$dom = new DOMDocument;
+
 		// Ignore warnings during HTML soup loading.
-		@$dom->loadHTML('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html
-				xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type"
-				content="text/html; charset=utf-8" /></head><body>' . $text . '</body></html>');
+		@$dom->loadHTML('<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>' . $text . '</body></html>');
 		
 		return $dom;
 	}
 
 	/**
-	 * Converts a DOM object back to an HTML snippet.
+	 * Converts a DOM object back to an HTML snippet
 	 *
 	 * The function serializes the body part of a DOMDocument
-	 * back to an XHTML snippet.
+	 * back to an HTML snippet.
 	 *
-	 * The resulting XHTML snippet will be properly formatted
+	 * The resulting HTML snippet will be properly formatted
 	 * to be compatible with HTML user agents.
 	 *
-	 * @param $dom_document
-	 *   A DOMDocument object to serialize, only the tags below
-	 *   the first <body> node will be converted.
+	 * @param  DOMDocument  $dom_document  A DOMDocument object to serialize
 	 *
-	 * @return
-	 *   A valid (X)HTML snippet, as a string.
+	 * @return  string  A valid HTML snippet, as a string.
 	 */
-	private static function dom_serialize($dom_document)
+	private static function dom_serialize(DOMDocument $dom_document)
 	{
 		$body_node    = $dom_document->getElementsByTagName('body')->item(0);
 		$body_content = '';
 
 		foreach ($body_node->getElementsByTagName('script') as $node)
 		{
-			Text::_escape_cdata_element($dom_document, $node);
+			Text::escape_cdata_element($dom_document, $node);
 		}
 
 		foreach ($body_node->getElementsByTagName('style') as $node)
 		{
-			Text::_escape_cdata_element($dom_document, $node, '/*', '*/');
+			Text::escape_cdata_element($dom_document, $node, '/*', '*/');
 		}
 
 		foreach ($body_node->childNodes as $child_node)
@@ -817,33 +826,34 @@ class Text {
 	}
 
 	/**
-	 * Adds comments around the <!CDATA section in a dom element.
-	 *
-	 * DOMDocument::loadHTML in filter_dom_load() makes CDATA sections from the
-	 * contents of inline script and style tags.  This can cause HTML 4 browsers to
-	 * throw exceptions.
+	 * Adds comments around the <!CDATA section in a dom element
 	 *
 	 * This function attempts to solve the problem by creating a DocumentFragment,
 	 * commenting the CDATA tag.
 	 *
-	 * @param $dom_document
-	 *   The DOMDocument containing the $dom_element.
-	 * @param $dom_element
-	 *   The element potentially containing a CDATA node.
-	 * @param $comment_start
-	 *   String to use as a comment start marker to escape the CDATA declaration.
-	 * @param $comment_end
-	 *   String to use as a comment end marker to escape the CDATA declaration.
+	 * @param  DOMDocument  $dom_document   The DOMDocument containing the $dom_element
+	 * @param  DOMElement   $dom_element    The element potentially containing a CDATA node
+	 * @param  string       $comment_start  String to use as a comment start marker to escape the CDATA declaration [Optional]
+	 * @param  string       $comment_end    String to use as a comment end marker to escape the CDATA declaration [Optional]
 	*/
-	private static function _escape_cdata_element($dom_document, $dom_element, $comment_start = '//', $comment_end = '') {
+	private static function escape_cdata_element(DOMDocument $dom_document, DOMElement $dom_element, $comment_start = '//', $comment_end = '')
+	{
 		foreach ($dom_element->childNodes as $node)
 		{
 			if (get_class($node) == 'DOMCdataSection')
 			{
-				$embed_prefix = "\n<!--{$comment_start}--><![CDATA[{$comment_start} ><!--{$comment_end}\n";
-				$embed_suffix = "\n{$comment_start}--><!]]>{$comment_end}\n";
+				$embed_prefix = PHP_EOL."<!--{$comment_start}--><![CDATA[{$comment_start} ><!--{$comment_end}".PHP_EOL;
+				$embed_suffix = PHP_EOL."{$comment_start}--><!]]>{$comment_end}".PHP_EOL;
+
+				// Prevent invalid cdata escaping as this would throw a DOM error.
+				// This is the same behavior as found in libxml2.
+				// Related W3C standard: http://www.w3.org/TR/REC-xml/#dt-cdsection
+				// Fix explanation: http://en.wikipedia.org/wiki/CDATA#Nesting
+				$data = str_replace(']]>', ']]]]><![CDATA[>', $node->data);
+
 				$fragment = $dom_document->createDocumentFragment();
-				$fragment->appendXML($embed_prefix . $node->data . $embed_suffix);
+				$fragment->appendXML($embed_prefix . $data . $embed_suffix);
+
 				$dom_element->appendChild($fragment);
 				$dom_element->removeChild($node);
 			}
@@ -852,11 +862,13 @@ class Text {
 
 
 	/**
-	 * Replace runs of multiple whitespace characters with a single space.
+	 * Replace runs of multiple whitespace characters with a single space
 	 *
-	 * @access	public
-	 * @param	string	the string to normalize
-	 * @return	string
+	 * @param   string  $string  The string to normalize
+	 *
+	 * @return  string
+	 *
+	 * @uses    UTF8::trim
 	 */
 	public static function normalize_spaces($string)
 	{
@@ -870,11 +882,11 @@ class Text {
 	}
 
 	/**
-	 * Extract link URLs from HTML content.
+	 * Extract link URLs from HTML content
 	 *
-	 * @access	public
-	 * @param	string	the HTML
-	 * @param	boolean	remove duplicate URLs?
+	 * @param	string	$html    The HTML [Optional]
+	 * @param	boolean	$unique  Remove duplicate URLs? [Optional]
+	 *
 	 * @return	array
 	 */
 	public static function get_urls($html, $unique = FALSE)
@@ -894,8 +906,7 @@ class Text {
 	/**
 	 * Standardize newlines
 	 *
-	 * @access	public
-	 * @param	string	the value
+	 * @param	string	$value  The value
 	 * @return	string
 	 */
 	public static function standardize($value)
@@ -1027,7 +1038,7 @@ class Text {
 	 *
 	 * @link http://api.drupal.org/api/drupal/modules--filter--filter.module/function/_filter_autop
 	 *
-	 * @param   string   subject
+	 * @param   string  $text  subject
 	 * @return  string
 	 */
 	public static function autop($text, $format, $filter)
