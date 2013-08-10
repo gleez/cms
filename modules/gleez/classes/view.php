@@ -4,25 +4,47 @@
  * Variables can be assigned with the view object and referenced locally within
  * the view.
  *
- * @package    Kohana
- * @category   Base
+ * @package    Gleez\Base
+ * @author     Gleez Team
  * @author     Kohana Team
  * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license Gleez CMS License
  * @license    http://kohanaframework.org/license
  */
-class Kohana_View {
+class View {
 
-	// Array of global variables
+	/**
+	 * Array of global variables
+	 * @var array
+	 */
 	protected static $_global_data = array();
 
 	/**
-	 * Returns a new View object. If you do not define the "file" parameter,
-	 * you must call [View::set_filename].
+	 * View filename
+	 * @var string
+	 */
+	protected $_file;
+
+	/**
+	 * Array of local variables
+	 * @var array
+	 */
+	protected $_data = array();
+
+	/**
+	 * Returns a new View object
 	 *
-	 *     $view = View::factory($file);
+	 * If you do not define the "file" parameter, you must call [View::set_filename].
 	 *
-	 * @param   string  $file   view filename
-	 * @param   array   $data   array of values
+	 * Example:
+	 * ~~~
+	 * $view = View::factory($file);
+	 * ~~~
+	 *
+	 * @param   string  $file  View filename [Optional]
+	 * @param   array   $data  Array of values [Optional]
+	 *
 	 * @return  View
 	 */
 	public static function factory($file = NULL, array $data = NULL)
@@ -31,20 +53,56 @@ class Kohana_View {
 	}
 
 	/**
-	 * Captures the output that is generated when a view is included.
-	 * The view data will be extracted to make local variables. This method
-	 * is static to prevent object scope resolution.
+	 * Sets the initial view filename and local data
 	 *
-	 *     $output = View::capture($file, $data);
+	 * Views should almost always only be created using [View::factory].
 	 *
-	 * @param   string  $kohana_view_filename   filename
-	 * @param   array   $kohana_view_data       variables
+	 * Example:
+	 * ~~~
+	 * $view = new View($file);
+	 * ~~~
+	 *
+	 * @param   string  $file  View filename [Optional]
+	 * @param   array   $data  Array of values [Optional]
+	 *
+	 * @uses    View::set_filename
+	 */
+	public function __construct($file = NULL, array $data = NULL)
+	{
+		if ( ! is_null($file))
+		{
+			$this->set_filename($file);
+		}
+
+		if ( ! is_null($data))
+		{
+			// Add the values to the current data
+			$this->_data = $data + $this->_data;
+		}
+	}
+
+	/**
+	 * Captures the output that is generated when a view is included
+	 *
+	 * The view data will be extracted to make local variables.
+	 * This method is static to prevent object scope resolution.
+	 *
+	 * Example:
+	 * ~~~
+	 * $output = View::capture($file, $data);
+	 * ~~~
+	 *
+	 * @param   string $view_filename  Filename
+	 * @param   array $view_data       Variables
+	 *
+	 * @throws  Exception
+	 *
 	 * @return  string
 	 */
-	protected static function capture($kohana_view_filename, array $kohana_view_data)
+	protected static function capture($view_filename, array $view_data)
 	{
 		// Import the view variables to local namespace
-		extract($kohana_view_data, EXTR_SKIP);
+		extract($view_data, EXTR_SKIP);
 
 		if (View::$_global_data)
 		{
@@ -58,7 +116,7 @@ class Kohana_View {
 		try
 		{
 			// Load the view within the current scope
-			include $kohana_view_filename;
+			include $view_filename;
 		}
 		catch (Exception $e)
 		{
@@ -77,11 +135,13 @@ class Kohana_View {
 	 * Sets a global variable, similar to [View::set], except that the
 	 * variable will be accessible to all views.
 	 *
-	 *     View::set_global($name, $value);
+	 * Example:
+	 * ~~~
+	 * View::set_global($name, $value);
+	 * ~~~
 	 *
-	 * @param   string  $key    variable name or an array of variables
-	 * @param   mixed   $value  value
-	 * @return  void
+	 * @param   string  $key    Variable name or an array of variables
+	 * @param   mixed   $value  Value [Optional]
 	 */
 	public static function set_global($key, $value = NULL)
 	{
@@ -102,59 +162,36 @@ class Kohana_View {
 	 * Assigns a global variable by reference, similar to [View::bind], except
 	 * that the variable will be accessible to all views.
 	 *
-	 *     View::bind_global($key, $value);
+	 * Example:
+	 * ~~~
+	 * View::bind_global($key, $value);
+	 * ~~~
 	 *
 	 * @param   string  $key    variable name
 	 * @param   mixed   $value  referenced variable
-	 * @return  void
 	 */
 	public static function bind_global($key, & $value)
 	{
 		View::$_global_data[$key] =& $value;
 	}
 
-	// View filename
-	protected $_file;
-
-	// Array of local variables
-	protected $_data = array();
-
 	/**
-	 * Sets the initial view filename and local data. Views should almost
-	 * always only be created using [View::factory].
+	 * Magic method, searches for the given variable and returns its value
 	 *
-	 *     $view = new View($file);
-	 *
-	 * @param   string  $file   view filename
-	 * @param   array   $data   array of values
-	 * @return  void
-	 * @uses    View::set_filename
-	 */
-	public function __construct($file = NULL, array $data = NULL)
-	{
-		if ($file !== NULL)
-		{
-			$this->set_filename($file);
-		}
-
-		if ($data !== NULL)
-		{
-			// Add the values to the current data
-			$this->_data = $data + $this->_data;
-		}
-	}
-
-	/**
-	 * Magic method, searches for the given variable and returns its value.
 	 * Local variables will be returned before global variables.
 	 *
-	 *     $value = $view->foo;
+	 * Example:
+	 * ~~~
+	 * $value = $view->foo;
+	 * ~~~
 	 *
-	 * [!!] If the variable has not yet been set, an exception will be thrown.
+	 * [!!] Note: If the variable has not yet been set, an exception will be thrown.
 	 *
-	 * @param   string  $key    variable name
+	 * @param   string  $key  Variable name
+	 *
 	 * @return  mixed
-	 * @throws  Kohana_Exception
+	 *
+	 * @throws  Gleez_Exception
 	 */
 	public function & __get($key)
 	{
@@ -168,19 +205,22 @@ class Kohana_View {
 		}
 		else
 		{
-			throw new Kohana_Exception('View variable is not set: :var',
-				array(':var' => $key));
+			throw new Gleez_Exception('View variable is not set: :var',
+				array(':var' => $key)
+			);
 		}
 	}
 
 	/**
-	 * Magic method, calls [View::set] with the same parameters.
+	 * Magic method, calls [View::set] with the same parameters
 	 *
-	 *     $view->foo = 'something';
+	 * Example:
+	 * ~~~
+	 * $view->foo = 'something';
+	 * ~~~
 	 *
-	 * @param   string  $key    variable name
-	 * @param   mixed   $value  value
-	 * @return  void
+	 * @param  string  $key    Variable name
+	 * @param  mixed   $value  Value
 	 */
 	public function __set($key, $value)
 	{
@@ -188,13 +228,16 @@ class Kohana_View {
 	}
 
 	/**
-	 * Magic method, determines if a variable is set.
+	 * Magic method, determines if a variable is set
 	 *
-	 *     isset($view->foo);
+	 * Example:
+	 * ~~~
+	 * isset($view->foo);
+	 * ~~~
 	 *
-	 * [!!] `NULL` variables are not considered to be set by [isset](http://php.net/isset).
+	 * [!!] Note: `NULL` variables are not considered to be set by [isset](http://php.net/isset).
 	 *
-	 * @param   string  $key    variable name
+	 * @param   string  $key  Variable name
 	 * @return  boolean
 	 */
 	public function __isset($key)
@@ -203,12 +246,14 @@ class Kohana_View {
 	}
 
 	/**
-	 * Magic method, unsets a given variable.
+	 * Magic method, unsets a given variable
 	 *
-	 *     unset($view->foo);
+	 * Example:
+	 * ~~~
+	 * unset($view->foo);
+	 * ~~~
 	 *
-	 * @param   string  $key    variable name
-	 * @return  void
+	 * @param  string  $key  Variable name
 	 */
 	public function __unset($key)
 	{
@@ -245,12 +290,17 @@ class Kohana_View {
 	}
 
 	/**
-	 * Sets the view filename.
+	 * Sets the view filename
 	 *
-	 *     $view->set_filename($file);
+	 * Example:
+	 * ~~~
+	 * $view->set_filename($file);
+	 * ~~~
 	 *
-	 * @param   string  $file   view filename
+	 * @param   string  $file  View filename
+	 *
 	 * @return  View
+	 *
 	 * @throws  View_Exception
 	 */
 	public function set_filename($file)
@@ -269,19 +319,23 @@ class Kohana_View {
 	}
 
 	/**
-	 * Assigns a variable by name. Assigned values will be available as a
-	 * variable within the view file:
+	 * Assigns a variable by name
 	 *
-	 *     // This value can be accessed as $foo within the view
-	 *     $view->set('foo', 'my value');
+	 * Assigned values will be available as a variable within the view file:
+	 * ~~~
+	 * // This value can be accessed as $foo within the view
+	 * $view->set('foo', 'my value');
+	 * ~~~
 	 *
 	 * You can also use an array to set several values at once:
+	 * ~~~
+	 * // Create the values $food and $beverage in the view
+	 * $view->set(array('food' => 'bread', 'beverage' => 'water'));
+	 * ~~~
 	 *
-	 *     // Create the values $food and $beverage in the view
-	 *     $view->set(array('food' => 'bread', 'beverage' => 'water'));
+	 * @param   string  $key    Variable name or an array of variables
+	 * @param   mixed   $value  Value [Optional]
 	 *
-	 * @param   string  $key    variable name or an array of variables
-	 * @param   mixed   $value  value
 	 * @return  $this
 	 */
 	public function set($key, $value = NULL)
@@ -302,42 +356,54 @@ class Kohana_View {
 	}
 
 	/**
-	 * Assigns a value by reference. The benefit of binding is that values can
-	 * be altered without re-setting them. It is also possible to bind variables
-	 * before they have values. Assigned values will be available as a
-	 * variable within the view file:
+	 * Assigns a value by reference
 	 *
-	 *     // This reference can be accessed as $ref within the view
-	 *     $view->bind('ref', $bar);
+	 * The benefit of binding is that values can be altered without re-setting them.
+	 * It is also possible to bind variables before they have values.
 	 *
-	 * @param   string  $key    variable name
-	 * @param   mixed   $value  referenced variable
+	 * Assigned values will be available as a variable within the view file:
+	 * ~~~
+	 * // This reference can be accessed as $ref within the view
+	 * $view->bind('ref', $bar);
+	 * ~~~
+	 *
+	 * @param   string  $key    Variable name
+	 * @param   mixed   $value  Referenced variable
+	 *
 	 * @return  $this
 	 */
 	public function bind($key, & $value)
 	{
-		$this->_data[$key] =& $value;
+		$this->_data[$key] = & $value;
 
 		return $this;
 	}
 
 	/**
-	 * Renders the view object to a string. Global and local data are merged
-	 * and extracted to create local variables within the view file.
+	 * Renders the view object to a string
 	 *
-	 *     $output = $view->render();
+	 * Global and local data are merged and extracted to create
+	 * local variables within the view file.
 	 *
-	 * [!!] Global variables with the same key name as local variables will be
-	 * overwritten by the local variable.
+	 * Example:
+	 * ~~~
+	 * $output = $view->render();
+	 * ~~~
 	 *
-	 * @param   string  $file   view filename
+	 * [!!] Note: Global variables with the same key name as local variables will be
+	 *      overwritten by the local variable.
+	 *
+	 * @param   string  $file  View filename [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @throws  View_Exception
+	 *
 	 * @uses    View::capture
 	 */
 	public function render($file = NULL)
 	{
-		if ($file !== NULL)
+		if ( ! is_null($file))
 		{
 			$this->set_filename($file);
 		}
@@ -350,5 +416,4 @@ class Kohana_View {
 		// Combine local and global data and capture the output
 		return View::capture($this->_file, $this->_data);
 	}
-
 }
