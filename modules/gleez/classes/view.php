@@ -216,10 +216,13 @@ class Kohana_View {
 	}
 
 	/**
-	 * Magic method, returns the output of [View::render].
+	 * Magic method, returns the output of [View::render]
 	 *
 	 * @return  string
+	 *
 	 * @uses    View::render
+	 * @uses    Gleez_Exception::_handler
+	 * @uses    Response::body
 	 */
 	public function __toString()
 	{
@@ -229,10 +232,15 @@ class Kohana_View {
 		}
 		catch (Exception $e)
 		{
-			// Display the exception message
-			Kohana_Exception::handler($e);
+			/**
+			 * Display the exception message
+			 *
+			 * We use this method here because it's impossible to throw and
+			 * exception from __toString().
+			 */
+			$error_response = Gleez_Exception::_handler($e);
 
-			return '';
+			return $error_response->body();
 		}
 	}
 
@@ -343,4 +351,4 @@ class Kohana_View {
 		return View::capture($this->_file, $this->_data);
 	}
 
-} // End View
+}
