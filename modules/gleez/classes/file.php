@@ -3,9 +3,9 @@
  * Gleez File Class
  *
  * @package    Gleez\SPL
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @author     Kohana Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2007-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -116,7 +116,7 @@ class File extends SplFileInfo {
 	{
 		if ( ! is_null($name))
 		{
-			$this->_path = $name;
+			$this->_name = $name;
 		}
 
 		return $this->_name;
@@ -396,13 +396,29 @@ class File extends SplFileInfo {
 	 *
 	 * @since   1.0.1
 	 *
-	 * @param   string  $name  Filename
+	 * @param   string   $name           Filename [Optional]
+	 * @param   integer  $length         Length of filename to return [Optional]
+	 * @param   boolean  $remove_spaces  Remove spaces from file name [Optional]
+	 * @param   string   $replacement    Replacement for spaces [Optional]
 	 *
 	 * @return  string
+	 *
+	 * @uses    Text::random
+	 * @uses    UTF8::strtolower
 	 */
-	public static function getUnique($name)
+	public static function getUnique($name = NULL, $length = 20, $remove_spaces = TRUE, $replacement = '_')
 	{
-		return uniqid().preg_replace('/\s+/u', '-', $name);
+		if (is_null($name))
+		{
+			return UTF8::strtolower(uniqid().Text::random('alnum', (int)$length));
+		}
+		else
+		{
+			$retval = uniqid().($remove_spaces ? preg_replace('/\s+/u', $replacement, $name) : $name);
+			$retval = is_null($length) ? $retval : substr($retval, (int)$length);
+
+			return $retval;
+		}
 	}
 
 	/**
