@@ -396,15 +396,17 @@ class File extends SplFileInfo {
 	 *
 	 * @since   1.0.1
 	 *
-	 * @param   string   $name    Filename [Optional]
-	 * @param   integer  $length  Length of filename to return [Optional]
+	 * @param   string   $name           Filename [Optional]
+	 * @param   integer  $length         Length of filename to return [Optional]
+	 * @param   boolean  $remove_spaces  Remove spaces from file name [Optional]
+	 * @param   string   $replacement    Replacement for spaces [Optional]
 	 *
 	 * @return  string
 	 *
 	 * @uses    Text::random
 	 * @uses    UTF8::strtolower
 	 */
-	public static function getUnique($name = NULL, $length = 20)
+	public static function getUnique($name = NULL, $length = 20, $remove_spaces = TRUE, $replacement = '_')
 	{
 		if (is_null($name))
 		{
@@ -412,7 +414,7 @@ class File extends SplFileInfo {
 		}
 		else
 		{
-			$retval = uniqid().preg_replace('/\s+/u', '-', $name);
+			$retval = uniqid().($remove_spaces ? preg_replace('/\s+/u', $replacement, $name) : $name);
 			$retval = is_null($length) ? $retval : substr($retval, (int)$length);
 
 			return $retval;
