@@ -50,7 +50,7 @@ class Post extends ORM_Versioned {
 	);
 
 	/**
-	 * Auto fill create and update columns
+	 * Auto fill updated columns
 	 */
 	protected $_updated_column = array(
 		'column' => 'updated',
