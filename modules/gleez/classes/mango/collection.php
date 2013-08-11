@@ -47,7 +47,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Gleez Team
- * @version    0.5.0
+ * @version    0.5.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -968,7 +968,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($name != 'batchSize' AND $name != 'timeout' AND $this->is_iterating())
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		if ($name == 'query')
@@ -1014,7 +1014,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($this->is_iterating())
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		unset($this->_options[$name]);
@@ -1196,7 +1196,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($this->_cursor)
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		if ( ! isset($this->_options['sort']))
@@ -1211,32 +1211,21 @@ class Mango_Collection implements Iterator, Countable {
 		}
 
 		// Translate field aliases
-		foreach ($fields as $field => $direction)
+		foreach ($fields as $field => $dir)
 		{
-			if (is_string($direction))
+			if (is_string($dir))
 			{
-				if (strtolower($direction) == 'asc' || $direction == '1')
+				if (strtolower($dir) == 'asc' || $dir == '1')
 				{
-					$direction = self::ASC;
+					$dir = self::ASC;
 				}
 				else
 				{
-					$direction = self::DESC;
-				}
-			}
-			if (is_integer($direction))
-			{
-				if ($direction >= 1)
-				{
-					$direction = self::ASC;
-				}
-				else
-				{
-					$direction = self::DESC;
+					$dir = self::DESC;
 				}
 			}
 
-			$this->_options['sort'][$this->getFieldName($field)] = $direction;
+			$this->_options['sort'][$this->getFieldName($field)] = $dir;
 		}
 
 		return $this;
@@ -1253,7 +1242,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function sortAsc($field)
 	{
-		$this->sort($field, self::ASC);
+		return $this->sort($field, self::ASC);
 	}
 
 	/**
@@ -1297,6 +1286,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @uses    Profiler::start
 	 * @uses    Profiler::stop
+	 * @uses    Mango::$profiling
 	 */
 	public function rewind()
 	{
