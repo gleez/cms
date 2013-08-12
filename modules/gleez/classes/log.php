@@ -1,14 +1,14 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Message logging with observer-based log writing.
+ * Message logging with observer-based log writing
  *
  * [!!] This class does not support extensions, only additional writers.
  * [!!] __NOTE__: For log messages levels Windows users see PHP Bug #18090
  *
  * @package    Gleez\Logging
  * @author     Kohana Team
- * @author     Sergey Yakovlev - Gleez
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    2.0.0
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -16,28 +16,28 @@
  */
 class Log {
 
-	/* System is unusable. 0 */
+	/** @type integer EMERGENCY System is unusable. Code: 0 */
 	const EMERGENCY = LOG_EMERG;
 
-	/* Action must be taken immediately. 1 */
+	/** @type integer ALERT Action must be taken immediately. Code: 1 */
 	const ALERT = LOG_ALERT;
 
-	/* Critical conditions. 2 */
+	/** @type integer CRITICAL Critical conditions. Code: 2 */
 	const CRITICAL = LOG_CRIT;
 
-	/* Error conditions. 3 */
+	/** @type integer ERROR Error conditions. Code: 3 */
 	const ERROR = LOG_ERR;
 
-	/* Warning conditions. 4 */
+	/** @type integer Warning conditions. Code: 4 */
 	const WARNING = LOG_WARNING;
 
-	/* Normal, but significant, condition. 5 */
+	/** @type integer Normal, but significant, condition. Code: 5 */
 	const NOTICE = LOG_NOTICE;
 
-	/* Informational message. 6 */
+	/** @type integer Informational message. Code: 6 */
 	const INFO = LOG_INFO;
 
-	/* Debug-level message. 7 */
+	/** @type integer Debug-level message. Code: 7 */
 	const DEBUG = LOG_DEBUG;
 
 	/**
@@ -56,21 +56,21 @@ class Log {
 	 * List of added messages
 	 * @var array
 	 */
-	protected $_messages = array();
+	protected static $_messages = array();
 
 	/**
 	 * List of log writers
 	 * @var array
 	 */
-	protected $_writers = array();
+	protected static $_writers = array();
 
 	/**
 	 * Get the singleton instance of this class and enable writing at shutdown
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $log = Log::instance();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log = Log::instance();
+	 * ~~~
 	 *
 	 * @return  Log
 	 */
@@ -89,18 +89,44 @@ class Log {
 	}
 
 	/**
+	 * Catch and recall helper for logging at desired log level
+	 *
+	 * Example:
+	 * ~~~
+	 * Log::error('some error log message');
+	 * Log::info('some info log message');
+	 * ~~~
+	 *
+	 * @since   2.0.0
+	 *
+	 * @param   string  $name  Method name
+	 * @param   array   $args  Method arguments
+	 */
+	public static function __callStatic($name, $args)
+	{
+		// Note: value of $name is case sensitive.
+		$level = constant('Log::'.strtoupper($name));
+
+		if (defined($level))
+		{
+			call_user_func_array(array(Kohana::$log, 'add'), array_merge(array($level), $args));
+		}
+	}
+
+	/**
 	 * Attaches a log writer
 	 *
 	 * Optionally limits the levels of messages that will be written by the writer.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->attach($writer);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->attach($writer);
+	 * ~~~
 	 *
 	 * @param   Log_Writer  $writer     Instance
 	 * @param   array       $levels     Array of messages levels to write OR max level to write [Optional]
 	 * @param   integer     $min_level  Min level to write if `$levels` is not an array [Optional]
+	 *
 	 * @return  Log
 	 */
 	public function attach(Log_Writer $writer, $levels = array(), $min_level = 0)
@@ -110,12 +136,12 @@ class Log {
 			$levels = range($min_level, $levels);
 		}
 
-		$this->_writers["{$writer}"] = array(
+		self::$_writers["{$writer}"] = array(
 			'object' => $writer,
 			'levels' => $levels
 		);
 
-		return $this;
+		return Log::$_instance;
 	}
 
 	/**
@@ -123,20 +149,21 @@ class Log {
 	 *
 	 * The same writer object must be used.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->detach($writer);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->detach($writer);
+	 * ~~~
 	 *
 	 * @param   Log_Writer  $writer  Instance
+	 *
 	 * @return  Log
 	 */
 	public function detach(Log_Writer $writer)
 	{
 		// Remove the writer
-		unset($this->_writers["{$writer}"]);
+		unset(self::$_writers["{$writer}"]);
 
-		return $this;
+		return Log::$_instance;
 	}
 
 	/**
@@ -145,20 +172,30 @@ class Log {
 	 * Replacement values must be passed in to be
 	 * replaced using [strtr](http://php.net/strtr).
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $log->add(Log::ERROR, 'Could not locate user: :user', array(':user' => $user->name));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->add(Log::ERROR, 'Could not locate user: :user', array(':user' => $user->name));
+	 * ~~~
 	 *
 	 * @param   string  $level       Level of message
 	 * @param   string  $message     Message body
 	 * @param   array   $values      Values to replace in the message [Optional]
 	 * @param   array   $additional  Additional custom parameters to supply to the log writer [Optional]
+	 *
 	 * @return  Log
 	 *
 	 * @uses    Date::formatted_time
+	 * @uses    Date::$timestamp_format
+	 * @uses    Date::$timezone
+	 * @uses    Request::current
+	 * @uses    Request::initial
+	 * @uses    Request::uri
+	 * @uses    Request::detect_uri
+	 * @uses    Request::$client_ip
+	 * @uses    Request::$user_agent
+	 * @uses    Text::plain
 	 */
-	public function add($level, $message, array $values = NULL, array $additional = NULL)
+	public static function add($level, $message, array $values = NULL, array $additional = NULL)
 	{
 		if ($values)
 		{
@@ -192,17 +229,17 @@ class Log {
 		$request = Request::current();
 		$uri = '';
 		
-		if($request instanceof Request)
+		if ($request instanceof Request)
 		{
 			$uri = Request::initial()->uri();
 		}
-		elseif(!Kohana::$is_cli)
+		elseif ( ! Kohana::$is_cli)
 		{
 			$uri = Request::detect_uri();
 		}
 		
 		// Create a new message and timestamp it
-		$this->_messages[] = array
+		self::$_messages[] = array
 		(
 			'time'       => Date::formatted_time('now', Date::$timestamp_format, Date::$timezone),
 			'level'      => $level,
@@ -222,35 +259,35 @@ class Log {
 		if (Log::$write_on_add)
 		{
 			// Write logs as they are added
-			$this->write();
+			self::write();
 		}
 
-		return $this;
+		return Log::$_instance;
 	}
 
 	/**
 	 * Write and clear all of the messages
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->write();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->write();
+	 * ~~~
 	 */
-	public function write()
+	public static function write()
 	{
-		if (empty($this->_messages))
+		if (empty(self::$_messages))
 		{
 			// There is nothing to write, move along
 			return;
 		}
 
 		// Import all messages locally
-		$messages = $this->_messages;
+		$messages = self::$_messages;
 
 		// Reset the messages array
-		$this->_messages = array();
+		self::$_messages = array();
 
-		foreach ($this->_writers as $writer)
+		foreach (self::$_writers as $writer)
 		{
 			if (empty($writer['levels']))
 			{
