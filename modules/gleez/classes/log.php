@@ -89,6 +89,31 @@ class Log {
 	}
 
 	/**
+	 * Catch and recall helper for logging at desired log level
+	 *
+	 * Example:
+	 * ~~~
+	 * Log::error('some error log message');
+	 * Log::info('some info log message');
+	 * ~~~
+	 *
+	 * @since   2.0.0
+	 *
+	 * @param   string  $name  Method name
+	 * @param   array   $args  Method arguments
+	 */
+	public static function __callStatic($name, $args)
+	{
+		// Note: value of $name is case sensitive.
+		$level = constant('Log::'.strtoupper($name));
+
+		if (defined($level))
+		{
+			call_user_func_array(array(Kohana::$log, 'add'), array_merge(array($level), $args));
+		}
+	}
+
+	/**
 	 * Attaches a log writer
 	 *
 	 * Optionally limits the levels of messages that will be written by the writer.
