@@ -2,42 +2,52 @@
 /**
  * Message logging with observer-based log writing.
  *
- * [!!] This class does not support extensions, only additional writers.
+ * This class does not support extensions, only additional writers.
+ *
  * [!!] __NOTE__: For log messages levels Windows users see PHP Bug #18090
  *
  * @package    Gleez\Logging
  * @author     Kohana Team
- * @author     Sergey Yakovlev - Gleez
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    2.0.0
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  * @license    http://kohanaframework.org/license
+ *
+ * @method     static Log emergency(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log alert(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log critical(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log error(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log warning(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log notice(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log info(string $message, array $values = NULL, array $additional = NULL)
+ * @method     static Log debug(string $message, array $values = NULL, array $additional = NULL)
  */
 class Log {
 
-	/* System is unusable. 0 */
+	/** @type integer EMERGENCY System is unusable. Code: 0 */
 	const EMERGENCY = LOG_EMERG;
 
-	/* Action must be taken immediately. 1 */
+	/** @type integer ALERT Action must be taken immediately. Code: 1 */
 	const ALERT = LOG_ALERT;
 
-	/* Critical conditions. 2 */
+	/** @type integer CRITICAL Critical conditions. Code: 2 */
 	const CRITICAL = LOG_CRIT;
 
-	/* Error conditions. 3 */
+	/** @type integer ERROR Error conditions. Code: 3 */
 	const ERROR = LOG_ERR;
 
-	/* Warning conditions. 4 */
+	/** @type integer Warning conditions. Code: 4 */
 	const WARNING = LOG_WARNING;
 
-	/* Normal, but significant, condition. 5 */
+	/** @type integer Normal, but significant, condition. Code: 5 */
 	const NOTICE = LOG_NOTICE;
 
-	/* Informational message. 6 */
+	/** @type integer Informational message. Code: 6 */
 	const INFO = LOG_INFO;
 
-	/* Debug-level message. 7 */
+	/** @type integer Debug-level message. Code: 7 */
 	const DEBUG = LOG_DEBUG;
 
 	/**
@@ -67,10 +77,10 @@ class Log {
 	/**
 	 * Get the singleton instance of this class and enable writing at shutdown
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $log = Log::instance();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log = Log::instance();
+	 * ~~~
 	 *
 	 * @return  Log
 	 */
@@ -89,14 +99,43 @@ class Log {
 	}
 
 	/**
+	 * Catch and recall helper for logging at desired log level
+	 *
+	 * Example:
+	 * ~~~
+	 * Log::error('some error log message');
+	 * Log::info('some info log message');
+	 * ~~~
+	 *
+	 * @since   2.0.0
+	 *
+	 * @param   string  $name  Method name
+	 * @param   array   $args  Method arguments
+	 *
+	 * @return  boolean  FALSE if log level not found
+	 * @return  Log
+	 */
+	public static function __callStatic($name, $args)
+	{
+		$level = constant('Log::'.strtoupper($name));
+
+		if (defined('Log::'.strtoupper($name)))
+		{
+			return call_user_func_array(array(Log::$_instance, 'add'), array_merge(array($level), $args));
+		}
+
+		return FALSE;
+	}
+
+	/**
 	 * Attaches a log writer
 	 *
 	 * Optionally limits the levels of messages that will be written by the writer.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->attach($writer);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->attach($writer);
+	 * ~~~
 	 *
 	 * @param   Log_Writer  $writer     Instance
 	 * @param   array       $levels     Array of messages levels to write OR max level to write [Optional]
@@ -123,10 +162,10 @@ class Log {
 	 *
 	 * The same writer object must be used.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->detach($writer);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->detach($writer);
+	 * ~~~
 	 *
 	 * @param   Log_Writer  $writer  Instance
 	 * @return  Log
@@ -145,10 +184,10 @@ class Log {
 	 * Replacement values must be passed in to be
 	 * replaced using [strtr](http://php.net/strtr).
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $log->add(Log::ERROR, 'Could not locate user: :user', array(':user' => $user->name));
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 * $log->add(Log::ERROR, 'Could not locate user: :user', array(':user' => $user->name));
+	 * ~~~
 	 *
 	 * @param   string  $level       Level of message
 	 * @param   string  $message     Message body
@@ -157,6 +196,15 @@ class Log {
 	 * @return  Log
 	 *
 	 * @uses    Date::formatted_time
+	 * @uses    Date::$timestamp_format
+	 * @uses    Date::$timezone
+	 * @uses    Request::current
+	 * @uses    Request::initial
+	 * @uses    Request::uri
+	 * @uses    Request::detect_uri
+	 * @uses    Request::$client_ip
+	 * @uses    Request::$user_agent
+	 * @uses    Text::plain
 	 */
 	public function add($level, $message, array $values = NULL, array $additional = NULL)
 	{
@@ -231,10 +279,10 @@ class Log {
 	/**
 	 * Write and clear all of the messages
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $log->write();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $log->write();
+	 * ~~
 	 */
 	public function write()
 	{
