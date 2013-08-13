@@ -1,7 +1,9 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
- * Wrapper for configuration arrays. Multiple configuration sources can be
- * attached to allow loading configuration from files, database, etc.
+ * Wrapper for configuration arrays
+ *
+ * Multiple configuration sources can be attached to allow loading configuration
+ * from files, database, etc.
  *
  * Configuration directives cascade across config sources in the same way that
  * files cascade across the filesystem.
@@ -10,32 +12,35 @@
  * below them.
  *
  * @package    Gleez\Configuration
- * @version    2.0
- * @author     Sandeep Sangamreddi - Gleez
+ * @version    2.0.0
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez_Config {
 
 	/**
-	 * @var array $_items config array
+	 * Config array
+	 * @var array
 	 */
 	protected static $_items = array();
 
 	/**
-	 * @var array $_sources configuration sources
+	 * Configuration sources
+	 * @var array
 	 */
 	protected static $_sources = array();
 
 	/**
-	 * @var config instance
+	 * Config instance
+	 * @var Config
 	 */
 	protected static $_instance;
 
 	/**
 	 * Singleton pattern
 	 *
-	 * @return Config
+	 * @return  Config
 	 */
 	public static function instance()
 	{
@@ -48,16 +53,25 @@ class Gleez_Config {
 	}
 
 	/**
-	 * Attach a configuration source. By default, the source will be added as
-	 * the first used source. However, if the source should be used only when
-	 * all other sources fail, use `FALSE` for the second parameter.
+	 * Attach a configuration source
 	 *
-	 *     $config->attach($source);        // Try first
-	 *     $config->attach($source, FALSE); // Try last
+	 * By default, the source will be added as the first used source.
+	 * However, if the source should be used only when all other sources fail,
+	 * use `FALSE` for the second parameter.
 	 *
-	 * @param   Config_Source    $source instance
-	 * @param   boolean          $first  add the source as the first used object
-	 * @return  $this
+	 * Example:
+	 * ~~~
+	 * // Try first
+	 * $config->attach($source);
+	 *
+	 * // Try last
+	 * $config->attach($source, FALSE);
+	 * ~~~
+	 *
+	 * @param   Config_Source  $source  Instance
+	 * @param   boolean        $first   Add the source as the first used object [Optional]
+	 *
+	 * @return  Config
 	 */
 	public function attach(Config_Source $source, $first = TRUE)
 	{
@@ -76,12 +90,16 @@ class Gleez_Config {
 	}
 
 	/**
-	 * Detach a configuration source.
+	 * Detach a configuration source
 	 *
-	 *     $config->detach($source);
+	 * Example:
+	 * ~~~
+	 * $config->detach($source);
+	 * ~~~
 	 *
-	 * @param   Config_Source    $source instance
-	 * @return  $this
+	 * @param   Config_Source  $source  Instance
+	 *
+	 * @return  Config
 	 */
 	public function detach(Config_Source $source)
 	{
@@ -95,16 +113,23 @@ class Gleez_Config {
 	}
 
 	/**
-	 * Load a configuration group. Searches all the config sources, merging all the
-	 * directives found into a single config group.  Any changes made to the config
-	 * in this group will be mirrored across all writable sources.
+	 * Load a configuration group
 	 *
-	 *     $array = Config::load($name);
+	 * Searches all the config sources, merging all the directives found
+	 * into a single config group. Any changes made to the config in this
+	 * group will be mirrored across all writable sources.
+	 *
+	 * Example:
+	 * ~~~
+	 * $array = Config::load($name);
+	 * ~~~
 	 *
 	 * See [Gleez_Config] for more info
 	 *
-	 * @param   string  $group  configuration group name
-	 * @return  object  Gleez_Config
+	 * @param   string  $group  Configuration group name
+	 *
+	 * @return  object Config
+	 *
 	 * @throws  Gleez_Exception
 	 */
 	public static function load($group)
@@ -116,12 +141,12 @@ class Gleez_Config {
 
 		if (empty($group))
 		{
-			throw new Gleez_Exception("Need to specify a config group");
+			throw new Gleez_Exception('Need to specify a config group');
 		}
 
 		if ( ! is_string($group))
 		{
-			throw new Gleez_Exception("Config group must be a string");
+			throw new Gleez_Exception('Config group must be a string');
 		}
 
 		if (strpos($group, '.') !== FALSE)
@@ -160,7 +185,7 @@ class Gleez_Config {
 			Config::$_items[$group] = array();
 		}
 
-		Config::$_items[$group] = new Config_group($config, $group);
+		Config::$_items[$group] = new Config_Group($config, $group);
 
 		if (isset($path))
 		{
@@ -173,11 +198,12 @@ class Gleez_Config {
 	/**
 	 * Returns a (dot notated) config setting
 	 *
-	 * @param   string   $item      name of the config item, can be dot notated
-	 * @param   mixed    $default   the return value if the item isn't found
-	 * @return  mixed               the config setting or default if not found
+	 * @param   string   $item      Name of the config item, can be dot notated
+	 * @param   mixed    $default   The return value if the item isn't found [Optional]
+	 *
+	 * @return  mixed               The config setting or default if not found
 	 */
-	public static function get($item, $default = null)
+	public static function get($item, $default = NULL)
 	{
 		if (strpos($item, '.') !== FALSE)
 		{
@@ -208,14 +234,17 @@ class Gleez_Config {
 	/**
 	 * To store changes made to configuration
 	 *
-	 * @param string    $group  Group name
-	 * @param string    $key    Variable name
-	 * @param mixed     $value  The new value
-	 * @return boolean
+	 * @param   string  $group  Group name
+	 * @param   string  $key    Variable name
+	 * @param   mixed   $value  The new value
+	 *
+	 * @return  boolean
 	 */
 	public static function set($group, $key, $value)
 	{
 		$status = TRUE;
+
+		/** @var $source \Config_Source */
 		foreach (self::$_sources as $source)
 		{
 			// Copy each value in the config
@@ -228,13 +257,16 @@ class Gleez_Config {
 	/**
 	 * Deletes a config item
 	 *
-	 * @param    string       config group
-	 * @param    string       config key
-	 * @return boolean
+	 * @param   string  Config group
+	 * @param   string  Config key
+	 *
+	 * @return  boolean
 	 */
 	public static function delete($group, $key)
 	{
 		$status = TRUE;
+
+		/** @var $source \Config_Source */
 		foreach (self::$_sources as $source)
 		{
 			$status = $source->delete($group, $key);
@@ -267,6 +299,7 @@ class Gleez_Config {
 		foreach (self::$_sources as $source)
 		{
 			// Copy each value in the config
+			/** @var $source \Config_Source */
 			$status = $source->write($group, $item, $config[$item]);
 		}
 
