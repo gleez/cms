@@ -87,9 +87,13 @@ class Log_Mango extends Log_Writer {
 			$exception = isset($message['additional']['exception']) ? $message['additional']['exception'] : NULL;
 			$message['level'] = $this->_log_levels[$message['level']];
 
-			unset($message['additional'], $message['trace'], $message['time']);
+			unset($message['additional'], $message['trace']);
 
+			// FIX: $message should consist of an array of strings
 			$message = array_filter($message, 'is_string');
+
+			// See MongoDate::__toString
+			$message['time'] = new MongoDate(strtotime($message['time']));
 
 			if ($exception)
 			{
