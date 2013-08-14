@@ -7,7 +7,7 @@
  * [!!] Note: by design, this class does not do any permission checking.
  *
  * @package    Gleez\HTML
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
  * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -247,10 +247,9 @@ class Gleez_Filter {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Filter callback :class for :filter', array(
-						':class' => $e->getMessage(),
-						'filter' => $filter['name']
-				));
+				Log::error('Filter callback response :msg for filter: :filter',
+					array(':msg' => $e->getMessage(), 'filter' => $filter['name'])
+				);
 
 				return $text;
 			}

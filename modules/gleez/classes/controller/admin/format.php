@@ -3,7 +3,8 @@
  * Admin Format Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -35,7 +36,7 @@ class Controller_Admin_Format extends Controller_Admin {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No formats found');
+			Log::info('No formats found.');
 			$this->response->body(View::factory('admin/format/none'));
 
 			return;
@@ -71,8 +72,8 @@ class Controller_Admin_Format extends Controller_Admin {
 
 		if (is_null($format))
 		{
+			Log::error('Attempt to access non-existent format id :id', array(':id' => $id));
 			Message::error(__('Text Format doesn\'t exists!'));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent format id :id', array(':id' => $id));
 
 			$this->request->redirect(Route::get('admin/format')->uri(), 404);
 		}

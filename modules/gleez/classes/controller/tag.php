@@ -1,9 +1,10 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Tag Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -24,6 +25,7 @@ class Controller_Tag extends Template {
 	public function action_list()
 	{
 		// @todo
+		Log::error('Attempt to access disabled feature.');
 	}
 
 	/**
@@ -43,9 +45,9 @@ class Controller_Tag extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', $id);
 
-		if( ! $tag->loaded())
+		if ( ! $tag->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent tag');
+			Log::error('Attempt to access non-existent tag.');
 			throw new HTTP_Exception_404(__('Tag :tag not found!'), array(':tag' => $id));
 		}
 
@@ -58,7 +60,7 @@ class Controller_Tag extends Template {
 
 		$posts = $tag->posts;
 
-		if( ! ACL::check('administer tags') AND ! ACL::check('administer content'))
+		if ( ! ACL::check('administer tags') AND ! ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -67,8 +69,8 @@ class Controller_Tag extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body( View::factory('page/none') );
+			Log::info('No posts found.');
+			$this->response->body(View::factory('page/none'));
 			return;
 		}
 

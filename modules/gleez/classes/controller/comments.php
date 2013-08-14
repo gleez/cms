@@ -3,7 +3,8 @@
  * Comments controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-20133 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -58,7 +59,7 @@ class Controller_Comments extends Controller {
 		// Make sure request is an internal request
 		if ($this->request === Request::initial())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt was made to access comments controller externally');
+			Log::error('Attempt was made to access comments controller externally.');
 			$this->request->redirect('');
 		}
 
@@ -83,7 +84,7 @@ class Controller_Comments extends Controller {
 		// Comment must have a parent
 		if ($id == 0)
 		{
-			Kohana::$log->add(LOG::INFO, 'Attempt to load all public comments without a defined parent');
+			Log::info('Attempt to load all public comments without a defined parent.');
 			return;
 		}
 		else
@@ -141,7 +142,9 @@ class Controller_Comments extends Controller {
 		// If no comments found (bad offset/page)
 		if (count($comments) == 0)
 		{
-			Kohana::$log->add(LOG::INFO, 'No comments found for state='.$state.', page='.$page);
+			Log::info('No comments found for state: :state, page: :page',
+				array(':state' => $state, ':page' => $page)
+			);
 			return;
 		}
 

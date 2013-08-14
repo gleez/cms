@@ -6,7 +6,8 @@
  * Code taken from Gallery3.
  *
  * @package    Gleez\Theme
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
@@ -14,19 +15,31 @@
  */
 class Theme {
 
-	/** @var string The file contains information about theme */
+	/** @type string INFO_FILE Theme info filename */
 	const INFO_FILE = 'theme.info';
 
-	/** @var string Active theme name */
+	/**
+	 * Active theme name
+	 * @var string
+	 */
 	public static $active = 'fluid';
 	
-	/** @var string Site theme name */
+	/**
+	 * Site theme name
+	 * @var string
+	 */
 	public static $site_theme_name = 'fluid';
 
-	/** @var string Admin theme name */
+	/**
+	 * Admin theme name
+	 * @var string
+	 */
 	public static $admin_theme_name = 'fluid';
 
-	/** @var boolean Admin? */
+	/**
+	 * Admin?
+	 * @var boolean
+	 */
 	public static $is_admin = FALSE;
 
 	/**
@@ -77,7 +90,7 @@ class Theme {
 			}
 			else
 			{
-				Kohana::$log->add(LOG::ERROR, 'Missing override site theme: :theme', array(':theme' => $override));
+				Log::error('Missing override site theme: :theme', array(':theme' => $override));
 			}
 		}
 
@@ -88,8 +101,7 @@ class Theme {
 	/**
 	 * Sets active theme if none supplied or uses the supplied one 
 	 *
-	 * @param   string        $theme   Theme name (optional)
-	 * @return  void
+	 * @param  boolean|string  $theme  Theme name [Optional]
 	 */
 	public static function set_theme($theme = FALSE)
 	{

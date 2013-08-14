@@ -5,8 +5,8 @@
  * @link https://github.com/Synchro/PHPMailer
  *
  * @package    Gleez\Email
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.1.1
+ * @author     Gleez Team
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -181,7 +181,7 @@ class Gleez_Email {
 		}
 		catch(Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Error sending mail error: :e', array(':e' => $e->getMessage()) );
+			Log::error('Error sending mail error: :e', array(':e' => $e->getMessage()));
 			return FALSE;
 		}
 	}
@@ -196,4 +196,4 @@ class Gleez_Email {
 		return $this->mail;
 	}
 
-} // End email
+}

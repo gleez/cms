@@ -16,7 +16,7 @@
  * - Any ORM implementation
  *
  * @package    Gleez\ACL
- * @version    2.1.1
+ * @version    2.1.2
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -248,9 +248,7 @@ class ACL {
 				return;
 			}
 
-			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :perm.',
-				array(':perm' => $perm_name)
-			);
+			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
 			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
@@ -286,12 +284,10 @@ class ACL {
 				return;
 			}
 
-			Kohana::$log->add(Log::ALERT, 'Unauthorised access attempt to action :act.',
-				array(':act' => $perm_name)
-			);
+			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw new HTTP_Exception_403('Unauthorised access attempt to action :act.',
+			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
 				array(':act' => $perm_name)
 			);
 		}
@@ -476,7 +472,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorised attempt to non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -580,7 +576,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorised attempt to non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
