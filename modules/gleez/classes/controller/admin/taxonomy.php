@@ -3,7 +3,8 @@
  * Admin Taxonomy Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -99,7 +100,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		if ( ! $post->loaded())
 		{
 			Message::error(__('Vocab: doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent Vocab');
+			Log::error('Attempt to access non-existent Vocab.');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
@@ -136,7 +137,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		if ( ! $term->loaded())
 		{
 			Message::error(__('Taxonomy: doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent taxonomy');
+			Log::error('Attempt to access non-existent taxonomy.');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 		}
@@ -165,8 +166,9 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occurred deleting taxonomy id: :id, :message',
-							array(':id' => $term->id, ':message' => $e->getMessage()));
+				Log::error('Error occurred deleting taxonomy id: :id, :message',
+					array(':id' => $term->id, ':message' => $e->getMessage())
+				);
 				Message::error(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
 				$this->_errors = array(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
 

@@ -30,7 +30,8 @@
  *
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @license    http://kohanaphp.com/license
@@ -163,7 +164,7 @@ class Cache_File extends Cache {
 					// if cache gets corrupted ignore silently and log in production
 					if (Kohana::$environment == Kohana::PRODUCTION)
 					{
-						Kohana::$log->add(Log::ERROR, 'corrupted cache file!');
+						Log::error('Corrupted cache file!');
 						return $default;
 					}
 

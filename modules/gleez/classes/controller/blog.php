@@ -3,8 +3,8 @@
  * Blog Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -84,7 +84,7 @@ class Controller_Blog extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No blogs found');
+			Log::info('No blogs found.');
 			$this->response->body(View::factory('blog/none'));
 			return;
 		}
@@ -272,8 +272,9 @@ class Controller_Blog extends Template {
 			try
 			{
 				$post->values($_POST)->save();
+
+				Log::info('Blog :title created.', array(':title' => $post->title));
 				Message::success(__('Blog %title created', array('%title' => $post->title)));
-				Kohana::$log->add(LOG::INFO, 'Blog :title created.', array(':title' => $post->title));
 
 				$this->request->redirect($post->url);
 			}
@@ -364,8 +365,8 @@ class Controller_Blog extends Template {
 			{
 				$post->values($_POST)->save();
 
+				Log::info('Blog :title updated.', array(':title' => $post->title));
 				Message::success(__('Blog %title updated', array('%title' => $post->title)));
-				Kohana::$log->add(LOG::INFO, 'Blog :title updated.', array(':title' => $post->title));
 
 				$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
 			}
@@ -440,13 +441,15 @@ class Controller_Blog extends Template {
 				$post->delete();
 
 				Cache::instance('blog')->delete('blog-'.$id);
+
+				Log::info('Blog :title deleted.', array(':title' => $title));
 				Message::success(__('Blog %title deleted successful!', array('%title' => $title)));
-				Kohana::$log->add(LOG::INFO, 'Blog :title deleted.', array(':title' => $title) );
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting blog id: :id, :message',
-					array(':id' => $post->id, ':message' => $e->getMessage()));
+				Log::error('Error occurred deleting blog id: :id, :msg',
+					array(':id' => $post->id, ':msg' => $e->getMessage())
+				);
 				Message::error(__('An error occurred deleting blog %post',array('%post' => $post->title)));
 			}
 
@@ -470,7 +473,7 @@ class Controller_Blog extends Template {
 
 		if ( ! $config->use_category)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
+			Log::error('Attempt to access disabled feature.');
 			throw new HTTP_Exception_403(__('Attempt to access disabled feature'));
 		}
 
@@ -480,7 +483,7 @@ class Controller_Blog extends Template {
 
 		if ( ! $term->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
+			Log::error('Attempt to access non-existent term.');
 			throw new HTTP_Exception_404(__('Term ":term" Not Found'), array(':term'=>$id));
 		}
 
@@ -503,7 +506,7 @@ class Controller_Blog extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No topics found');
+			Log::info('No topics found.');
 			$this->response->body(View::factory('forum/none'));
 			return;
 		}
@@ -552,8 +555,8 @@ class Controller_Blog extends Template {
 
 		if ( ! $tag->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent blog tag');
-			throw new HTTP_Exception_404( __('Tag ":tag" Not Found'), array(':tag'=>$id));
+			Log::error('Attempt to access non-existent blog tag.');
+			throw new HTTP_Exception_404(__('Tag ":tag" Not Found'), array(':tag'=>$id));
 		}
 
 		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name)));
@@ -575,7 +578,7 @@ class Controller_Blog extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No blogs found');
+			Log::info('No blogs found.');
 			$this->response->body(View::factory('blog/none'));
 			return;
 		}

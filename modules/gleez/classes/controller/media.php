@@ -3,8 +3,8 @@
  * Media Controller
  *
  * @package    Gleez\Media\Controller
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License 
  */
@@ -97,9 +97,7 @@ class Controller_Media extends Controller {
 		}
 		else
 		{
-			Kohana::$log->add(LOG::ERROR, 'Media controller error while loading file: `:file`',
-				array(':file' => $file)
-			);
+			Log::error('Media controller error while loading file: :file', array(':file' => $file));
 
 			// Return a 404 status
 			$this->response->status(404);

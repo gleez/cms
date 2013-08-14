@@ -3,7 +3,8 @@
  * Admin Widget Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -173,8 +174,8 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		if ( ! $widget->loaded())
 		{
+			Log::error('Attempt to access non-existent widget.');
 			Message::error(__('Widget doesn\'t exists!'));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent widget');
 
 			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
@@ -249,8 +250,8 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		if ( ! $widget->loaded())
 		{
+			Log::error('Attempt to access non-existent widget.');
 			Message::error(__('Widget doesn\'t exists!'));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent widget');
 
 			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
@@ -288,16 +289,14 @@ class Controller_Admin_Widget extends Controller_Admin {
 				$title = $widget->title;
 				$widget->delete();
 				$handler->delete($_POST);
+
 				Message::success(__('Widget :title deleted successful!', array(':title' => $title)));
 				Cache::instance('widgets')->delete_all();
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting widget id: :id, :message',
-					array(
-						':id' => $widget->id,
-						':message' => $e->getMessage()
-					)
+				Log::error('Error occurred deleting widget id: :id, :msg',
+					array(':id' => $widget->id, ':msg' => $e->getMessage())
 				);
 				Message::error(__('An error occurred deleting widget %title', array(':title' => $widget->title)));
 			}

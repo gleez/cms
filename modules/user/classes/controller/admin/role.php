@@ -3,7 +3,8 @@
  * Admin Role Controller
  *
  * @package   Gleez\User\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
+ * @author    Gleez Team
+ * @version   1.0.1
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -125,7 +126,7 @@ class Controller_Admin_Role extends Controller_Admin {
 		if(!$post->loaded())
 		{
 			Message::error(__("Role doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent role');
+			Log::error('Attempt to access non-existent role.');
 
 			$this->request->redirect(Route::get('admin/role')->uri());
 		}
@@ -168,7 +169,7 @@ class Controller_Admin_Role extends Controller_Admin {
 		if ( ! $role->loaded())
 		{
 			Message::error(__('Role: doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent role');
+			Log::error('Attempt to access non-existent role.');
 			$this->request->redirect(Route::get('admin/role')->uri());
 		}
 
@@ -196,8 +197,8 @@ class Controller_Admin_Role extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting role id: :id, :message',
-							array(':id' => $role->id, ':message' => $e->getMessage())
+				Log::error('Error occured deleting role id: :id, :message',
+					array(':id' => $role->id, ':message' => $e->getMessage())
 				);
 				Message::error('An error occured deleting blog, :post.',array(':post' => $post->title));
 

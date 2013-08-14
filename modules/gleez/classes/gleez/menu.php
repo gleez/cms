@@ -7,7 +7,8 @@
  * the list, and each list item has special classes to help you style it.
  *
  * @package    Gleez\Menu
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @author     1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -409,19 +410,17 @@ class Gleez_Menu {
 
 			if(count($stack) > 0)
 			{
-				//Kohana::$log->add(LOG::DEBUG, 'Adding :title to :parent', array( ':title' => $item['title'], ':parent' => $stack[count($stack) - 1]['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image'], $stack[count($stack) - 1]['name']);
 			}
 			else
 			{
-				//Kohana::$log->add(LOG::DEBUG, 'No parent for :title ', array( ':title' => $item['title']) );
 				$menu->add($item['name'], $item['title'], $item['url'], $item['descp'], $item['params'], $item['image']);
 			}
 
 			$stack[] = &$item;
 		}
 
-		//unset the stack array to freeup memory
+		// unset the stack array to freeup memory
 		unset( $stack );
 
 		// Enable developers to override menu

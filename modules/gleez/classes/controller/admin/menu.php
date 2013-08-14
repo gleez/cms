@@ -3,7 +3,8 @@
  * Admin Menu Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -140,8 +141,8 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 		if ( ! $post->loaded())
 		{
+			Log::error('Attempt to access non-existent Menu.');
 			Message::error(__('Menu doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent Menu');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
@@ -198,8 +199,8 @@ class Controller_Admin_Menu extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
+			Log::error('Attempt to access non-existent menu.');
 			Message::error(__("Menu doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
@@ -207,8 +208,8 @@ class Controller_Admin_Menu extends Controller_Admin {
 		// If it is an external request and id == 2
 		elseif ($menu->id == 2)
 		{
+			Log::error('Attempt to delete system menu.');
 			Message::error(__("You can't delete system menu!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to delete system menu');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/menu')->uri(), 403);
@@ -233,8 +234,8 @@ class Controller_Admin_Menu extends Controller_Admin {
 			// If it is an internal request (eg. popup dialog) and id < 3
 			if ($menu->id == 2)
 			{
+				Log::error('Attempt to delete system menu.');
 				$this->_errors = array(__("You can't delete system menu!"));
-				Kohana::$log->add(Log::ERROR, 'Attempt to delete system menu');
 			}
 			else
 			{
@@ -249,11 +250,8 @@ class Controller_Admin_Menu extends Controller_Admin {
 				}
 				catch (Exception $e)
 				{
-					Kohana::$log->add(Log::ERROR, 'Error occurred deleting menu :term, id: :id, :message',
-						array(
-							':id'      => $menu->id,
-							':term'    => $menu->name,
-							':message' => $e->getMessage()
+					Log::error('Error occurred deleting menu :term, id: :id, :msg',
+						array(':id' => $menu->id, ':term' => $menu->name, ':msg' => $e->getMessage()
 						)
 					);
 					$this->_errors = array(__('An error occurred deleting menu %menu: :message',

@@ -3,7 +3,8 @@
  * Page Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -83,7 +84,7 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No posts found');
+			Log::info('No posts found.');
 			$this->response->body( View::factory('page/none') );
 			return;
 		}
@@ -270,8 +271,9 @@ class Controller_Page extends Template {
 			try
 			{
 				$post->values($_POST)->save();
+
+				Log::info('Page :title created.', array(':title' => $post->title));
 				Message::success(__('Page %title created', array('%title' => $post->title)));
-				Kohana::$log->add(LOG::INFO, 'Page :title created.', array(':title' => $post->title));
 
 				$this->request->redirect($post->url);
 			}
@@ -356,8 +358,8 @@ class Controller_Page extends Template {
 			{
 				$post->values($_POST)->save();
 
+				Log::info('Page: :title updated.', array(':title' => $post->title));
 				Message::success(__('Page %title updated', array('%title' => $post->title)));
-				Kohana::$log->add(LOG::INFO, 'Page: :title updated.', array(':title' => $post->title));
 
 				$this->request->redirect(empty($destination) ? $post->url : $this->request->query('destination'));
 			}
@@ -430,13 +432,14 @@ class Controller_Page extends Template {
 				$title = $post->title;
 				$post->delete();
 
+				Log::info('Page: :title deleted.', array(':title' => $title));
 				Message::success(__('Page: :title deleted successful!', array(':title' => $title)));
-				Kohana::$log->add(LOG::INFO, 'Page: :title deleted.', array(':title' => $title));
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting page id: :id, :message',
-							array(':id' => $post->id, ':message' => $e->getMessage()));
+				Log::error('Error occurred deleting page id: :id, :msg',
+					array(':id' => $post->id, ':msg' => $e->getMessage())
+				);
 				Message::error(__('An error occurred deleting page %post',array('%post' => $post->title)));
 			}
 
@@ -467,9 +470,9 @@ class Controller_Page extends Template {
 	{
 		$config = Config::load('page');
 
-		if( ! $config->use_category)
+		if ( ! $config->use_category)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access disabled feature');
+			Log::error('Attempt to access disabled feature.');
 			throw new HTTP_Exception_403('Attempt to access disabled feature');
 		}
 
@@ -479,7 +482,7 @@ class Controller_Page extends Template {
 
 		if ( ! $term->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
+			Log::error('Attempt to access non-existent term.');
 			throw new HTTP_Exception_404('Term ":term" Not Found', array(':term'=>$id));
 		}
 
@@ -502,7 +505,7 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No topics found');
+			Log::info('No topics found.');
 			$this->response->body(View::factory('forum/none'));
 			return;
 		}
@@ -560,7 +563,7 @@ class Controller_Page extends Template {
 
 		if ( ! $tag->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent page tag');
+			Log::error('Attempt to access non-existent page tag.');
 			throw new HTTP_Exception_404('Tag ":tag" Not Found', array(':tag'=>$id));
 		}
 
@@ -583,7 +586,7 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No posts found');
+			Log::info('No posts found.');
 			$this->response->body(View::factory('page/none'));
 			return;
 		}

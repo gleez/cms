@@ -1,9 +1,10 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Taxonomy Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -14,8 +15,8 @@ class Controller_Taxonomy extends Template {
 		// Internal request only!
 		if ($this->request->is_initial())
 		{
-			throw new HTTP_Exception_404('Accessing an internal request <small>:type</small> externally',
-				array(':type' => $this->request->uri())
+			throw new HTTP_Exception_404('Accessing an internal request :type externally.',
+				array(':type' => '<small>'.$this->request->uri().'</small>')
 			);
 		}
 
@@ -28,9 +29,9 @@ class Controller_Taxonomy extends Template {
 		$id = (int) $this->request->param('id', 0);
 		$term = ORM::factory('term', $id);
 
-		if( ! $term->loaded() )
+		if ( ! $term->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent term');
+			Log::error('Attempt to access non-existent term.');
 			throw new HTTP_Exception_404('Term ":term" Not Found', array(':term'=>$id));
 		}
 
@@ -42,7 +43,7 @@ class Controller_Taxonomy extends Template {
 
 			$posts = $term->posts;
 
-		if( ! ACL::check('administer terms') AND !ACL::check('administer content'))
+		if ( ! ACL::check('administer terms') AND !ACL::check('administer content'))
 		{
 			$posts->where('status', '=', 'publish');
 		}
@@ -51,8 +52,8 @@ class Controller_Taxonomy extends Template {
 
 		if ($total == 0)
 		{
-			Kohana::$log->add(Log::INFO, 'No posts found');
-			$this->response->body( View::factory('page/none') );
+			Log::error('No posts found.');
+			$this->response->body( View::factory('page/none'));
 			return;
 		}
 
@@ -71,7 +72,7 @@ class Controller_Taxonomy extends Template {
 		$this->response->body($view);
 
 		//Set the canonical and shortlink for search engines
-		if ( $this->auto_render === TRUE )
+		if ($this->auto_render === TRUE)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
 			Meta::links(Route::url('taxonomy', array('action' => 'term', 'id' => $term->id)), array('rel' => 'shortlink'));

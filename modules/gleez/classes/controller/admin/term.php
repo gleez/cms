@@ -3,7 +3,8 @@
  * Admin Term Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -33,8 +34,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $vocab->loaded())
 		{
+			Log::error('Attempt to access non-existent vocabulary.');
 			Message::error(__('Vocabulary doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent vocabulary');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
@@ -90,8 +91,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $vocab->loaded())
 		{
+			Log::error('Attempt to access non-existent vocabulary.');
 			Message::error(__('Vocabulary doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent vocabulary');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
@@ -149,8 +150,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $term->loaded())
 		{
+			Log::error('Attempt to access non-existent Term.');
 			Message::error(__('Term doesn\'t exists!'));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Term');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
@@ -190,7 +191,7 @@ class Controller_Admin_Term extends Controller_Admin {
 	}
 
 	/**
-	 * Deletin terms
+	 * Deleting terms
 	 *
 	 * @uses  Message::error
 	 * @uses  Message::success
@@ -206,8 +207,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $term->loaded())
 		{
+			Log::error('Attempt to access non-existent Term.');
 			Message::error(__('Term doesn\'t exists!'));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Term');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
@@ -232,15 +233,17 @@ class Controller_Admin_Term extends Controller_Admin {
 			{
 				$name = $term->name;
 				$term->delete();
-				Message::success(__('Term %name deleted successful!', array('%name' => $name)) );
+
+				Log::info('Term :name deleted successful.', array(':name' => $name));
+				Message::success(__('Term %name deleted successful!', array('%name' => $name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' =>'list')));
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting term id: :id, :message',
-					array(':id' => $term->id, ':message' => $e->getMessage()));
-
+				Log::error('Error occurred deleting term id: :id, :msg',
+					array(':id' => $term->id, ':msg' => $e->getMessage())
+				);
 				Message::error( __('An error occurred deleting term %term.', array('%term' => $term->name)) );
 
 				$this->request->redirect(Route::get('admin/term')->uri(array('action' =>'list', 'id' => $term->id )), 500);
@@ -279,8 +282,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 			if ($this->level_zero > 1)
 			{
+				Log::error('Terms order could not be saved.');
 				Message::error(__('Terms order could not be saved.'));
-				Kohana::$log->add(LOG::ERROR, 'Terms order could not be saved.');
 
 				$this->request->redirect(
 					Route::get('admin/term')->uri( array( 'action'=>'list', 'id' => $id ) )

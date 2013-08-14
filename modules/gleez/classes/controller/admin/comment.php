@@ -3,9 +3,8 @@
  * Admin Comment Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.1.1
+ * @author     Gleez Team
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -76,8 +75,8 @@ class Controller_Admin_Comment extends Controller_Admin {
 
 		if( ! $comment->loaded())
 		{
+			Log::error('Attempt to access non-existent comment.');
 			Message::error( __('Comment doesn\'t exists!') );
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
 
 			// Redirect to listing
 			$this->request->redirect(Route::get('admin/comment')->uri());

@@ -3,8 +3,8 @@
  * This is the API for handling modules
  *
  * @package    Gleez\Modules
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -50,9 +50,7 @@ class Gleez_Module {
 		$module->version = $version;
 		$module->save();
 
-		Kohana::$log->add(LOG::DEBUG, ':name : version is now :version', array(
-				':name' => $name, ':version' => $version)
-		);
+		Log::debug(':name : version is now :version', array(':name' => $name, ':version' => $version));
 	}
 
 	/**
@@ -243,7 +241,7 @@ class Gleez_Module {
 		// Now the module is installed but inactive, so don't leave it in the active path
 		Module::_remove_from_path($module_name);
 
-		Kohana::$log->add(LOG::INFO, 'Installed module :module_name', array(':module_name' => $module_name) );
+		Log::info('Installed module :module_name', array(':module_name' => $module_name));
 	}
 
 	private static function _add_to_path($module_name)
@@ -318,7 +316,9 @@ class Gleez_Module {
 		$version_after = Module::get_version($module_name);
 		if ($version_before != $version_after)
 		{
-			Kohana::$log->add(Log::INFO, "Upgraded module $module_name from $version_before to $version_after");
+			Log::info('Upgraded module :module from :before to :after',
+				array(':module' => $module_name, ':before' => $version_before, ':after' => $version_after)
+			);
 		}
 	}
 
@@ -357,7 +357,7 @@ class Gleez_Module {
 		//Widget::activate($module_name);
 		//Menu_Item::rebuild(TRUE);
 
-		Kohana::$log->add(LOG::INFO, 'Activated module :module_name', array(':module_name' => $module_name) );
+		Log::info('Activated module :module_name', array(':module_name' => $module_name));
 	}
 
 	/**
@@ -389,7 +389,7 @@ class Gleez_Module {
 
 		Module::load_modules(TRUE);
 
-		Kohana::$log->add(LOG::INFO, 'Deactivated module :module_name', array(':module_name' => $module_name) );
+		Log::info('Deactivated module :module_name', array(':module_name' => $module_name));
 	}
 
 	/**
@@ -419,7 +419,7 @@ class Gleez_Module {
 		// remove widgets when the module is uninstalled
 		Widgets::uninstall($module_name);
 
-		Kohana::$log->add(LOG::INFO, 'Uninstalled module :module_name', array(':module_name' => $module_name) );
+		Log::info('Uninstalled module :module_name', array(':module_name' => $module_name));
 	}
 
 	/**
@@ -455,7 +455,7 @@ class Gleez_Module {
 			unset($data);
 			if (Kohana::DEVELOPMENT === Kohana::$environment)
 			{
-				Kohana::$log->add(LOG::DEBUG, 'Modules Loaded FROM Cache');
+				Log::debug('Modules Loaded FROM Cache');
 			}
 		}
 		else
@@ -504,7 +504,7 @@ class Gleez_Module {
 			unset($data, $_cache_modules, $_cache_active);
 			if (Kohana::DEVELOPMENT === Kohana::$environment)
 			{
-				Kohana::$log->add(LOG::DEBUG, 'Modules Loaded from ORM');
+				Log::debug('Modules Loaded from ORM');
 			}
 		}
 
@@ -513,7 +513,10 @@ class Gleez_Module {
 
 	/**
 	 * Check to see if a module installed and active
-	 * @param string $module_name
+	 *
+	 * @param  string  $module_name  Module name
+	 *
+	 * @return boolean
 	 */
 	public static function exists($module_name)
 	{
