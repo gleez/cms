@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') OR die('No direct script access allowed.');
 /**
- * Mango Collection
+ * # Mango Collection
  *
  * This class can be used directly as a wrapper for MongoCollection/MongoCursor
  *
- * ### Usage
+ * ## Usage
  *
  * ~~~
  * $collection = new Mango_Collection('users');
@@ -15,15 +15,13 @@
  *                    ->toArray();
  * ~~~
  *
- * ### System Requirements
+ * ## System Requirements
  *
  * - MongoDB 2.4 or higher
  * - PHP-extension MongoDB 1.4.0 or higher
  *
- * This class has appeared thanks to such wonderful projects as:
- *
- * + [Wouterrr/MangoDB](https://github.com/Wouterrr/MangoDB)
- * + [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ * This class was adapted from
+ * [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
  *
  * @method     mixed          batchInsert(array $a, array $options = array())
  * @method     array          createDBRef(array $a)
@@ -47,16 +45,20 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Gleez Team
- * @version    0.5.0
+ * @version    0.6.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
+ *
+ * @link       https://github.com/colinmollenhour/mongodb-php-odm  MongoDB PHP ODM
+ * @link       http://www.martinfowler.com/eaaCatalog/tableDataGateway.html  Table Data Gateway pattern
+ * @link       http://www.martinfowler.com/eaaCatalog/rowDataGateway.html  Row Data Gateway pattern
  */
 class Mango_Collection implements Iterator, Countable {
 
-	/* Sort mode - ascending */
+	/** @type integer ASC Sort mode - ascending */
 	const ASC = 1;
 
-	/* Sort mode - descending */
+	/** @type integer DESC Sort mode - descending */
 	const DESC = -1;
 
 	/**
@@ -77,6 +79,14 @@ class Mango_Collection implements Iterator, Countable {
 	 * @var boolean
 	 */
 	protected $_gridFS = FALSE;
+
+	/**
+	 * The class name or instance of the corresponding
+	 * document model or NULL if direct mode
+	 *
+	 * @var mixed
+	 */
+	protected $_model;
 
 	/**
 	 * Benchmark token
@@ -115,6 +125,12 @@ class Mango_Collection implements Iterator, Countable {
 	protected static $_collections = array();
 
 	/**
+	 * A cache of [Mango_Document] model instances for performance
+	 * @var array
+	 */
+	protected static $_models = array();
+
+	/**
 	 * Class constructor
 	 *
 	 * Instantiate a new collection object, can be used for querying, updating, etc..
@@ -124,27 +140,29 @@ class Mango_Collection implements Iterator, Countable {
 	 * $posts = new Mango_Collection('posts');
 	 * ~~~
 	 *
-	 * @param   string   $name    The collection name
-	 * @param   string   $db      The database configuration name [Optional]
-	 * @param   boolean  $gridFS  Is the collection a gridFS instance? [Optional]
-	 *
-	 * @throws  Mango_Exception
+	 * @param   string          $name    The collection name [Optional]
+	 * @param   string          $db      The database configuration name [Optional]
+	 * @param   boolean         $gridFS  Is the collection a gridFS instance? [Optional]
+	 * @param   boolean|string  $model   Class name of template model for new documents [Optional]
 	 */
-	public function __construct($name, $db = NULL, $gridFS = FALSE)
+	public function __construct($name = NULL, $db = NULL, $gridFS = FALSE, $model = FALSE)
 	{
-		if ( ! extension_loaded('mongo'))
+		if ( ! is_null($name))
 		{
-			throw new Mango_Exception('The php-mongo extension is not installed or is disabled.');
+			if (is_null($db))
+			{
+				$db = Mango::$default;
+			}
+
+			$this->_name   = $name;
+			$this->_db     = $db;
+			$this->_gridFS = $gridFS;
 		}
 
-		if (is_null($db))
+		if ($model)
 		{
-			$db = Mango::$default;
+			$this->_model = $model;
 		}
-
-		$this->_name   = $name;
-		$this->_db     = $db;
-		$this->_gridFS = $gridFS;
 	}
 
 	/**
@@ -420,8 +438,8 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Set some criteria for the query
 	 *
-	 * Unlike [MongoCollection::find](http://www.php.net/manual/en/mongocollection.find.php),
-	 * this can be called multiple times and the query parameters will be merged together.
+	 * Unlike [MongoCollection::find], this can be called multiple times and the
+	 * query parameters will be merged together.
 	 *
 	 * The possible values for `$query`:
 	 *
@@ -567,7 +585,7 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Perform an update, throw exception on errors
 	 *
-	 * Same usage as MongoCollection::update except it throws an exception on error.
+	 * Same usage as [MongoCollection::update] except it throws an exception on error.
 	 *
 	 * Return values depend on type of update:
 	 *
@@ -639,7 +657,7 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Remove, throw exception on errors
 	 *
-	 * Same usage as MongoCollection::remove except it throws an exception on error.
+	 * Same usage as [MongoCollection::remove] except it throws an exception on error.
 	 *
 	 * Returns number of documents removed if "safe",
 	 * otherwise just if the operation was successfully sent.
@@ -712,7 +730,7 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Retrieve a list of distinct values for the given key across a collection
 	 *
-	 * Same usage as MongoCollection::distinct except it throws an exception on error.
+	 * Same usage as [MongoCollection::distinct] except it throws an exception on error.
 	 *
 	 * @since   0.4.0
 	 *
@@ -739,7 +757,7 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Perform an aggregation using the aggregation framework
 	 *
-	 * Same usage as MongoCollection::aggregate except it throws an exception on error.
+	 * Same usage as [MongoCollection::aggregate] except it throws an exception on error.
 	 *
 	 * [!!] This method accepts either a variable amount of pipeline operators,
 	 *      or a single array of operators constituting the pipeline.
@@ -859,6 +877,24 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Get an instance of the corresponding document model
+	 *
+	 * @since   0.6.0
+	 *
+	 * @return  Mango_Document
+	 */
+	public function getModel()
+	{
+		if ( ! isset(self::$_models[$this->_model]))
+		{
+			$model = $this->_model;
+			self::$_models[$this->_model] = new $model;
+		}
+
+		return self::$_models[$this->_model];
+	}
+
+	/**
 	 * Get the Mango instance used for this collection
 	 *
 	 * @since   0.3.0
@@ -912,17 +948,23 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Translate a field name according to aliases defined in the model if they exist
 	 *
-	 * @todo
-	 *
-	 * @since   0.4.0
+	 * @since   0.4.0  getFieldName($name)  Introduced
+	 * @since   0.6.0  getFieldName($name)  Used $this->_model
 	 *
 	 * @param   string  $name  Field name
 	 *
 	 * @return  string
+	 *
+	 * @uses    Mango_Document::getFieldName
 	 */
 	public function getFieldName($name)
 	{
-		return $name;
+		if ( ! $this->_model)
+		{
+			return $name;
+		}
+
+		return $this->getModel()->getFieldName($name);
 	}
 
 	/**
@@ -950,6 +992,51 @@ class Mango_Collection implements Iterator, Countable {
 	}
 
 	/**
+	 * Implement [MongoCursor::getNext] so that the return value
+	 * is a [Mango_Document] instead of array
+	 *
+	 * @since   0.6.0
+	 *
+	 * @return array|Mango_Document
+	 */
+	public function getNext()
+	{
+		if($this->getDB()->profiling AND ( ! $this->_cursor OR ! $this->is_iterating()))
+		{
+			$this->getCursor();
+
+			// Start the benchmark
+			$this->_benchmark = Profiler::start("Mongo_Database::{$this->_db}", $this->shellQuery());
+
+			$this->getCursor()->next();
+
+			// Stop the benchmark
+			Profiler::stop($this->_benchmark);
+
+			// Clean benchmark token
+			$this->_benchmark = NULL;
+		}
+		else
+		{
+			$this->getCursor()->next();
+		}
+
+		return $this->current();
+	}
+
+	/**
+	 * Implement [MongoCursor::hasNext] to ensure that the cursor is loaded
+	 *
+	 * @since   0.6.0
+	 *
+	 * @return  boolean
+	 */
+	public function hasNext()
+	{
+		return $this->getCursor()->hasNext();
+	}
+
+	/**
 	 * Set a cursor option
 	 *
 	 * Will apply to currently loaded cursor if it has not started iterating.
@@ -968,7 +1055,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($name != 'batchSize' AND $name != 'timeout' AND $this->is_iterating())
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		if ($name == 'query')
@@ -1014,7 +1101,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($this->is_iterating())
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		unset($this->_options[$name]);
@@ -1196,7 +1283,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		if ($this->_cursor)
 		{
-			throw new MongoCursorException('The cursor has already started iterating');
+			throw new MongoCursorException(__('The cursor has already started iterating'));
 		}
 
 		if ( ! isset($this->_options['sort']))
@@ -1211,32 +1298,21 @@ class Mango_Collection implements Iterator, Countable {
 		}
 
 		// Translate field aliases
-		foreach ($fields as $field => $direction)
+		foreach ($fields as $field => $dir)
 		{
-			if (is_string($direction))
+			if (is_string($dir))
 			{
-				if (strtolower($direction) == 'asc' || $direction == '1')
+				if (strtolower($dir) == 'asc' || $dir == '1')
 				{
-					$direction = self::ASC;
+					$dir = self::ASC;
 				}
 				else
 				{
-					$direction = self::DESC;
-				}
-			}
-			if (is_integer($direction))
-			{
-				if ($direction >= 1)
-				{
-					$direction = self::ASC;
-				}
-				else
-				{
-					$direction = self::DESC;
+					$dir = self::DESC;
 				}
 			}
 
-			$this->_options['sort'][$this->getFieldName($field)] = $direction;
+			$this->_options['sort'][$this->getFieldName($field)] = $dir;
 		}
 
 		return $this;
@@ -1253,7 +1329,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function sortAsc($field)
 	{
-		$this->sort($field, self::ASC);
+		return $this->sort($field, self::ASC);
 	}
 
 	/**
@@ -1297,6 +1373,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @uses    Profiler::start
 	 * @uses    Profiler::stop
+	 * @uses    Mango::$profiling
 	 */
 	public function rewind()
 	{
