@@ -7,6 +7,7 @@
  *
  * @package    Gleez\Auth\Base
  * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -63,9 +64,10 @@ abstract class Gleez_Auth {
 		$this->_config = $config;
 
 		$this->_session = Session::instance();
+
 		if (Kohana::DEVELOPMENT === Kohana::$environment)
 		{
-			Kohana::$log->add(Log::DEBUG, 'Auth Library loaded');
+			Log::debug('Auth Library loaded.');
 		}
 	}
 
@@ -117,7 +119,7 @@ abstract class Gleez_Auth {
 	 */
 	public function get_provider()
 	{
-		return $this->_session->get($this->_config['session_key'] . '_provider', null);
+		return $this->_session->get($this->_config['session_key'] . '_provider', NULL);
 	}
 
 	/**

@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -249,7 +249,7 @@ class Model_Auth_User extends ORM {
 		// If it is an internal request (eg. popup dialog) and id < 3
 		if ($id < 3)
 		{
-			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
+			Log::error('Attempt to delete system user.');
 			throw new Gleez_Exception("You can't delete system users!");
 		}
 
@@ -339,7 +339,7 @@ class Model_Auth_User extends ORM {
 			$this->login = time();
 
 			//if the pass is md5.. convert to new hash system
-			if( strlen($this->pass) == 32 AND isset($this->password) AND strlen($this->password) > 3 )
+			if (strlen($this->pass) == 32 AND isset($this->password) AND strlen($this->password) > 3)
 			{
 				$this->pass = $this->password;
 			}
@@ -473,7 +473,7 @@ class Model_Auth_User extends ORM {
 					array('%dir' => Text::plain($picture_path))
 				));
 
-				Kohana::$log->add(Log::ERROR, 'Failed to create directory :dir for uploading profile image.',
+				Log::error('Failed to create directory :dir for uploading profile image.',
 					array(':dir' => Text::plain($picture_path))
 				);
 			}
@@ -510,14 +510,16 @@ class Model_Auth_User extends ORM {
 
 		$array = Validation::factory($array);
 
-		//important to check isset to avoid unnecessary routing
-		if( isset( $array['name'] ) )
+		// important to check isset to avoid unnecessary routing
+		if (isset( $array['name']))
 		{
 			$login_name = $this->unique_key($array['name']);
 
-			//be sure remove the name/email_available rule during login
-			if( isset($rules[$login_name][4]))
+			// be sure remove the name/email_available rule during login
+			if (isset($rules[$login_name][4]))
+			{
 				unset($rules[$login_name][4]);
+			}
 
 			$array->rules('name', $rules[$login_name]);
 			$array->label('name', $labels[$login_name]);
@@ -540,14 +542,16 @@ class Model_Auth_User extends ORM {
 				$array->error('name', 'blocked');
 				Module::event('user_blocked', $array);
 
-				Kohana::$log->add( Log::ERROR, 'User: :name account blocked.', array(':name' => $array['name']) );
+				Log::error('User: :name account blocked.', array(':name' => $array['name']));
 				throw new Validation_Exception($array, 'Account Blocked');
 			}
 			elseif ($this->loaded() AND Auth::instance()->login($this, $array['password'], $remember))
 			{
 				// Redirect after a successful login
 				if (is_string($redirect))
+				{
 					Request::initial()->redirect($redirect);
+				}
 
 				return $this;
 			}
@@ -556,13 +560,13 @@ class Model_Auth_User extends ORM {
 				$array->error('name', 'invalid');
 				Module::event('user_auth_failed', $array);
 
-				Kohana::$log->add( Log::ERROR, 'User: :name failed login.', array(':name' => $array['name']) );
+				Log::error('User: :name failed login.', array(':name' => $array['name']));
 				throw new Validation_Exception($array, 'Validation has failed for login');
 			}
 		}
 		else
 		{
-			Kohana::$log->add( Log::ERROR, 'User Login error');
+			Log::error('User Login error.');
 			throw new Validation_Exception($array, 'Validation has failed for login');
 		}
 	}
@@ -620,7 +624,7 @@ class Model_Auth_User extends ORM {
 			}
 
 			// Set gender if it's available via OAuth provider
-			if( isset($data['gender']) )
+			if (isset($data['gender']))
 			{
 				$this->gender = ($data['gender'] === 'male') ? 1 : 2;
 			}
@@ -929,7 +933,7 @@ class Model_Auth_User extends ORM {
 		$this->pass = $data['pass'];
 		$this->save();
 
-		Kohana::$log->add(LOG::INFO, 'User %name used one-time login link.', array('%name' => $this->name) );
+		Log::info('User %name used one-time login link.', array('%name' => $this->name));
 
 		// It could be that the user resets his password before he confirmed his sign-up,
 		// or a the reset password form could be used in case the original sign-up confirmation mail got lost.
@@ -985,12 +989,12 @@ class Model_Auth_User extends ORM {
 		if ($this->_loaded)
 		{
 			$data = empty($this->data) ? array() : unserialize($this->data);
-			if(isset($data['roles']) AND !empty($data['roles']))
+			if (isset($data['roles']) AND !empty($data['roles']))
 			{
 				return $data['roles'];
 			}
 
-			if(empty($data['roles']))
+			if (empty($data['roles']))
 			{
 				return $this->_set_roles();
 			}

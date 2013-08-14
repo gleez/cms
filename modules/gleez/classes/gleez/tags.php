@@ -3,7 +3,8 @@
  * An adaptation of Freetag
  *
  * @package    Gleez\Tags
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -14,15 +15,14 @@ class Gleez_Tags {
 	
 	/**
 	 * Tag instance
-	 *
-	 * @var string
+	 * @var Tags
 	 */
 	protected static $_instance;
 
 	/**
 	 * Create an instance of Tags.
 	 *
-	 * @return  object
+	 * @return  Tags
 	 */
 	public static function factory($config = array())
 	{
@@ -48,7 +48,7 @@ class Gleez_Tags {
 		// Save the config in the object
 		$this->config = $config;
 
-		Kohana::$log->add(Log::DEBUG, 'Tags Library loaded');
+		Log::debug('Tags Library loaded');
 	}
 	
 	/**

@@ -3,8 +3,8 @@
  * Controller User
  *
  * @package    Gleez\User
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.1.0
+ * @author     Gleez Team
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -171,7 +171,7 @@ class Controller_User extends Template {
 
 				// If the post data validates using the rules setup in the user model
 				Message::success(__('Welcome, %title!', array('%title' => $user->nick)));
-				Kohana::$log->add(LOG::INFO, 'User :name logged in.', array(':name' => $user->name) );
+				Log::info('User :name logged in.', array(':name' => $user->name));
 
 				// redirect to the user account
 				$this->request->redirect(isset($_GET['destination']) ? $_GET['destination'] :'', 200);
@@ -240,7 +240,7 @@ class Controller_User extends Template {
 
 		if ( ! $user->loaded())
 		{
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent user');
+			Log::error('Attempt to access non-existent user.');
 
 			// No user is currently logged in
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
@@ -267,7 +267,7 @@ class Controller_User extends Template {
 		}
 		else
 		{
-			Kohana::$log->add(LOG::ALERT, 'Attempt to access without required privileges.');
+			Log::alert('Attempt to access without required privileges.');
 
 			throw new HTTP_Exception_403('Attempt to access without required privileges.');
 		}
@@ -503,7 +503,7 @@ class Controller_User extends Template {
 			if($this->_user->reset_password($post = $this->request->post()))
 			{
 				Message::success(__('Instructions to reset your password are being sent to your email address %mail.', array('%mail' => $_POST['mail'])));
-				Kohana::$log->add(LOG::INFO, 'Password reset instructions mailed to :name at :mail.',
+				Log::info('Password reset instructions mailed to :name at :mail.',
 					array(':name' => $this->_user->name, ':mail' => $_POST['mail'])
 				);
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));

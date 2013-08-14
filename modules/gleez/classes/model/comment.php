@@ -3,7 +3,8 @@
  * Comment Model Class
  *
  * @package    Gleez\ORM\Comment
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -440,7 +441,7 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorised attempt to non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -470,7 +471,7 @@ class Model_Comment extends ORM {
 			{
 				return $this;
 			}
-			// Check if commenters can view their own unpublished comments.
+			// Check if commentators can view their own unpublished comments.
 			elseif ($this->status != 'publish' AND $this->author == (int)$user->id AND $user->id != 1)
 			{
 				return $this;
@@ -481,7 +482,7 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to view comment :post.',
+				Log::notice('Unauthorised attempt to view comment :post.',
 					array(':post' => $this->id)
 				);
 				return FALSE;
@@ -501,7 +502,7 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to edit comment :post.',
+				Log::notice('Unauthorised attempt to edit comment :post.',
 					array(':post' => $this->id)
 				);
 				return FALSE;
@@ -522,7 +523,7 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				Kohana::$log->add(Log::NOTICE, 'Unauthorised attempt to delete comment :post.',
+				Log::notice('Unauthorised attempt to delete comment :post.',
 					array(':post' => $this->id)
 				);
 				return FALSE;

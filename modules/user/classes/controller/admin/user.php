@@ -3,7 +3,8 @@
  * Admin User Controller
  *
  * @package   Gleez\User\Admin\Controller
- * @author    Sandeep Sangamreddi - Gleez
+ * @author    Gleez Team
+ * @version   1.0.1
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -131,7 +132,7 @@ class Controller_Admin_User extends Controller_Admin {
 		if ( ! $post->loaded() OR $id === 1)
 		{
 			Message::error(__("User doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
+			Log::error('Attempt to access non-existent user');
 
 			$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
 		}
@@ -212,7 +213,7 @@ class Controller_Admin_User extends Controller_Admin {
 		if ( ! $user->loaded())
 		{
 			Message::error(__("User doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
+			Log::error('Attempt to access non-existent user.');
 
 			$this->request->redirect(Route::get('admin/user')->uri());
 		}
@@ -220,7 +221,7 @@ class Controller_Admin_User extends Controller_Admin {
 		elseif ($user->id < 3)
 		{
 			Message::error(__("You can't delete system users!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to delete system user');
+			Log::error('Attempt to delete system user.');
 
 			$this->request->redirect(Route::get('admin/user')->uri());
 		}
@@ -249,11 +250,9 @@ class Controller_Admin_User extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occurred deleting user id: :id, :message',
-					array(
-						':id'      => $user->id,
-						':message' => $e->getMessage()
-				));
+				Log::error('Error occurred deleting user id: :id, :message',
+					array(':id' => $user->id,':message' => $e->getMessage())
+				);
 				$this->_errors = array(__('An error occurred deleting user %user: :message',
 					array(
 						'%user'    => $user->name,

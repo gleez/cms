@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Session
  * @author     Gleez Team
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -371,7 +371,7 @@ abstract class Session {
 			$this->destroy();
 
 			// Log & ignore all errors when a read fails
-			Kohana::$log->add(Log::ERROR, Gleez_Exception::text($e))->write();
+			Log::error(Gleez_Exception::text($e))->write();
 
 			return;
 		}
@@ -433,7 +433,7 @@ abstract class Session {
 		catch (Exception $e)
 		{
 			// Log & ignore all errors when a write fails
-			Kohana::$log->add(Log::ERROR, Kohana_Exception::text($e))->write();
+			Log::error(Kohana_Exception::text($e))->write();
 
 			return FALSE;
 		}

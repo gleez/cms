@@ -5,9 +5,9 @@
  * Translates exceptions using the [I18n] class
  *
  * @package    Gleez\Exceptions
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @author     Kohana Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -157,16 +157,44 @@ class Gleez_Exception extends Exception {
 	 */
 	public static function log(Exception $e, $level = Log::EMERGENCY)
 	{
+		// @todo
 		if (is_object(Kohana::$log))
 		{
 			// Create a text version of the exception
 			$error = Gleez_Exception::text($e);
 
-			// Add this exception to the log
-			Kohana::$log->add($level, $error, NULL, array('exception' => $e));
+			switch($level)
+			{
+				case 0:
+					$method = 'emergency';
+				break;
+				case 1:
+					$method = 'alert';
+				break;
+				case 2:
+					$method = 'critical';
+				break;
+				case 3:
+					$method = 'error';
+				break;
+				case 4:
+					$method = 'warning';
+				break;
+				case 5:
+					$method = 'notice';
+				break;
+				case 6:
+					$method = 'info';
+				break;
+				case 7:
+					$method = 'debug';
+				break;
+				default:
+					$method = 'debug';
+			}
 
-			// Make sure the logs are written
-			Kohana::$log->write();
+			// Add this exception to the log
+			Log::$method($error, NULL, array('exception' => $e))->write();
 		}
 	}
 

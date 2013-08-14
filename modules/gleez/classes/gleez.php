@@ -3,24 +3,23 @@
  * Gleez Core class
  *
  * @package    Gleez
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    0.10.3
+ * @author     Gleez Team
+ * @version    0.10.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
-	/** Release version */
-	const VERSION = '0.10.3';
+	/** @type string VERSION Release version */
+	const VERSION = '0.10.4';
 
-	/** Release codename */
+	/** @type string CODENAME Release codename */
 	const CODENAME = 'Turdus obscurus';
 
-	/** Default message for maintenance mode */
+	/** @type string MAINTENANCE_MESSAGE Default message for maintenance mode */
 	const MAINTENANCE_MESSAGE = 'This site is down for maintenance';
 
-	/* Security check that is added to all generated PHP files */
+	/** @type string FILE_SECURITY Security check that is added to all generated PHP files */
 	const FILE_SECURITY = '<?php defined(\'SYSPATH\') OR die(\'No direct script access allowed.\');';
 
 	/**
@@ -229,7 +228,7 @@ class Gleez {
 
 		if ($maintenance_mode AND ($request instanceof Request) AND ($request->controller() != 'user' AND $request->action() != 'login') AND !ACL::check('administer site') AND $request->controller() != 'media')
 		{
-			Kohana::$log->add(LOG::INFO, 'Site running in Maintenance Mode');
+			Log::info('Site running in Maintenance Mode');
 			throw new HTTP_Exception_503(__($message));
 		}
 	}
@@ -250,7 +249,7 @@ class Gleez {
 
 		if ( ! empty($blocked_ips) AND in_array($ip, preg_split("/[\s,]+/",$blocked_ips)))
 		{
-			Kohana::$log->add(LOG::INFO, 'Attempt to access with banned ip address: (:ip).', array(':ip' => $ip));
+			Log::info('Attempt to access with banned ip address: (:ip).', array(':ip' => $ip));
 			throw new HTTP_Exception_403('Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
 		}
 	}

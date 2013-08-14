@@ -3,7 +3,8 @@
  * Admin Page Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -114,6 +115,7 @@ class Controller_Admin_Page extends Controller_Admin {
 				$post->set($key, $value);
 			}
 
+			Log::info('Page Settings updated.');
 			Message::success(__('Page Settings updated!'));
 
 			$this->request->redirect(Route::get('admin/page')->uri(array('action' =>'settings')), 200);

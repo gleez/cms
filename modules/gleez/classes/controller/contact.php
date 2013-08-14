@@ -3,8 +3,8 @@
  * Gleez Contact Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -94,11 +94,10 @@ class Controller_Contact extends Template {
 				// Send the message
 				$email->send();
 
-				Message::success(__('Your message has been sent.'));
-				Kohana::$log->add(LOG::INFO, ':name sent an e-mail regarding :category', array(
-					':name'     => Text::plain($post['name']),
-					':category' => $types[$post['category']])
+				Log::info(':name sent an e-mail regarding :cat',
+					array(':name' => Text::plain($post['name']), ':cat' => $types[$post['category']])
 				);
+				Message::success(__('Your message has been sent.'));
 
 				// Always redirect after a successful POST to prevent refresh warnings
 				$this->request->redirect(Route::get('contact')->uri(), 200);

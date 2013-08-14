@@ -3,7 +3,8 @@
  * Admin Permission Controller
  *
  * @package    Gleez\User\Admin\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -73,10 +74,7 @@ class Controller_Admin_Permission extends Controller_Admin {
 				Message::success(__('Permissions saved successfully!'));
 
 				// Redirect to listing
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/permission')->uri(array('action' => 'role', 'id' => $role->id)));
-				}
+				$this->request->redirect(Route::get('admin/permission')->uri(array('action' => 'role', 'id' => $role->id)));
 			}
 			catch(ORM_Validation_Exception $e)
 			{
@@ -106,12 +104,9 @@ class Controller_Admin_Permission extends Controller_Admin {
 		if ( ! $post->loaded() OR $id === 1)
 		{
 			Message::error(__("User doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent user');
+			Log::error('Attempt to access non-existent user.');
 
-			if ( ! $this->_internal)
-			{
-				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
-			}
+			$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 404);
 		}
 
 		$this->title = __(':user Permissions', array(":user" => $post->name));
@@ -134,10 +129,7 @@ class Controller_Admin_Permission extends Controller_Admin {
 				$post->save();
 				Message::success(__('Permissions: saved successful!'));
 
-				if ( ! $this->_internal)
-				{
-					$this->request->redirect(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $post->id)));
-				}
+				$this->request->redirect(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $post->id)));
 			}
 			catch(ORM_Validation_Exception $e)
 			{

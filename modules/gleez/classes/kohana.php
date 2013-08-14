@@ -8,7 +8,7 @@
  * - Variable and path debugging
  *
  * @package    Gleez\Core
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
  * @author     Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
