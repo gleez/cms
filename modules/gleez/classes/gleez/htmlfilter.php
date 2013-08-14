@@ -9,7 +9,7 @@
  *
  * @package    Gleez\Security
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -171,7 +171,7 @@ class Gleez_HTMLFilter {
 
 		if (Kohana::PRODUCTION !== Kohana::$environment)
 		{
-			Kohana::$log->add(Log::DEBUG, 'HTML Filter Library initialized');
+			Log::debug('HTML Filter Library initialized');
 		}
 	}
 

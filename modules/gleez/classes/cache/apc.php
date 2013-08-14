@@ -32,8 +32,8 @@
  *
  * @package    Gleez\Cache\Base
  * @author     Kohana Team
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.2
+ * @author     Gleez Team
+ * @version    1.0.3
  * @copyright  (c) 2012-2013 Gleez Technologies
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://kohanaphp.com/license
@@ -100,7 +100,7 @@ class Cache_Apc extends Cache {
 		catch (Exception $e)
 		{
 			// Cache is corrupt or not exists, let return happen normally
-			Kohana::$log->add(LOG::ERROR, 'An error occurred retrieving corrupt or not exists cache name: [:name]',
+			Log::error('An error occurred retrieving corrupt or not exists cache name: [:name]',
 				array(':name' => $id)
 			);
 		}
@@ -144,7 +144,7 @@ class Cache_Apc extends Cache {
 		}
 		catch (Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, 'An error occurred setting [:name] to cache',
+			Log::error('An error occurred setting [:name] to cache.',
 				array(':name' => $id)
 			);
 		}

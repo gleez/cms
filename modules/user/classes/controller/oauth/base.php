@@ -3,7 +3,8 @@
  * The Abstract OAuth Class
  *
  * @package    Gleez\OAuth\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -154,7 +155,7 @@ abstract class Controller_OAuth_Base extends Template {
 		}
 		catch( Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
+			Log::error($e->getMessage());
 		}
 	}
 
@@ -200,7 +201,7 @@ abstract class Controller_OAuth_Base extends Template {
 				);
 			}
 
-			Kohana::$log->add(LOG::ERROR, 'Error retrieving code/tokens');
+			Log::error('Error retrieving code/tokens.');
 			Message::info(__('Coudn\'t login. Either you deny or network error!'));
 
 			// Redirect to the provider's index page
@@ -212,7 +213,7 @@ abstract class Controller_OAuth_Base extends Template {
 		}
 		catch( Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
+			Log::error($e->getMessage());
 
 			// Redirect to the provider's index page
 			$this->request->redirect( $this->route->uri(
@@ -248,7 +249,7 @@ abstract class Controller_OAuth_Base extends Template {
 		}
 		catch( Exception $e )
 		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
+			Log::error($e->getMessage());
 
 			// Redirect to the provider's index page
 			$this->request->redirect( $this->route->uri(
@@ -341,7 +342,7 @@ abstract class Controller_OAuth_Base extends Template {
 		}
 		catch(Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
+			Log::error($e->getMessage());
 
 			// Redirect to the provider's index page
 			$this->request->redirect( $this->route->uri(

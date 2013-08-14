@@ -3,7 +3,8 @@
  * Admin Menu Item Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -28,10 +29,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
+			Log::error('Attempt to access non-existent menu id: :id', array(':id' => $id));
 			Message::error(__('Menu: doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu id: `:id`',
-				array(':id' => $id)
-			);
 
 			$this->request->redirect(Route::get('admin/menu')->uri());
 		}
@@ -74,8 +73,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
+			Log::error('Attempt to access non-existent menu.');
 			Message::error(__("Menu doesn't exists!"));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent menu');
 
 			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
@@ -127,8 +126,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
+			Log::error('Attempt to access non-existent Menu.');
 			Message::error(__("Menu doesn't exists!"));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu');
 
 			$this->request->redirect(Route::get('admin/menu')->uri());
 		}
@@ -182,8 +181,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		if ( ! $menu->loaded())
 		{
+			Log::error('Attempt to access non-existent menu item :id', array(':id' => $id));
 			Message::error(__("Menu item doesn't exists!"));
-			Kohana::$log->add(LOG::ERROR, 'Attempt to access non-existent Menu Item #'.$id);
 
 			$this->request->redirect(Route::get('admin/menu')->uri(), 404);
 		}
@@ -214,8 +213,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting menu item id: :id, :message',
-					array(':id' => $menu->id, ':message' => $e->getMessage())
+				Log::error('Error occurred deleting menu item id: :id, :msg',
+					array(':id' => $menu->id, ':msg' => $e->getMessage())
 				);
 				Message::error(__('An error occurred deleting menu item %term', array('%term' => $menu->title)));
 
@@ -248,8 +247,8 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 			if ($this->level_zero > 1)
 			{
+				Log::error('Menu Items order could not be saved.');
 				Message::error(__('Menu Items order could not be saved.'));
-				Kohana::$log->add(LOG::ERROR, 'Menu Items order could not be saved.');
 
 				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action'=>'list', 'id' => $id)));
 			}

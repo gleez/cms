@@ -5,7 +5,8 @@
  * This class for handling widget(s) in template regions (sidebar left/right etc).
  *
  * @package    Gleez\Widget
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
@@ -13,49 +14,42 @@ abstract class Gleez_Widgets {
 
 	/**
 	 * Widgets instance
-	 *
 	 * @var array
 	 */
 	protected static $instance;
 
 	/**
 	 * Associative array of widgets
-	 * 
 	 * @var string
 	 */
 	protected $_widgets = array();
 
 	/**
 	 * Associative array of widget regions that will be loaded
-	 * 
 	 * @var string
 	 */
 	protected $_regions = array();
 
 	/**
 	 * Count of widgets inside a region
-	 *
 	 * @var string
 	 */
 	protected $_widget_count = array();
 
 	/**
 	 * Status of Widgets, if it's already loaded from the database
-	 *
 	 * @var string
 	 */
 	protected $_loaded = FALSE;
 
 	/**
 	 * Region name right|left etc
-	 *
 	 * @var string
 	 */
 	protected $_region;
 
 	/**
 	 * Render style html|json etc
-	 *
 	 * @var string
 	 */
 	protected $_format;
@@ -87,13 +81,13 @@ abstract class Gleez_Widgets {
 	{
 		// Store the region locally
 		$this->_region = $region;
-		
+
 		// Store the format locally
 		$this->_format = $format;
-	
+
 		// Load the widgets from database
 		$this->load();
-	
+
 		// Store the widgets instance
 		Widgets::$instance = $this;
 	}
@@ -101,7 +95,6 @@ abstract class Gleez_Widgets {
 	/**
 	 * Add's a new widget to the widgets
 	 *
-
 	 * @param   string  $region  Widget region
 	 * @param   string  $name    Unique widget name
 	 * @param   string  $widget  Widget object
@@ -110,42 +103,45 @@ abstract class Gleez_Widgets {
 	 */
 	public function add($region, $name, $widget)
 	{
-		if( ! is_object($widget))
+		if ( ! is_object($widget))
 		{
 			throw new Gleez_Exception('Not a valid widget object: :widget', array(':widget' => $name));
 		}
-	
+
 		if ( ! isset($this->_regions[$region]))
 		{
 			$this->_regions[$region] = array();
 		}
 
 		array_push($this->_regions[$region], $name);
-	
+
 		// set default widget members
 		$widget->config = FALSE;
 		$widget->content = FALSE;
 		$widget->visible = TRUE;
 
 		$this->_widgets[$name] = $widget;
-		
+
 		return $this;
 	}
 
 	/**
 	 * Retrieves a named widget
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $widget = $region->get('login');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $widget = $region->get('login');
+	 * ~~~
 	 *
 	 * @param   string  $name  Widget name
 	 * @return  Widget
 	 */
 	public function get($name)
 	{
-		if ( ! isset($this->_widgets[$name]) ) return FALSE;
+		if ( ! isset($this->_widgets[$name]))
+		{
+			return FALSE;
+		}
 
 		return $this->_widgets[$name];
 	}
@@ -153,16 +149,15 @@ abstract class Gleez_Widgets {
 	/**
 	 * Remove a widget from the widgets or region from regions
 	 *
-	 * Removes right sidebar:<br>
-	 * <code>
-	 *   $widget = $region->remove('right');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * // Removes right sidebar
+	 * $widget = $region->remove('right');
 	 *
-	 * Removes login widget:<br>
-	 * <code>
-	 *   $widget = $region->remove(FALSE, 'login');
-	 * </code>
-	 *	
+	 * // Removes login widget
+	 * $widget = $region->remove(FALSE, 'login');
+	 * ~~~
+	 *
 	 * @param   string  $region  Region name [Optional]
 	 * @param   string  $widget  Widget name [Optional]
 	 */
@@ -188,10 +183,11 @@ abstract class Gleez_Widgets {
 	/**
 	 * Sets or gets region
 	 *
-	 * Sets region to right sidebar:<br>
-	 * <code>
-	 *   $widget = $region->region('right');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * // Sets region to right sidebar
+	 * $widget = $region->region('right');
+	 * ~~~
 	 *
 	 * @param   string  $region  Region name [Optional]
 	 * @return  $this|string
@@ -204,17 +200,18 @@ abstract class Gleez_Widgets {
 		}
 
 		$this->_region = $region;
-	
+
 		return $this;
 	}
 
 	/**
 	 * Sets or gets format
 	 *
-	 * Sets format to html output:<br>
-	 * <code>
-	 *   $widget = $region->format('html');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * // Sets format to html output
+	 * $widget = $region->format('html');
+	 * ~~~
 	 *
 	 * @param   string  $format  Format name [Optional]
 	 * @return  $this|string
@@ -269,7 +266,7 @@ abstract class Gleez_Widgets {
 		{
 			$this->format($format);
 		}
-	
+
 		if ( ! isset($this->_regions[$this->_region]) OR is_null($this->_regions[$this->_region]))
 		{
 			return FALSE;
@@ -309,9 +306,8 @@ abstract class Gleez_Widgets {
 
 		// Enable developers to override widget
 		Module::event('Widget', $widget);
-
 		Module::event('Widget_'.ucfirst($name), $widget);
-	
+
 		if ($widget->status AND $widget->visible)
 		{
 			try
@@ -319,9 +315,9 @@ abstract class Gleez_Widgets {
 				$widget->content = Widget::factory($name, $widget, $widget->config)->render();
 				$response = ($format === FALSE) ? $widget : trim($this->_html($widget, $this->_region, $this->_format));
 			}
-			catch( Exception $e )
+			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error processing widget: :name', array( ':name' => $name ));
+				Log::error('Error processing widget: :name', array(':name' => $name));
 			}
 		}
 
@@ -356,19 +352,15 @@ abstract class Gleez_Widgets {
 			$values['module'] = (string) $module;
 			$values['status'] = 0;
 			$values['region'] = '-1';
-			
+
 			try
 			{
 				ORM::factory('widget')->values($values)->save();
-				Kohana::$log->add(LOG::DEBUG, 'Insert widget where module: :module', array(
-						':module' => $module
-				));
+				Log::debug('Insert widget where module: :module', array(':module' => $module));
 			}
 			catch (Database_Exception $e)
 			{
-				Kohana::$log->add(LOG::DEBUG, __('Unable to Insert widgets, Error :error', array(
-						':error' => $e->getMessage()
-				)));
+				Log::error('Unable to insert widgets: :mgs', array(':msg' => $e->getMessage()));
 			}
 		}
 	}
@@ -384,19 +376,14 @@ abstract class Gleez_Widgets {
 		{
 			ORM::factory('widget')->where('module', '=', $module)->delete();
 			Cache::instance('widgets')->delete_all();
-			
-			Kohana::$log->add(LOG::DEBUG, 'Deleted widgets where module: :module', array(
-					':module' => $module
-			));
+
+			Log::info('Deleted widgets where module: :module', array(':module' => $module));
 		}
 		catch (Database_Exception $e)
 		{
-			Kohana::$log->add(LOG::DEBUG, __('Unable to Delete widgets, Error :error', array(
-					':error' => $e->getMessage()
-			)));
+			Log::error('Unable to delete widgets: :msg', array(':msg' => $e->getMessage()));
 		}
 	}
-
 
 	/**
 	 * Load the widgets from database
@@ -410,7 +397,7 @@ abstract class Gleez_Widgets {
 		{
 			return $this->_widgets;
 		}
-	
+
 		$cache = Cache::instance('widgets');
 
 		if ( ! $widgets = $cache->get('widgets'))
@@ -454,15 +441,18 @@ abstract class Gleez_Widgets {
 			$current_route = UTF8::strtolower($current_route);
 		}
 
-		//role based widget access
-		if ( ! User::belongsto($widget->roles)) $widget->visible = FALSE;
+		// role based widget access
+		if ( ! User::belongsto($widget->roles))
+		{
+			$widget->visible = FALSE;
+		}
 
-		if($widget->pages)
+		if ($widget->pages)
 		{
 			$pages = UTF8::strtolower($widget->pages);
 			$page_match =  Path::match_path($current_route, $pages);
-		
-			$widget->visible = !($widget->visibility xor $page_match);
+
+			$widget->visible = !($widget->visibility XOR $page_match);
 		}
 
 		return $widget;
@@ -472,34 +462,33 @@ abstract class Gleez_Widgets {
 	{
 		$zebra = $id = FALSE;
 
-		//Remove empty strings if content is string instead of view object
-		if(is_string($widget->content))
+		// Remove empty strings if content is string instead of view object
+		if (is_string($widget->content))
 		{
 			//@todo needs a better way
 			$widget->content = trim($widget->content);
 		}
-	
-		//Don't render any widget if the content is null or empty
-		if(empty($widget->content))
+
+		// Don't render any widget if the content is null or empty
+		if (empty($widget->content))
 		{
 			return;
 		}
 
-		if( $region )
+		if ($region)
 		{
 			// All widgets get an independent counter for each region.
-			if ( ! isset($this->_widget_count[$region]) )
+			if ( ! isset($this->_widget_count[$region]))
 				$this->_widget_count[$region] = 1;
-				
+
 			// Same with zebra striping.
 			$zebra = ($this->_widget_count[$region] % 2) ? 'odd' : 'even';
 			$id    = $this->_widget_count[$region]++;
 		}
 
-		//replace '/' with '-' for name in css
 		$widget->name = str_replace('/', '-', $widget->name);
-		$widget->menu = ( strpos($widget->name, 'menu-')  === false ) ? FALSE : TRUE;
-		
+		$widget->menu = (bool)(strpos($widget->name, 'menu-'));
+
 		return View::factory('widgets/' .$format)
 				->set('content', $widget->content)
 				->set('title',   $widget->title)

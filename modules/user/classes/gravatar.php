@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Gleez Team
- * @version    1.4.2
+ * @version    1.4.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -459,7 +459,7 @@ class Gravatar {
 		{
 			if ( ! System::mkdir($this->_store_location))
 			{
-				Kohana::$log->add(Log::WARNING, "Can't create location :loc1 for picture downloading. Current location: :loc2",
+				Log::warning("Can't create location :loc1 for picture downloading. Current location: :loc2",
 					array(':loc1' => $this->_store_location, ':loc2' => sys_get_temp_dir())
 				);
 				$this->_store_location = sys_get_temp_dir();

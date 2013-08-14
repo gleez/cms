@@ -3,7 +3,8 @@
  * Comment Controller
  *
  * @package    Gleez\Controller
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -29,8 +30,8 @@ class Controller_Comment extends Template {
 
 		if ( ! $comment->loaded())
 		{
+			Log::error('Attempt to access non-existent comment.');
 			Message::error(__('Comment doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent comment');
 
 			$this->request->redirect($route, 404);
 		}
@@ -81,8 +82,8 @@ class Controller_Comment extends Template {
 				/** @var $comment ORM */
 				$comment->values($_POST)->save();
 
+				Log::info('Comment: :title updated.', array(':title' => $comment->title));
 				Message::success(__('Comment %title has been updated.', array('%title' => $comment->title)));
-				Kohana::$log->add(LOG::INFO, 'Comment: :title updated.', array(':title' => $comment->title));
 
 				$this->request->redirect(empty($destination) ? $comment->url : $this->request->query('destination'));
 			}
@@ -123,14 +124,17 @@ class Controller_Comment extends Template {
 			try
 			{
 				$comment->delete();
+
+				Log::info('Comment: :title deleted.', array(':title' => $title));
 				Message::success(__('Comment %title deleted successful!', array('%title' => $title)));
-				Kohana::$log->add(LOG::INFO, 'Comment: :title deleted.', array(':title' => $title));
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, 'Error occurred deleting comment id: :id, :message',
-					array(':id' => $comment->id, ':message' => $e->getMessage()));
+				Log::error('Error occurred deleting comment id: :id, :msg',
+					array(':id' => $comment->id, ':msg' => $e->getMessage())
+				);
 				Message::error('An error occurred deleting comment %post.',array('%post' => $title));
+
 				$this->_errors = array('An error occurred deleting comment %post.',array('%post' => $title));
 			}
 

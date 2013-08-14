@@ -3,7 +3,8 @@
  * An adaptation of handle path aliasing.
  *
  * @package    Gleez\Path
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -97,7 +98,7 @@ class Gleez_Path {
 		catch (Exception $e)
 		{
 			// log error and return, to avoid breaking process
-			Kohana::$log->add(LOG::ERROR, 'Error: :error creating path alias!',
+			Log::error('Error: :error creating path alias.',
 				array(':error' => $e->getMessage())
 			);
 			return FALSE;
@@ -110,7 +111,7 @@ class Gleez_Path {
 	 * Deletes path alias
 	 *
 	 * @param   $criteria  A number representing the pid or an array of criteria
-	 * @return  boolen     TRUE|FASLE
+	 * @return  boolean    TRUE|FALSE
 	 */
 	public static function delete($criteria)
 	{
@@ -132,9 +133,7 @@ class Gleez_Path {
 		}
 		catch (Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Error: :error deleting path alias!',
-				array(':error' => $e->getMessage())
-			);
+			Log::error('Error: :error deleting path alias.', array(':error' => $e->getMessage()));
 			return FALSE;
 		}
 
@@ -177,9 +176,7 @@ class Gleez_Path {
 		}
 		catch(Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Error: :error lookup path alias!',
-				array(':error' => $e->getMessage())
-			);
+			Log::error('Error: :error lookup path alias.', array(':error' => $e->getMessage()));
 			return FALSE;
 		}
 
@@ -204,9 +201,7 @@ class Gleez_Path {
 		}
 		catch (Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, 'Error: :error getting alias!',
-				array(':error' => $e->getMessage())
-			);
+			Log::error('Error: :error getting alias.', array(':error' => $e->getMessage()));
 			return $source;
 		}
 	}

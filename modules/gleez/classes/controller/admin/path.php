@@ -3,7 +3,8 @@
  * Admin Path Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -124,10 +125,10 @@ class Controller_Admin_Path extends Controller_Admin {
 
 		$post = ORM::factory('path', (int) $id);
 
-		if( ! $post->loaded())
+		if ( ! $post->loaded())
 		{
+			Log::error('Attempt to access non-existent alias.');
 			Message::error(__('Alias doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent alias');
 
 			$this->request->redirect(Route::get('admin/path')->uri(array('action' => 'list')), 404);
 		}
@@ -177,8 +178,8 @@ class Controller_Admin_Path extends Controller_Admin {
 
 		if ( ! $path->loaded())
 		{
+			Log::error('Attempt to access non-existent alias.');
 			Message::error(__('Alias doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent alias');
 
 			$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 404);
 		}
@@ -207,8 +208,9 @@ class Controller_Admin_Path extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occured deleting alias id: :id, :message',
-					array(':id' => $path->id, ':message' => $e->getMessage()));
+				Log::error('Error occured deleting alias id: :id, :msg',
+					array(':id' => $path->id, ':message' => $e->getMessage())
+				);
 				Message::error('An error occurred deleting alias %path',array(':path' => $path->alias));
 
 				$this->request->redirect(Route::get('admin/path')->uri( array('action' => 'list')), 503);

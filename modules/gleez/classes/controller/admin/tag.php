@@ -3,7 +3,8 @@
  * Admin Tag Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -122,10 +123,10 @@ class Controller_Admin_Tag extends Controller_Admin {
 		$id = (int) $this->request->param('id', 0);
 		$post = ORM::factory('tag', $id);
 
-		if( ! $post->loaded())
+		if ( ! $post->loaded())
 		{
+			Log::error('Attempt to access non-existent tag.');
 			Message::error(__('Tag doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
 
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
@@ -139,6 +140,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 			{
 				$post->save();
 
+				Log::info('Tag :name saved successful.', array(':name' => $post->name));
 				Message::success(__('Tag %name saved successful!', array('%name' => $post->name)));
 
 				$this->request->redirect(Route::get('admin/tag')->uri(), 200);
@@ -174,8 +176,9 @@ class Controller_Admin_Tag extends Controller_Admin {
 
 		if ( ! $tag->loaded())
 		{
+			Log::error('Attempt to access non-existent tag.');
 			Message::error(__('Tag doesn\'t exists!'));
-			Kohana::$log->add(Log::ERROR, 'Attempt to access non-existent tag');
+
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
 
@@ -202,11 +205,12 @@ class Controller_Admin_Tag extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(Log::ERROR, 'Error occurred deleting tag id: :id, :message',
-							array(':id' => $tag->id, ':message' => $e->getMessage()));
-
+				Log::error('Error occurred deleting tag id: :id, :msg',
+					array(':id' => $tag->id, ':msg' => $e->getMessage())
+				);
 				Message::error('An error occurred deleting tag %tag',array('%tag' => $tag->name));
 				$this->_errors = array(__('An error occurred deleting tag %tag',array('%tag' => $tag->name)));
+
 				$this->request->redirect(Route::get('admin/tag')->uri(), 503);
 			}
 		}

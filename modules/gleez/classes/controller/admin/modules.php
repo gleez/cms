@@ -3,8 +3,8 @@
  * Admin Modules Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -166,7 +166,7 @@ class Controller_Admin_Modules extends Controller_Admin {
 			}
 			catch (Exception $e)
 			{
-				Kohana::$log->add(LOG::ERROR, Gleez_Exception::text($e));
+				Log::error(Gleez_Exception::text($e));
 			}
 		}
 
