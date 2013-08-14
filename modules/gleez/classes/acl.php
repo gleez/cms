@@ -288,7 +288,7 @@ class ACL {
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
 			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
-				array(':act' => $perm_name)
+				array(':perm' => $perm_name)
 			);
 		}
 	}
