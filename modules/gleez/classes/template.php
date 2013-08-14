@@ -3,9 +3,8 @@
  * Abstract template class for automatic templating
  *
  * @package    Gleez\Template
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.2.1
+ * @author     Gleez Team
+ * @version    1.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -337,9 +336,10 @@ abstract class Template extends Controller {
 
 		if (Kohana::$environment === Kohana::DEVELOPMENT)
 		{
-			Kohana::$log->add(LOG::DEBUG, 'Executing Controller `:controller` action `:action`', array(
-				':controller' => $this->request->controller(),
-				':action' => $this->request->action()
+			Log::debug('Executing Controller [:controller] action [:action]',
+				array(
+					':controller' => $this->request->controller(),
+					':action'     => $this->request->action()
 			));
 		}
 	}

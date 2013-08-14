@@ -3,9 +3,8 @@
  * Abstract template class for feed controllers
  *
  * @package    Gleez\Controller\Feed
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -159,10 +158,9 @@ class Controller_Feeds_Template extends Controller {
 
 		if (Kohana::$environment === Kohana::DEVELOPMENT)
 		{
-			Kohana::$log->add(LOG::DEBUG, 'Executing Controller `:controller` action `:action`', array(
-				':controller' => $this->request->controller(),
-				':action' => $this->request->action()
-			));
+			Log::debug('Executing Controller: :controller, action: :action',
+				array(':controller' => $this->request->controller(), ':action' => $this->request->action())
+			);
 		}
 	}
 

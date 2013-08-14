@@ -3,8 +3,8 @@
  * Admin Blog Controller
  *
  * @package    Gleez\Controller\Admin
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -145,7 +145,9 @@ class Controller_Admin_Blog extends Controller_Admin {
 				$config->set($key, $value);
 			}
 
+			Log::info('Blog Settings updated.');
 			Message::success(__('Blog Settings updated!'));
+
 			$this->request->redirect(Route::get('admin/blog')->uri(array('action' =>'settings')));
 		}
 

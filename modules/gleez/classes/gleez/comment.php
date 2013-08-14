@@ -1,9 +1,10 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') OR die('No direct script access.');
 /**
  * Comment Core Class
  *
  * @package	   Gleez\Comment
- * @author	   Sandeep Sangamreddi - Gleez
+ * @author	   Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -31,12 +32,14 @@ class Gleez_Comment {
 		// Get total number of comments
 		if ($parent_id == 0)
 		{
-			Kohana::$log->add(LOG::DEBUG, 'Fetching all '.$state.' comments');
+			Log::debug('Fetching all :state comments', array(':state' => $state));
 			$total = ORM::factory('comment', array('status' => $state))->count_all();
 		}
 		else
 		{
-			Kohana::$log->add(LOG::DEBUG, 'Fetching '.$state.' comments for parent id='.$parent_id);
+			Log::debug('Fetching :state comments for parent id: :id',
+				array(':state' => $state, ':id' => $parent_id)
+			);
 			$total = ORM::factory('comment', array(
 				'status'  => $state,
 				'parent'  => $parent_id,
@@ -110,7 +113,7 @@ class Gleez_Comment {
 					));
 				}
 
-				Kohana::$log->add(LOG::INFO, 'Comment: :title has posted.', array(':title' => $post->title) );
+				Log::info('Comment: :title has posted.', array(':title' => $post->title));
 
 				// Redirect to post page
 				$controller->request->redirect(Request::current()->uri());
