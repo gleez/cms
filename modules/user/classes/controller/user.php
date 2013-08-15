@@ -12,7 +12,7 @@ class Controller_User extends Template {
 
 	/**
 	 * User object
-	 * @var ORM
+	 * @var Model_User
 	 */
 	protected $_user;
 
@@ -72,7 +72,7 @@ class Controller_User extends Template {
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
 		}
 
-		// Instantiate a new user
+		/** @var $post Model_User */
 		$post   = ORM::factory('user');
 		$config = Config::load('auth');
 
@@ -262,7 +262,7 @@ class Controller_User extends Template {
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
-		elseif (ACL::check('access profiles') AND $user->status AND $user->id > 1)
+		elseif (ACL::check('access profiles') AND $user->status AND $user->id > Model_User::GUEST_ID)
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
@@ -463,11 +463,11 @@ class Controller_User extends Template {
 		{
 			// @todo If logged in, redirect to profile page or something, otherwise to sign in form
 			// @todo If account already confirmed, show Message::NOTICE
-			Message::success('Rejoice. Your sign-up has been confirmed.');
+			Message::success(__('Rejoice. Your sign-up has been confirmed.'));
 			$this->request->redirect('user/profile');
 		}
 
-		Message::error('Oh no! This confirmation link is invalid.');
+		Message::error(__('Oh no! This confirmation link is invalid.'));
 		$this->request->redirect('user/profile');
 	}
 
