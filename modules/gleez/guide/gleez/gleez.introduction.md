@@ -38,9 +38,11 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
 * Other Details like SEO, Media, Gravatar, etc.
+* DataTables, Popups, autocomplete etc
 
 ## Frameworks & Libraries
 
+* Greet [(https://github.com/gleez/greet)](https://github.com/gleez/greet)
 * Kohana [(http://kohanaframework.org)](http://kohanaframework.org)
 * Bootstrap Twitter [(http://getbootstrap.com/)](http://getbootstrap.com/)
 * jQuery [(http://jquery.com/)](http://jquery.com/)
