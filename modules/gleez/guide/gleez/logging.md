@@ -75,3 +75,4 @@ connect          | __NO__   | (_boolean_) Connect to DB on creation connection. 
 username         | __NO__   | (_string_) Database username. __FALSE__ and '' are identical.
 password         | __NO__   | (_string_) Database password. __FALSE__ and '' are identical.
 replicaSet       | __NO__   | (_string_) The name of the replica set to connect to. __FALSE__ and '' are identical.
+w                | __NO__   | (_mixed_) When a write is given a [Write Concern](http://www.php.net/manual/ru/mongo.writeconcerns.php) option ("w") the driver will send the query to MongoDB and piggy back a [getLastError](http://docs.mongodb.org/manual/core/write-operations/) command (GLE) with the Write Concern option at the same time.
