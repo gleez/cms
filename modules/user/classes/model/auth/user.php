@@ -4,13 +4,19 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.0.3
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_Auth_User extends ORM {
 
-	/** Default upload path */
+	/** @type integer GUEST_ID Guest user ID */
+	const GUEST_ID = 1;
+
+	/** @type integer GUEST_ID Main admin user ID */
+	const ADMIN_ID = 2;
+
+	/** @type string GUEST_ID Default upload path */
 	const DEFAULT_PATH = 'media/pictures';
 
 	/**
@@ -65,7 +71,7 @@ class Model_Auth_User extends ORM {
 	protected $_ignored_columns = array('password', 'old_pass');
 
 	/**
-	 * ## Rules for the user model
+	 * Rules for the user model
 	 *
 	 * Because the password is _always_ a hash  when it's set,you need to run
 	 * an additional not_empty rule in your controller to make sure you didn't
@@ -196,6 +202,8 @@ class Model_Auth_User extends ORM {
 
 	/**
 	 * Gets all permissions
+	 *
+	 * @return array
 	 */
 	public function perms()
 	{
@@ -211,6 +219,8 @@ class Model_Auth_User extends ORM {
 
 	/**
 	 * Gets all roles
+	 *
+	 * @return array
 	 */
 	public function roles()
 	{
@@ -219,6 +229,10 @@ class Model_Auth_User extends ORM {
 
 	/**
 	 * Override the create method with defaults
+	 *
+	 * @param   Validation $validation  Validation object [Optional]
+	 *
+	 * @return  ORM
 	 *
 	 * @throws  Gleez_Exception
 	 */
@@ -230,7 +244,7 @@ class Model_Auth_User extends ORM {
 		}
 
 		$this->init = $this->mail;
-		$this->status = (int) 1;
+		$this->status = 1;
 
 		return parent::create($validation);
 	}
@@ -247,7 +261,7 @@ class Model_Auth_User extends ORM {
 	protected function before_delete($id)
 	{
 		// If it is an internal request (eg. popup dialog) and id < 3
-		if ($id < 3)
+		if ($id == Model_User::GUEST_ID OR $id == Model_User::ADMIN_ID)
 		{
 			Log::error('Attempt to delete system user.');
 			throw new Gleez_Exception("You can't delete system users!");
