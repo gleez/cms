@@ -12,7 +12,7 @@ class Controller_User extends Template {
 
 	/**
 	 * User object
-	 * @var ORM
+	 * @var Model_User
 	 */
 	protected $_user;
 
@@ -37,7 +37,7 @@ class Controller_User extends Template {
 			$this->_user = ORM::factory('user');
 		}
 
-		if(strpos($this->request->uri(), 'user/reset/', 0) !== FALSE)
+		if (strpos($this->request->uri(), 'user/reset/', 0) !== FALSE)
 		{
 			$this->request->action('reset_'.$this->request->action());
 		}
@@ -53,8 +53,8 @@ class Controller_User extends Template {
 	 * @uses    Request::action
 	 * @uses    Route::get
 	 * @uses    Route::uri
-	 * @uses    Config_Group::load
-	 * @uses    Config::get
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
 	 * @uses    Captcha::instance
 	 * @uses    Message::success
 	 *
@@ -66,17 +66,17 @@ class Controller_User extends Template {
 		$this->title = __('User Registration');
 
 		// If user already signed-in
-		if($this->_auth->logged_in())
+		if ($this->_auth->logged_in())
 		{
 			// redirect to the user account
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
 		}
 
-		// Instantiate a new user
-		$post = ORM::factory('user');
-		$config = Kohana::$config->load('auth');
+		/** @var $post Model_User */
+		$post   = ORM::factory('user');
+		$config = Config::load('auth');
 
-		if( ! $config->register)
+		if ( ! $config->register)
 		{
 			// If user registration disabled, we return access denied.
 			throw new HTTP_Exception_403(__('User registration not allowed'));
@@ -84,8 +84,8 @@ class Controller_User extends Template {
 
 		$action = Route::get('user')->uri(array('action' => $this->request->action()));
 
-		$male = (isset($post->gender) && $post->gender == 1) ? TRUE : FALSE;
-		$female = (isset($post->gender) && $post->gender == 2) ? TRUE : FALSE;
+		$male   = (isset($post->gender) AND $post->gender == 1) ? TRUE : FALSE;
+		$female = (isset($post->gender) AND $post->gender == 2) ? TRUE : FALSE;
 
 		// Load the view
 		$view = View::factory('user/register')
@@ -96,14 +96,14 @@ class Controller_User extends Template {
 			->bind('female', $female)
 			->bind('errors', $this->_errors);
 
-		if($config->get('use_captcha', FALSE))
+		if ($config->get('use_captcha', FALSE))
 		{
 			$captcha = Captcha::instance();
 			$view->set('captcha', $captcha);
 		}
 
 		// If there is a post and $_POST is not empty
-		if($this->valid_post('register'))
+		if ($this->valid_post('register'))
 		{
 			try
 			{
@@ -114,13 +114,14 @@ class Controller_User extends Template {
 				// sign the user in
 				Auth::instance()->login($post->name, $post->pass);
 
+				Log::info('Account :title created successful.', array(':title' => $post->nick));
 				Message::success(__('Account %title created successful!', array('%title' => $post->nick)));
 
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors =  $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -261,7 +262,7 @@ class Controller_User extends Template {
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
-		elseif (ACL::check('access profiles') AND $user->status AND $user->id > 1)
+		elseif (ACL::check('access profiles') AND $user->status AND $user->id > Model_User::GUEST_ID)
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
@@ -358,7 +359,7 @@ class Controller_User extends Template {
 	public function action_password()
 	{
 		// The user is not logged in
-		if( ! $this->_auth->logged_in())
+		if ( ! $this->_auth->logged_in())
 		{
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 200);
 		}
@@ -406,7 +407,7 @@ class Controller_User extends Template {
 	public function action_photo()
 	{
 		// The user is not logged in
-		if( ! $this->_auth->logged_in())
+		if ( ! $this->_auth->logged_in())
 		{
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
 		}
@@ -462,11 +463,11 @@ class Controller_User extends Template {
 		{
 			// @todo If logged in, redirect to profile page or something, otherwise to sign in form
 			// @todo If account already confirmed, show Message::NOTICE
-			Message::success('Rejoice. Your sign-up has been confirmed.');
+			Message::success(__('Rejoice. Your sign-up has been confirmed.'));
 			$this->request->redirect('user/profile');
 		}
 
-		Message::error('Oh no! This confirmation link is invalid.');
+		Message::error(__('Oh no! This confirmation link is invalid.'));
 		$this->request->redirect('user/profile');
 	}
 
@@ -481,7 +482,7 @@ class Controller_User extends Template {
 	public function action_reset_password()
 	{
 		// The user is logged in, yet it is possible that he lost his password anyway
-		if($this->_auth->logged_in())
+		if ($this->_auth->logged_in())
 		{
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'password', 'id' => $this->_user->id)), 200);
 		}
@@ -497,10 +498,10 @@ class Controller_User extends Template {
 				->bind('errors', $this->_errors);
 
 		// Form submitted
-		if($this->valid_post('reset_pass'))
+		if ($this->valid_post('reset_pass'))
 		{
 			// Try to reset the password
-			if($this->_user->reset_password($post = $this->request->post()))
+			if ($this->_user->reset_password($post = $this->request->post()))
 			{
 				Message::success(__('Instructions to reset your password are being sent to your email address %mail.', array('%mail' => $_POST['mail'])));
 				Log::info('Password reset instructions mailed to :name at :mail.',
@@ -532,7 +533,7 @@ class Controller_User extends Template {
 	 */
 	public function action_reset_confirm_password()
 	{
-		if($this->_auth->logged_in())
+		if ($this->_auth->logged_in())
 		{
 			// redirect to the user account
 			$this->request->redirect('user/profile');
@@ -588,7 +589,7 @@ class Controller_User extends Template {
 	protected function prevent_user_collision($id)
 	{
 		// Another user (on the same browser) is still logged in
-		if($this->_auth->logged_in() AND $id != $this->_user->id)
+		if ($this->_auth->logged_in() AND $id != $this->_user->id)
 		{
 			// Cover your ears, we're blowing up the whole session!
 			$this->_auth->logout(TRUE);
