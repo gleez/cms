@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -13,10 +13,22 @@ class Model_User extends ORM {
 	/** @type integer GUEST_ID Guest user ID */
 	const GUEST_ID = 1;
 
-	/** @type integer GUEST_ID Main admin user ID */
+	/** @type integer ADMIN_ID Main admin user ID */
 	const ADMIN_ID = 2;
 
-	/** @type string GUEST_ID Default upload path */
+	/** @type integer ANONYMOUS_ROLE Anonymous role ID */
+	const ANONYMOUS_ROLE = 1;
+
+	/** @type integer LOGIN_ROLE Login role ID */
+	const LOGIN_ROLE = 2;
+
+	/** @type integer USER_ROLE User role ID */
+	const USER_ROLE = 3;
+
+	/** @type integer ADMIN_ROLE Admin role ID */
+	const ADMIN_ROLE = 4;
+
+	/** @type string DEFAULT_PATH Default upload path */
 	const DEFAULT_PATH = 'media/pictures';
 
 	/**
@@ -253,6 +265,7 @@ class Model_User extends ORM {
 	 * Take actions before the user is deleted
 	 *
 	 * @since   1.0.1
+	 * @since   1.1.0  Used GUEST_ID & ADMIN_ID constants
 	 *
 	 * @param   integer  $id  User ID
 	 *
@@ -261,7 +274,7 @@ class Model_User extends ORM {
 	protected function before_delete($id)
 	{
 		// If it is an internal request (eg. popup dialog) and id < 3
-		if ($id == Model_User::GUEST_ID OR $id == Model_User::ADMIN_ID)
+		if ($id == self::GUEST_ID OR $id == self::ADMIN_ID)
 		{
 			Log::error('Attempt to delete system user.');
 			throw new Gleez_Exception("You can't delete system users!");
@@ -294,7 +307,7 @@ class Model_User extends ORM {
 	{
 		parent::add($alias, $far_keys, $data);
 
-		//update data roles
+		// update data roles
 		$this->_set_roles();
 
 		return $this;
@@ -307,7 +320,7 @@ class Model_User extends ORM {
 	{
 		parent::remove($alias, $far_keys);
 
-		//update data roles
+		// update data roles
 		$this->_set_roles();
 
 		return $this;
@@ -320,7 +333,7 @@ class Model_User extends ORM {
 	 */
 	public function find_all($id = NULL)
 	{
-		$this->where($this->_object_name.'.id', '!=', 1);
+		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
 
 		return parent::find_all($id);
 	}
@@ -332,7 +345,7 @@ class Model_User extends ORM {
 	 */
 	public function count_all()
 	{
-		$this->where($this->_object_name.'.id', '!=', 1);
+		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
 
 		return parent::count_all();
 	}
@@ -457,7 +470,7 @@ class Model_User extends ORM {
 	public static function get_password_validation($values)
 	{
 		return Validation::factory($values)
-			->rule('pass', 'min_length', array(':value', 4))
+			->rule('pass', 'min_length', array(':value', Config::get('auth.password.length_min', 4)))
 			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
 	}
 
@@ -467,7 +480,7 @@ class Model_User extends ORM {
 	 * @param   string  $file Uploaded file
 	 * @return  NULL|string   File path
 	 *
-	 * @uses    System::mkdir Making dir for uploading photo
+	 * @uses    System::mkdir
 	 * @uses    Message::error
 	 * @uses    Log::add
 	 * @uses    Text::plain
@@ -514,8 +527,10 @@ class Model_User extends ORM {
 	 *
 	 * @param   array          $array    Values to check
 	 * @param   boolean|string $redirect URI or URL to redirect to
+	 *
 	 * @throws  Validation_Exception
-	 * @return  boolean|$this
+	 *
+	 * @return  Model_User
 	 */
 	public function login(array $array, $redirect = FALSE)
 	{
@@ -588,7 +603,7 @@ class Model_User extends ORM {
 	public function change_pass($values, $expected = NULL )
 	{
 		// Validation for passwords
-		$extra_validation = Model_User::get_password_validation($values)
+		$extra_validation = self::get_password_validation($values)
 			->rule('old_pass', 'not_empty')
 			->rule('pass_confirm', 'not_empty')
 			->rule('pass', 'not_empty')
@@ -602,7 +617,8 @@ class Model_User extends ORM {
 	 *
 	 * @param   string  $provider_field
 	 * @param   array   $data
-	 * @return  ORM
+	 *
+	 * @return  Model_User
 	 */
 	public function find_sso_user($provider_field, $data)
 	{
@@ -618,7 +634,8 @@ class Model_User extends ORM {
 	 *
 	 * @param   array   $data
 	 * @param   array  $provider
-	 * @return  ORM
+	 *
+	 * @return  Model_User
 	 */
 	public function sso_signup(array $data, array $provider)
 	{
@@ -629,7 +646,7 @@ class Model_User extends ORM {
 			$this->pass = $data['id']; //set id as pass( we can't save without password)
 			$this->nick = $data['nick'];
 			$this->url  = $data['link'];
-			$this->status  = (int) 1;
+			$this->status  = 1;
 
 			// Set email if it's available via OAuth provider
 			if ( isset($data['email']) )
@@ -646,8 +663,8 @@ class Model_User extends ORM {
 			// Save user
 			$this->save();
 
-			//give "login" role as it is verified
-			$this->add('roles', 2);
+			// give "login" role as it is verified
+			$this->add('roles', self::LOGIN_ROLE);
 
 			$identity = ORM::factory('identity');
 			$identity->user_id = $this->id;
@@ -670,16 +687,16 @@ class Model_User extends ORM {
 			// Set email if it's available via OAuth provider and save
 			if (isset($data['email']))
 			{
-				$this->status  = (int) 1;
+				$this->status  = 1;
 				//$this->mail = $data['email'];
 				$this->save();
 			}
 		}
 
-		if ( ! $this->has('roles', 3))
+		if ( ! $this->has('roles', self::USER_ROLE))
 		{
 			// Give the user the "user" role
-			$this->add('roles', 3);
+			$this->add('roles', self::USER_ROLE);
 		}
 
 		// Return user
@@ -687,7 +704,7 @@ class Model_User extends ORM {
 	}
 
 	/**
-	 * ## Sign-up: step 1
+	 * Sign-up: step 1
 	 *
 	 * Validates sign-up information and creates a new user with the "login" role only.
 	 *
@@ -700,10 +717,10 @@ class Model_User extends ORM {
 		$this->values($data)->save();
 
 		// Give user the "login" role
-		if ( ! $this->has('roles', 2))
+		if ( ! $this->has('roles', self::LOGIN_ROLE))
 		{
 			// Give the user the "user" role
-			$this->add('roles', 2);
+			$this->add('roles', self::LOGIN_ROLE);
 		}
 
 		// Create e-mail body with reset password link
@@ -733,7 +750,7 @@ class Model_User extends ORM {
 	}
 
 	/**
-	 * ## Sign-up: step 2
+	 * Sign-up: step 2
 	 *
 	 * Confirms a user sign-up by validating the confirmation link.
 	 * Adds the "user" role to the user.
@@ -953,10 +970,10 @@ class Model_User extends ORM {
 		// or a the reset password form could be used in case the original sign-up confirmation mail got lost.
 		// Since the user could only come to this point if he supplied a valid email address,
 		// we confirm his account right here.
-		if ( ! $this->has('roles', 3))
+		if ( ! $this->has('roles', self::USER_ROLE))
 		{
 			// Give the user the "user" role
-			$this->add('roles', 3);
+			$this->add('roles', self::USER_ROLE);
 		}
 
 		return TRUE;
@@ -1018,7 +1035,9 @@ class Model_User extends ORM {
 	}
 
 	/**
-	 * update user data roles array in the $user->data
+	 * Update user data roles array in the $user->data
+	 *
+	 * @return array
 	 */
 	protected function _set_roles()
 	{
@@ -1026,7 +1045,7 @@ class Model_User extends ORM {
 		{
 			$roles = $this->roles->find_all()->as_array('id', 'name');
 
-			//save to data field for performance
+			// save to data field for performance
 			$this->data = array('roles' => $roles);
 			$this->update();
 
