@@ -270,6 +270,8 @@ class Model_User extends ORM {
 	 * @param   integer  $id  User ID
 	 *
 	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Log::error
 	 */
 	protected function before_delete($id)
 	{
@@ -365,8 +367,11 @@ class Model_User extends ORM {
 			// Set the last login date
 			$this->login = time();
 
-			//if the pass is md5.. convert to new hash system
-			if (strlen($this->pass) == 32 AND isset($this->password) AND strlen($this->password) > 3)
+			// if the pass is md5.. convert to new hash system
+			if (strlen($this->pass) == 32
+				AND isset($this->password)
+				AND strlen($this->password) > Config::get('auth.password.length_min', 4)
+			)
 			{
 				$this->pass = $this->password;
 			}
@@ -454,6 +459,7 @@ class Model_User extends ORM {
 	 *
 	 * @param   string  $value  Unique value
 	 * @return  boolean
+	 *
 	 * @uses    Valid::email
 	 */
 	public function unique_key($value)
@@ -464,8 +470,13 @@ class Model_User extends ORM {
 	/**
 	 * Password validation for plain passwords.
 	 *
-	 * @param   array  $values
+	 * @param   array  $values  Array of 'pass' 'pass_confirm' and to use for validation
+	 *
 	 * @return  Validation
+	 *
+	 * @uses    Config::get
+	 * @uses    Validation::factory
+	 * @uses    Validation::rule
 	 */
 	public static function get_password_validation($values)
 	{
@@ -482,7 +493,7 @@ class Model_User extends ORM {
 	 *
 	 * @uses    System::mkdir
 	 * @uses    Message::error
-	 * @uses    Log::add
+	 * @uses    Log::error
 	 * @uses    Text::plain
 	 * @uses    Upload::valid
 	 * @uses    Upload::save
@@ -531,6 +542,11 @@ class Model_User extends ORM {
 	 * @throws  Validation_Exception
 	 *
 	 * @return  Model_User
+	 *
+	 * @uses    Log::error
+	 * @uses    Module::event
+	 * @uses    Request::initial
+	 * @uses    Request::redirect
 	 */
 	public function login(array $array, $redirect = FALSE)
 	{
@@ -649,7 +665,7 @@ class Model_User extends ORM {
 			$this->status  = 1;
 
 			// Set email if it's available via OAuth provider
-			if ( isset($data['email']) )
+			if (isset($data['email']))
 			{
 				$this->mail = $data['email'];
 			}
@@ -674,7 +690,7 @@ class Model_User extends ORM {
 			//send welcome mail
 			$this->welcome_mail();
 		}
-		elseif ( $this->_loaded )
+		elseif ($this->_loaded)
 		{
 			// If user is found, but provider id is missing add it to details.
 			// We can do this merge, because this means user is found by email address,
@@ -709,7 +725,19 @@ class Model_User extends ORM {
 	 * Validates sign-up information and creates a new user with the "login" role only.
 	 *
 	 * @param   array  $data  Values to check
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    Auth::instance
+	 * @uses    Auth::hash
+	 * @uses    URL::site
+	 * @uses    Route::get
+	 * @uses    Route::uri
+	 * @uses    Email::factory
+	 * @uses    Email::subject
+	 * @uses    Email::to
+	 * @uses    Email::message
+	 * @uses    Email::send
 	 */
 	public function signup(array $data)
 	{
@@ -739,7 +767,7 @@ class Model_User extends ORM {
 
 		// Create an email message
 		$email = Email::factory()
-			->subject( __('Gleez - Validate account details for :name', array(':name' => $this->nick)) )
+			->subject(__('Gleez - Validate account details for :name', array(':name' => $this->nick)))
 			->to($this->mail, $this->nick)
 			->message($body);
 
@@ -757,7 +785,11 @@ class Model_User extends ORM {
 	 *
 	 * @param   integer  $id     User id
 	 * @param   string   $token  Confirmation token
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    Auth::instance
+	 * @uses    Auth::hash
 	 */
 	public function confirm_signup($id, $token)
 	{
@@ -769,7 +801,7 @@ class Model_User extends ORM {
 		$this->where('id', '=', $id)->where('status', '=', 1)->find();
 
 		// Invalid user id or account blocked
-		if ( ! $this->loaded() )
+		if ( ! $this->loaded())
 			return FALSE;
 
 		// Invalid confirmation token
@@ -794,6 +826,12 @@ class Model_User extends ORM {
 	 * Welcome email to confirmed users/oauth users
 	 *
 	 * @return  boolean
+	 *
+	 * @uses    Email::factory
+	 * @uses    Email::subject
+	 * @uses    Email::to
+	 * @uses    Email::message
+	 * @uses    Email::send
 	 */
 	public function welcome_mail()
 	{
@@ -828,6 +866,7 @@ class Model_User extends ORM {
 	 * @uses    Validation::rule
 	 * @uses    Auth::instance
 	 * @uses    Auth::hash
+	 * @uses    URL::site
 	 * @uses    Email::factory
 	 * @uses    Email::subject
 	 * @uses    Email::to
@@ -857,7 +896,7 @@ class Model_User extends ORM {
 		$this->where('mail', '=', $data['mail'])->find();
 
 		// Invalid user
-		if ( ! $this->_loaded )
+		if ( ! $this->_loaded)
 		{
 			return FALSE;
 		}
@@ -907,7 +946,12 @@ class Model_User extends ORM {
 	 * @param   integer  $id     User id
 	 * @param   string   $token  Confirmation token
 	 * @param   integer  $time   UNIX timestamp
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    Auth::instance
+	 * @uses    Auth::hash
+	 * @uses    Config::get
 	 */
 	public function confirm_reset_password_link($id, $token, $time)
 	{
@@ -926,7 +970,7 @@ class Model_User extends ORM {
 		$this->where('id', '=', $id)->where('status', '=', 1)->find();
 
 		// Invalid user id
-		if ( ! $this->loaded() )
+		if ( ! $this->loaded())
 			return FALSE;
 
 		// Used onetime login link
@@ -941,13 +985,19 @@ class Model_User extends ORM {
 
 
 	/**
-	 * ## Reset password: step 2b
+	 * Reset password: step 2b
 	 *
 	 * Validates and saves a new password.
 	 * Also adds the "user" role to the user, in case his sign-up wasn't confirmed yet.
 	 *
 	 * @param   array  $data  Values to check
+	 *
 	 * @return  boolean
+	 *
+	 * @uses    Log::info
+	 * @uses    Validation::factory
+	 * @uses    Validation::rule
+	 * @uses    Validation::label
 	 */
 	public function confirm_reset_password_form(array & $data)
 	{
