@@ -53,8 +53,8 @@ class Controller_User extends Template {
 	 * @uses    Request::action
 	 * @uses    Route::get
 	 * @uses    Route::uri
-	 * @uses    Config_Group::load
-	 * @uses    Config::get
+	 * @uses    Config::load
+	 * @uses    Config_Group::get
 	 * @uses    Captcha::instance
 	 * @uses    Message::success
 	 *
