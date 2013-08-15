@@ -1,9 +1,9 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 /**
  * Default auth user token
  *
  * @package    Gleez\User
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
@@ -77,4 +77,4 @@ class Model_Auth_User_Token extends ORM {
 		return $token;
 	}
 
-} // End Auth User Token Model
+}

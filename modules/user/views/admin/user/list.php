@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access to script'); ?>
+<?php defined('SYSPATH') OR die('No direct access to script'); ?>
 
 <?php if ($is_datatables): ?>
 	<?php echo $datatables->render(); ?>
