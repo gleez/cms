@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Basic captcha class.
  *
@@ -80,4 +80,4 @@ class Captcha_Basic extends Captcha
 		return $this->image_render($html);
 	}
 
-} // End Captcha Basic Driver Class
+}

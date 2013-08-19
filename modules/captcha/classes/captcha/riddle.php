@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Riddle captcha class.
  *
@@ -47,4 +47,4 @@ class Captcha_Riddle extends Captcha
 		return $this->riddle;
 	}
 
-} // End Captcha Riddle Driver Class
+}
