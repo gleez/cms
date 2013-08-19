@@ -1,6 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
-<?php echo Form::open($action) // The query string (with token) is required here ?>
+<?php echo Form::open($action); ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 

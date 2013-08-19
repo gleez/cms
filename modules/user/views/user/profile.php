@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="row-fluid" itemscope itemtype="http://schema.org/Person">
 
 	<div id="Panel" class="span4">
