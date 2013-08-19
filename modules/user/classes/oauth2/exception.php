@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * OAuth v2 Exception
  *
@@ -7,4 +7,4 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
-class OAuth2_Exception extends Gleez_Exception {  }
+class OAuth2_Exception extends Gleez_Exception {}

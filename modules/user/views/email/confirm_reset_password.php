@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <?php
 	echo
 		__('Hello :name!', array(':name' => $name)) . PHP_EOL . PHP_EOL .

@@ -1,14 +1,13 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
-* Localized strings into Romanian
-*
-* @package   User\I18n
-* @author    Sorin Iclanzan
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
-return array
-(
+ * Localized strings into Romanian
+ *
+ * @package   User\I18n
+ * @author    Sorin Iclanzan
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
   // :
 	':field must be a valid address with the http:// or https:// prefix' => ':field trebuie să fie o adresă validă cu prefixul “http://” sau “https://”',
 	':nick joined.' => ':nick s-a adăugat.',

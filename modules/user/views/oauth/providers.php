@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <?php Assets::css('user', 'media/css/user.css', array('weight' => 2)); ?>
 
 <ul id="oauth-providers">
