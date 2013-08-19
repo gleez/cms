@@ -1,9 +1,9 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
 * Localized strings into Italian
 *
 * @package   Gleez\I18n
-* @author    Emanuele Calvagno - Gleez
+* @author    Emanuele Calvagno
 * @copyright (c) 2011-2013 Gleez Technologies
 * @license   http://gleezcms.org/license Gleez CMS License
 */

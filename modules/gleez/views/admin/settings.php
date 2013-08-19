@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') or die('No direct script access.'); ?>
-
 <div class="help">
 	<p><?php echo __('The main parameters of the site set up here. The following are all of the settings that define your site as a whole: settings which determine how your site behaves, how you interact with your site, and how the rest of the world interacts with your site.') ?></p>
 </div>

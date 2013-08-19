@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('404 Not Found.');
+<?php
 
 return array(
 

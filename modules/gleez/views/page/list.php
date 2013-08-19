@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <?php foreach($posts as $i => $post): ?>
 	<div id="post-<?php echo $i; ?>" class="post-list <?php echo ($post->sticky) ? ' sticky' : ' post-'. $post->status; ?>">
 		<h2 class="post-title">

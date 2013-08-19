@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.');
+<?php
 /**
  * Gleez Core class
  *
@@ -18,9 +18,6 @@ class Gleez {
 
 	/** @type string MAINTENANCE_MESSAGE Default message for maintenance mode */
 	const MAINTENANCE_MESSAGE = 'This site is down for maintenance';
-
-	/** @type string FILE_SECURITY Security check that is added to all generated PHP files */
-	const FILE_SECURITY = '<?php defined(\'SYSPATH\') OR die(\'No direct script access allowed.\');';
 
 	/**
 	 * Gleez installed?

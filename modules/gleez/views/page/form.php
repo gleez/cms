@@ -1,5 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
-
+<?php
 	echo Form::open($action, array('id'=>'page-form', 'class'=>'post-form form', 'enctype' => 'multipart/form-data'));
 
 	include Kohana::find_file('views', 'errors/partial');

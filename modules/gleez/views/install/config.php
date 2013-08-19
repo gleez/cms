@@ -1,6 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
-    echo Gleez::FILE_SECURITY.PHP_EOL
-?>
+<?php echo '<?php'.PHP_EOL; ?>
 return array
 (
 	'default' => array

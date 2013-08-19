@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-
 <?php echo Form::open($action, array('class' => 'form form-horizontal')); ?>
 	<div class="container">
 		<div class="span12">

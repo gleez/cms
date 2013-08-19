@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <h4 class="title"><?php echo __('Comments'); ?></h4>
 
 <ol class="MessageList Discussions" START=<?php echo $pagination->offset + 1; ?>>

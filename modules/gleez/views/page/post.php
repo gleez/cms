@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-
 <div class="post-page-wrapper">
 	<?php if (isset($page)): ?>
 		<div class="post-page">

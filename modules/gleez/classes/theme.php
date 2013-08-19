@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
  * Theme helper for adding content to views
  *

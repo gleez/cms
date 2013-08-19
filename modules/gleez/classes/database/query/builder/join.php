@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 class Database_Query_Builder_Join extends Kohana_Database_Query_Builder_Join {
 

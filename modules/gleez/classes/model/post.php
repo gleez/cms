@@ -1,3 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php
 
 class Model_Post extends Post {}

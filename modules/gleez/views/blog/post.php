@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <div class="blog-page-wrapper">
 	<?php if (isset($blog)): ?>
 		<div class="blog-page">
