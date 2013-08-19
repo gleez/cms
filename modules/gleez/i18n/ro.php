@@ -1,14 +1,13 @@
 <?php
 /**
-* Localized strings into Romanian
-*
-* @package   Gleez\I18n
-* @author    Sorin Iclanzan
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
-return array
-(
+ * Localized strings into Romanian
+ *
+ * @package   Gleez\I18n
+ * @author    Sorin Iclanzan
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
 	// :
 	':field must not be empty' => 'câmpul nu poate fi gol',
 	':pcre has not been compiled with Unicode property support.' => ':pcre nu a fost compilat cu suport pentru Unicode.',
