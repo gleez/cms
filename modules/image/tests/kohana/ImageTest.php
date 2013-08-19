@@ -1,5 +1,4 @@
-<?php defined('SYSPATH') OR die('Kohana bootstrap needs to be included before tests run');
-
+<?php
 /**
  * @package    Kohana/Image
  * @group      kohana
@@ -9,7 +8,6 @@
  * @copyright  (c) 2009-2012 Kohana Team
  * @license    http://http://kohanaframework.org/license
  */
-
 class Kohana_ImageTest extends PHPUnit_Framework_TestCase {
 
 	protected function setUp()
