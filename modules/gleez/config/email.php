@@ -1,4 +1,5 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
+
 return array(
 	/**
 	 * SwiftMailer driver, used with the email module.

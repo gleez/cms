@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
-
 <ul class="page-stats">
 	<li>
 		<h3><?php _e('Categories'); ?></h3>

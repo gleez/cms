@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="signin-form row-fluid">
 	<div class="span6">
 		<?php echo Form::open($action, array('class' => 'form-horizontal1')); ?>

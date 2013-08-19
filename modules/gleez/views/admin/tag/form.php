@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.') ?>
-
 <div class="help">
 	<p><?php echo __('Add and edit your tags using the form below.'); ?></p>
 </div>

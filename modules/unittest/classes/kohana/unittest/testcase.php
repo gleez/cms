@@ -1,5 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php
 /**
  * A version of the stock PHPUnit testcase that includes some extra helpers
  * and default settings

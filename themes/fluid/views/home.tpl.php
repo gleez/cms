@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-
     <div class="hero-unit">
         <h1>Gleez CMS</h1>
         <blockquote>

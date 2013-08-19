@@ -1,5 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
-
+<?php
 /**
  * PHPUnit testsuite for kohana application
  *

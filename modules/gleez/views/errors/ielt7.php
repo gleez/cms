@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <!--[if lt IE 7]>
 	<div class="alert">
 		<strong><?php echo __('Warning!'); ?></strong>

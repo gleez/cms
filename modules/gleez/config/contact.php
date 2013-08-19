@@ -1,7 +1,6 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 
-return array
-(
+return array(
 	/**
 	 * Subject length
 	 * @var integer

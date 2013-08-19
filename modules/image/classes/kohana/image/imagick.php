@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Support for image manipulation using [Imagick](http://php.net/Imagick).
  *

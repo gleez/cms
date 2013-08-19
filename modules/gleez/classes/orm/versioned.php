@@ -1,3 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 
 class ORM_Versioned extends Gleez_ORM_Versioned {}
