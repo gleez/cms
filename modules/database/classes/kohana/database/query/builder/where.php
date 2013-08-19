@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database query builder for WHERE statements. See [Query Builder](/database/query/builder) for usage and examples.
  *
