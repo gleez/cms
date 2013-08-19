@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 
 	$use_captcha       = (isset($post['use_captcha']) AND $post['use_captcha'] == 1) ? TRUE : FALSE;
 	$use_authors       = (isset($post['use_authors']) AND $post['use_authors'] == 1) ? TRUE : FALSE;

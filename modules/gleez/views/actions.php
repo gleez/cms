@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct access to script'); ?>
-
 <div class="btn-group">
 	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 		<i class="icon-cog"></i> <span class="caret"></span>

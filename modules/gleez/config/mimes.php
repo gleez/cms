@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * This file maps Internet media types to unique file extension(s)
  *

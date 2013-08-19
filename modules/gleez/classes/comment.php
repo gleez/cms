@@ -1,3 +1,3 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 class Comment extends Gleez_Comment {}

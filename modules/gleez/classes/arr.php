@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
  * Array Class Helper
  *
@@ -803,18 +803,17 @@ class Arr {
 	/**
 	 * Unpack and prepare array to be used in the configuration files
 	 *
-	 * Example:<br>
-	 * <code>
-	 *  file_put_contents($file, process_config(array('foo' => 'bar')));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * file_put_contents($file, process_config(array('foo' => 'bar')));
+	 * ~~~
 	 *
 	 * @param   array  $config  Array of configuration
 	 * @return  string
 	 */
 	public static function process_config(array $config)
 	{
-		$array_str = "<?php defined('SYSPATH') OR die('No direct script access.');" . PHP_EOL
-			. "return " . var_export($config, TRUE) . ";" . PHP_EOL;
+		$array_str = '<?php' . PHP_EOL 	. "return " . var_export($config, TRUE) . ";" . PHP_EOL;
 
 		return $array_str;
 	}

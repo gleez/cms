@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.'); ?>
-
 <div class="help">
 	<p>
 		<?php _e('If you want more information about the %sitename or if you have comments about this website please use the contact form below. If you message is about a specific page on the %site_url website please include the URL in your message for reference.',

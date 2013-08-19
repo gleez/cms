@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.');
+<?php
 /**
  * Upload helper class for working with uploaded files and [Validation].
  *
