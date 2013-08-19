@@ -1,7 +1,6 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
-return array
-(
+return array(
 	'User Guide' => 'Guide Utilisateur'
 );
 
