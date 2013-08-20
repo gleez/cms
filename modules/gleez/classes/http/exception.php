@@ -28,6 +28,11 @@ class HTTP_Exception extends Gleez_Exception {
 	/**
 	 * Creates an HTTP_Exception of the specified type
 	 *
+	 * Example:
+	 * ~~~
+	 * throw HTTP_Exception::factory(404, 'File not found!');
+	 * ~~~
+	 *
 	 * @param  integer    $code       The HTTP status code
 	 * @param  string     $message    Status message, custom content to display with error [Optional]
 	 * @param  array      $variables  Translation variables [Optional]
@@ -45,9 +50,10 @@ class HTTP_Exception extends Gleez_Exception {
 	 *
 	 * Example:
 	 * ~~~
-	 * throw new Gleez_Exception('Something went terrible wrong, :user',
+	 * throw new HTTP_Exception('Something went terrible wrong, :user',
 	 *     array(':user' => $user)
 	 * );
+	 * ~~~
 	 *
 	 * @param  string     $message    Status message, custom content to display with error [Optional]
 	 * @param  array      $variables  Translation variables [Optional]
