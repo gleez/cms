@@ -1,37 +1,24 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * Response wrapper. Created as the result of any [Request] execution
- * or utility method (i.e. Redirect). Implements standard HTTP
- * response format.
+ * Response wrapper
  *
- * @package    Kohana
- * @category   Base
+ * Created as the result of any [Request] execution or utility method
+ * (i.e. Redirect). Implements standard HTTP response format.
+ *
+ * @package    Gleez\Base
  * @author     Kohana Team
+ * @author     Gleez Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaphp.com/license
- * @since      3.1.0
+ * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Kohana_Response implements HTTP_Response {
+class Response implements HTTP_Response {
 
 	/**
-	 * Factory method to create a new [Response]. Pass properties
-	 * in using an associative array.
-	 *
-	 *      // Create a new response
-	 *      $response = Response::factory();
-	 *
-	 *      // Create a new response with headers
-	 *      $response = Response::factory(array('status' => 200));
-	 *
-	 * @param   array    $config Setup the response object
-	 * @return  Response
+	 * HTTP status codes and messages
+	 * @var array
 	 */
-	public static function factory(array $config = array())
-	{
-		return new Response($config);
-	}
-
-	// HTTP status codes and messages
 	public static $messages = array(
 		// Informational 1xx
 		100 => 'Continue',
@@ -87,35 +74,64 @@ class Kohana_Response implements HTTP_Response {
 	);
 
 	/**
-	 * @var  integer     The response http status
+	 * The response http status
+	 * @var integer
 	 */
 	protected $_status = 200;
 
 	/**
-	 * @var  HTTP_Header  Headers returned in the response
+	 * Headers returned in the response
+	 * @var HTTP_Header
 	 */
 	protected $_header;
 
 	/**
-	 * @var  string      The response body
+	 * The response body
+	 * @var string
 	 */
 	protected $_body = '';
 
 	/**
-	 * @var  array       Cookies to be returned in the response
+	 * Cookies to be returned in the response
+	 * @var array
 	 */
 	protected $_cookies = array();
 
 	/**
-	 * @var  string      The response protocol
+	 * The response protocol
+	 * @var string
 	 */
 	protected $_protocol;
 
 	/**
+	 * Factory method to create a new [Response]
+	 *
+	 * Pass properties in using an associative array.
+	 *
+	 * Example:
+	 * ~~~
+	 * // Create a new response
+	 * $response = Response::factory();
+	 *
+	 * // Create a new response with headers
+	 * $response = Response::factory(array('status' => 200));
+	 * ~~~
+	 *
+	 * @param   array  $config  Config for response object [Optional]
+	 *
+	 * @return  Response
+	 */
+	public static function factory(array $config = array())
+	{
+		return new Response($config);
+	}
+
+	/**
 	 * Sets up the response object
 	 *
-	 * @param   array $config Setup the response object
-	 * @return  void
+	 * @param   array  $config  Config for response object [Optional]
+	 *
+	 * @return  Response
 	 */
 	public function __construct(array $config = array())
 	{
@@ -150,22 +166,27 @@ class Kohana_Response implements HTTP_Response {
 	/**
 	 * Gets or sets the body of the response
 	 *
-	 * @return  mixed
+	 * @param   string  $content  The body of the response [Optional]
+	 * @return  string|Response
 	 */
 	public function body($content = NULL)
 	{
 		if ($content === NULL)
+		{
 			return $this->_body;
+		}
 
 		$this->_body = (string) $content;
+
 		return $this;
 	}
 
 	/**
-	 * Gets or sets the HTTP protocol. The standard protocol to use
-	 * is `HTTP/1.1`.
+	 * Gets or sets the HTTP protocol
 	 *
-	 * @param   string   $protocol Protocol to set to the request/response
+	 * The standard protocol to use is `HTTP/1.1`.
+	 *
+	 * @param   string  $protocol  Protocol to set to the request|response [Optional]
 	 * @return  mixed
 	 */
 	public function protocol($protocol = NULL)
@@ -185,17 +206,23 @@ class Kohana_Response implements HTTP_Response {
 	}
 
 	/**
-	 * Sets or gets the HTTP status from this response.
+	 * Sets or gets the HTTP status from this response
 	 *
-	 *      // Set the HTTP status to 404 Not Found
-	 *      $response = Response::factory()
-	 *              ->status(404);
+	 * Example:
+	 * ~~~
+	 * // Set the HTTP status to 404 Not Found
+	 * $response = Response::factory()
+	 *                       ->status(404);
 	 *
-	 *      // Get the current status
-	 *      $status = $response->status();
+	 * // Get the current status
+	 * $status = $response->status();
+	 * ~~~
 	 *
-	 * @param   integer  $status Status to set to this response
+	 * @param   integer  $status  Status to set to this response [Optional]
+	 *
 	 * @return  mixed
+	 *
+	 * @throws  Gleez_Exception
 	 */
 	public function status($status = NULL)
 	{
@@ -210,30 +237,38 @@ class Kohana_Response implements HTTP_Response {
 		}
 		else
 		{
-			throw new Kohana_Exception(__METHOD__.' unknown status value : :value', array(':value' => $status));
+			throw new Gleez_Exception(__METHOD__.' unknown status value : :value', array(':value' => $status));
 		}
 	}
 
 	/**
 	 * Gets and sets headers to the [Response], allowing chaining
-	 * of response methods. If chaining isn't required, direct
-	 * access to the property should be used instead.
+	 * of response methods
 	 *
-	 *       // Get a header
-	 *       $accept = $response->headers('Content-Type');
+	 * If chaining isn't required, direct access to the property
+	 * should be used instead.
 	 *
-	 *       // Set a header
-	 *       $response->headers('Content-Type', 'text/html');
+	 * Example:
+	 * ~~~
+	 * // Get a header
+	 * $accept = $response->headers('Content-Type');
 	 *
-	 *       // Get all headers
-	 *       $headers = $response->headers();
+	 * // Set a header
+	 * $response->headers('Content-Type', 'text/html');
 	 *
-	 *       // Set multiple headers
-	 *       $response->headers(array('Content-Type' => 'text/html', 'Cache-Control' => 'no-cache'));
+	 * // Get all headers
+	 * $headers = $response->headers();
 	 *
-	 * @param mixed $key
-	 * @param string $value
-	 * @return mixed
+	 * // Set multiple headers
+	 * $response->headers(array('Content-Type' => 'text/html', 'Cache-Control' => 'no-cache'));
+	 * ~~~
+	 *
+	 * @param   mixed   $key    Header key [Optional]
+	 * @param   string  $value  Header value [Optional]
+	 *
+	 * @return  mixed
+	 *
+	 * @uses    Arr::get
 	 */
 	public function headers($key = NULL, $value = NULL)
 	{
@@ -258,8 +293,7 @@ class Kohana_Response implements HTTP_Response {
 	}
 
 	/**
-	 * Returns the length of the body for use with
-	 * content header
+	 * Returns the length of the body for use with content header
 	 *
 	 * @return  integer
 	 */
@@ -269,30 +303,41 @@ class Kohana_Response implements HTTP_Response {
 	}
 
 	/**
-	 * Set and get cookies values for this response.
-	 * 
-	 *     // Get the cookies set to the response
-	 *     $cookies = $response->cookie();
-	 *     
-	 *     // Set a cookie to the response
-	 *     $response->cookie('session', array(
-	 *          'value' => $value,
-	 *          'expiration' => 12352234
-	 *     ));
+	 * Set and get cookies values for this response
 	 *
-	 * @param   mixed   $key    cookie name, or array of cookie values
-	 * @param   string  $value  value to set to cookie
+	 * Example:
+	 * ~~~
+	 * // Get the cookies set to the response
+	 * $cookies = $response->cookie();
+	 *     
+	 * // Set a cookie to the response
+	 * $response->cookie('session', array(
+	 *     'value'      => $value,
+	 *     'expiration' => 12352234
+	 * ));
+	 * ~~~
+	 *
+	 * @param   mixed   $key    Cookie name, or array of cookie values [Optional]
+	 * @param   string  $value  Value to set to cookie [Optional]
+	 *
 	 * @return  string
 	 * @return  void
 	 * @return  [Response]
+	 *
+	 * @uses    Arr::get
+	 * @uses    Cookie::$expiration
 	 */
 	public function cookie($key = NULL, $value = NULL)
 	{
 		// Handle the get cookie calls
 		if ($key === NULL)
+		{
 			return $this->_cookies;
+		}
 		elseif ( ! is_array($key) AND ! $value)
+		{
 			return Arr::get($this->_cookies, $key);
+		}
 
 		// Handle the set cookie calls
 		if (is_array($key))
@@ -308,7 +353,7 @@ class Kohana_Response implements HTTP_Response {
 			if ( ! is_array($value))
 			{
 				$value = array(
-					'value' => $value,
+					'value'      => $value,
 					'expiration' => Cookie::$expiration
 				);
 			}
@@ -326,12 +371,14 @@ class Kohana_Response implements HTTP_Response {
 	/**
 	 * Deletes a cookie set to the response
 	 *
-	 * @param   string  $name
+	 * @param   string  $name  Cookie key
+	 *
 	 * @return  Response
 	 */
 	public function delete_cookie($name)
 	{
 		unset($this->_cookies[$name]);
+
 		return $this;
 	}
 
@@ -343,14 +390,16 @@ class Kohana_Response implements HTTP_Response {
 	public function delete_cookies()
 	{
 		$this->_cookies = array();
+
 		return $this;
 	}
 
 	/**
-	 * Sends the response status and all set headers.
+	 * Sends the response status and all set headers
 	 *
-	 * @param   boolean     $replace    replace existing headers
-	 * @param   callback    $callback   function to handle header output
+	 * @param   boolean   $replace   Replace existing headers [Optional]
+	 * @param   callback  $callback  Function to handle header output [Optional]
+	 *
 	 * @return  mixed
 	 */
 	public function send_headers($replace = FALSE, $callback = NULL)
@@ -359,10 +408,11 @@ class Kohana_Response implements HTTP_Response {
 	}
 
 	/**
-	 * Send file download as the response. All execution will be halted when
-	 * this method is called! Use TRUE for the filename to send the current
-	 * response as the file content. The third parameter allows the following
-	 * options to be set:
+	 * Send file download as the response
+	 *
+	 * All execution will be halted when this method is called!
+	 * Use TRUE for the filename to send the current response as the file content.
+	 * The third parameter allows the following options to be set:
 	 *
 	 * Type      | Option    | Description                        | Default Value
 	 * ----------|-----------|------------------------------------|--------------
@@ -381,14 +431,18 @@ class Kohana_Response implements HTTP_Response {
 	 *
 	 * [!!] No further processing can be done after this method is called!
 	 *
-	 * @param   string  $filename   filename with path, or TRUE for the current response
-	 * @param   string  $download   downloaded file name
-	 * @param   array   $options    additional options
+	 * @param   string  $filename  Filename with path, or TRUE for the current response
+	 * @param   string  $download  Downloaded file name [Optional]
+	 * @param   array   $options   Additional options [Optional]
+	 *
 	 * @return  void
-	 * @throws  Kohana_Exception
+	 *
+	 * @throws  Gleez_Exception
+	 *
 	 * @uses    File::mime_by_ext
 	 * @uses    File::mime
 	 * @uses    Request::send_headers
+	 * @uses    Gleez_Exception::text
 	 */
 	public function send_file($filename, $download = NULL, array $options = NULL)
 	{
@@ -402,7 +456,7 @@ class Kohana_Response implements HTTP_Response {
 		{
 			if (empty($download))
 			{
-				throw new Kohana_Exception('Download name must be provided for streaming files');
+				throw new Gleez_Exception('Download name must be provided for streaming files');
 			}
 
 			// Temporary files will automatically be deleted
@@ -455,7 +509,7 @@ class Kohana_Response implements HTTP_Response {
 
 		if ( ! is_resource($file))
 		{
-			throw new Kohana_Exception('Could not read file to send: :file', array(
+			throw new Gleez_Exception('Could not read file to send: :file', array(
 				':file' => $download,
 			));
 		}
@@ -554,15 +608,13 @@ class Kohana_Response implements HTTP_Response {
 			catch (Exception $e)
 			{
 				// Create a text version of the exception
-				$error = Kohana_Exception::text($e);
+				$error = Gleez_Exception::text($e);
 
 				if (is_object(Kohana::$log))
 				{
 					// Add this exception to the log
-					Kohana::$log->add(Log::ERROR, $error);
-
-					// Make sure the logs are written
-					Kohana::$log->write();
+					// And make sure the logs are written
+					Log::error($error)->write();
 				}
 
 				// Do NOT display the exception, it will corrupt the output!
@@ -631,10 +683,12 @@ class Kohana_Response implements HTTP_Response {
 
 	/**
 	 * Generate ETag
+	 *
 	 * Generates an ETag from the response ready to be returned
 	 *
-	 * @throws Request_Exception
-	 * @return String Generated ETag
+	 * @throws  Request_Exception
+	 *
+	 * @return  string  Generated ETag
 	 */
 	public function generate_etag()
 	{
@@ -649,11 +703,14 @@ class Kohana_Response implements HTTP_Response {
 
 	/**
 	 * Check Cache
+	 *
 	 * Checks the browser cache to see the response needs to be returned
 	 *
-	 * @param   string   $etag Resource ETag
-	 * @param   Request  $request The request to test against
+	 * @param   string   $etag     Resource ETag [Optional]
+	 * @param   Request  $request  The request to test against [Optional]
+	 *
 	 * @return  Response
+	 *
 	 * @throws  Request_Exception
 	 */
 	public function check_cache($etag = NULL, Request $request = NULL)
@@ -664,7 +721,9 @@ class Kohana_Response implements HTTP_Response {
 		}
 
 		if ( ! $request)
+		{
 			throw new Request_Exception('A Request object must be supplied with an etag for evaluation');
+		}
 
 		// Set the ETag header
 		$this->_header['etag'] = $etag;
@@ -705,7 +764,8 @@ class Kohana_Response implements HTTP_Response {
 	 * resumable downloads.
 	 *
 	 * @link   http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
-	 * @return array|FALSE
+	 *
+	 * @return mixed
 	 */
 	protected function _parse_byte_range()
 	{
@@ -721,10 +781,12 @@ class Kohana_Response implements HTTP_Response {
 	}
 
 	/**
-	 * Calculates the byte range to use with send_file. If HTTP_RANGE doesn't
-	 * exist then the complete byte range is returned
+	 * Calculates the byte range to use with send_file
+	 *
+	 * If HTTP_RANGE doesn't exist then the complete byte range is returned
 	 *
 	 * @param  integer $size
+	 *
 	 * @return array
 	 */
 	protected function _calculate_byte_range($size)
@@ -763,4 +825,4 @@ class Kohana_Response implements HTTP_Response {
 
 		return array($start, $end);
 	}
-} // End Kohana_Response
+}
