@@ -2,7 +2,7 @@
 
 Writing a task in minion is very easy. Simply create a new class called `Task_<Taskname>` and put it inside `classes/task/<taskname>.php`.
 
-	<?php defined('SYSPATH') or die('No direct script access.');
+	<?php
 
 	class Task_Demo extends Minion_Task
 	{
@@ -51,7 +51,7 @@ These validations will run for every task call unless `--help` is passed to the 
 
 Tasks can have built-in help. Minion will read class docblocks that you specify:
 
-	<?php defined('SYSPATH') or die('No direct script access.');
+	<?php
 
 	/**
 	 * This is a demo task.

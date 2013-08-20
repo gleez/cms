@@ -1,7 +1,6 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 
-return array
-(
+return array(
   /** @var string Cookie salt */
   'salt'      =>  'e41eb68d5605ebcc01424519da854',
 

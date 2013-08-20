@@ -1,3 +1,3 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 
 class ORM_Validation_Exception extends Gleez_ORM_Validation_Exception {}

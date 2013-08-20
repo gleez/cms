@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.') ?>
-
 <div class="<?php echo $post->type ?> post teaser">
 
 	<?php if($post->taxonomy OR $config->use_submitted): ?>

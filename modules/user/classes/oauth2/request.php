@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * OAuth v2 Request
  *
@@ -109,7 +109,7 @@ abstract class OAuth2_Request {
 	 *     // Get the request URL
 	 *     $url = $request->url;
 	 *
-	 * @param   string  variable name
+	 * @param   string  $key variable name
 	 * @return  mixed
 	 */
 	public function __get($key)
@@ -134,17 +134,22 @@ abstract class OAuth2_Request {
 	/**
 	 * Parameter getter and setter. Setting the value to `NULL` will remove it.
 	 *
-	 *     // Set the "oauth_consumer_key" to a new value
-	 *     $request->param('oauth_consumer_key', $key);
+	 * Example:
+	 * ~~~
+	 * // Set the "oauth_consumer_key" to a new value
+	 * $request->param('oauth_consumer_key', $key);
 	 *
-	 *     // Get the "oauth_consumer_key" value
-	 *     $key = $request->param('oauth_consumer_key');
+	 * // Get the "oauth_consumer_key" value
+	 * $key = $request->param('oauth_consumer_key');
+	 * ~~~
 	 *
-	 * @param   string   parameter name
-	 * @param   mixed    parameter value
-	 * @param   boolean  allow duplicates?
+	 * @param   string   $name       Parameter name
+	 * @param   mixed    $value      Parameter value [Optional]
+	 * @param   boolean  $duplicate  Allow duplicates? [Optional]
+	 *
 	 * @return  mixed    when getting
 	 * @return  $this    when setting
+	 *
 	 * @uses    Arr::get
 	 */
 	public function param($name, $value = NULL, $duplicate = FALSE)

@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <p class="lead"><?php echo __('The test results:'); ?></p>
 
 <div id="tests">

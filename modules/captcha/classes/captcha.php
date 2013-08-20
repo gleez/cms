@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Captcha abstract class.
  *

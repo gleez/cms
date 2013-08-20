@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * An adaptation of handle path aliasing
  *

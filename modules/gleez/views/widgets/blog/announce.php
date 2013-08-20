@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access."); ?>
-
 <?php if (isset($items)): ?>
 	<div class="recent-announce-blogs">
 		<div class="recent-announce-wrapper" itemscope itemtype="http://schema.org/CreativeWork">

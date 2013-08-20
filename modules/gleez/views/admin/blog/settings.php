@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="help">
 	<p><?php echo __('Blog specific settings, default status, tags, comments etc.'); ?></p>
 </div>

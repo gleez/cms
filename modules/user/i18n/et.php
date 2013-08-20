@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Localization for Estonian
  *
@@ -7,8 +7,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-return array
-(
+return array(
 	// :
 	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
 	':nick joined.' => ':nick присоединился.',

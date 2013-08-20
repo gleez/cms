@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="help">
 	<?php echo __('Add new menus to your site, edit existing menus, and rename and reorganize menu links.') ?>
 </div>

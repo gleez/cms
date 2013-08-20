@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <h1><?php echo __('Hello!')?></h1>
 
 <p><?php echo __(':name sent a message using the contact form at :site.', array(

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Alpha captcha class.
  *
@@ -92,4 +92,4 @@ class Captcha_Alpha extends Captcha
 		return $this->image_render($html);
 	}
 
-} // End Captcha Alpha Driver Class
+}

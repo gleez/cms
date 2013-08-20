@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
-
 <div class="help">
 	<p><?php echo __('Enter the path you wish to create the alias for, followed by the name of the new alias.'); ?></p>
 </div>

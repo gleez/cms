@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.') ?>
-
 <?php echo Form::open($action.URL::query($destination), array('id'=>'comment-form', 'class'=>'comment-form form')) ?>
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>

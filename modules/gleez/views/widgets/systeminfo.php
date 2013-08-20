@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <table class="hor-minimalist-a" id="admin-info">
 	<tbody>
 		<tr>

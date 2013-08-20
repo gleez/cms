@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php
 /**
  * Class for creating bbcode like tags "shortcodes."
  * The tag and attribute parsing or regular expression code is

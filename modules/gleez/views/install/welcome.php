@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <p class="lead">
   <?php echo __('Installing Gleez is very easy. We just need to know how to talk to your MySQL database, and we need a place to store config on your web host. Everything else will do Gleez Installer. But first we need to check your system on compliance to the minimum requirements.'); ?>
 </p>

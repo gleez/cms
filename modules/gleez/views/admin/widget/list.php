@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <div class="help">
 	<?php echo __('This page provides interface for assigning a widget to a region, and for controlling the order of widgets within regions. Click the configure link next to each widget to configure its specific title and visibility settings.'); ?>
 </div>

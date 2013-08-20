@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Word captcha class.
  *
@@ -34,4 +34,4 @@ class Captcha_Word extends Captcha_Basic
 		return strtoupper($words[array_rand($words)]);
 	}
 
-} // End Captcha Word Driver Class
+}
