@@ -3,13 +3,13 @@
  * MySQLi database connection driver
  *
  * ### System Requirements
+ *
  * - PHP 5.3 or higher
  * - MySQL 5.0 or higher
  *
  * @package    Gleez\Database\Drivers
- * @version    1.0.0
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @version    1.1.0
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -20,6 +20,12 @@ class Database_MySQLi extends Database {
 	 * @var array
 	 */
 	protected static $_current_databases = array();
+
+	/**
+	 * Use SET NAMES to set the character set
+	 * @var boolean
+	 */
+	protected static $_set_names;
 
 	/**
 	 * Identifier for this connection within the PHP driver
@@ -34,20 +40,22 @@ class Database_MySQLi extends Database {
 	protected $_identifier = '`';
 
 	/**
+	 * Raw server connection
+	 * @var mysqli
+	 */
+	protected $_connection;
+
+	/**
 	 * Connect to the database
 	 *
 	 * [!!] This is called automatically when the first query is executed.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $db->connect();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db->connect();
+	 * ~~~
 	 *
 	 * @throws  Database_Exception
-	 *
-	 * @link    http://php.net/manual/en/mysqli.character-set-name.php mysqli_set_charset()
-	 * @link    http://php.net/manual/en/mysqli.construct.php mysqli_connect()
-	 * @link    http://php.net/manual/en/mysqli.get-server-info.php mysqli.get-server-info()
 	 */
 	public function connect()
 	{
@@ -56,20 +64,31 @@ class Database_MySQLi extends Database {
 			return;
 		}
 
+		if (is_null(self::$_set_names))
+		{
+			// Determine if we can use mysqli_set_charset(), which is only
+			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
+			self::$_set_names = ! function_exists('mysqli_set_charset');
+		}
+
 		/**
 		 * Extract the connection parameters, adding required variables
 		 *
-		 * @var $database   string
-		 * @var $hostname   string
-		 * @var $username   string
-		 * @var $password   string
-		 * @var $persistent boolean
+		 * @var  $database   string
+		 * @var  $hostname   string
+		 * @var  $username   string
+		 * @var  $password   string
+		 * @var  $socket     string
+		 * @var  $port       string
+		 * @var  $persistent boolean
 		 */
 		extract($this->_config['connection'] + array(
 			'database'   => '',
 			'hostname'   => '',
 			'username'   => '',
 			'password'   => '',
+			'socket'     => '',
+			'port'       => 3306,
 			'persistent' => FALSE,
 		));
 
@@ -79,15 +98,16 @@ class Database_MySQLi extends Database {
 		try
 		{
 			// Compare versions
-			if (version_compare(PHP_VERSION, '5.3', '<') OR empty($persistent))
+			if (version_compare(PHP_VERSION, '5.3', '>=') AND (bool)$persistent)
 			{
-				// Create a connection
-				$this->_connection = mysqli_connect($hostname, $username, $password);
+				// Create a persistent connection - only available with PHP 5.3+
+				// See http://www.php.net/manual/en/mysqli.persistconns.php
+				$this->_connection = new mysqli('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
 			}
 			else
 			{
-				// Create a persistent connection - only available with PHP 5.3+
-				$this->_connection = mysqli_connect('p:'.$hostname, $username, $password);
+				// Create a connection
+				$this->_connection = new mysqli($hostname, $username, $password, $database, (int)$port, $socket);
 			}
 		}
 		catch (Exception $e)
@@ -100,16 +120,6 @@ class Database_MySQLi extends Database {
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
 		$this->_connection_id = sha1($hostname.'_'.$username.'_'.$password);
-
-		// Determine if we can use mysqli_set_charset()
-		if ( ! function_exists('mysqli_set_charset'))
-		{
-			throw new Database_Exception('Gleez CMS requires a MySQL version 5.0 or higher, but your version :ver',
-				array(':ver' => mysqli_get_server_info($this->_connection))
-			);
-		}
-
-		$this->_select_db($database);
 
 		if ( ! empty($this->_config['charset']))
 		{
@@ -127,7 +137,7 @@ class Database_MySQLi extends Database {
 				$variables[] = 'SESSION '.$var.' = '.$this->quote($val);
 			}
 
-			mysqli_query($this->_connection, 'SET '.implode(', ', $variables));
+			$this->_connection->query('SET '.implode(', ', $variables));
 		}
 	}
 
@@ -136,14 +146,12 @@ class Database_MySQLi extends Database {
 	 *
 	 * [!!] This is called automatically by [Database::__destruct].
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $db->disconnect();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db->disconnect();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 *
-	 * @link    http://php.net/manual/en/mysqli.character-set-name.php mysqli_close()
 	 */
 	public function disconnect()
 	{
@@ -152,9 +160,9 @@ class Database_MySQLi extends Database {
 			// Database is assumed disconnected
 			$status = TRUE;
 
-			if (is_resource($this->_connection))
+			if ($this->_connection instanceof mysqli)
 			{
-				if ($status = mysqli_close($this->_connection))
+				if ($status = $this->_connection->close())
 				{
 					// Clear the connection
 					$this->_connection = NULL;
@@ -167,7 +175,7 @@ class Database_MySQLi extends Database {
 		catch (Exception $e)
 		{
 			// Database is probably not disconnected
-			$status = ! is_resource($this->_connection);
+			$status = ! ($this->_connection instanceof mysqli);
 		}
 
 		return $status;
@@ -179,21 +187,18 @@ class Database_MySQLi extends Database {
 	 * [!!] This is called automatically by [Database_MySQLi::connect].
 	 *
 	 * @param   string  $database  Database name
-	 * @throws  Database_Exception
 	 *
-	 * @link    http://php.net/manual/en/mysqli.select-db.php mysqli_select_db()
-	 * @link    http://php.net/manual/en/mysqli.error.php mysqli_error()
-	 * @link    http://php.net/manual/en/mysqli.errno.php mysqli_errno()
+	 * @throws  Database_Exception
 	 */
 	protected function _select_db($database)
 	{
-		if ( ! mysqli_select_db($this->_connection, $database))
+		if ( ! $this->_connection->select_db($database))
 		{
 			// Unable to select database
-			throw new Database_Exception(':error', array(':error' => mysqli_error($this->_connection)), mysqli_errno($this->_connection));
+			throw new Database_Exception(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
 		}
 
-		Database_MySQLi::$_current_databases[$this->_connection_id] = $database;
+		self::$_current_databases[$this->_connection_id] = $database;
 	}
 
 	/**
@@ -201,12 +206,13 @@ class Database_MySQLi extends Database {
 	 *
 	 * [!!] This is called automatically by [Database_MySQLi::connect].
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $db->set_charset('utf8');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db->set_charset('utf8');
+	 * ~~~
 	 *
 	 * @param   string  $charset  Character set name
+	 *
 	 * @throws  Database_Exception
 	 */
 	public function set_charset($charset)
@@ -214,25 +220,34 @@ class Database_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		// PHP is compiled against MySQL 5.x
-		if ( ! mysqli_set_charset($this->_connection, $charset))
+		if (self::$_set_names === TRUE)
 		{
-			throw new Database_Exception(':error', array(':error' => mysqli_error($this->_connection)), mysqli_errno($this->_connection));
+			// PHP is compiled against MySQL 4.x
+			$status = (bool) $this->_connection->query('SET NAMES '.$this->quote($charset));
+		}
+		else
+		{
+			// PHP is compiled against MySQL 5.x
+			$status = $this->_connection->set_charset($charset);
+		}
+
+		if ($status === FALSE)
+		{
+			throw new Database_Exception(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
 		}
 	}
 
 	/**
 	 * Perform an SQL query of the given type
 	 *
-	 * Make a SELECT query and use objects for results:<br>
-	 * <code>
-	 *   $db->query(Database::SELECT, 'SELECT * FROM groups', TRUE);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * // Make a SELECT query and use objects for results
+	 * $db->query(Database::SELECT, 'SELECT * FROM groups', TRUE);
 	 *
-	 * Make a SELECT query and use "Model_User" for the results:<br>
-	 * <code>
-	 *   $db->query(Database::SELECT, 'SELECT * FROM users LIMIT 1', 'Model_User');
-	 * </code>
+	 * // Make a SELECT query and use "Model_User" for the results:
+	 * $db->query(Database::SELECT, 'SELECT * FROM users LIMIT 1', 'Model_User');
+	 * ~~~
 	 *
 	 * @param   integer  $type       Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql        SQL query
@@ -248,32 +263,26 @@ class Database_MySQLi extends Database {
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    List (insert id, row count) for INSERT queries
 	 * @return  integer  Number of affected rows for all other queries
-	 *
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
-	 * @link    http://php.net/manual/en/mysqli.error.php mysqli_error()
-	 * @link    http://php.net/manual/en/mysqli.errno.php mysqli_errno()
-	 * @link    http://php.net/manual/en/mysqli.insert-id.php mysqli_insert_id()
-	 * @link    http://php.net/manual/en/mysqli.affected-rows.php mysqli_affected_rows()
 	 */
 	public function query($type, $sql, $as_object = FALSE, array $params = NULL)
 	{
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if ( ! empty($this->_config['profiling']) AND Kohana::$profiling)
+		if ((bool)$this->_config['profiling'] AND Kohana::$profiling)
 		{
 			// Benchmark this query for the current instance
-			$benchmark = Profiler::start("Database ({$this->_instance})", $sql);
+			$benchmark = Profiler::start(__CLASS__." ({$this->_instance})", $sql);
 		}
 
-		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== Database_MySQLi::$_current_databases[$this->_connection_id])
+		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== self::$_current_databases[$this->_connection_id])
 		{
 			// Select database on persistent connections
 			$this->_select_db($this->_config['connection']['database']);
 		}
 
 		// Execute the query
-		if (($result = mysqli_query($this->_connection, $sql)) === FALSE)
+		if (($result = $this->_connection->query($sql)) === FALSE)
 		{
 			if (isset($benchmark))
 			{
@@ -281,7 +290,10 @@ class Database_MySQLi extends Database {
 				Profiler::delete($benchmark);
 			}
 
-			throw new Database_Exception(':error [ :query ]', array(':error' => mysqli_error($this->_connection), ':query' => $sql), mysqli_errno($this->_connection));
+			throw new Database_Exception(':error [ :query ]', array(
+				':error' => $this->_connection->error,
+				':query' => $sql
+			), $this->_connection->errno);
 		}
 
 		if (isset($benchmark))
@@ -301,26 +313,27 @@ class Database_MySQLi extends Database {
 		{
 			// Return a list of insert id and rows created
 			return array(
-				mysqli_insert_id($this->_connection),
-				mysqli_affected_rows($this->_connection),
+				$this->_connection->insert_id,
+				$this->_connection->affected_rows,
 			);
 		}
 		else
 		{
 			// Return the number of rows affected
-			return mysqli_affected_rows($this->_connection);
+			return $this->_connection->affected_rows;
 		}
 	}
 
 	/**
 	 * Returns a normalized array describing the SQL data type
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $db->datatype('char');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db->datatype('char');
+	 * ~~~
 	 *
 	 * @param   string  $type  SQL data type
+	 *
 	 * @return  array
 	 */
 	public function datatype($type)
@@ -374,71 +387,68 @@ class Database_MySQLi extends Database {
 	/**
 	 * Start a SQL transaction
 	 *
-	 * Start the transactions:<br>
-	 * <code>
-	 *   $db->begin();
-	 * </code>
+	 * @link    http://dev.mysql.com/doc/refman/5.0/en/set-transaction.html
+	 *
+	 * Example:
+	 * ~~~
+	 * $db->begin();
+	 * ~~~
 	 *
 	 * @param   string  $mode  Isolation level [Optional]
-	 * @return  boolean
-	 * @throws  Database_Exception
 	 *
-	 * @link    http://dev.mysql.com/doc/refman/5.0/en/set-transaction.html
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
-	 * @link    http://php.net/manual/en/mysqli.error.php mysqli_error()
-	 * @link    http://php.net/manual/en/mysqli.errno.php mysqli_errno()
+	 * @return  boolean
+	 *
+	 * @throws  Database_Exception
 	 */
 	public function begin($mode = NULL)
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		if ($mode AND ! mysqli_query($this->_connection, "SET TRANSACTION ISOLATION LEVEL $mode"))
+		if ($mode AND ! $this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error',
-				array(':error' => mysqli_error($this->_connection)),
-				mysqli_errno($this->_connection));
+			throw new Database_Exception(':error', array(
+					':error' => $this->_connection->error
+			), $this->_connection->errno);
 		}
 
-		return (bool) mysqli_query($this->_connection, 'START TRANSACTION');
+		return (bool) $this->_connection->query('START TRANSACTION');
 	}
 
 	/**
 	 * Commit a SQL transaction
 	 *
-	 * Commit the database changes:<br>
-	 * <code>
-	 *   $db->commit();
-	 * </code>
+	 * Commit the database changes:
+	 * ~~~
+	 * $db->commit();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
 	 */
 	public function commit()
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		return (bool) mysqli_query($this->_connection, 'COMMIT');
+		return (bool) $this->_connection->query('COMMIT');
 	}
 
 	/**
 	 * Rollback a SQL transaction
 	 *
-	 * Undo the changes:<br>
-	 * <code>
-	 *   $db->rollback();
-	 * </code>
+	 * Undo the changes:
+	 * ~~~
+	 * $db->rollback();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
 	 */
 	public function rollback()
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		return (bool) mysqli_query($this->_connection, 'ROLLBACK');
+		return (bool) $this->_connection->query('ROLLBACK');
 	}
 
 	/**
@@ -564,19 +574,21 @@ class Database_MySQLi extends Database {
 	 * Escapes special characters in a string for use in an SQL statement
 	 *
 	 * @param   string  $value  Value to escape
-	 * @return  string
-	 * @throws  Database_Exception
 	 *
-	 * @link    http://php.net/manual/en/mysqli.real-escape-string.php mysqli_real_escape_string()
+	 * @return  string
+	 *
+	 * @throws  Database_Exception
 	 */
 	public function escape($value)
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		if (($value = mysqli_real_escape_string($this->_connection, (string) $value)) === FALSE)
+		if (($value = $this->_connection->real_escape_string( (string) $value)) === FALSE)
 		{
-			throw new Database_Exception(':error', array(':error' => mysqli_errno($this->_connection)), mysqli_error($this->_connection));
+			throw new Database_Exception(':error', array(
+				':error' => $this->_connection->error
+			), $this->_connection->errno);
 		}
 
 		// SQL standard is to use single-quotes for all values
@@ -586,26 +598,23 @@ class Database_MySQLi extends Database {
 	/**
 	 * Get MySQL version
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   $db->version();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $db->version();
+	 * ~~~
 	 *
 	 * @param   boolean  $full  Show full version [Optional]
-	 * @return  string
 	 *
-	 * @link    http://php.net/manual/en/mysqli.query.php mysqli_query()
-	 * @link    http://php.net/manual/en/mysqli-result.fetch-object.php mysqli_fetch_object()
+	 * @return  string
 	 */
 	public function version($full = FALSE)
 	{
 		// Make sure the database is connected
-		$this->_connection or $this->connect();
+		$this->_connection OR $this->connect();
 
-		$result = mysqli_query($this->_connection, 'SHOW VARIABLES WHERE variable_name = "version"');
-		$row = mysqli_fetch_object($result);
+		$result = $this->_connection->query('SHOW VARIABLES WHERE variable_name = '. $this->quote('version'));
+		$row    = $result->fetch_object();
 
 		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
 	}
-
 }
