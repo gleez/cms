@@ -8,7 +8,7 @@
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license    http://kohanaframework.org/license
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 interface HTTP_Message {
