@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Manager for rendering meta tags (<link> and <meta>)
  *

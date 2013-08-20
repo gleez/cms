@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.') ?>
-
 <div class="help">
 	<?php _e('Add new vocabulary to your site, edit and reorganize existing vocabularies.') ?>
 </div>

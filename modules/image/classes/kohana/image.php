@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Image manipulation support. Allows images to be resized, cropped, etc.
  *

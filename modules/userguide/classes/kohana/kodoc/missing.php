@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * Set Kodoc_Missing::create_class as an autoloading to prevent missing classes
  * from crashing the api browser.  Classes that are missing a parent will

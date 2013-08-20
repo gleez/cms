@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-
 <div id="blog-<?php echo $post->id; ?>" class="<?php echo $post->type ?> blog<?php if ($post->sticky) { echo ' sticky'; } ?> <?php echo ' blog-'. $post->status;  ?>">
 
     <?php

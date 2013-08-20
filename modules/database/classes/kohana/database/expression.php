@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
  * Database expressions can be used to add unescaped SQL fragments to a
  * [Database_Query_Builder] object.

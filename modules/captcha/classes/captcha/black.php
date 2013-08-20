@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Black captcha class.
  *
@@ -71,4 +71,4 @@ class Captcha_Black extends Captcha
 		return $this->image_render($html);
 	}
 
-} // End Captcha Black Driver Class
+}

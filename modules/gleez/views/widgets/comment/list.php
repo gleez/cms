@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <?php if( isset($comments) AND !empty($comments)): ?>
 	<ul class="comments-list">
 		<?php foreach($comments as $i => $comment) : ?>

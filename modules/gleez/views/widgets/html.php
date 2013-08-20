@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access."); ?>
-
 <div id="widget-<?php echo $widget->module; ?>-<?php echo Text::plain($widget->name); ?> <?php echo (isset($id)) ? 'widget-'.$id : '' ?>" class="widget blockme widget-<?php echo Text::plain($widget->name); ?> <?php echo ($widget->menu) ? 'widget-menu' : ''; ?> <?php echo (isset($zebra)) ? 'widget-'.$zebra : '' ?>">
 
 	<?php if ($widget->show_title): ?>

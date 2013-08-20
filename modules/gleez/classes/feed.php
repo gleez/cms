@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct script access allowed.');
+<?php
 /**
  * Abstract Feed class
  *

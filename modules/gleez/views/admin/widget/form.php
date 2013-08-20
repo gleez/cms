@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <?php
 	if (isset($widget->id) AND Valid::digit($widget->id))
 	{

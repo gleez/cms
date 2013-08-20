@@ -1,14 +1,13 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
-* Localized strings into Italian
-*
-* @package   User\I18n
-* @author    Emanuele Calvagno - Gleez
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
-return array
-(
+ * Localized strings into Italian
+ *
+ * @package   User\I18n
+ * @author    Emanuele Calvagno
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
   // :
 	':field must be a valid address with the http:// or https:// prefix' => ':field deve essere un indirizzo valido con il prefisso http:// o https://',
 	':nick joined.' => ':nick si &#269; registrato.',

@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-
     <div class="row">
 
         <?php if ($sidebar_left): echo '<div id="left" class="span3">'. $sidebar_left .'</div>'; endif; ?>

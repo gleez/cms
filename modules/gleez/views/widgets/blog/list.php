@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access."); ?>
-
 <?php if (isset($items)): ?>
 	<ul class="blogs-list">
 		<?php foreach($items as $item) : ?>

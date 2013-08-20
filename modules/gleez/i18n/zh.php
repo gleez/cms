@@ -1,5 +1,13 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
-return array (
+<?php
+/**
+ * Localized strings into Chinese
+ *
+ * @package   Gleez\I18n
+ * @author    dishuostec <dishuostec@gmail.com>
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
   '(:count) Comments' => '（:count）评论',
   '(No subject)' => '（无主题）',
   ' (not verified)' => '（未验证）',

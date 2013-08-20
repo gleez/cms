@@ -1,7 +1,6 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 
-return array
-(
+return array(
 	// Enable the API browser.  TRUE or FALSE
 	'api_browser'  => TRUE,
 

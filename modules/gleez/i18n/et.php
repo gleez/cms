@@ -1,14 +1,13 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
-* Localized strings into Estonian
-*
-* @package   Gleez\I18n
-* @author    Sergei Moroz <sergeimoroz@gmail.com>
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
-return array
-(
+ * Localized strings into Estonian
+ *
+ * @package   Gleez\I18n
+ * @author    Sergei Moroz <sergeimoroz@gmail.com>
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
 	// :
 	'(:count) Comments' => '(:count) Kommentaari',
 	':field must not be empty' => ':field ei saa olla tühi',

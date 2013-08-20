@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="help">
 	<p><?php echo __('Power up your Gleez CMS by adding more modules! Each module provides new cool features.'); ?></p>
 </div>

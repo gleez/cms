@@ -1,5 +1,3 @@
-<?php defined("SYSPATH") OR die("No direct script access.") ?>
-
 <p class="lead"><?php echo __('Your Gleez install is complete!'); ?></p>
 
 <h3><?php echo __('Before you start using it...'); ?></h3>

@@ -1,3 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 
 abstract class Widget extends Gleez_Widget {}

@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <div class="help">
 	<p><?php echo __('Permissions let you control what users can do on your site. User defined permission override role based permissions.'); ?></p>
 </div>

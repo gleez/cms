@@ -1,14 +1,13 @@
-<?php defined("SYSPATH") OR die("No direct script access.");
+<?php
 /**
-* Localized strings into Italian
-*
-* @package   Gleez\I18n
-* @author    Emanuele Calvagno - Gleez
-* @copyright (c) 2011-2013 Gleez Technologies
-* @license   http://gleezcms.org/license Gleez CMS License
-*/
-return array
-(
+ * Localized strings into Italian
+ *
+ * @package   Gleez\I18n
+ * @author    Emanuele Calvagno
+ * @copyright (c) 2011-2013 Gleez Technologies
+ * @license   http://gleezcms.org/license Gleez CMS License
+ */
+return array(
 	// :
 	':field must not be empty' => 'Il campo non pu&#328; essere vuoto',
 	':pcre has not been compiled with Unicode property support.' => ':pcre non &#269; stato compilato con il supporto Unicode.',

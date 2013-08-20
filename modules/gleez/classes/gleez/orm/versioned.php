@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php
 /**
  * Object Relational Mapping (ORM) "versioned" extension
  *

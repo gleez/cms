@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Transparent extension for Kohana_Unittest_Database_TestCase
  *

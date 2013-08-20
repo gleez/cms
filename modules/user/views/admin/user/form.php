@@ -1,5 +1,3 @@
-<?php defined('SYSPATH') OR die('No direct script access.'); ?>
-
 <?php
 	$parms = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add');
 	$destination = isset($GET['destination']) ? $GET['destination']: '';

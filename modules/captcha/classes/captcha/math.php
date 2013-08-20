@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access.');
+<?php
 /**
  * Math captcha class.
  *
@@ -61,4 +61,4 @@ class Captcha_Math extends Captcha
 		return $this->math_exercise;
 	}
 
-} // End Captcha Math Driver Class
+}
