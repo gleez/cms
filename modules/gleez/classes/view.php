@@ -1,16 +1,15 @@
 <?php
 /**
- * Acts as an object wrapper for HTML pages with embedded PHP, called "views".
+ * Acts as an object wrapper for HTML pages with embedded PHP, called "views"
+ *
  * Variables can be assigned with the view object and referenced locally within
  * the view.
  *
  * @package    Gleez\Base
  * @author     Gleez Team
- * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class View {
 
@@ -104,10 +103,10 @@ class View {
 		// Import the view variables to local namespace
 		extract($view_data, EXTR_SKIP);
 
-		if (View::$_global_data)
+		if (self::$_global_data)
 		{
 			// Import the global view variables to local namespace
-			extract(View::$_global_data, EXTR_SKIP | EXTR_REFS);
+			extract(self::$_global_data, EXTR_SKIP | EXTR_REFS);
 		}
 
 		// Capture the view output
@@ -149,12 +148,12 @@ class View {
 		{
 			foreach ($key as $key2 => $value)
 			{
-				View::$_global_data[$key2] = $value;
+				self::$_global_data[$key2] = $value;
 			}
 		}
 		else
 		{
-			View::$_global_data[$key] = $value;
+			self::$_global_data[$key] = $value;
 		}
 	}
 
@@ -172,7 +171,7 @@ class View {
 	 */
 	public static function bind_global($key, & $value)
 	{
-		View::$_global_data[$key] =& $value;
+		self::$_global_data[$key] =& $value;
 	}
 
 	/**
@@ -201,7 +200,7 @@ class View {
 		}
 		elseif (array_key_exists($key, View::$_global_data))
 		{
-			return View::$_global_data[$key];
+			return self::$_global_data[$key];
 		}
 		else
 		{
@@ -257,7 +256,7 @@ class View {
 	 */
 	public function __unset($key)
 	{
-		unset($this->_data[$key], View::$_global_data[$key]);
+		unset($this->_data[$key], self::$_global_data[$key]);
 	}
 
 	/**
@@ -305,12 +304,19 @@ class View {
 	 */
 	public function set_filename($file)
 	{
-		if (($path = Kohana::find_file('views', $file)) === FALSE)
+		// Search our view directories for the view
+		// instead of just the 'views' directory.
+		if (($path = Kohana::find_file('themes', $file)) === FALSE)
 		{
-			throw new View_Exception('The requested view :file could not be found', array(
-				':file' => $file,
-			));
+			// Otherwise, revert to the old method
+			if (($path = Kohana::find_file('views', $file)) === FALSE)
+			{
+				throw new View_Exception('The requested view :file could not be found', array(
+					':file' => $file,
+				));
+			}
 		}
+
 
 		// Store the file path locally
 		$this->_file = $path;
@@ -414,6 +420,6 @@ class View {
 		}
 
 		// Combine local and global data and capture the output
-		return View::capture($this->_file, $this->_data);
+		return self::capture($this->_file, $this->_data);
 	}
 }
