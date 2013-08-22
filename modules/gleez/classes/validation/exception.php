@@ -20,11 +20,12 @@ class Validation_Exception extends Gleez_Exception {
 	 * @param  string      $message  Error message [Optional]
 	 * @param  array       $values   Translation variables [Optional]
 	 * @param  integer     $code     The exception code [Optional]
+	 * @param  Exception   $previous Previous exception [Optional]
 	 */
-	public function __construct(Validation $array, $message = 'Failed to validate array', array $values = NULL, $code = 0)
+	public function __construct(Validation $array, $message = 'Failed to validate array', array $values = NULL, $code = 0, Exception $previous = NULL)
 	{
 		$this->array = $array;
 
-		parent::__construct($message, $values, $code);
+		parent::__construct($message, $values, $code, $previous);
 	}
 }
