@@ -1,18 +1,23 @@
 <?php
 /**
- * Request and response wrapper. Uses the [Route] class to determine what
- * [Controller] to send the request to.
+ * Request and response wrapper
+ *
+ * Uses the [Route] class to determine what [Controller]
+ * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1
- * @author     Sandeep Sangamreddi - Gleez
+ * @version    1.1.0
+ * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
 class Request implements HTTP_Request {
 
-	/** Default maximum size of POST data */
+	/**
+	 * Default maximum size of POST data
+	 * @type string
+	 */
 	const DEFAULT_POST_MAX_SIZE = '1M';
 
 	/**
@@ -22,46 +27,180 @@ class Request implements HTTP_Request {
 	public static $redirect_url;
 	
 	/**
-	 * @var  string  client user agent
+	 * Client user agent
+	 * @var string
 	 */
 	public static $user_agent = '';
 
 	/**
-	 * @var  string  client IP address
+	 * Client IP address
+	 * @var string
 	 */
 	public static $client_ip = '0.0.0.0';
 
 	/**
-	 * @var  string  trusted proxy server IPs
+	 * Trusted proxy server IPs
+	 * @var string
 	 */
 	public static $trusted_proxies = array('127.0.0.1', 'localhost', 'localhost.localdomain');
 
 	/**
-	 * @var  Request  main request instance
+	 * Main request instance
+	 * @var Request
 	 */
 	public static $initial;
 
 	/**
-	 * @var  Request  currently executing request instance
+	 * Currently executing request instance
+	 * @var Request
 	 */
 	public static $current;
 
 	/**
-	 * Creates a new request object for the given URI. New requests should be
-	 * created using the [Request::instance] or [Request::factory] methods.
+	 * The X-Requested-With header which most likely will be XMLHttpRequest
+	 * @var string
+	 */
+	protected $_requested_with;
+
+	/**
+	 * Method: GET, POST, PUT, DELETE, HEAD, etc
+	 * @var string
+	 */
+	protected $_method = 'GET';
+
+	/**
+	 * Protocol: HTTP/1.1, FTP, CLI, etc
+	 * @var string
+	 */
+	protected $_protocol;
+
+	/**
+	 * @var boolean
+	 */
+	protected $_secure = FALSE;
+
+	/**
+	 * Referring URL
+	 * @var string
+	 */
+	protected $_referrer;
+
+	/**
+	 * Route matched for this request
+	 * @var Route
+	 */
+	protected $_route;
+
+	/**
+	 * Array of routes to manually look at instead of the global namespace
+	 * @var Route
+	 */
+	protected $_routes;
+
+	/**
+	 * Response
+	 * @var Response
+	 */
+	protected $_response;
+
+	/**
+	 * Headers to sent as part of the request
+	 * @var HTTP_Header
+	 */
+	protected $_header;
+
+	/**
+	 * The body
+	 * @var string
+	 */
+	protected $_body;
+
+	/**
+	 * Controller directory
+	 * @var string
+	 */
+	protected $_directory = '';
+
+	/**
+	 * Controller to be executed
+	 * @var string
+	 */
+	protected $_controller;
+
+	/**
+	 * Action to be executed in the controller
+	 * @var string
+	 */
+	protected $_action;
+
+	/**
+	 * The URI of the request
+	 * @var string
+	 */
+	protected $_uri;
+
+	/**
+	 * External request
+	 * @var boolean
+	 */
+	protected $_external = FALSE;
+
+	/**
+	 * Parameters from the route
+	 * @var array
+	 */
+	protected $_params = array();
+
+	/**
+	 * Query parameters
+	 * @var array
+	 */
+	protected $_get = array();
+
+	/**
+	 * Post parameters
+	 * @var array
+	 */
+	protected $_post = array();
+
+	/**
+	 * Cookies to send with the request
+	 * @var array
+	 */
+	protected $_cookies = array();
+
+	/**
+	 * @var Request_Client
+	 */
+	protected $_client;
+
+	/**
+	 * Creates a new request object for the given URI
 	 *
-	 *     $request = Request::factory($uri);
+	 * New requests should be created using the [Request::instance]
+	 * or [Request::factory] methods.
+	 *
+	 * Example:
+	 * ~~~
+	 * $request = Request::factory($uri);
+	 * ~~~
 	 *
 	 * If $cache parameter is set, the response for the request will attempt to
 	 * be retrieved from the cache.
 	 *
-	 * @param   string  $uri URI of the request
-	 * @param   Cache   $cache
-	 * @param   array   $injected_routes an array of routes to use, for testing
+	 * @param   boolean|string  $uri              URI of the request [Optional]
+	 * @param   HTTP_Cache      $cache
+	 * @param   array           $injected_routes  An array of routes to use, for testing [Optional]
+	 *
 	 * @return  void|Request
+	 *
 	 * @throws  Request_Exception
+	 *
 	 * @uses    Route::all
 	 * @uses    Route::matches
+	 * @uses    HTTP::$protocol
+	 * @uses    HTTP_Request::GET
+	 * @uses    Cookie::get
 	 */
 	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
 	{
@@ -218,13 +357,19 @@ class Request implements HTTP_Request {
 
 	/**
 	 * Automatically detects the URI of the main request using PATH_INFO,
-	 * REQUEST_URI, PHP_SELF or REDIRECT_URL.
+	 * REQUEST_URI, PHP_SELF or REDIRECT_URL
 	 *
-	 *     $uri = Request::detect_uri();
+	 * Example:
+	 * ~~~
+	 * $uri = Request::detect_uri();
+	 * ~~~
 	 *
 	 * @return  string  URI of the main request
-	 * @throws  Kohana_Exception
-	 * @since   3.0.8
+	 *
+	 * @throws  Gleez_Exception
+	 *
+	 * @uses    Kohana::$base_url
+	 * @uses    Kohana::$index_file
 	 */
 	public static function detect_uri()
 	{
@@ -271,7 +416,7 @@ class Request implements HTTP_Request {
 			{
 				// If you ever see this error, please report an issue at http://dev.kohanaphp.com/projects/kohana3/issues
 				// along with any relevant information about your web server setup. Thanks!
-				throw new Kohana_Exception('Unable to detect the URI using PATH_INFO, REQUEST_URI, PHP_SELF or REDIRECT_URL');
+				throw new Gleez_Exception('Unable to detect the URI using PATH_INFO, REQUEST_URI, PHP_SELF or REDIRECT_URL');
 			}
 
 			// Get the path from the base URL, including the index file
@@ -294,14 +439,17 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Return the currently executing request. This is changed to the current
-	 * request when [Request::execute] is called and restored when the request
-	 * is completed.
+	 * Return the currently executing request
 	 *
-	 *     $request = Request::current();
+	 * This is changed to the current request when [Request::execute]
+	 * is called and restored when the request is completed.
+	 *
+	 * Example:
+	 * ~~~
+	 * $request = Request::current();
+	 * ~~~
 	 *
 	 * @return  Request
-	 * @since   3.0.5
 	 */
 	public static function current()
 	{
@@ -309,18 +457,21 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the first request encountered by this framework. This will should
-	 * only be set once during the first [Request::factory] invocation.
+	 * Returns the first request encountered by this framework
 	 *
-	 *     // Get the first request
-	 *     $request = Request::initial();
+	 * This will should only be set once during the first [Request::factory] invocation.
 	 *
-	 *     // Test whether the current request is the first request
-	 *     if (Request::initial() === Request::current())
-	 *          // Do something useful
+	 * Example:
+	 * ~~~
+	 * // Get the first request
+	 * $request = Request::initial();
+	 *
+	 * // Test whether the current request is the first request
+	 * if (Request::initial() === Request::current())
+	 * // Do something useful
+	 * ~~~
 	 *
 	 * @return  Request
-	 * @since   3.1.0
 	 */
 	public static function initial()
 	{
@@ -328,22 +479,29 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns information about the client user agent.
+	 * Returns information about the client user agent
 	 *
-	 *     // Returns "Chrome" when using Google Chrome
-	 *     $browser = Request::user_agent('browser');
+	 * Example:
+	 * ~~~
+	 * // Returns "Chrome" when using Google Chrome
+	 * $browser = Request::user_agent('browser');
+	 * ~~~
 	 *
 	 * Multiple values can be returned at once by using an array:
-	 *
-	 *     // Get the browser and platform with a single call
-	 *     $info = Request::user_agent(array('browser', 'platform'));
+	 * ~~~
+	 * // Get the browser and platform with a single call
+	 * $info = Request::user_agent(array('browser', 'platform'));
+	 * ~~~
 	 *
 	 * When using an array for the value, an associative array will be returned.
 	 *
-	 * @param   mixed   $value String to return: browser, version, robot, mobile, platform; or array of values
-	 * @return  mixed   requested information, FALSE if nothing is found
-	 * @uses    Kohana::$config
+	 * @param   mixed   $value  String to return: browser, version, robot, mobile, platform; or array of values
+	 *
+	 * @return  mixed   Requested information, FALSE if nothing is found
+	 *
+	 * @uses    Config::get
 	 * @uses    Request::$user_agent
+	 * @uses    Request::user_agent
 	 */
 	public static function user_agent($value)
 	{
@@ -370,7 +528,7 @@ class Request implements HTTP_Request {
 		if ($value === 'browser' OR $value == 'version')
 		{
 			// Load browsers
-			$browsers = Kohana::$config->load('user_agents')->browser;
+			$browsers = Config::get('user_agents.browser', array());
 
 			foreach ($browsers as $search => $name)
 			{
@@ -397,7 +555,7 @@ class Request implements HTTP_Request {
 		else
 		{
 			// Load the search group for this type
-			$group = Kohana::$config->load('user_agents')->$value;
+			$group =Config::get('user_agents.value', array());
 
 			foreach ($group as $search => $name)
 			{
@@ -686,133 +844,34 @@ class Request implements HTTP_Request {
 	/**
 	 * Gets POST max size in bytes
 	 *
+	 * @link    http://php.net/post-max-size
+	 *
 	 * @return  float
 	 *
-	 * @uses    Config::load
-	 * @uses    Config_Group::get
-	 * @uses    Kohana_Num::bytes
-	 * @link    http://php.net/post-max-size
+	 * @uses    Config::get
+	 * @uses    Config::set
+	 * @uses    Num::bytes
+	 * @uses    Request::DEFAULT_POST_MAX_SIZE
 	 */
 	public static function get_post_max_size()
 	{
-		$config = Kohana::$config->load('media');
+		$max_size = Config::get('media.post_max_size', NULL);
 
 		// Set post_max_size default value if it not exists
-		if (is_null($config->get('post_max_size')))
+		if (is_null($max_size))
 		{
-			$config->set('post_max_size', Request::DEFAULT_POST_MAX_SIZE);
+			Config::set('media', 'post_max_size', Request::DEFAULT_POST_MAX_SIZE);
 		}
 
 		// Get the post_max_size in bytes from php.ini
 		$php_settings = Num::bytes(ini_get('post_max_size'));
 
 		// Get the post_max_size in bytes from `config/media`
-		$gleez_settings = Num::bytes($config->get('post_max_size'));
+		$gleez_settings = Num::bytes($max_size);
 
 		return ($gleez_settings <= $php_settings) ? $gleez_settings : $php_settings;
 	}
 	
-	/**
-	 * @var  string  the x-requested-with header which most likely
-	 *               will be xmlhttprequest
-	 */
-	protected $_requested_with;
-
-	/**
-	 * @var  string  method: GET, POST, PUT, DELETE, HEAD, etc
-	 */
-	protected $_method = 'GET';
-
-	/**
-	 * @var  string  protocol: HTTP/1.1, FTP, CLI, etc
-	 */
-	protected $_protocol;
-
-	/**
-	 * @var  boolean
-	 */
-	protected $_secure = FALSE;
-
-	/**
-	 * @var  string  referring URL
-	 */
-	protected $_referrer;
-
-	/**
-	 * @var  Route       route matched for this request
-	 */
-	protected $_route;
-
-	/**
-	 * @var  Route       array of routes to manually look at instead of the global namespace
-	 */
-	protected $_routes;
-
-	/**
-	 * @var  Kohana_Response  response
-	 */
-	protected $_response;
-
-	/**
-	 * @var  Kohana_HTTP_Header  headers to sent as part of the request
-	 */
-	protected $_header;
-
-	/**
-	 * @var  string the body
-	 */
-	protected $_body;
-
-	/**
-	 * @var  string  controller directory
-	 */
-	protected $_directory = '';
-
-	/**
-	 * @var  string  controller to be executed
-	 */
-	protected $_controller;
-
-	/**
-	 * @var  string  action to be executed in the controller
-	 */
-	protected $_action;
-
-	/**
-	 * @var  string  the URI of the request
-	 */
-	protected $_uri;
-
-	/**
-	 * @var  boolean  external request
-	 */
-	protected $_external = FALSE;
-
-	/**
-	 * @var  array   parameters from the route
-	 */
-	protected $_params = array();
-
-	/**
-	 * @var array    query parameters
-	 */
-	protected $_get = array();
-
-	/**
-	 * @var array    post parameters
-	 */
-	protected $_post = array();
-
-	/**
-	 * @var array    cookies to send with the request
-	 */
-	protected $_cookies = array();
-
-	/**
-	 * @var Kohana_Request_Client
-	 */
-	protected $_client;
-
 	/**
 	 * Creates a new request object for the given URI. New requests should be
 	 * created using the [Request::instance] or [Request::factory] methods.
@@ -830,7 +889,7 @@ class Request implements HTTP_Request {
 	 * @uses    Route::all
 	 * @uses    Route::matches
 	 */
-	public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
+		public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
 	{
 		// Initialise the header
 		$this->_header = new HTTP_Header(array());
@@ -944,13 +1003,14 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the URI for the current route.
+	 * Returns the URI for the current route
 	 *
-	 *     $request->uri();
+	 * Example:
+	 * ~~~
+	 * $request->uri();
+	 * ~~~
 	 *
-	 * @param   array   $params  Additional route parameters
 	 * @return  string
-	 * @uses    Route::uri
 	 */
 	public function uri()
 	{
@@ -964,8 +1024,9 @@ class Request implements HTTP_Request {
 	 *
 	 * @param   array    $params    URI parameters
 	 * @param   mixed    $protocol  protocol string or Request object
+	 *
 	 * @return  string
-	 * @since   3.0.7
+	 *
 	 * @uses    URL::site
 	 */
 	public function url($protocol = NULL)
@@ -1541,7 +1602,7 @@ class Request implements HTTP_Request {
 	 *  - Headers
 	 *  - Body
 	 *
-	 *  If there are variables set to the `Kohana_Request::$_post`
+	 *  If there are variables set to the `Request::$_post`
 	 *  they will override any values set to body.
 	 *
 	 * @param   boolean  $response  Return the rendered response, else returns the rendered request
@@ -1663,13 +1724,12 @@ class Request implements HTTP_Request {
 	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $this->request->is_get();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $this->request->is_get();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    https://github.com/kohana/core/pull/286
 	 */
 	public function is_get()
 	{
@@ -1681,13 +1741,12 @@ class Request implements HTTP_Request {
 	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $this->request->is_post();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $this->request->is_post();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    https://github.com/kohana/core/pull/286
 	 */
 	public function is_post()
 	{
@@ -1699,13 +1758,12 @@ class Request implements HTTP_Request {
 	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $this->request->is_put();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $this->request->is_put();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    https://github.com/kohana/core/pull/286
 	 */
 	public function is_put()
 	{
@@ -1717,17 +1775,16 @@ class Request implements HTTP_Request {
 	 *
 	 * Thanks to nike-17@ya.ru
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $this->request->is_delete();
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $this->request->is_delete();
+	 * ~~~
 	 *
 	 * @return  boolean
-	 * @link    https://github.com/kohana/core/pull/286
 	 */
 	public function is_delete()
 	{
 		return ($this->method() === Request::DELETE);
 	}
+}
 
-} // End Request
