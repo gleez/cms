@@ -8,7 +8,7 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Validation_Contact extends Gleez_Validation {
+class Validation_Contact extends Validation {
 
 	/** Default subject length */
 	const SUBJECT_LEN = 80;
