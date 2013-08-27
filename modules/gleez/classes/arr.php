@@ -3,17 +3,41 @@
  * Array Class Helper
  *
  * @package    Gleez\Helpers
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @copyright  (c) 2012 Gleez Technologies
+ * @author     Gleez Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Arr {
 
 	/**
-	 * @var  string  default delimiter for path()
+	 * Default delimiter for path()
+	 * @var string
 	 */
 	public static $delimiter = '.';
+
+	/**
+	 * Count the number of elements in an array or a Countable object
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   mixed  $array  Array or instance of Countable
+	 *
+	 * @return  integer
+	 *
+	 * @throws  Gleez_Exception
+	 */
+	public static function count($array)
+	{
+		if (is_array($array) OR $array instanceof Countable)
+		{
+			return count($array);
+		}
+
+		throw new Gleez_Exception('Parameter 1 for Arr::count() must be array or object of type Countable, :type given.',
+			array(':type' => is_object($array) ? get_class($array) : gettype($array))
+		);
+	}
 
 	/**
 	 * Tests if an array is associative or not.
@@ -25,6 +49,7 @@ class Arr {
 	 *     Arr::is_assoc('foo', 'bar');
 	 *
 	 * @param   array   $array  array to check
+	 *
 	 * @return  boolean
 	 */
 	public static function is_assoc(array $array)
@@ -50,6 +75,7 @@ class Arr {
 	 *     Arr::is_array(Database::instance());
 	 *
 	 * @param   mixed   $value  value to check
+	 *
 	 * @return  boolean
 	 */
 	public static function is_array($value)
@@ -84,6 +110,7 @@ class Arr {
 	 * @param   mixed   $path       key path string (delimiter separated) or array of keys
 	 * @param   mixed   $default    default value if the path is not set
 	 * @param   string  $delimiter  key path delimiter
+	 *
 	 * @return  mixed
 	 */
 	public static function path($array, $path, $default = NULL, $delimiter = NULL)
@@ -241,6 +268,7 @@ class Arr {
 	 *
 	 * @param   integer $step   stepping
 	 * @param   integer $max    ending number
+	 *
 	 * @return  array
 	 */
 	public static function range($step = 10, $max = 100)
@@ -270,6 +298,7 @@ class Arr {
 	 * @param   array   $array      array to extract from
 	 * @param   string  $key        key name
 	 * @param   mixed   $default    default value
+	 *
 	 * @return  mixed
 	 */
 	public static function get($array, $key, $default = NULL)
@@ -291,6 +320,7 @@ class Arr {
 	 * @param   array  $array    array to extract paths from
 	 * @param   array  $paths    list of path
 	 * @param   mixed  $default  default value
+	 *
 	 * @return  array
 	 */
 	public static function extract($array, array $paths, $default = NULL)
@@ -314,6 +344,7 @@ class Arr {
 	 *
 	 * @param   array   $array  list of arrays to check
 	 * @param   string  $key    key to pluck
+	 *
 	 * @return  array
 	 */
 	public static function pluck($array, $key)
@@ -341,6 +372,7 @@ class Arr {
 	 * @param   array   $array  array to modify
 	 * @param   string  $key    array key name
 	 * @param   mixed   $val    array value
+	 *
 	 * @return  array
 	 */
 	public static function unshift( array & $array, $key, $val)
@@ -374,6 +406,7 @@ class Arr {
 	 * @param   mixed   $callbacks  array of callbacks to apply to every element in the array
 	 * @param   array   $array      array to map
 	 * @param   array   $keys       array of keys to apply to
+	 *
 	 * @return  array
 	 */
 	public static function map($callbacks, $array, $keys = NULL)
@@ -421,6 +454,7 @@ class Arr {
 	 *
 	 * @param   array  $array1      initial array
 	 * @param   array  $array2,...  array to merge
+	 *
 	 * @return  array
 	 */
 	public static function merge($array1, $array2)
@@ -505,6 +539,7 @@ class Arr {
 	 *
 	 * @param   array   $array1 master array
 	 * @param   array   $array2 input arrays that will overwrite existing values
+	 *
 	 * @return  array
 	 */
 	public static function overwrite($array1, $array2)
@@ -538,8 +573,9 @@ class Arr {
 	 *     // Get the result of the callback
 	 *     $result = call_user_func_array($func, $params);
 	 *
-	 * @param   string  $str    callback string
-	 * @return  array   function, params
+	 * @param   string  $str  Callback string
+	 *
+	 * @return  array
 	 */
 	public static function callback($str)
 	{
@@ -588,8 +624,8 @@ class Arr {
 	 * [!!] The keys of array values will be discarded.
 	 *
 	 * @param   array   $array  array to flatten
+	 *
 	 * @return  array
-	 * @since   3.0.6
 	 */
 	public static function flatten($array)
 	{
@@ -662,6 +698,7 @@ class Arr {
 	 * @param  array     $array  The array to sort
 	 * @param  string    $on     The array key to sort
 	 * @param  integer   $order  Sort order (SORT_ASC|SORT_DESC) [Optional]
+	 *
 	 * @return array
 	 */
 	public static function array_sort($array, $on, $order = SORT_ASC)
@@ -715,6 +752,7 @@ class Arr {
 	 *
 	 * @param   mixed  $needle    The searched value
 	 * @param   array  $haystack  The array
+	 *
 	 * @return  array
 	 */
 	public static function search_in_array($needle, $haystack)
@@ -757,6 +795,7 @@ class Arr {
 	 * @param   mixed    $array      Array
 	 * @param   boolean  $serialize  Serialize string? [Optional]
 	 * @param   string   $sep        Separator [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function unpack_string($array, $serialize = FALSE, $sep = PHP_EOL)
@@ -779,7 +818,8 @@ class Arr {
 	 * @param   boolean   $serialize  Serialize array? [Optional]
 	 * @param   string    $sep        Separator [Optional]
 	 * @param   int|NULL  $maxlen     Max length of substring for trimming [Optional]
-	 * @return  string    Serialized array
+	 *
+	 * @return  string
 	 *
 	 * @uses    Text::limit_chars
 	 */
@@ -809,6 +849,7 @@ class Arr {
 	 * ~~~
 	 *
 	 * @param   array  $config  Array of configuration
+	 *
 	 * @return  string
 	 */
 	public static function process_config(array $config)
