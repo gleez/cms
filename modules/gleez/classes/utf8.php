@@ -109,7 +109,7 @@ class UTF8 {
 	 * $ascii = UTF8::is_ascii($str);
 	 * ~~~
 	 *
-	 * @param   mixed
+	 * @param   mixed  $str  String or array of strings to check
 	 *
 	 * @return  boolean
 	 */
@@ -148,7 +148,7 @@ class UTF8 {
 	 * $str = UTF8::strip_non_ascii($str);
 	 * ~~~
 	 *
-	 * @param   string
+	 * @param   string  $str  String to clean
 	 *
 	 * @return  string
 	 */
