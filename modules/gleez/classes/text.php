@@ -2,12 +2,13 @@
 /**
  * Text Class Helper
  *
- * Text helper for formatting text for output for security
- * Code taken from drupal filter module and and text class
+ * Provides simple methods for working with text. Text helper for
+ * formatting text for output for security Code taken from Drupal
+ * filter module and text class
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.2.1
+ * @version    1.3.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -59,14 +60,15 @@ class Text {
 	/**
 	 * Limits a phrase to a given number of words
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $text = Text::limit_words($text);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $text = Text::limit_words($text);
+	 * ~~~
 	 *
 	 * @param   string  $str        Phrase to limit words of
 	 * @param   integer $limit      Number of words to limit to [Optional]
 	 * @param   string  $end_char   end character or entity [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function limit_words($str, $limit = 100, $end_char = NULL)
@@ -90,15 +92,16 @@ class Text {
 	/**
 	 * Limits a phrase to a given number of characters
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   $text = Text::limit_chars($text);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $text = Text::limit_chars($text);
+	 * ~~~
 	 *
 	 * @param   string  $str            phrase to limit characters of
 	 * @param   integer $limit          number of characters to limit to
 	 * @param   string  $end_char       end character or entity
 	 * @param   boolean $preserve_words enable or disable the preservation of words while limiting
+	 *
 	 * @return  string
 	 *
 	 * @uses    UTF8::strlen
@@ -137,6 +140,7 @@ class Text {
 	 * unexpected results.
 	 *
 	 * @param   string  $str,...    strings to alternate between
+	 *
 	 * @return  string
 	 */
 	public static function alternate()
@@ -163,9 +167,9 @@ class Text {
 	 * ~~~
 	 *
 	 * The following types are supported:
-	 * * alnum:  Upper and lower case a-z, 0-9 (default)
-	 * * alpha:  Upper and lower case a-z
-	 * * hexdec:  Hexadecimal characters a-f, 0-9
+	 * * alnum:     Upper and lower case a-z, 0-9 (default)
+	 * * alpha:     Upper and lower case a-z
+	 * * hexdec:    Hexadecimal characters a-f, 0-9
 	 * * distinct:  Uppercase characters and numbers that cannot be confused
 	 *
 	 * You can also create a custom type by providing the "pool" of characters
@@ -341,6 +345,7 @@ class Text {
 	 * ~~~
 	 *
 	 * @param   array   $words  words to find similar text of
+	 *
 	 * @return  string
 	 */
 	public static function similar(array $words)
@@ -423,7 +428,9 @@ class Text {
 	 * [!!] This method is not foolproof since it uses regex to parse HTML.
 	 *
 	 * @param   string  $text   text to auto link
+	 *
 	 * @return  string
+	 *
 	 * @uses    HTML::mailto
 	 */
 	public static function auto_link_emails($text)
@@ -503,15 +510,16 @@ class Text {
 	 * [Aidan Lister](http://aidanlister.com/repos/v/function.size_readable.php)
 	 * and [Quentin Zervaas](http://www.phpriot.com/d/code/strings/filesize-format/).
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo Text::bytes(filesize($file));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo Text::bytes(filesize($file));
+	 * ~~~
 	 *
 	 * @param   integer  $bytes       Size in bytes
 	 * @param   string   $force_unit  A definitive unit [Optional]
 	 * @param   string   $format      The return string format [Optional]
 	 * @param   boolean  $si          Whether to use SI prefixes or IEC [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function bytes($bytes, $force_unit = NULL, $format = NULL, $si = TRUE)
@@ -571,7 +579,7 @@ class Text {
 		// The last matched item within the loop
 		$last_item = '';
 
-		foreach (Text::$units as $unit => $name)
+		foreach (self::$units as $unit => $name)
 		{
 			if ($number / $unit >= 1)
 			{
@@ -593,7 +601,7 @@ class Text {
 				}
 				else
 				{
-					$item = Text::number($value).' '.$name;
+					$item = self::number($value).' '.$name;
 				}
 
 				// In the situation that we need to make a composite number (i.e. twenty-three)
@@ -632,6 +640,7 @@ class Text {
 	 *     echo Text::widont($text);
 	 *
 	 * @param   string  $str    text to remove widows from
+	 *
 	 * @return  string
 	 */
 	public static function widont($str)
@@ -660,9 +669,10 @@ class Text {
 	 *
 	 * When using an array for the value, an associative array will be returned.
 	 *
+	 * @param   string  $agent
 	 * @param   mixed   $value  array or string to return: browser, version, robot, mobile, platform
-	 * @return  mixed   requested information, FALSE if nothing is found
-	 * @uses    Kohana::$config
+	 *
+	 * @return  mixed
 	 */
 	public static function user_agent($agent, $value)
 	{
@@ -672,7 +682,7 @@ class Text {
 			foreach ($value as $part)
 			{
 				// Add each part to the set
-				$data[$part] = Text::user_agent($agent, $part);
+				$data[$part] = self::user_agent($agent, $part);
 			}
 
 			return $data;
@@ -684,7 +694,7 @@ class Text {
 			$info = array();
 
 			// Load browsers
-			$browsers = Kohana::$config->load('user_agents')->browser;
+			$browsers = Config::get('user_agents.browser');
 
 			foreach ($browsers as $search => $name)
 			{
@@ -728,6 +738,42 @@ class Text {
 	}
 
 	/**
+	 * Turns an array of strings/ints into a readable, comma separated list
+	 *
+	 * @param   array    $words         An array of words
+	 * @param   string   $conjunction   The conjunction term used (e.g. 'and', 'or' etc.) [Optional]
+	 * @param   boolean  $serial_comma  Whether a serial comma should be used [Optional]
+	 *
+	 * @return  string
+	 *
+	 * @throws  InvalidArgumentException
+	 */
+	public static function readable_list(array $words, $conjunction = 'and', $serial_comma = TRUE)
+	{
+		// First, validate that the method parameters are suitable.
+		foreach ($words as $word)
+		{
+			// Check that the word isn't an array itself
+			if (is_array($word))
+			{
+				throw new InvalidArgumentException('The array must only have one dimension.');
+			}
+			// Check that the value of the word is appropriate
+			elseif ( ! is_string($word) AND ! is_int($word) AND ! (is_object($word) AND method_exists($word, '__toString')))
+			{
+				throw new InvalidArgumentException('Array values must be either strings or integers.');
+			}
+		}
+
+		// Build the 'readable list'
+		$last_word = array_pop($words);
+		$string = implode(', ', $words).($serial_comma ? ', ' : ' ').$conjunction.' '.$last_word;
+
+		// Return the 'readable list'
+		return $string;
+	}
+
+	/**
 	 * Encode special characters in a plain-text string for display as HTML.
 	 *
 	 * Also validates strings as UTF-8 to prevent cross site scripting attacks
@@ -735,7 +781,7 @@ class Text {
 	 *
 	 * @param  string  $text  The text to be checked or processed.
 	 *
-	 * @return  string An HTML safe version of `$text`, or an empty string if $text is not valid UTF-8.
+	 * @return  string
 	 */
 	public static function plain($text)
 	{
@@ -749,6 +795,7 @@ class Text {
 	 * When entering more than one carriage return, only the first will be honored.
 	 *
 	 * @param   string|array  $text  The text to be checked or processed
+	 *
 	 * @return  mixed
 	 */
 	public static function emptyparagraph($text)
@@ -760,6 +807,7 @@ class Text {
 	 * Scan input and make sure that all HTML tags are properly closed and nested.
 	 *
 	 * @param   string   Text string to filter html
+	 *
 	 * @return  mixed
 	 */
 	public static function htmlcorrector($text)
@@ -777,7 +825,8 @@ class Text {
 	 * back to a HTML snippet.
 	 *
 	 * @param   string       Text string to filter html
-	 * @return  DOMDocument  A DOMDocument that represents the loaded HTML snippet.
+	 *
+	 * @return  DOMDocument
 	 */
 	public static function dom_load($text)
 	{
@@ -798,9 +847,9 @@ class Text {
 	 * The resulting HTML snippet will be properly formatted
 	 * to be compatible with HTML user agents.
 	 *
-	 * @param  DOMDocument  $dom_document  A DOMDocument object to serialize
+	 * @param   DOMDocument  $dom_document  A DOMDocument object to serialize
 	 *
-	 * @return  string  A valid HTML snippet, as a string.
+	 * @return  string
 	 */
 	private static function dom_serialize(DOMDocument $dom_document)
 	{
@@ -809,12 +858,12 @@ class Text {
 
 		foreach ($body_node->getElementsByTagName('script') as $node)
 		{
-			Text::escape_cdata_element($dom_document, $node);
+			self::escape_cdata_element($dom_document, $node);
 		}
 
 		foreach ($body_node->getElementsByTagName('style') as $node)
 		{
-			Text::escape_cdata_element($dom_document, $node, '/*', '*/');
+			self::escape_cdata_element($dom_document, $node, '/*', '*/');
 		}
 
 		foreach ($body_node->childNodes as $child_node)
@@ -907,6 +956,7 @@ class Text {
 	 * Standardize newlines
 	 *
 	 * @param	string	$value  The value
+	 *
 	 * @return	string
 	 */
 	public static function standardize($value)
@@ -933,6 +983,7 @@ class Text {
 	 * @param   integer  $format_id  The format id of the text to be filtered. If no format is assigned, the fallback format will be used [Optional]
 	 * @param   string   $langcode   The language code of the text to be filtered, e.g. 'en' for English. This allows filters to be language aware so language specific text replacement can be implemented [Optional]
 	 * @param   boolean  $cache      Boolean whether to cache the filtered output in the {cache_filter} table. The caller may set this to FALSE when the output is already cached elsewhere to avoid duplicate cache lookups and storage [Optional]
+	 *
 	 * @return  mixed
 	 *
 	 * @uses    Config::load
@@ -1008,7 +1059,7 @@ class Text {
 				//Shortens long URLs to http://www.example.com/long/url...
 				if ($filter['settings']['url_length'])
 				{
-					$link->nodeValue = Text::limit_chars($link->nodeValue,
+					$link->nodeValue = self::limit_chars($link->nodeValue,
 										 (int) $filter['settings']['url_length'], '....');
 				}
 			}
@@ -1123,11 +1174,12 @@ class Text {
 		return $output;
 	}
 
-	/*
+	/**
 	 * Move links to bottom of the text
 	 *
-	 * @param   string  text
-	 * @param   bool    Convert URLs into links. default true
+	 * @param   string   $text        Text
+	 * @param   boolean  $auto_links  Convert URLs into links [Optional]
+
 	 * @return  string
 	 */
 	public static function move_links_to_end($text, $auto_links = FALSE)
@@ -1137,7 +1189,7 @@ class Text {
 
 		if($auto_links)
 		{
-			$text = Text::auto_link($text);
+			$text = self::auto_link($text);
 		}
 
 		$text = preg_replace($search, $replace, $text);
@@ -1155,13 +1207,13 @@ class Text {
 		return $text;
 	}
 
-	/*
+	/**
 	 * Helper function called by preg_replace() on link replacement.
 	 *
-	 *  @param string $link URL of the link
-	 *  @param string $display Part of the text to associate number with
-	 *  @access private
-	 *  @return string
+	 * @param string $link URL of the link
+	 * @param string $display Part of the text to associate number with
+	 *
+	 * @return string
 	 */
 	private static function _links_list( $link, $display )
 	{
@@ -1200,6 +1252,7 @@ class Text {
 	 *
 	 * @param   string  string to highlight terms in
 	 * @param   string  words to highlight
+	 *
 	 * @return  string
 	*/
 	public static function highlight($str, $keywords)
@@ -1228,6 +1281,7 @@ class Text {
 	 * Reverts auto_p
 	 *
 	 * @param   string  $str  String to be processed
+	 *
 	 * @return  string
 	 */
 	public static function auto_p_revert($str)
@@ -1240,7 +1294,9 @@ class Text {
 	 * Adds &lt;span class="ordinal"&gt; tags around any ordinals (nd / st / th / rd)
 	 *
 	 * @param   string  $text  String to be processed
+	 *
 	 * @return  string
+	 *
 	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function ordinals($text)
@@ -1255,7 +1311,9 @@ class Text {
 	 * Adds &lt;span class="initial"&gt; tag around the initial letter of each paragraph
 	 *
 	 * @param   string  $text  String to be processed
+	 *
 	 * @return  string
+	 *
 	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function initialcaps($text)
@@ -1271,7 +1329,9 @@ class Text {
 	 * Converts fractions to their html equivalent (for example, 1/4 will become &frac14;)
 	 *
 	 * @param   string  $text  String to be processed
+	 *
 	 * @return  string
+	 *
 	 * @link    http://drupal.org/project/more_filters
 	 */
 	public static function fractions($text)
@@ -1297,6 +1357,7 @@ class Text {
 	 *
 	 * @param   string  $string       The string you want to slug
 	 * @param   string  $replacement  Will replace keys in map [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function convert_accented_characters($string, $replacement = '-')
@@ -1402,20 +1463,21 @@ class Text {
 	 * @since  1.1.0
 	 *
 	 * @param   mixed  $value  The value to be stripped
-	 * @return  array|object|string  Stripped value
+	 *
+	 * @return  mixed
 	 */
 	public static function strip_slashes($value)
 	{
 		if (is_array($value))
 		{
-			$value = array_map('Text::strip_slashes', $value);
+			$value = array_map('self::strip_slashes', $value);
 		}
 		elseif (is_object($value))
 		{
 			$vars = get_object_vars($value);
 			foreach ($vars as $key => $data)
 			{
-				$value->{$key} = Text::strip_slashes($data);
+				$value->{$key} = self::strip_slashes($data);
 			}
 		}
 		elseif (is_string($value))
