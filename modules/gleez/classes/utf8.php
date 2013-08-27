@@ -109,7 +109,7 @@ class UTF8 {
 	 * $ascii = UTF8::is_ascii($str);
 	 * ~~~
 	 *
-	 * @param   mixed   $str  String or array of strings to check
+	 * @param   mixed
 	 *
 	 * @return  boolean
 	 */
@@ -148,7 +148,7 @@ class UTF8 {
 	 * $str = UTF8::strip_non_ascii($str);
 	 * ~~~
 	 *
-	 * @param   string  $str  String to clean
+	 * @param   string
 	 *
 	 * @return  string
 	 */
@@ -207,7 +207,7 @@ class UTF8 {
 	 */
 	public static function strlen($str)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return mb_strlen($str, Kohana::$charset);
 		}
@@ -239,15 +239,14 @@ class UTF8 {
 	 * @param   string   $search  Needle
 	 * @param   integer  $offset  Offset from which character in haystack to start searching [Optional]
 	 *
-	 * @return  integer  Position of needle
-	 * @return  boolean  FALSE if the needle is not found
+	 * @return  mixed
 	 *
 	 * @uses    UTF8::$server_utf8
 	 * @uses    Kohana::find_file
 	 */
 	public static function strpos($str, $search, $offset = 0)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return mb_strpos($str, $search, $offset, Kohana::$charset);
 		}
@@ -279,8 +278,7 @@ class UTF8 {
 	 * @param   string   $search  Needle
 	 * @param   integer  $offset  Offset from which character in haystack to start searching [Optional]
 	 *
-	 * @return  integer  Position of needle
-	 * @return  boolean  FALSE if the needle is not found
+	 * @return  mixed
 	 *
 	 * @uses    UTF8::$server_utf8
 	 * @uses    Kohana::$charset
@@ -288,7 +286,7 @@ class UTF8 {
 	 */
 	public static function strrpos($str, $search, $offset = 0)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return mb_strrpos($str, $search, $offset, Kohana::$charset);
 		}
@@ -328,7 +326,7 @@ class UTF8 {
 	 */
 	public static function substr($str, $offset, $length = NULL)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return (is_null($length))
 				? mb_substr($str, $offset, mb_strlen($str), Kohana::$charset)
@@ -408,7 +406,7 @@ class UTF8 {
 	 */
 	public static function strtolower($str)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return mb_strtolower($str, Kohana::$charset);
 		}
@@ -441,7 +439,7 @@ class UTF8 {
 	 */
 	public static function strtoupper($str)
 	{
-		if (UTF8::$server_utf8)
+		if (self::$server_utf8)
 		{
 			return mb_strtoupper($str, Kohana::$charset);
 		}
@@ -535,9 +533,7 @@ class UTF8 {
 	 * @param   string  $str1  String to compare
 	 * @param   string  $str2  String to compare
 	 *
-	 * @return  integer  Less than 0 if str1 is less than str2
-	 * @return  integer  Greater than 0 if str1 is greater than str2
-	 * @return  integer  0 if they are equal
+	 * @return  integer
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -567,13 +563,12 @@ class UTF8 {
 	 *
 	 * @author  Harry Fuecks <hfuecks@gmail.com
 	 *
-	 * @param   string|array    $search   Text to replace
-	 * @param   string|array    $replace  Replacement text
-	 * @param   string|array    $str      Subject text
-	 * @param   integer         $count    Number of matched and replaced needles will be returned via this parameter which is passed by reference [Optional]
+	 * @param   mixed    $search   Text to replace
+	 * @param   mixed    $replace  Replacement text
+	 * @param   mixed    $str      Subject text
+	 * @param   integer  $count    Number of matched and replaced needles will be returned via this parameter which is passed by reference [Optional]
 	 *
-	 * @return  string  If the input was a string
-	 * @return  array   If the input was an array
+	 * @return  mixed
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -606,8 +601,7 @@ class UTF8 {
 	 * @param   string  $str     Input string
 	 * @param   string  $search  Needle
 	 *
-	 * @return  string   Matched substring if found
-	 * @return  boolean  FALSE if the substring was not found
+	 * @return  mixed
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -641,7 +635,7 @@ class UTF8 {
 	 * @param   integer  $offset  Start position of the string to examine [Optional]
 	 * @param   integer  $length  Length of the string to examine [Optional]
 	 *
-	 * @return  integer  Length of the initial segment that contains characters in the mask
+	 * @return  integer
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -675,7 +669,7 @@ class UTF8 {
 	 * @param   integer  $offset  Start position of the string to examine [Optional]
 	 * @param   integer  $length  Length of the string to examine [Optional]
 	 *
-	 * @return  integer  Length of the initial segment that contains characters not in the mask
+	 * @return  integer
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -937,8 +931,7 @@ class UTF8 {
 	 *
 	 * @param   string  $str  UTF-8 encoded string
 	 *
-	 * @return  array    Unicode code points
-	 * @return  boolean  FALSE if the string is invalid
+	 * @return  array    mixed
 	 *
 	 * @uses    Kohana::find_file
 	 */
@@ -972,10 +965,9 @@ class UTF8 {
 	 * Ported to PHP by Henri Sivonen <hsivonen@iki.fi>, see http://hsivonen.iki.fi/php-utf8/
 	 * Slight modifications to fit with phputf8 library by Harry Fuecks <hfuecks@gmail.com>.
 	 *
-	 * @param   array   $arr    unicode code points representing a string
+	 * @param   array  $arr  Unicode code points representing a string
 	 *
-	 * @return  string   UTF8 string of characters
-	 * @return  boolean  FALSE if a code point cannot be found
+	 * @return  mixed
 	 *
 	 * @uses    Kohana::find_file
 	 */
