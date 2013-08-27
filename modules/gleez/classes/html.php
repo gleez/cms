@@ -8,7 +8,7 @@
  * @package    Gleez\Helpers
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -73,13 +73,14 @@ class HTML {
 	 *
 	 * All untrusted content should be passed through this method to prevent XSS injections.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::chars($username);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::chars($username);
+	 * ~~~
 	 *
 	 * @param   string   $value          String to convert
 	 * @param   boolean  $double_encode  Encode existing entities [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function chars($value, $double_encode = TRUE)
@@ -93,13 +94,14 @@ class HTML {
 	 * All characters that cannot be represented in HTML with the current character set
 	 * will be converted to entities.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::entities($username);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::entities($username);
+	 * ~~~
 	 *
 	 * @param   string   $value          String to convert
 	 * @param   boolean  $double_encode  Encode existing entities [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function entities($value, $double_encode = TRUE)
@@ -112,16 +114,17 @@ class HTML {
 	 *
 	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::anchor('/user/profile', 'My Profile');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::anchor('/user/profile', 'My Profile');
+	 * ~~~
 	 *
 	 * @param   string  $uri         URL or URI string
 	 * @param   string  $title       Link text [Optional]
 	 * @param   array   $attributes  HTML anchor attributes [Optional]
 	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
 	 * @param   boolean $index       Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -130,7 +133,7 @@ class HTML {
 	 */
 	public static function anchor($uri, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = TRUE)
 	{
-		if ($title === NULL)
+		if (is_null($title))
 		{
 			// Use the URI as the title
 			$title = $uri;
@@ -161,7 +164,7 @@ class HTML {
 		// Add the sanitized link to the attributes
 		$attributes['href'] = $uri;
 
-		return '<a'.HTML::attributes($attributes).'>'.$title.'</a>';
+		return '<a'.self::attributes($attributes).'>'.$title.'</a>';
 	}
 
 	/**
@@ -169,16 +172,17 @@ class HTML {
 	 *
 	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::file_anchor('media/doc/user_guide.pdf', 'User Guide');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::file_anchor('media/doc/user_guide.pdf', 'User Guide');
+	 * ~~~
 	 *
 	 * @param   string  $file        Name of file to link to
 	 * @param   string  $title       Link text [Optional]
 	 * @param   array   $attributes  HTML anchor attributes [Optional]
 	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
 	 * @param   boolean $index       Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -194,7 +198,7 @@ class HTML {
 		// Add the file link to the attributes
 		$attributes['href'] = URL::site($file, $protocol, $index);
 
-		return '<a'.HTML::attributes($attributes).'>'.$title.'</a>';
+		return '<a'.self::attributes($attributes).'>'.$title.'</a>';
 	}
 
 	/**
@@ -202,39 +206,41 @@ class HTML {
 	 *
 	 * Note that the title is not escaped, to allow HTML elements within links (images, etc).
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::mailto($address);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::mailto($address);
+	 * ~~~
 	 *
 	 * @param   string  $email       Email address to send to
 	 * @param   string  $title       Link text [Optional]
 	 * @param   array   $attributes  HTML anchor attributes [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function mailto($email, $title = NULL, array $attributes = NULL)
 	{
-		if ($title === NULL)
+		if (is_null($title))
 		{
 			// Use the email address as the title
 			$title = $email;
 		}
 
-		return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;'.$email.'"'.HTML::attributes($attributes).'>'.$title.'</a>';
+		return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;'.$email.'"'.self::attributes($attributes).'>'.$title.'</a>';
 	}
 
 	/**
 	 * Creates a script link
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::script('media/js/jquery.min.js');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::script('media/js/jquery.min.js');
+	 * ~~~
 	 *
 	 * @param   string  $file        File name
 	 * @param   array   $attributes  Default attributes [Optional]
 	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
 	 * @param   boolean $index       Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -261,21 +267,22 @@ class HTML {
 		// Set the script type
 		$attributes['type'] = 'text/javascript';
 
-		return '<script'.HTML::attributes($attributes).'></script>';
+		return '<script'.self::attributes($attributes).'></script>';
 	}
 
 	/**
 	 * Creates a image link
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::image('media/img/logo.png', array('alt' => 'My Company'));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::image('media/img/logo.png', array('alt' => 'My Company'));
+	 * ~~~
 	 *
 	 * @param   string  $file        File name
 	 * @param   array   $attributes  Default attributes [Optional]
 	 * @param   mixed   $protocol    Protocol to pass to URL::base() [Optional]
 	 * @param   boolean $index       Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -292,7 +299,7 @@ class HTML {
 		// Add the image link
 		$attributes['src'] = $file;
 
-		return '<img'.HTML::attributes($attributes).' >';
+		return '<img'.self::attributes($attributes).' >';
 	}
 
 	/**
@@ -300,12 +307,13 @@ class HTML {
 	 *
 	 * Attributes will be sorted using HTML::$attribute_order for consistency.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo '<div'.HTML::attributes($attrs).'>'.$content.'</div>';
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo '<div'.HTML::attributes($attrs).'>'.$content.'</div>';
+	 * ~~~
 	 *
-	 * @param   array   $attributes  Attribute list [Optional]
+	 * @param   array  $attributes  Attribute list [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function attributes(array $attributes = NULL)
@@ -316,7 +324,7 @@ class HTML {
 		}
 
 		$sorted = array();
-		foreach (HTML::$attribute_order as $key)
+		foreach (self::$attribute_order as $key)
 		{
 			if (isset($attributes[$key]))
 			{
@@ -342,7 +350,7 @@ class HTML {
 				// Assume non-associative keys are mirrored attributes
 				$key = $value;
 
-				if ( ! HTML::$strict)
+				if ( ! self::$strict)
 				{
 					// Just use a key
 					$value = FALSE;
@@ -352,10 +360,10 @@ class HTML {
 			// Add the attribute key
 			$compiled .= ' '.$key;
 
-			if ($value OR HTML::$strict)
+			if ($value OR self::$strict)
 			{
 				// Add the attribute value
-				$compiled .= '="'.HTML::chars($value).'"';
+				$compiled .= '="'.self::chars($value).'"';
 			}
 		}
 
@@ -365,17 +373,18 @@ class HTML {
 	/**
 	 * Creates a style sheet link element
 	 *
-	 * Example:<br>
-	 * <code>
-	 *	echo HTML::style('media/css/screen.css');
-	 * <code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::style('media/css/screen.css');
+	 * ~~~
 	 *
-	 * Note: Gleez by default use HTML5. In HTML5 attribute `type` not needed
+	 * [!!] Note: Gleez by default use HTML5. In HTML5 attribute `type` not needed
 	 *
 	 * @param   string  $file       File name
 	 * @param   array   $attrs      Default attributes [Optional]
 	 * @param   mixed   $protocol   Protocol to pass to `URL::base()` [Optional]
 	 * @param   boolean $index      Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -402,7 +411,7 @@ class HTML {
 		// Set the stylesheet rel
 		$attrs['rel'] = 'stylesheet';
 
-		return '<link'.HTML::attributes($attrs).'>';
+		return '<link'.self::attributes($attrs).'>';
 	}
 
 	/**
@@ -410,15 +419,16 @@ class HTML {
 	 *
 	 * Width, height and type attributes are required to resize the image.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo HTML::resize('media/img/logo.png', array('alt' => 'My Company', 'width' => 50, 'height' => 50, 'type' => 'ratio'));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo HTML::resize('media/img/logo.png', array('alt' => 'My Company', 'width' => 50, 'height' => 50, 'type' => 'ratio'));
+	 * ~~~
 	 *
 	 * @param   string   $file        File name
 	 * @param   array    $attributes  Default attributes + type = crop|ratio [Optional]
 	 * @param   mixed    $protocol    Protocol to pass to `URL::base()` [Optional]
 	 * @param   boolean  $index       Include the index page [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    URL::base
@@ -466,17 +476,18 @@ class HTML {
 		// Add the image link
 		$attributes['src'] = $file;
 
-		return '<img'.HTML::attributes($attributes).'>';
+		return '<img'.self::attributes($attributes).'>';
 	}
 
 	/**
 	 * Print out a themed set of links
 	 *
-	 * @param  array  $links       Links
-	 * @param  array  $attributes  Attributes, for example CSS class [Optional]
-	 * @return string Prepared HTML
+	 * @param   array  $links       Links
+	 * @param   array  $attributes  Attributes, for example CSS class [Optional]
 	 *
-	 * @uses   Request::uri
+	 * @return  string
+	 *
+	 * @uses    Request::uri
 	 */
 	public static function links($links, $attributes = array('class' => 'links'))
 	{
@@ -484,7 +495,7 @@ class HTML {
 
 		if (count($links) > 0)
 		{
-			$output = '<ul'. HTML::attributes($attributes) .'>';
+			$output = '<ul'. self::attributes($attributes) .'>';
 
 			$num_links = count($links);
 			$i = 1;
@@ -494,32 +505,34 @@ class HTML {
 				$class = 'link-' . $i;
 
 				// Add first, last and active classes to the list of links to help out themers.
-				if ($i == 1) {
+				if ($i == 1)
+				{
 					$class .= ' first';
 				}
 
 				// Check if the menu item URI is or contains the current URI
-				if( is_object($item) AND HTML::is_active($item->link) )
+				if(is_object($item) AND self::is_active($item->link))
 				{
 					$class .= ' active';
 				}
-				elseif( is_array($item) AND HTML::is_active($item['link']) )
+				elseif(is_array($item) AND self::is_active($item['link']))
 				{
 					$class .= ' active';
 				}
 
-				if ($i == $num_links) {
+				if ($i == $num_links)
+				{
 					$class .= ' last';
 				}
-				$output .= '<li'. HTML::attributes(array('class' => $class)) .'>';
+				$output .= '<li'.self::attributes(array('class' => $class)) .'>';
 
 				if( is_object($item))
 				{
-					$output .= HTML::anchor($item->link, $item->name);
+					$output .= self::anchor($item->link, $item->name);
 				}
 				elseif( is_array($item))
 				{
-					$output .= HTML::anchor($item['link'], $item['name']);
+					$output .= self::anchor($item['link'], $item['name']);
 				}
 
 				$i++;
@@ -536,6 +549,7 @@ class HTML {
 	 *
 	 * @param   array  $tabs        Tabs
 	 * @param   array  $attributes  Attributes, for example CSS class [Optional]
+	 *
 	 * @return  string Prepared HTML
 	 *
 	 * @uses    Request::uri
@@ -546,7 +560,7 @@ class HTML {
 
 		if (count($tabs) > 0)
 		{
-			$output = '<ul'. HTML::attributes($attributes) .'>';
+			$output = '<ul'.self::attributes($attributes).'>';
 
 			$num_links = count($tabs);
 			$i = 1;
@@ -555,7 +569,7 @@ class HTML {
 			{
 				$class = 'tab-' . $i;
 
-				if( isset($tab['active']) OR ( isset($tab['link']) AND HTML::is_active($tab['link']) ) )
+				if(isset($tab['active']) OR ( isset($tab['link']) AND self::is_active($tab['link'])))
 				{
 					$class .= ' active';
 				}
@@ -568,7 +582,7 @@ class HTML {
 					$class .= ' last';
 				}
 
-				$output .= '<li'. HTML::attributes(array('class' => $class)) .'>';
+				$output .= '<li'.self::attributes(array('class' => $class)).'>';
 
 				//sanitized link text
 				$tab['text'] = Text::plain( $tab['text'] );
@@ -579,7 +593,7 @@ class HTML {
 				}
 				else
 				{
-					$output .= HTML::anchor($tab['link'], $tab['text']);
+					$output .= self::anchor($tab['link'], $tab['text']);
 				}
 				$i++;
 				$output .= "</li>".PHP_EOL;
@@ -595,6 +609,7 @@ class HTML {
 	 * the start) of the current request URI.
 	 *
 	 * @param   string  $uri  URI
+	 *
 	 * @return  boolean
 	 */
 	public static function is_active($uri)
@@ -607,6 +622,7 @@ class HTML {
 	 *
 	 * @param   string  $source  Script source
 	 * @param   string  $type    Script type [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function script_source($source, $type = 'text/javascript')
@@ -617,7 +633,7 @@ class HTML {
 		{
 			foreach ($source as $script)
 			{
-				$compiled .= HTML::script_source($script);
+				$compiled .= self::script_source($script);
 			}
 		}
 		else
@@ -633,6 +649,7 @@ class HTML {
 	 *
 	 * @param   mixed   $class  Image class name
 	 * @param   string  $title  Image title [Optional]
+	 *
 	 * @return  string  An HTML-prepared image
 	 *
 	 * @uses    Route::uri
@@ -664,37 +681,39 @@ class HTML {
 			$attr['title'] = $title;
 		}
 
-		return HTML::image(Route::get('media')->uri(array('file' => 'images/spacer.gif')), $attr);
+		return self::image(Route::get('media')->uri(array('file' => 'images/spacer.gif')), $attr);
 	}
 
 	/**
 	 * Create a iconic button
 	 *
 	 * Example:
-	 * <code>
-	 *   echo HTML::icon('/paths/edit/1', 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
-	 * </code>
+	 * ~~~
+	 * echo HTML::icon('/paths/edit/1', 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
+	 * ~~~
 	 *
 	 * @param   string  $url    URL
 	 * @param   string  $icon   FontAwesome like icon  class
 	 * @param   array   $attrs  Attributes, for example CSS class or title [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function icon($url, $icon, array $attrs = array())
 	{
-		return HTML::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
+		return self::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
 	}
 
 	/**
 	 * Create a bootstrap label
 	 *
 	 * Example:
-	 * <code>
-	 *   echo HTML::label(__('Publish'), 'info');
-	 * </code>
+	 * ~~~
+	 * echo HTML::label(__('Publish'), 'info');
+	 * ~~~
 	 *
-	 * @param   string  $text    Text
-	 * @param   string  $label   bootstrap label  class
+	 * @param   string  $text   Text
+	 * @param   string  $label  Bootstrap label class [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function label($text, $label = 'default')
