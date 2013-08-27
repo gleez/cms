@@ -125,6 +125,12 @@ class Arr {
 		{
 			// The path has already been separated into keys
 			$keys = $path;
+
+			if ( ! is_array($path))
+			{
+				// Split the keys by delimiter
+				$keys = explode($delimiter, $path);
+			}
 		}
 		else
 		{
@@ -218,14 +224,15 @@ class Arr {
 	}
 
 	/**
-	* Set a value on an array by path.
-	*
-	* @see Arr::path()
-	* @param array   $array     Array to update
-	* @param string  $path      Path
-	* @param mixed   $value     Value to set
-	* @param string  $delimiter Path delimiter
-	*/
+	 * Set a value on an array by path
+	 *
+	 * @see Arr::path()
+	 *
+	 * @param array   $array     Array to update
+	 * @param string  $path      Path - delimiter separated keys as a string or array of keys
+	 * @param mixed   $value     Value to set
+	 * @param string  $delimiter Path delimiter
+	 */
 	public static function set_path( & $array, $path, $value, $delimiter = NULL)
 	{
 		if ( ! $delimiter)
