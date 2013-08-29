@@ -6,11 +6,9 @@
  * (i.e. Redirect). Implements standard HTTP response format.
  *
  * @package    Gleez\Base
- * @author     Kohana Team
  * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Response implements HTTP_Response {
@@ -420,16 +418,17 @@ class Response implements HTTP_Response {
 	 * `string`  | mime_type | Manual mime type                   | Automatic
 	 * `boolean` | delete    | Delete the file after sending      | `FALSE`
 	 *
-	 * Download a file that already exists:
+	 * Example:
+	 * ~~~
+	 * // Download a file that already exists
+	 * $request->send_file('media/packages/gleez.zip');
 	 *
-	 *     $request->send_file('media/packages/kohana.zip');
+	 * // Download generated content as a file:
+	 * $request->response($content);
+	 * $request->send_file(TRUE, $filename);
+	 * ~~~
 	 *
-	 * Download generated content as a file:
-	 *
-	 *     $request->response($content);
-	 *     $request->send_file(TRUE, $filename);
-	 *
-	 * [!!] No further processing can be done after this method is called!
+	 * [!!] Note: No further processing can be done after this method is called!
 	 *
 	 * @param   string  $filename  Filename with path, or TRUE for the current response
 	 * @param   string  $download  Downloaded file name [Optional]
@@ -500,7 +499,7 @@ class Response implements HTTP_Response {
 			if ( ! isset($mime))
 			{
 				// Get the mime type
-				$mime = File::mime($download);
+				$mime = File::mime_by_ext(strtolower(pathinfo($download, PATHINFO_EXTENSION)));
 			}
 
 			// Open the file for reading
@@ -734,6 +733,7 @@ class Response implements HTTP_Response {
 		{
 			if (is_array($this->_header['cache-control']))
 			{
+				// @todo
 				$this->_header['cache-control'][] = new HTTP_Header_Value('must-revalidate');
 			}
 			else
