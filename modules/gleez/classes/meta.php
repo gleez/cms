@@ -41,7 +41,7 @@ class Meta {
 		// Return all meta links
 		if (is_null($handle))
 		{
-			return Meta::all_links();
+			return self::all_links();
 		}
 
 		$attrs['href'] = URL::is_absolute($handle) ? $handle : URL::site($handle, TRUE);
@@ -52,7 +52,7 @@ class Meta {
 			$handle = 'canonical';
 		}
 
-		return Meta::$links[$handle] = array('url' => $attrs['href'], 'attrs' => $attrs);
+		return self::$links[$handle] = array('url' => $attrs['href'], 'attrs' => $attrs);
 	}
 
 	/**
@@ -67,12 +67,12 @@ class Meta {
 	 */
 	public static function get_link($handle)
 	{
-		if ( ! isset(Meta::$links[$handle]))
+		if ( ! isset(self::$links[$handle]))
 		{
 			return FALSE;
 		}
 
-		$asset       = Meta::$links[$handle];
+		$asset       = self::$links[$handle];
 		$attrs       = $asset['attrs'];
 		$output      = '';
 		$conditional = Arr::get($attrs, 'conditional');
@@ -104,16 +104,16 @@ class Meta {
 	 */
 	public static function all_links()
 	{
-		if (empty(Meta::$links))
+		if (empty(self::$links))
 		{
 			return FALSE;
 		}
 
 		$assets = array();
 
-		foreach (Meta::_sort(Meta::$links) as $handle => $data)
+		foreach (self::_sort(self::$links) as $handle => $data)
 		{
-			$assets[] = Meta::get_link($handle);
+			$assets[] = self::get_link($handle);
 		}
 
 		return implode(PHP_EOL, $assets).PHP_EOL;
@@ -130,10 +130,10 @@ class Meta {
 	{
 		if (is_null($handle))
 		{
-			return Meta::$links = array();
+			return self::$links = array();
 		}
 
-		unset(Meta::$links[$handle]);
+		unset(self::$links[$handle]);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Meta {
 		// Return all meta links
 		if (is_null($handle))
 		{
-			return Meta::all_tags();
+			return self::all_tags();
 		}
 
 		if ( ! is_array($attrs))
@@ -170,7 +170,7 @@ class Meta {
 			$attrs = array();
 		}
 
-		return Meta::$tags[$handle] = array('handle' => $handle, 'value' => $value, 'attrs' => $attrs);
+		return self::$tags[$handle] = array('handle' => $handle, 'value' => $value, 'attrs' => $attrs);
 	}
 
 	/**
@@ -185,12 +185,12 @@ class Meta {
 	 */
 	public static function get_tag($handle)
 	{
-		if ( ! isset(Meta::$tags[$handle]))
+		if ( ! isset(self::$tags[$handle]))
 		{
 			return FALSE;
 		}
 
-		$asset       = Meta::$tags[$handle];
+		$asset       = self::$tags[$handle];
 		$attrs       = $asset['attrs'];
 		$output      = '';
 		$conditional = Arr::get($attrs, 'conditional');
@@ -226,16 +226,16 @@ class Meta {
 	 */
 	public static function all_tags()
 	{
-		if (empty(Meta::$tags))
+		if (empty(self::$tags))
 		{
 			return FALSE;
 		}
 
 		$assets = array();
 
-		foreach (Meta::_sort(Meta::$tags) as $handle => $data)
+		foreach (self::_sort(self::$tags) as $handle => $data)
 		{
-			$assets[] = Meta::get_tag($handle);
+			$assets[] = self::get_tag($handle);
 		}
 
 		return implode(PHP_EOL, $assets).PHP_EOL;
@@ -252,10 +252,10 @@ class Meta {
 	{
 		if (is_null($handle))
 		{
-			return Meta::$tags = array();
+			return self::$tags = array();
 		}
 
-		unset(Meta::$tags[$handle]);
+		unset(self::$tags[$handle]);
 	}
 
 	/**
