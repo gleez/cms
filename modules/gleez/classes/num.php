@@ -5,13 +5,10 @@
  * Provides additional formatting methods that for working with numbers.
  *
  * @package    Gleez\Helpers
- * @author     Kohana Team
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2009-2012 Kohana Team
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Num {
 
@@ -58,6 +55,22 @@ class Num {
 		'Yi'  => 80,
 		'YB'  => 80,
 		'YiB' => 80,
+	);
+
+	/**
+	 * SI looking prefixes
+	 * @var array
+	 */
+	public static $si_prefixes = array(
+		'B'   => 0,
+		'KB'  => 3,
+		'MB'  => 6,
+		'GB'  => 9,
+		'TB'  => 12,
+		'PB'  => 15,
+		'EB'  => 18,
+		'ZB'  => 21,
+		'YB'  => 24,
 	);
 
 	/**
@@ -220,26 +233,30 @@ class Num {
 	 *
 	 * Examples:
 	 * ~~~
-	 * echo Num::bytes('200K');  // 204800
-	 * echo Num::bytes('5MiB');  // 5242880
-	 * echo Num::bytes('1000');  // 1000
-	 * echo Num::bytes('2.5GB'); // 2684354560
+	 * echo Num::bytes('200K');   // 204800
+	 * echo Num::bytes('5MiB');   // 5242880
+	 * echo Num::bytes('1000');   // 1000
+	 * echo Num::bytes('2.5GB');  // 2684354560
+	 * echo Num::bytes('2.5GB');  // 2500000000
+	 * echo Num::bytes('2.5GiB'); // 2684354560
 	 * ~~~
 	 *
 	 * @param   string  $size  File size in SB format
+	 * @param   boolean $si    Use SI prefixes? [Optional]
+	 *
 	 * @return  float
 	 *
 	 * @throws  Gleez_Exception
 	 *
 	 * @uses    Arr::get
 	 */
-	public static function bytes($size)
+	public static function bytes($size, $si = TRUE)
 	{
 		// Prepare the size
 		$size = trim( (string) $size);
 
 		// Construct an OR list of byte units for the regex
-		$accepted = implode('|', array_keys(Num::$byte_units));
+		$accepted = implode('|', array_keys(self::$byte_units));
 
 		// Construct the regex pattern for verifying the size format
 		$pattern = '/^([0-9]+(?:\.[0-9]+)?)('.$accepted.')?$/Di';
@@ -248,7 +265,7 @@ class Num {
 		if ( ! preg_match($pattern, $size, $matches))
 		{
 			throw new Gleez_Exception('The byte unit size, ":size", is improperly formatted.',
-				array(':size' => $size,)
+				array(':size' => $size)
 			);
 		}
 
@@ -258,8 +275,16 @@ class Num {
 		// Find the actual unit, assume B if no unit specified
 		$unit = Arr::get($matches, 2, 'B');
 
-		// Convert the size into bytes
-		$bytes = $size * pow(2, Num::$byte_units[$unit]);
+		if (array_key_exists($unit, self::$si_prefixes) AND $si === TRUE)
+		{
+			// Convert the size into bytes using SI prefixes (decimal)
+			$bytes = $size * pow(10, self::$si_prefixes[$unit]);
+		}
+		else
+		{
+			// Convert the size into bytes
+			$bytes = $size * pow(2, self::$byte_units[$unit]);
+		}
 
 		return $bytes;
 	}
