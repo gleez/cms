@@ -2,16 +2,11 @@
 /**
  * Gleez File Class
  *
- * @package    Gleez\SPL
+ * @package    Gleez\Helpers
  * @author     Gleez Team
- * @author     Kohana Team
- * @version    1.1.1
- * @copyright  (c) 2007-2012 Kohana Team
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
- *
- * @link       http://www.php.net/manual/en/class.splfileinfo.php SplFileInfo
  */
 class File extends SplFileInfo {
 
@@ -45,7 +40,9 @@ class File extends SplFileInfo {
 	 * ~~~
 	 *
 	 * @param   string  $file_name  File name
+	 *
 	 * @return  File
+	 *
 	 * @throws  Gleez_Exception
 	 */
 	public static function instance($file_name)
@@ -55,20 +52,19 @@ class File extends SplFileInfo {
 			throw new Gleez_Exception('The file name must be specified', 500);
 		}
 
-		if (is_null(File::$instance))
+		if (is_null(self::$instance))
 		{
 			new File($file_name);
 		}
 
 		// If initiated already return the current File instance
-		return File::$instance;
+		return self::$instance;
 	}
 
 	/**
 	 * Class constructor
 	 *
 	 * @param  string  $file_name  File name
-	 * @link   http://php.net/manual/en/splfileinfo.construct.php  SplFileInfo::__construct
 	 */
 	public function __construct($file_name)
 	{
@@ -78,7 +74,7 @@ class File extends SplFileInfo {
 		$this->_name = $spl->getBasename();
 		$this->_path = $spl->getPath();
 
-		File::$instance = $this;
+		self::$instance = $this;
 	}
 
 	/**
@@ -88,7 +84,7 @@ class File extends SplFileInfo {
 	{
 		try
 		{
-			File::$instance = NULL;
+			self::$instance = NULL;
 		}
 		catch(Exception $e)
 		{
@@ -103,13 +99,14 @@ class File extends SplFileInfo {
 	 */
 	final public function __toString()
 	{
-		return is_null(File::$instance) ? NULL : $this->_name;
+		return is_null(self::$instance) ? NULL : $this->_name;
 	}
 
 	/**
 	 * Gets or sets the filename
 	 *
 	 * @param   string  $name  File name [Optional]
+	 *
 	 * @return  string
 	 */
 	public function name($name = NULL)
@@ -126,6 +123,7 @@ class File extends SplFileInfo {
 	 * Gets or sets the path without filename
 	 *
 	 * @param   string  $path  File path [Optional]
+	 *
 	 * @return  string  File path
 	 */
 	public function path($path = NULL)
@@ -160,6 +158,7 @@ class File extends SplFileInfo {
 	 * ~~~
 	 *
 	 * @param   string  $filename  File name or path
+	 *
 	 * @return  string  Mime type on success
 	 * @return  boolean FALSE on failure
 	 */
@@ -196,7 +195,7 @@ class File extends SplFileInfo {
 
 		if ( ! empty($extension))
 		{
-			return File::mime_by_ext($extension);
+			return self::mime_by_ext($extension);
 		}
 
 		// Unable to find the mime-type
@@ -212,6 +211,7 @@ class File extends SplFileInfo {
 	 * ~~~
 	 *
 	 * @param   string  $extension  php, pdf, txt, etc
+	 *
 	 * @return  string  mime type on success
 	 * @return  boolean FALSE on failure
 	 */
@@ -227,6 +227,7 @@ class File extends SplFileInfo {
 	 * Lookup MIME types for a file
 	 *
 	 * @param   string $extension  Extension to lookup
+	 *
 	 * @return  array  Array of MIMEs associated with the specified extension
 	 */
 	public static function mimes_by_ext($extension)
@@ -241,6 +242,7 @@ class File extends SplFileInfo {
 	 * Lookup file extensions by MIME type
 	 *
 	 * @param   string  $type File MIME type
+	 *
 	 * @return  array   File extensions matching MIME type
 	 */
 	public static function exts_by_mime($type)
@@ -279,11 +281,12 @@ class File extends SplFileInfo {
 	 * Lookup a single file extension by MIME type
 	 *
 	 * @param   string  $type  MIME type to lookup
+	 *
 	 * @return  mixed          First file extension matching or false
 	 */
 	public static function ext_by_mime($type)
 	{
-		return current(File::exts_by_mime($type));
+		return current(self::exts_by_mime($type));
 	}
 
 	/**
@@ -311,16 +314,16 @@ class File extends SplFileInfo {
 		// Write files in 8k blocks
 		$block_size = 1024 * 8;
 
-		// Total number of peices
-		$peices = 0;
+		// Total number of pieces
+		$pieces = 0;
 
 		while ( ! feof($file))
 		{
 			// Create another piece
-			$peices += 1;
+			$pieces += 1;
 
 			// Create a new file piece
-			$piece = str_pad($peices, 3, '0', STR_PAD_LEFT);
+			$piece = str_pad($pieces, 3, '0', STR_PAD_LEFT);
 			$piece = fopen($filename.'.'.$piece, 'wb+');
 
 			// Number of bytes read
@@ -343,7 +346,7 @@ class File extends SplFileInfo {
 		// Close the file
 		fclose($file);
 
-		return $peices;
+		return $pieces;
 	}
 
 	/**
@@ -357,6 +360,7 @@ class File extends SplFileInfo {
 	 * ~~~
 	 *
 	 * @param   string  $filename   Split filename, without .000 extension
+	 *
 	 * @return  integer The number of pieces that were joined.
 	 */
 	public static function join($filename)
@@ -367,7 +371,7 @@ class File extends SplFileInfo {
 		// Read files in 8k blocks
 		$block_size = 1024 * 8;
 
-		// Total number of peices
+		// Total number of pieces
 		$pieces = 0;
 
 		while (is_file($piece = $filename.'.'.str_pad($pieces + 1, 3, '0', STR_PAD_LEFT)))
@@ -384,7 +388,7 @@ class File extends SplFileInfo {
 				fwrite($file, fread($piece, $block_size));
 			}
 
-			// Close the peice
+			// Close the pieces
 			fclose($piece);
 		}
 
