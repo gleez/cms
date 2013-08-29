@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.0
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -95,8 +95,8 @@ class Form {
 			Assets::css('form', 'media/css/form.css', array('weight' => 2));
 
 			$action  = md5($action . CSRF::key());
-			$out 	.= Form::hidden('_token', CSRF::token(FALSE, $action)).PHP_EOL;
-			$out 	.= Form::hidden('_action', $action).PHP_EOL;
+			$out 	.= self::hidden('_token', CSRF::token(FALSE, $action)).PHP_EOL;
+			$out 	.= self::hidden('_action', $action).PHP_EOL;
 		}
 
 		return $out;
@@ -155,7 +155,7 @@ class Form {
 
 		if (! isset($attrs['id']))
 		{
-			$attrs['id'] = Form::_get_id_by_name($name);
+			$attrs['id'] = self::_get_id_by_name($name);
 		}
 
 		$out = '';
@@ -198,7 +198,7 @@ class Form {
 	{
 		$attributes['type'] = 'hidden';
 
-		return Form::input($name, $value, $attributes);
+		return self::input($name, $value, $attributes);
 	}
 
 	/**
@@ -221,7 +221,7 @@ class Form {
 	{
 		$attributes['type'] = 'password';
 
-		return Form::input($name, $value, $attributes);
+		return self::input($name, $value, $attributes);
 	}
 
 	/**
@@ -243,7 +243,7 @@ class Form {
 	{
 		$attributes['type'] = 'file';
 
-		return Form::input($name, NULL, $attributes);
+		return self::input($name, NULL, $attributes);
 	}
 
 	/**
@@ -273,7 +273,7 @@ class Form {
 			$attributes[] = 'checked';
 		}
 
-		return Form::input($name, $value, $attributes);
+		return self::input($name, $value, $attributes);
 	}
 
 	/**
@@ -304,7 +304,7 @@ class Form {
 			$attributes[] = 'checked';
 		}
 
-		return Form::input($name, $value, $attributes);
+		return self::input($name, $value, $attributes);
 	}
 
 	/**
@@ -332,7 +332,7 @@ class Form {
 
 		if ( ! isset($attributes['id']))
 		{
-			$attributes['id'] = Form::_get_id_by_name($name);
+			$attributes['id'] = self::_get_id_by_name($name);
 		}
 
 		// Add default rows and cols attributes (required)
@@ -365,7 +365,7 @@ class Form {
 
 		if (! isset($attributes['id']))
 		{
-			$attributes['id'] = Form::_get_id_by_name($name);
+			$attributes['id'] = self::_get_id_by_name($name);
 		}
 
 		if (is_array($selected))
@@ -472,7 +472,7 @@ class Form {
 	{
 		$attrs['type'] = 'submit';
 
-		return Form::input($name, $value, $attrs);
+		return self::input($name, $value, $attrs);
 	}
 
 	/**
@@ -505,7 +505,7 @@ class Form {
 
 		$attributes['type'] = 'image';
 
-		return Form::input($name, $value, $attributes);
+		return self::input($name, $value, $attributes);
 	}
 
 	/**
@@ -538,7 +538,7 @@ class Form {
 
 		if (! isset($attrs['id']))
 		{
-			$attrs['id'] = Form::_get_id_by_name($name);
+			$attrs['id'] = self::_get_id_by_name($name);
 		}
 
 		$out = '<button '.HTML::attributes($attrs).'>'.$caption.'</button>';
@@ -588,7 +588,7 @@ class Form {
 	 */
 	public static function csrf($id = '', $action = '')
 	{
-		return Form::hidden('token', CSRF::token($id, $action));
+		return self::hidden('token', CSRF::token($id, $action));
 	}
 
 	/**
@@ -612,7 +612,7 @@ class Form {
 			$options[$n] = $n;
 		}
 
-		return Form::select($name, $options, $selected, $attrs);
+		return self::select($name, $options, $selected, $attrs);
 	}
 
 	/**
@@ -634,7 +634,7 @@ class Form {
 			$attrs['style'] = 'width: 100%';
 		}
 
-		return Form::input("filter[$column]", Arr::get($vals, $column), $attrs);
+		return self::input("filter[$column]", Arr::get($vals, $column), $attrs);
 	}
 
 	/**
@@ -778,7 +778,7 @@ class Form {
 
 		foreach ($options as $k => $v)
 		{
-			$out .= Form::label($name, Form::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attrs);
+			$out .= self::label($name, self::radio($name, $k, ($selected == $k) ? TRUE : FALSE).Text::plain($v), $attrs);
 		}
 
 		return $out;
@@ -809,7 +809,7 @@ class Form {
 
 		foreach ($options as $k => $v)
 		{
-			$output .= Form::label($name, Form::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attrs);
+			$output .= self::label($name, self::checkbox($name, $k, (in_array($k, $selected) ? TRUE : FALSE)).Text::plain($v), $attrs);
 		}
 
 		return $output;
