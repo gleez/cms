@@ -6,9 +6,8 @@
  * tags and making output HTML safe.
  *
  * @package    Gleez\Helpers
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.0.3
+ * @author     Gleez Team
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -61,12 +60,6 @@ class HTML {
 	 * @var boolean
 	 */
 	public static $strict = TRUE;
-
-	/**
-	 * Automatically target external URLs to a new window?
-	 * @var boolean
-	 */
-	public static $windowed_urls = TRUE;
 
 	/**
 	 * Convert special characters to HTML entities
@@ -146,15 +139,7 @@ class HTML {
 		}
 		else
 		{
-			if (URL::is_remote($uri))
-			{
-				if (HTML::$windowed_urls === TRUE AND empty($attributes['target']))
-				{
-					// Make the link open in a new window
-					$attributes['target'] = '_blank';
-				}
-			}
-			elseif ($uri[0] !== '#')
+			if ($uri[0] !== '#')
 			{
 				// Make the URI absolute for non-id anchors
 				$uri = URL::site($uri, $protocol, $index);
