@@ -3,7 +3,8 @@
  * Manager for rendering meta tags (<link> and <meta>)
  *
  * @package    Gleez\Meta
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -28,6 +29,7 @@ class Gleez_Meta {
 	 *
 	 * @param   string  $handle  The link URL [Optional]
 	 * @param   array	$attrs   An associative array of link settings [Optional]
+	 *
 	 * @return  array   Setting returns asset array
 	 * @return  string  Getting returns asset content
 	 *
@@ -57,7 +59,8 @@ class Gleez_Meta {
 	 * Get a single Meta Link
 	 *
 	 * @param   string  $handle  Asset name
-	 * @return  string  Asset HTML
+	 *
+	 * @return  string
 	 *
 	 * @uses    Arr::get
 	 * @uses    HTML::attributes
@@ -97,7 +100,7 @@ class Gleez_Meta {
 	 * Get all Meta Links
 	 *
 	 * @return  string   Asset HTML
-	 * @return  boolean  FALSE when `Meta::$links` is empty
+	 * @return  boolean  FALSE when Meta::$links is empty
 	 */
 	public static function all_links()
 	{
@@ -119,7 +122,8 @@ class Gleez_Meta {
 	/**
 	 * Remove a Meta Link, or all
 	 *
-	 * @param   mixed  $handle  Asset name, or `NULL` to remove all [Optional]
+	 * @param   mixed  $handle  Asset name, or NULL to remove all [Optional]
+	 *
 	 * @return  mixed  Empty array or void
 	 */
 	public static function remove_links($handle = NULL)
@@ -140,6 +144,7 @@ class Gleez_Meta {
 	 * @param   string  $handle  The meta tag name [Optional]
 	 * @param   string  $value	 The meta tag value [Optional]
 	 * @param   array   $attrs   An associative array of tag settings [Optional]
+	 *
 	 * @return  array   Setting returns asset array
 	 * @return  string  Getting returns asset content
 	 */
@@ -172,8 +177,9 @@ class Gleez_Meta {
 	 * Get a single Meta tag
 	 *
 	 * @param   string   $handle  Asset name
+	 *
 	 * @return  string   Asset HTML
-	 * @return  boolean  When `$handle` not exists
+	 * @return  boolean  When $handle not exists
 	 *
 	 * @uses    HTML::attributes
 	 */
@@ -216,7 +222,7 @@ class Gleez_Meta {
 	 * Get all Meta Tags
 	 *
 	 * @return  string   Asset HTML
-	 * @return  boolean  FALSE when `Meta::$tags` is empty
+	 * @return  boolean  FALSE when Meta::$tags is empty
 	 */
 	public static function all_tags()
 	{
@@ -238,7 +244,8 @@ class Gleez_Meta {
 	/**
 	 * Remove a Meta Tag, or all
 	 *
-	 * @param   string|NULL  $handle  Asset name, or `NULL` to remove all  [Optional]
+	 * @param   string|NULL  $handle  Asset name, or NULL to remove all  [Optional]
+	 *
 	 * @return  mixed  Empty array or void
 	 */
 	public static function remove_tags($handle = NULL)
@@ -255,6 +262,7 @@ class Gleez_Meta {
 	 * Sorts assets based on dependencies
 	 *
 	 * @param   array  $assets  Array of assets
+	 *
 	 * @return  array  Sorted array of assets
 	 */
 	protected static function _sort($assets)
@@ -302,7 +310,7 @@ class Gleez_Meta {
 	/**
 	 * Enforce static usage
 	 */
-	private function __contruct() {}
+	private function __construct() {}
 	private function __clone() {}
 
 }
