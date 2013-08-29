@@ -3,7 +3,8 @@
  * Form helper class
  *
  * @package    Gleez\Helpers
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -12,28 +13,21 @@ class Form {
 	/**
 	 * Generates an opening HTML form tag
 	 *
-	 * #### Usage
+	 * Examples:
+	 * ~~~
+	 * // Form will submit back to the current page using POST
+	 * echo Form::open();
 	 *
-	 * Form will submit back to the current page using POST:<br>
-	 * <code>
-	 * 	echo Form::open();
-	 * </code>
+	 * // Form will submit to 'search' using GET
+	 * echo Form::open('search', array('method' => 'get'));
 	 *
-	 * Form will submit to 'search' using GET:<br>
-	 * <code>
-	 *	echo Form::open('search', array('method' => 'get'));
-	 * </code>
-	 *
-	 * When "file" inputs are present, you must include the "enctype":<br>
-	 * <code>
-	 * 	echo Form::open(NULL, array('enctype' => 'multipart/form-data'));
-	 * </code>
+	 * // When "file" inputs are present, you must include the "enctype"
+	 * echo Form::open(NULL, array('enctype' => 'multipart/form-data'));
+	 * ~~~
 	 *
 	 * @param   mixed  $action  Form action, defaults to the current request URI, or Request class to use [Optional]
 	 * @param   array  $attrs   HTML attributes [Optional]
 	 * @return  string
-	 *
-	 * @see     Request
 	 *
 	 * @uses    Request::uri
 	 * @uses    URL::site
@@ -109,9 +103,12 @@ class Form {
 	}
 
 	/**
-	 * Creates the closing form tag.
+	 * Creates the closing form tag
 	 *
-	 *     echo Form::close();
+	 * Example:
+	 * ~~~
+	 * echo Form::close();
+	 * ~~~
 	 *
 	 * @return  string
 	 */
@@ -125,17 +122,18 @@ class Form {
 	 *
 	 * If no type is specified, a "text" type input will be returned.
 	 *
-	 * Example:<br>
-	 * <code>
-	 *   echo Form::input('username', $username);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo Form::input('username', $username);
+	 * ~~~
 	 *
 	 * @param   string  $name   Input name
 	 * @param   string  $value  Input value [Optional]
 	 * @param   array   $attrs  HTML attributes [Optional]
 	 * @param   string  $url    Input url (autocomplete url) [Optional]
 	 * @param   boolean $smart  Smart smart results listing [Optional]
-	 * @return  string  HTML form input
+	 *
+	 * @return  string
 	 *
 	 * @uses    HTML::attributes
 	 * @uses    Assets::js
@@ -181,14 +179,19 @@ class Form {
 
 
 	/**
-	 * Creates a hidden form input.
+	 * Creates a hidden form input
 	 *
-	 *     echo Form::hidden('csrf', $token);
+	 * Example:
+	 * ~~~
+	 * echo Form::hidden('csrf', $token);
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   string  $value      input value
-	 * @param   array   $attributes html attributes
+	 * @param   string  $name        Input name [Optional]
+	 * @param   string  $value       Input value [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function hidden($name, $value = NULL, array $attributes = NULL)
@@ -199,14 +202,19 @@ class Form {
 	}
 
 	/**
-	 * Creates a password form input.
+	 * Creates a password form input
 	 *
-	 *     echo Form::password('password');
+	 * Example:
+	 * ~~~
+	 * echo Form::password('password');
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   string  $value      input value
-	 * @param   array   $attributes html attributes
+	 * @param   string  $name        Input name [Optional]
+	 * @param   string  $value       Input value [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function password($name, $value = NULL, array $attributes = NULL)
@@ -217,13 +225,18 @@ class Form {
 	}
 
 	/**
-	 * Creates a file upload form input. No input value can be specified.
+	 * Creates a file upload form input. No input value can be specified
 	 *
-	 *     echo Form::file('image');
+	 * Example:
+	 * ~~~
+	 * echo Form::file('image');
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   array   $attributes html attributes
+	 * @param   string  $name        Input name
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function file($name, array $attributes = NULL)
@@ -234,15 +247,20 @@ class Form {
 	}
 
 	/**
-	 * Creates a checkbox form input.
+	 * Creates a checkbox form input
 	 *
-	 *     echo Form::checkbox('remember_me', 1, (bool) $remember);
+	 * Example:
+	 * ~~~
+	 * echo Form::checkbox('remember_me', 1, (bool) $remember);
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   string  $value      input value
-	 * @param   boolean $checked    checked status
-	 * @param   array   $attributes html attributes
+	 * @param   string  $name        Input name
+	 * @param   string  $value       Input value [Optional]
+	 * @param   boolean $checked     Checked status [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function checkbox($name, $value = NULL, $checked = FALSE, array $attributes = NULL)
@@ -259,16 +277,21 @@ class Form {
 	}
 
 	/**
-	 * Creates a radio form input.
+	 * Creates a radio form input
 	 *
-	 *     echo Form::radio('like_cats', 1, $cats);
-	 *     echo Form::radio('like_cats', 0, ! $cats);
+	 * Example:
+	 * ~~~
+	 * echo Form::radio('like_cats', 1, $cats);
+	 * echo Form::radio('like_cats', 0, ! $cats);
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   string  $value      input value
-	 * @param   boolean $checked    checked status
-	 * @param   array   $attributes html attributes
+	 * @param   string  $name        Input name
+	 * @param   string  $value       Input value [Optional]
+	 * @param   boolean $checked     Checked status [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function radio($name, $value = NULL, $checked = FALSE, array $attributes = NULL)
@@ -285,15 +308,20 @@ class Form {
 	}
 
 	/**
-	 * Creates a textarea form input.
+	 * Creates a textarea form input
 	 *
-	 *     echo Form::textarea('about', $about);
+	 * Example:
+	 * ~~~
+	 * echo Form::textarea('about', $about);
+	 * ~~~
 	 *
-	 * @param   string  $name           textarea name
-	 * @param   string  $body           textarea body
-	 * @param   array   $attributes     html attributes
-	 * @param   boolean $double_encode  encode existing HTML characters
+	 * @param   string  $name           Textarea name
+	 * @param   string  $body           Textarea body [Optional]
+	 * @param   array   $attributes     HTML attributes [Optional]
+	 * @param   boolean $double_encode  Encode existing HTML characters [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    HTML::attributes
 	 * @uses    HTML::chars
 	 */
@@ -302,7 +330,7 @@ class Form {
 		// Set the input name
 		$attributes['name'] = $name;
 
-		if (! isset($attributes['id']))
+		if ( ! isset($attributes['id']))
 		{
 			$attributes['id'] = Form::_get_id_by_name($name);
 		}
@@ -314,17 +342,20 @@ class Form {
 	}
 
 	/**
-	 * Creates a select form input.
+	 * Creates a select form input
 	 *
-	 *     echo Form::select('country', $countries, $country);
+	 * Example:
+	 * ~~~
+	 * echo Form::select('country', $countries, $country);
+	 * ~~~
 	 *
-	 * [!!] Support for multiple selected options was added in v3.0.7.
+	 * @param   string  $name        Input name
+	 * @param   array   $options     Available options [Optional]
+	 * @param   mixed   $selected    Selected option string, or an array of selected options [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
 	 *
-	 * @param   string  $name       input name
-	 * @param   array   $options    available options
-	 * @param   mixed   $selected   selected option string, or an array of selected options
-	 * @param   array   $attributes html attributes
 	 * @return  string
+	 *
 	 * @uses    HTML::attributes
 	 */
 	public static function select($name, array $options = NULL, $selected = NULL, array $attributes = NULL)
@@ -426,14 +457,15 @@ class Form {
 	/**
 	 * Creates a submit form input
 	 *
-	 * Example:<br>
-	 * <code>
-	 * 	echo Form::submit(NULL, 'Login');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo Form::submit(NULL, 'Login');
+	 * ~~~
 	 *
 	 * @param   string  $name   Input name
 	 * @param   string  $value  Input value
 	 * @param   array   $attrs  HTML attributes [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function submit($name, $value, array $attrs = array())
@@ -444,15 +476,20 @@ class Form {
 	}
 
 	/**
-	 * Creates a image form input.
+	 * Creates a image form input
 	 *
-	 *     echo Form::image(NULL, NULL, array('src' => 'media/img/login.png'));
+	 * Example:
+	 * ~~~
+	 * echo Form::image(NULL, NULL, array('src' => 'media/img/login.png'));
+	 * ~~~
 	 *
-	 * @param   string  $name       input name
-	 * @param   string  $value      input value
-	 * @param   array   $attributes html attributes
-	 * @param   boolean $index      add index file to URL?
+	 * @param   string  $name        Input name
+	 * @param   string  $value       Input value
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 * @param   boolean $index       Add index file to URL? [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    Form::input
 	 */
 	public static function image($name, $value, array $attributes = NULL, $index = FALSE)
@@ -474,14 +511,15 @@ class Form {
 	/**
 	 * Creates a button
 	 *
-	 * Example:<br>
-	 * <code>
-	 * 	echo Form::button('login', 'Login', array('class' => 'pull-right'));
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo Form::button('login', 'Login', array('class' => 'pull-right'));
+	 * ~~~
 	 *
 	 * @param   string  $name     Button name
 	 * @param   string  $caption  Button caption
 	 * @param   array   $attrs    HTML attributes [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    HTML::attributes
@@ -509,14 +547,19 @@ class Form {
 	}
 
 	/**
-	 * Creates a form label. Label text is not automatically translated.
+	 * Creates a form label. Label text is not automatically translated
 	 *
-	 *     echo Form::label('username', 'Username');
+	 * Example:
+	 * ~~~
+	 * echo Form::label('username', 'Username');
+	 * ~~~
 	 *
-	 * @param   string  $input      target input
-	 * @param   string  $text       label text
-	 * @param   array   $attributes html attributes
+	 * @param   string  $input       Target input
+	 * @param   string  $text        Label text [Optional]
+	 * @param   array   $attributes  HTML attributes [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    HTML::attributes
 	 */
 	public static function label($input, $text = NULL, array $attributes = NULL)
@@ -538,6 +581,7 @@ class Form {
 	 *
 	 * @param   string  $id      ID e.g. uid [Optional]
 	 * @param   string  $action  Action [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    CSRF::token
@@ -554,6 +598,7 @@ class Form {
 	 * @param   integer  $selected  Selected option int [Optional]
 	 * @param   array    $attrs     HTML attributes [Optional]
 	 * @param   integer  $delta     Delta [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    Form::select
@@ -576,6 +621,7 @@ class Form {
 	 * @param   string $column  Column
 	 * @param   array  $vals    Filter values
 	 * @param   array  $attrs   Filter attributes [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    Arr::get
@@ -597,6 +643,7 @@ class Form {
 	 * @param   string  $name   Button name
 	 * @param   string  $title  Button title [Optional]
 	 * @param   string  $url    Button URL [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    HTML::anchor
@@ -627,6 +674,7 @@ class Form {
 	 * @param   array   $options   Available options [Optional]
 	 * @param   array   $selected  Selected options [Optional]
 	 * @param   array   $attrs     HTML attributes [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses    HTML::attributes
@@ -710,6 +758,7 @@ class Form {
 	 * @param   array   $options   Radios options [Optional]
 	 * @param   mixed   $selected  Selected radio [Optional]
 	 * @param   array   $attrs     Additional attributes [Optional]
+	 *
 	 * @return  string
 	 *
 	 * @uses  Text::plain
@@ -742,6 +791,7 @@ class Form {
 	 * @param   array   $options   Checkboxes options [Optional]
 	 * @param   array   $selected  Selected checkboxes [Optional]
 	 * @param   array   $attrs     Additional attributes [Optional]
+	 *
 	 * @return  string
 	 */
 	public static function checkboxes($name, array $options = array(), array $selected = array(), array $attrs = array())
@@ -768,15 +818,16 @@ class Form {
 	/**
 	 * Creates a select form input with raw labels
 	 *
-	 * Example:<br>
-	 * <code>
-	 * 	echo Form::select('country', $countries, $country);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * echo Form::select('country', $countries, $country);
+	 * ~~~
 	 *
 	 * @param   string  $name      Input name
 	 * @param   array   $options   Available options [Optional]
 	 * @param   mixed   $selected  Selected option string, or an array of selected options [Optional]
 	 * @param   array   $attrs     HTML attributes
+	 *
 	 * @return  string
 	 *
 	 * @uses    HTML::attributes
@@ -875,8 +926,9 @@ class Form {
 	/**
 	 * Generates a valid HTML ID based the name.
 	 *
-	 * @param  $name
-	 * @return string the ID generated based on name.
+	 * @param  string  $name   Element name
+	 *
+	 * @return string
 	 */
 	protected static function _get_id_by_name($name)
 	{
