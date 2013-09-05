@@ -81,7 +81,7 @@ class Form {
 		// Only accept the default character set
 		$attrs['accept-charset'] = Kohana::$charset;
 
-		if ( ! isset($attributes['method']))
+		if ( ! isset($attrs['method']))
 		{
 			// Use POST method
 			$attrs['method'] = 'post';
