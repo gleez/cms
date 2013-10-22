@@ -3,9 +3,8 @@
  * Gleez Core Utils class
  *
  * @package    Gleez\Core
- * @author     Sergey Yakovlev - Gleez
- * @author     Sandeep Sangamreddi - Gleez
- * @version    1.2.0
+ * @author     Gleez Team
+ * @version    1.3.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -447,7 +446,6 @@ class System {
 			"icon-won" => "won",
 			"icon-btc" => "btc",
 			"icon-bitcoin" => "bitcoin",
-			"icon-file" => "file",
 			"icon-file-text" => "file-text",
 			"icon-sort-by-alphabet" => "sort-by-alphabet",
 			"icon-sort-by-alphabet-alt" => "sort-by-alphabet-alt",
@@ -455,8 +453,6 @@ class System {
 			"icon-sort-by-attributes-alt" => "sort-by-attributes-alt",
 			"icon-sort-by-order" => "sort-by-order",
 			"icon-sort-by-order-alt" => "sort-by-order-alt",
-			"icon-thumbs-up" => "thumbs-up",
-			"icon-thumbs-down" => "thumbs-down",
 			"icon-youtube-sign" => "youtube-sign",
 			"icon-youtube" => "youtube",
 			"icon-xing" => "xing",
@@ -554,40 +550,6 @@ class System {
 	}
 
 	/**
-	 * Checking the system for compatibility
-	 *
-	 * @param   mixed  $param Checked argument
-	 * @return  boolean
-	 */
-	public static function check($param)
-	{
-		$status = TRUE;
-
-		if (is_array($param))
-		{
-			foreach ($param as $req)
-			{
-				if ( ! $status = self::_do_check($req))
-				{
-					return $status;
-				}
-			}
-		}
-
-		if (is_string($param))
-		{
-			$status = self::_do_check($param);
-		}
-
-		if (is_bool($param))
-		{
-			$status = $param;
-		}
-
-		return $status;
-	}
-
-	/**
 	 * Sanitize id
 	 *
 	 * Replaces troublesome characters with underscores
@@ -610,94 +572,5 @@ class System {
 			'\\',
 			' '
 		), '_', $id);
-	}
-
-	/**
-	 * Checking the system for compatibility
-	 *
-	 * This is called automatically by [System::check].
-	 *
-	 * @param   string  $param  Checked argument
-	 * @return  boolean
-	 *
-	 * @link    http://php.net/manual/en/function.version-compare.php version_compare()
-	 * @link    http://php.net/manual/en/function.class-exists.php class_exists()
-	 * @link    http://php.net/manual/en/function.function-exists.php function_exists()
-	 * @link    http://php.net/manual/en/function.extension-loaded.php extension_loaded()
-	 * @link    http://php.net/manual/en/function.is-dir.php is_dir()
-	 * @link    http://php.net/manual/en/function.is-readable.php is_readable()
-	 * @link    http://php.net/manual/en/function.is-writable.php is_writable()
-	 * @link    http://php.net/manual/en/function.preg-match.php preg_match()
-	 * @link    http://php.net/manual/en/function.ini-get.php ini_get()
-	 */
-	protected static function _do_check($param)
-	{
-		switch($param)
-		{
-			case 'php':
-				$status = version_compare(PHP_VERSION, '5.3', '>=');
-			break;
-			case 'mysql':
-				$status = function_exists('mysqli_query') OR function_exists('mysql_query');
-			break;
-			case 'sys_dir':
-				$status = (is_dir(SYSPATH) AND is_readable(SYSPATH.'classes/kohana'.EXT));
-			break;
-			case 'app_dir':
-				$status = (is_dir(APPPATH) AND is_readable(APPPATH.'bootstrap'.EXT));
-			break;
-			case 'mod_dir':
-				$status = is_dir(MODPATH);
-			break;
-			case 'theme_dir':
-				$status = is_dir(THEMEPATH);
-			break;
-			case 'config':
-				$status = (is_dir(APPPATH.'config') AND is_writable(APPPATH.'config'));
-			break;
-			case 'cache':
-				$status = (is_dir(APPPATH.'cache') AND is_writable(APPPATH.'cache'));
-			break;
-			case 'utf8':
-				$status = ( @preg_match('/^.$/u', 'ñ'));
-			break;
-			case 'unicode':
-				$status = ( @preg_match('/^\pL$/u', 'ñ'));
-			break;
-			case 'reflection':
-				$status = class_exists('ReflectionClass');
-			break;
-			case 'spl_autoload':
-				$status = function_exists('spl_autoload_register');
-			break;
-			case 'filters':
-				$status = function_exists('filter_list');
-			break;
-			case 'iconv':
-				$status = extension_loaded('iconv');
-			break;
-			case 'simplexml':
-				$status = extension_loaded('simplexml');
-			break;
-			case 'json':
-				$status = function_exists('json_encode');
-			break;
-			case 'mbstring':
-				$status = ( ! (extension_loaded('mbstring') AND ini_get('mbstring.func_overload') AND MB_OVERLOAD_STRING));
-			break;
-			case 'ctype':
-				$status = function_exists('ctype_digit');
-			break;
-			case 'uri_determ':
-				$status = (isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF']) OR isset($_SERVER['PATH_INFO']));
-			break;
-			case 'gd':
-				$status = extension_loaded('gd');
-			break;
-			default:
-				$status = FALSE;
-		}
-
-		return $status;
 	}
 }
