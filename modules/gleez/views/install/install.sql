@@ -19,7 +19,7 @@ CREATE TABLE {posts} (
   password varchar(20) DEFAULT '',
   comment tinyint(4) NOT NULL DEFAULT '0',
   lang varchar(12) NOT NULL DEFAULT 'en',
-  layout varchar(255) NOT NULL,
+  layout varchar(255) NOT NULL DEFAULT '',
   image varchar(255) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY `post_type` (`type`),
