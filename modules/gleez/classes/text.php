@@ -8,7 +8,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.3.0
+ * @version    1.3.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -561,11 +561,12 @@ class Text {
 	 * echo Text::number(5000632);
 	 * ~~~
 	 *
-	 * @param   integer  $number  Number to format
+	 * @param   integer  $number     Number to format
+	 * @param   string   $separator  Seperation word [Optional]
 	 *
 	 * @return  string
 	 */
-	public static function number($number)
+	public static function number($number, $separator = ' and ')
 	{
 		// The number must always be an integer
 		$number = (int) $number;
@@ -627,7 +628,7 @@ class Text {
 
 		if (isset($and))
 		{
-			$text .= ' and '.$and;
+			$text .= $separator . $and;
 		}
 
 		return $text;
