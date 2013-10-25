@@ -45,7 +45,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Gleez Team
- * @version    0.6.0
+ * @version    0.6.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -230,6 +230,7 @@ class Mango_Collection implements Iterator, Countable {
 				array(':method' => "Mango::{$name}")
 			);
 		}
+		return FALSE;
 	}
 
 	/**

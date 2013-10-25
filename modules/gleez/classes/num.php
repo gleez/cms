@@ -236,7 +236,7 @@ class Num {
 	 * echo Num::bytes('200K');   // 204800
 	 * echo Num::bytes('5MiB');   // 5242880
 	 * echo Num::bytes('1000');   // 1000
-	 * echo Num::bytes('2.5GB');  // 2684354560
+	 * echo Num::bytes('2.5GB', FALSE); // 2684354560
 	 * echo Num::bytes('2.5GB');  // 2500000000
 	 * echo Num::bytes('2.5GiB'); // 2684354560
 	 * ~~~
