@@ -7,7 +7,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -345,7 +345,7 @@ class HTML {
 			// Add the attribute key
 			$compiled .= ' '.$key;
 
-			if ($value OR self::$strict)
+			if ($value !== FALSE OR self::$strict)
 			{
 				// Add the attribute value
 				$compiled .= '="'.self::chars($value).'"';
