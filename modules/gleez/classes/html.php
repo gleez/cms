@@ -345,7 +345,7 @@ class HTML {
 			// Add the attribute key
 			$compiled .= ' '.$key;
 
-			if ($value OR self::$strict)
+			if ($value !== FALSE OR self::$strict)
 			{
 				// Add the attribute value
 				$compiled .= '="'.self::chars($value).'"';
