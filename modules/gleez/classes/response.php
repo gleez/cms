@@ -7,7 +7,7 @@
  *
  * @package    Gleez\Base
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -647,7 +647,7 @@ class Response implements HTTP_Response {
 		// If Kohana expose, set the user-agent
 		if (Kohana::$expose)
 		{
-			$this->headers('user-agent', 'Kohana Framework '.Kohana::VERSION.' ('.Kohana::CODENAME.')');
+			$this->headers('user-agent', 'Gleez CMS '.Gleez::VERSION.' ('.Gleez::CODENAME.')');
 		}
 
 		// Prepare cookies
