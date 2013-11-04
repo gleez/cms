@@ -306,7 +306,6 @@ return array(
 	'Menu Items order has been saved.' => 'Järjekorras menüü edukalt salvestatud.',
 	'Menus' => 'Menü',
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Veenduge, et kataloog on kirjutatav veebiserveri või seada see õige 777.',
-	'Mbstring Not Overloaded' => 'Mbstring ole ülekoormatud',
 	'Mission' => 'Mission',
 	'Module' => 'Moodul',
 	'modules' => 'Mooduleid',
