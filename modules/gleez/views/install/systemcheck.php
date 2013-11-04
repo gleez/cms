@@ -137,11 +137,29 @@
 		</tr>
 
 		<tr class="<?php echo $mbstring ? 'success' : 'error' ?>">
-			<td><?php echo __('Mbstring Not Overloaded'); ?></td>
+			<td><?php echo __('Mbstring Extension'); ?></td>
 			<?php if ($mbstring): ?>
 				<td><?php echo __('Pass') ?></td>
 			<?php else: ?>
 				<td><?php echo __('The :mbstring extension is overloading PHP\'s native string functions.', array(':mbstring' => HTML::anchor('http://php.net/mbstring', 'mbstring') )); ?></td>
+			<?php endif ?>
+		</tr>
+
+		<tr class="<?php echo $mbstring_overload ? 'success' : 'error' ?>">
+			<td><?php echo __('Using overloading'); ?></td>
+			<?php if ($mbstring_overload): ?>
+				<td><?php echo __('Pass') ?></td>
+			<?php else: ?>
+				<td><?php echo __('To use function overloading, set :overload in php.ini to 2, 3, 6 or 7', array(':overload' => HTML::anchor('http://www.php.net/manual/en/mbstring.configuration.php#ini.mbstring.func-overload', 'mbstring.func_overload') )); ?></td>
+			<?php endif ?>
+		</tr>
+
+		<tr class="<?php echo $mbstring_int_encoding ? 'success' : 'error' ?>">
+			<td><?php echo __('Internal encoding'); ?></td>
+			<?php if ($mbstring_int_encoding): ?>
+				<td><?php echo __('Pass') ?></td>
+			<?php else: ?>
+				<td><?php echo __('Set :encoding in php.ini to UTF-8', array(':encoding' => HTML::anchor('http://www.php.net/manual/en/mbstring.configuration.php#ini.mbstring.internal_encoding', 'mbstring.internal_encoding') )); ?></td>
 			<?php endif ?>
 		</tr>
 
