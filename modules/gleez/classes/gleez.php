@@ -4,19 +4,28 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.4
+ * @version    0.10.5
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
 
-	/** @type string VERSION Release version */
-	const VERSION = '0.10.4';
+	/**
+	 * Release version
+	 * @type string
+	 */
+	const VERSION = '0.10.5';
 
-	/** @type string CODENAME Release codename */
-	const CODENAME = 'Turdus obscurus';
+	/**
+	 * Release codename
+	 * @type string
+	 */
+	const CODENAME = 'Vicious Delicious';
 
-	/** @type string MAINTENANCE_MESSAGE Default message for maintenance mode */
+	/**
+	 * Default message for maintenance mode
+	 * @type string
+	 */
 	const MAINTENANCE_MESSAGE = 'This site is down for maintenance';
 
 	/**
@@ -44,7 +53,7 @@ class Gleez {
 	 * Has [Gleez::ready] been called?
 	 * @var boolean
 	 */
-	protected static $_ginit = FALSE;
+	protected static $_init = FALSE;
 
 	/**
 	 * Runs the Gleez environment
@@ -58,14 +67,14 @@ class Gleez {
 	 */
 	public static function ready()
 	{
-		if (self::$_ginit)
+		if (self::$_init)
 		{
 			// Do not allow execution twice
 			return;
 		}
 
 		// Gleez is now initialized?
-		self::$_ginit = TRUE;
+		self::$_init = TRUE;
 
 		// Link the Kohana locale to gleez for temporary, it's not singleton
 		Gleez::$locale = Gleez_Locale::instance();
