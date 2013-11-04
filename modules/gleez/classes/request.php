@@ -6,11 +6,10 @@
  * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1.0
+ * @version    1.1.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://gleezcms.org/license Gleez CMS License Agreement
+ * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Request implements HTTP_Request {
 
@@ -1626,7 +1625,7 @@ class Request implements HTTP_Request {
 		// If Kohana expose, set the user-agent
 		if (Kohana::$expose)
 		{
-			$this->headers('user-agent', 'Kohana Framework '.Kohana::VERSION.' ('.Kohana::CODENAME.')');
+			$this->headers('user-agent', 'Gleez CMS '.Gleez::VERSION.' ('.Gleez::CODENAME.')');
 		}
 
 		// Prepare cookies
