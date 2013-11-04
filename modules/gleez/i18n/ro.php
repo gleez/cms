@@ -238,7 +238,6 @@ return array(
 	'Menu Items order has been saved.' => 'Ordinea Itemelor de Meniu a fost salvată.',
 	'Menus' => 'Meniuri',
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Asigurați-vă ca acest folder poate fi scris de către serverul web, sau că are permisiunea 777.',
-	'Mbstring Not Overloaded' => 'Mbstring Not Overloaded',
 	'Mission' => 'Misiue',
 	'Module' => 'Modul',
 	'modules' => 'module',
