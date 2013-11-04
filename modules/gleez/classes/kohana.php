@@ -382,17 +382,11 @@ class Kohana {
 		$_POST   = Kohana::sanitize($_POST);
 		$_COOKIE = Kohana::sanitize($_COOKIE);
 
-		// Load the logger if one doesn't already exist
-		if ( ! Kohana::$log instanceof Log)
-		{
-			Kohana::$log = Log::instance();
-		}
+		// Load the logger object
+		Kohana::$log = Log::instance();
 
-		// Load the config if one doesn't already exist
-		if ( ! Kohana::$config instanceof Config)
-		{
-			Kohana::$config = new Config;
-		}
+		// Load the config object
+		Kohana::$config = new Config;
 	}
 
 	/**
