@@ -254,7 +254,6 @@ Links:
   'Maybe the page exists, but is only visible to authorized users.
 				      <br>If you think this is an error, talk to the Site administrator!' => '可能页面只对验证用户开放。<br>如果您觉得这是个错误，请告诉网站管理员！',
   'MB' => 'MB',
-  'Mbstring Not Overloaded' => 'mbstring未重载',
   'Menu %name created successful!' => '菜单 %name 创建成功！',
   'Menu %name deleted successful!' => '菜单 %name 删除成功！',
   'Menu %name saved successful!' => '菜单 %name 保存成功！',

@@ -238,7 +238,6 @@ return array(
 	'Menu Items order has been saved.' => 'L\'ordine delle voci di men&#367; &#269; stato salvato.',
 	'Menus' => 'Men&#367;',
 	'Make sure this folder writable by the webserver, or 777 permissions on this folder.' => 'Assicurati che questa cartella sia scrivibile dal webserver, o aggiungi i permessi 777 sulla cartella.',
-	'Mbstring Not Overloaded' => 'Mbstring non in overload',
 	'Mission' => 'Missione',
 	'Module' => 'Modulo',
 	'modules' => 'moduli',

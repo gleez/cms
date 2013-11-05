@@ -152,8 +152,9 @@ class Controller_Install_Install extends Controller_Template {
 		$view = new View('install/systemcheck');
 
 		$view->php_version           = version_compare(PHP_VERSION, '5.3', '>=');
+		// @todo Use here mysqli
 		$view->mysql           	     = function_exists("mysql_query");
-		$view->system_directory      = (is_dir(SYSPATH));
+		$view->system_directory      = is_dir(SYSPATH);
 		$view->application_directory = (is_dir(APPPATH) AND is_file(APPPATH.'bootstrap'.EXT));
 		$view->modules_directory     = is_dir(MODPATH);
 		$view->config_writable       = (is_dir(APPPATH.'config') AND is_writable(APPPATH.'config'));
@@ -166,8 +167,9 @@ class Controller_Install_Install extends Controller_Template {
 		$view->iconv_loaded          = extension_loaded('iconv');
 		$view->simplexml             = extension_loaded('simplexml');
 		$view->json_encode           = function_exists('json_encode');
-		$view->mbstring              = ( ! (extension_loaded('mbstring')
-								AND ini_get('mbstring.func_overload') AND MB_OVERLOAD_STRING));
+		$view->mbstring              = (extension_loaded('mbstring') AND MB_OVERLOAD_STRING);
+		$view->mbstring_overload     = in_array(ini_get('mbstring.func_overload'), array(2, 3, 6, 7));
+		$view->mbstring_int_encoding = (strcasecmp(ini_get('mbstring.internal_encoding'), 'utf-8') == 0);
 		$view->ctype_digit           = function_exists('ctype_digit');
 		$view->uri_determination     = isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF'])
 							OR isset($_SERVER['PATH_INFO']);
@@ -189,6 +191,8 @@ class Controller_Install_Install extends Controller_Template {
 			AND $view->simplexml
 			AND $view->json_encode
 			AND $view->mbstring
+			AND $view->mbstring_overload
+			AND $view->mbstring_int_encoding
 			AND $view->ctype_digit
 			AND $view->uri_determination
 			AND $view->gd_info)
