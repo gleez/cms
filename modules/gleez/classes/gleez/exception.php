@@ -6,12 +6,9 @@
  *
  * @package    Gleez\Exceptions
  * @author     Gleez Team
- * @author     Kohana Team
- * @version    1.0.1
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Gleez_Exception extends Exception {
 
@@ -52,10 +49,10 @@ class Gleez_Exception extends Exception {
 	/**
 	 * Creates a new translated exception
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   throw new Gleez_Exception('Something went terrible wrong, :user', array(':user' => $user));
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 * throw new Gleez_Exception('Something went terrible wrong, :user', array(':user' => $user));
+	 * ~~~
 	 *
 	 * @param  string     $message    Error message [Optional]
 	 * @param  array      $variables  Translation variables [Optional]
@@ -64,7 +61,7 @@ class Gleez_Exception extends Exception {
 	 */
 	public function __construct($message = "", array $variables = NULL, $code = 0, Exception $previous = NULL)
 	{
-		if (Gleez_Exception::$translate_errors)
+		if (self::$translate_errors)
 		{
 			// Set the message
 			$message = __($message, $variables);
@@ -81,16 +78,16 @@ class Gleez_Exception extends Exception {
 	/**
 	 * Magic object-to-string method
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *   echo $exception;
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 * echo $exception;
+	 * ~~~
 	 *
 	 * @return string
 	 */
 	public function __toString()
 	{
-		return Gleez_Exception::text($this);
+		return self::text($this);
 	}
 
 	/**
@@ -101,7 +98,7 @@ class Gleez_Exception extends Exception {
 	 */
 	public static function handler(Exception $e)
 	{
-		$response = Gleez_Exception::_handler($e);
+		$response = self::_handler($e);
 
 		// Send the response to the browser
 		echo $response->send_headers()->body();
@@ -121,10 +118,10 @@ class Gleez_Exception extends Exception {
 		try
 		{
 			// Log the exception
-			Gleez_Exception::log($e);
+			self::log($e);
 
 			// Generate the response
-			$response = Gleez_Exception::response($e);
+			$response = self::response($e);
 
 			return $response;
 		}
@@ -140,7 +137,7 @@ class Gleez_Exception extends Exception {
 			// Set the Status code to 500, and Content-Type to text/plain.
 			header('Content-Type: text/plain; charset='.Kohana::$charset, TRUE, 500);
 
-			echo Gleez_Exception::text($e);
+			echo self::text($e);
 
 			exit(1);
 		}
@@ -161,7 +158,7 @@ class Gleez_Exception extends Exception {
 		if (is_object(Kohana::$log))
 		{
 			// Create a text version of the exception
-			$error = Gleez_Exception::text($e);
+			$error = self::text($e);
 
 			switch($level)
 			{
@@ -255,10 +252,10 @@ class Gleez_Exception extends Exception {
 					}
 				}
 
-				if (isset(Gleez_Exception::$php_errors[$code]))
+				if (isset(self::$php_errors[$code]))
 				{
 					// Use the human-readable error name
-					$code = Gleez_Exception::$php_errors[$code];
+					$code = self::$php_errors[$code];
 				}
 			}
 
@@ -274,7 +271,7 @@ class Gleez_Exception extends Exception {
 			}
 
 			// Instantiate the error view.
-			$view = View::factory(Gleez_Exception::$error_view, get_defined_vars());
+			$view = View::factory(self::$error_view, get_defined_vars());
 
 			// Prepare the response object.
 			$response = Response::factory();
@@ -283,7 +280,7 @@ class Gleez_Exception extends Exception {
 			$response->status(($e instanceof HTTP_Exception) ? $e->getCode() : 500);
 
 			// Set the response headers
-			$response->headers('Content-Type', Gleez_Exception::$error_view_content_type.'; charset='.Kohana::$charset);
+			$response->headers('Content-Type', self::$error_view_content_type.'; charset='.Kohana::$charset);
 
 			// Set the response body
 			$response->body($view->render());
@@ -297,7 +294,7 @@ class Gleez_Exception extends Exception {
 			$response = Response::factory();
 			$response->status(500);
 			$response->headers('Content-Type', 'text/plain');
-			$response->body(Gleez_Exception::text($e));
+			$response->body(self::text($e));
 		}
 
 		return $response;
