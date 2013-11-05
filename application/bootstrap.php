@@ -55,10 +55,10 @@ mb_substitute_character('none');
  *
  * @todo In the future Kohana::$environment should be moved to Gleez Core as Gleez::$environment
  */
-if (getenv('GLEEZ_ENV'))
+if (isset($_SERVER['GLEEZ_ENV']))
 {
-	// Get environment variable from $_ENV, $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
-	Kohana::$environment = constant('Kohana::'.strtoupper(getenv('GLEEZ_ENV')));
+	// Get environment variable from $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
+	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']));
 }
 else if (get_cfg_var('GLEEZ_ENV'))
 {
