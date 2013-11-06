@@ -12,12 +12,13 @@
 class Email {
 
 	/**
-	 * @var  object  mail
+	 * Mail object
+	 * @var PHPMailer
 	 */
 	protected $mail;
 
 	/**
-	 * Create a new email message.
+	 * Create a new email message
 	 *
 	 * @return  Email
 	 */
@@ -29,22 +30,21 @@ class Email {
 	public function __construct()
 	{
 		require_once Kohana::find_file('vendor/PHPMailer', 'class.phpmailer');
-		$config = Kohana::$config->load('site');
 
-		//create phpmailer object
+		// Create phpmailer object
 		$this->mail = new PHPMailer(true);
 
-		//Set some defaults
-		$this->mail->SetFrom($config->get('site_email', 'webmaster@example.com'), Template::getSiteName());
-		$this->mail->WordWrap   = 70;
-		$this->mail->CharSet    = 'UTF-8';
-		$this->mail->XMailer    = Gleez::getVersion(FALSE, TRUE);
+		// Set some defaults
+		$this->mail->SetFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());
+		$this->mail->WordWrap = 70;
+		$this->mail->CharSet  = 'UTF-8';
+		$this->mail->XMailer  = Gleez::getVersion(FALSE, TRUE);
 	}
 
 	/**
-	 * Set the message subject.
+	 * Set the message subject
 	 *
-	 * @param   string  new subject
+	 * @param   string  $subject  New subject
 	 * @return  Email
 	 */
 	public function subject($subject)
@@ -56,12 +56,13 @@ class Email {
 	}
 
 	/**
-	 * Set the message body. Multiple bodies with different types can be added
-	 * by calling this method multiple times. Every email is required to have
-	 * a "plain" message body.
+	 * Set the message body
 	 *
-	 * @param   string  new message body
-	 * @param   string  mime type: text/html
+	 * Multiple bodies with different types can be added by calling this method
+	 * multiple times. Every email is required to have a "plain" message body.
+	 *
+	 * @param   string  $body  New message body
+	 * @param   string  $type  Mime type: text/html, text/plain [Optional]
 	 * @return  Email
 	 */
 	public function message($body, $type = NULL)
@@ -74,20 +75,23 @@ class Email {
 		else
 		{
 			// Add a custom mime type
-			$this->mail->MsgHTML( $body );
+			$this->mail->MsgHTML($body);
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Add one or more email recipients..
+	 * Add one or more email recipients
 	 *
-	 *     // A single recipient
-	 *     $email->to('john.doe@domain.com', 'John Doe');
+	 * Example:
+	 * ~~~
+	 * // A single recipient
+	 * $email->to('john.doe@domain.com', 'John Doe');
+	 * ~~~
 	 *
-	 * @param   string    single email address
-	 * @param   string   full name
+	 * @param   string  $email  Single email address
+	 * @param   string  $name   Full name [Optional]
 	 * @return  Email
 	 */
 	public function to($email, $name = NULL)
@@ -98,10 +102,10 @@ class Email {
 	}
 
 	/**
-	 * Add a "carbon copy" email recipient.
+	 * Add a "carbon copy" email recipient
 	 *
-	 * @param   string   email address
-	 * @param   string   full name
+	 * @param   string  $email  Email address
+	 * @param   string  $name   Full name [Optional]
 	 * @return  Email
 	 */
 	public function cc($email, $name = NULL)
@@ -112,10 +116,10 @@ class Email {
 	}
 
 	/**
-	 * Add a "blind carbon copy" email recipient.
+	 * Add a "blind carbon copy" email recipient
 	 *
-	 * @param   string   email address
-	 * @param   string   full name
+	 * @param   string  $email  Email address
+	 * @param   string  $name   Full name [Optional]
 	 * @return  Email
 	 */
 	public function bcc($email, $name = NULL)
@@ -126,10 +130,10 @@ class Email {
 	}
 
 	/**
-	 * Add email senders.
+	 * Add email senders
 	 *
-	 * @param   string   email address
-	 * @param   string   full name
+	 * @param   string  $email  Email address
+	 * @param   string  $name   Full name [Optional]
 	 * @return  Email
 	 */
 	public function from($email, $name = NULL )
@@ -140,10 +144,10 @@ class Email {
 	}
 
 	/**
-	 * Add "reply to" email sender.
+	 * Add "reply to" email sender
 	 *
-	 * @param   string   email address
-	 * @param   string   full name
+	 * @param   string  $email  Email address
+	 * @param   string  $name   Full name [Optional]
 	 * @return  Email
 	 */
 	public function reply_to($email, $name = NULL)
@@ -154,9 +158,9 @@ class Email {
 	}
 
 	/**
-	 * Set the return path for bounce messages.
+	 * Set the return path for bounce messages
 	 *
-	 * @param   string  email address
+	 * @param   string  $email  Email address
 	 * @return  Email
 	 */
 	public function return_path($email)
@@ -167,7 +171,7 @@ class Email {
 	}
 
 	/**
-	 * Sends the email.
+	 * Sends the email
 	 *
 	 * @return  boolean
 	 */
