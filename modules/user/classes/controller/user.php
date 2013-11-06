@@ -463,7 +463,7 @@ class Controller_User extends Template {
 		{
 			// @todo If logged in, redirect to profile page or something, otherwise to sign in form
 			// @todo If account already confirmed, show Message::NOTICE
-			Message::success(__('Rejoice. Your sign-up has been confirmed.'));
+			Message::success(__('Congratulations! Your sign-up has been confirmed.'));
 			$this->request->redirect('user/profile');
 		}
 
