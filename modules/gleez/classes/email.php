@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Email
  * @author     Gleez Team
- * @version    1.1.2
+ * @version    1.1.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  * @link       https://github.com/Synchro/PHPMailer
@@ -35,10 +35,11 @@ class Email {
 		$this->mail = new PHPMailer(true);
 
 		// Set some defaults
-		$this->mail->SetFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());
+		$this->mail->setFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());
 		$this->mail->WordWrap = 70;
-		$this->mail->CharSet  = 'UTF-8';
+		$this->mail->CharSet  = Kohana::$charset;
 		$this->mail->XMailer  = Gleez::getVersion(FALSE, TRUE);
+		$this->mail->Debugoutput = 'error_log';
 	}
 
 	/**
@@ -75,7 +76,7 @@ class Email {
 		else
 		{
 			// Add a custom mime type
-			$this->mail->MsgHTML($body);
+			$this->mail->msgHTML($body);
 		}
 
 		return $this;
@@ -96,7 +97,7 @@ class Email {
 	 */
 	public function to($email, $name = NULL)
 	{
-		$this->mail->AddAddress($email, $name);
+		$this->mail->addAddress($email, $name);
 
 		return $this;
 	}
@@ -110,7 +111,7 @@ class Email {
 	 */
 	public function cc($email, $name = NULL)
 	{
-		$this->mail->AddCC($email, $name);
+		$this->mail->addCC($email, $name);
 
 		return $this;
 	}
@@ -124,7 +125,7 @@ class Email {
 	 */
 	public function bcc($email, $name = NULL)
 	{
-		$this->mail->AddBCC($email, $name);
+		$this->mail->addBCC($email, $name);
 
 		return $this;
 	}
@@ -138,7 +139,7 @@ class Email {
 	 */
 	public function from($email, $name = NULL )
 	{
-		$this->mail->SetFrom($email, $name);
+		$this->mail->setFrom($email, $name);
 
 		return $this;
 	}
@@ -152,7 +153,7 @@ class Email {
 	 */
 	public function reply_to($email, $name = NULL)
 	{
-		$this->mail->AddReplyTo($email, $name);
+		$this->mail->addReplyTo($email, $name);
 
 		return $this;
 	}
@@ -179,7 +180,7 @@ class Email {
 	{
 		try
 		{
-			$this->mail->Send();
+			$this->mail->send();
 			return TRUE;
 		}
 		catch(Exception $e)
@@ -192,7 +193,7 @@ class Email {
 	/**
 	 * Mail object of the instance
 	 *
-	 * @return  object phpmailer
+	 * @return  PHPMailer
 	 */
 	public function mail()
 	{
