@@ -767,7 +767,7 @@ class Model_User extends ORM {
 
 		// Create an email message
 		$email = Email::factory()
-			->subject(__(':site: :name', array(
+			->subject(__(':site - Validate account details for :name', array(
 				':site' => Config::get('site.site_name', 'Gleez CMS'),
 				':name' => ($this->nick ? $this->nick : $this->name)
 			)))
@@ -851,7 +851,7 @@ class Model_User extends ORM {
 
 			// Create an email message
 			$email = Email::factory()
-				->subject(__(':site: :name', array(
+				->subject(__(':site - Account details for :name (approved)', array(
 					':site' => Config::get('site.site_name', 'Gleez CMS'),
 					':name' => ($this->nick ? $this->nick : $this->name)
 				)))
