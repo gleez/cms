@@ -1,5 +1,20 @@
 # ChangeLog
 
+* Increase timeout to match RFC2821 section 4.5.3.2 and thus not fail greetdelays, fixes #104
+* Add timestamps to default debug output
+* Add connection events and new level 3 to debug output options
+* Chinese language update (Thanks to @binaryoung)
+* Allow custom Mailer types (thanks to @michield)
+* Cope with spaces around SMTP host specs
+* Fix processing of multiple hosts in connect string
+* Added Galician translation (Thanks to @donatorouco)
+* Autoloader now prepends
+* Minor docs update
+* Add Latvian translation (Thanks to @eddsstudio)
+* Add Belarusian translation (Thanks to @amaksymiuk)
+* Make autoloader work better on older PHP versions
+
+## Version 5.2.7 (September 12th 2013)
 * Add Ukranian translation from @Krezalis
 * Support for do_verp
 * Fix bug in CRAM-MD5 AUTH
@@ -14,19 +29,30 @@
 * Update SyntaxHighlighter
 * Major overhaul and cleanup of example code
 * New PHPMailer graphic
-* MsgHTML now uses RFC2392-compliant content ids
-* Add line break normalization function and use it in MsgHTML
+* msgHTML now uses RFC2392-compliant content ids
+* Add line break normalization function and use it in msgHTML
 * Don't set unnecessary reply-to addresses
 * Make fakesendmail.sh a bit cleaner and safer
 * Set a content-transfer-encoding on multiparts (fixes msglint error)
-* Fix cid generation in MsgHTML (Thanks to @digitalthought)
+* Fix cid generation in msgHTML (Thanks to @digitalthought)
 * Fix handling of multiple SMTP servers (Thanks to @NanoCaiordo)
-* SMTP->Connect() now supports stream context options (Thanks to @stanislavdavid)
+* SMTP->connect() now supports stream context options (Thanks to @stanislavdavid)
 * Add support for iCal event alternatives (Thanks to @reblutus)
 * Update to Polish language file (Thanks to Krzysztof Kowalewski)
 * Update to Norwegian language file (Thanks to @datagutten)
 * Update to Hungarian language file (Thanks to @dominicus-75)
 * Add Persian/Farsi translation from @jaii
+* Make SMTPDebug property type match type in SMTP class
+* Add unit tests for DKIM
+* Major refactor of SMTP class
+* Reformat to PSR-2 coding standard
+* Introduce autoloader
+* Allow overriding of SMTP class
+* Overhaul of PHPDocs
+* Fix broken Q-encoding
+* Czech language update (Thanks to @nemelu)
+* Removal of excess blank lines in messages
+* Added fake POP server and unit tests for POP-before-SMTP
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
