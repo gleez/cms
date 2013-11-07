@@ -39,6 +39,7 @@ class Email {
 		$this->mail->WordWrap = 70;
 		$this->mail->CharSet  = Kohana::$charset;
 		$this->mail->XMailer  = Gleez::getVersion(FALSE, TRUE);
+		$this->mail->setLanguage(I18n::$lang);
 		$this->mail->Debugoutput = 'error_log';
 	}
 
