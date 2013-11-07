@@ -10,8 +10,12 @@
 return array(
 	// :
 	'(:count) Comments' => '(:count) Комментариев',
+	':field must contain only letters' => 'Поле `:field` должно содержать только буквы',
+	':field must contain only letters and numbers' => 'Поле `:field` должно содержать только буквы и цифры',
+	':field must contain only numbers, letters and dashes' => 'Поле `:field` должно содержать только цифры, буквы и точки',
 	':field must not be empty' => ':field не может быть пустым',
 	':field not valid image file' => ':field не является изображением',
+	':field does not match the required format' => ':field не соответствует требуемому формату',
 	':name sent a message using the contact form at :site.' => ':name отправил(а) вам сообщение используя форму отправки сообщений с сайта :site.',
 	':pcre has not been compiled with Unicode property support.' => ':pcre собран без поддержки Unicode.',
 	':pcre has not been compiled with UTF-8 support.' => ':pcre собран без поддержки UTF-8.',
