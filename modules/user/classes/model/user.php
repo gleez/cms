@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -769,7 +769,7 @@ class Model_User extends ORM {
 		$email = Email::factory()
 			->subject(__(':site: :name', array(
 				':site' => Config::get('site.site_name', 'Gleez CMS'),
-				':name' => $this->nick
+				':name' => ($this->nick ? $this->nick : $this->name)
 			)))
 			->to($this->mail, $this->nick)
 			->message($body);
@@ -841,11 +841,20 @@ class Model_User extends ORM {
 		if ($this->_loaded)
 		{
 			$body = View::factory('email/welcome_signup', $this->as_array())
-				->set('url', URL::site('', TRUE ));
+				->set('url', URL::site('', TRUE ))
+				->set('uri_brief', URL::site(
+					Route::get('user')->uri(array(
+						'action' => 'login'
+					)),
+					TRUE // Protocol
+				));
 
 			// Create an email message
 			$email = Email::factory()
-				->subject( __('Gleez - Account details for :name (approved)', array(':name' => $this->nick)) )
+				->subject(__(':site: :name', array(
+					':site' => Config::get('site.site_name', 'Gleez CMS'),
+					':name' => ($this->nick ? $this->nick : $this->name)
+				)))
 				->to($this->mail, $this->nick)
 				->message($body);
 
