@@ -42,6 +42,7 @@ return array(
 	'Avatar size must be within 0 pixels and 2048 pixels' => 'Размер аватары должен быть между 0 и 2048 пикселами',
 	// B
 	'Best Regards' => 'С наилучшими пожеланиями',
+	'Best regards, :site team' => 'С наилучшими пожеланиями, команда :site',
 	'Bio' => 'Биография',
 	'Bio must be less than :param2 characters long' => 'Биография должна быть не длиннее :param2 символов',
 	'Birthday' => 'День рождения',
@@ -57,6 +58,7 @@ return array(
 	'Current password' => 'Текущий пароль',
 	'Confirm Password' => 'Повторите пароль',
 	'Confirm new password' => 'Подтвердите новый пароль',
+	'Congratulations! Your sign-up has been confirmed.' => 'Поздравляем! Ваша регистрация была успешно подтверждена.',
 	// D
 	'Delete User' => 'Удалить пользователя',
 	'Description of Role must be less than :param2 characters long' => 'Описание роли должно быть менее :param2 символов',
@@ -80,6 +82,7 @@ return array(
 	'Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.' => 'Не удалось создать каталог %dir для загрузки изображения профиля. Проверьте права доступа веб-сервера на создание этого каталога.',
 	'Fill in the information below to register' => 'Для регистрации заполните регистрационную анкету ниже',
 	'First Visit' => 'Первое посещение',
+	'For full site access, you will need to click on this link or copy and paste it in your browser: :url' => 'Для полного доступа к сайту и подтверждения регистрации Вы должны перейти по следующей ссылке (или скопируйте и вставьте эту ссылку в адресную строку вашего браузера): :url',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
 	'Gender' => 'Пол',
@@ -90,9 +93,11 @@ return array(
 	'Hello :name!' => 'Здравствуйте :name!',
 	'Home Page' => 'Домашняя страница',
 	// I
+	'If you are were not going to register an account, please ignore this message.' => 'Если вы не собирались регистрировать учётную запись, просто проигнорируйте это письмо.',
 	"If you don't use any of these services, you can create an account." => "Если вы не используете ни один из этих сервисов, вы можете зарегистрировать аккаунт.",
 	'Inherit' => 'Наследовать',
 	'Instructions to reset your password are being sent to your email address %mail.' => 'Инструкции для сброса вашего пароля были высланы на ваш email адрес %mail.',
+	'IMPORTANT:' => 'ВАЖНО:',
 	'Invalid rating :rating specified, only "G", "PG", "R", or "X" are allowed to be used.' => 'Определён не правильный рейтинг :rating. Доступно только "G", "PG", "R", или "X"',
 	// J
 	'Joined on' => 'Участник с',
@@ -122,6 +127,7 @@ return array(
 	// O
 	'Old password is incorrect' => 'Текущий пароль введён неверно',
 	'Only authorized users can post comments. :register or login using one of these services:' => 'Только авторизованные пользователи могут оставлять комментарии. :register или войдите для того, чтоб иметь возможность оставлять комментарии:',
+	'Oh no! This confirmation link is invalid.' => 'О нет! Эта ссылка, подтверждающая регистрацию является недействительной.',
 	// P
 	'Password' => 'Пароль',
 	'Password or username is incorrect' => 'Пароль или имя пользователя не верны',
@@ -137,6 +143,7 @@ return array(
 	'Permissions saved successfully!' => 'Полномочия успешно сохранены!',
 	'Photo' => 'Фотография',
 	'Photo successfully uploaded!' => 'Фотография успешно загружена',
+	'Please enter the code from the image.' => 'Пожалуйста введите код с картинки.',
 	'Please register' => 'Пожалуйста зарегистрируйтесь',
 	'Profile %title' => 'Профиль %title',
 	'Public' => 'Публичное',
@@ -161,6 +168,7 @@ return array(
 	'Special Role' => 'Особая роль',
 	'Stay Signed in' => 'Оставаться в системе',
 	// T
+	'Thank you for registering at :site.' => 'Благодарим вас за регистрацию на сайте :site.',
 	'The ability to change own username' => 'Возможность изменять собственное имя пользователя (логин)',
 	'The ability to change profile' => 'Возможность изменять профиль',
 	'The confirmation link to reset your password has expired or is invalid. Please request a new one using the form below.' => 'Подтверждающая ссылка для сброса пароля устарела или неправильная. Пожалуйста, запросите новую ссылку используя форму ниже.',
@@ -172,9 +180,11 @@ return array(
 	'This email already exists' => 'Этот email адрес уже зарегистрирован',
 	"This email don't exists" => 'Этот email адрес не обнаружен',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Это одноразовая ссылка и она может быть использована одни раз. Срок действия ссылки один день и ничего не произойдёт если она за это время не используется.',
+	'This mail is an automatic notification and requires you to answer.' => 'Данное письмо является автоматическим уведомлением и не требует от Вас ответа.',
 	'This username already exists' => 'Такое имя пользователя уже существует',
 	'This username is not available' => 'Это имя пользователя не доступно',
 	'This username or password is not valid' => 'Имя пользователя или пароль не верны',
+	'This will verify your account. In the future you will be able to log in using the username and password that you created during registration.' => 'Это подтвердит Вашу регистрацию. В будущем Вы сможете авторизоваться используя им пользователя (логин) и пароль, которые Вы указали при регистрации.',
 	'Try to come up with a complex password' => 'Постарайтесь придумать сложный пароль',
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',
