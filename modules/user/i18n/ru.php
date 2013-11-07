@@ -75,6 +75,7 @@ return array(
 	'Edit role %name' => 'Изменить роль %name',
 	'Edit User' => 'Изменить пользователя',
 	'Email' => 'E-mail',
+	'email: :mail' => 'электронная почта: :mail',
 	'E-mail must be a valid email address' => 'E-mail адрес должен быть в правильном формате',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
@@ -201,6 +202,7 @@ return array(
 	'Users management' => 'Управление пользователями',
 	'Username/Email' => 'Имя пользователя/Email',
 	'Username' => 'Имя пользователя',
+	'username: :name' => 'имя пользователя (логин): :name',
 	'Username for login' => 'Имя пользователя для авторизации',
 	'Username for logging in can\'t be changed.' => 'Имя пользователя для авторизации не может быть изменено.',
 	'Users' => 'Пользователи',
@@ -223,6 +225,8 @@ return array(
 	'You must provide a username' => 'Вы должны ввести имя пользователя',
 	'You must provide an email address' => 'Вы должны ввести email адрес',
 	'You must provide old password' => 'Вы должны ввести текущий пароль',
+	'Your account at :site (:url) has been activated.' => 'Ваш аккаунт на сайте :site (:url) успешно активирован.',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Ваше изображение будет пропорционально изменено до размеров :w&times;:h',
+	'Your registration data:' => 'Ваши регистрационные данные:',
 	// Z
 );
