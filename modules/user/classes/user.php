@@ -10,7 +10,10 @@
  */
 class User {
 
-	/** @var array All Roles */
+	/**
+	 * All Roles
+	 * @var array
+	 */
 	protected static $roles = array();
 
 	/**
