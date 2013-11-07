@@ -767,7 +767,10 @@ class Model_User extends ORM {
 
 		// Create an email message
 		$email = Email::factory()
-			->subject(__('Gleez - Validate account details for :name', array(':name' => $this->nick)))
+			->subject(__(':site: :name', array(
+				':site' => Config::get('site.site_name', 'Gleez CMS'),
+				':name' => $this->nick
+			)))
 			->to($this->mail, $this->nick)
 			->message($body);
 
