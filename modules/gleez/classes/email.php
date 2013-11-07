@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Email
  * @author     Gleez Team
- * @version    1.1.3
+ * @version    1.1.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  * @link       https://github.com/Synchro/PHPMailer
@@ -20,19 +20,25 @@ class Email {
 	/**
 	 * Create a new email message
 	 *
+	 * @param   boolean  $exceptions  PHPMailer should throw external exceptions? [Optional]
 	 * @return  Email
 	 */
-	public static function factory()
+	public static function factory($exceptions = TRUE)
 	{
-		return new Email();
+		return new Email($exceptions);
 	}
 
-	public function __construct()
+	/**
+	 * Class constructor
+	 *
+	 * @param   boolean  $exceptions  PHPMailer should throw external exceptions? [Optional]
+	 */
+	public function __construct($exceptions = TRUE)
 	{
-		require_once Kohana::find_file('vendor/PHPMailer', 'class.phpmailer');
+		require_once Kohana::find_file('vendor/PHPMailer', 'PHPMailerAutoload');
 
 		// Create phpmailer object
-		$this->mail = new PHPMailer(true);
+		$this->mail = new PHPMailer($exceptions);
 
 		// Set some defaults
 		$this->mail->setFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());

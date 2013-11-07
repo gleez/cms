@@ -13,7 +13,9 @@ return array(
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Аккаунт :prov',
 	':role Permissions' => 'Полномочия :role',
+	':site - Account details for :name (approved)' => ':site - Регистрационные ланные для :name (одобрено)',
 	':site - Reset password for :name' => ':site - Сброс пароля для :name',
+	':site - Validate account details for :name' => ':site - Проверка регистрационных данных для :name',
 	':site Account' => 'Аккаунт :site',
 	':user Permissions' => 'Полномочия :user',
 	// %
