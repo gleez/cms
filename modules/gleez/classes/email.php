@@ -29,7 +29,7 @@ class Email {
 
 	public function __construct()
 	{
-		require_once Kohana::find_file('vendor/PHPMailer', 'class.phpmailer');
+		require_once Kohana::find_file('vendor/PHPMailer', 'PHPMailerAutoload');
 
 		// Create phpmailer object
 		$this->mail = new PHPMailer(true);
