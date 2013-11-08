@@ -150,7 +150,7 @@
 			<?php if ($mbstring_overload): ?>
 				<td><?php echo __('Pass') ?></td>
 			<?php else: ?>
-				<td><?php echo __('To use function overloading, set :overload in php.ini to 2, 3, 6 or 7', array(':overload' => HTML::anchor('http://www.php.net/manual/en/mbstring.configuration.php#ini.mbstring.func-overload', 'mbstring.func_overload') )); ?></td>
+				<td><?php echo __('To use function overloading, set :overload in php.ini to 2 or 6', array(':overload' => HTML::anchor('http://www.php.net/manual/en/mbstring.configuration.php#ini.mbstring.func-overload', 'mbstring.func_overload') )); ?></td>
 			<?php endif ?>
 		</tr>
 
