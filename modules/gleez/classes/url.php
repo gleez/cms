@@ -4,6 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
+ * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -114,16 +115,19 @@ class URL {
 	 * Merges the current GET parameters with an array of new or overloaded
 	 * parameters and returns the resulting query string.
 	 *
-	 *     // Returns "?sort=title&limit=10" combined with any existing GET values
-	 *     $query = URL::query(array('sort' => 'title', 'limit' => 10));
+	 * Example:
+	 * ~~~
+	 * // Returns "?sort=title&limit=10" combined with any existing GET values
+	 * $query = URL::query(array('sort' => 'title', 'limit' => 10));
+	 * ~~~
 	 *
 	 * Typically you would use this when you are sorting query results,
 	 * or something similar.
 	 *
 	 * [!!] Parameters with a NULL value are left out.
 	 *
-	 * @param   array    $params   Array of GET parameters
-	 * @param   boolean  $use_get  Include current request GET parameters
+	 * @param   array    $params   Array of GET parameters [Optional]
+	 * @param   boolean  $use_get  Include current request GET parameters [Optional]
 	 * @return  string
 	 */
 	public static function query(array $params = NULL, $use_get = TRUE)
@@ -158,12 +162,17 @@ class URL {
 	/**
 	 * Convert a phrase to a URL-safe title.
 	 *
-	 *     echo URL::title('My Blog Post'); // "my-blog-post"
+	 * Example:
+	 * ~~~
+	 * echo URL::title('My Blog Post'); // "my-blog-post"
+	 * ~~~
 	 *
 	 * @param   string   $title       Phrase to convert
-	 * @param   string   $separator   Word separator (any single character)
-	 * @param   boolean  $ascii_only  Transliterate to ASCII?
+	 * @param   string   $separator   Word separator (any single character) [Optional]
+	 * @param   boolean  $ascii_only  Transliterate to ASCII? [Optional]
+	 *
 	 * @return  string
+	 *
 	 * @uses    UTF8::transliterate_to_ascii
 	 */
 	public static function title($title, $separator = '-', $ascii_only = FALSE)
@@ -223,7 +232,7 @@ class URL {
 	 */
 	public static function is_absolute($url)
 	{
-		return (mb_strpos($url, '://') === FALSE);
+		return (strpos($url, '://') === FALSE);
 	}
 
 	/**
@@ -234,16 +243,19 @@ class URL {
 	 */
 	public static function is_remote($url)
 	{
-		return (mb_strpos($url, '://') !== FALSE);
+		return (strpos($url, '://') !== FALSE);
 	}
 
 	/**
 	 * Fetches an absolute site URL based on a URI segment.
 	 * Added admin Theme support
 	 *
-	 *     echo URL::site('foo/bar');
+	 * Example:
+	 * ~~~
+	 * echo URL::site('foo/bar');
+	 * ~~~
 	 *
-	 * @param   string  $uri        Site URI to convert
+	 * @param   string  $uri        Site URI to convert [Optional]
 	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from [Optional]
 	 * @param   boolean $index		Include the index_page in the URL [Optional]
 	 * @return  string
@@ -384,6 +396,7 @@ class URL {
 	 * @param   mixed    $protocol
 	 * @param   boolean  $index
 	 * @param   boolean  $with_query_params
+	 *
 	 * @return  string
 	 */
 	public static function current($protocol = NULL, $index = FALSE, $with_query_params = TRUE)
@@ -397,7 +410,6 @@ class URL {
 
 		if (empty($uri))
 		{
-			//$uri = Arr::get($_SERVER, 'REQUEST_URI', '/');
 			$uri = self::site(Request::current()->uri());
 		}
 

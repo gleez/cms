@@ -54,6 +54,9 @@ mb_substitute_character('none');
  * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
  *
  * @todo In the future Kohana::$environment should be moved to Gleez Core as Gleez::$environment
+ *
+ * @link https://github.com/gleez/cms/wiki/Apache
+ * @link https://github.com/gleez/cms/wiki/Nginx
  */
 if (isset($_SERVER['GLEEZ_ENV']))
 {
@@ -102,6 +105,7 @@ Kohana::modules(array(
 	'database'    => MODPATH.'database',   // Database access
 	'image'       => MODPATH.'image',      // Image manipulation
 	'captcha'     => MODPATH.'captcha',    // Captcha implementation
+	//'minion'      => MODPATH.'minion',    // For running tasks via the CLI
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
 	//'mango'       => MODPATH.'mango',      // Gleez Mango
