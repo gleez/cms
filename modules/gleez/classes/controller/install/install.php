@@ -168,7 +168,7 @@ class Controller_Install_Install extends Controller_Template {
 		$view->simplexml             = extension_loaded('simplexml');
 		$view->json_encode           = function_exists('json_encode');
 		$view->mbstring              = (extension_loaded('mbstring') AND MB_OVERLOAD_STRING);
-		$view->mbstring_overload     = in_array(ini_get('mbstring.func_overload'), array(2, 3, 6, 7));
+		$view->mbstring_overload     = in_array(ini_get('mbstring.func_overload'), array(2, 6));
 		$view->mbstring_int_encoding = (strcasecmp(ini_get('mbstring.internal_encoding'), 'utf-8') == 0);
 		$view->ctype_digit           = function_exists('ctype_digit');
 		$view->uri_determination     = isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF'])
