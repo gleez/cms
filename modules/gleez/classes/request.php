@@ -6,7 +6,7 @@
  * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1.1
+ * @version    1.1.2
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -1274,10 +1274,15 @@ class Request implements HTTP_Request {
 	 * By default, the output from the controller is captured and returned, and
 	 * no headers are sent.
 	 *
-	 *     $request->execute();
+	 * Example:
+	 * ~~~
+	 * $request->execute();
+	 * ~~~
 	 *
 	 * @return  Response
+	 *
 	 * @throws  Request_Exception
+	 *
 	 * @throws  HTTP_Exception_404
 	 * @uses    [Kohana::$profiling]
 	 * @uses    [Profiler]
@@ -1297,9 +1302,11 @@ class Request implements HTTP_Request {
 		
 		if ( ! $this->_route instanceof Route)
 		{
-			throw new HTTP_Exception_404('Unable to find a route to match the URI: :uri', array(
-				':uri' => $this->_uri,
-			));
+			return HTTP_Exception::factory(404, 'Unable to find a route to match the URI: :uri', array(
+					':uri' => $this->_uri
+				))
+				->request($this)
+				->get_response();
 		}
 
 		if ( ! $this->_client instanceof Request_Client)
