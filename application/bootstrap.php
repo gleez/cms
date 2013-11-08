@@ -105,6 +105,7 @@ Kohana::modules(array(
 	'database'    => MODPATH.'database',   // Database access
 	'image'       => MODPATH.'image',      // Image manipulation
 	'captcha'     => MODPATH.'captcha',    // Captcha implementation
+	//'minion'      => MODPATH.'minion',    // For running tasks via the CLI
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
 	//'mango'       => MODPATH.'mango',      // Gleez Mango
