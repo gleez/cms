@@ -6,9 +6,8 @@
  * See blog model for example
  *
  * @package    Gleez\Post
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.1.0
+ * @author     Gleez Team
+ * @version    1.1.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
@@ -16,10 +15,16 @@
  */
 class Post extends ORM_Versioned {
 
-	/** Special tag for stopping widgets setting */
+	/**
+	 * Special tag for stopping widgets setting
+	 * @type string
+	 */
 	const NO_WIDGETS_TAG = '<!--nowidgets-->';
 
-	/** Special tag for stopping teaser setting */
+	/**
+	 * Special tag for stopping teaser setting
+	 * @type string
+	 */
 	const TEASER_TAG = '<!--break-->';
 
 	/**
@@ -902,7 +907,7 @@ class Post extends ORM_Versioned {
 
 			if ( ! $post->loaded())
 			{
-				throw new HTTP_Exception_404('Attempt to non-existent post.');
+				throw HTTP_Exception::factory(404, 'Attempt to non-existent post.');
 			}
 
 			$post->content = View::factory($type."/body")->set('config', $config)->bind('post', $post)->render();
