@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -58,7 +58,7 @@ class Controller_Admin_Modules extends Controller_Admin {
 	{
 		if ( ! $this->valid_post('modules'))
 		{
-			throw new HTTP_Exception_403('Unauthorised access attempt to action');
+			throw HTTP_Exception::factory(403, 'Unauthorized attempt to access action.');
 		}
 
 		$messages = array("error" => array(), "warn" => array());
