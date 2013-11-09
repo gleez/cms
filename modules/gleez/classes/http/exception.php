@@ -4,12 +4,9 @@
  *
  * @package    Gleez\HTTP
  * @author     Gleez Team
- * @author     Kohana Team
- * @version    1.0.0
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class HTTP_Exception extends Gleez_Exception {
 
@@ -89,10 +86,14 @@ class HTTP_Exception extends Gleez_Exception {
 	 * @return  Response
 	 *
 	 * @uses    Gleez_Exception::response
+	 * @uses    Gleez_Exception::log
 	 */
 	public function get_response()
 	{
-		return Gleez_Exception::response($this);
+		// Lets log the Exception
+		parent::log($this);
+
+		return parent::response($this);
 	}
 
 }
