@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller\Feed
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -85,10 +85,7 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 
 			if ( ! $tag->loaded())
 			{
-				Log::error('Attempt to access non-existent :type tag feed.',
-					array(':type' => $this->_type)
-				);
-				throw new HTTP_Exception_404('Tag ":tag" Not Found', array(':tag' => $id));
+				throw HTTP_Exception::factory(404, 'Tag ":tag" Not Found', array(':tag' => $id));
 			}
 
 			$posts = $tag->posts
@@ -158,10 +155,7 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 
 			if ( ! $term->loaded())
 			{
-				Log::error('Attempt to access non-existent :type term feed.',
-					array(':type' => $this->_type)
-				);
-				throw new HTTP_Exception_404('Term ":term" Not Found', array(':term' => $id));
+				throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term' => $id));
 			}
 
 			$posts = $term->posts

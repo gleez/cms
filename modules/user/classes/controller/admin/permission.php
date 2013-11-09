@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User\Admin\Controller
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -51,7 +51,7 @@ class Controller_Admin_Permission extends Controller_Admin {
 
 		if ( ! $role->loaded())
 		{
-			throw new HTTP_Exception_404('Attempt to access non-existent role.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent role.');
 		}
 
 		if (isset($_POST['permissions']) AND $this->valid_post('role'))

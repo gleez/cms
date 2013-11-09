@@ -248,12 +248,9 @@ class ACL {
 				return;
 			}
 
-			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
-
-			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
-				array(':perm' => $perm_name)
-			);
+			// If the action is set and the role hasn't been matched, the user doesn't have permission
+			throw HTTP_Exception::factory(403, 'Unauthorized attempt to access action :perm.',
+				array(':perm' => $perm_name));
 		}
 	}
 
@@ -284,12 +281,9 @@ class ACL {
 				return;
 			}
 
-			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
-
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
-				array(':perm' => $perm_name)
-			);
+			throw HTTP_Exception::factory(403, 'Unauthorized attempt to access action :perm.',
+				array(':perm' => $perm_name));
 		}
 	}
 	
@@ -472,7 +466,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -481,7 +475,7 @@ class ACL {
 		if ($post instanceof ORM AND ! $post->loaded())
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent post.');
 		}
 
 		if ( ! $post instanceof ORM)
@@ -576,7 +570,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -585,7 +579,7 @@ class ACL {
 		if ( ! $comment->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent comment.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent comment.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.

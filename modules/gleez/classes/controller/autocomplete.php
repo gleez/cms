@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -15,9 +15,8 @@ class Controller_AutoComplete extends Controller {
 		// Ajax request only!
 		if ( ! $this->request->is_ajax())
 		{
-			throw new HTTP_Exception_404('Accessing an ajax request :type externally',
-				array(':type' => '<small>'.$this->request->uri().'</small>')
-			);
+			throw HTTP_Exception::factory(404, 'Accessing an ajax request :type externally',
+				array(':type' => '<small>'.$this->request->uri().'</small>'));
 		}
 
 		ACL::required('access content');

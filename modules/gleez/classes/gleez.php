@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.5
+ * @version    0.10.6
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '0.10.5';
+	const VERSION = '0.10.6';
 
 	/**
 	 * Release codename
@@ -234,8 +234,7 @@ class Gleez {
 
 		if ($maintenance_mode AND ($request instanceof Request) AND ($request->controller() != 'user' AND $request->action() != 'login') AND !ACL::check('administer site') AND $request->controller() != 'media')
 		{
-			Log::info('Site running in Maintenance Mode');
-			throw new HTTP_Exception_503(__($message));
+			throw HTTP_Exception::factory(503, __($message));
 		}
 	}
 
@@ -255,8 +254,7 @@ class Gleez {
 
 		if ( ! empty($blocked_ips) AND in_array($ip, preg_split("/[\s,]+/",$blocked_ips)))
 		{
-			Log::info('Attempt to access with banned ip address: (:ip).', array(':ip' => $ip));
-			throw new HTTP_Exception_403('Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
+			throw HTTP_Exception::factory(403, 'Sorry, your ip address (:ip) has been banned.', array(':ip' => $ip));
 		}
 	}
 

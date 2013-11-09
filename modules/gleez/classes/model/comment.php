@@ -4,7 +4,7 @@
  *
  * @package    Gleez\ORM\Comment
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -331,14 +331,14 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw new HTTP_Exception_404('Unauthorised attempt to non-existent action :act.',
+			throw HTTP_Exception::factory(404, 'Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action));
 		}
 
 		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent post.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent post.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
@@ -369,9 +369,8 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				throw new HTTP_Exception_403('Unauthorised attempt to view comment :post.',
-					array(':post' => $this->id)
-				);
+				throw HTTP_Exception::factory(403, 'Unauthorized attempt to view comment :post.',
+					array(':post' => $this->id));
 			}
 		}
 
@@ -387,9 +386,8 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				throw new HTTP_Exception_403('Unauthorised attempt to edit comment :post',
-					array(':post' => $this->id,)
-				);
+				throw HTTP_Exception::factory(403, 'Unauthorized attempt to edit comment :post',
+					array(':post' => $this->id));
 			}
 		}
 
@@ -406,9 +404,8 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				throw new HTTP_Exception_403('Unauthorised attempt to delete comment :post',
-					array(':post' => $this->id)
-				);
+				throw HTTP_Exception::factory(403, 'Unauthorised attempt to delete comment :post',
+					array(':post' => $this->id));
 			}
 		}
 
@@ -441,7 +438,7 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorised attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -450,7 +447,7 @@ class Model_Comment extends ORM {
 		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw new HTTP_Exception_404('Attempt to non-existent comment.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent comment.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
