@@ -124,7 +124,7 @@ class Config {
 	 * $array = Config::load($name);
 	 * ~~~
 	 *
-	 * See [Gleez_Config] for more info
+	 * See [Config] for more info
 	 *
 	 * @param   string  $group  Configuration group name
 	 *
