@@ -3,13 +3,10 @@
  * Contains debugging and dumping tools
  *
  * @package    Gleez\Debug
- * @author     Kohana Team
- * @author     Sergey Yakovlev - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2007-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Debug {
 
@@ -72,15 +69,19 @@ class Debug {
 	{
 		if ($var === NULL)
 		{
-			return '<small>NULL</small>';
+			return '<small style="color: #3465a4">NULL</small>';
 		}
 		elseif (is_bool($var))
 		{
-			return '<small>bool</small> '.($var ? 'TRUE' : 'FALSE');
+			return '<small>bool</small> <span style="color:#4e9a06">'.($var ? 'TRUE' : 'FALSE').'</span>';
 		}
 		elseif (is_float($var))
 		{
-			return '<small>float</small> '.$var;
+			return '<small>float</small> <span style="color:#4e9a06">'.$var.'</span>';
+		}
+		elseif (is_integer($var))
+		{
+			return '<small>int</small> <span style="color:#4e9a06">'.$var.'</span>';
 		}
 		elseif (is_resource($var))
 		{
@@ -123,7 +124,7 @@ class Debug {
 				$str = htmlspecialchars($var, ENT_NOQUOTES, Kohana::$charset);
 			}
 
-			return '<small>string</small><span>('.strlen($var).')</span> "'.$str.'"';
+			return '<small>string</small> <span style="color:#cc0000">\''.$str.'\'</span>(<span style="font-style:italic">length='.strlen($var).'</span>)';
 		}
 		elseif (is_array($var))
 		{
@@ -146,11 +147,11 @@ class Debug {
 			}
 			elseif (isset($var[$marker]))
 			{
-				$output[] = "(\n$space$s*RECURSION*\n$space)";
+				$output[] = "\n$space$s*RECURSION*\n$space";
 			}
 			elseif ($level < $limit)
 			{
-				$output[] = "<span>(";
+				$output[] = "<span>";
 
 				$var[$marker] = TRUE;
 				foreach ($var as $key => & $val)
@@ -165,15 +166,15 @@ class Debug {
 				}
 				unset($var[$marker]);
 
-				$output[] = "$space)</span>";
+				$output[] = "$space</span>";
 			}
 			else
 			{
 				// Depth too great
-				$output[] = "(\n$space$s...\n$space)";
+				$output[] = "\n$space$s...\n$space";
 			}
 
-			return '<small>array</small><span>('.count($var).')</span> '.implode("\n", $output);
+			return '<strong>array</strong> <span style="font-style:italic">(size='.count($var).')</span> '.implode(PHP_EOL, $output);
 		}
 		elseif (is_object($var))
 		{
@@ -200,7 +201,7 @@ class Debug {
 			}
 			elseif ($level < $limit)
 			{
-				$output[] = "<code>{";
+				$output[] = "<code>";
 
 				$objects[$hash] = TRUE;
 				foreach ($array as $key => & $val)
@@ -208,21 +209,21 @@ class Debug {
 					if ($key[0] === "\x00")
 					{
 						// Determine if the access is protected or protected
-						$access = '<small>'.(($key[1] === '*') ? 'protected' : 'private').'</small>';
+						$access = '<span style="font-style:italic">'.(($key[1] === '*') ? 'protected' : 'private').'</span>';
 
 						// Remove the access level from the variable name
 						$key = substr($key, strrpos($key, "\x00") + 1);
 					}
 					else
 					{
-						$access = '<small>public</small>';
+						$access = '<span style="font-style:italic">public</span>';
 					}
 
-					$output[] = "$space$s$access $key => ".Debug::_dump($val, $length, $limit, $level + 1);
+					$output[] = "$space$s$access '$key' <span style='color:#888a85'>=&gt;</span> ".Debug::_dump($val, $length, $limit, $level + 1);
 				}
 				unset($objects[$hash]);
 
-				$output[] = "$space}</code>";
+				$output[] = "$space</code>";
 			}
 			else
 			{
@@ -230,7 +231,7 @@ class Debug {
 				$output[] = "{\n$space$s...\n$space}";
 			}
 
-			return '<small>object</small> <span>'.get_class($var).'('.count($array).')</span> '.implode("\n", $output);
+			return '<strong>object</strong>(<span style="font-style:italic">'.get_class($var).'</span>)'.'[<span style="font-style:italic">'.count($array).'</span>]'.implode(PHP_EOL, $output);
 		}
 		else
 		{
