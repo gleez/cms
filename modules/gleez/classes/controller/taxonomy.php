@@ -31,7 +31,6 @@ class Controller_Taxonomy extends Template {
 
 		if ( ! $term->loaded())
 		{
-			Log::error('Attempt to access non-existent term.');
 			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
 		}
 

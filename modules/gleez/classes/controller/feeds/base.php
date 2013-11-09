@@ -85,9 +85,6 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 
 			if ( ! $tag->loaded())
 			{
-				Log::error('Attempt to access non-existent :type tag feed.',
-					array(':type' => $this->_type)
-				);
 				throw HTTP_Exception::factory(404, 'Tag ":tag" Not Found', array(':tag' => $id));
 			}
 
@@ -158,9 +155,6 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 
 			if ( ! $term->loaded())
 			{
-				Log::error('Attempt to access non-existent :type term feed.',
-					array(':type' => $this->_type)
-				);
 				throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term' => $id));
 			}
 
