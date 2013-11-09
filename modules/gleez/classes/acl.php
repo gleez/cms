@@ -250,10 +250,9 @@ class ACL {
 
 			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
 
-			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw new HTTP_Exception_403('Unauthorised access attempt to action :perm.',
-				array(':perm' => $perm_name)
-			);
+			// If the action is set and the role hasn't been matched, the user doesn't have permission
+			throw HTTP_Exception::factory(403, 'Unauthorised access attempt to action :perm.',
+				array(':perm' => $perm_name));
 		}
 	}
 
