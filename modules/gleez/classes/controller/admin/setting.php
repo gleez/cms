@@ -81,12 +81,12 @@ class Controller_Admin_Setting extends Controller_Admin {
 	private function _set_front_page($source)
 	{
 		// Delete previous alias if any
-		Path::delete( array( 'alias' => '<front>' ) );
+		Path::delete(array('alias' => Path::FRONT_ALIAS));
 
 		// Create and save alias
 		$values = array();
 		$values['source'] = $source;
-		$values['alias']  = '<front>' ;
+		$values['alias']  = Path::FRONT_ALIAS ;
 
 		return Path::save($values);
 	}
