@@ -907,7 +907,7 @@ class Post extends ORM_Versioned {
 
 			if ( ! $post->loaded())
 			{
-				throw HTTP_Exception::factory(404, 'Attempt to non-existent post.');
+				throw HTTP_Exception::factory(404, 'Attempt access to non-existent post.');
 			}
 
 			$post->content = View::factory($type."/body")->set('config', $config)->bind('post', $post)->render();
