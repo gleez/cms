@@ -6,7 +6,7 @@
  * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1.1
+ * @version    1.1.3
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -571,10 +571,14 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the accepted content types. If a specific type is defined,
-	 * the quality of that type will be returned.
+	 * Returns the accepted content types
 	 *
-	 *     $types = Request::accept_type();
+	 * If a specific type is defined, the quality of that type will be returned.
+	 *
+	 * Example:
+	 * ~~~
+	 * $types = Request::accept_type();
+	 * ~~~
 	 *
 	 * @param   string  $type Content MIME type
 	 * @return  mixed   An array of all types or a specific type as a string
@@ -600,11 +604,15 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the accepted languages. If a specific language is defined,
-	 * the quality of that language will be returned. If the language is not
-	 * accepted, FALSE will be returned.
+	 * Returns the accepted languages
 	 *
-	 *     $langs = Request::accept_lang();
+	 * If a specific language is defined, the quality of that language will be
+	 * returned. If the language is not accepted, FALSE will be returned.
+	 *
+	 * Example:
+	 * ~~~
+	 * $langs = Request::accept_lang();
+	 * ~~~
 	 *
 	 * @param   string  $lang  Language code
 	 * @return  mixed   An array of all types or a specific type as a string
@@ -630,11 +638,15 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the accepted encodings. If a specific encoding is defined,
-	 * the quality of that encoding will be returned. If the encoding is not
-	 * accepted, FALSE will be returned.
+	 * Returns the accepted encodings
 	 *
-	 *     $encodings = Request::accept_encoding();
+	 * If a specific encoding is defined, the quality of that encoding will be
+	 * returned. If the encoding is not  accepted, FALSE will be returned.
+	 *
+	 * Example:
+	 * ~~~
+	 * $encodings = Request::accept_encoding();
+	 * ~~~
 	 *
 	 * @param   string  $type Encoding type
 	 * @return  mixed   An array of all types or a specific type as a string
@@ -724,9 +736,12 @@ class Request implements HTTP_Request {
 
 	/**
 	 * Parses an accept header and returns an array (type => quality) of the
-	 * accepted types, ordered by quality.
+	 * accepted types, ordered by quality
 	 *
-	 *     $accept = Request::_parse_accept($header, $defaults);
+	 * Example:
+	 * ~~~
+	 * $accept = Request::_parse_accept($header, $defaults);
+	 * ~~~
 	 *
 	 * @param   string   $header   Header to parse
 	 * @param   array    $accepts  Default values
@@ -873,22 +888,26 @@ class Request implements HTTP_Request {
 	
 	/**
 	 * Creates a new request object for the given URI. New requests should be
-	 * created using the [Request::instance] or [Request::factory] methods.
+	 * created using the [Request::instance] or [Request::factory] methods
 	 *
-	 *     $request = new Request($uri);
+	 * Example:
+	 * ~~~
+	 * $request = new Request($uri);
+	 * ~~~
 	 *
 	 * If $cache parameter is set, the response for the request will attempt to
 	 * be retrieved from the cache.
 	 *
-	 * @param   string  $uri URI of the request
-	 * @param   HTTP_Cache   $cache
-	 * @param   array   $injected_routes an array of routes to use, for testing
-	 * @return  void
+	 * @param   string      $uri URI of the request
+	 * @param   HTTP_Cache  $cache
+	 * @param   array       $injected_routes an array of routes to use, for testing
+	 *
 	 * @throws  Request_Exception
+	 *
 	 * @uses    Route::all
 	 * @uses    Route::matches
 	 */
-		public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
+	public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
 	{
 		// Initialise the header
 		$this->_header = new HTTP_Header(array());
@@ -990,9 +1009,12 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the response as the string representation of a request.
+	 * Returns the response as the string representation of a request
 	 *
-	 *     echo $request;
+	 * Example:
+	 * ~~~
+	 * echo $request;
+	 * ~~~
 	 *
 	 * @return  string
 	 */
@@ -1017,11 +1039,13 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Create a URL string from the current request. This is a shortcut for:
+	 * Create a URL string from the current request
 	 *
-	 *     echo URL::site($this->request->uri(), $protocol);
+	 * This is a shortcut for:
+	 * ~~~
+	 * echo URL::site($this->request->uri(), $protocol);
+	 * ~~~
 	 *
-	 * @param   array    $params    URI parameters
 	 * @param   mixed    $protocol  protocol string or Request object
 	 *
 	 * @return  string
@@ -1035,9 +1059,12 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Retrieves a value from the route parameters.
+	 * Retrieves a value from the route parameters
 	 *
-	 *     $id = $request->param('id');
+	 * Example:
+	 * ~~~
+	 * $id = $request->param('id');
+	 * ~~~
 	 *
 	 * @param   string   $key      Key of the value
 	 * @param   mixed    $default  Default value if the key is not set
@@ -1058,24 +1085,10 @@ class Request implements HTTP_Request {
 	 * Redirects as the request response. If the URL does not include a
 	 * protocol, it will be converted into a complete URL.
 	 *
-	 *     $request->redirect($url);
-	 *
-	 * [!!] No further processing can be done after this method is called!
-	 *
-	 * @param   string   $url   Redirect location
-	 * @param   integer  $code  Status code: 301, 302, etc
-	 * @return  void
-	 * @uses    URL::site
-	 * @uses    Request::send_headers
-	 */
-	/**
-	 * Redirects as the request response. If the URL does not include a
-	 * protocol, it will be converted into a complete URL.
-	 *
-	 * Example:<br>
-	 * <code>
-	 *   $request->redirect($url);
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * $request->redirect($url);
+	 * ~~~
 	 *
 	 * [!!] No further processing can be done after this method is called!
 	 *
@@ -1146,7 +1159,7 @@ class Request implements HTTP_Request {
 	/**
 	 * Sets and gets the route from the request.
 	 *
-	 * @param   string $route
+	 * @param   Route $route
 	 * @return  mixed
 	 */
 	public function route(Route $route = NULL)
@@ -1224,10 +1237,11 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Provides access to the [Request_Client].
+	 * Provides access to the [Request_Client]
 	 *
-	 * @return  Request_Client
-	 * @return  self
+	 * @param Request_Client $client
+	 *
+	 * @return Request|Request_Client
 	 */
 	public function client(Request_Client $client = NULL)
 	{
@@ -1274,10 +1288,15 @@ class Request implements HTTP_Request {
 	 * By default, the output from the controller is captured and returned, and
 	 * no headers are sent.
 	 *
-	 *     $request->execute();
+	 * Example:
+	 * ~~~
+	 * $request->execute();
+	 * ~~~
 	 *
 	 * @return  Response
+	 *
 	 * @throws  Request_Exception
+	 *
 	 * @throws  HTTP_Exception_404
 	 * @uses    [Kohana::$profiling]
 	 * @uses    [Profiler]
@@ -1297,9 +1316,11 @@ class Request implements HTTP_Request {
 		
 		if ( ! $this->_route instanceof Route)
 		{
-			throw new HTTP_Exception_404('Unable to find a route to match the URI: :uri', array(
-				':uri' => $this->_uri,
-			));
+			return HTTP_Exception::factory(404, 'Unable to find a route to match the URI: :uri', array(
+					':uri' => $this->_uri
+				))
+				->request($this)
+				->get_response();
 		}
 
 		if ( ! $this->_client instanceof Request_Client)
@@ -1314,10 +1335,12 @@ class Request implements HTTP_Request {
 
 	/**
 	 * Returns whether this request is the initial request Kohana received.
-	 * Can be used to test for sub requests.
 	 *
-	 *     if ( ! $request->is_initial())
-	 *         // This is a sub request
+	 * Can be used to test for sub requests:
+	 * ~~~
+	 * if ( ! $request->is_initial())
+	 *     // This is a sub request
+	 * ~~~
 	 *
 	 * @return  boolean
 	 */
@@ -1329,8 +1352,11 @@ class Request implements HTTP_Request {
 	/**
 	 * Readonly access to the [Request::$_external] property.
 	 *
-	 *     if ( ! $request->is_external())
-	 *          // This is an internal request
+	 * Example:
+	 * ~~~
+	 * if ( ! $request->is_external())
+	 *     // This is an internal request
+	 * ~~~
 	 *
 	 * @return  boolean
 	 */
@@ -1353,7 +1379,10 @@ class Request implements HTTP_Request {
 	 * Generates an [ETag](http://en.wikipedia.org/wiki/HTTP_ETag) from the
 	 * request response.
 	 *
-	 *     $etag = $request->generate_etag();
+	 * Example:
+	 * ~~~
+	 * $etag = $request->generate_etag();
+	 * ~~~
 	 *
 	 * [!!] If the request response is empty when this method is called, an
 	 * exception will be thrown!
@@ -1398,8 +1427,11 @@ class Request implements HTTP_Request {
 	 * Request_HTTP will produce a Response_HTTP, and the same applies
 	 * to CLI.
 	 *
-	 *      // Create a response to the request
-	 *      $response = $request->create_response();
+	 * Example:
+	 * ~~~
+	 * // Create a response to the request
+	 * $response = $request->create_response();
+	 * ~~~
 	 *
 	 * @param   boolean  $bind  Bind to this request
 	 * @return  Response
@@ -1604,7 +1636,6 @@ class Request implements HTTP_Request {
 	 *  If there are variables set to the `Request::$_post`
 	 *  they will override any values set to body.
 	 *
-	 * @param   boolean  $response  Return the rendered response, else returns the rendered request
 	 * @return  string
 	 */
 	public function render()

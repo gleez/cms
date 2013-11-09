@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -79,7 +79,7 @@ class Controller_User extends Template {
 		if ( ! $config->register)
 		{
 			// If user registration disabled, we return access denied.
-			throw new HTTP_Exception_403(__('User registration not allowed'));
+			throw HTTP_Exception::factory(403, __('User registration not allowed'));
 		}
 
 		$action = Route::get('user')->uri(array('action' => $this->request->action()));
@@ -268,9 +268,7 @@ class Controller_User extends Template {
 		}
 		else
 		{
-			Log::alert('Attempt to access without required privileges.');
-
-			throw new HTTP_Exception_403('Attempt to access without required privileges.');
+			throw HTTP_Exception::factory(403, 'Attempt to access without required privileges.');
 		}
 
 		if ($account AND ($user->id === $account->id))
