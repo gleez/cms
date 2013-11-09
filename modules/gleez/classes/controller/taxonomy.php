@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -15,7 +15,7 @@ class Controller_Taxonomy extends Template {
 		// Internal request only!
 		if ($this->request->is_initial())
 		{
-			throw new HTTP_Exception_404('Accessing an internal request :type externally.',
+			throw HTTP_Exception::factory(404, 'Access denied!',
 				array(':type' => '<small>'.$this->request->uri().'</small>')
 			);
 		}
@@ -32,7 +32,7 @@ class Controller_Taxonomy extends Template {
 		if ( ! $term->loaded())
 		{
 			Log::error('Attempt to access non-existent term.');
-			throw new HTTP_Exception_404('Term ":term" Not Found', array(':term'=>$id));
+			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
 		}
 
 			$this->title    = __(':title', array(':title' => $term->name) );
