@@ -94,13 +94,13 @@ class ACL {
 	 */
 	public static function get($name)
 	{
-		if ( ! isset(ACL::$_all_perms[$name]))
+		if ( ! isset(self::$_all_perms[$name]))
 		{
 			throw new Gleez_Exception('The requested Permission does not exist: :permission',
 				array(':permission' => $name));
 		}
 
-	  return ACL::$_all_perms[$name];
+	  return self::$_all_perms[$name];
 	}
 
 	/**
@@ -124,7 +124,7 @@ class ACL {
 	public static function set($name, array $access_names)
 	{
 		// Adds the action to the action array and returns it.
-		return ACL::$_all_perms[$name] = $access_names;
+		return self::$_all_perms[$name] = $access_names;
 	}
 
 	/**
@@ -139,7 +139,7 @@ class ACL {
 	 */
 	public static function all()
 	{
-		return ACL::$_all_perms;
+		return self::$_all_perms;
 	}
 
 	/**
@@ -173,7 +173,7 @@ class ACL {
 		if ($save)
 		{
 			// Cache all defined perms
-			return $cache->set('ACL::cache()', ACL::$_all_perms);
+			return $cache->set('ACL::cache()', self::$_all_perms);
 		}
 		else
 		{
@@ -182,21 +182,21 @@ class ACL {
 				if ($append)
 				{
 					// Append cached perms
-					ACL::$_all_perms = Arr::merge(ACL::$_all_perms, $perms);
+					self::$_all_perms = Arr::merge(self::$_all_perms, $perms);
 				}
 				else
 				{
 					// Replace existing perms
-					ACL::$_all_perms = $perms;
+					self::$_all_perms = $perms;
 				}
 
 				// perms were cached
-				return ACL::$cache = TRUE;
+				return self::$cache = TRUE;
 			}
 			else
 			{
 				// perms were not cached
-				return ACL::$cache = FALSE;
+				return self::$cache = FALSE;
 			}
 		}
 	}
@@ -234,7 +234,7 @@ class ACL {
 	 */
 	public static function required($perm_name, Model_User $user = NULL, $callback = NULL, array $args = array())
 	{
-		if ( ! ACL::check($perm_name, $user))
+		if ( ! self::check($perm_name, $user))
 		{
 			if ( ! is_null($callback))
 			{
@@ -272,7 +272,7 @@ class ACL {
 	 */
 	public static function redirect($perm_name, $route = NULL, array $uri = array())
 	{
-		if ( ! ACL::check($perm_name))
+		if ( ! self::check($perm_name))
 		{
 			if ( ! is_null($route) AND is_string($route))
 			{
@@ -311,17 +311,17 @@ class ACL {
 		// User #2 has all privileges:
 		if ($user->id == self::ID_ADMIN)
 		{
-			return ACL::ALLOW;
+			return self::ALLOW;
 		}
 
 		// To reduce the number of SQL queries, we cache the user's permissions
 		// in a static variable.
-		if ( ! isset(ACL::$_perm[$user->id]))
+		if ( ! isset(self::$_perm[$user->id]))
 		{
-			ACL::_set_permissions($user);
+			self::_set_permissions($user);
 		}
 
-		return isset(ACL::$_perm[$user->id][$perm_name]);
+		return isset(self::$_perm[$user->id][$perm_name]);
 	}
 	
 	/**
@@ -335,7 +335,7 @@ class ACL {
 	 */
 	public static function is_role($role)
 	{
-		$roles = ACL::site_roles();
+		$roles = self::site_roles();
 		return isset($roles[$role]);
 	}
 
@@ -389,7 +389,7 @@ class ACL {
 
 			foreach ($result as $row)
 			{
-				$perms[$row->rid][$row->permission] = ACL::ALLOW;
+				$perms[$row->rid][$row->permission] = self::ALLOW;
 			}
 			
 			//set the cache
@@ -407,20 +407,20 @@ class ACL {
 	protected static function _set_permissions(Model_User $user)
 	{
 		$user_perms = $user->perms();
-		$site_perms = ACL::site_perms();
-		$user_roles = ACL::get_user_roles($user);
+		$site_perms = self::site_perms();
+		$user_roles = self::get_user_roles($user);
 	
-		//filter out active roles
-		$roles = array_filter( array_keys( $user_roles ), array( 'ACL', 'is_role' ) );
-		ACL::$_perm[$user->id] = array();
+		// Filter out active roles
+		$roles = array_filter(array_keys($user_roles), array('self', 'is_role'));
+		self::$_perm[$user->id] = array();
 
 		//role based permissions
 		foreach($roles as $role)
 		{
 			if(isset($site_perms[$role]) AND is_array($site_perms[$role]))
 			{
-				ACL::$_perm[$user->id] = array_merge(
-					(array) ACL::$_perm[$user->id],
+				self::$_perm[$user->id] = array_merge(
+					(array) self::$_perm[$user->id],
 					(array) $site_perms[$role]
 				);
 			}
@@ -429,16 +429,16 @@ class ACL {
 		// User based permissions
 		foreach($user_perms as $perm => $val)
 		{
-			if($val == ACL::PERM_ALLOW)
+			if($val == self::PERM_ALLOW)
 			{
-				ACL::$_perm[$user->id] = array_merge(ACL::$_perm[$user->id], array($perm => ACL::ALLOW) );
+				self::$_perm[$user->id] = array_merge(self::$_perm[$user->id], array($perm => self::ALLOW) );
 			}
-			elseif($val == ACL::PERM_DENY)
+			elseif($val == self::PERM_DENY)
 			{
 				//if we deny this permission unset if it exists
-				if (isset(ACL::$_perm[$user->id][$perm]) )
+				if (isset(self::$_perm[$user->id][$perm]) )
 				{
-					unset(ACL::$_perm[$user->id][$perm]);
+					unset(self::$_perm[$user->id][$perm]);
 				}
 			}
 		}
@@ -489,7 +489,7 @@ class ACL {
 			$user = User::active_user();
 		}
 
-		if (ACL::check('bypass post access', $user))
+		if (self::check('bypass post access', $user))
 		{
 			return TRUE;
 		}
@@ -499,13 +499,13 @@ class ACL {
 
 		if ($action === 'view')
 		{
-			if ($post->status === 'publish' AND ACL::check('access content', $user))
+			if ($post->status === 'publish' AND self::check('access content', $user))
 			{
 				return TRUE;
 			}
 			// Check if authors can view their own unpublished posts.
 			elseif ($post->status != 'publish'
-				AND ACL::check('view own unpublished content', $user)
+				AND self::check('view own unpublished content', $user)
 				AND $post->author == (int)$user->id
 				AND $user->id != 1)
 			{
@@ -513,13 +513,13 @@ class ACL {
 			}
 			else
 			{
-				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
+				return self::check('administer content', $user) OR self::check('administer content '.$post->type, $user);
 			}
 		}
 
 		if ($action === 'edit')
 		{
-			if ((ACL::check('edit own '.$post->type) OR ACL::check('edit any '.$post->type))
+			if ((self::check('edit own '.$post->type) OR self::check('edit any '.$post->type))
 				AND $post->author == (int)$user->id
 				AND $user->id != 1)
 			{
@@ -527,13 +527,13 @@ class ACL {
 			}
 			else
 			{
-				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
+				return self::check('administer content', $user) OR self::check('administer content '.$post->type, $user);
 			}
 		}
 
 		if ($action === 'delete')
 		{
-			if ((ACL::check('delete own '.$post->type) OR ACL::check('delete any '.$post->type))
+			if ((self::check('delete own '.$post->type) OR self::check('delete any '.$post->type))
 				AND $post->author == (int)$user->id
 				AND $user->id != 1)
 			{
@@ -541,7 +541,7 @@ class ACL {
 			}
 			else
 			{
-				return ACL::check('administer content', $user) OR ACL::check('administer content '.$post->type, $user);
+				return self::check('administer content', $user) OR self::check('administer content '.$post->type, $user);
 			}
 		}
 
@@ -588,7 +588,7 @@ class ACL {
 			$user = User::active_user();
 		}
 
-		if (ACL::check('bypass comment access', $user))
+		if (self::check('bypass comment access', $user))
 		{
 			return TRUE;
 		}
@@ -598,7 +598,7 @@ class ACL {
 
 		if ($action === 'view')
 		{
-			if ($comment->status === 'publish' AND ACL::check('access comment', $user))
+			if ($comment->status === 'publish' AND self::check('access comment', $user))
 			{
 				return TRUE;
 			}
@@ -609,7 +609,7 @@ class ACL {
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer comment', $user))
+			elseif (self::check('administer comment', $user))
 			{
 				return TRUE;
 			}
@@ -621,13 +621,13 @@ class ACL {
 
 		if ($action === 'edit')
 		{
-			if (ACL::check('edit own comment')
+			if (self::check('edit own comment')
 				AND $comment->author == (int)$user->id
 				AND $user->id != 1)
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer comment', $user))
+			elseif (self::check('administer comment', $user))
 			{
 				return TRUE;
 			}
@@ -639,13 +639,13 @@ class ACL {
 
 		if ($action === 'delete')
 		{
-			if ((ACL::check('delete own comment') OR ACL::check('delete any comment'))
+			if ((self::check('delete own comment') OR self::check('delete any comment'))
 				AND $comment->author == (int)$user->id
 				AND $user->id != 1)
 			{
 				return TRUE;
 			}
-			elseif (ACL::check('administer comment', $user))
+			elseif (self::check('administer comment', $user))
 			{
 				return TRUE;
 			}
