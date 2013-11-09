@@ -248,10 +248,10 @@ class ACL {
 				return;
 			}
 
-			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
+			Log::alert('Unauthorized attempt to access action :perm.', array(':perm' => $perm_name));
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission
-			throw HTTP_Exception::factory(403, 'Unauthorised access attempt to action :perm.',
+			throw HTTP_Exception::factory(403, 'Unauthorized attempt to access action :perm.',
 				array(':perm' => $perm_name));
 		}
 	}
@@ -283,10 +283,10 @@ class ACL {
 				return;
 			}
 
-			Log::alert('Unauthorised access attempt to action :perm.', array(':perm' => $perm_name));
+			Log::alert('Unauthorized attempt to access action :perm.', array(':perm' => $perm_name));
 
 			// If the action is set and the role hasn't been matched, the user doesn't have permission.
-			throw HTTP_Exception::factory(403, 'Unauthorised access attempt to action :perm.',
+			throw HTTP_Exception::factory(403, 'Unauthorized attempt to access action :perm.',
 				array(':perm' => $perm_name));
 		}
 	}
@@ -470,7 +470,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -574,7 +574,7 @@ class ACL {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;

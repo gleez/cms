@@ -331,14 +331,14 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw HTTP_Exception::factory(404, 'Unauthorised attempt to non-existent action :act.',
+			throw HTTP_Exception::factory(404, 'Unauthorized attempt to access non-existent action :act.',
 				array(':act' => $action));
 		}
 
 		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw HTTP_Exception::factory(404, 'Attempt to non-existent post.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent post.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
@@ -369,7 +369,7 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				throw HTTP_Exception::factory(403, 'Unauthorised attempt to view comment :post.',
+				throw HTTP_Exception::factory(403, 'Unauthorized attempt to view comment :post.',
 					array(':post' => $this->id));
 			}
 		}
@@ -386,7 +386,7 @@ class Model_Comment extends ORM {
 			}
 			else
 			{
-				throw HTTP_Exception::factory(403, 'Unauthorised attempt to edit comment :post',
+				throw HTTP_Exception::factory(403, 'Unauthorized attempt to edit comment :post',
 					array(':post' => $this->id));
 			}
 		}
@@ -438,7 +438,7 @@ class Model_Comment extends ORM {
 		if ( ! in_array($action, array('view', 'edit', 'delete', 'add', 'list'), TRUE))
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			Log::notice('Unauthorised attempt to non-existent action :act.',
+			Log::notice('Unauthorised attempt to access non-existent action :act.',
 				array(':act' => $action)
 			);
 			return FALSE;
@@ -447,7 +447,7 @@ class Model_Comment extends ORM {
 		if ( ! $this->loaded())
 		{
 			// If the $action was not one of the supported ones, we return access denied.
-			throw HTTP_Exception::factory(404, 'Attempt to non-existent comment.');
+			throw HTTP_Exception::factory(404, 'Attempt to access non-existent comment.');
 		}
 
 		// If no user object is supplied, the access check is for the current user.
