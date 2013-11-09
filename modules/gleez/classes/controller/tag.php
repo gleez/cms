@@ -47,7 +47,6 @@ class Controller_Tag extends Template {
 
 		if ( ! $tag->loaded())
 		{
-			Log::error('Attempt to access non-existent tag.');
 			throw HTTP_Exception::factory(404, 'Tag :tag not found!', array(':tag' => $id));
 		}
 

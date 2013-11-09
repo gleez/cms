@@ -473,7 +473,6 @@ class Controller_Blog extends Template {
 
 		if ( ! $config->use_category)
 		{
-			Log::error('Attempt to access disabled feature.');
 			throw HTTP_Exception::factory(403, 'Attempt to access disabled feature.');
 		}
 
@@ -483,7 +482,6 @@ class Controller_Blog extends Template {
 
 		if ( ! $term->loaded())
 		{
-			Log::error('Attempt to access non-existent term.');
 			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
 		}
 
@@ -555,7 +553,6 @@ class Controller_Blog extends Template {
 
 		if ( ! $tag->loaded())
 		{
-			Log::error('Attempt to access non-existent blog tag.');
 			throw HTTP_Exception::factory(404, 'Tag ":tag" Not Found', array(':tag'=>$id));
 		}
 

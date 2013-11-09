@@ -268,8 +268,6 @@ class Controller_User extends Template {
 		}
 		else
 		{
-			Log::alert('Attempt to access without required privileges.');
-
 			throw HTTP_Exception::factory(403, 'Attempt to access without required privileges.');
 		}
 
