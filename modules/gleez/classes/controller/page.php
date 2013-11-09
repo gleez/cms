@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -156,7 +156,7 @@ class Controller_Page extends Template {
 		if ( ! ACL::post('view', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_403('Access denied!');
+			throw HTTP_Exception::factory(403, 'Access denied!');
 		}
 
 		if (ACL::post('edit', $post))
@@ -312,7 +312,7 @@ class Controller_Page extends Template {
 		if ( ! ACL::post('edit', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_403('Access denied!');
+			throw HTTP_Exception::factory(403, 'Access denied!');
 		}
 
 		$this->title = $post->title;
@@ -406,7 +406,7 @@ class Controller_Page extends Template {
 		if ( ! ACL::post('delete', $post))
 		{
 			// If the post was not loaded, we return access denied.
-			throw new HTTP_Exception_403('Access denied!');
+			throw HTTP_Exception::factory(403, 'Access denied!');
 		}
 
 		$this->title = __('Delete :title', array(':title' => $post->title));
@@ -472,8 +472,8 @@ class Controller_Page extends Template {
 
 		if ( ! $config->use_category)
 		{
-			Log::error('Attempt to access disabled feature.');
-			throw new HTTP_Exception_403('Attempt to access disabled feature');
+			Log::error('Attempt access to disabled feature.');
+			throw HTTP_Exception::factory(403, 'Attempt access to access disabled feature');
 		}
 
 		$id    = (int) $this->request->param('id', 0);
@@ -482,8 +482,8 @@ class Controller_Page extends Template {
 
 		if ( ! $term->loaded())
 		{
-			Log::error('Attempt to access non-existent term.');
-			throw new HTTP_Exception_404('Term ":term" Not Found', array(':term'=>$id));
+			Log::error('Attempt access to access non-existent term.');
+			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
@@ -564,7 +564,7 @@ class Controller_Page extends Template {
 		if ( ! $tag->loaded())
 		{
 			Log::error('Attempt to access non-existent page tag.');
-			throw new HTTP_Exception_404('Tag ":tag" Not Found', array(':tag'=>$id));
+			throw HTTP_Exception::factory(404, 'Tag ":tag" Not Found', array(':tag'=>$id));
 		}
 
 		$this->title = __(':title', array(':title' => Text::ucfirst($tag->name)));
