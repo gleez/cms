@@ -17,7 +17,7 @@ return array
 			 * Ports and sockets may be appended to the hostname.
 			 */
 			'hostname'   => '<?php echo $host ?>',
-                        'database'   => '<?php echo $dbname ?>',
+			'database'   => '<?php echo $dbname ?>',
 			'username'   => '<?php echo $user ?>',
 			'password'   => '<?php echo str_replace("'", "\\'", $password) ?>',
 			'persistent' => FALSE,

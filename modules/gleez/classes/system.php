@@ -2,7 +2,7 @@
 /**
  * Gleez Core Utils class
  *
- * @package	   Gleez\Core
+ * @package    Gleez\Core
  * @author     Gleez Team
  * @version    1.3.1
  * @copyright  (c) 2011-2013 Gleez Technologies
