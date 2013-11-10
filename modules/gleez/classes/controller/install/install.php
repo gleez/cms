@@ -2,10 +2,11 @@
 /**
  * Gleez Installer
  *
- * @package    Gleez\Install
- * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @package		Gleez\Install
+ * @author 		Gleez Team
+ * @version 	1.3.1
+ * @copyright 	(c) 2011-2013 Gleez Technologies
+ * @license 	http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Install_Install extends Controller_Template {
 
@@ -149,29 +150,7 @@ class Controller_Install_Install extends Controller_Template {
 		!file_exists(DOCROOT . "media/css") && System::mkdir(DOCROOT . "media/css");
 		!file_exists(DOCROOT . "media/js") && System::mkdir(DOCROOT . "media/js");
 
-		$view = new View('install/systemcheck');
-
-		$view->php_version           = version_compare(PHP_VERSION, '5.3', '>=');
-		// @todo Use here mysqli
-		$view->mysql           	     = function_exists("mysql_query");
-		$view->system_directory      = is_dir(SYSPATH);
-		$view->application_directory = (is_dir(APPPATH) AND is_file(APPPATH.'bootstrap'.EXT));
-		$view->modules_directory     = is_dir(MODPATH);
-		$view->config_writable       = (is_dir(APPPATH.'config') AND is_writable(APPPATH.'config'));
-		$view->cache_writable        = (is_dir(APPPATH.'cache') AND is_writable(APPPATH.'cache'));
-		$view->pcre_utf8             = ( @preg_match('/^.$/u', 'ñ') );
-		$view->pcre_unicode          = ( @preg_match('/^\pL$/u', 'ñ') );
-		$view->reflection_enabled    = class_exists('ReflectionClass');
-		$view->spl_autoload_register = function_exists('spl_autoload_register');
-		$view->filters_enabled       = function_exists('filter_list');
-		$view->iconv_loaded          = extension_loaded('iconv');
-		$view->simplexml             = extension_loaded('simplexml');
-		$view->json_encode           = function_exists('json_encode');
-		$view->mbstring              = (extension_loaded('mbstring') AND MB_OVERLOAD_STRING);
-		$view->ctype_digit           = function_exists('ctype_digit');
-		$view->uri_determination     = isset($_SERVER['REQUEST_URI']) OR isset($_SERVER['PHP_SELF'])
-							OR isset($_SERVER['PATH_INFO']);
-		$view->gd_info               = function_exists('gd_info');
+		$view = View::factory('install/systemcheck', System::check());
 
 		if (	$view->php_version
 			AND $view->mysql
@@ -392,7 +371,7 @@ class Controller_Install_Install extends Controller_Template {
 			}
 			else
 			{
-				throw new Exception(mysql_error());
+				//throw new Exception(mysql_error());
 			}
 		}
 
@@ -485,4 +464,3 @@ class Controller_Install_Install extends Controller_Template {
 		return $password;
 	}
 }
-
