@@ -355,6 +355,18 @@ class Controller_Install_Install extends Controller_Template {
 
 	public function check_database($username, $password, $hostname, $database)
 	{
+		if(function_exists('mysqli_query'))
+		{
+			return $this->_mysqli_check_database($username, $password, $hostname, $database);
+		}
+		else
+		{
+			return $this->_mysql_check_database($username, $password, $hostname, $database);
+		}
+	}
+
+	private function _mysql_check_database($username, $password, $hostname, $database)
+	{
 		if ( ! $link = @mysql_connect($hostname, $username, $password))
 		{
 			if (strpos(mysql_error(), 'Access denied'))
@@ -393,6 +405,46 @@ class Controller_Install_Install extends Controller_Template {
 		return TRUE;
 	}
 
+	private function _mysqli_check_database($username, $password, $hostname, $database)
+	{
+		if ( ! $link = @mysqli_connect($hostname, $username, $password))
+		{
+			if (strpos(mysqli_error(), 'Access denied'))
+			{
+				throw new Exception('access');
+			}
+			elseif (strpos(mysqli_error(), 'server host'))
+			{
+				throw new Exception('unknown_host');
+			}
+			elseif (strpos(mysqli_error(), 'connect to'))
+			{
+				throw new Exception('connect_to_host');
+			}
+			else
+			{
+				throw new Exception(mysqli_error());
+			}
+		}
+
+		if (! version_compare($this->mysql_version($link), "5.0.0", ">=") ) {
+				throw new Exception('version');
+		}
+
+		if ($select = mysqli_select_db($link, $database)) {
+			return TRUE;
+		}
+		else {
+			mysqli_query($link, "CREATE DATABASE `{$database}`");
+
+			if (! $select = mysqli_select_db($link, $database)) {
+				throw new Exception('select');
+			}
+		}
+
+		return TRUE;
+	}
+
 	public function create_database_config($username, $password, $hostname, $database, $table_prefix)
 	{
 		$config = new View('install/config');
@@ -408,14 +460,60 @@ class Controller_Install_Install extends Controller_Template {
 		return file_put_contents(APPPATH.'config/database.php', $config) !== false;
 	}
 
-	private function mysql_version($config)
+	private function mysql_version($link)
 	{
-		$result = mysql_query("SHOW VARIABLES WHERE variable_name = \"version\"");
-		$row = mysql_fetch_object($result);
+		if(function_exists('mysqli_query'))
+		{
+			$result = mysqli_query($link, "SHOW VARIABLES WHERE variable_name = \"version\"");
+			$row = mysqli_fetch_object($result);
+		}
+		else
+		{
+			$result = mysql_query("SHOW VARIABLES WHERE variable_name = \"version\"");
+			$row = mysql_fetch_object($result);
+		}
+
 		return $row->Value;
 	}
 
 	private function unpack_sql($config)
+	{
+		if(function_exists('mysqli_query'))
+		{
+			return $this->_mysqli_unpack_sql($config);
+		}
+		else
+		{
+			return $this->_mysql_unpack_sql($config);
+		}
+	}
+
+	private function _mysqli_unpack_sql($config)
+	{
+		$prefix = $config["table_prefix"];
+		$buf = null;
+
+		$link = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
+		mysqli_select_db($link, $config["database"]);
+
+		$sql_file = MODPATH . "gleez/views/install/install.sql";
+
+		foreach (file($sql_file) as $line)
+		{
+			$buf .= trim($line);
+			if (preg_match("/;$/", $buf))
+			{
+				if (!mysqli_query($link, $this->prepend_prefix($prefix, $buf)))
+				{
+					throw new Exception(mysqli_error());
+				}
+				$buf = "";
+			}
+		}
+		return true;
+	}
+
+	private function _mysql_unpack_sql($config)
 	{
 		$prefix = $config["table_prefix"];
 		$buf = null;
@@ -447,6 +545,37 @@ class Controller_Install_Install extends Controller_Template {
 
 	private function add_user()
 	{
+		if(function_exists('mysqli_query'))
+		{
+			return $this->_mysqli_add_user();
+		}
+		else
+		{
+			return $this->_mysql_add_user();
+		}
+	}
+
+	private function _mysqli_add_user()
+	{
+		$config = $this->_session->get('database_data');
+		$link = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
+		mysqli_select_db($link, $config["database"]);
+		$prefix = trim($config["table_prefix"]);
+
+		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$skey = serialize($key);
+		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
+		mysqli_query($link, $sql);
+
+		$password = Text::random('alnum', 8);
+		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
+		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
+
+		return $password;
+	}
+
+	private function _mysql_add_user()
+	{
 		$config = $this->_session->get('database_data');
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
@@ -463,4 +592,5 @@ class Controller_Install_Install extends Controller_Template {
 
 		return $password;
 	}
+
 }
