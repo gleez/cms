@@ -2,11 +2,11 @@
 	<tbody>
 		<tr>
 			<th><?php echo __('Gleez Version') ?></th>
-			<td><?php echo HTML::chars(Gleez::VERSION) ?></td>
+			<td><?php echo HTML::chars(Gleez::VERSION); ?></td>
 		</tr>
 		<tr>
 			<th><?php echo __('Host Name') ?></th>
-			<td><?php echo HTML::chars(php_uname("n")) ?></td>
+			<td><?php echo HTML::chars(php_uname("n")); ?></td>
 		</tr>
 		<tr>
 			<th><?php echo __('Webserver') ?></th>
@@ -14,15 +14,15 @@
 		</tr>
 		<tr>
 			<th><?php echo __('PHP Version') ?></th>
-			<td><?php echo HTML::chars(PHP_VERSION) ?></td>
+			<td><?php echo HTML::chars(PHP_VERSION); ?></td>
 		</tr>
 		<tr>
 			<th><?php echo __('MySQL Version') ?></th>
-			<td><?php echo function_exists("mysql_get_server_info") ? mysql_get_server_info() : __('Unavailable'); ?></td>
+			<td><?php echo HTML::chars(Database::instance()->version(TRUE)); ?></td>
 		</tr>
 		<tr>
 			<th><?php echo __('Load Average') ?></th>
-			<td><?php echo System::get_avg() ?></td>
+			<td><?php echo System::get_avg(); ?></td>
 		</tr>
 	</tbody>
 </table>
