@@ -2,11 +2,11 @@
 /**
  * Gleez Core Utils class
  *
- * @package    Gleez\Core
- * @author     Gleez Team
- * @version    1.3.0
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @package		Gleez\Core
+ * @author 		Gleez Team
+ * @version 	1.3.1
+ * @copyright 	(c) 2011-2013 Gleez Technologies
+ * @license 	http://gleezcms.org/license  Gleez CMS License
  */
 class System {
 
@@ -572,5 +572,36 @@ class System {
 			'\\',
 			' '
 		), '_', $id);
+	}
+
+	public static function check()
+	{
+		$criteria = array(
+			'php_version' 			=> version_compare(PHP_VERSION, '5.3', '>='),
+			'mysqli'				=> function_exists("mysqli_query"),
+			'mysql'					=> function_exists("mysql_query"),
+			'system_directory' 		=> is_dir(SYSPATH),
+			'application_directory' => (is_dir(APPPATH) && is_file(APPPATH.'bootstrap'.EXT)),
+			'modules_directory'		=> is_dir(MODPATH),
+			'config_writable'		=> (is_dir(APPPATH.'config') && is_writable(APPPATH.'config')),
+			'cache_writable'		=> (is_dir(APPPATH.'cache') && is_writable(APPPATH.'cache')),
+			'pcre_utf8' 			=> ( @preg_match('/^.$/u', 'ñ') ),
+			'pcre_unicode' 			=> ( @preg_match('/^\pL$/u', 'ñ') ),
+			'reflection_enabled' 	=> class_exists('ReflectionClass'),
+			'spl_autoload_register'	=> function_exists('spl_autoload_register'),
+			'filters_enabled' 		=> function_exists('filter_list'),
+			'iconv_loaded' 			=> extension_loaded('iconv'),
+			'simplexml' 			=> extension_loaded('simplexml'),
+			'json_encode' 			=> function_exists('json_encode'),
+			'mbstring' 				=> (extension_loaded('mbstring') && MB_OVERLOAD_STRING),
+			'ctype_digit'			=> function_exists('ctype_digit'),
+			'uri_determination'		=> isset($_SERVER['REQUEST_URI']) || isset($_SERVER['PHP_SELF']) || isset($_SERVER['PATH_INFO']),
+			'gd_info'				=> function_exists('gd_info'),
+		);
+
+		//Allow other modules to overried or add
+		$criteriae = Module::action('system_check', $criteria);
+
+		return $criteriae;
 	}
 }
