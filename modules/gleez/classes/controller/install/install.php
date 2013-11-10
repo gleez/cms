@@ -2,11 +2,11 @@
 /**
  * Gleez Installer
  *
- * @package		Gleez\Install
- * @author 		Gleez Team
- * @version 	1.3.1
- * @copyright 	(c) 2011-2013 Gleez Technologies
- * @license 	http://gleezcms.org/license  Gleez CMS License
+ * @package    Gleez\Install
+ * @author     Gleez Team
+ * @version    1.3.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Install_Install extends Controller_Template {
 
@@ -371,7 +371,7 @@ class Controller_Install_Install extends Controller_Template {
 			}
 			else
 			{
-				//throw new Exception(mysql_error());
+				throw new Exception(mysql_error());
 			}
 		}
 
