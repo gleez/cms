@@ -2,11 +2,11 @@
 /**
  * Gleez Core Utils class
  *
- * @package		Gleez\Core
- * @author 		Gleez Team
- * @version 	1.3.1
- * @copyright 	(c) 2011-2013 Gleez Technologies
- * @license 	http://gleezcms.org/license  Gleez CMS License
+ * @package	   Gleez\Core
+ * @author     Gleez Team
+ * @version    1.3.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class System {
 
