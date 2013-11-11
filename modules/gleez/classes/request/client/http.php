@@ -1,28 +1,33 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * [Request_Client_External] HTTP driver performs external requests using the
- * php-http extention. To use this driver, ensure the following is completed
- * before executing an external request- ideally in the application bootstrap.
- * 
- * @example
- * 
- *       // In application bootstrap
- *       Request_Client_External::$client = 'Request_Client_HTTP';
- * 
- * @package    Kohana
- * @category   Base
+ * php-http extension
+ *
+ * To use this driver, ensure the following is completed before executing an
+ * external request- ideally in the application bootstrap.
+ *
+ * Example:
+ * ~~~
+ * // In application bootstrap
+ * Request_Client_External::$client = 'Request_Client_HTTP';
+ * ~~~
+ *
+ * @package    Gleez\Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
- * @uses       [PECL HTTP](http://php.net/manual/en/book.http.php)
+ * @author     Gleez Team
+ * @version    1.0.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ *
+ * @link       http://php.net/manual/en/book.http.php
  */
-class Kohana_Request_Client_HTTP extends Request_Client_External {
+class Request_Client_HTTP extends Request_Client_External {
 
 	/**
-	 * Creates a new `Request_Client` object,
-	 * allows for dependency injection.
+	 * Creates a new `Request_Client` object, allows for dependency injection
 	 *
-	 * @param   array    $params Params
+	 * @param   array  $params  Params [Optional]
+	 *
 	 * @throws  Request_Exception
 	 */
 	public function __construct(array $params = array())
@@ -38,19 +43,17 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 	}
 
 	/**
-	 * @var     array     curl options
-	 * @link    http://www.php.net/manual/function.curl-setopt
-	 */
-	protected $_options = array();
-
-	/**
 	 * Sends the HTTP message [Request] to a remote server and processes
 	 * the response.
 	 *
-	 * @param   Request $request    request to send
+	 * @param   Request  $request   Request to send
+	 * @param   Response $response  Response to send
+	 *
 	 * @return  Response
+	 *
+	 * @throws  Request_Exception
 	 */
-	public function _send_message(Request $request)
+	public function _send_message(Request $request, Response $response)
 	{
 		$http_method_mapping = array(
 			HTTP_Request::GET     => HTTPRequest::METH_GET,
@@ -93,13 +96,14 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 
 		try
 		{
+			// Send request
 			$http_request->send();
 		}
 		catch (HTTPRequestException $e)
 		{
 			throw new Request_Exception($e->getMessage());
 		}
-		catch (HTTPMalformedHeaderException $e)
+		catch (HTTPMalformedHeadersException $e)
 		{
 			throw new Request_Exception($e->getMessage());
 		}
@@ -107,9 +111,6 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 		{
 			throw new Request_Exception($e->getMessage());
 		}
-
-		// Create the response
-		$response = $request->create_response();
 
 		// Build the response
 		$response->status($http_request->getResponseCode())
@@ -119,5 +120,4 @@ class Kohana_Request_Client_HTTP extends Request_Client_External {
 
 		return $response;
 	}
-
-} // End Kohana_Request_Client_HTTP
+}
