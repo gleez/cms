@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.6
+ * @version    0.10.7
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '0.10.6';
+	const VERSION = '0.10.7';
 
 	/**
 	 * Release codename
@@ -54,6 +54,25 @@ class Gleez {
 	 * @var boolean
 	 */
 	protected static $_init = FALSE;
+
+	/**
+	 * Set the X-Powered-By header?
+	 * @var  boolean
+	 */
+	public static $expose = FALSE;
+
+	/**
+	 * Whether to enable [profiling](gleez/profiling)
+	 * @todo  May be set by [Gleez::init or Gleez::ready]
+	 * @var boolean
+	 */
+	public static $profiling = TRUE;
+
+	/**
+	 * Character set of input and output
+	 * @var string
+	 */
+	public static $charset = 'utf-8';
 
 	/**
 	 * Runs the Gleez environment
@@ -121,6 +140,7 @@ class Gleez {
 		}
 	
 		// Disable the kohana powered headers
+		// @todo Remove it, use Gleez::$expose
 		Kohana::$expose = FALSE;
 	
 		/**
