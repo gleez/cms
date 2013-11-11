@@ -403,7 +403,7 @@ abstract class Template extends Controller {
 
 			// Set primary menu
 			$primary_menu = Menu::links('main-menu', array(
-				'class' => 'menus nav'
+				'class' => 'menus nav navbar-nav'
 			));
 
 			// Bind the generic page variables
