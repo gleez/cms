@@ -1,63 +1,74 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /**
  * [Request_Client_External] provides a wrapper for all external request
  * processing. This class should be extended by all drivers handling external
  * requests.
- * 
+ *
  * Supported out of the box:
  *  - Curl (default)
  *  - PECL HTTP
  *  - Streams
- * 
+ *
  * To select a specific external driver to use as the default driver, set the
  * following property within the Application bootstrap. Alternatively, the
  * client can be injected into the request object.
- * 
- * @example
- * 
- *       // In application bootstrap
- *       Request_Client_External::$client = 'Request_Client_Stream';
- * 
- *       // Add client to request
- *       $request = Request::factory('http://some.host.tld/foo/bar')
- *           ->client(Request_Client_External::factory('Request_Client_HTTP));
- * 
- * @package    Kohana
- * @category   Base
+ *
+ * Example:
+ * ~~~
+ * // In application bootstrap
+ * Request_Client_External::$client = 'Request_Client_Stream';
+ *
+ * // Add client to request
+ * $request = Request::factory('http://some.host.tld/foo/bar')
+ *     ->client(Request_Client_External::factory('Request_Client_HTTP));
+ * ~~~
+ *
+ * @package    Gleez\Base
  * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
- * @uses       [PECL HTTP](http://php.net/manual/en/book.http.php)
+ * @author     Gleez Team
+ * @version    1.0.1
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ *
+ * @link       http://php.net/manual/en/book.http.php
  */
-abstract class Kohana_Request_Client_External extends Request_Client {
+abstract class Request_Client_External extends Request_Client {
 
 	/**
-	 * Use:
-	 *  - Request_Client_Curl (default)
-	 *  - Request_Client_HTTP
-	 *  - Request_Client_Stream
-	 * 
-	 * @var     string    defines the external client to use by default
+	 * Defines the external client to use by default:
+	 * - Request_Client_Curl (default)
+	 * - Request_Client_HTTP
+	 * - Request_Client_Stream
+	 * @var string
 	 */
 	public static $client = 'Request_Client_Curl';
 
 	/**
+	 * Options
+	 * @var array
+	 */
+	protected $_options = array();
+
+	/**
 	 * Factory method to create a new Request_Client_External object based on
-	 * the client name passed, or defaulting to Request_Client_External::$client
+	 * the client name passed, or defaulting to [Request_Client_External::$client]
 	 * by default.
-	 * 
-	 * Request_Client_External::$client can be set in the application bootstrap.
 	 *
-	 * @param   array   $params parameters to pass to the client
-	 * @param   string  $client external client to use
+	 * [!!] Note: [Request_Client_External::$client] can be set in the
+	 * application bootstrap.
+	 *
+	 * @param   array   $params  Parameters to pass to the client [Optional]
+	 * @param   string  $client  External client to use [Optional]
+	 *
 	 * @return  Request_Client_External
+	 *
 	 * @throws  Request_Exception
 	 */
 	public static function factory(array $params = array(), $client = NULL)
 	{
-		if ($client === NULL)
+		if (is_null($client))
 		{
-			$client = Request_Client_External::$client;
+			$client = self::$client;
 		}
 
 		$client = new $client($params);
@@ -71,43 +82,44 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 	}
 
 	/**
-	 * @var     array     curl options
-	 * @link    http://www.php.net/manual/function.curl-setopt
-	 * @link    http://www.php.net/manual/http.request.options
-	 */
-	protected $_options = array();
-
-	/**
 	 * Processes the request, executing the controller action that handles this
 	 * request, determined by the [Route].
 	 *
-	 * 1. Before the controller action is called, the [Controller::before] method
-	 * will be called.
-	 * 2. Next the controller action will be called.
+	 * 1. Before the controller action is called, the [Controller::before]
+	 * method will be called
+	 * 2. Next the controller action will be called
 	 * 3. After the controller action is called, the [Controller::after] method
-	 * will be called.
+	 * will be called
 	 *
 	 * By default, the output from the controller is captured and returned, and
 	 * no headers are sent.
 	 *
-	 *     $request->execute();
+	 * Example:
+	 * ~~~
+	 * $request->execute();
+	 * ~~~
 	 *
-	 * @param   Request $request A request object
+	 * @param   Request   $request   A request object
+	 * @param   Response  $response  A response object
+	 *
 	 * @return  Response
-	 * @throws  Kohana_Exception
-	 * @uses    [Kohana::$profiling]
-	 * @uses    [Profiler]
+	 *
+	 * @throws  Exception
+	 *
+	 * @uses    Gleez::$profiling
+	 * @uses    Profiler::start
+	 * @uses    Profiler::stop
+	 * @uses    Profiler::delete
 	 */
-	public function execute_request(Request $request)
+	public function execute_request(Request $request, Response $response)
 	{
-		if (Kohana::$profiling)
+		if (Gleez::$profiling)
 		{
 			// Set the benchmark name
-			$benchmark = '"'.$request->uri().'"';
+			$benchmark = "'{$request->uri()}'";
 
 			if ($request !== Request::$initial AND Request::$current)
 			{
-				// Add the parent request uri
 				$benchmark .= ' « "'.Request::$current->uri().'"';
 			}
 
@@ -123,18 +135,18 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 		if ($post = $request->post())
 		{
 			$request->body(http_build_query($post, NULL, '&'))
-				->headers('content-type', 'application/x-www-form-urlencoded');
+				->headers('content-type', 'application/x-www-form-urlencoded; charset='.Gleez::$charset);
 		}
 
-		// If Kohana expose, set the user-agent
-		if (Kohana::$expose)
+		// If Gleez expose, set the user-agent
+		if (Gleez::$expose)
 		{
-			$request->headers('user-agent', 'Kohana Framework '.Kohana::VERSION.' ('.Kohana::CODENAME.')');
+			$request->headers('user-agent', Gleez::getVersion(TRUE, TRUE));
 		}
 
 		try
 		{
-			$response = $this->_send_message($request);
+			$response = $this->_send_message($request, $response);
 		}
 		catch (Exception $e)
 		{
@@ -165,23 +177,27 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 	}
 
 	/**
-	 * Set and get options for this request.
+	 * Set and get options for this request
 	 *
-	 * @param   mixed    $key    Option name, or array of options
-	 * @param   mixed    $value  Option value
-	 * @return  mixed
-	 * @return  Request_Client_External
+	 * @param   mixed  $key    Option name, or array of options [Optional]
+	 * @param   mixed  $value  Option value [Optional]
+	 *
+	 * @return  Request_Client_External|mixed
+	 *
+	 * @uses    Arr::get
 	 */
 	public function options($key = NULL, $value = NULL)
 	{
-		if ($key === NULL)
+		if (is_null($key))
+		{
 			return $this->_options;
+		}
 
 		if (is_array($key))
 		{
 			$this->_options = $key;
 		}
-		elseif ($value === NULL)
+		elseif (is_null($value))
 		{
 			return Arr::get($this->_options, $key);
 		}
@@ -195,11 +211,12 @@ abstract class Kohana_Request_Client_External extends Request_Client {
 
 	/**
 	 * Sends the HTTP message [Request] to a remote server and processes
-	 * the response.
+	 * the response
 	 *
-	 * @param   Request $request    request to send
+	 * @param   Request   $request   Request to send
+	 * @param   Response  $response  Response to send
+	 *
 	 * @return  Response
 	 */
-	abstract protected function _send_message(Request $request);
-
-} // End Kohana_Request_Client_External
+	abstract protected function _send_message(Request $request, Response $response);
+}
