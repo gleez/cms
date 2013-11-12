@@ -19,6 +19,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 	Deny From All
 </Files>
 
+# Gleez CMS supports Friendly URLs via this .htaccess file.
+# You must serve web pages via Apache with mod_rewrite to use this functionality.
 # Start rewrite engine
 <IfModule mod_rewrite.c>
 	# If your web host doesn't allow the FollowSymlinks option, you may need to
@@ -32,6 +34,23 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
 	# Installation directory
 	RewriteBase /
+
+	# Rewrite www.domain.com -> domain.com -- used with SEO Strict URLs plugin
+	# Please change domain.com and uncomment three bottom strings
+	#RewriteCond %{HTTP_HOST} .
+	#RewriteCond %{HTTP_HOST} !^domain\.lo [NC]
+	#RewriteRule (.*) http://domain.lo/$1 [R=301,L]
+
+	# For the opposite domain.com -> www.domain.com use the following
+	# Please change domain.com and uncomment three bottom strings
+	#RewriteCond %{HTTP_HOST} .
+	#RewriteCond %{HTTP_HOST} !^www\.domain\.lo [NC]
+	#RewriteRule (.*) http://www.domain.lo/$1 [R=301,L]
+
+	# !!! Do not use both redirects !!!
+	# www.domain.com -> domain.com
+	#            or
+	# domain.com -> www.domain.com
 
 	RewriteCond %{THE_REQUEST} ^.*/index.php
 	RewriteRule ^(.*)index.php$ /$1 [R=301,L]
@@ -74,3 +93,24 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 		Header set Access-Control-Allow-Origin "*"
 	</FilesMatch>
 </IfModule>
+
+# If your server is not already configured as such, the following directive
+# should be uncommented in order to set PHP's register_globals option to OFF.
+# This closes a major security hole that is abused by most XSS (cross-site
+# scripting) attacks. For more information: http://php.net/register_globals
+#
+# Your server does not allow PHP directives to be set via .htaccess. In that
+# case you must make this change in your php.ini file instead. If you are
+# using a commercial web host, contact the administrators for assistance in
+# doing this. Not all servers allow local php.ini files, and they should
+# include all PHP configurations (not just this one), or you will effectively
+# reset everything to PHP defaults. Consult www.php.net for more detailed
+# information about setting PHP directives.
+
+#php_flag register_globals Off
+
+# For servers that support output compression, you should pick up a bit of
+# speed by un-commenting the following lines.
+
+#php_flag zlib.output_compression On
+#php_value zlib.output_compression_level 5
