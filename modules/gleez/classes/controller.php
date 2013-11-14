@@ -1,44 +1,48 @@
-<?php defined('SYSPATH') OR die('No direct script access.');
+<?php
 /**
- * Abstract controller class. Controllers should only be created using a [Request].
+ * Abstract controller class
  *
- * Controllers methods will be automatically called in the following order by
- * the request:
+ * Controllers should only be created using a [Request].
  *
- *     $controller = new Controller_Foo($request);
- *     $controller->before();
- *     $controller->action_bar();
- *     $controller->after();
+ * Controllers methods will be automatically called in the following
+ * order by the request:
+ * ~~~
+ * $controller = new Controller_Foo($request);
+ * $controller->before();
+ * $controller->action_bar();
+ * $controller->after();
+ * ~~~
  *
  * The controller action should add the output it creates to
  * `$this->response->body($output)`, typically in the form of a [View], during the
  * "action" part of execution.
  *
- * @package    Kohana
- * @category   Controller
- * @author     Kohana Team
- * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @package    Gleez\Controller
+ * @author     Gleez Team
+ * @copyright  (c) 2011-2013 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 abstract class Controller {
 
 	/**
-	 * @var  Request  Request that created the controller
+	 * Request that created the controller
+	 * @var Request
 	 */
 	public $request;
 
 	/**
-	 * @var  Response The response that will be returned from controller
+	 * The response that will be returned from controller
+	 * @var Response
 	 */
 	public $response;
 
 	/**
-	 * Creates a new controller instance. Each controller must be constructed
-	 * with the request object that created it.
+	 * Creates a new controller instance
 	 *
-	 * @param   Request   $request  Request that created the controller
-	 * @param   Response  $response The request's response
-	 * @return  void
+	 * Each controller must be constructed with the request object that created it.
+	 *
+	 * @param  Request   $request   Request that created the controller
+	 * @param  Response  $response  The request's response
 	 */
 	public function __construct(Request $request, Response $response)
 	{
@@ -50,51 +54,10 @@ abstract class Controller {
 	}
 
 	/**
-	 * Executes the given action and calls the [Controller::before] and [Controller::after] methods.
+	 * Automatically executed before the controller action
 	 *
-	 * Can also be used to catch exceptions from actions in a single place.
-	 *
-	 * 1. Before the controller action is called, the [Controller::before] method
-	 * will be called.
-	 * 2. Next the controller action will be called.
-	 * 3. After the controller action is called, the [Controller::after] method
-	 * will be called.
-	 *
-	 * @throws  HTTP_Exception_404
-	 * @return  Response
-	 */
-	public function execute()
-	{
-		// Execute the "before action" method
-		$this->before();
-
-		// Determine the action to use
-		$action = 'action_'.$this->request->action();
-
-		// If the action doesn't exist, it's a 404
-		if ( ! method_exists($this, $action))
-		{
-			throw HTTP_Exception::factory(404,
-				'The requested URL :uri was not found on this server.',
-				array(':uri' => $this->request->uri())
-			)->request($this->request);
-		}
-
-		// Execute the action itself
-		$this->{$action}();
-
-		// Execute the "after action" method
-		$this->after();
-
-		// Return the response
-		return $this->response;
-	}
-
-	/**
-	 * Automatically executed before the controller action. Can be used to set
-	 * class properties, do authorization checks, and execute other custom code.
-	 *
-	 * @return  void
+	 * Can be used to set class properties, do authorization checks,
+	 * and execute other custom code.
 	 */
 	public function before()
 	{
@@ -102,44 +65,14 @@ abstract class Controller {
 	}
 
 	/**
-	 * Automatically executed after the controller action. Can be used to apply
-	 * transformation to the response, add extra output, and execute
-	 * other custom code.
+	 * Automatically executed after the controller action
 	 *
-	 * @return  void
+	 * Can be used to apply transformation to the request response,
+	 * add extra output, and execute other custom code.
 	 */
 	public function after()
 	{
 		// Nothing by default
-	}
-
-	/**
-	 * Issues a HTTP redirect.
-	 *
-	 * Proxies to the [HTTP::redirect] method.
-	 *
-	 * @param  string  $uri   URI to redirect to
-	 * @param  int     $code  HTTP Status code to use for the redirect
-	 * @throws HTTP_Exception
-	 */
-	public static function redirect($uri = '', $code = 302)
-	{
-		return HTTP::redirect( (string) $uri, $code);
-	}
-
-	/**
-	 * Checks the browser cache to see the response needs to be returned,
-	 * execution will halt and a 304 Not Modified will be sent if the
-	 * browser cache is up to date.
-	 *
-	 *     $this->check_cache(sha1($content));
-	 *
-	 * @param  string  $etag  Resource Etag
-	 * @return Response
-	 */
-	protected function check_cache($etag = NULL)
-	{
-		return HTTP::check_cache($this->request, $this->response, $etag);
 	}
 
 }
