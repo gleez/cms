@@ -448,7 +448,7 @@ class Gleez_Datatables {
 				View::factory($this->_view, array('datatables' => $this))->render();
 			}
 
-			Response::factory()->headers('content-type', 'application/json; charset=' . Kohana::$charset);
+			$this->request()->response()->headers('content-type', 'application/json; charset=' . Kohana::$charset);
 
 			$this->_render = json_encode(array
 			(
