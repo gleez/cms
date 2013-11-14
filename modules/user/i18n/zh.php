@@ -120,7 +120,7 @@ return array(
   'Security code' => '安全代码',
   'Sign In' => '登录',
   'Sign in using social network:' => '使用社会网络登录：',
-  'Sign in using your registered account:' => '使用注册的账号登录：',
+  'Sign in using your registered account' => '使用注册的账号登录',
   'Sign in with :provider' => '使用 :provider 账号 登录',
   'Sign in with Facebook' => '使用 Facebook账号 登录',
   'Sign in with Google' => '使用 Google账号 登录',

@@ -138,7 +138,7 @@ return array(
 	'Save Permissions' => 'Salva i permessi',
 	'Security code' => 'Codice di sicurezza',
 	'Sign in using social network:' => 'Entra usando i social network:',
-	'Sign in using your registered account:' => 'Entra usando il tuo profilo registrato:',
+	'Sign in using your registered account' => 'Entra usando il tuo profilo registrato',
 	'Special Role' => 'Ruolo speciale',
 	'Stay Signed in' => 'Resta connesso',
 	// T
