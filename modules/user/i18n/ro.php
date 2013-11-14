@@ -138,7 +138,7 @@ return array(
 	'Save Permissions' => 'Salvează Permisiuni',
 	'Security code' => 'Cod de securitate',
 	'Sign in using social network:' => 'Autentifică-te printr-o rețea socială:',
-	'Sign in using your registered account:' => 'Autentifică-te cu contul tău:',
+	'Sign in using your registered account' => 'Autentifică-te cu contul tău',
 	'Special Role' => 'Rol Special',
 	'Stay Signed in' => 'Menține Autentificarea',
 	// T
