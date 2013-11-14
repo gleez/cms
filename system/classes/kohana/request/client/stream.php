@@ -1,29 +1,32 @@
-<?php
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * [Request_Client_External] Stream driver performs external requests using php
- * sockets
- *
- * To use this driver, ensure the following is completed before executing an
- * external request- ideally in the application bootstrap.
- *
- * Example:
- * ~~~
- * // In application bootstrap
- * Request_Client_External::$client = 'Request_Client_Stream';
- * ~~~
- *
- * @package    Gleez\Base
+ * sockets. To use this driver, ensure the following is completed
+ * before executing an external request- ideally in the application bootstrap.
+ * 
+ * @example
+ * 
+ *       // In application bootstrap
+ *       Request_Client_External::$client = 'Request_Client_Stream';
+ * 
+ * @package    Kohana
+ * @category   Base
  * @author     Kohana Team
- * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
- *
- * @uses       http://php.net/manual/en/book.stream.php
+ * @copyright  (c) 2008-2012 Kohana Team
+ * @license    http://kohanaframework.org/license
+ * @uses       [PHP Streams](http://php.net/manual/en/book.stream.php)
  */
-class Request_Client_Stream extends Request_Client_External {
+class Kohana_Request_Client_Stream extends Request_Client_External {
 
-	public function _send_message(Request $request, Response $response)
+	/**
+	 * Sends the HTTP message [Request] to a remote server and processes
+	 * the response.
+	 *
+	 * @param   Request $request    request to send
+	 * @return  Response
+	 * @uses    [PHP cURL](http://php.net/manual/en/book.curl.php)
+	 */
+	public function _send_message(Request $request)
 	{
 		// Calculate stream mode
 		$mode = ($request->method() === HTTP_Request::GET) ? 'r' : 'r+';
@@ -59,7 +62,6 @@ class Request_Client_Stream extends Request_Client_External {
 		// Create the context stream
 		$context = stream_context_create($options);
 
-		/** @noinspection PhpParamsInspection */
 		stream_context_set_option($context, $this->_options);
 
 		$uri = $request->uri();
@@ -67,7 +69,6 @@ class Request_Client_Stream extends Request_Client_External {
 		if ($query = $request->query())
 		{
 			$uri .= '?'.http_build_query($query, NULL, '&');
-
 		}
 
 		$stream = fopen($uri, $mode, FALSE, $context);
@@ -88,7 +89,8 @@ class Request_Client_Stream extends Request_Client_External {
 			$status   = NULL;
 		}
 
-		// Get any existing response headers
+		// Create a response
+		$response = $request->create_response();
 		$response_header = $response->headers();
 
 		// Process headers
@@ -103,4 +105,5 @@ class Request_Client_Stream extends Request_Client_External {
 
 		return $response;
 	}
-}
+
+} // End Kohana_Request_Client_Stream
