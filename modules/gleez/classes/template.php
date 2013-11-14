@@ -14,7 +14,7 @@ abstract class Template extends Controller {
 	 * Page template
 	 * @var string
 	 */
-	public $template = 'template';
+	public $template = 'layouts/default';
 
 	/**
 	 * Auto render template?

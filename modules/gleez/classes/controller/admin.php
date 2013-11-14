@@ -11,6 +11,12 @@
 class Controller_Admin extends Template {
 
 	/**
+	 * Page template
+	 * @var string
+	 */
+	public $template = 'layouts/admin';
+
+	/**
 	 * Currently destination
 	 * @var string
 	 */
