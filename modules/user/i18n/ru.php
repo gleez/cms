@@ -69,6 +69,7 @@ return array(
 	"Don't have an account? :url" => 'Нет учётной записи? :url',
 	"Don't have an account?" => 'Нет учётной записи?',
 	// E
+	'E-mail must be a valid email address' => 'E-mail адрес должен быть в правильном формате',
 	'Edit Account' => 'Изменить учётную запись',
 	'Edit Permission' => 'Изменить полномочие',
 	'Edit Permissions' => 'Изменить полномочия',
@@ -78,7 +79,7 @@ return array(
 	'Edit User' => 'Изменить пользователя',
 	'Email' => 'E-mail',
 	'email: :mail' => 'электронная почта: :mail',
-	'E-mail must be a valid email address' => 'E-mail адрес должен быть в правильном формате',
+	'Enter email specified at registration for password reset' => 'Введите email указанный при регистрации для сброса пароля',
 	// F
 	'Fast, safe & secure way!' => 'Быстро и безопасно!',
 	'Female' => 'Женский',
@@ -153,7 +154,7 @@ return array(
 	'Public field. No more than 800 characters' => 'Публичное поле. Не более 800 символов',
 	// Q
 	// R
-	'Register new account' => 'Зарегистрировать новую учётную запись',
+	'Register new account' => 'Создать учётную запись',
 	'Repeat entered password' => 'Повторите введенный пароль',
 	'Reset password' => 'Сброс пароля',
 	'Reset' => 'Сброс',

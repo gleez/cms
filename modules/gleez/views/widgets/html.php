@@ -2,7 +2,7 @@
 
 	<?php if ($widget->show_title): ?>
 		<div class="widget-header">
-			<i class="<?php echo Text::plain($widget->icon); ?>"></i>
+			<i class="fa <?php echo Text::plain($widget->icon); ?>"></i>
 			<h3><?php echo Text::plain($title); ?></h3>
 		</div>
 	<?php endif; ?>
