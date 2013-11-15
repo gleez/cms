@@ -141,7 +141,7 @@ return array(
 	'Save Permissions' => 'Сохранить полномочия',
 	'Security code' => 'Turvakood',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
-	'Sign in using your registered account:' => 'Войдите используя ваш зарегистрированный аккаунт:',
+	'Sign in using your registered account' => 'Войдите используя ваш зарегистрированный аккаунт',
 	"Special" => 'Особая роль',
 	'Special Role' => 'Особая роль',
 	'Stay Signed in' => 'Оставаться в системе',
