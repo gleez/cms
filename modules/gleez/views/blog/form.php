@@ -2,66 +2,66 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="row-fluid">
+	<div class="row">
 
-		<div id="blog-body" class="span9">
+		<div id="blog-body" class="col-md-9">
 
-			<div class="control-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
 				<div class="controls">
-					<?php echo Form::input('title', $blog->rawtitle, array('class' => 'span12', 'placeholder' => __('Enter title here'))); ?>
+					<?php echo Form::input('title', $blog->rawtitle, array('class' => 'form-control', 'placeholder' => __('Enter title here'))); ?>
 				</div>
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')) : ?>
-				<div class="control-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
 					<?php echo Form::label('path', __('Permalink: %slug', array('%slug' => $site_url )), array('class' => 'control-label')) ?>
 					<div class="controls">
-						<?php echo Form::input('path', $path, array('class' => 'span12 slug')); ?>
+						<?php echo Form::input('path', $path, array('class' => 'form-control slug')); ?>
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<?php if ($config->use_tags) : ?>
-				<div class="control-group <?php echo isset($errors['ftags']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['ftags']) ? 'error': ''; ?>">
 					<?php echo Form::label('ftags', __('Tags'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::input('ftags', $tags, array('class' => 'span12'), 'autocomplete/tag/page'); ?>
+						<?php echo Form::input('ftags', $tags, array('class' => 'form-control'), 'autocomplete/tag/page'); ?>
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<?php if ($config->primary_image): ?>
-				<div class="control-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
 					<?php echo Form::label('image', __('Primary Image'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::file('image', array('class' => 'span12')); ?>
+						<?php echo Form::file('image', array('class' => 'form-control')); ?>
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<?php if ($config->use_excerpt): ?>
-				<div class="control-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::textarea('excerpt', $blog->rawteaser, array('class' => 'textarea span12 excerpt', 'rows' => 5)) ?>
+						<?php echo Form::textarea('excerpt', $blog->rawteaser, array('class' => 'form-control', 'rows' => 5)) ?>
 					</div>
 				</div>
 			<?php endif; ?>
 
-			<div class="control-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
 				<?php echo Form::label('body', __('Content'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::textarea('body', $blog->rawbody, array('class' => 'textarea span12', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
+					<?php echo Form::textarea('body', $blog->rawbody, array('class' => 'form-control', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
 				</div>
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
 
-				<div class="control-group format-wrapper <?php echo isset($errors['format']) ? 'error': ''; ?>">
+				<div class="form-group format-wrapper <?php echo isset($errors['format']) ? 'error': ''; ?>">
 					<div class="controls">
-						<div class="input-prepend">
-							<span class="add-on"><?php echo __('Text format') ?></span>
-							<?php echo Form::select('format', Filter::formats(), $blog->format, array('class' => 'input-large')); ?>
+						<div class="input-group">
+							<span class="input-group-addon"><?php echo __('Text format') ?></span>
+							<?php echo Form::select('format', Filter::formats(), $blog->format, array('class' => 'form-control')); ?>
 						</div>
 					</div>
 				</div>
@@ -69,19 +69,19 @@
 
 		</div>
 
-		<div id="side-info-column" class="span3 inner-sidebar">
+		<div id="side-info-column" class="col-md-3">
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
 				<div id="submitdiv" class="postbox">
 					<h3 class='hndle'><?php echo __('Publication') ?></h3>
 
 					<div class='inside' id="submitpost">
 						<div id="minor-publishing">
-							<div class="control-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
-								<?php echo Form::select('status', Post::status(), $blog->status, array('class' => 'span11')); ?>
+								<?php echo Form::select('status', Post::status(), $blog->status, array('class' => 'form-control')); ?>
 							</div>
 
-							<div class="control-group <?php echo isset($errors['sticky']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['sticky']) ? 'error': ''; ?>">
 								<?php
 									$sticky  = (isset($blog->sticky) AND $blog->sticky == 1) ? TRUE : FALSE;
 									$promote = (isset($blog->promote) AND $blog->promote == 1) ? TRUE : FALSE;
@@ -96,27 +96,27 @@
 								</div>
 							</div>
 
-							<div class="control-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
 								<?php echo Form::label('author_date', __('Date'), array('class' => 'control-label') ) ?>
 								<div class="controls">
-									<?php echo Form::input('author_date', $created, array('class' => 'span11')); ?>
+									<?php echo Form::input('author_date', $created, array('class' => 'form-control')); ?>
 								</div>
 							</div>
 
 							<?php if ($config->use_authors): ?>
-								<div class="control-group <?php echo isset($errors['author_name']) ? 'error': ''; ?>">
+								<div class="form-group <?php echo isset($errors['author_name']) ? 'error': ''; ?>">
 									<?php echo Form::label('author_name', __('Author'), array('class' => 'control-label') ) ?>
 									<div class="controls">
-										<?php echo Form::input('author_name', $author,array('class' => 'span11', 'data-items' => 10), 'autocomplete/user'); ?>
+										<?php echo Form::input('author_name', $author,array('class' => 'form-control', 'data-items' => 10), 'autocomplete/user'); ?>
 									</div>
 								</div>
 							<?php endif; ?>
 						</div>
 
-						<div id="major-publishing-actions" class="row-fluid">
+						<div id="major-publishing-actions" class="row">
 							<?php if ($blog->loaded() AND ACL::post('delete', $blog)): ?>
 								<div id="delete-action" class="pull-left">
-									<i class="icon-trash"></i>
+									<i class="fa fa-trash"></i>
 									<?php echo HTML::anchor($blog->delete_url.URL::query($destination), __('Move to Trash'), array('class' => 'submitdelete')) ?>
 								</div>
 							<?php endif; ?>
@@ -133,7 +133,7 @@
 				<div id="categorydiv" class="postbox">
 					<h3 class='hndle'><?php echo __('Category'); ?></h3>
 					<div class='inside'>
-						<div class="control-group <?php echo isset($errors['categories']) ? 'error': ''; ?>">
+						<div class="form-group <?php echo isset($errors['categories']) ? 'error': ''; ?>">
 							<?php echo Form::select('categories[1]', $terms, $blog->terms_form, array('class' => 'span11')); ?>
 						</div>
 					</div>
@@ -145,7 +145,7 @@
 					<h3 class='hndle'><?php echo  __('Comments'); ?></h3>
 
 					<div class='inside'>
-						<div class="control-group <?php echo isset($errors['comment']) ? 'error': ''; ?>">
+						<div class="form-group <?php echo isset($errors['comment']) ? 'error': ''; ?>">
 							<?php
 								if ( ! isset($blog->comment))
 								{
@@ -180,7 +180,7 @@
 	<div class="clearfix"></div>
 
 	<?php if ($config->use_captcha  AND ! $captcha->promoted()): ?>
-		<div class="control-group <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
+		<div class="form-group <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
 			<?php echo Form::label('_captcha', __('Security'), array('class' => 'wrap')) ?>
 			<?php echo Form::input('_captcha', '', array('class' => 'text tiny')); ?><br>
 			<?php echo $captcha; ?>
