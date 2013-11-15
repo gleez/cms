@@ -7,7 +7,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -685,7 +685,7 @@ class HTML {
 	 */
 	public static function icon($url, $icon, array $attrs = array())
 	{
-		return self::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
+		return self::anchor($url, '<i class="fa '.$icon.'"></i>', $attrs);
 	}
 
 	/**
