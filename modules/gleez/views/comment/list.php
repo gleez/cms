@@ -15,13 +15,13 @@
 
 					<?php if ($comment->user_can('edit') ): ?>
 						<span class="edit">
-							<?php echo HTML::icon($comment->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Comment'))); ?>
+							<?php echo HTML::icon($comment->edit_url, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Comment'))); ?>
 						</span>
 					<?php endif;?>
 
 					<?php if ($comment->user_can('delete') ): ?>
 						<span class="delete">
-							<?php echo HTML::icon($comment->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Comment'))); ?>
+							<?php echo HTML::icon($comment->delete_url, 'fa-trash', array('class'=>'action-delete', 'title'=> __('Delete Comment'))); ?>
 						</span>
 					<?php endif;?>
 				</div>
