@@ -154,7 +154,7 @@ return array(
 	'Public field. No more than 800 characters' => 'Публичное поле. Не более 800 символов',
 	// Q
 	// R
-	'Register new account' => 'Зарегистрировать новую учётную запись',
+	'Register new account' => 'Создать учётную запись',
 	'Repeat entered password' => 'Повторите введенный пароль',
 	'Reset password' => 'Сброс пароля',
 	'Reset' => 'Сброс',
