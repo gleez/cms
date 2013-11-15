@@ -230,7 +230,7 @@ return array(
 	'Cloning of Cache objects is forbidden' => 'Клонирование объектов кэша запрещено',
 	'Cocos' => 'Кокосовые острова',
 	'Colombo' => 'Коломбо',
-	"Comma seperated ip's for multiple addresses" => 'Список IP-адресов разделенный запятыми',
+	"Comma separated ip's for multiple addresses" => 'Список IP-адресов разделенный запятыми',
 	'Comment' => 'Комментарий',
 	'Comment %title deleted successful!' => 'Комментарий %title успешно удалён!',
 	'Comment %title has been updated.' => 'Комментарий %title успешно обновлён.',
