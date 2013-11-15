@@ -6,9 +6,9 @@
         ?>
 
 	<?php if($post->taxonomy OR $config->use_submitted): ?>
-		<div class="row-fluid meta">
+		<div class="row meta">
 			<?php if ($config->use_submitted): ?>
-				<div class="span7">
+				<div class="col-md-7">
 					<span class="author">
 						<?php echo HTML::anchor($post->user->url, User::getAvatar($post->user)); ?>
 						<?php echo HTML::anchor($post->user->url, $post->user->nick, array('title' => $post->user->nick)); ?>
@@ -17,7 +17,7 @@
 				</div>
 			<?php endif;?>
 	
-			<?php if ($post->taxonomy): ?> <div class="taxonomy span5 pull-right"> <?php echo $post->taxonomy; ?> </div> <?php endif;?>
+			<?php if ($post->taxonomy): ?> <div class="taxonomy col-md-5 pull-right"> <?php echo $post->taxonomy; ?> </div> <?php endif;?>
 		</div>
 	<?php endif;?>
 
