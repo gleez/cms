@@ -202,7 +202,7 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (29, 'Add Blog', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
 (30, 'List', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
 (31, 'List', 'list-1', '', NULL, 'blog', NULL, 1, 28, 11, 12, 3, 1),
-(32, 'Contact', 'contact-1', '', 'fa-envelope-alt', 'contact', NULL, 1, 1, 16, 17, 2, 1);
+(32, 'Contact', 'contact-1', '', 'fa-envelope-o', 'contact', NULL, 1, 1, 16, 17, 2, 1);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
