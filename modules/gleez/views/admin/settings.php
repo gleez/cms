@@ -1,13 +1,13 @@
 <div class="help">
-	<p><?php echo __('The main parameters of the site set up here. The following are all of the settings that define your site as a whole: settings which determine how your site behaves, how you interact with your site, and how the rest of the world interacts with your site.') ?></p>
+	<p><?php _e('The main parameters of the site set up here. The following are all of the settings that define your site as a whole: settings which determine how your site behaves, how you interact with your site, and how the rest of the world interacts with your site.')?></p>
 </div>
 
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#general" data-toggle="tab"><?php echo __('General'); ?></a></li>
-    <li><a href="#theme" data-toggle="tab"><?php echo __('Appearance'); ?></a></li>
-    <li><a href="#timezone" data-toggle="tab"><?php echo __('Date & Time'); ?></a></li>
-    <li><a href="#seo" data-toggle="tab"><?php echo __('SEO & Tracking'); ?></a></li>
-    <li><a href="#offline" data-toggle="tab"><?php echo __('Maintenance'); ?></a></li>
+    <li class="active"><a href="#general" data-toggle="tab"><?php _e('General')?></a></li>
+    <li><a href="#theme" data-toggle="tab"><?php _e('Appearance')?></a></li>
+    <li><a href="#timezone" data-toggle="tab"><?php _e('Date & Time')?></a></li>
+    <li><a href="#seo" data-toggle="tab"><?php _e('SEO & Tracking')?></a></li>
+    <li><a href="#offline" data-toggle="tab"><?php _e('Maintenance')?></a></li>
 </ul>
     
 <?php echo Form::open($action, array('id'=>'settings-form', 'class'=>'form-horizontal')) ?>
