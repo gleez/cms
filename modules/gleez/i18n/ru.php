@@ -668,6 +668,7 @@ return array(
 	'Norfolk' => 'Норфолк',
 	'Noronha' => 'Норонха',
 	'North Dakota' => 'Северная Дакота',
+	'Not available' => 'Не доступно',
 	'Not implemented yet!' => 'Ещё не реализовано!',
 	'Nouakchott' => 'Нуакшот',
 	'Noumea' => 'Нумеа',
