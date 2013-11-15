@@ -166,7 +166,7 @@ return array(
 	'Save Permissions' => 'Сохранить полномочия',
 	'Security code' => 'Защитный код',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
-	'Sign in using your registered account:' => 'Войдите используя вашу учётную запись:',
+	'Sign in using your registered account' => 'Войдите используя вашу учётную запись',
 	"Special" => 'Особая роль',
 	'Special Role' => 'Особая роль',
 	'Stay Signed in' => 'Оставаться в системе',
