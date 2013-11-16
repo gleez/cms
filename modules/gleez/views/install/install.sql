@@ -137,7 +137,7 @@ CREATE TABLE {config} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
-('site', 'admin_theme', 's:5:"fluid";'),
+('site', 'admin_theme', 's:6:"cerber";'),
 ('site', 'date_first_day', 's:1:"1";'),
 ('site', 'date_format', 's:9:"l, F j, Y";'),
 ('site', 'date_time_format', 's:15:"l, F j, Y - H:i";'),
@@ -151,7 +151,7 @@ INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'site_logo', 's:15:"/media/logo.png";'),
 ('site', 'site_name', 's:9:"Gleez CMS";'),
 ('site', 'site_slogan', 's:49:"Light, Simple, Flexible Content Management System";'),
-('site', 'theme', 's:5:"fluid";'),
+('site', 'theme', 's:6:"cerber";'),
 ('site', 'timezone', 's:12:"Asia/Kolkata";'),
 ('site', 'time_format', 's:5:"H:i:s";'),
 ('site', 'gleez_private_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";');
