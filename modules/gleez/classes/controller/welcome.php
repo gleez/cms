@@ -11,6 +11,12 @@
 class Controller_Welcome extends Template {
 
 	/**
+	 * Page template
+	 * @var string
+	 */
+	public $template = 'layouts/welcome';
+
+	/**
 	 * The before() method is called before controller action.
 	 */
 	public function before()
