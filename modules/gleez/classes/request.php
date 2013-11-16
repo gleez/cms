@@ -1455,11 +1455,12 @@ class Request implements HTTP_Request {
 	 * traditional CRUD applications.
 	 *
 	 * @param   string   $method  Method to use for this request
-	 * @return  mixed
+	 *
+	 * @return  string|Request
 	 */
 	public function method($method = NULL)
 	{
-		if ($method === NULL)
+		if (is_null($method))
 		{
 			// Act as a getter
 			return $this->_method;
@@ -1518,7 +1519,8 @@ class Request implements HTTP_Request {
 	 *
 	 * @param   mixed   $key   Key or array of key/value pairs to set
 	 * @param   string  $value Value to set to the supplied key
-	 * @return  mixed
+	 *
+	 * @return  Request|HTTP_Header|mixed
 	 */
 	public function headers($key = NULL, $value = NULL)
 	{
@@ -1599,11 +1601,12 @@ class Request implements HTTP_Request {
 	 * included after the header, separated by a single empty new line.
 	 *
 	 * @param   string  $content Content to set to the object
-	 * @return  mixed
+	 *
+	 * @return  HTTP_Request|string
 	 */
 	public function body($content = NULL)
 	{
-		if ($content === NULL)
+		if (is_null($content))
 		{
 			// Act as a getter
 			return $this->_body;
