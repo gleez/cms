@@ -2,7 +2,7 @@
 
 <div id="tests">
 	<table class="table table-bordered">
-		<tr class="<?php echo $php_version ? 'success' : 'error' ?>">
+		<tr class="<?php echo $php_version ? 'success' : 'danger' ?>">
 			<td><?php echo __('PHP Version'); ?></td>
 			<?php if ($php_version): ?>
 				<td><?php echo PHP_VERSION ?></td>
@@ -11,7 +11,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $mysql ? 'success' : 'error' ?>">
+		<tr class="<?php echo $mysql ? 'success' : 'danger' ?>">
 			<td><?php echo __('PHP MySQL'); ?></td>
 			<?php if ($mysql): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -22,7 +22,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $system_directory ? 'success' : 'error' ?>">
+		<tr class="<?php echo $system_directory ? 'success' : 'danger' ?>">
 			<td><?php echo __('System Directory'); ?></td>
 			<?php if ($system_directory): ?>
 				<td><code><?php echo SYSPATH ?></code></td>
@@ -31,7 +31,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $application_directory ? 'success' : 'error' ?>">
+		<tr class="<?php echo $application_directory ? 'success' : 'danger' ?>">
 			<td><?php echo __('Application Directory'); ?></td>
 			<?php if ($application_directory): ?>
 				<td><code><?php echo APPPATH ?></code></td>
@@ -40,7 +40,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $modules_directory ? 'success' : 'error' ?>">
+		<tr class="<?php echo $modules_directory ? 'success' : 'danger' ?>">
 			<td><?php echo __('Modules Directory'); ?></td>
 			<?php if ($modules_directory): ?>
 				<td><code><?php echo MODPATH ?></code></td>
@@ -49,7 +49,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $config_writable ? 'success' : 'error' ?>">
+		<tr class="<?php echo $config_writable ? 'success' : 'danger' ?>">
 			<td><?php echo __('Config Directory'); ?></td>
 			<?php if ($config_writable): ?>
 				<td><?php echo __('The :config_dir directory is writable.', array(':config_dir' => '<code>'. str_replace('\\', '/', realpath(APPPATH.'config')).'/</code>'))?></td>
@@ -60,7 +60,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $cache_writable ? 'success' : 'error' ?>">
+		<tr class="<?php echo $cache_writable ? 'success' : 'danger' ?>">
 			<td><?php echo __('Cache Directory'); ?></td>
 			<?php if ($cache_writable): ?>
                 <td><?php echo __('The :cache_dir directory is writable.', array(':cache_dir' => '<code>'. str_replace('\\', '/', realpath(APPPATH.'cache')).'/</code>'))?></td>
@@ -71,7 +71,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $cache_writable ? 'success' : 'error' ?>">
+		<tr class="<?php echo $cache_writable ? 'success' : 'danger' ?>">
 			<td><?php echo __('PCRE UTF-8'); ?></td>
 			<?php if ( ! $pcre_utf8): ?>
 				<td><?php echo __(':pcre has not been compiled with UTF-8 support.', array(':pcre' => '<a href="http://php.net/pcre">PCRE</a>')) ?></td>
@@ -82,7 +82,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $reflection_enabled ? 'success' : 'error' ?>">
+		<tr class="<?php echo $reflection_enabled ? 'success' : 'danger' ?>">
 			<td><?php echo __('Reflection API'); ?></td>
 			<?php if ($reflection_enabled): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -91,7 +91,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $spl_autoload_register ? 'success' : 'error' ?>">
+		<tr class="<?php echo $spl_autoload_register ? 'success' : 'danger' ?>">
 			<td><?php echo __('Standard PHP Library (SPL)'); ?></td>
 			<?php if ($spl_autoload_register): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -100,7 +100,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $filters_enabled ? 'success' : 'error' ?>">
+		<tr class="<?php echo $filters_enabled ? 'success' : 'danger' ?>">
 			<td><?php echo __('Filters Enabled'); ?></td>
 			<?php if ($filters_enabled): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -109,7 +109,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $iconv_loaded ? 'success' : 'error' ?>">
+		<tr class="<?php echo $iconv_loaded ? 'success' : 'danger' ?>">
 			<td><?php echo __('Iconv Extension'); ?></td>
 			<?php if ($iconv_loaded): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -118,7 +118,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $simplexml ? 'success' : 'error' ?>">
+		<tr class="<?php echo $simplexml ? 'success' : 'danger' ?>">
 			<td><?php echo __('SimpleXML Extension'); ?></td>
 			<?php if ($simplexml): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -127,7 +127,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $json_encode ? 'success' : 'error' ?>">
+		<tr class="<?php echo $json_encode ? 'success' : 'danger' ?>">
 			<td><?php echo __('JavaScript Object Notation (JSON)'); ?></td>
 			<?php if ($json_encode): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -136,7 +136,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $mbstring ? 'success' : 'error' ?>">
+		<tr class="<?php echo $mbstring ? 'success' : 'danger' ?>">
 			<td><?php echo __('Mbstring Extension'); ?></td>
 			<?php if ($mbstring): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -145,7 +145,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $ctype_digit ? 'success' : 'error' ?>">
+		<tr class="<?php echo $ctype_digit ? 'success' : 'danger' ?>">
 			<td><?php echo __('Character Type (CTYPE)'); ?></td>
 			<?php if ($ctype_digit): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -154,7 +154,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $uri_determination ? 'success' : 'error' ?>">
+		<tr class="<?php echo $uri_determination ? 'success' : 'danger' ?>">
 			<td><?php echo __('URI Determination'); ?></td>
 			<?php if ($uri_determination): ?>
 				<td><?php echo __('Pass') ?></td>
@@ -165,7 +165,7 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $gd_info ? 'success' : 'error' ?>">
+		<tr class="<?php echo $gd_info ? 'success' : 'danger' ?>">
 			<td><?php echo __('GD Enabled'); ?></td>
 			<?php if ($gd_info): ?>
 				<td><?php echo __('Pass') ?></td>
