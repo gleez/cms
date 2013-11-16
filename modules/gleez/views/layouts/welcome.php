@@ -63,8 +63,8 @@
 	<div class="container" itemscope itemtype="http://schema.org/WebPage">
 		<?php include Kohana::find_file('views', 'welcome'); ?>
 	</div>
-	
 	<!-- ########## template / container-fluid end ########## -->
+	
 	<!-- ########## Footer start ########## -->
 	<footer class="footer">
 		<?php $footer = Widgets::instance()->render('footer', 'footer'); ?>
