@@ -8,7 +8,7 @@
  *
  * @package    Gleez\Menu
  * @author     Gleez Team
- * @author     1.0.0
+ * @author     1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -225,7 +225,7 @@ class Menu {
 			}
 
 			//set title
-			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
+			$title = (isset($item['image'])) ? '<i class="fa '.$item['image'].'"></i>' : '';
 			$title .= Text::plain($item['title']).$caret;
 
 			if($item['descp'] AND !empty($item['descp']))
