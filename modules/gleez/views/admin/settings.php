@@ -51,7 +51,7 @@
 			<?php echo Form::label('site_url', __('Website address'), array('class' => 'col-sm-3 control-label'))?>
 			<div class="col-sm-9">
 				<div class="col-sm-8">
-					<?php echo Form::input('site_url', $post['site_url'], array('class' => 'form-control', 'type' => 'url'))?>
+					<?php echo Form::input('site_url', $post['site_url'], array('class' => 'form-control'))?>
 				</div>
 			</div>
 		</div>
