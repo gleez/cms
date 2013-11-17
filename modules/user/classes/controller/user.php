@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.2
+ * @version    1.1.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -53,8 +53,7 @@ class Controller_User extends Template {
 	 * @uses    Request::action
 	 * @uses    Route::get
 	 * @uses    Route::uri
-	 * @uses    Config::load
-	 * @uses    Config_Group::get
+	 * @uses    Config::get
 	 * @uses    Captcha::instance
 	 * @uses    Message::success
 	 *
@@ -148,7 +147,6 @@ class Controller_User extends Template {
 
 		$this->title = __('Sign In');
 		$user        = ORM::factory('user');
-		$config      = Kohana::$config->load('auth');
 
 		// Create form action
 		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
@@ -156,9 +154,9 @@ class Controller_User extends Template {
 		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
 
 		$view = View::factory('user/login')
-			->set('register',     $config->get('register'))
-			->set('use_username', $config->get('username'))
-			->set('providers',    array_filter($config->get('providers')))
+			->set('register',     Config::get('auth.register'))
+			->set('use_username', Config::get('auth.username'))
+			->set('providers',    array_filter(Config::get('auth.providers')))
 			->set('post',         $user)
 			->set('action',       $action)
 			->bind('errors',      $this->_errors);
