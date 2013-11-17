@@ -969,6 +969,7 @@ return array(
 	'Time Format' => 'Формат времени',
 	'Time Zone' => 'Часовой пояс',
 	'Title' => 'Заголовок',
+	'Toggle navigation' => 'Переключить навигацию',
 	'Tokyo' => 'Токио',
 	'Tongatapu' => 'Тонгатапу',
 	'Top Region' => 'Верхний регион',
