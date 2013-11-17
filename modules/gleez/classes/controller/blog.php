@@ -76,6 +76,8 @@ class Controller_Blog extends Template {
 			$posts->where('status', '=', 'publish');
 		}
 
+		$this->title = __('Blogs');
+
 		/**
 		 * Bug in ORM to repeat the `where()` methods after using `count_all()`
 		 * @link http://forum.kohanaframework.org/discussion/7736 Solved
@@ -90,8 +92,6 @@ class Controller_Blog extends Template {
 		}
 
 		$config = Config::load('blog');
-
-		$this->title = __('Blogs');
 
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
