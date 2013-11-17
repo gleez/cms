@@ -863,7 +863,7 @@ return array(
 	'Status' => 'Статус',
 	'Sticky this Post' => 'Закрепить материал',
 	'Stockholm' => 'Стокгольм',
-	'Subject' => 'Тема',
+	'Subject' => 'Тема письма',
 	'Subsystem' => 'Подсистема',
 	'Subject must be less than :param2 characters long' => 'Тема сообщения должна содержать не более :param2 символов',
 	'Success!' => 'Успех!',
