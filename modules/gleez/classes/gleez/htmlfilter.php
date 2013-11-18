@@ -9,7 +9,7 @@
  *
  * @package    Gleez\Security
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -120,7 +120,7 @@ class Gleez_HTMLFilter {
 	 * Benchmark token
 	 * @var string
 	 */
-	protected $benchmark;
+	protected $_benchmark;
 
 	/**
 	 * Create new Core object and initialize our own settings
@@ -136,12 +136,11 @@ class Gleez_HTMLFilter {
 	public function __construct($text, $format = 1, array $filter = NULL)
 	{
 		// Be sure to only profile if it's enabled
-		if (Kohana::$profiling === TRUE)
+		if (Gleez::$profiling)
 		{
 			// Start a new benchmark
 			$this->benchmark = Profiler::start('Gleez Filter', __FUNCTION__);
 		}
-
 		// Load the configuration for this type
 		$config = Config::load('inputfilter');
 
@@ -177,10 +176,10 @@ class Gleez_HTMLFilter {
 
 	public function __destruct()
 	{
-		if (isset($this->benchmark))
+		if (isset($this->_benchmark))
 		{
 			// Stop the benchmark
-			Profiler::stop($this->benchmark);
+			Profiler::stop($this->_benchmark);
 		}
 	}
 
