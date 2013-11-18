@@ -319,7 +319,7 @@ class Post extends ORM_Versioned {
 
 			// delete previous image if exists, to cleanup stale images
 			$this->_delete_image();
-	
+
 			// generate a unique filename to avoid conflicts
 			$filename = File::getUnique($_FILES['image']['name']);
 
@@ -502,7 +502,7 @@ class Post extends ORM_Versioned {
 
 		//delete image if exists, to cleanup stale images
 		$this->_delete_image();
-	
+
 		$source = $this->rawurl;
 		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
 		parent::delete();
@@ -513,7 +513,7 @@ class Post extends ORM_Versioned {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Reading data from inaccessible properties
 	 *
@@ -1002,7 +1002,7 @@ class Post extends ORM_Versioned {
 		{
 			@unlink($this->_image_path.$this->rawimage);
 		}
-		
+
 		return $this;
 	}
 }
