@@ -8,7 +8,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.3.1
+ * @version    1.3.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -813,7 +813,7 @@ class Text {
 	 */
 	public static function htmlcorrector($text)
 	{
-		return Text::dom_serialize(Text::dom_load($text));
+		return self::dom_serialize(self::dom_load($text));
 	}
 
 	/**
@@ -835,7 +835,7 @@ class Text {
 
 		// Ignore warnings during HTML soup loading.
 		@$dom->loadHTML('<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>' . $text . '</body></html>');
-		
+
 		return $dom;
 	}
 
@@ -1004,8 +1004,7 @@ class Text {
 			return $text;
 		}
 
-		$config = Kohana::$config->load('inputfilter');
-		$format_id = is_null($format_id) ? $config->get('default_format', 1) : $format_id;
+		$format_id = is_null($format_id) ? Config::get('inputfilter.default_format', 1) : $format_id;
 		$langcode  = is_null($langcode) ? I18n::$lang : $langcode;
 
 		// Check for a cached version of this piece of text.
@@ -1043,10 +1042,17 @@ class Text {
 	}
 
 	/**
-	 * HTML filter. Provides filtering of input into accepted HTML.
+	 * HTML filter
+	 *
+	 * Provides filtering of input into accepted HTML.
+	 *
+	 * @param $text
+	 * @param $format
+	 * @param $filter
+	 * @return string
 	 */
-	public static function html($text, $format, $filter) {
-
+	public static function html($text, $format, $filter)
+	{
 		$text = (string) HTMLFilter::factory($text, $format, $filter)->render();
 
 		if ($filter['settings']['html_nofollow'])
