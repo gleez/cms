@@ -238,7 +238,9 @@ CREATE TABLE {paths} (
 INSERT INTO {paths} (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
 (1, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
 (2, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL),
-(3, 'user/login', 'login', 'und', 'user', NULL, 'user', 'login', NULL);
+(3, 'user/login', 'login', 'und', 'user', NULL, 'user', 'login', NULL),
+(4, 'page/list', 'pages', 'und', 'page', NULL, 'page', 'list', NULL),
+(5, 'blog/list', 'blogs', 'und', 'blog', NULL, 'blog', 'list', NULL);
 
 DROP TABLE IF EXISTS {permissions};
 CREATE TABLE {permissions} (
