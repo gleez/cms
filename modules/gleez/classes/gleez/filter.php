@@ -8,7 +8,7 @@
  *
  * @package    Gleez\HTML
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -182,7 +182,7 @@ class Gleez_Filter {
 	 */
 	public static function process($text)
 	{
-		$config = Kohana::$config->load('inputfilter');
+		$config = Config::load('inputfilter');
 		if(!array_key_exists($text->format, $config->get('formats') ) OR !isset($text->format))
 		{
 			//make sure a valid format id exists, if not set default format id
