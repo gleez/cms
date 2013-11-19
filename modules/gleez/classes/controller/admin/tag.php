@@ -52,8 +52,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 						HTML::anchor($tag->url, $tag->url),
 						Text::plain($tag->type),
 
-						HTML::icon($tag->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
-						HTML::icon($tag->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
+						HTML::icon($tag->edit_url, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
+						HTML::icon($tag->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
 					)
 				);
 			}

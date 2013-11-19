@@ -49,8 +49,8 @@ class Controller_Admin_Path extends Controller_Admin {
 					array(
 						Text::plain($path->source),
 						Text::plain($path->alias),
-						HTML::icon($path->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias'))) . '&nbsp;' .
-						HTML::icon($path->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Alias'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-paths'))
+						HTML::icon($path->edit_url, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias'))) . '&nbsp;' .
+						HTML::icon($path->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Alias'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-paths'))
 					)
 				);
 			}
