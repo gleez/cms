@@ -771,6 +771,7 @@ return array(
 	'Rarotonga' => 'Раротонга',
 	'Read only' => 'Только чтение',
 	'Read More' => 'Читать далее',
+	'Read more about :title' => 'Читать далее о :title',
 	'Read/Write' => 'Чтение/Запись',
 	'Recently added posts' => 'Последние добавленные материалы',
 	'Recife' => 'Ресифи',
