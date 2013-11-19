@@ -1,4 +1,4 @@
-<?php echo HTML::anchor(Route::get('admin/term')->uri($params), '<i class="icon-plus icon-white"></i> '.__('Add New Term'), array('title'=>__('Add New Term'),'class' => 'btn btn-success pull-right')); ?>
+<?php echo HTML::anchor(Route::get('admin/term')->uri($params), '<i class="fa fa-plus fa-white"></i> '.__('Add New Term'), array('title'=>__('Add New Term'),'class' => 'btn btn-success pull-right')); ?>
 <div class="clearfix"></div><br>
 
 <?php echo Form::open(Route::get('admin/term')->uri(array('action' => 'confirm', 'id' => $id)), array('id'=>'menu-form', 'class'=>'form')); ?>
@@ -38,8 +38,8 @@
 					<?php echo Text::plain($item['description']); ?>
 				</td>
 				<td class="action">
-					<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'edit', 'id' => $item['id'])), '<i class="btn-icon-only icon-edit"></i>', array('class' => 'btn btn-small', 'title' => __('Edit Term'))); ?>
-					<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'delete', 'id' => $item['id'])), '<i class="btn-icon-only icon-remove"></i>', array('class' => 'btn btn-small btn-danger', 'title' => __('Delete Term'))); ?>
+					<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'edit', 'id' => $item['id'])), '<i class="fa fa-edit"></i>', array('class' => 'btn btn-small btn-default', 'title' => __('Edit Term'))); ?>
+					<?php echo HTML::anchor(Route::get('admin/term')->uri(array('action' => 'delete', 'id' => $item['id'])), '<i class="fa fa-times"></i>', array('class' => 'btn btn-small btn-default btn-danger', 'title' => __('Delete Term'))); ?>
 				</td>
 			</tr>
 		<?php endforeach ?>
