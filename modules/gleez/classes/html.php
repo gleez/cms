@@ -674,8 +674,10 @@ class HTML {
 	 *
 	 * Example:
 	 * ~~~
-	 * echo HTML::icon('/paths/edit/1', 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
+	 * echo HTML::icon('/paths/edit/1', 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
 	 * ~~~
+	 *
+	 * @link    http://fontawesome.io/
 	 *
 	 * @param   string  $url    URL
 	 * @param   string  $icon   FontAwesome like icon  class
