@@ -43,13 +43,13 @@ class Controller_Admin_Role extends Controller_Admin {
 					array(
 						Text::plain($role->name),
 						Text::plain($role->description),
-						$role->special ? '<i class="icon-ok-sign"></i>' : '<i class="icon-ban-circle"></i>',
+						$role->special ? '<i class="fa fa-check-circle"></i>' : '<i class="fa fa-ban"></i>',
 
 						$role->special
-							? HTML::icon($role->perm_url, 'icon-lock', array('class'=>'icon-large', 'title'=> __('Edit Permissions')))
-							: HTML::icon($role->edit_url, 'icon-edit', array('class'=>'icon-large', 'title'=> __('Edit Role'))) . '&nbsp;' .
-							  HTML::icon($role->delete_url, 'icon-trash', array('class'=>'icon-large', 'title'=> __('Delete Role'))) . '&nbsp;' .
-							  HTML::icon($role->perm_url, 'icon-lock', array('class'=>'icon-large', 'title'=> __('Edit Permissions')))
+							? HTML::icon($role->perm_url, 'fa-lock', array('title'=> __('Edit Permissions')))
+							: HTML::icon($role->edit_url, 'fa-edit', array('title'=> __('Edit Role'))) . '&nbsp;' .
+							  HTML::icon($role->delete_url, 'fa-trash-o', array('title'=> __('Delete Role'))) . '&nbsp;' .
+							  HTML::icon($role->perm_url, 'fa-lock', array('title'=> __('Edit Permissions')))
 					)
 				);
 			}
