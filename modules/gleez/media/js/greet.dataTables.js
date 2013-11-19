@@ -106,8 +106,8 @@
 				}
 			}
 			
-			$(nPaging).addClass('pagination').append(
-				'<ul>'+
+			$(nPaging).addClass('dtpager').append(
+				'<ul class="pagination">'+
 				'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
 				'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
 				'</ul>'
@@ -203,7 +203,7 @@
 		, localize:''
 		, cookie: "gleez_datatable_"
 		, emptytable: "No active record(s) here. Would you like to create one?"
-		, dom: "<'table_head'lfr>t<'row-fluid'<'span4'i><'span8'p>>"
+		, dom: "<'table_head'lfr>t<'row'<'col-md-4'i><'col-md-8'p>>"
     }
 
     $.fn.gdatatable.Constructor = DataTable
