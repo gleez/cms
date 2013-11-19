@@ -202,84 +202,9 @@ jQuery.noConflict();
     //icon theme for select2 plugin
     Gleez.theme_icon = function(icon) {
 	if (!icon.id) return icon.text; // optgroup
-	return "<i class=" + icon.id.toLowerCase() + "></i> " + icon.text;
+	return "<i class='fa " + icon.id.toLowerCase() + "'></i> " + icon.text;
     }
 
-    /**
-     * Common function to support without writing js, see admin/user/list
-     *
-     * @todo add i18 support and minor events
-     */
-    Gleez.dataTable = function()
-    {
-	if (!$.fn.dataTable) return;
-
-	$('[data-toggle="datatable"]').each(function (i, table) {
-	    var $table = $(table)
-	    ,   columns = []
-	    ,   aaSorting
-	    ,   aoColumns
-	    ,   bPaginate = $table.data('paginate') || true
-	    ,   bInfo     = $table.data('info') || true
-	    ,   bFilter   = $table.data('filter') || true
-	    ,   bLengthChange = $table.data('lengthchange') || true
-	    ,   source = $table.data('target') || false;
-	    
-	    //dont't init if it's already initialised
-	    if ( $.fn.DataTable.fnIsDataTable( table ) ) return
-	    
-	    //exit if no url
-	    if(source == false) return
-	    
-	    //use data sortable value to disable sorting/searching for a column
-	    $('thead th', $(table)).each(function(){
-		var obj   = $(this).data("columns");
-		
-		if(obj && obj != undefined){
-		    columns.push(obj);
-		}else{
-		    columns.push(null);
-		}
-	    })
-
-	    var oTable = $table.dataTable({
-		"aoColumns": columns
-	    ,   "aaSorting": $(this).data("sorting")
-	    ,   "sPaginationType": "bootstrap"
-	    ,   "bProcessing": true
-	    ,   "bServerSide": true
-	    ,   "bDeferRender": true
-	    ,   "bLengthChange": bLengthChange
-	    ,   "bPaginate": bPaginate
-	    ,   "bFilter ": bFilter 
-	    ,   "bInfo ": bInfo
-	    ,   "sCookiePrefix": "gleez_datatable_"
-	    ,   "sDom": "<'table_head'lfr>t<'row-fluid'<'span4'i><'span8'p>>"
-	    ,   "sAjaxSource": source
-	    ,   "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
-		    oSettings.jqXHR = $.ajax( {
-			"url":  sUrl,
-			"data": aoData,
-			"dataType": "json",
-			"cache": false,
-			"type": oSettings.sServerMethod
-		    }, 300)
-		    .done(function(data, textStatus, jqXHR){
-			$(oSettings.oInstance).trigger('xhr', oSettings)
-			fnCallback( data )
-		    })
-		    .fail(function (jqXHR, textStatus, errorThrown) {
-			//var ierror = Gleez.informError(jqXHR, false, true);
-			var errorText = '<div class="empty_page alert alert-block"><i class="icon-info-sign"></i>&nbsp'+errorThrown+'</div>'
-			$(oSettings.oInstance).parent().html(errorText)
-		    })
-		}
-	    })
-	    
-	    //set the datatable object in table data further use
-	    $table.data('datatable', oTable)
-	})
-    }
 
     /**
      * Dynamic injection of css and js files
