@@ -9,16 +9,16 @@
 			<?php if ($is_owner OR ACL::check('administer users')): ?>
 				<ul class="nav nav-list">
 					<?php if ( ! Config::get('site.use_gravatars', FALSE)): ?>
-						<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
+						<li><?php echo HTML::anchor('user/photo', '<i class="fa fa-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
 					<?php endif; ?>
-					<li><?php echo HTML::anchor('user/edit', '<i class="icon-pencil"></i>'.__('Edit Account')) ?></li>
-					<li><?php echo HTML::anchor('user/password', '<i class="icon-cog"></i>'.__('Change Password')) ?></li>
+					<li><?php echo HTML::anchor('user/edit', '<i class="fa fa-pencil"></i>'.__('Edit Account')) ?></li>
+					<li><?php echo HTML::anchor('user/password', '<i class="fa fa-cog"></i>'.__('Change Password')) ?></li>
 				</ul>
 			<?php endif;?>
 		</div>
 
 		<div class="well about">
-			<h4><i class="icon-user"></i> <?php echo __('About'); ?></h4>
+			<h4><i class="fa fa-user"></i> <?php echo __('About'); ?></h4>
 			<dl>
 				<dt><?php echo __('Name'); ?></dt>
 				<dd itemprop="name"><?php echo $user->nick; ?></dd>
