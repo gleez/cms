@@ -7,24 +7,24 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-		<?php echo Form::label('name', __('Name'), array('class' => 'control-label')) ?>
-		<div class="controls">
-			<?php echo Form::input('name', $post->rawname, array('class' => 'input-xlarge')); ?>
+	<div class="form-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+		<?php echo Form::label('name', __('Name'), array('class' => 'control-label col-md-3')) ?>
+		<div class="controls col-md-5">
+			<?php echo Form::input('name', $post->rawname, array('class' => 'form-control')); ?>
 		</div>
 	</div>
 
-	<div class="control-group <?php echo isset($errors['type']) ? 'error': ''; ?>">
-		<?php echo Form::label('type', __('Type'), array('class' => 'control-label')) ?>
-		<div class="controls">
-			<?php echo Form::select('type', Gleez::types(), $post->type, array('class' => 'input-xlarge')); ?>
+	<div class="form-group <?php echo isset($errors['type']) ? 'error': ''; ?>">
+		<?php echo Form::label('type', __('Type'), array('class' => 'control-label col-md-3')) ?>
+		<div class="controls col-md-5">
+			<?php echo Form::select('type', Gleez::types(), $post->type, array('class' => 'form-control')); ?>
 		</div>
 	</div>
 	
-	<div class="control-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
-		<?php echo Form::label('description', __('Description'), array('class' => 'control-label')) ?>
-		<div class="controls">
-			<?php echo Form::textarea('description', $post->description, array('class' => 'input-xlarge', 'rows' => 5)) ?>
+	<div class="form-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
+		<?php echo Form::label('description', __('Description'), array('class' => 'control-label col-md-3')) ?>
+		<div class="controls col-md-5">
+			<?php echo Form::textarea('description', $post->description, array('class' => 'form-control', 'rows' => 5)) ?>
 		</div>
 	</div>
 
