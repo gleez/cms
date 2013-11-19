@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.3.2
+ * @version    1.3.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -466,7 +466,7 @@ class System {
 		//sort icons by natural order
 		natsort($icons);
 
-		$icons = array("icon-none" => __('none')) + $icons;
+		$icons = array("fa-none" => __('none')) + $icons;
 
 		return $icons;
 	}
