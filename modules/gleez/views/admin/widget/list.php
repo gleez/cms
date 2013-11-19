@@ -2,7 +2,7 @@
 	<?php echo __('This page provides interface for assigning a widget to a region, and for controlling the order of widgets within regions. Click the configure link next to each widget to configure its specific title and visibility settings.'); ?>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/widget')->uri( array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Widget'), array('class' => 'btn btn-success pull-right')) ?>
+<?php echo HTML::anchor(Route::get('admin/widget')->uri( array('action' =>'add')), '<i class="fa fa-plus fa-white"></i>'.__('Add Widget'), array('class' => 'btn btn-success pull-right')) ?>
 <div class="clearfix"></div><br>
 <?php echo Form::open( Route::url('admin/widget', array('action' => 'index')), array('id'=>'widgets-form', 'class'=>'form') ); ?>
 	<table id="widgets" class="table table-striped table-bordered table-highlight">
@@ -42,11 +42,11 @@
 						</td>
 						<td class="action">
 							<?php
-								echo HTML::anchor($widget->edit_url, '<i class="icon-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
+								echo HTML::anchor($widget->edit_url, '<i class="fa fa-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
 
 								if ($static)
 								{
-									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), ' <i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete')));
+									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), ' <i class="fa fa-trash-o"></i>', array('class'=>'action-delete', 'title'=>__('Delete')));
 								}
 
 								unset($static);
