@@ -56,26 +56,26 @@ for ($i = $n7; $i <= $n8; $i++)
 
 ?>
 
-<div class="pagination pagination-centered">
-	<ul>
-	<?php if ($previous_page !== FALSE): ?>
-		<li><a href="<?php echo HTML::chars($page->url($previous_page)) ?>" class="prev" rel="prev">&larr;</a></li>
-	<?php else: ?>
-		<li class="disabled"><a href="" class="disabled">&larr;</a></li>
-	<?php endif ?>
-
-	<?php foreach ($links as $number => $content): ?>
-		<?php if ($number === $current_page): ?>
-			<li class="active"><a href="<?php echo HTML::chars($page->url($number)) ?>" class="active"><?php echo $content ?></a></li>
+<div>
+	<ul class="pagination pagination-centered">
+		<?php if ($previous_page !== FALSE): ?>
+			<li><a href="<?php echo HTML::chars($page->url($previous_page)) ?>" class="prev" rel="prev">&larr;</a></li>
 		<?php else: ?>
-			<li><a href="<?php echo HTML::chars($page->url($number)) ?>"><?php echo $content ?></a></li>
+			<li class="disabled"><a href="" class="disabled">&larr;</a></li>
 		<?php endif ?>
-	<?php endforeach ?>
 
-	<?php if ($next_page !== FALSE): ?>
-		<li><a href="<?php echo HTML::chars($page->url($next_page)) ?>" class="next" rel="next">&rarr;</a></li>
-	<?php else: ?>
-		<li class="disabled"><a href="" class="disabled">&rarr;</a></li>
-	<?php endif ?>
+		<?php foreach ($links as $number => $content): ?>
+			<?php if ($number === $current_page): ?>
+				<li class="active"><a href="<?php echo HTML::chars($page->url($number)) ?>" class="active"><?php echo $content ?></a></li>
+			<?php else: ?>
+				<li><a href="<?php echo HTML::chars($page->url($number)) ?>"><?php echo $content ?></a></li>
+			<?php endif ?>
+		<?php endforeach ?>
+
+		<?php if ($next_page !== FALSE): ?>
+			<li><a href="<?php echo HTML::chars($page->url($next_page)) ?>" class="next" rel="next">&rarr;</a></li>
+		<?php else: ?>
+			<li class="disabled"><a href="" class="disabled">&rarr;</a></li>
+		<?php endif ?>
 	</ul>
 </div><!-- .pagination -->
