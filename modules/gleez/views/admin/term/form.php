@@ -2,32 +2,32 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-	<?php echo Form::label('name', __('Name'), array('class' => 'control-label')); ?>
-	<div class="controls">
-		<?php echo Form::input('name', $post->rawname, array('class' => 'span3')); ?>
+<div class="form-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+	<?php echo Form::label('name', __('Name'), array('class' => 'control-label col-md-3')); ?>
+	<div class="controls col-md-5">
+		<?php echo Form::input('name', $post->rawname, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
-<div class="control-group <?php echo isset($errors['parent']) ? 'error': ''; ?>">
-	<?php echo Form::label('parent', __('Parent'), array('class' => 'control-label')); ?>
-	<div class="controls">
-		<?php echo Form::select('parent', $terms, $post->pid, array('class' => 'input-xlarge')); ?>
+<div class="form-group <?php echo isset($errors['parent']) ? 'error': ''; ?>">
+	<?php echo Form::label('parent', __('Parent'), array('class' => 'control-label col-md-3')); ?>
+	<div class="controls col-md-5">
+		<?php echo Form::select('parent', $terms, $post->pid, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
-<div class="control-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
-	<?php echo Form::label('path', __('Slug'), array('class' => 'nowrap control-label')) ?>
-	<div class="controls">
-		<?php echo Form::input('path', $path, array('class' => 'span3 slug')); ?>
+<div class="form-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
+	<?php echo Form::label('path', __('Slug'), array('class' => 'nowrap control-label col-md-3')) ?>
+	<div class="controls col-md-5">
+		<?php echo Form::input('path', $path, array('class' => 'form-control slug')); ?>
 		<span class="help-block"><?php echo __('Slug for %slug', array('%slug' => $site_url)); ?></span>
 	</div>
 </div>
 
-<div class="control-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
-	<?php echo Form::label('description', __('Description'), array('class' => 'control-label')); ?>
-	<div class="controls">
-		<?php echo Form::textarea('description', $post->description, array('class' => 'span3', 'rows' => 5)) ?>
+<div class="form-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
+	<?php echo Form::label('description', __('Description'), array('class' => 'control-label col-md-3')); ?>
+	<div class="controls col-md-5">
+		<?php echo Form::textarea('description', $post->description, array('class' => 'form-control', 'rows' => 5)) ?>
 	</div>
 </div>
 
