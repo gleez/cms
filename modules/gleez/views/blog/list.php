@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-1 pull-right">
-		<?php echo HTML::icon($rss_link, 'icon-rss', array('title' => 'RSS 2.0', 'class' => 'pull-right')); ?>
+		<?php echo HTML::icon($rss_link, 'fa-rss', array('title' => 'RSS 2.0', 'class' => 'pull-right')); ?>
 	</div>
 </div>
 <?php foreach($posts as $i => $post): ?>

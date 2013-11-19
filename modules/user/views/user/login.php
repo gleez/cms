@@ -7,7 +7,7 @@
 		<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
 			<div class="controls">
 				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-user"></i></span>
+					<span class="add-on"><i class="fa fa-user"></i></span>
 					<?php echo Form::input('name', $post->name, array('class' => 'span10', 'placeholder' => __('Username/Email'))); ?>
 				</div>
 			</div>
@@ -16,7 +16,7 @@
 		<div class="control-group <?php echo isset($errors['password']) ? 'error': ''; ?>">
 			<div class="controls">
 				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-key"></i></span>
+					<span class="add-on"><i class="fa fa-key"></i></span>
 					<?php echo Form::password('password', NULL, array('class' => 'span10', 'placeholder' => __('Password'))); ?>
 				</div>
 			</div>
