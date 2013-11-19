@@ -282,8 +282,8 @@ class Controller_Admin_Comment extends Controller_Admin {
 						$author,
 						HTML::anchor($post->post->url, $post->post->title, array('class'=>'action-view')),
 						Date::formatted_time($post->created),
-						HTML::icon($post->edit_url.$this->_destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
-						HTML::icon($post->delete_url.$this->_destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-comments'))
+						HTML::icon($post->edit_url.$this->_destination, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit'))),
+						HTML::icon($post->delete_url.$this->_destination, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-comments'))
 				));
 			}
 		}

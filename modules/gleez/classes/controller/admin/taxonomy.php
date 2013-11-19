@@ -43,10 +43,10 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				$this->_datatables->add_row(
 					array(
 						Text::plain($term->name).'<div class="description">'.Text::plain($term->description).'</div>',
-						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Terms'))),
-						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Term'))),
-						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Vocab'))),
-						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Vocab'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-vocabs'))
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'fa-th-list', array('class'=>'action-list', 'title'=> __('List Terms'))),
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'fa-plus', array('class'=>'action-add', 'title'=> __('Add Term'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Vocab'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Vocab'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-vocabs'))
 					)
 				);
 			}
