@@ -69,7 +69,7 @@
 					fnCallback( data )
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
-					var errorText = '<div class="empty_page alert alert-block"><i class="icon-info-sign"></i>&nbsp'+errorThrown+'</div>'
+					var errorText = '<div class="empty_page alert alert-block"><i class="fa fa-info-circle"></i>&nbsp'+errorThrown+'</div>'
 					$(oSettings.oInstance).parent().html(errorText)
 				})
 			}
