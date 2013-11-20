@@ -3,7 +3,7 @@
  * https://github.com/gleez/greet
  * 
  * @package    Greet\DataTables
- * @version    1.0
+ * @version    1.2
  * @requires   jQuery v1.9 or later
  * @requires   jQuery dataTables
  * @author     Sandeep Sangamreddi - Gleez
@@ -76,10 +76,39 @@
 		})
     }
 
+	/* Set the defaults for DataTables initialisation */
+	$.extend(true, $.fn.dataTable.defaults, {
+		"fnInitComplete": function (oSettings, json) {
+			var currentId = $(this).attr('id')
+
+			if (currentId) {
+				var thisLength = $('#' + currentId + '_length')
+				var thisLengthLabel = $('#' + currentId + '_length label')
+				var thisLengthSelect = $('#' + currentId + '_length label select')
+
+				var thisFilter = $('#' + currentId + '_filter')
+				var thisFilterLabel = $('#' + currentId + '_filter label')
+				var thisFilterInput = $('#' + currentId + '_filter label input')
+
+				// Re-arrange the records selection for a form-horizontal layout
+				//thisLength.addClass('form-group')
+				thisLengthLabel.addClass('control-label').attr('for', currentId + '_length_select')
+				thisLengthSelect.addClass('form-control input-sm').attr('id', currentId + '_length_select')
+				//thisLengthSelect.prependTo(thisLength).wrap('<div class="col-xs-12 col-sm-5 col-md-6" />')
+
+				// Re-arrange the search input for a form-horizontal layout
+				thisFilter.addClass('form-group')
+				thisFilterLabel.addClass('control-label').attr('for', currentId + '_filter_input')
+				thisFilterInput.addClass('form-control input-sm').attr('id', currentId + '_filter_input')
+				thisFilterInput.appendTo(thisFilter).wrap('<div class="col-xs-8 col-sm-9 col-md-9" />')
+			}
+	  	}
+	})
+
     /* Default class modification */
     $.extend( $.fn.dataTableExt.oStdClasses, {
 		"sWrapper": "dataTables_wrapper form-inline"
-    } );
+    })
     
     /* API method to get paging information */
     $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings ){
@@ -203,7 +232,8 @@
 		, localize:''
 		, cookie: "gleez_datatable_"
 		, emptytable: "No active record(s) here. Would you like to create one?"
-		, dom: "<'table_head'lfr>t<'row'<'col-md-4'i><'col-md-8'p>>"
+		//, dom: "<'table_head'lfr>t<'row'<'col-md-4'i><'col-md-8'p>>"
+		, dom: "<'table_head row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
     }
 
     $.fn.gdatatable.Constructor = DataTable

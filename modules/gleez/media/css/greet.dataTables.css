@@ -9,7 +9,7 @@ div.dataTables_length select {
 }
 
 div.dataTables_filter label {
-	float: right;
+	float: left;
 }
 
 div.dataTables_info {
@@ -20,7 +20,10 @@ div.dataTables_paginate {
 	float: right;
 	margin: 0;
 }
-
+div.dataTables_paginate ul.pagination
+{
+    margin: 2px;
+}
 table.table {
 	clear: both;
 	margin-bottom: 6px !important;
@@ -76,7 +79,7 @@ table.table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-chi
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
 	filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-	height: 35px;
+	height: 46px;
 	line-height: 35px;
 	padding: 5px 3px 0 3px;
 	margin: 15px 0 0 0;
