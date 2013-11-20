@@ -3,13 +3,10 @@
  * Date helper.
  *
  * @package    Gleez\Helpers
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Kohana Team
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2007-2012 Kohana Team
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Date {
 
@@ -39,16 +36,21 @@ class Date {
 	public static $timezone = 'UTC';
 
 	/**
-	 * Returns the offset (in seconds) between two time zones. Use this to
-	 * display dates to users in different time zones.
+	 * Returns the offset (in seconds) between two time zones
 	 *
-	 *     $seconds = Date::offset('America/Chicago', 'GMT');
+	 * Use this to display dates to users in different time zones.
+	 *
+	 * Example:
+	 * ~~~
+	 * $seconds = Date::offset('America/Chicago', 'GMT');
+	 * ~~~
 	 *
 	 * @link    http://php.net/timezones A list of time zones that PHP supports
 	 *
-	 * @param   string  $remote timezone that to find the offset of
-	 * @param   string  $local  timezone used as the baseline
-	 * @param   mixed   $now    UNIX timestamp or date string
+	 * @param   string  $remote  Timezone that to find the offset of
+	 * @param   string  $local   Timezone used as the baseline [Optional]
+	 * @param   mixed   $now     UNIX timestamp or date string [Optional]
+	 *
 	 * @return  integer
 	 */
 	public static function offset($remote, $local = NULL, $now = NULL)
@@ -80,14 +82,20 @@ class Date {
 	}
 
 	/**
-	 * Number of seconds in a minute, incrementing by a step. Typically used as
-	 * a shortcut for generating a list that can used in a form.
+	 * Number of seconds in a minute, incrementing by a step
 	 *
-	 *     $seconds = Date::seconds(); // 01, 02, 03, ..., 58, 59, 60
+	 * Typically used as a shortcut for generating a list that can used in a form.
 	 *
-	 * @param   integer $step   amount to increment each step by, 1 to 30
-	 * @param   integer $start  start value
-	 * @param   integer $end    end value
+	 * Example:
+	 * ~~~
+	 * // 01, 02, 03, ..., 58, 59, 60
+	 * $seconds = Date::seconds();
+	 * ~~~
+	 *
+	 * @param   integer  $step   Amount to increment each step by, 1 to 30 [Optional]
+	 * @param   integer  $start  Start value [Optional]
+	 * @param   integer  $end    End value [Optional]
+	 *
 	 * @return  array   A mirrored (foo => foo) array from 1-60.
 	 */
 	public static function seconds($step = 1, $start = 0, $end = 60)
@@ -106,14 +114,22 @@ class Date {
 	}
 
 	/**
-	 * Number of minutes in an hour, incrementing by a step. Typically used as
-	 * a shortcut for generating a list that can be used in a form.
+	 * Number of minutes in an hour, incrementing by a step
 	 *
-	 *     $minutes = Date::minutes(); // 05, 10, 15, ..., 50, 55, 60
+	 * Typically used as a shortcut for generating
+	 * a list that can be used in a form.
+	 *
+	 * Example:
+	 * ~~~
+	 * // 05, 10, 15, ..., 50, 55, 60
+	 * $minutes = Date::minutes();
+	 * ~~~
+	 *
+	 * @param   integer  $step  Amount to increment each step by, 1 to 30 [Optional]
+	 *
+	 * @return  array    A mirrored (foo => foo) array from 1-60.
 	 *
 	 * @uses    Date::seconds
-	 * @param   integer $step   amount to increment each step by, 1 to 30
-	 * @return  array   A mirrored (foo => foo) array from 1-60.
 	 */
 	public static function minutes($step = 5)
 	{
@@ -121,18 +137,25 @@ class Date {
 		// we choose to re-use seconds(), rather than creating an entirely new
 		// function. Shhhh, it's cheating! ;) There are several more of these
 		// in the following methods.
-		return Date::seconds($step);
+		return self::seconds($step);
 	}
 
 	/**
-	 * Number of hours in a day. Typically used as a shortcut for generating a
+	 * Number of hours in a day
+	 *
+	 * Typically used as a shortcut for generating a
 	 * list that can be used in a form.
 	 *
-	 *     $hours = Date::hours(); // 01, 02, 03, ..., 10, 11, 12
+	 * Example:
+	 * ~~~
+	 * // 01, 02, 03, ..., 10, 11, 12
+	 * $hours = Date::hours();
+	 * ~~~
 	 *
-	 * @param   integer $step   amount to increment each step by
-	 * @param   boolean $long   use 24-hour time
-	 * @param   integer $start  the hour to start at
+	 * @param   integer $step   Amount to increment each step by [Optional]
+	 * @param   boolean $long   Use 24-hour time [Optional]
+	 * @param   integer $start  The hour to start at [Optional]
+	 *
 	 * @return  array   A mirrored (foo => foo) array from start-12 or start-23.
 	 */
 	public static function hours($step = 1, $long = FALSE, $start = NULL)
@@ -164,10 +187,14 @@ class Date {
 	/**
 	 * Returns AM or PM, based on a given hour (in 24 hour format).
 	 *
-	 *     $type = Date::ampm(12); // PM
-	 *     $type = Date::ampm(1);  // AM
+	 * Example:
+	 * ~~~
+	 * $type = Date::ampm(12); // PM
+	 * $type = Date::ampm(1);  // AM
+	 * ~~~
 	 *
-	 * @param   integer $hour   number of the hour
+	 * @param   integer $hour  Number of the hour
+	 *
 	 * @return  string
 	 */
 	public static function ampm($hour)
@@ -181,10 +208,14 @@ class Date {
 	/**
 	 * Adjusts a non-24-hour number into a 24-hour number.
 	 *
-	 *     $hour = Date::adjust(3, 'pm'); // 15
+	 * Example:
+	 * ~~~
+	 * $hour = Date::adjust(3, 'pm'); // 15
+	 * ~~~
 	 *
-	 * @param   integer $hour   hour to adjust
-	 * @param   string  $ampm   AM or PM
+	 * @param   integer $hour  Hour to adjust
+	 * @param   string  $ampm  AM or PM
+	 *
 	 * @return  string
 	 */
 	public static function adjust($hour, $ampm)
@@ -212,13 +243,19 @@ class Date {
 	}
 
 	/**
-	 * Number of days in a given month and year. Typically used as a shortcut
+	 * Number of days in a given month and year
+	 *
+	 * Typically used as a shortcut
 	 * for generating a list that can be used in a form.
 	 *
-	 *     Date::days(4, 2010); // 1, 2, 3, ..., 28, 29, 30
+	 * Example:
+	 * ~~~
+	 * Date::days(4, 2010); // 1, 2, 3, ..., 28, 29, 30
+	 * ~~~
 	 *
 	 * @param   integer          $month  Number of month
 	 * @param   boolean|integer  $year   Number of year to check month, defaults to the current year [Optional]
+	 *
 	 * @return  array   A mirrored (foo => foo) array of the days.
 	 */
 	public static function days($month, $year = FALSE)
@@ -253,33 +290,40 @@ class Date {
 	}
 
 	/**
-	 * Number of months in a year. Typically used as a shortcut for generating
+	 * Number of months in a year
+	 *
+	 * Typically used as a shortcut for generating
 	 * a list that can be used in a form.
 	 *
-	 * By default a mirrored array of $month_number => $month_number is returned
+	 * By default a mirrored array of $month_number => $month_number is returned:
+	 * ~~~
+	 * Date::months();
+	 * // array(1 => 1, 2 => 2, 3 => 3, ..., 12 => 12)
+	 * ~~~
 	 *
-	 *     Date::months();
-	 *     // array(1 => 1, 2 => 2, 3 => 3, ..., 12 => 12)
+	 * But you can customise this by passing in either [Date::MONTHS_LONG]:
+	 * ~~~
+	 * Date::months(Date::MONTHS_LONG);
+	 * // array(1 => 'January', 2 => 'February', ..., 12 => 'December')
+	 * ~~~
 	 *
-	 * But you can customise this by passing in either Date::MONTHS_LONG
+	 * Or [Date::MONTHS_SHORT]:
+	 * ~~~
+	 * Date::months(Date::MONTHS_SHORT);
+	 * // array(1 => 'Jan', 2 => 'Feb', ..., 12 => 'Dec')
+	 * ~~~
 	 *
-	 *     Date::months(Date::MONTHS_LONG);
-	 *     // array(1 => 'January', 2 => 'February', ..., 12 => 'December')
+	 * @param   string  $format  The format to use for months [Optional]
 	 *
-	 * Or Date::MONTHS_SHORT
-	 *
-	 *     Date::months(Date::MONTHS_SHORT);
-	 *     // array(1 => 'Jan', 2 => 'Feb', ..., 12 => 'Dec')
+	 * @return  array   An array of months based on the specified format
 	 *
 	 * @uses    Date::hours
-	 * @param   string  $format The format to use for months
-	 * @return  array   An array of months based on the specified format
 	 */
 	public static function months($format = NULL)
 	{
 		$months = array();
 
-		if ($format === Date::MONTHS_LONG OR $format === Date::MONTHS_SHORT)
+		if ($format === self::MONTHS_LONG OR $format === self::MONTHS_SHORT)
 		{
 			for ($i = 1; $i <= 12; ++$i)
 			{
@@ -288,7 +332,7 @@ class Date {
 		}
 		else
 		{
-			$months = Date::hours();
+			$months = self::hours();
 		}
 
 		return $months;
@@ -299,7 +343,11 @@ class Date {
 	 * the the current year - 5 and current year + 5 will be used. Typically used
 	 * as a shortcut for generating a list that can be used in a form.
 	 *
-	 *     $years = Date::years(2000, 2010); // 2000, 2001, ..., 2009, 2010
+	 * Example:
+	 * ~~~
+	 * // 2000, 2001, ..., 2009, 2010
+	 * $years = Date::years(2000, 2010);
+	 * ~~~
 	 *
 	 * @param   boolean|integer  $start  Starting year (default is current year - 5) [Optional]
 	 * @param   boolean|integer  $end    Ending year (default is current year + 5) [Optional]
@@ -322,12 +370,19 @@ class Date {
 	}
 
 	/**
-	 * Returns time difference between two timestamps, in human readable format.
+	 * Returns time difference between two timestamps, in human readable format
+	 *
 	 * If the second timestamp is not given, the current time will be used.
 	 * Also consider using [Date::fuzzy_span] when displaying a span.
 	 *
-	 *     $span = Date::span(60, 182, 'minutes,seconds'); // array('minutes' => 2, 'seconds' => 2)
-	 *     $span = Date::span(60, 182, 'minutes'); // 2
+	 * Example:
+	 * ~~~
+	 * // array('minutes' => 2, 'seconds' => 2)
+	 * $span = Date::span(60, 182, 'minutes,seconds');
+	 *
+	 * // 2
+	 * $span = Date::span(60, 182, 'minutes');
+	 * ~~~
 	 *
 	 * @param   integer $remote timestamp to find the span of
 	 * @param   integer $local  timestamp to use as the baseline
@@ -366,32 +421,32 @@ class Date {
 
 		if (isset($output['years']))
 		{
-			$timespan -= Date::YEAR * ($output['years'] = (int) floor($timespan / Date::YEAR));
+			$timespan -= self::YEAR * ($output['years'] = (int) floor($timespan / self::YEAR));
 		}
 
 		if (isset($output['months']))
 		{
-			$timespan -= Date::MONTH * ($output['months'] = (int) floor($timespan / Date::MONTH));
+			$timespan -= self::MONTH * ($output['months'] = (int) floor($timespan / self::MONTH));
 		}
 
 		if (isset($output['weeks']))
 		{
-			$timespan -= Date::WEEK * ($output['weeks'] = (int) floor($timespan / Date::WEEK));
+			$timespan -= self::WEEK * ($output['weeks'] = (int) floor($timespan / self::WEEK));
 		}
 
 		if (isset($output['days']))
 		{
-			$timespan -= Date::DAY * ($output['days'] = (int) floor($timespan / Date::DAY));
+			$timespan -= self::DAY * ($output['days'] = (int) floor($timespan / self::DAY));
 		}
 
 		if (isset($output['hours']))
 		{
-			$timespan -= Date::HOUR * ($output['hours'] = (int) floor($timespan / Date::HOUR));
+			$timespan -= self::HOUR * ($output['hours'] = (int) floor($timespan / self::HOUR));
 		}
 
 		if (isset($output['minutes']))
 		{
-			$timespan -= Date::MINUTE * ($output['minutes'] = (int) floor($timespan / Date::MINUTE));
+			$timespan -= self::MINUTE * ($output['minutes'] = (int) floor($timespan / self::MINUTE));
 		}
 
 		// Seconds ago, 1
@@ -414,8 +469,11 @@ class Date {
 	 * Returns the difference between a time and now in a "fuzzy" way.
 	 * Displaying a fuzzy time instead of a date is usually faster to read and understand.
 	 *
-	 *     $span = Date::fuzzy_span(time() - 10); // "moments ago"
-	 *     $span = Date::fuzzy_span(time() + 20); // "in moments"
+	 * Example:
+	 * ~~~
+	 * $span = Date::fuzzy_span(time() - 10); // "moments ago"
+	 * $span = Date::fuzzy_span(time() + 20); // "in moments"
+	 * ~~~
 	 *
 	 * A second parameter is available to manually set the "local" timestamp,
 	 * however this parameter shouldn't be needed in normal usage and is only
@@ -432,79 +490,79 @@ class Date {
 		// Determine the difference in seconds
 		$offset = abs($local_timestamp - $timestamp);
 
-		if ($offset <= Date::MINUTE)
+		if ($offset <= self::MINUTE)
 		{
 			$span = 'moments';
 		}
-		elseif ($offset < (Date::MINUTE * 20))
+		elseif ($offset < (self::MINUTE * 20))
 		{
 			$span = 'a few minutes';
 		}
-		elseif ($offset < Date::HOUR)
+		elseif ($offset < self::HOUR)
 		{
 			$span = 'less than an hour';
 		}
-		elseif ($offset < (Date::HOUR * 4))
+		elseif ($offset < (self::HOUR * 4))
 		{
 			$span = 'a couple of hours';
 		}
-		elseif ($offset < Date::DAY)
+		elseif ($offset < self::DAY)
 		{
 			$span = 'less than a day';
 		}
-		elseif ($offset < (Date::DAY * 2))
+		elseif ($offset < (self::DAY * 2))
 		{
 			$span = 'about a day';
 		}
-		elseif ($offset < (Date::DAY * 4))
+		elseif ($offset < (self::DAY * 4))
 		{
 			$span = 'a couple of days';
 		}
-		elseif ($offset < Date::WEEK)
+		elseif ($offset < self::WEEK)
 		{
 			$span = 'less than a week';
 		}
-		elseif ($offset < (Date::WEEK * 2))
+		elseif ($offset < (self::WEEK * 2))
 		{
 			$span = 'about a week';
 		}
-		elseif ($offset < Date::MONTH)
+		elseif ($offset < self::MONTH)
 		{
 			$span = 'less than a month';
 		}
-		elseif ($offset < (Date::MONTH * 2))
+		elseif ($offset < (self::MONTH * 2))
 		{
 			$span = 'about a month';
 		}
-		elseif ($offset < (Date::MONTH * 4))
+		elseif ($offset < (self::MONTH * 4))
 		{
 			$span = 'a couple of months';
 		}
-		elseif ($offset < Date::YEAR)
+		elseif ($offset < self::YEAR)
 		{
 			$span = 'less than a year';
 		}
-		elseif ($offset < (Date::YEAR * 2))
+		elseif ($offset < (self::YEAR * 2))
 		{
 			$span = 'about a year';
 		}
-		elseif ($offset < (Date::YEAR * 4))
+		elseif ($offset < (self::YEAR * 4))
 		{
 			$span = 'a couple of years';
 		}
-		elseif ($offset < (Date::YEAR * 8))
+		elseif ($offset < (self::YEAR * 8))
 		{
 			$span = 'a few years';
 		}
-		elseif ($offset < (Date::YEAR * 12))
+		elseif ($offset < (self::YEAR * 12))
 		{
 			$span = 'about a decade';
 		}
-		elseif ($offset < (Date::YEAR * 24))
+		elseif ($offset < (self::YEAR * 24))
 		{
 			$span = 'a couple of decades';
 		}
-		elseif ($offset < (Date::YEAR * 64))
+		elseif ($offset < (self::YEAR * 64))
 		{
 			$span = 'several decades';
 		}
@@ -530,7 +588,10 @@ class Date {
 	 * this is needed, but some binary formats use it (eg: zip files.)
 	 * Converting the other direction is done using {@link Date::dos2unix}.
 	 *
-	 *     $dos = Date::unix2dos($unix);
+	 * Example:
+	 * ~~~
+	 * $dos = Date::unix2dos($unix);
+	 * ~~~
 	 *
 	 * @param   boolean|integer  $timestamp  UNIX timestamp [Optional]
 	 * @return  integer
@@ -558,7 +619,10 @@ class Date {
 	 * this is needed, but some binary formats use it (eg: zip files.)
 	 * Converting the other direction is done using {@link Date::unix2dos}.
 	 *
-	 *     $unix = Date::dos2unix($dos);
+	 * Example:
+	 * ~~~
+	 * $unix = Date::dos2unix($dos);
+	 * ~~~
 	 *
 	 * @param   boolean|integer  $timestamp  DOS timestamp [Optional]
 	 * @return  integer
@@ -578,32 +642,39 @@ class Date {
 	/**
 	 * Returns a date/time string with the specified timestamp format
 	 *
-	 *     $time = Date::formatted_time('5 minutes ago');
+	 * Example:
+	 * ~~~
+	 * $time = Date::formatted_time('5 minutes ago');
+	 * ~~~
 	 *
 	 * @link    http://www.php.net/manual/datetime.construct
-	 * @param   string  $datetime_str       datetime string
-	 * @param   string  $timestamp_format   timestamp format
-	 * @param   string  $timezone           timezone identifier
+	 *
+	 * @param   string  $datetime_str      Datetime string [Optional]
+	 * @param   string  $timestamp_format  Timestamp format [Optional]
+	 * @param   string  $timezone          Timezone identifier [Optional]
+	 *
 	 * @return  string
+	 *
+	 * @uses    Config::get
 	 */
 	public static function formatted_time($datetime_str = 'now', $timestamp_format = NULL, $timezone = NULL)
 	{
-		$settimezone  = ($timezone === NULL) ? Date::$timezone : $timezone;
-	
+		$settimezone  = ($timezone === NULL) ? self::$timezone : $timezone;
+
 		//Display Dates in site defined timezone format
 		if(Config::get('site.timezone_override', FALSE) AND $timezone === NULL)
 		{
 			// Default timezone from config
 			$settimezone = Config::get('site.timezone', 'UTC');
 		}
-	
+
 		//convert timestamp to support datetime class
 		if(is_numeric($datetime_str))
 		{
 			$datetime_str = '@'.$datetime_str;
 		}
-	
-		$timestamp_format = ($timestamp_format == NULL) ? Date::$timestamp_format : $timestamp_format;
+
+		$timestamp_format = ($timestamp_format == NULL) ? self::$timestamp_format : $timestamp_format;
 
 		$tz   = new DateTimeZone($settimezone ? $settimezone : date_default_timezone_get());
 		$time = new DateTime($datetime_str, $tz);
@@ -689,7 +760,7 @@ class Date {
 	{
 		// Default values
 		$long = (bool) $long;
-		$months = Date::hours();
+		$months = self::hours();
 
 		for ($i = 1; $i <= 12; $i++)
 		{
@@ -894,6 +965,7 @@ class Date {
 				$date_choices[$f] = date($f, time());
 			}
 
+			/** @var $date_choices array */
 			return $date_choices;
 		}
 
@@ -944,6 +1016,7 @@ class Date {
 				$date_choices[$f] = date($f, time());
 			}
 
+			/** @var $date_choices array */
 			return $date_choices;
 		}
 
@@ -976,6 +1049,7 @@ class Date {
 				$time_choices[$f] = date($f, time());
 			}
 
+			/** @var $time_choices array */
 			return $time_choices;
 		}
 
@@ -986,45 +1060,45 @@ class Date {
 	 * Return a unix timestamp in a user specified format including date and time
 	 *
 	 * @param  integer $timestamp Unix timestamp
-	 * @param  string  $config    The configuration file [Optional]
-	 * @param  string  $key       The key with the value of the configuration file [Optional]
+	 * @param  string  $format    Timestamp format [Optional]
+	 *
 	 * @return string
 	 *
 	 * @uses   Config::get
 	 */
-	public static function date_time($timestamp, $config = 'site', $key = 'date_time_format')
+	public static function date_time($timestamp, $format = NULL)
 	{
-		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
+		return self::formatted_time($timestamp, is_null($format) ? Config::get('site.date_time_format') : $format);
 	}
 
 	/**
 	 * Return a unix timestamp in a user specified format that's just the date
 	 *
 	 * @param  integer $timestamp Unix timestamp
-	 * @param  string  $config    The configuration file [Optional]
-	 * @param  string  $key       The key with the value of the configuration file [Optional]
+	 * @param  string  $format    Timestamp format [Optional]
+	 *
 	 * @return string
 	 *
 	 * @uses   Config::get
 	 */
-	public static function date_format($timestamp, $config = 'site', $key = 'date_format')
+	public static function date_format($timestamp, $format = NULL)
 	{
-		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
+		return self::formatted_time($timestamp, is_null($format) ? Config::get('site.date_format') : $format);
 	}
 
 	/**
 	 * Return a unix timestamp in a user specified format that's just the time
 	 *
 	 * @param  integer $timestamp Unix timestamp
-	 * @param  string  $config    The configuration file [Optional]
-	 * @param  string  $key       The key with the value of the configuration file [Optional]
+	 * @param  string  $format    Timestamp format [Optional]
+	 *
 	 * @return string
 	 *
 	 * @uses   Config::get
 	 */
-	public static function time($timestamp, $config = 'site', $key = 'time_format')
+	public static function time($timestamp, $format = NULL)
 	{
-		return Date::formatted_time($timestamp, Config::get("{$config}.{$key}"));
+		return self::formatted_time($timestamp, is_null($format) ? Config::get('site.time_format') : $format);
 	}
 
 }
