@@ -16,7 +16,7 @@ class Widget_Menu extends Widget {
 	
 	public function render()
 	{
-		return Menu::links($this->name);
+		return Menu::links($this->name, $attr = array('class' =>'menus', 'widget' => TRUE));
 	}
 
 }

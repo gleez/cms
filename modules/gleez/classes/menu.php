@@ -174,6 +174,9 @@ class Menu {
 		$i++;
 		HTML::$current_route = URL::site(Request::current()->uri());
 
+		//This attribute detects we're in nav or widget for styling
+		$is_widget	= isset($attrs['widget']);
+		if($is_widget) unset($attrs['widget']);
 
 		$attrs['class'] = empty($attrs['class']) ? 'level-'.$i : $attrs['class'].' level-'.$i;
 		$menu = '<ul'.HTML::attributes($attrs).'>';
@@ -222,13 +225,24 @@ class Menu {
 				$attributes['data-toggle'] = 'dropdown';
 				$item['url'] = '#';
 				$caret = ($i == 2) ? '': '<b class="caret"></b>';
+				$class = 'dropdown-menu';
+			}
+
+			//Twitter bootstrap use collapse for widget menu chlidren
+			if($has_children && $is_widget)
+			{
+				$attributes['data-toggle'] = 'collapse';
+				$attributes['data-parent'] = '#menu-'.$key;
+				$item['url'] ='#collapse-'.$key;
+				$class = 'panel-collapse collapse';
+				$caret = ($i == 2) ? '': '<i class="fa fa-chevron-down submenu"></i>';
 			}
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="fa '.$item['image'].'"></i>' : '';
 			$title .= Text::plain($item['title']).$caret;
 
-			if($item['descp'] AND !empty($item['descp']))
+			if($item['descp'] && !empty($item['descp']))
 			{
 				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
 			}
@@ -237,7 +251,7 @@ class Menu {
 
 			if ( $has_children )
 			{
-				$menu .= $this->render(array('class' => 'dropdown-menu'),  $item['children']);
+				$menu .= $this->render(array('class' => $class, 'id' => 'collapse-'.$key),  $item['children']);
 			}
 
 			$_i++;
