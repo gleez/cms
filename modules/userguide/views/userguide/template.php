@@ -23,11 +23,11 @@
 			<div id="kodoc-menu">
 				<ul>
 					<li class="guide first">
-						<a href="<?php echo Route::url('docs/guide') ?>">User Guide</a>
+						<a href="<?php echo Route::url('docs/guide') ?>"><?php _e('User Guide')?></a>
 					</li>
 					<?php if (Kohana::$config->load('userguide.api_browser')): ?>
 					<li class="api">
-						<a href="<?php echo Route::url('docs/api') ?>">API Browser</a>
+						<a href="<?php echo Route::url('docs/api') ?>"><?php _e('API Browser')?></a>
 					</li>
 					<?php endif ?>
 				</ul>
@@ -85,7 +85,7 @@
 			<?php endif ?>
 			</div>
 			<div class="span-12 last right">
-				<p>Powered by <?php echo HTML::anchor('http://gleezcms.org/', 'Gleez CMS') ?> v <?php echo Gleez::VERSION ?></p>
+				<p><?php _e('Powered by :gleez', array(':gleez' => HTML::anchor('http://gleezcms.org/', 'Gleez CMS') )); ?>&nbsp;<?php echo Gleez::getVersion() ?></p>
 			</div>
 		</div>
 	</div>
