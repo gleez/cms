@@ -8,14 +8,14 @@
 
 		<div id="post-body" class="col-md-9">
 
-			<div class="form-group <?php echo isset($errors['title']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['title']) ? 'has-error': ''; ?>">
 				<div class="controls">
 					<?php echo Form::input('title', $post->rawtitle, array('class' => 'form-control', 'placeholder' => __('Enter title here'))); ?>
 				</div>
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')) : ?>
-				<div class="form-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['slug']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('path', __('Permalink: %slug', array('%slug' => $site_url )), array('class' => 'control-label')) ?>
 					<div class="controls">
 						<?php echo Form::input('path', $path, array('class' => 'form-control slug')); ?>
@@ -24,7 +24,7 @@
 			<?php endif; ?>
 
 			<?php if ($config->use_tags) : ?>
-				<div class="form-group <?php echo isset($errors['ftags']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['ftags']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('ftags', __('Tags'), array('class' => 'control-label') ) ?>
 					<div class="controls">
 						<?php echo Form::input('ftags', $tags, array('class' => 'form-control'), 'autocomplete/tag/page'); ?>
@@ -33,7 +33,7 @@
 			<?php endif; ?>
 
 			<?php if ($config->primary_image): ?>
-				<div class="form-group <?php echo isset($errors['image']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['image']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('image', __('Primary Image'), array('class' => 'control-label') ) ?>
 					<div class="controls page-img">
 						<?php echo Form::file('image', array('class' => 'form-control')); ?>
@@ -42,7 +42,7 @@
 			<?php endif; ?>
 	
 			<?php if ($config->use_excerpt): ?>
-				<div class="form-group <?php echo isset($errors['teaser']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['teaser']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
 					<div class="controls">
 						<?php echo Form::textarea('excerpt', $post->rawteaser, array('class' => 'form-control', 'rows' => 3)) ?>
@@ -50,7 +50,7 @@
 				</div>
 			<?php endif; ?>
 
-			<div class="form-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['body']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('body', __('Content'), array('class' => 'control-label')) ?>
 				<div class="controls">
 					<?php echo Form::textarea('body', $post->rawbody, array('class' => 'textarea form-control', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
@@ -59,7 +59,7 @@
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
 
-				<div class="form-group format-wrapper <?php echo isset($errors['format']) ? 'error': ''; ?>">
+				<div class="form-group format-wrapper <?php echo isset($errors['format']) ? 'has-error': ''; ?>">
 					<div class="controls">
 						<div class="input-group">
 							<span class="input-group-addon"><?php echo __('Text format') ?></span>
@@ -70,7 +70,7 @@
 			<?php endif; ?>
 			
 			<?php if ($config->use_captcha  AND ! $captcha->promoted()): ?>
-				<div class="form-group <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['captcha']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('_captcha', __('Security'), array('class' => 'wrap')) ?>
 					<?php echo Form::input('_captcha', '', array('class' => 'form-control')); ?><br>
 					<?php echo $captcha; ?>
@@ -86,12 +86,12 @@
 
 					<div class='inside' id="submitpost">
 						<div id="minor-publishing">
-							<div class="form-group <?php echo isset($errors['status']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['status']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
 								<?php echo Form::select('status', Post::status(), $post->status, array('class' => 'form-control input-sm')); ?>
 							</div>
 
-							<div class="form-group <?php echo isset($errors['sticky']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['sticky']) ? 'has-error': ''; ?>">
 								<?php
 									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE;
 									$promote = (isset($post->promote) AND $post->promote == 1) ? TRUE : FALSE;
@@ -106,7 +106,7 @@
 								</div>
 							</div>
 
-							<div class="form-group <?php echo isset($errors['author_date']) ? 'error': ''; ?>">
+							<div class="form-group <?php echo isset($errors['author_date']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('author_date', __('Date'), array('class' => 'control-label') ) ?>
 								<div class="controls">
 									<?php echo Form::input('author_date', $created, array('class' => 'form-control col-md-11')); ?>
@@ -114,7 +114,7 @@
 							</div>
 
 							<?php if ($config->use_authors): ?>
-								<div class="form-group <?php echo isset($errors['author_name']) ? 'error': ''; ?>">
+								<div class="form-group <?php echo isset($errors['author_name']) ? 'has-error': ''; ?>">
 									<?php echo Form::label('author_name', __('Author'), array('class' => 'control-label') ) ?>
 									<div class="controls">
 										<?php echo Form::input('author_name', $author,array('class' => 'form-control col-md-11', 'data-items' => 10), 'autocomplete/user'); ?>
@@ -143,7 +143,7 @@
 				<div id="categorydiv" class="postbox">
 					<h3 class='hndle'><?php echo __('Category'); ?></h3>
 					<div class='inside'>
-						<div class="form-group <?php echo isset($errors['categories']) ? 'error': ''; ?>">
+						<div class="form-group <?php echo isset($errors['categories']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('categories[1]', $terms, $post->terms_form, array('class' => 'form-control')); ?>
 						</div>
 					</div>
@@ -155,7 +155,7 @@
 					<h3 class='hndle'><?php echo  __('Comments'); ?></h3>
 
 					<div class='inside'>
-						<div class="form-group <?php echo isset($errors['comment']) ? 'error': ''; ?>">
+						<div class="form-group <?php echo isset($errors['comment']) ? 'has-error': ''; ?>">
 							<?php
 								if ( ! isset($post->comment))
 								{
