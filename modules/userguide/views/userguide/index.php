@@ -1,20 +1,20 @@
-<h1>User Guide</h1>
+<h1><?php _e('User Guide')?></h1>
 
-<p>The following modules have userguide pages:</p>
+<p><?php _e('The following modules have userguide pages:')?></p>
 
-<?php if( ! empty($modules)): ?>
+<?php if ( ! empty($modules)): ?>
 
 	<?php foreach($modules as $url => $options): ?>
-	
+
 		<p>
 			<strong><?php echo HTML::anchor(Route::get('docs/guide')->uri(array('module' => $url)), $options['name'], NULL, NULL, TRUE) ?></strong> -
-			<?php echo $options['description'] ?>
+			<?php _e($options['description']) ?>
 		</p>
-	
+
 	<?php endforeach; ?>
-	
+
 <?php else: ?>
 
-	<p class="error">I couldn't find any modules with userguide pages.</p>
+	<p class="error"><?php _e("I couldn't find any modules with userguide pages.")?></p>
 
 <?php endif; ?>
