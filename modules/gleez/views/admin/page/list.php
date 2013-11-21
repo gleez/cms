@@ -12,13 +12,13 @@
 		<?php echo Form::open($action, array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
 			<fieldset class="bulk-actions form-actions rounded">
 				<div class="row">
-					<div class="col-md-7">
-						<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
+					<div class="col-md-4">
+						<div class="control-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'page'), '', array('class' => 'form-control col-md-5')); ?>
 						</div>
 					</div>
 					<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-default col-md-1')); ?>
-					<div class="col-md-4">
+					<div class="col-md-7">
 						<?php echo HTML::anchor(Route::get('page')->uri(array('action' => 'add')), '<i class="fa fa-plus fa-white"></i> '.__('New entry'), array('class'=>'btn btn-success pull-right')); ?>
 					</div>
 				</div>
