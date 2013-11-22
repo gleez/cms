@@ -2,21 +2,21 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-<div class="form-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('name', __('Name'), array('class' => 'control-label col-md-3')); ?>
 	<div class="controls col-md-5">
 		<?php echo Form::input('name', $post->rawname, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
-<div class="form-group <?php echo isset($errors['parent']) ? 'error': ''; ?>">
+<div class="form-group <?php echo isset($errors['parent']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('parent', __('Parent'), array('class' => 'control-label col-md-3')); ?>
 	<div class="controls col-md-5">
 		<?php echo Form::select('parent', $terms, $post->pid, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
-<div class="form-group <?php echo isset($errors['slug']) ? 'error': ''; ?>">
+<div class="form-group <?php echo isset($errors['slug']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('path', __('Slug'), array('class' => 'nowrap control-label col-md-3')) ?>
 	<div class="controls col-md-5">
 		<?php echo Form::input('path', $path, array('class' => 'form-control slug')); ?>
@@ -24,7 +24,7 @@
 	</div>
 </div>
 
-<div class="form-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
+<div class="form-group <?php echo isset($errors['description']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('description', __('Description'), array('class' => 'control-label col-md-3')); ?>
 	<div class="controls col-md-5">
 		<?php echo Form::textarea('description', $post->description, array('class' => 'form-control', 'rows' => 5)) ?>
