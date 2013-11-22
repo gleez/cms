@@ -7,21 +7,21 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="form-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('name', __('Name'), array('class' => 'control-label col-md-3')) ?>
 		<div class="controls col-md-5">
 			<?php echo Form::input('name', $post->rawname, array('class' => 'form-control')); ?>
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['type']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['type']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('type', __('Type'), array('class' => 'control-label col-md-3')) ?>
 		<div class="controls col-md-5">
 			<?php echo Form::select('type', Gleez::types(), $post->type, array('class' => 'form-control')); ?>
 		</div>
 	</div>
 	
-	<div class="form-group <?php echo isset($errors['description']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['description']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('description', __('Description'), array('class' => 'control-label col-md-3')) ?>
 		<div class="controls col-md-5">
 			<?php echo Form::textarea('description', $post->description, array('class' => 'form-control', 'rows' => 5)) ?>
