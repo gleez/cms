@@ -1,0 +1,69 @@
+@charset "utf-8";
+
+/*-------------------------------------------------------------------
+                           5. Admin
+-------------------------------------------------------------------*/
+
+html#backend, body.backend {
+    height:100%;
+}
+
+body.backend {
+	background-image: url('../images/bg/bg3.png');
+	padding-top: 50px;
+}
+
+#backend .admin-container.container,
+#backend .admin-nav.container {
+	min-height: 100%;
+	overflow: hidden;
+}
+
+#backend .sidebar, #backend .main-content {
+	margin-bottom: -9999px;
+	padding-bottom: 9999px;
+}
+
+#backend .navbar {
+    box-shadow: none;
+}
+
+#backend .admin-container.container,
+#backend .admin-nav.container {
+    width: 100%;
+    margin-top: 0;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+
+#backend #messages {
+	position: static;
+}
+
+.backend .content.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.page-settings-form .set-check .checkbox {
+	margin-left: 22em;
+}
+
+.blog-settings-form .set-check .checkbox {
+	margin-left: 22em;
+}
+
+.page-stats h3 {
+	color: #666;
+	font: normal 18px/30px "Oswald", Verdana, Arial, Helvetica, sans-serif;
+	margin: 10px 0;
+}
+
+#backend .page-header {
+	padding-bottom: 0;
+	border: none;
+}
