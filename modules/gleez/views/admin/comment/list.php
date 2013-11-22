@@ -13,7 +13,7 @@
 			<fieldset class="bulk-actions form-actions rounded">
 				<div class="row">
 					<div class="col-md-6">
-						<div class="form-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
+						<div class="form-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'form-control col-md-6')); ?>
 						</div>
 					</div>
