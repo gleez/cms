@@ -42,6 +42,8 @@ class Controller_Welcome extends Template {
 			$this->request->redirect(Route::get('install')->uri(array('action' => 'index')), 200);
 		}
 
+		Assets::css('welcome', "media/css/welcome.css", array('default'), array('weight' => 30));
+
 		$this->title = __('Welcome!');
 		$content = View::factory('welcome');
 
