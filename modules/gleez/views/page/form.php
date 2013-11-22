@@ -81,16 +81,17 @@
 
 		<div id="side-info-column" class="col-md-3">
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
-				<div id="submitdiv" class="postbox">
-					<h3 class='hndle'><?php echo __('Publication') ?></h3>
-
-					<div class='inside' id="submitpost">
+				<div id="submitdiv" class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo __('Publication') ?></h3>
+				</div>
+					<div class='panel-body' id="submitpost">
 						<div id="minor-publishing">
+						
 							<div class="form-group <?php echo isset($errors['status']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
 								<?php echo Form::select('status', Post::status(), $post->status, array('class' => 'form-control input-sm')); ?>
 							</div>
-
 							<div class="form-group <?php echo isset($errors['sticky']) ? 'has-error': ''; ?>">
 								<?php
 									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE;
@@ -98,18 +99,19 @@
 									echo Form::hidden('sticky', 0);
 									echo Form::hidden('promote', 0);
 								?>
-								<div class="controls">
-									<?php echo Form::label('sticky', Form::checkbox('sticky', TRUE, $sticky).__('Sticky this Post'), array('class' => 'checkbox')) ?>
+								<div class="controls checkbox">
+									<?php echo Form::label('sticky', Form::checkbox('sticky', TRUE, $sticky).__('Sticky this Post')) ?>
 								</div>
-								<div class="controls">
-									<?php echo Form::label('promote', Form::checkbox('promote', TRUE, $promote).__('Promote this Post'), array('class' => 'checkbox')) ?>
+								<div class="controls checkbox">
+									<?php echo Form::label('promote', Form::checkbox('promote', TRUE, $promote).__('Promote this Post')) ?>
 								</div>
 							</div>
+								<div class="clearfix"></div>
 
 							<div class="form-group <?php echo isset($errors['author_date']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('author_date', __('Date'), array('class' => 'control-label') ) ?>
 								<div class="controls">
-									<?php echo Form::input('author_date', $created, array('class' => 'form-control col-md-11')); ?>
+									<?php echo Form::input('author_date', $created, array('class' => 'form-control')); ?>
 								</div>
 							</div>
 
@@ -117,16 +119,17 @@
 								<div class="form-group <?php echo isset($errors['author_name']) ? 'has-error': ''; ?>">
 									<?php echo Form::label('author_name', __('Author'), array('class' => 'control-label') ) ?>
 									<div class="controls">
-										<?php echo Form::input('author_name', $author,array('class' => 'form-control col-md-11', 'data-items' => 10), 'autocomplete/user'); ?>
+										<?php echo Form::input('author_name', $author,array('class' => 'form-control', 'data-items' => 10), 'autocomplete/user'); ?>
 									</div>
 								</div>
 							<?php endif; ?>
 						</div>
-
+					</div>
+					<div class="panel-footer">
 						<div id="major-publishing-actions" class="row">
 							<?php if ($post->loaded() AND ACL::post('delete', $post)): ?>
-								<div id="delete-action" class="pull-left">
-									<i class="fa fa-trash"></i>
+								<div id="delete-action" class="btn btn-default pull-left">
+									<i class="fa fa-trash-o"></i>
 									<?php echo HTML::anchor($post->delete_url.URL::query($destination), __('Move to Trash'), array('class' => 'submitdelete')) ?>
 								</div>
 							<?php endif; ?>
@@ -140,21 +143,26 @@
 			<?php endif; ?>
 
 			<?php if($config->use_category) : ?>
-				<div id="categorydiv" class="postbox">
-					<h3 class='hndle'><?php echo __('Category'); ?></h3>
-					<div class='inside'>
+				<div id="categorydiv" class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo __('Category'); ?></h3>
+				</div>
+					<div class='panel-body'>
 						<div class="form-group <?php echo isset($errors['categories']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('categories[1]', $terms, $post->terms_form, array('class' => 'form-control')); ?>
 						</div>
 					</div>
 				</div>
+				
 			<?php endif; ?>
 
 			<?php if( $config->use_comment) : ?>
-				<div id="commentdiv" class="postbox">
-					<h3 class='hndle'><?php echo  __('Comments'); ?></h3>
+				<div id="commentdiv" class="panel panel-default">
+					<div class="panel-heading">
+					<h3 class="panel-title"><?php echo  __('Comments'); ?></h3>
+					</div>
 
-					<div class='inside'>
+					<div class='panel-body'>
 						<div class="form-group <?php echo isset($errors['comment']) ? 'has-error': ''; ?>">
 							<?php
 								if ( ! isset($post->comment))
@@ -168,16 +176,16 @@
 							?>
 
 							<?php echo Form::label('comment', __('Discussion') ) ?>
-							<div class="controls">
-								<?php echo Form::label('comment', Form::radio('comment', 0, $comment1).__('Disabled'), array('class' => 'radio')) ?>
+							<div class="controls radio">
+								<?php echo Form::label('comment', Form::radio('comment', 0, $comment1).__('Disabled')) ?>
 							</div>
 
-							<div class="controls">
-								<?php echo Form::label('comment', Form::radio('comment', 1, $comment2).__('Read only'), array('class' => 'radio')) ?>
+							<div class="controls radio">
+								<?php echo Form::label('comment', Form::radio('comment', 1, $comment2).__('Read only')) ?>
 							</div>
 
-							<div class="controls">
-								<?php echo Form::label('comment', Form::radio('comment', 2, $comment3).__('Read/Write'), array('class' => 'radio')) ?>
+							<div class="controls radio">
+								<?php echo Form::label('comment', Form::radio('comment', 2, $comment3).__('Read/Write')) ?>
 							</div>
 
 						</div>
