@@ -6,14 +6,14 @@
 
 <?php echo Form::open($action, array('class'=>'blog-settings-form form form-horizontal')); ?>
 
-	<div class="form-group <?php echo isset($errors['items_per_page']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['items_per_page']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('title', __('Blog entries per page'), array('class' => 'control-label col-sm-3')) ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::select('items_per_page', HTML::per_page(), $config['items_per_page'], array('class' => 'form-control')); ?>
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['default_status']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['default_status']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('default_status', __('Default Blog Status'), array('class' => 'control-label col-sm-3')) ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::select('default_status', Post::status(), isset($config['default_status']) ? $config['default_status'] : NULL, array('class' => 'form-control')); ?>
@@ -52,7 +52,7 @@
 
 	<hr>
 
-	<div class="form-group <?php echo isset($errors['comment']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['comment']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('comment', __('Allow people to post comments'), array('class' => 'control-label col-sm-3')); ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::label('comment', Form::radio('comment', 0, $comment1).__('Disabled'), array('class' => 'radio')); ?>
@@ -62,7 +62,7 @@
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['comment_default_mode']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['comment_default_mode']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('comment_default_mode', __('Comment display mode'), array('class' => 'control-label col-sm-3')) ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::label('comment_default_mode', Form::radio('comment_default_mode', 1, $mode1).__('Flat list &mdash; collapsed'), array('class' => 'radio')) ?>
@@ -72,7 +72,7 @@
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['comment_order']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['comment_order']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('comment_order', __('Comment Order'), array('class' => 'control-label col-sm-3')) ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::select('comment_order', array('asc'=> __('Older'), 'desc'=>__('Newer')), isset($config['comment_order']) ? $config['comment_order'] : 'asc', array('class' => 'form-control')); ?>
@@ -80,7 +80,7 @@
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['comments_per_page']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['comments_per_page']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('comments_per_page', __('Comments per page'), array('class' => 'control-label col-sm-3')); ?>
 		<div class="controls col-sm-4">
 			<?php echo Form::select('comments_per_page', HTML::per_page(), isset($config['comments_per_page']) ? $config['comments_per_page'] : 50, array('class' => 'form-control'));	?>
