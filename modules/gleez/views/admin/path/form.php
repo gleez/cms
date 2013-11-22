@@ -6,7 +6,7 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="form-group <?php echo isset($errors['source']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['source']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('source', __('Existing URL Path'), array('class' => 'control-label col-md-4')); ?>
 		<div class="controls col-md-5">
 			<?php echo Form::input('source', $post->source, array('class' => 'form-control col-md-5')); ?>
@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-	<div class="form-group <?php echo isset($errors['alias']) ? 'error': ''; ?>">
+	<div class="form-group <?php echo isset($errors['alias']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('alias', __('Alias'), array('class' => 'control-label col-md-4')); ?>
 		<div class="controls col-md-5">
 			<?php echo Form::input('alias', $post->alias, array('class' => 'form-control col-md-5')); ?>
