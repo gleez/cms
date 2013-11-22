@@ -172,7 +172,6 @@ class Menu {
 		if( empty( $items ) ) return;
 
 		$i++;
-		HTML::$current_route = URL::site(Request::current()->uri());
 
 		//This attribute detects we're in nav or widget for styling
 		$is_widget	= isset($attrs['widget']);
@@ -196,7 +195,7 @@ class Menu {
 			if ( $has_children )
 			{
 				$classes[] = 'parent dropdown';
-				$attributes[] = 'dropdown-toggle';
+				$attributes[] = 'dropdown-toggle collapsed';
 				if($i == 2) $classes[] = 'dropdown-submenu';
 			}
 
@@ -240,7 +239,7 @@ class Menu {
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="fa '.$item['image'].'"></i>' : '';
-			$title .= Text::plain($item['title']).$caret;
+			$title .= '<span>'.Text::plain($item['title']).$caret.'</span>';
 
 			if($item['descp'] && !empty($item['descp']))
 			{
