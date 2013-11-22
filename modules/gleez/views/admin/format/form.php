@@ -8,14 +8,14 @@
 
 	<div class="row">
 		<div class="col-md-6">
-			<div class="form-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 				<div class="controls">
 					<?php echo Form::label('name', __('Title'), array('class' => 'control-label')); ?>
 					<?php echo Form::input('name', $format['name'], array('class' => 'form-control')); ?>
 				</div>
 			</div>
 
-			<div class="form-group <?php echo isset($errors['roles']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['roles']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('roles', __('Roles'), array('class' => 'control-label')) ?>
 				<?php foreach($roles as $role => $name): ?>
 					<div class="form-wrap1">
