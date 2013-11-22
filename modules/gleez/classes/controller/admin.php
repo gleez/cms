@@ -52,6 +52,7 @@ class Controller_Admin extends Template {
 
 	public function after()
 	{
+		Assets::css('admin', "media/css/admin.css", array('default'), array('weight' => 60));
 		parent::after();
 	}
 
