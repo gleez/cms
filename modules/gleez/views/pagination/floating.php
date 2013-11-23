@@ -91,4 +91,4 @@ for ($i = $n7; $i <= $n8; $i++)
 		<?php echo __('Last') ?>
 	<?php endif ?>
 
-</p><!-- .pagination -->
+</p>

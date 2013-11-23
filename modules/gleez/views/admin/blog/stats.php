@@ -2,7 +2,6 @@
 	<p><?php _e('Summary statistics of blogs used on your site'); ?></p>
 </div>
 
-
 <div class="content col-sm-12">
 	<div class="row">
 		<div class="col-sm-6">

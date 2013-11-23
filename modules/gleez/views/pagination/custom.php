@@ -78,4 +78,4 @@ for ($i = $n7; $i <= $n8; $i++)
 			<li class="disabled"><a href="" class="disabled">&rarr;</a></li>
 		<?php endif ?>
 	</ul>
-</div><!-- .pagination -->
+</div>
