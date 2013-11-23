@@ -1,3 +1,7 @@
+<div class="help">
+	<p><?php _e('Summary statistics of pages used on your site'); ?></p>
+</div>
+
 <div class="content col-sm-12">
 	<div class="row">
 		<div class="col-sm-6">
