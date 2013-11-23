@@ -9,7 +9,7 @@ html#backend, body.backend {
 }
 
 body.backend {
-	background-image: url('../images/bg/bg3.png');
+	background-image: url('../images/alt-bg.png');
 	padding-top: 50px;
 }
 
@@ -66,4 +66,8 @@ body.backend {
 #backend .page-header {
 	padding-bottom: 0;
 	border: none;
+}
+
+#backend .panel-body ul.menus li.active a:after {
+	right: -1px;
 }
