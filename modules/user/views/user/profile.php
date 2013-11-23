@@ -1,76 +1,84 @@
-<div class="row-fluid" itemscope itemtype="http://schema.org/Person">
-
-	<div id="Panel" class="span4">
-		<div id="photo" class="well">
-			<div class="Photo">
-				<?php echo User::getAvatar($user, array('size' => 150)); ?>
-			</div>
-
-			<?php if ($is_owner OR ACL::check('administer users')): ?>
-				<ul class="nav nav-list">
-					<?php if ( ! Config::get('site.use_gravatars', FALSE)): ?>
-						<li><?php echo HTML::anchor('user/photo', '<i class="fa fa-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
-					<?php endif; ?>
-					<li><?php echo HTML::anchor('user/edit', '<i class="fa fa-pencil"></i>'.__('Edit Account')) ?></li>
-					<li><?php echo HTML::anchor('user/password', '<i class="fa fa-cog"></i>'.__('Change Password')) ?></li>
-				</ul>
-			<?php endif;?>
-		</div>
-
-		<div class="well about">
-			<h4><i class="fa fa-user"></i> <?php echo __('About'); ?></h4>
-			<dl>
-				<dt><?php echo __('Name'); ?></dt>
-				<dd itemprop="name"><?php echo $user->nick; ?></dd>
-				<dt><?php echo __('Birthday'); ?></dt>
-				<dd itemprop="birthDate"><?php echo date('M d, Y', $user->dob); ?></dd>
-				<dt><?php echo __('Joined on'); ?></dt>
-				<dd><?php echo date('M d, Y', $user->created); ?></dd>
-				<?php if ($is_owner OR User::is_admin()): ?>
-					<dt><?php echo __('Email'); ?></dt>
-					<dd><?php echo Text::auto_link_emails($user->mail); ?></dd>
-				<?php endif; ?>
-				<?php if ($user->homepage): ?>
-					<dt><?php echo __('Home Page'); ?></dt>
-					<dd><?php echo Text::auto_link($user->homepage); ?></dd>
-				<?php endif; ?>
-				<dt><?php echo __('Visits'); ?></dt>
-				<dd><?php echo $user->logins; ?></dd>
-				<dt><?php echo __('Last Active'); ?></dt>
-				<dd><?php echo date('M d, Y', $user->login); ?> @ <?php echo date('h:i a', $user->login); ?></dd>
-				<?php if (User::is_admin()): ?>
-				<dt><?php echo __('Roles'); ?></dt>
-				<dd>
-					<ul class="user-roles">
-						<?php foreach ($user->roles() as $role): ?>
-							<li><?php echo Text::plain(ucfirst($role)); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				</dd>
-				<?php endif; ?>
+<div class="row">
+<div class="col-md-4 vcard" itemscope itemtype="http://schema.org/Person">
+	<div class="vcard-avatar">
+		<?php echo User::getAvatar($user, array('size' => 220)); ?>
+	</div>
+	<h1 class="vcard-names">
+		<span itemprop="name"><?php echo $user->nick; ?></span>
+		<em itemprop="additionalName"><?php echo $user->name; ?></em>
+	</h1>
+	<div class="vcard-details">
+		<?php if ($is_owner AND ( ! Config::get('site.use_gravatars', FALSE))): ?>
+		<dl>
+			<dt><i class="fa fa-upload"></i></dt>
+			<dd><?php echo HTML::anchor('user/photo', __('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'), 'data-toggle' => 'popup')) ?></dd>
+		</dl>
+		<?php endif; ?>
+		<dl>
+			<dt><i class="fa fa-sign-in"></i></dt>
+			<dd><span class="caption-label"><?php echo __('Joined on') ?></span><?php echo date('M d, Y', $user->created) ?></dd>
+		</dl>
+		<dl>
+			<dt><i class="fa fa-off"></i></dt>
+			<dd><span class="caption-label"><?php echo __('Visits') ?></span><?php echo $user->logins ?></dd>
+		</dl>
+		<dl title="<?php echo __('Last Active') ?>">
+			<dt><i class="fa fa-fire"></i></dt>
+			<dd><?php echo date('M d, Y', $user->login) . __(' @ ') .  date('h:i a', $user->login) ?></dd>
+		</dl>
+		<?php if ($is_owner OR User::is_admin()): ?>
+			<dl title="<?php echo __('Email') ?>">
+				<dt><i class="fa fa-envelope"></i></dt>
+				<dd><a class="email" data-email="<?php echo $user->mail ?>" href="mailto:<?php echo $user->mail ?>"><?php echo $user->mail ?></a></dd>
 			</dl>
-		</div>
-	</div>
+		<?php endif; ?>
+		<?php if ($user->homepage): ?>
+			<dl title="<?php echo __('Home Page') ?>">
+				<dt><i class="fa fa-link"></i></dt>
+				<dd><?php echo HTML::anchor($user->homepage, $user->homepage, array('itemprop' => 'url')); ?></dd>
+			</dl>
+		<?php endif; ?>
 
-	<div id="Profile" class="span8">
-		<h3><?php echo __('Activity'); ?></h3>
-		<ul class="nav nav-list">
-			<li class="Item activity " id="activity_1">
-				<div class="ItemContent Activity">
-					<div class="Title"><?php echo __(':nick joined.', array(':nick' => $user->nick)); ?></div>
-					<div class="Excerpt"><?php echo __('Welcome to Gleez!') ?></div>
-					<div class="meta"><span class="date-created"><?php echo __(Date::fuzzy_span($user->created)); ?></span></div>
-				</div>
-			</li>
-		</ul>
-		<h3><?php echo __('Bio'); ?></h3>
-		<div class="ItemContent">
-			<?php echo Text::plain($user->bio); ?>
-		</div>
+		<dl title="<?php echo __('Birthday') ?>">
+			<dt><i class="fa fa-calendar"></i></dt>
+			<dd itemprop="birthDate"><?php echo date('M d, Y', $user->dob) ?></dd>
+		</dl>
+		<?php if (User::is_admin()): ?>
+			<dl>
+				<dt><i class="fa fa-group"></i></dt>
+				<dd class="tagcloud">
+					<?php foreach ($user->roles() as $role): ?>
+						<span><?php echo Text::plain(ucfirst($role)); ?></span>
+					<?php endforeach; ?>
+				</dd>
+			</dl>
+		<?php endif; ?>
 	</div>
-
 </div>
 
+<div class="col-md-8">
+	<ul class="tabnav">
+		<li>
+			<?php echo HTML::anchor('user/edit', '<i class="fa fa-pencil"></i> '.__('Edit Account'), array('class' => 'btn btn-default')); ?>
+		</li>
+		<li>
+			<?php echo HTML::anchor('user/password', '<i class="fa fa-cog"></i> '.__('Change Password'), array('class' => 'btn btn-default')); ?>
+		</li>
+	</ul>
+	<div class="col-md-12">
+		<?php if ($user->bio): ?>
+			<div class="widget">
+				<div class="widget-header">
+					<h3><?php echo __('Bio') ?></h3>
+				</div>
+				<div class="widget-content">
+					<?php echo Text::plain($user->bio); ?>
+				</div>
+			</div>
+		<?php endif ?>
+	</div>
+</div>
+</div>
 <div class="modal hide fade in" id="upload-photo" role="dialog" tabindex="-1" aria-hidden="true">
 	<div class="modal-header">
 		<?php echo Form::button('close_window', '&times;', array('class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')); ?>
@@ -79,5 +87,7 @@
 	<div class="modal-data"></div>
 </div>
 
-<?php Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15)); ?>
-<?php Assets::js('form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10)); ?>
+<?php
+	Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15));
+	Assets::js('user/form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10));
+?>
