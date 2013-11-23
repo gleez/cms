@@ -1,4 +1,4 @@
-<div class="tab-content col-sm-12">
+<div class="content col-sm-12">
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="panel panel-default">
