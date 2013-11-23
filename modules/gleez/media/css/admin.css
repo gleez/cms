@@ -57,12 +57,6 @@ body.backend {
 	margin-left: 22em;
 }
 
-.page-stats h3 {
-	color: #666;
-	font: normal 18px/30px "Oswald", Verdana, Arial, Helvetica, sans-serif;
-	margin: 10px 0;
-}
-
 #backend .page-header {
 	padding-bottom: 0;
 	border: none;
