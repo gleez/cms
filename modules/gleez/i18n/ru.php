@@ -873,6 +873,7 @@ return array(
 	'Subject must be less than :param2 characters long' => 'Тема сообщения должна содержать не более :param2 символов',
 	'Success!' => 'Успех!',
 	'Summary statistics of pages used on your site' => 'Основная статистика страниц используемых на вашем сайте',
+	'Summary statistics of blogs used on your site' => 'Основная статистика блогов используемых на вашем сайте',
 	'Sunday' => 'Воскресенье',
 	'Swift Current' => 'Свифт-Карент',
 	'Sydney' => 'Сидней',
