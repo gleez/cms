@@ -7,7 +7,7 @@
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
 <div class="form-group <?php echo isset($errors['title']) ? 'has-error': ''; ?>">
-	<?php echo Form::label('title', __('Title'), array('class' => 'control-label col-md-3');) ?>
+	<?php echo Form::label('title', __('Title'), array('class' => 'control-label col-md-3')) ?>
 	<div class="controls col-md-6">
 		<?php echo Form::input('title', $post->title, array('class' => 'form-control')); ?>
 	</div>
