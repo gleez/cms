@@ -981,7 +981,7 @@ return array(
 	'Toronto' => 'Торонто',
 	'Tortola' => 'Тортола',
 	'Tirane' => 'Тирана',
-	'Total' => 'Итого',
+	'Total: %sum' => 'Итого: %sum',
 	'Tripoli' => 'Триполи',
 	'Tuesday' => 'Вторник',
 	'Tunis' => 'Тунис',
