@@ -37,6 +37,9 @@ class Controller_Contact extends Template {
 		$this->title = __('Contact us');
 		$config = Kohana::$config->load('contact');
 
+		//Add schema.org support
+		$this->schemaType = 'ContactPage';
+		
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
 

@@ -243,6 +243,9 @@ class Controller_User extends Template {
 		$account  = FALSE;
 		$is_owner = FALSE;
 
+		//Add schema.org support
+		$this->schemaType = 'ProfilePage';
+
 		if ( ! $user->loaded())
 		{
 			Log::error('Attempt to access non-existent user.');
