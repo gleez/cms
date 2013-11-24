@@ -24,7 +24,7 @@
 				<span class="content"><?php _e('Tags'); ?></span>
 				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['tags']['total'])); ?></span>
 			</div>
-			<?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+			<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6">
@@ -36,7 +36,7 @@
 				<span class="content"><?php _e('Posts'); ?></span>
 				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['articles']['total'])); ?></span>
 			</div>
-			<?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+			<?php echo HTML::anchor(Route::get('admin/page')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6">
@@ -48,7 +48,7 @@
 				<span class="content"><?php _e('Comments'); ?></span>
 				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['comments']['total'])); ?></span>
 			</div>
-			<?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+			<?php echo HTML::anchor(Route::get('admin/comment')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
 		</div>
 	</div>
 </div>
