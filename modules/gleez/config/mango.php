@@ -50,7 +50,7 @@ return array(
 				 *                            See http://www.php.net/manual/ru/mongo.writeconcerns.php
 				 */
 				'db'               => 'gleez', // Required
-				'connectTimeoutMS' => 1000,    // Optional
+				'connectTimeoutMS' => 10000,   // Optional
 				'connect'          => FALSE,   // Optional
 				'username'         => FALSE,   // Optional
 				'password'         => FALSE,   // Optional
