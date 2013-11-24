@@ -10,12 +10,6 @@
 return array
 (
 	/**
-	 * Driver name file or orm
-	 * @var  string
-	 */
-	'driver' => 'orm',
-
-	/**
 	 * Type of hash to use for passwords.
 	 * Any algorithm supported by the hash function can be used here.
 	 *
@@ -43,14 +37,6 @@ return array
 	 * @var  string
 	 */
 	'session_key' => 'auth_user',
-
-	/**
-	 * Username/password combinations for the Auth File driver
-	 * @var  string
-	 */
-	'users' => array(
-		// 'admin' => 'b3154acf3a344170077d11bdb5fff31532f679a1919e716a02',
-	),
 
 	/**
 	 * Use username for login and registration (TRUE) or use email as username (FALSE)?
@@ -95,7 +81,7 @@ return array
 	'use_nick' => TRUE,
 
 	/**
-	 * Use nickname for registration (TRUE) or use username (FALSE)?
+	 * Use captcha for registration (TRUE)?
 	 * @var  boolean
 	 */
 	'use_captcha' => TRUE,
