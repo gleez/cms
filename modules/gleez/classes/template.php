@@ -47,6 +47,12 @@ abstract class Template extends Controller {
 	public $subtitle = FALSE;
 	
 	/**
+	 * The Schema Type
+	 * @var string
+	 */
+	public $schemaType = FALSE;
+
+	/**
 	 * The delimiter page header and site name
 	 * @var string
 	 */
@@ -303,6 +309,7 @@ abstract class Template extends Controller {
 				->set('title',         $this->title)
 				->set('subtitle',      $this->subtitle)
 				->set('icon',          $this->icon)
+				->set('schemaType',    $this->schemaType)
 				->set('front',         FALSE)
 				->set('mission',       FALSE)
 				->set('tabs',          FALSE)
@@ -414,6 +421,7 @@ abstract class Template extends Controller {
 				->set('title',        $this->title)
 				->set('subtitle',     $this->subtitle)
 				->set('icon',         $this->icon)
+				->set('schemaType',   $this->schemaType)
 				->set('mission',      $this->template->mission)
 				->set('content',      $this->response->body())
 				->set('messages',     Message::display())
