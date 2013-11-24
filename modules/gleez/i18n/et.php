@@ -525,7 +525,7 @@ return array(
 	'Time Zone' => 'Часовой пояс',
 	'Title' => 'Pealkiri',
 	'Top Region' => 'Верхний регион',
-	'Total' => 'Summas',
+	'Total: %sum' => 'Summas: %sum',
 	'Tuesday' => 'Teisipäev',
 	'Thursday' => 'Neljapäev',
 	'Type' => 'Tüüp',
