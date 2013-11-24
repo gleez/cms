@@ -73,7 +73,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Gleez Team
- * @version    0.4.0
+ * @version    0.4.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -278,8 +278,7 @@ class Mango {
 		$this->_connection = new $mongo_class($server, Arr::merge(array('connect' => FALSE), $options));
 
 		// Save profiling option in a public variable
-		// @todo Kohana::$profiling => Gleez::$profiling
-		$this->profiling = (isset($config['profiling']) AND $config['profiling']) AND Kohana::$profiling;
+		$this->profiling = (isset($config['profiling']) AND $config['profiling']) AND Gleez::$profiling;
 
 		// Optional connect
 		if (Arr::get($options, 'connect', TRUE))
