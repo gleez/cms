@@ -197,6 +197,9 @@ class Controller_User extends Template {
 	 */
 	public function action_logout()
 	{
+		//Disbale themplate on logout
+		$this->auto_render = FALSE;
+
 		// Sign out the user
 		Auth::instance()->logout();
 
