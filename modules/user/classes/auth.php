@@ -7,11 +7,11 @@
  *
  * @package    Gleez\Auth\Base
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-abstract class Auth {
+class Auth {
 
 	/**
 	 * Auth instances
@@ -41,18 +41,10 @@ abstract class Auth {
 		if ( ! isset(Auth::$_instance))
 		{
 			// Load the configuration for this type
-			$config = Kohana::$config->load('auth');
-
-			if ( ! $type = $config->get('driver'))
-			{
-				$type = 'file';
-			}
-
-			// Set the auth class name
-			$class = 'Auth_'.ucfirst($type);
+			$config = Config::load('auth');
 
 			// Create a new session instance
-			Auth::$_instance = new $class($config);
+			Auth::$_instance = new Auth($config);
 		}
 
 		return Auth::$_instance;
@@ -109,7 +101,15 @@ abstract class Auth {
 	 */
 	public function get_user($default = NULL)
 	{
-		return $this->_session->get($this->_config['session_key'], $default);
+		$user = $this->_session->get($this->_config['session_key'], $default);
+
+		if ( !$user OR $user->id === 1 )
+		{
+			// check for "remembered" login
+			$user = $this->auto_login();
+		}
+
+		return $user;
 	}
 
 	/**
@@ -127,11 +127,42 @@ abstract class Auth {
 	 * specific role.
 	 *
 	 * @param   string  $role  Role name [Optional]
-	 * @return  mixed
+	 * @return  boolean
 	 */
 	public function logged_in($role = NULL)
 	{
-		return ($this->get_user() !== NULL);
+		static $roles;
+
+		// Get the user from the session
+		$user = $this->get_user();
+		if ( ! $user) return FALSE;
+
+		if ($user instanceof Model_User AND $user->loaded() AND $user->id !== 1)
+		{
+			// If we don't have a roll no further checking is needed
+			if ( ! $role) return TRUE;
+
+			if ( ! is_array($role) ) $role = array($role);
+			if ( ! isset($roles) ) $roles = $user->roles->find_all()->as_array('id', 'name');
+
+			foreach ($role as $role_item)
+			{
+				if (is_int($role_item))
+				{
+					if ( !isset($roles[$role_item]) ) return FALSE;
+				}
+				elseif (is_object($role_item))
+				{
+					if ( !isset($roles[$role_item->pk()]) ) return FALSE;
+				}
+				else
+				{
+					if ( !in_array($role_item, $roles) ) return FALSE;
+				}
+			}
+
+			return TRUE;
+		}
 	}
 
 	/**
@@ -187,6 +218,159 @@ abstract class Auth {
 	}
 
 	/**
+	 * Allows a model use email, username and OAuth provider id as unique identifiers for login
+	 *
+	 * @param   string  $value           Unique value
+	 * @param   string  $oauth_provider  OAuth provider name [Optional]
+	 * @return  string  field name
+	 */
+	public function unique_key($value, $oauth_provider = NULL)
+	{
+		if ($oauth_provider)
+		{
+			return $oauth_provider.'_id';
+		}
+
+		return Valid::email($value) ? 'mail' : 'name';
+	}
+
+	/**
+	 * Get the stored password for a username.
+	 *
+	 * @param   mixed   username string, or user ORM object
+	 * @return  string
+	 */
+	public function password($user)
+	{
+		if ( ! is_object($user))
+		{
+			$username = $user;
+
+			// Load the user
+			$user = ORM::factory('user');
+			$user->where($user->unique_key($username), '=', $username)->find();
+		}
+
+		return $user->passw;
+	}
+
+	/**
+	 * Compare password with original (hashed). Works for current (logged in) user
+	 *
+	 * @param   string  $password
+	 * @return  boolean
+	 */
+	public function check_password($password)
+	{
+		$user_model = $this->get_user();
+		$user = $user_model->original_values();
+
+		if ( ! $user)
+			return FALSE;
+
+		return ($this->hash($password) === $user['pass']);
+	}
+
+	/**
+	 * Logs a user in, based on the authautologin cookie.
+	 *
+	 * @return  mixed
+	 */
+	public function auto_login()
+	{
+		if ($token = Cookie::get('authautologin'))
+		{
+			// Load the token and user
+			$token = ORM::factory('user_token', array('token' => $token));
+
+			if ($token->loaded() AND $token->user->loaded()  AND $token->user->id != 1)
+			{
+				if ($token->user_agent === sha1(Request::$user_agent))
+				{
+					// Save the token to create a new unique token
+					$token->save();
+
+					// Set the new token
+					Cookie::set('authautologin', $token->token, $token->expires - time());
+
+					// Complete the login with the found data
+					$this->complete_login($token->user);
+
+					// Automatic login was successful
+					return $token->user;
+				}
+
+				// Token is invalid
+				$token->delete();
+			}
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Forces a user to be logged in, without specifying a password.
+	 *
+	 * @param   mixed    username string, or user ORM object
+	 * @param   boolean  mark the session as forced
+	 * @return  boolean
+	 */
+	public function force_login($user, $mark_session_as_forced = FALSE)
+	{
+		if ( ! is_object($user))
+		{
+			$username = $user;
+
+			// Load the user
+			$user = ORM::factory('user');
+			$user->where($user->unique_key($username), '=', $username)->find();
+		}
+
+		if ($mark_session_as_forced === TRUE)
+		{
+			// Mark the session as forced, to prevent users from changing account information
+			$this->_session->set('auth_forced', TRUE);
+		}
+
+		// Run the standard completion
+		$this->complete_login($user);
+	}
+
+	/**
+	 * Forces a user to be logged in when using SSO, without specifying a password.
+	 *
+	 * @param   ORM      $user
+	 * @param   boolean  $mark_session_as_forced
+	 * @return  boolean
+	 */
+	public function force_sso_login(ORM $user, $mark_session_as_forced = FALSE)
+	{
+		if ($mark_session_as_forced === TRUE)
+		{
+			// Mark the session as forced, to prevent users from changing account information
+			$this->_session->set('auth_forced', TRUE);
+		}
+
+		// Token data
+		$data = array(
+			'user_id'    => $user->id,
+			'expires'    => time() + $this->_config['lifetime'],
+			'user_agent' => sha1(Request::$user_agent),
+		);
+
+		// Create a new autologin token
+		$token = ORM::factory('user_token')
+			->values($data)
+			->create();
+
+		// Set the autologin cookie
+		Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+
+		// Run the standard completion
+		$this->complete_login($user);
+	}
+
+	/**
 	 * Log out a user by removing the related session variables.
 	 *
 	 * @param   boolean  $destroy     Completely destroy the session [Optional]
@@ -195,6 +379,27 @@ abstract class Auth {
 	 */
 	public function logout($destroy = FALSE, $logout_all = FALSE)
 	{
+		// Set by force_login()
+		$this->_session->delete('auth_forced');
+
+		if ($token = Cookie::get('authautologin'))
+		{
+			// Delete the autologin cookie to prevent re-login
+			Cookie::delete('authautologin');
+
+			// Clear the autologin token from the database
+			$token = ORM::factory('user_token', array('token' => $token));
+
+			if ($token->loaded() AND $logout_all)
+			{
+				ORM::factory('user_token')->where('user_id', '=', $token->user_id)->delete_all();
+			}
+			elseif ($token->loaded())
+			{
+				$token->delete();
+			}
+		}
+
 		if ($destroy === TRUE)
 		{
 			// Destroy the session completely
@@ -213,8 +418,69 @@ abstract class Auth {
 		return ! $this->logged_in();
 	}
 
+	/**
+	 * Logs a user in.
+	 *
+	 * @param   string   username
+	 * @param   string   password
+	 * @param   boolean  enable autologin
+	 * @return  boolean
+	 */
+	protected function _login($user, $password, $remember)
+	{
+		if ( ! is_object($user))
+		{
+			$username = $user;
+
+			// Load the user
+			$user = ORM::factory('user');
+			$user->where($user->unique_key($username), '=', $username)->find();
+		}
+
+		// If the passwords match, perform a login! role id: 2
+		if ($user->has('roles', 2) AND User::check_pass($user, $password) AND $user->id !== 1)
+		{
+			if ($remember === TRUE)
+			{
+				// Token data
+				$data = array(
+					'user_id'    => $user->id,
+					'expires'    => time() + $this->_config['lifetime'],
+					'user_agent' => sha1(Request::$user_agent),
+					'type'	     => 'autologin',
+					'created'    => time(),
+				);
+
+				// Create a new autologin token
+				$token = ORM::factory('user_token')
+					->values($data)
+					->create();
+
+				// Set the autologin cookie
+				Cookie::set('authautologin', $token->token, $this->_config['lifetime']);
+			}
+
+			// Finish the login
+			$this->complete_login($user);
+
+			return TRUE;
+		}
+
+		// Login failed
+		return FALSE;
+	}
+
+	/**
+	 * Complete the login for a user by incrementing the logins and setting
+	 * session data: user_id, username, roles.
+	 *
+	 * @param   object  user ORM object
+	 * @return  void
+	 */
 	protected function complete_login($user)
 	{
+		$user->complete_login();
+
 		// Regenerate session_id
 		$this->_session->regenerate();
 
@@ -223,28 +489,5 @@ abstract class Auth {
 
 		return TRUE;
 	}
-
-	/**
-	 * Allows a model use email, username and OAuth provider id as unique identifiers for login
-	 *
-	 * @param   string  $value           Unique value
-	 * @param   string  $oauth_provider  OAuth provider name [Optional]
-	 * @return  string  field name
-	 */
-	public function unique_key($value, $oauth_provider = NULL)
-	{
-		if ($oauth_provider)
-		{
-			return $oauth_provider.'_id';
-		}
-
-		return Valid::email($value) ? 'mail' : 'name';
-	}
-
-	abstract protected function _login($username, $password, $remember);
-
-	abstract public function password($username);
-
-	abstract public function check_password($password);
 
 }
