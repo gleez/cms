@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-md-3 col-sm-6">
-		<div class="dashboard-stat primary">
+		<div class="microwidget primary">
 			<div class="visual">
 				<i class="fa fa fa-folder-open"></i>
 			</div>
@@ -16,7 +16,7 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6">
-		<div class="dashboard-stat secondary">
+		<div class="microwidget secondary">
 			<div class="visual">
 				<i class="fa fa-tags"></i>
 			</div>
@@ -28,7 +28,7 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6">
-		<div class="dashboard-stat tertiary">
+		<div class="microwidget tertiary">
 			<div class="visual">
 				<i class="fa fa-file"></i>
 			</div>
@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<div class="col-md-3 col-sm-6">
-		<div class="dashboard-stat">
+		<div class="microwidget">
 			<div class="visual">
 				<i class="fa fa-comments"></i>
 			</div>
