@@ -480,7 +480,7 @@ Links:
   'Time Format' => '时间格式',
   'Time Zone' => '时区',
   'Title' => '标题',
-  'Total' => '总数',
+  'Total: %sum' => '总数: %sum',
   'Tuesday' => '星期二',
   'Type' => '类型',
   'Type:' => '类型：',

@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 /*-------------------------------------------------------------------
-                           5. Admin
+                               5. Admin
 -------------------------------------------------------------------*/
 
 html#backend, body.backend {
-    height:100%;
+	height:100%;
 }
 
 body.backend {
@@ -25,16 +25,16 @@ body.backend {
 }
 
 #backend .navbar {
-    box-shadow: none;
+	box-shadow: none;
 }
 
 #backend .admin-container.container,
 #backend .admin-nav.container {
-    width: 100%;
-    margin-top: 0;
-    padding-top: 0;
-    padding-left: 0;
-    padding-right: 0;
+	width: 100%;
+	margin-top: 0;
+	padding-top: 0;
+	padding-left: 0;
+	padding-right: 0;
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 	        box-sizing: border-box;
@@ -45,8 +45,8 @@ body.backend {
 }
 
 .backend .content.row {
-    margin-right: 0;
-    margin-left: 0;
+	margin-right: 0;
+	margin-left: 0;
 }
 
 .page-settings-form .set-check .checkbox {
@@ -55,12 +55,6 @@ body.backend {
 
 .blog-settings-form .set-check .checkbox {
 	margin-left: 22em;
-}
-
-.page-stats h3 {
-	color: #666;
-	font: normal 18px/30px "Oswald", Verdana, Arial, Helvetica, sans-serif;
-	margin: 10px 0;
 }
 
 #backend .page-header {
