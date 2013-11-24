@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -77,6 +77,7 @@ class Controller_Blog extends Template {
 		}
 
 		$this->title = __('Blogs');
+		$this->schemaType = 'WebPage';
 
 		/**
 		 * Bug in ORM to repeat the `where()` methods after using `count_all()`
@@ -195,6 +196,7 @@ class Controller_Blog extends Template {
 		}
 
 		$this->title = $post->title;
+		$this->schemaType = 'Article';
 
 		$view = View::factory('blog/post')
 			->set('title',             $this->title)
