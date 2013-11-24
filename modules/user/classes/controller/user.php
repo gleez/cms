@@ -148,6 +148,9 @@ class Controller_User extends Template {
 		$this->title = __('Sign In');
 		$user        = ORM::factory('user');
 
+		//Disbale sidebars on login page
+		$this->_sidebars = FALSE;
+
 		// Create form action
 		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
 		$params      = array('action' => 'login');
