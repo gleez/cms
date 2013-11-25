@@ -199,7 +199,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			try
 			{
 				$term->delete();
-				Message::success(__('Category Group :name deleted successful!', array(':name' => $term->name)));
+				Message::success(__('Category Group %name deleted successful!', array('%name' => $term->name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
