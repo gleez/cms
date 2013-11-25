@@ -190,7 +190,7 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (17, 'Settings', 'settings', '', 'fa-cogs', 'admin/settings', NULL, 1, 2, 28, 29, 2, 2),
 (18, 'Path Alias', 'path-alias', '', 'fa-link', 'admin/paths', NULL, 1, 2, 20, 21, 2, 2),
 (19, 'Widgets', 'widgets', '', 'fa-asterisk', 'admin/widgets', NULL, 1, 2, 26, 27, 2, 2),
-(20, 'Taxonomy', 'taxonomy', '', 'fa-folder-open', 'admin/taxonomy', NULL, 1, 2, 14, 15, 2, 2),
+(20, 'Categories', 'taxonomy', '', 'fa-folder-open', 'admin/taxonomy', NULL, 1, 2, 14, 15, 2, 2),
 (21, 'Tags', 'tags', '', 'fa-tags', 'admin/tags', NULL, 1, 2, 16, 17, 2, 2),
 (22, 'Modules', 'modules', '', 'fa-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
 (23, 'Users', 'users', '', 'fa-user', 'admin/users', NULL, 1, 2, 22, 23, 2, 2),
