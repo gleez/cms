@@ -138,7 +138,6 @@ return array(
 	'Password Confirm must be the same as Password' => 'Подтверждение пароля должно соответствовать паролю',
 	'Password must be at least :param2 characters long' => 'Пароль должен быть не короче :param2 символов',
 	'Password successfully changed! We hope you feel safer now.' => 'Пароль успешно изменён! Мы надеемся теперь вы чувствуете себя в безопасности.',
-	'Private' => 'Личное',
 	'Permission' => 'Полномочие',
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
@@ -150,6 +149,8 @@ return array(
 	'Please enter the code from the image.' => 'Пожалуйста введите код с картинки.',
 	'Please register' => 'Пожалуйста зарегистрируйтесь',
 	'Profile %title' => 'Профиль %title',
+	'Profile Settings' => 'Настройки профиля',
+	'Private' => 'Личное',
 	'Public' => 'Публичное',
 	'Public field. No more than 800 characters' => 'Публичное поле. Не более 800 символов',
 	// Q

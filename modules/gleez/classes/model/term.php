@@ -1,9 +1,10 @@
 <?php
 /**
- * An adaptation of taxonomy
+ * An adaptation of taxonomy (Categories and Category Groups)
  *
  * @package    Gleez\ORM\Terms
- * @author     Sandeep Sangamreddi - Gleez
+ * @author     Gleez Team
+ * @version    1.0.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
