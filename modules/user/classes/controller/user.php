@@ -41,6 +41,9 @@ class Controller_User extends Template {
 		{
 			$this->request->action('reset_'.$this->request->action());
 		}
+
+		//Disable sidebars on user pages
+		$this->_sidebars = FALSE;
 	}
 
 	/**
