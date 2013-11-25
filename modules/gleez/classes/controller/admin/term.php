@@ -4,15 +4,21 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Term extends Controller_Admin {
 
+	/**
+	 * The before() method is called before controller action
+	 *
+	 * @uses  ACL::required
+	 */
 	public function before()
 	{
 		ACL::required('administer terms');
+
 		parent::before();
 	}
 
@@ -34,13 +40,13 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $vocab->loaded())
 		{
-			Log::error('Attempt to access non-existent vocabulary.');
-			Message::error(__('Vocabulary doesn\'t exists!'));
+			Log::error('Attempt to access non-existent category group.');
+			Message::error(__("Category Group doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
 
-		$this->title = __('Terms for %vocab', array('%vocab' => $vocab->name));
+		$this->title = __('Categories of Group %vocab', array('%vocab' => $vocab->name));
 		$params = array('action' => 'add', 'id' => $id);
 
 		$view = View::factory('admin/term/list')
@@ -58,7 +64,7 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if (count($terms) == 0)
 		{
-			Message::info(__('There are no Terms that have been created for %vocab.', array('%vocab' => $vocab->name)));
+			Message::info(__('There are no Categories that have been created for %vocab.', array('%vocab' => $vocab->name)));
 
 			$view = View::factory('admin/term/none')
 					->bind('params', $params);
@@ -87,17 +93,18 @@ class Controller_Admin_Term extends Controller_Admin {
 	public function action_add()
 	{
 		$id = $this->request->param('id', 0);
+		/** @var $vocab Model_Term */
 		$vocab = ORM::factory('term', array('id' => $id, 'lft' => 1));
 
 		if ( ! $vocab->loaded())
 		{
-			Log::error('Attempt to access non-existent vocabulary.');
-			Message::error(__('Vocabulary doesn\'t exists!'));
+			Log::error('Attempt to access non-existent category group.');
+			Message::error(__("Category Group doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
-		$this->title = __('Add Term for %vocab', array('%vocab' => $vocab->name));
+		$this->title = __('Add Category for %vocab', array('%vocab' => $vocab->name));
 
 		$terms = $vocab->select_list('id', 'name', '--');
 		$action = Route::get('admin/term')->uri(array('action' =>'add', 'id' => $vocab->id));
@@ -108,8 +115,9 @@ class Controller_Admin_Term extends Controller_Admin {
 					->set('action',  $action)
 					->set('terms',   $terms)
 					->set('path',    FALSE)
-					->bind('errors', $errors);
+					->bind('errors', $this->_errors);
 
+		/** @var $post Model_Term */
 		$post = ORM::factory('term')
 				->values($_POST);
 
@@ -120,13 +128,13 @@ class Controller_Admin_Term extends Controller_Admin {
 				$post->type = $vocab->type;
 				$post->create_at($id, Arr::get($_POST, 'parent', 'last'));
 
-				Message::success(__('Term %name saved successful!', array('%name' => $post->name)));
+				Message::success(__('Category %name saved successful!', array('%name' => $post->name)));
 
 				$this->request->redirect(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $vocab->id)), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -146,12 +154,13 @@ class Controller_Admin_Term extends Controller_Admin {
 	public function action_edit()
 	{
 		$id = $this->request->param('id', 0);
+		/** @var $term Model_Term */
 		$term = ORM::factory('term', $id);
 
 		if ( ! $term->loaded())
 		{
-			Log::error('Attempt to access non-existent Term.');
-			Message::error(__('Term doesn\'t exists!'));
+			Log::error('Attempt to access non-existent category.');
+			Message::error(__("Category doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
@@ -164,7 +173,7 @@ class Controller_Admin_Term extends Controller_Admin {
 		$view = View::factory('admin/term/form')
 				->bind('vocab',  $term)
 				->bind('post',   $term)
-				->bind('errors', $errors)
+				->bind('errors', $this->_errors)
 				->set('terms',   $terms)
 				->set('path',    $term->url)
 				->set('action',  $action);
@@ -176,14 +185,14 @@ class Controller_Admin_Term extends Controller_Admin {
 			try
 			{
 				$term->save();
-				Message::success(__('Term %name saved successful!', array('%name' => $term->name)));
+				Message::success(__('Category %name saved successful!', array('%name' => $term->name)));
 
 				// Redirect to listing
 				$this->request->redirect(Route::get('admin/term')->uri( array('id'=> $term->root())));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$errors = $e->errors('models', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -207,15 +216,15 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		if ( ! $term->loaded())
 		{
-			Log::error('Attempt to access non-existent Term.');
-			Message::error(__('Term doesn\'t exists!'));
+			Log::error('Attempt to access non-existent category.');
+			Message::error(__("Category doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(), 404);
 		}
 
 		$action = Route::get('admin/term')->uri(array('action' =>'delete', 'id' => $term->id));
 
-		$this->title = __('Deleting Term %name', array('%name' => $term->name));
+		$this->title = __('Deleting Category %name', array('%name' => $term->name));
 		$view = View::factory('form/confirm')
 					->set('title', $term->name)
 					->set('action', $action);
@@ -234,17 +243,17 @@ class Controller_Admin_Term extends Controller_Admin {
 				$name = $term->name;
 				$term->delete();
 
-				Log::info('Term :name deleted successful.', array(':name' => $name));
-				Message::success(__('Term %name deleted successful!', array('%name' => $name)));
+				Log::info('Category :name deleted successful.', array(':name' => $name));
+				Message::success(__('Category %name deleted successful!', array('%name' => $name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' =>'list')));
 			}
 			catch (Exception $e)
 			{
-				Log::error('Error occurred deleting term id: :id, :msg',
+				Log::error('Error occurred deleting category id: :id, :msg',
 					array(':id' => $term->id, ':msg' => $e->getMessage())
 				);
-				Message::error( __('An error occurred deleting term %term.', array('%term' => $term->name)) );
+				Message::error(__('An error occurred deleting category %term.', array('%term' => $term->name)));
 
 				$this->request->redirect(Route::get('admin/term')->uri(array('action' =>'list', 'id' => $term->id )), 500);
 			}
@@ -255,6 +264,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 	/**
 	 * Confirm form
+	 *
+	 * @todo Fix me!
 	 */
 	public function action_confirm()
 	{
@@ -282,8 +293,8 @@ class Controller_Admin_Term extends Controller_Admin {
 
 			if ($this->level_zero > 1)
 			{
-				Log::error('Terms order could not be saved.');
-				Message::error(__('Terms order could not be saved.'));
+				Log::error('Category order could not be saved.');
+				Message::error(__('Order of the categories could not be saved.'));
 
 				$this->request->redirect(
 					Route::get('admin/term')->uri( array( 'action'=>'list', 'id' => $id ) )
@@ -305,11 +316,11 @@ class Controller_Admin_Term extends Controller_Admin {
 						->execute();
 				}
 
-				Message::success(__('Terms order has been saved.'));
+				Message::success(__('Order of the categories has been saved.'));
 			}
 			catch(Exception $e)
 			{
-				Message::error(__('Term order could not be saved.'));
+				Message::error(__('Order of the categories could not be saved.'));
 			}
 
 			$this->request->redirect(Route::get('admin/term')->uri(array('action'=>'list', 'id' => $id )));
@@ -320,7 +331,9 @@ class Controller_Admin_Term extends Controller_Admin {
 	/*
 	 * Private function to generate the tree with parent child relationship for bulk update
 	 *
-	 * param  array  $tree
+	 * @param  array  $tree
+	 *
+	 * @todo Move to Model
 	 */
 	private function generate_tree($tree)
 	{
@@ -349,11 +362,14 @@ class Controller_Admin_Term extends Controller_Admin {
 	}
 
 	/*
-	 * Private function to calculate and generate the new ordered left, right and level values for bulk update
+	 * Private function to calculate and generate the new ordered left,
+	 * right and level values for bulk update
 	 *
-	 * param  array    $tree
-	 * param  integer  $parent [Optional]
-	 * param  array    $level [Optional]
+	 * @param  array    $tree
+	 * @param  integer  $parent [Optional]
+	 * @param  array    $level [Optional]
+	 *
+	 * @todo Move to Model
 	 */
 	private function calculate_mptt($tree, $parent = 0, $level = 2)
 	{
