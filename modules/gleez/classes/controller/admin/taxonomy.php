@@ -2,9 +2,11 @@
 /**
  * Admin Taxonomy Controller
  *
+ * Designed for managing Group Categories (Vocabs) and Categories (Terms)
+ *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -23,9 +25,15 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 	}
 
 	/**
-	 * Lists Vocabularies
+	 * List Category Groups
 	 *
 	 * @uses  Assets::popup
+	 * @uses  Request::is_datatables
+	 * @uses  Text::plain
+	 * @uses  HTML::icon
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Route::url
 	 */
 	public function action_list()
 	{
@@ -43,16 +51,16 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 				$this->_datatables->add_row(
 					array(
 						Text::plain($term->name).'<div class="description">'.Text::plain($term->description).'</div>',
-						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'fa-th-list', array('class'=>'action-list', 'title'=> __('List Terms'))),
-						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'fa-plus', array('class'=>'action-add', 'title'=> __('Add Term'))),
-						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Vocab'))),
-						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Vocab'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-vocabs'))
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'list', 'id' => $term->id)), 'fa-th-list', array('class'=>'action-list', 'title'=> __('List Categories'))),
+						HTML::icon(Route::get('admin/term')->uri(array('action' => 'add', 'id' => $term->id)), 'fa-plus', array('class'=>'action-add', 'title'=> __('Add Category'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'edit', 'id' => $term->id)), 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Group'))),
+						HTML::icon(Route::get('admin/taxonomy')->uri(array('action' => 'delete', 'id' => $term->id)), 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Group'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-vocabs'))
 					)
 				);
 			}
 		}
 
-		$this->title = __('Vocabulary');
+		$this->title = __('Category Groups');
 		$add_url     = Route::get('admin/taxonomy')->uri(array('action' =>'add'));
 		$url         = Route::url('admin/taxonomy', array('action' => 'list'), TRUE);
 
@@ -65,10 +73,22 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Add New Category Group
+	 *
+	 * @uses  Message::success
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 */
 	public function action_add()
 	{
-		$this->title = __('Add Vocab');
-		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $this->_errors);
+		$this->title = __('New Category Group');
+
+		$view = View::factory('admin/taxonomy/form')
+				->bind('post', $post)
+				->bind('errors', $this->_errors);
+
+		/** @var $post Model_Term */
 		$post = ORM::factory('term');
 
 		if ($this->valid_post('vocab'))
@@ -78,7 +98,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			{
 				$post->make_root();
 
-				Message::success(__('Vocab: %name saved successful!', array('%name' => $post->name)));
+				Message::success(__('New Category Group %name saved successful!', array('%name' => $post->name)));
 
 				// Redirect to listing
 				$this->request->redirect(Route::get('admin/taxonomy')->uri());
@@ -92,6 +112,13 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Edit Category Group
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Log::error
+	 */
 	public function action_edit()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -99,14 +126,16 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 
 		if ( ! $post->loaded())
 		{
-			Message::error(__('Vocab: doesn\'t exists!'));
-			Log::error('Attempt to access non-existent Vocab.');
+			Message::error(__("Category Group doesn't exists!"));
+			Log::error('Attempt to access non-existent Category Group.');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
-		$this->title = __( 'Edit Vocab: :name', array(':name' => $post->name) );
-		$view = View::factory('admin/taxonomy/form')->bind('post', $post)->bind('errors', $this->_errors);
+		$this->title = __('Edit Category Group %name', array('%name' => $post->name));
+		$view = View::factory('admin/taxonomy/form')
+				->bind('post', $post)
+				->bind('errors', $this->_errors);
 
 		if ($this->valid_post('vocab'))
 		{
@@ -115,7 +144,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 			{
 				$post->save();
 
-				Message::success(__('Vocab: %name saved successful!', array('%name' => $post->name)));
+				Message::success(__('Category Group %name saved successful!', array('%name' => $post->name)));
 
 				// Redirect to listing
 				$this->request->redirect( Route::get('admin/taxonomy')->uri() );
@@ -129,6 +158,16 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Delete Category Group
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Log::error
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Route::url
+	 */
 	public function action_delete()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -136,41 +175,41 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 
 		if ( ! $term->loaded())
 		{
-			Message::error(__('Taxonomy: doesn\'t exists!'));
-			Log::error('Attempt to access non-existent taxonomy.');
+			Message::error(__("Category doesn't exists!"));
+			Log::error('Attempt to access non-existent category group.');
 
 			$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 		}
 
-		$this->title = __('Delete Taxonomy :title', array(':title' => $term->name ));
+		$this->title = __('Delete Category Group :title', array(':title' => $term->name ));
 
 		$view = View::factory('form/confirm')
 				->set('action', Route::url('admin/taxonomy', array('action' => 'delete', 'id' => $term->id) ))
 				->set('title', $term->name);
 
 		// If deletion is not desired, redirect to list
-		if ( isset($_POST['no']) AND $this->valid_post() )
+		if (isset($_POST['no']) AND $this->valid_post())
 		{
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
 		// If deletion is confirmed
-		if ( isset($_POST['yes']) AND $this->valid_post() )
+		if (isset($_POST['yes']) AND $this->valid_post())
 		{
 			try
 			{
 				$term->delete();
-				Message::success(__('Taxonomy: :name deleted successful!', array(':name' => $term->name)));
+				Message::success(__('Category Group :name deleted successful!', array(':name' => $term->name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
 			catch (Exception $e)
 			{
-				Log::error('Error occurred deleting taxonomy id: :id, :message',
+				Log::error('Error occurred deleting category group id: :id, :message',
 					array(':id' => $term->id, ':message' => $e->getMessage())
 				);
-				Message::error(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
-				$this->_errors = array(__('An error occurred deleting taxonomy, :term.',array(':term' => $term->name)));
+				Message::error(__('An error occurred deleting category group %term', array('%term' => $term->name)));
+				$this->_errors = array(__('An error occurred deleting category group %term', array('%term' => $term->name)));
 
 				$this->request->redirect(Route::get('admin/taxonomy')->uri(array('action' => 'list')));
 			}
