@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.1.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -25,21 +25,33 @@ class Controller_Contact extends Template {
 	/**
 	 * Sending mails
 	 *
+	 * @since 1.0.0  First time this method was introduced
+	 * @since 1.1.0  Added jQuery Textarea Characters Counter Plugin
+	 *
+	 * @link  http://roy-jin.appspot.com/jsp/textareaCounter.jsp
+	 *
 	 * @uses  Request::query
 	 * @uses  Route::get
 	 * @uses  Route::uri
 	 * @uses  URL::query
 	 * @uses  URL::site
 	 * @uses  Validation::rule
+	 * @uses  Config::get
+	 * @uses  Config::load
+	 * @uses  Assets::js
 	 */
 	public function action_mail()
 	{
 		$this->title = __('Contact us');
-		$config = Kohana::$config->load('contact');
+
+		$config = Config::load('contact');
+
+		Assets::js('textareaCounter', 'media/js/jquery.textareaCounter.plugin.js', array('jquery'), FALSE, array('weight' => 10));
+		Assets::js('greet/form', 'media/js/greet.form.js', array('textareaCounter'), FALSE, array('weight' => 15));
 
 		//Add schema.org support
 		$this->schemaType = 'ContactPage';
-		
+
 		// Set form destination
 		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
 
@@ -84,7 +96,7 @@ class Controller_Contact extends Template {
 				$body = View::factory('email/contact')
 						->set('name',   $post['name'])
 						->set('body',   $post['body'])
-						->set('config', Kohana::$config->load('site'))
+						->set('config', Config::load('site'))
 						->render();
 
 				// Create an email message
