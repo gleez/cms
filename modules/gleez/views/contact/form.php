@@ -46,10 +46,7 @@
 			<div class="col-sm-9">
 				<div class="row">
 					<div class="input-group col-sm-12">
-						<?php echo Form::input('subject', '', array('class' => 'form-control', 'autofocus')) ?>
-						<p class="help-block">
-							<?php echo __('Maximum of :num characters.', array(':num' => '<span id="subject_length">'.$config->subject_length.'</span>')) ?>
-						</p>
+						<?php echo Form::input('subject', '', array('class' => 'form-control', 'autofocus', 'id' => 'countInput', 'data-max-chars' => $config->subject_length, 'data-display-format' => __(':format words', array(':format' => '#input/#max | #words ')))) ?>
 					</div>
 				</div>
 			</div>
@@ -60,10 +57,7 @@
 			<div class="col-sm-9">
 				<div class="row">
 					<div class="input-group col-sm-12">
-						<?php echo Form::textarea('body', '', array('class' => 'form-control', 'rows' => 6)) ?>
-						<p class="help-block">
-							<?php echo __('Maximum of :num characters.', array(':num' => '<span id="body_length">'.$config->body_length.'</span>')) ?>
-						</p>
+						<?php echo Form::textarea('body', '', array('class' => 'form-control', 'rows' => 6, 'id' => 'countTextarea', 'data-max-chars' => $config->body_length, 'data-display-format' => __(':format words', array(':format' => '#input/#max | #words ')))) ?>
 					</div>
 				</div>
 			</div>
