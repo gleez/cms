@@ -15,7 +15,7 @@
 	var textareaOptions = {
 		'maxCharacterSize': $('#countTextarea').data("maxChars"),
 		'originalStyle'   : 'help-block',
-		'warningStyle'    : 'help-block-warning',
+		'warningStyle'    : 'text-warning',
 		'warningNumber'   : 40,
 		'displayFormat'   : $('#countTextarea').data("displayFormat")
 	};
@@ -23,7 +23,7 @@
 	var inputOptions = {
 		'maxCharacterSize': $('#countInput').data("maxChars"),
 		'originalStyle'   : 'help-block',
-		'warningStyle'    : 'help-block-warning',
+		'warningStyle'    : 'text-warning',
 		'warningNumber'   : 10,
 		'displayFormat'   : $('#countInput').data("displayFormat")
 	};
