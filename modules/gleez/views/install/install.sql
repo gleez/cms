@@ -194,7 +194,7 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (21, 'Tags', 'tags', '', 'fa-tags', 'admin/tags', NULL, 1, 2, 16, 17, 2, 2),
 (22, 'Modules', 'modules', '', 'fa-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
 (23, 'Users', 'users', '', 'fa-user', 'admin/users', NULL, 1, 2, 22, 23, 2, 2),
-(24, 'Roles', 'roles', '', 'fa-retweet', 'admin/roles', NULL, 1, 2, 24, 25, 2, 2),
+(24, 'Roles', 'roles', '', 'fa-lock', 'admin/roles', NULL, 1, 2, 24, 25, 2, 2),
 (25, 'Pages', 'admin-pages', '', 'fa-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
 (26, 'Comments', 'admin-comment', '', 'fa-comment', 'admin/comments', NULL, 1, 2, 12, 13, 2, 2),
 (27, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4),
