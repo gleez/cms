@@ -432,8 +432,8 @@ CREATE TABLE {widgets} (
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
 (1, 'admin/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '4', 1, NULL, 1, 'fa-gift'),
-(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-tachometer'),
-(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'fa-cog'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'fa-tachometer'),
 (4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-asterisk'),
 (5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-none'),
 (6, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-flag'),
