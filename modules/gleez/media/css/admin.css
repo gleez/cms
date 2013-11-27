@@ -65,3 +65,66 @@ body.backend {
 #backend .panel-body ul.menus li.active a:after {
 	right: -1px;
 }
+
+.quick-actions{
+	display: inline-block;
+	list-style: none outside none;
+	margin: 20px 0 10px;
+	padding: 0;
+	text-align: center;
+}
+
+.quick-actions li{
+	padding: 0;
+}
+
+.quick-actions li{
+	min-width: 120px;
+}
+
+.quick-actions li {
+	background-color: #F6F6F6;
+	background-image: linear-gradient(to bottom, #F9F9F9 0%, #EDEBF4 100%);
+	background-repeat: repeat-x;
+	border: 1px solid #D5D5D5;
+	border-radius: 4px;
+	box-shadow: 0 1px 0 0 #FFFFFF inset, 0 1px 0 rgba(255, 255, 255, 0.4);
+	display: inline-block;
+	line-height: 18px;
+	margin: 0 10px 10px;
+}
+
+.quick-actions li a{
+	color: #666666;
+	display: block;
+	text-align: center !important;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.quick-actions li a {
+	padding: 10px 30px;
+}
+
+#dashboard-widgets-wrap.row{
+	padding-left:15px;
+	padding-right:15px;
+}
+
+#widgets tr.region-title td {
+	background-color: #BABABA;
+	font-weight: bold;
+}
+
+#widgets tr.region-message {
+	color: #999999;
+	font-weight: normal;
+}
+
+#widgets tr.region-populated {
+	display: none;
+}
+
+#widgets tr.region-title--1 td {
+	border-left: 3px solid #BA5D0F;
+	color: #BA5D0F;
+}
