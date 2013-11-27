@@ -49,6 +49,13 @@ table.dataTable th:active {
 	outline: none;
 }
 
+table.dataTable tr.odd td.sorting_1 { background-color: #E9E9E9; }
+table.dataTable tr.odd td.sorting_2 { background-color: #E9E9E9; }
+table.dataTable tr.odd td.sorting_3 { background-color: #E9E9E9; }
+table.dataTable tr.even td.sorting_1 { background-color: #FFF; }
+table.dataTable tr.even td.sorting_2 { background-color: #FFF; }
+table.dataTable tr.even td.sorting_3 { background-color: #FFF; }
+
 div.dataTables_filter {
 	height: 26px;
 	margin: 0;
