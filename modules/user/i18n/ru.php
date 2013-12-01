@@ -28,6 +28,7 @@ return array(
 	'Account %title created successful!' => 'Учётная запись %title успешно зарегистрирована!',
 	'Active' => 'Активный',
 	'Activity' => 'Активность',
+	'Activity Feed' => 'Лента активности',
 	'Add New Role' => 'Добавить новую роль',
 	'Add New User' => 'Добавить нового пользователя',
 	'Add Role' => 'Добавить роль',
@@ -86,6 +87,7 @@ return array(
 	'Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.' => 'Не удалось создать каталог %dir для загрузки изображения профиля. Проверьте права доступа веб-сервера на создание этого каталога.',
 	'Fill in the information below to register' => 'Для регистрации заполните регистрационную анкету ниже',
 	'First Visit' => 'Первое посещение',
+	'Friends' => 'Друзья',
 	'For full site access, you will need to click on this link or copy and paste it in your browser: :url' => 'Для полного доступа к сайту и подтверждения регистрации Вы должны перейти по следующей ссылке (или скопируйте и вставьте эту ссылку в адресную строку вашего браузера): :url',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
