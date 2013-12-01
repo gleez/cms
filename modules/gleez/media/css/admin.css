@@ -127,3 +127,26 @@ body.backend {
 	border-left: 3px solid #BA5D0F;
 	color: #BA5D0F;
 }
+
+#admin-list-users .user-roles{
+	margin: 0 0 10px 25px;
+}
+
+.dataTables_filter .col-xs-4{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.sys-icon .col-md-12{
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.sys-icon .select2-container .select2-choice {
+	height:34px;
+	border: 1px solid #CCCCCC;
+}
+
+#form-status.status{
+	margin-bottom:10px;
+}
