@@ -31,8 +31,8 @@
 
 	<div class="form-group <?php echo isset($errors['image']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('image', __('Icon'), array('class' => 'control-label col-md-3')); ?>
-		<div class="controls col-md-6">
-			<?php echo Form::select('image', System::icons(), $post->image, array('class' => 'form-control select-icons')); ?>
+		<div class="controls col-md-6 sys-icon">
+			<?php echo Form::select('image', System::icons(), $post->image, array('class' => 'select-icons col-md-12')); ?>
 		</div>
 	</div>
 
