@@ -190,11 +190,6 @@ class I18n {
 			// matched /lang or /lang/
 			return $matches[1];
 		}
-		elseif (preg_match ('/^\/(' . join ('|', array_values($installed_locales)) . ')\//', $uri, $matches)) {
-		{
-			// matched /lang/page-id
-			return $matches[1];
-		}
 
 		return FALSE;
 	}
@@ -210,7 +205,6 @@ class I18n {
 	 */
 	public static function domainLocale( array $installed_locales )
 	{
-
 		if (preg_match ('/^(' . join ('|', array_values($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
 		{
 			// matched /lang or /lang/ -> /lang [language=lang]
