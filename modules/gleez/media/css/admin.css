@@ -78,7 +78,7 @@ body.backend {
 }
 
 .quick-actions li{
-	min-width: 120px;
+	width: 150px;
 }
 
 .quick-actions li {
