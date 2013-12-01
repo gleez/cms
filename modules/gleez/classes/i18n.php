@@ -207,7 +207,6 @@ class I18n {
 	{
 		if (preg_match ('/^(' . join ('|', array_values($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
 		{
-			// matched /lang or /lang/ -> /lang [language=lang]
 			return $matches[1];
 		}
 
