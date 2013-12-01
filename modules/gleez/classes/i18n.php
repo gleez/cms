@@ -19,7 +19,7 @@
  * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
- * @version    1.0.1
+ * @version    1.2.0
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://kohanaframework.org/license
@@ -41,31 +41,49 @@ class I18n {
 	 */
 	protected static $_cache = array();
 
+	/**
+	 * Main function to detect and set the default language.
+	 *
+	 *     // Set the language
+	 *     $lang = I18n::initialize();
+	 */
 	public static function initialize()
 	{
 		//Installed Locales
 		$installed_locales = Config::get('site.installed_locales', array());
-		$default_locale    = Config::get('site.locale', 'en_US');
+		$default_locale    = Config::get('site.locale', I18n::$lang);
 		
 		//allow the user or browser to override the default locale
 		$locale_override   = Config::get('site.locale_override', FALSE);
 
 		// 1. Check the session specific preference (cookie)
-		$locale = I18n::cookie_locale($installed_locales);
+		$locale = I18n::cookieLocale($installed_locales);
 	
 		// 2. Check the user's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
-			$locale   = I18n::user_locale($installed_locales);
+			$locale   = I18n::userLocale($installed_locales);
 		}
 	
 		// 3. Check the request client/browser's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
-			$locale = I18n::request_locale($installed_locales);
+			$locale = I18n::requestLocale($installed_locales);
 		}
-	
-		// 4. Default locale preference
+
+		// 4. Check the url preference and get the language from url
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'URL'))
+		{
+			$locale = I18n::urlLocale($installed_locales);
+		}
+
+		// 5. Check the sub-domain preference and get the language form subdomain
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'DOMAIN'))
+		{
+			$locale = I18n::domainLocale($installed_locales);
+		}
+
+		// 6. Default locale preference
 		if(!$locale)
 		{
 			$locale = $default_locale;
@@ -76,7 +94,16 @@ class I18n {
 		setlocale(LC_ALL, $locale.'.utf-8');
 	}
 
-	public static function request_locale( array $installed_locales )
+	/**
+	 * Detect language based on the http request.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::requestLocale();
+	 *
+	 * @param   array  $installed_locales   array of instaleld locales
+	 * @return  string
+	 */
+	public static function requestLocale( array $installed_locales )
 	{
 		$requested_locales	= Request::accept_lang();
 		//@todo score comparison
@@ -91,7 +118,16 @@ class I18n {
 		return FALSE;
 	}
 
-	public static function user_locale( array $installed_locales )
+	/**
+	 * Detect language based on the user language settings.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::userLocale();
+	 *
+	 * @param   array  $installed_locales   array of instaleld locales
+	 * @return  string
+	 */
+	public static function userLocale( array $installed_locales )
 	{
 		//Can't set guest users locale, default's to site locale
 		if(User::is_guest()) 
@@ -110,8 +146,17 @@ class I18n {
 		
 		return FALSE;
 	}
-	
-	public static function cookie_locale( array $installed_locales )
+
+	/**
+	 * Detect language based on the request cookie.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::cookieLocale();
+	 *
+	 * @param   array  $installed_locales   array of instaleld locales
+	 * @return  string
+	 */
+	public static function cookieLocale( array $installed_locales )
 	{
 		$cookie_data = Cookie::get('user_language');
 		
@@ -127,7 +172,54 @@ class I18n {
 		
 		return FALSE;
 	}
-	
+
+	/**
+	 * Detect language based on the url.
+	 *
+	 *     ex: example.com/fr/
+	 *     $lang = I18n::urlLocale();
+	 *
+	 * @param   array  $installed_locales   array of instaleld locales
+	 * @return  string
+	 */
+	public static function urlLocale( array $installed_locales )
+	{
+		$uri	= Request::detect_uri();
+		if (preg_match ('/^\/(' . join ('|', array_values($installed_locales)) . ')\/?$/', $uri, $matches)) 
+		{
+			// matched /lang or /lang/
+			return $matches[1];
+		}
+		elseif (preg_match ('/^\/(' . join ('|', array_values($installed_locales)) . ')\//', $uri, $matches)) {
+		{
+			// matched /lang/page-id
+			return $matches[1];
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Detect language based on the subdomain.
+	 *
+	 *		ex: fr.example.com
+	 *     	$lang = I18n::domainLocale();
+	 *
+	 * @param   array  $installed_locales   array of instaleld locales
+	 * @return  string
+	 */
+	public static function domainLocale( array $installed_locales )
+	{
+
+		if (preg_match ('/^(' . join ('|', array_values($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
+		{
+			// matched /lang or /lang/ -> /lang [language=lang]
+			return $matches[1];
+		}
+
+		return FALSE;
+	}
+
 	/**
 	 * Get and set the target language.
 	 *
