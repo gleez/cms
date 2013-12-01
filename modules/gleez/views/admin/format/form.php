@@ -18,8 +18,8 @@
 			<div class="form-group <?php echo isset($errors['roles']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('roles', __('Roles'), array('class' => 'control-label')) ?>
 				<?php foreach($roles as $role => $name): ?>
-					<div class="form-wrap1">
-						<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, FALSE).ucfirst($name), array('class' => 'checkbox')) ?>
+					<div class="checkbox">
+						<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, FALSE).ucfirst($name)); ?>
 					</div>
 				<?php endforeach ?>
 			</div>
