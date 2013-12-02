@@ -5,9 +5,9 @@
 	<div class="help">
 		<p><?php echo __('View, edit, and delete your site\'s pages.'); ?></p>
 	</div>
-	
+
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
-	
+
 	<div class="content">
 		<?php echo Form::open($action, array('id'=>'admin-page-form', 'class'=>'no-form')); ?>
 			<fieldset class="bulk-actions form-actions rounded">
@@ -17,8 +17,8 @@
 							<?php echo Form::select('operation', Post::bulk_actions(TRUE, 'page'), '', array('class' => 'form-control col-md-5')); ?>
 						</div>
 					</div>
-					<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-default col-md-1')); ?>
-					<div class="col-md-7">
+					<?php echo Form::submit('page-bulk-actions', __('Apply'), array('class'=>'btn btn-default col-md-2')); ?>
+					<div class="col-md-6">
 						<?php echo HTML::anchor(Route::get('page')->uri(array('action' => 'add')), '<i class="fa fa-plus fa-white"></i> '.__('New entry'), array('class'=>'btn btn-success pull-right')); ?>
 					</div>
 				</div>
