@@ -200,6 +200,7 @@ return array(
 	'User %name deleted successful!' => 'Пользователь %name успешно удалён!',
 	"User %name saved successful!" => 'Пользователь: %name успешно обновлён!',
 	'User Account' => 'Учётная запись пользователя',
+	'User Groups' => 'Группы пользователей',
 	"User doesn't exists!" => "Пользователь не найден!",
 	'User name' => 'Имя пользователя',
 	'User Registration' => 'Регистрация пользователя',
