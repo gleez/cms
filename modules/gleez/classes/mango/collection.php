@@ -45,7 +45,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Gleez Team
- * @version    0.6.1
+ * @version    0.6.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -55,11 +55,23 @@
  */
 class Mango_Collection implements Iterator, Countable {
 
-	/** @type integer ASC Sort mode - ascending */
+	/**
+	 * Sort mode - ascending
+	 * @type integer
+	 */
 	const ASC = 1;
 
-	/** @type integer DESC Sort mode - descending */
+	/**
+	 * Sort mode - descending
+	 * @type integer
+	 */
 	const DESC = -1;
+
+	/**
+	 * Required driver version
+	 * @type string
+	 */
+	const REQUIRED_VERSION = '1.0.10';
 
 	/**
 	 * The name of the collection within the database or the gridFS prefix if gridFS is TRUE
@@ -305,7 +317,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @return  boolean
 	 *
-	 * @throws  Exception
+	 * @throws  Gleez_Exception
 	 */
 	public function is_iterating()
 	{
@@ -319,7 +331,7 @@ class Mango_Collection implements Iterator, Countable {
 
 		if ( ! isset($info['started_iterating']))
 		{
-			throw new Exception('Driver version >= 1.0.10 required');
+			throw new Gleez_Exception('Driver version >= :ver required', array(':ver' => self::REQUIRED_VERSION));
 		}
 
 		return $info['started_iterating'];
