@@ -128,6 +128,7 @@ return array(
 	'Name of Role must be less than :param2 characters long' => 'Имя роли должно быть менее :param2 символов',
 	'New password' => 'Новый пароль',
 	'New password (again)' => 'Повторите пароль',
+	'Never' => 'Никогда',
 	'Nick name' => 'Отображаемое имя',
 	'No more than 800 characters' => 'Не более 800 символов',
 	// O
