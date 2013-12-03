@@ -135,8 +135,11 @@ table.dataTable tr .fa {
 }
 
 table.dataTable td.dataTables_empty {
-    color: #777777;
+    color: #777;
     font-size: 14px;
     padding: 32px;
     text-align: center;
+}
+table.dataTable td ul {
+	list-style: none;
 }
