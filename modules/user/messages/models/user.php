@@ -11,6 +11,10 @@ return array(
 	),
 	'pass' => array(
 		'not_empty' => 'You must provide a password',
+		'min_length' => ':field must be at least :param2 characters long',
+	),
+	'pass_confirm' => array (
+		'matches' => ':field must be the same as :param3',
 	),
 	'mail' => array(
 		'not_empty' => 'You must provide an email address',
