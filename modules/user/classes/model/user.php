@@ -1,10 +1,10 @@
 <?php
 /**
- * Default auth user
+ * User Model
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.1
+ * @version    1.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -1014,7 +1014,8 @@ class Model_User extends ORM {
 	public function confirm_reset_password_form(array & $data)
 	{
 		$data = Validation::factory($data)
-			->label('pass', __('Password') )
+			->label('pass', __('Password'))
+			->label('pass_confirm', __('Password Confirm'))
 			->rule('pass', 'not_empty' )
 			->rule('pass', 'min_length', array(':value', 4) )
 			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
