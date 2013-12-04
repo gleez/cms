@@ -1,4 +1,4 @@
-<div class="account-container col-sm-12">
+<div>
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
 	<?php echo Form::open($action, array('role' => 'form')); ?>
