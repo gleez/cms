@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.3
+ * @version    1.1.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -578,7 +578,7 @@ class Controller_User extends Template {
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$this->_errors = $post->errors('models', TRUE);
+			$this->_errors = $post->errors('models/user', TRUE);
 		}
 
 		$this->response->body($view);

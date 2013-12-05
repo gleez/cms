@@ -10,6 +10,8 @@
 return array(
 	// :
 	':field must be a valid address with the http:// or https:// prefix' => ':field должна быть правильным адресом и начинаться с http:// или https://',
+	':field must be at least :param2 characters long' => ':field должен быть не короче :param2 символов',
+	':field must be the same as :param3' => ':field должно быть таким же как и :param3',
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Учётная запись :prov',
 	':role Permissions' => 'Полномочия :role',
@@ -137,9 +139,8 @@ return array(
 	'Oh no! This confirmation link is invalid.' => 'О нет! Эта ссылка, подтверждающая регистрацию является недействительной.',
 	// P
 	'Password' => 'Пароль',
+	'Password Confirm' => 'Подтверждение пароля',
 	'Password or username is incorrect' => 'Пароль или имя пользователя не верны',
-	'Password Confirm must be the same as Password' => 'Подтверждение пароля должно соответствовать паролю',
-	'Password must be at least :param2 characters long' => 'Пароль должен быть не короче :param2 символов',
 	'Password successfully changed! We hope you feel safer now.' => 'Пароль успешно изменён! Мы надеемся теперь вы чувствуете себя в безопасности.',
 	'Permission' => 'Полномочие',
 	'Permissions' => 'Полномочия',

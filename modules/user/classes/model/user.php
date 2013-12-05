@@ -1,34 +1,55 @@
 <?php
 /**
- * Default auth user
+ * User Model
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.1
+ * @version    1.2.2
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_User extends ORM {
 
-	/** @type integer GUEST_ID Guest user ID */
+	/**
+	 * Guest user ID
+	 * @type integer
+	 */
 	const GUEST_ID = 1;
 
-	/** @type integer ADMIN_ID Main admin user ID */
+	/**
+	 * Main admin user ID
+	 * @type integer
+	 */
 	const ADMIN_ID = 2;
 
-	/** @type integer ANONYMOUS_ROLE Anonymous role ID */
+	/**
+	 * Anonymous role ID
+	 * @type integer
+	 */
 	const ANONYMOUS_ROLE = 1;
 
-	/** @type integer LOGIN_ROLE Login role ID */
+	/**
+	 * Login role ID
+	 * @type integer
+	 */
 	const LOGIN_ROLE = 2;
 
-	/** @type integer USER_ROLE User role ID */
+	/**
+	 * User role ID
+	 * @type integer
+	 */
 	const USER_ROLE = 3;
 
-	/** @type integer ADMIN_ROLE Admin role ID */
+	/**
+	 * Admin role ID
+	 * @type integer
+	 */
 	const ADMIN_ROLE = 4;
 
-	/** @type string DEFAULT_PATH Default upload path */
+	/**
+	 * Default upload path
+	 * @type string
+	 */
 	const DEFAULT_PATH = 'media/pictures';
 
 	/**
@@ -62,14 +83,19 @@ class Model_User extends ORM {
 	);
 
 	/**
-	 * Auto fill create and update columns
+	 * Auto fill create column
+	 * @var array
 	 */
 	protected $_created_column = array('column' => 'created', 'format' => TRUE);
+
+	/**
+	 * Auto fill update column
+	 * @var array
+	 */
 	protected $_updated_column = array('column' => 'updated', 'format' => TRUE);
 
 	/**
 	 * A user has many tokens and roles
-	 *
 	 * @var array Relationships
 	 */
 	protected $_has_many = array(
@@ -1014,7 +1040,8 @@ class Model_User extends ORM {
 	public function confirm_reset_password_form(array & $data)
 	{
 		$data = Validation::factory($data)
-			->label('pass', __('Password') )
+			->label('pass', __('Password'))
+			->label('pass_confirm', __('Password Confirm'))
 			->rule('pass', 'not_empty' )
 			->rule('pass', 'min_length', array(':value', 4) )
 			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
