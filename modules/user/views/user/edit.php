@@ -105,8 +105,8 @@
 	</div>
 </div>
 
-<div class="form-group ab-wrapper">
-	<div class="col-md-12">
+<div class="form-group">
+	<div class="col-md-12 clearfix">
 		<?php echo Form::button('user_edit', __('Save'), array('class' => 'btn btn-success pull-right', 'type' => 'submit'))?>
 	</div>
 </div>
