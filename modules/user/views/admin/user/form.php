@@ -60,8 +60,8 @@
 
 <?php echo Form::hidden('site_url', URL::site(NULL, TRUE), array('id'=>'site_url')) ?>
 
-<div class="form-group ab-wrapper">
-	<div class="col-sm-12">
+<div class="form-group">
+	<div class="col-sm-12 clearfix">
 		<?php echo Form::button('user', __('Save'), array('class' => 'btn btn-success pull-right', 'type' => 'submit'))?>
 	</div>
 </div>
