@@ -80,8 +80,8 @@
 
 	</div>
 
-	<div class="form-group ab-wrapper">
-		<div class="col-sm-12">
+	<div class="form-group">
+		<div class="col-sm-12 clearfix">
 			<?php echo Form::button('contact', __('Send message'), array('class' => 'btn btn-success pull-right', 'type' => 'submit'))?>
 		</div>
 	</div>
