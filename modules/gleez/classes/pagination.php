@@ -84,7 +84,7 @@ class Pagination {
 	 * Query offset
 	 * @var integer
 	 */
-	protected $_offset;
+	protected $offset;
 
 	/**
 	 * Request object
@@ -258,7 +258,7 @@ class Pagination {
 			$this->next_page          = ($this->current_page < $this->total_pages) ? $this->current_page + 1 : FALSE;
 			$this->first_page         = ($this->current_page === 1) ? FALSE : 1;
 			$this->last_page          = ($this->current_page >= $this->total_pages) ? FALSE : $this->total_pages;
-			$this->_offset            = (int) (($this->current_page - 1) * $this->items_per_page);
+			$this->offset            = (int) (($this->current_page - 1) * $this->items_per_page);
 		}
 
 		return $this;
