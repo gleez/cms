@@ -1,6 +1,7 @@
 <p class="lead"><?php echo __('The test results:'); ?></p>
 
 <div id="tests">
+	<p><?php _e('Please correct all errors highlighted in red, and reload this page.'); ?></p>
 	<table class="table table-bordered">
 		<tr class="<?php echo $php_version ? 'success' : 'danger' ?>">
 			<td><?php echo __('PHP Version'); ?></td>
