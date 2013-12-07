@@ -456,6 +456,7 @@ return array(
 	'PHP Version' => 'Версия PHP',
 	'Plain Text' => 'Простой текст',
 	'Please Choose Category' => 'Пожалуйста выберите категорию',
+	'Please correct all errors highlighted in red, and reload this page.' => 'Пожалуйста, исправьте все ошибки выделеные красным цветом, и перезагрузите эту страницу.',
 	'Please see the errors below!' => 'Пожалуйста, ознакомьтесь с ошибками ниже!',
 	'Post' => 'Публикация',
 	'Post Comment' => 'Опубликовать комментарий',
