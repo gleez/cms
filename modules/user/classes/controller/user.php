@@ -26,7 +26,7 @@ class Controller_User extends Template {
 	 */
 	public function before()
 	{
-		Assets::css('user', 'media/css/user.css', array('weight' => 2));
+		Assets::css('user', 'media/css/user.css', array('theme'), array('weight' => 60));
 
 		parent::before();
 
