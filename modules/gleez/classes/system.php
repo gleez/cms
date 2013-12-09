@@ -4,17 +4,31 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.3.3
+ * @version    1.4.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class System {
 
-	/** Windows OS */
+	/**
+	 * Windows OS
+	 * @type string
+	 */
 	const WIN = 'WINDOWS';
 
-	/** Linux OS */
+	/**
+	 * Linux OS
+	 * @type string
+	 */
 	const LIN = 'LINUX';
+
+	/**
+	 * Minimum amount of memory allocated to php-script.
+	 * Can be used if ini_get('memory_limit') returns 0, -1, NULL or FALSE.
+	 * This amount is used by default since PHP 5.3
+	 * @type integer
+	 */
+	const MIN_MEMORY_LIMIT = 16777216;
 
 	/**
 	 * Get the server load averages (if possible)
@@ -571,9 +585,32 @@ class System {
 			'gd_info'				=> function_exists('gd_info'),
 		);
 
-		//Allow other modules to overried or add
+		//Allow other modules to override or add
 		$criteriae = Module::action('system_check', $criteria);
 
 		return $criteriae;
+	}
+
+	/**
+	 * Get PHP memory_limit
+	 *
+	 * It can be used to obtain a human-readable form
+	 * of a PHP memory_limit.
+	 *
+	 * [!!] Note: If ini_get('memory_limit') returns 0, -1, NULL or FALSE
+	 *      returns [System::MIN_MEMORY_LIMIT]
+	 *
+	 * @since   1.4.0
+	 *
+	 * @return  int|string
+	 *
+	 * @uses    Num::bytes
+	 * @uses    Text::bytes
+	 */
+	public static function get_memory_limit()
+	{
+		$memory_limit = Num::bytes(ini_get('memory_limit'));
+
+		return Text::bytes((int)$memory_limit <= 0 ? self::MIN_MEMORY_LIMIT : $memory_limit, 'MiB');
 	}
 }
