@@ -1315,7 +1315,7 @@ class Mango_Collection implements Iterator, Countable {
 		{
 			if (is_string($dir))
 			{
-				if (strtolower($dir) == 'asc' || $dir == '1')
+				if (strtolower($dir) == 'asc' OR $dir == '1')
 				{
 					$dir = self::ASC;
 				}
