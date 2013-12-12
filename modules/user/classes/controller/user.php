@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.4
+ * @version    1.2.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -42,7 +42,7 @@ class Controller_User extends Template {
 			$this->request->action('reset_'.$this->request->action());
 		}
 
-		//Disable sidebars on user pages
+		// Disable sidebars on user pages
 		$this->_sidebars = FALSE;
 	}
 
@@ -76,6 +76,7 @@ class Controller_User extends Template {
 
 		/** @var $post Model_User */
 		$post   = ORM::factory('user');
+		/** @var $config Config_Group */
 		$config = Config::load('auth');
 
 		if ( ! $config->register)
@@ -151,7 +152,7 @@ class Controller_User extends Template {
 		$this->title = __('Sign In');
 		$user        = ORM::factory('user');
 
-		//Disbale sidebars on login page
+		// Disable sidebars on login page
 		$this->_sidebars = FALSE;
 
 		// Create form action
@@ -200,7 +201,7 @@ class Controller_User extends Template {
 	 */
 	public function action_logout()
 	{
-		//Disbale themplate on logout
+		// Disable template on logout
 		$this->auto_render = FALSE;
 
 		// Sign out the user
@@ -246,7 +247,7 @@ class Controller_User extends Template {
 		$account  = FALSE;
 		$is_owner = FALSE;
 
-		//Add schema.org support
+		// Add Schema.org support
 		$this->schemaType = 'ProfilePage';
 
 		if ( ! $user->loaded())
@@ -464,7 +465,7 @@ class Controller_User extends Template {
 
 
 		// Make sure nobody else is logged in
-		$this->prevent_user_collision($id);
+		$this->_preventCollision($id);
 
 		// Confirm the user's sign-up
 		if ($this->_user->confirm_signup($id, $token))
@@ -553,7 +554,7 @@ class Controller_User extends Template {
 		$time  = (int) $this->request->param('time');
 
 		// Make sure nobody else is logged in
-		$this->prevent_user_collision($id);
+		$this->_preventCollision($id);
 
 		// Validate the confirmation link first
 		if ( ! $this->_user->confirm_reset_password_link($id, $token, $time))
@@ -592,9 +593,9 @@ class Controller_User extends Template {
 	 * This situation could arise, for example, when a user follows a
 	 * confirmation links while another user was still logged in.
 	 *
-	 * @param   integer $id  User id of the current user
+	 * @param  integer  $id  User id of the current user
 	 */
-	protected function prevent_user_collision($id)
+	protected function _preventCollision($id)
 	{
 		// Another user (on the same browser) is still logged in
 		if ($this->_auth->logged_in() AND $id != $this->_user->id)
