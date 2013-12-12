@@ -508,7 +508,7 @@ return array(
 	'Save this information in a safe place, or change your :profile right away!' => 'Сохраните эту информацию в безопасном месте, или измените Ваш :profile прямо сейчас!',
 	'Save Widgets' => 'Сохранить виджеты',
 	'seconds' => 'сек.',
-	'Send message' => 'Отправить сообщение',
+	'Send Message' => 'Отправить сообщение',
 	'SEO & Tracking' => 'Поисковая оптимизация',
 	'Settings' => 'Настройки',
 	'settings' => 'настройки',
