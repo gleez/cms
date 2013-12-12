@@ -27,13 +27,12 @@
 				<?php echo HTML::anchor($site_url, $site_name, array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
 			<div class="navbar-collapse collapse">
-
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="<?php echo URL::site('/user/profile'); ?>"><i class="fa fa-user"></i> <?php echo $_user->nick; ?></a>
+						<a href="<?php echo URL::site('/user/profile'); ?>"><i class="fa fa-fw fa-user"></i> <?php echo $_user->nick; ?></a>
 					</li>
 					<li>
-						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-power-off"></i></a>
+						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-fw fa-power-off"></i></a>
 					</li>
 				</ul>
 			</div><!--/.nav-collapse -->
