@@ -15,7 +15,7 @@
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>">
 
 	<!-- ########## Navbar start ########## -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="admin-nav container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -27,13 +27,12 @@
 				<?php echo HTML::anchor($site_url, $site_name, array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
 			<div class="navbar-collapse collapse">
-
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="<?php echo URL::site('/user/profile'); ?>"><i class="fa fa-user"></i> <?php echo $_user->nick; ?></a>
+						<?php echo HTML::anchor(URL::site('/user/profile'), User::getAvatar($_user, array('size' => 20)).' '.$_user->name); ?>
 					</li>
 					<li>
-						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-power-off"></i></a>
+						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-fw fa-power-off"></i></a>
 					</li>
 				</ul>
 			</div><!--/.nav-collapse -->
