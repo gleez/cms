@@ -29,7 +29,7 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="<?php echo URL::site('/user/profile'); ?>"><i class="fa fa-fw fa-user"></i> <?php echo $_user->nick; ?></a>
+						<?php echo HTML::anchor(URL::site('/user/profile'), User::getAvatar($_user, array('size' => 20)).' '.$_user->name); ?>
 					</li>
 					<li>
 						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-fw fa-power-off"></i></a>
