@@ -124,6 +124,7 @@ return array(
 	'Managing user authority' => 'Управление аутентификацией пользователей',
 	'Minimum password length &mdash; :count characters' => 'Минимальная длина пароля &mdash; :count символа(ов)',
 	'My Account' => 'Моя учётная запись',
+	'My Profile' => 'Мой профиль',
 	// N
 	'Name' => 'Имя',
 	'Name of Role must be at least :param2 characters long' => 'Имя роли должно быть не менее :param2 символов',
@@ -152,6 +153,7 @@ return array(
 	'Photo successfully uploaded!' => 'Фотография успешно загружена',
 	'Please enter the code from the image.' => 'Пожалуйста введите код с картинки.',
 	'Please register' => 'Пожалуйста зарегистрируйтесь',
+	'Profile' => 'Профиль',
 	'Profile %title' => 'Профиль %title',
 	'Profile Settings' => 'Настройки профиля',
 	'Private' => 'Личное',
