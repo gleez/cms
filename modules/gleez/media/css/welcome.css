@@ -1,20 +1,20 @@
 @charset "utf-8";
 
 /* Homepage masthead */
-.gleez-masthead {
+.masthead {
 	position: relative;
 	padding: 30px 15px;
 	text-align: center;
 }
 
-.gleez-masthead h1 {
+.masthead h1 {
 	font-family: 'Kaushan Script', cursive;
 	font-size: 50px;
 	line-height: 1;
 	text-transform: none;
 }
 
-.gleez-masthead-links {
+.masthead-links {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	padding-left: 0;
@@ -22,52 +22,52 @@
 	text-align: center;
 }
 
-.gleez-masthead-links li {
+.masthead-links li {
 	display: inline;
 	color: #999;
 }
 
-.gleez-masthead-links li + li {
+.masthead-links li + li {
 	margin-left: 20px;
 }
 
-.gleez-dochead {
+.dochead {
 	padding: 15px 20px;
 	color: #777;
 	background-color: #fafafa;
 	border: 1px solid #e5e5e5;
 }
 
-.gleez-dochead .container-fluid {
+.dochead .container-fluid {
 	padding-top: 0;
 }
 
-.gleez-dochead p {
+.dochead p {
 	margin: 0;
 }
 
-.gleez-dochead .container-fluid {
+.dochead .container-fluid {
 	text-align: center;
 }
 
-.gleez-social {
+.masthead-social {
 	margin: 20px 0 30px;
 	text-align: center;
 }
 
-.gleez-social-buttons {
+.social-buttons {
 	display: inline-block;
 	margin-bottom: 0;
 	padding-left: 0;
 	list-style: none;
 }
 
-.gleez-social-buttons li {
+.social-buttons li {
 	display: inline-block;
 	line-height: 1;
 }
 
-.gleez-docbody {
+.docbody {
 	text-align: justify;
 	text-justify: inter-word;
 	/**
@@ -83,26 +83,26 @@
 	margin: 30px 0;
 }
 
-.gleez-docbody h3 {
+.docbody h3 {
 	text-transform: none;
 }
 
-.gleez-docbody p {
+.docbody p {
 	color: #777;
 	font-size: 16px;
 	line-height: 1.6;
 }
 
-.gleez-features {
+.features {
 	margin-top: 30px;
 	text-align: center;
 }
 
-.gleez-features h4 {
+.features h4 {
 	text-transform: none;
 }
 
-.gleez-features p {
+.features p {
 	text-align: justify;
 	text-justify: inter-word;
 	margin-bottom: 40px;
