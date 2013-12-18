@@ -396,11 +396,7 @@ class PHPMailer
      * The function that handles the result of the send email action.
      * It is called out by send() for each email sent.
      *
-     * Value can be:
-     * - 'function_name' for function names
-     * - 'Class::Method' for static method calls
-     * - array($object, 'Method') for calling methods on $object
-     * See http://php.net/is_callable manual page for more details.
+     * Value can be any php callable: http://www.php.net/is_callable
      *
      * Parameters:
      *   bool    $result        result of the send action
@@ -410,7 +406,6 @@ class PHPMailer
      *   string  $subject       the subject
      *   string  $body          the email body
      *   string  $from          email address of sender
-     * 
      * @type string
      */
     public $action_function = '';
@@ -638,8 +633,7 @@ class PHPMailer
                 break;
             case 'echo':
             default:
-                //Just echoes exactly what was received
-                echo $str;
+                echo $str."\n";
         }
     }
 
@@ -693,7 +687,7 @@ class PHPMailer
      */
     public function isQmail()
     {
-        if (stristr(ini_get('sendmail_path'), 'qmail')) {
+        if (!stristr(ini_get('sendmail_path'), 'qmail')) {
             $this->Sendmail = '/var/qmail/bin/qmail-inject';
         }
         $this->Mailer = 'qmail';
@@ -759,20 +753,20 @@ class PHPMailer
     {
         if (!preg_match('/^(to|cc|bcc|Reply-To)$/', $kind)) {
             $this->setError($this->lang('Invalid recipient array') . ': ' . $kind);
+            $this->edebug($this->lang('Invalid recipient array') . ': ' . $kind);
             if ($this->exceptions) {
                 throw new phpmailerException('Invalid recipient array: ' . $kind);
             }
-            $this->edebug($this->lang('Invalid recipient array') . ': ' . $kind);
             return false;
         }
         $address = trim($address);
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (!$this->validateAddress($address)) {
             $this->setError($this->lang('invalid_address') . ': ' . $address);
+            $this->edebug($this->lang('invalid_address') . ': ' . $address);
             if ($this->exceptions) {
                 throw new phpmailerException($this->lang('invalid_address') . ': ' . $address);
             }
-            $this->edebug($this->lang('invalid_address') . ': ' . $address);
             return false;
         }
         if ($kind != 'Reply-To') {
@@ -804,10 +798,10 @@ class PHPMailer
         $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
         if (!$this->validateAddress($address)) {
             $this->setError($this->lang('invalid_address') . ': ' . $address);
+            $this->edebug($this->lang('invalid_address') . ': ' . $address);
             if ($this->exceptions) {
                 throw new phpmailerException($this->lang('invalid_address') . ': ' . $address);
             }
-            $this->edebug($this->lang('invalid_address') . ': ' . $address);
             return false;
         }
         $this->From = $address;
@@ -1037,10 +1031,10 @@ class PHPMailer
             }
         } catch (phpmailerException $e) {
             $this->setError($e->getMessage());
+            $this->edebug($e->getMessage());
             if ($this->exceptions) {
                 throw $e;
             }
-            $this->edebug($e->getMessage() . "\n");
         }
         return false;
     }
@@ -1218,9 +1212,6 @@ class PHPMailer
             $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body, $this->From);
         }
 
-        if (count($bad_rcpt) > 0) { //Create error message for any bad addresses
-            throw new phpmailerException($this->lang('recipients_failed') . implode(', ', $bad_rcpt));
-        }
         if (!$this->smtp->data($header . $body)) {
             throw new phpmailerException($this->lang('data_not_accepted'), self::STOP_CRITICAL);
         }
@@ -1229,6 +1220,12 @@ class PHPMailer
         } else {
             $this->smtp->quit();
             $this->smtp->close();
+        }
+        if (count($bad_rcpt) > 0) { //Create error message for any bad addresses
+            throw new phpmailerException(
+                $this->lang('recipients_failed') . implode(', ', $bad_rcpt),
+                self::STOP_CONTINUE
+            );
         }
         return true;
     }
@@ -2033,10 +2030,10 @@ class PHPMailer
 
         } catch (phpmailerException $e) {
             $this->setError($e->getMessage());
+            $this->edebug($e->getMessage());
             if ($this->exceptions) {
                 throw $e;
             }
-            $this->edebug($e->getMessage() . "\n");
             return false;
         }
         return true;
