@@ -8,7 +8,7 @@
  * into one Mango class and can be instantiated simply by:
  *
  * ~~~
- *   $db = Mango::instance();
+ * $db = Mango::instance();
  * ~~~
  *
  * The above will assume the 'default' configuration from the `config/mango.php` file.
@@ -73,7 +73,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Gleez Team
- * @version    0.4.1
+ * @version    0.5.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -559,14 +559,17 @@ class Mango {
 	/**
 	 * Get an instance of MongoDB directly
 	 *
+	 * @since   0.1.0  Initial method Mango::db
+	 * @since   0.5.0  Renamed to Mango::getDb
+	 *
 	 * Example:
 	 * ~~~
-	 * Mango::instance()->db();
+	 * Mango::instance()->getDb();
 	 * ~~~
 	 *
 	 * @return MongoDB
 	 */
-	public function db()
+	public function getDb()
 	{
 		$this->_connected OR $this->connect();
 
