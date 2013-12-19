@@ -45,7 +45,7 @@
  *
  * @package    Gleez\Mango\Collection
  * @author     Gleez Team
- * @version    0.6.2
+ * @version    0.7.0
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
@@ -212,7 +212,7 @@ class Mango_Collection implements Iterator, Countable {
 
 		if (method_exists($this->getCollection(), $name))
 		{
-			if ($this->getDB()->profiling)
+			if ($this->getMangoInstance()->profiling)
 			{
 				$json_args = array();
 				foreach($arguments as $arg)
@@ -242,7 +242,6 @@ class Mango_Collection implements Iterator, Countable {
 				array(':method' => "Mango::{$name}")
 			);
 		}
-		return FALSE;
 	}
 
 	/**
@@ -592,7 +591,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function findAndModify(array $command)
 	{
-		return $this->getDB()->findAndModify($this->_name, $command);
+		return $this->getMangoInstance()->findAndModify($this->_name, $command);
 	}
 
 	/**
@@ -760,7 +759,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function distinct($key, array $query = array())
 	{
-		return $this->getDB()->safeCommand(array(
+		return $this->getMangoInstance()->safeCommand(array(
 			'distinct' => $this->_name,
 			'key'      => (string)$key,
 			'query'    => $query
@@ -805,7 +804,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function aggregate(array $pipeline)
 	{
-		return $this->getDB()->safeCommand(array(
+		return $this->getMangoInstance()->safeCommand(array(
 			'aggregate' => $this->_name,
 			'pipeline'  => $pipeline,
 		));
@@ -883,7 +882,7 @@ class Mango_Collection implements Iterator, Countable {
 		if ( ! isset(self::$_collections[$name]))
 		{
 			$method = ($this->_gridFS ? 'getGridFS' : 'selectCollection');
-			self::$_collections[$name] = $this->getDB()->db()->$method($this->_name);
+			self::$_collections[$name] = $this->getMangoInstance()->getDb()->$method($this->_name);
 		}
 
 		return self::$_collections[$name];
@@ -910,13 +909,14 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Get the Mango instance used for this collection
 	 *
-	 * @since   0.3.0
+	 * @since   0.3.0  Initial Mango_Collection::getDB method
+	 * @since   0.7.0  Renamed to Mango_Collection::getMangoInstance
 	 *
 	 * @return  Mango
 	 *
 	 * @uses    Mango::instance
 	 */
-	public function getDB()
+	public function getMangoInstance()
 	{
 		return Mango::instance($this->_db);
 	}
@@ -998,7 +998,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function getStats($scale = 1024)
 	{
-		return $this->getDB()->safeCommand(array(
+		return $this->getMangoInstance()->safeCommand(array(
 			'collStats' => $this->_name,
 			'scale'     => $scale
 		));
@@ -1014,7 +1014,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function getNext()
 	{
-		if($this->getDB()->profiling AND ( ! $this->_cursor OR ! $this->is_iterating()))
+		if($this->getMangoInstance()->profiling AND ( ! $this->_cursor OR ! $this->is_iterating()))
 		{
 			$this->getCursor();
 
@@ -1392,7 +1392,7 @@ class Mango_Collection implements Iterator, Countable {
 	{
 		try
 		{
-			if ($this->getDB()->profiling)
+			if ($this->getMangoInstance()->profiling)
 			{
 				$this->_benchmark = Profiler::start("Mango::{$this->_db}", $this->shellQuery());
 			}
@@ -1491,7 +1491,7 @@ class Mango_Collection implements Iterator, Countable {
 		if (is_bool($query))
 		{
 			// Profile count operation for cursor
-			if ($this->getDB()->profiling)
+			if ($this->getMangoInstance()->profiling)
 			{
 				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
 			}
@@ -1517,7 +1517,7 @@ class Mango_Collection implements Iterator, Countable {
 			$query = $query_trans;
 
 			// Profile count operation for collection
-			if ($this->getDB()->profiling)
+			if ($this->getMangoInstance()->profiling)
 			{
 				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", "db.{$this->_name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
 			}

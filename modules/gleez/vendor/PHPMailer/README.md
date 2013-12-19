@@ -1,6 +1,8 @@
 # PHPMailer - A full-featured email creation and transfer class for PHP
 
-Build status: [![Build Status](https://travis-ci.org/Synchro/PHPMailer.png)](https://travis-ci.org/Synchro/PHPMailer)
+Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.png)](https://travis-ci.org/PHPMailer/PHPMailer)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/PHPMailer/PHPMailer/badges/quality-score.png?s=3758e21d279becdf847a557a56a3ed16dfec9d5d)](https://scrutinizer-ci.com/g/PHPMailer/PHPMailer/)
+[![Code Coverage](https://scrutinizer-ci.com/g/PHPMailer/PHPMailer/badges/coverage.png?s=3fe6ca5fe8cd2cdf96285756e42932f7ca256962)](https://scrutinizer-ci.com/g/PHPMailer/PHPMailer/)
 
 ## Class Features
 
@@ -39,7 +41,7 @@ PHPMailer does *not* declare a namespace because namespaces were only introduced
 
 ### Minimal installation
 
-While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.php3.php](class.php3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
+While installing the entire package manually or with composer is simple, convenient and reliable, you may want to include only vital files in your project. At the very least you will need [class.phpmailer.php](class.phpmailer.php). If you're using SMTP, you'll need [class.smtp.php](class.smtp.php), and if you're using POP-before SMTP, you'll need [class.pop3.php](class.pop3.php). For all of these, we recommend you use [the autoloader](PHPMailerAutoload.php) too. You can skip the [language](language/) folder if you're not showing errors to users and can make do with English-only errors. You may need the additional classes in the [extras](extras/) folder if you are using those features, including NTLM authentication, advanced HTML-to-text conversion and ics generation.
 
 ## A Simple Example
 
