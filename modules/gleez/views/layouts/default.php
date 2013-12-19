@@ -5,10 +5,10 @@
 	<?php echo Meta::tags(); ?>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<?php echo Meta::links(); ?>
-	<!-- HTML5 shim and Respond.js, for IE6-8 support of HTML5 elements and media queries -->
+	<!-- HTML5 shiv and Respond.js, for IE6-8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<?php echo HTML::script('media/js/html5shiv.js', NULL, TRUE); ?>
+		<?php echo HTML::script('media/js/respond.min.js', NULL, TRUE); ?>
 	<![endif]-->
 	<?php echo Assets::css(); ?>
 </head>
