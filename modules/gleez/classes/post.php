@@ -735,10 +735,10 @@ class Post extends ORM_Versioned {
 	/**
 	 * Bulk update posts
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_update(array(1, 2, 3, ...), array('status' => 'publish', 'promote' => 1), 'blog');
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 * Post::bulk_update(array(1, 2, 3, ...), array('status' => 'publish', 'promote' => 1), 'blog');
+	 * ~~~
 	 *
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post actions
@@ -763,13 +763,13 @@ class Post extends ORM_Versioned {
 	/**
 	 * Bulk delete posts
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_delete(array(1, 2, 3, ...), 'blog');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * Post::bulk_delete(array(1, 2, 3, ...), 'blog');
+	 * ~~~
 	 *
-	 * @param   array   $ids   Array of post id's
-	 * @param   string  $type  Type of post [Optional]
+	 * @param  array   $ids   Array of post id's
+	 * @param  string  $type  Type of post [Optional]
 	 */
 	public static function bulk_delete(array $ids, $type = 'post')
 	{
@@ -781,16 +781,15 @@ class Post extends ORM_Versioned {
 		{
 			$post->delete();
 		}
-
 	}
 
 	/**
 	 * Bulk convert post type(s)
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_convert(array(1, 2, 3, ...), 'blog');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * Post::bulk_convert(array(1, 2, 3, ...), 'blog');
+	 * ~~~
 	 *
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post type (new type)
