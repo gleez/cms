@@ -287,20 +287,20 @@ class Controller_User extends Template {
 			$is_owner = TRUE;
 		}
 
-		$request = Model::factory('buddy')->isRequest($account->id, $user->id);
-		$friend  = Model::factory('buddy')->isFriend($account->id, $user->id);
-		$friends = Model::factory('buddy')->friends($user->id, 5);
+		$request   = Model::factory('buddy')->isRequest($account->id, $user->id);
+		$isFriend  = Model::factory('buddy')->isFriend($account->id, $user->id);
+		$friends   = Model::factory('buddy')->friends($user->id, 5);
 
 		$view = View::factory('user/profile')
 					->set('user',		 $user)
 					->set('is_owner',	 $is_owner)
 					->set('request',	 $request)
-					->set('friend',		 $friend)
-					->set('accept_list', $friends);
+					->set('isfriend',	 $isFriend)
+					->set('friends', 	 $friends);
 
 		Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15));
 		Assets::js('user/form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10));
-		
+
 		$this->response->body($view);
 	}
 
