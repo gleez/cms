@@ -26,10 +26,11 @@ class Controller_Buddy extends Template {
 
 	public function action_index()
 	{
-		$id 	  = (int) $this->request->param('id');
-		$user     = ORM::factory('user', $id);
-		$is_owner = FALSE;
 		$account  = Auth::instance()->get_user();
+		$id 	  = (int) $this->request->param('id', $account->id);
+		$is_owner = FALSE;
+
+		$user     = ORM::factory('user', $id);
 
 		if ( ! $user->loaded())
 		{
