@@ -298,6 +298,9 @@ class Controller_User extends Template {
 					->set('friend',		 $friend)
 					->set('accept_list', $friends);
 
+		Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15));
+		Assets::js('user/form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10));
+		
 		$this->response->body($view);
 	}
 
