@@ -658,22 +658,29 @@ class Text {
 	}
 
 	/**
-	 * Returns information about the client user agent.
+	 * Returns information about the client user agent
 	 *
-	 *     // Returns "Chrome" when using Google Chrome
-	 *     $browser = Text::user_agent('browser');
+	 * Example:
+	 * ~~~
+	 * // Returns "Chrome" when using Google Chrome
+	 * $browser = Text::user_agent(Request::$user_agent, 'browser');
+	 * ~~~
 	 *
 	 * Multiple values can be returned at once by using an array:
-	 *
-	 *     // Get the browser and platform with a single call
-	 *     $info = Text::user_agent(array('browser', 'platform'));
+	 * ~~~
+	 * // Get the browser and platform with a single call
+	 * $info = Text::user_agent(Request::$user_agent, array('browser', 'platform'));
+	 * ~~~
 	 *
 	 * When using an array for the value, an associative array will be returned.
 	 *
-	 * @param   string  $agent
-	 * @param   mixed   $value  array or string to return: browser, version, robot, mobile, platform
+	 * @param   string  $agent  Client user agent
+	 * @param   mixed   $value  Array or string to return: browser, version, robot, mobile, platform
 	 *
 	 * @return  mixed
+	 *
+	 * @uses    Config::get
+	 * @uses    Request::$user_agent
 	 */
 	public static function user_agent($agent, $value)
 	{

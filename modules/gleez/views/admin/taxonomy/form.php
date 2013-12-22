@@ -3,7 +3,7 @@
 </div>
 
 <?php $params = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add');
-	echo Form::open(Route::get('admin/taxonomy')->uri($params), array('id'=>'vocab-form', 'class'=>'form form-horizontal well', 'role' => 'form')) ?>
+	echo Form::open(Route::get('admin/taxonomy')->uri($params), array('id'=>'vocab-form', 'class'=>'form form-horizontal well')) ?>
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
