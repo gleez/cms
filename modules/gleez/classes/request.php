@@ -176,8 +176,7 @@ class Request implements HTTP_Request {
 	/**
 	 * Creates a new request object for the given URI
 	 *
-	 * New requests should be created using the [Request::instance]
-	 * or [Request::factory] methods.
+	 * New requests should be created using this method.
 	 *
 	 * Example:
 	 * ~~~
@@ -887,8 +886,9 @@ class Request implements HTTP_Request {
 	}
 	
 	/**
-	 * Creates a new request object for the given URI. New requests should be
-	 * created using the [Request::instance] or [Request::factory] methods
+	 * Creates a new request object for the given URI
+	 *
+	 * New requests should be created using the [Request::factory] method
 	 *
 	 * Example:
 	 * ~~~
