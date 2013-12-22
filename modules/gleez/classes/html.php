@@ -240,7 +240,13 @@ class HTML {
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
 
-		if (URL::is_absolute($file))
+		//Auto detect index file
+		if ($index == FALSE AND ! empty(Kohana::$index_file))
+		{
+			$index = TRUE;
+		}
+
+		if (strpos($file, '://') === FALSE)
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -275,7 +281,13 @@ class HTML {
 	 */
 	public static function image($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if (URL::is_absolute($file))
+		//Auto detect index file
+		if ($index == FALSE AND ! empty(Kohana::$index_file))
+		{
+			$index = TRUE;
+		}
+
+		if (strpos($file, '://') === FALSE)
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -384,7 +396,13 @@ class HTML {
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
 		}
 
-		if (URL::is_absolute($file))
+		//Auto detect index file
+		if ($index == FALSE AND ! empty(Kohana::$index_file))
+		{
+			$index = TRUE;
+		}
+
+		if (strpos($file, '://') === FALSE)
 		{
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
@@ -447,13 +465,20 @@ class HTML {
 			$type = 'crop';
 		}
 
-		if (URL::is_remote($file) === FALSE)
+		if (strpos($file, '://') === FALSE)
 		{
 			if( isset($width) AND isset($height) )
 			{
 				$file = (strpos($file, 'media/') === FALSE) ? $file : str_replace('media/', '', $file);
 				$file = "media/imagecache/$type/{$width}x{$height}/$file";
 			}
+
+			//Auto detect index file
+			if ($index == FALSE AND ! empty(Kohana::$index_file))
+			{
+				$index = TRUE;
+			}
+			
 			// Add the base URL
 			$file = URL::base($protocol, $index).$file;
 		}
