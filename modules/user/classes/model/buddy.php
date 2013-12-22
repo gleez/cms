@@ -79,8 +79,7 @@ class Model_Buddy extends Model
 
 	public function isRequest($user_id, $friend_id)
 	{
-		$total = DB::select(array(DB::expr('COUNT(*)'), 'total'))
-					->from('buddies')
+		$result = DB::select()->from('buddies')
 					->where_open()
 						->where_open()
 							->where('request_from', '=', $friend_id)
