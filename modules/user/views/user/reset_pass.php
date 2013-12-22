@@ -1,29 +1,28 @@
-<div class="account-container col-md-8">
-	<div class="content clearfix">
-		<?php echo Form::open($action, array('class' => 'form form-horizontal', 'role' => 'form')) ?>
+<div class="col-sm-6 col-sm-offset-3">
+	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-		<?php include Kohana::find_file('views', 'errors/partial'); ?>
-
-		<fieldset>
-			<legend><?php _e('Enter email specified at registration for password reset')?></legend>
-			<div class="form-group <?php echo isset($errors['mail']) ? 'has-error': ''; ?>">
-				<?php echo Form::label('mail', __('Email'), array('class' => 'col-md-2  control-label')); ?>
-				<div class="col-md-10">
-					<div class="row">
-						<div class="input-group col-sm-10">
-							<span class="input-group-addon">@</span>
+	<div class="panel panel-default window-shadow">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<?php _e('Enter email specified at registration for password reset')?>
+			</h3>
+		</div>
+		<?php echo Form::open($action, array('class' => 'form form-horizontal')) ?>
+			<div class="panel-body">
+				<div class="form-group <?php echo isset($errors['mail']) ? 'has-error': ''; ?>">
+					<div class="col-md-12">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
 							<?php echo Form::input('mail', $post['mail'], array('class' => 'form-control input-lg')); ?>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="form-group">
-				<div class="col-md-10">
+			<div class="panel-footer">
+				<div class="col-md-12 clearfix">
 					<?php echo Form::button('reset_pass', __('Reset'), array('class' => 'btn btn-danger pull-right', 'type' => 'submit'))?>
 				</div>
 			</div>
-		</fieldset>
 		<?php echo Form::close() ?>
 	</div>
 </div>
