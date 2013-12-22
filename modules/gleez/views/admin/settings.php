@@ -10,7 +10,7 @@
     <li><a href="#offline" data-toggle="tab"><?php _e('Maintenance')?></a></li>
 </ul>
 
-<?php echo Form::open($action, array('id'=>'settings-form', 'class'=>'form-horizontal', 'role' => 'form'))?>
+<?php echo Form::open($action, array('id'=>'settings-form', 'class'=>'form-horizontal'))?>
 
 	<?php include Kohana::find_file('views', 'errors/partial')?>
 

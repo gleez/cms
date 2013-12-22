@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<?php echo Form::open($action, array('id' => 'module-form', 'class' => 'form', 'role' => 'form')); ?>
+		<?php echo Form::open($action, array('id' => 'module-form', 'class' => 'form')); ?>
 			<table class="table table-bordered table-apparent table-striped" id="admin-modules">
 				<thead>
 					<tr>

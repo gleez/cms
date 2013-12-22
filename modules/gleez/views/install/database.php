@@ -1,4 +1,4 @@
-<?php echo Form::open($action, array('class' => 'form form-horizontal', 'role' => 'form')); ?>
+<?php echo Form::open($action, array('class' => 'form form-horizontal')); ?>
 	<div class="container1">
 			<div class="form-group <?php echo isset($errors['database']) ? 'error': ''; ?>">
 				<?php echo Form::label('database', __('Database Name'), array('class' => 'col-sm-3 control-label')) ?>
