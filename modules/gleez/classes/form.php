@@ -30,6 +30,8 @@ class Form {
 	 * @return  string
 	 *
 	 * @uses    Request::uri
+	 * @uses    Request::current
+	 * @uses    Request::query
 	 * @uses    URL::site
 	 * @uses    URL::is_remote
 	 * @uses    URL::explode
