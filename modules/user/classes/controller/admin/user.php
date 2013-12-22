@@ -4,7 +4,7 @@
  *
  * @package   Gleez\User\Admin\Controller
  * @author    Gleez Team
- * @version   1.0.1
+ * @version   1.0.2
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -28,9 +28,13 @@ class Controller_Admin_User extends Controller_Admin {
 	 * @uses  Request::is_datatables
 	 * @uses  ORM::dataTables
 	 * @uses  Text::plain
+	 * @uses  Text::auto_link
 	 * @uses  User::roles
 	 * @uses  HTML::anchor
+	 * @uses  HTML::icon
+	 * @uses  Route::get
 	 * @uses  Route::url
+	 * @uses  Date::formatted_time
 	 * @uses  Assets::popup
 	 */
 	public function action_list()
@@ -81,6 +85,7 @@ class Controller_Admin_User extends Controller_Admin {
 	public function action_add()
 	{
 		$this->title = __('Add User');
+
 		$view = View::factory('admin/user/form')
 						->bind('all_roles', $all_roles)
 						->set('user_roles', array())
@@ -103,9 +108,23 @@ class Controller_Admin_User extends Controller_Admin {
 				// Create the User
 				$post->save();
 
-				// Add the login role to the user
-				$login_role = new Model_Role(array('name' =>'login'));
-				$post->add('roles',$login_role);
+				// Make sure to add an empty if none of the roles checked to avoid errors
+				if (empty($_POST['roles']))
+				{
+					$_POST['roles'] = array('login');
+				}
+
+				// Make sure to add an empty if none of the roles checked to avoid errors
+				if (empty($_POST['roles']) OR ! in_array('login', $_POST['roles']))
+				{
+					$_POST['roles'] = array();
+				}
+
+				foreach(array_keys($_POST['roles']) as $role)
+				{
+					// add() executes the query immediately, and saves the data
+					$post->add('roles', ORM::factory('role', array('name' => $role)));
+				}
 
 				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
 
@@ -165,10 +184,10 @@ class Controller_Admin_User extends Controller_Admin {
 				$post->values($_POST);
 				$post->save();
 
-				// Make sure to add an empty if none of the roles checked to avoid errros
-				if (empty($_POST['roles']))
+				// Make sure to add an empty if none of the roles checked to avoid errors
+				if (empty($_POST['roles']) OR ! in_array('login', $_POST['roles']))
 				{
-					$_POST['roles'] = array();
+					$_POST['roles'] = array('login');
 				}
 
 				// Roles have to be added separately, and all users have to have the login role
@@ -179,13 +198,7 @@ class Controller_Admin_User extends Controller_Admin {
 				foreach(array_keys($_POST['roles']) as $role)
 				{
 					// add() executes the query immediately, and saves the data
-					$post->add('roles', ORM::factory('role')->where('name', '=', $role)->find());
-				}
-
-				// Always make sure login role is added if it's not there
-				if ( ! in_array('login', array_keys($_POST['roles'])))
-				{
-					$post->add('roles', ORM::factory('role')->where('name', '=', 'login')->find());
+					$post->add('roles', ORM::factory('role', array('name' => $role)));
 				}
 
 				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
