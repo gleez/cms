@@ -128,6 +128,25 @@ INSERT INTO {users} (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `the
 (1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', NULL, 0, 0, 0, 0, 1, 'UTC', 'en_US', '', '', NULL, NULL),
 (2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, 'UTC', 'en_US', '', 'webmaster@gleez.com', NULL, NULL);
 
+DROP TABLE IF EXISTS {messages};
+CREATE TABLE {messages} (
+  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  sender bigint(20) unsigned NOT NULL DEFAULT '0',
+  recipient bigint(20) unsigned NOT NULL DEFAULT '0',
+  subject varchar(128) NOT NULL,
+  body longtext NOT NULL,
+  status varchar(20) NOT NULL DEFAULT 'unread',
+  format tinyint(4) NOT NULL DEFAULT '1',
+  created int(11) NOT NULL DEFAULT '0',
+  sent int(11) NOT NULL DEFAULT '0',
+  lang varchar(12) NOT NULL DEFAULT 'en',
+  PRIMARY KEY (id),
+  KEY `message_id` (`id`),
+  KEY `message_status_date` (`status`,`created`,`id`),
+  KEY `message_author` (`sender`),
+  CONSTRAINT {messages_ibfk_1} FOREIGN KEY (`sender`) REFERENCES {users} (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS {config};
 CREATE TABLE {config} (
   `group_name` varchar(128) NOT NULL,
