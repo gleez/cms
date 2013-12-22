@@ -66,7 +66,7 @@
 							<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
 						<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
 							<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
-						<?php elseif($friend AND ! $is_owner): ?>
+						<?php elseif($isfriend AND ! $is_owner): ?>
 							<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
 						<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
 							<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
@@ -88,7 +88,7 @@
 	<div class="col-md-3 col-sm-6 col-sidebar-right">
 		<div class="list-group">
 			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-sign-in"></i></h3>
-				<h4 class="list-group-item-heading"><?php echo date('M d, Y', $user->created); ?></h4>
+				<h4 class="list-group-item-heading"><?php echo Date::date_format($user->created, 'M d, Y'); ?></h4>
 				<p class="list-group-item-text"><?php echo __('Joined on'); ?></p>
 			</a>
 			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-power-off"></i></h3>
@@ -101,9 +101,9 @@
 			</a>
 		</div>
 
-		<div class="list-group list-all panel panel-default">
+		<div class="list-group list-all panel panel-info">
 			<div class="panel-heading">
-				<h3 class="panel-title">Friends</h3>
+				<h3 class="panel-title"><?php echo __('Friends'); ?></h3>
 			</div>
 			
 			<?php foreach($friends as $id): ?>
