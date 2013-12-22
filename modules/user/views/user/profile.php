@@ -27,37 +27,51 @@
 				</h2>
 
 				<div class="col-md-12 vcard-details">
-					<?php if ($is_owner OR User::is_admin()): ?>
-						<dl title="<?php echo __('Email') ?>">
-							<dt><i class="fa fa-fw fa-envelope"></i></dt>
-							<dd><a class="email" data-email="<?php echo $user->mail ?>" href="mailto:<?php echo $user->mail ?>"><?php echo $user->mail ?></a></dd>
-						</dl>
-					<?php endif; ?>
-					<?php if ($user->homepage): ?>
-						<dl title="<?php echo __('Home Page') ?>">
-							<dt><i class="fa fa-fw fa-globe"></i></dt>
-							<dd><?php echo HTML::anchor($user->homepage, $user->homepage, array('itemprop' => 'url')); ?></dd>
-						</dl>
-					<?php endif; ?>
+					<div class="col-md-7">
+						<?php if ($is_owner OR User::is_admin()): ?>
+							<dl title="<?php echo __('Email') ?>">
+								<dt><i class="fa fa-fw fa-envelope"></i></dt>
+								<dd><a class="email" data-email="<?php echo $user->mail ?>" href="mailto:<?php echo $user->mail ?>"><?php echo $user->mail ?></a></dd>
+							</dl>
+						<?php endif; ?>
+						<?php if ($user->homepage): ?>
+							<dl title="<?php echo __('Home Page') ?>">
+								<dt><i class="fa fa-fw fa-globe"></i></dt>
+								<dd><?php echo HTML::anchor($user->homepage, $user->homepage, array('itemprop' => 'url')); ?></dd>
+							</dl>
+						<?php endif; ?>
 
-					<dl title="<?php echo __('Birthday') ?>">
-						<dt><i class="fa fa-fw fa-calendar"></i></dt>
-						<dd>
-							<time itemprop="birthDate" content="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>" datetime="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>">
-								<?php echo Date::date_format($user->dob); ?>
-							</time>
-						</dd>
-					</dl>
-					<?php if (User::is_admin()): ?>
-						<dl title="<?php echo __('User Groups') ?>">
-							<dt><i class="fa fa-fw fa-group"></i></dt>
-							<dd class="tagcloud">
-								<?php foreach ($user->roles() as $role): ?>
-									<span><?php echo Text::plain(ucfirst($role)); ?></span>
-								<?php endforeach; ?>
+						<dl title="<?php echo __('Birthday') ?>">
+							<dt><i class="fa fa-fw fa-calendar"></i></dt>
+							<dd>
+								<time itemprop="birthDate" content="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>" datetime="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>">
+									<?php echo Date::date_format($user->dob); ?>
+								</time>
 							</dd>
 						</dl>
-					<?php endif; ?>
+						<?php if (User::is_admin()): ?>
+							<dl title="<?php echo __('User Groups') ?>">
+								<dt><i class="fa fa-fw fa-group"></i></dt>
+								<dd class="tagcloud">
+									<?php foreach ($user->roles() as $role): ?>
+										<span><?php echo Text::plain(ucfirst($role)); ?></span>
+									<?php endforeach; ?>
+								</dd>
+							</dl>
+						<?php endif; ?>
+					</div>
+					<div class="col-md-5">
+						<?php if($request AND ($request == $user->id )):?>
+							<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
+							<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-success')); ?>
+						<?php elseif($request AND ! $friend AND ! $is_owner) : ?>
+							<div class= 'btn btn-info'>Pending</div>
+						<?php elseif($friend AND ! $is_owner) : ?>
+							<div class= 'btn btn-info'>Friend</div>
+						<?php elseif(! $request AND ! $friend AND ! $is_owner) : ?>
+							<?php echo HTML::anchor("buddy/add/".$user->id , __('Add Request'), array('class' => 'btn btn-success')); ?>
+						<?php endif; ?>
+					</div>
 				</div>
 				<hr>
 				<div class="col-md-12 bio">
@@ -85,6 +99,30 @@
 				<h4 class="list-group-item-heading"><?php echo Date::date_format($user->login, 'h:i a M d, Y'); ?></h4>
 				<p class="list-group-item-text"><?php echo  __('Last Visit'); ?></p>
 			</a>
+		</div>
+
+		<div class="list-group list-all panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Friends</h3>
+			</div>
+			
+			<?php foreach($accept_list as $id): ?>
+				<div class="list-group-item friends panel-body">
+					<?php $accept = User::lookup($id); ?>
+					<?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'rel'=>"popover", 'data-placement'=>"right", 'rel1'=>"tooltip", 'data-html'=>"true", 'data-original-title'=>"<strong>$accept->nick</strong>" )) ?>
+					<?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?>
+		
+					<?php if($is_owner): ?>
+						<?php echo HTML::anchor("buddy/delete/".$accept->id , '<i class="fa fa-trash-o"></i>', array('class'=>'action-delete pull-right', 'title'=> __('Delete'))); ?>
+					<?php endif ;?>
+				</div>
+			<?php endforeach ;?>
+			
+			<div class="panel-footer">
+				<div class="row">
+				<?php echo HTML::anchor("buddy/list/".$user->id , __('All'),  array('class' => 'all-view pull-right', 'title'=> __('view All'))) ?>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
