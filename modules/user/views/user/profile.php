@@ -126,9 +126,3 @@
 		</div>
 	</div>
 </div>
-
-<?php
-	// @todo Should be moved to controller?
-	Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15));
-	Assets::js('user/form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10));
-?>
