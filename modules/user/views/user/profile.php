@@ -11,11 +11,7 @@
 						<i class="fa fa-fw fa-asterisk"></i> <?php echo __('Activity Feed'); ?>
 						<i class="fa fa-fw fa-chevron-right list-group-chevron"></i>
 					</a>
-					<a href="javascript:;" class="list-group-item">
-						<i class="fa fa-fw fa-group"></i> <?php echo __('Friends'); ?>
-						<i class="fa fa-fw fa-chevron-right list-group-chevron"></i>
-						<span class="badge">7</span>
-					</a>
+					<?php echo HTML::anchor('buddy/'.$user->id, '<i class="fa fa-fw fa-group"></i> '.__('Friends') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
 					<?php echo HTML::anchor('user/edit', '<i class="fa fa-fw fa-cog"></i> '.__('Settings') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
 				</div>
 			</div>
