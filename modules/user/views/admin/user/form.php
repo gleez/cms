@@ -1,8 +1,8 @@
 <?php
-	$parms = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add');
+	$params = isset($post->id) ? array('id' => $post->id, 'action' => 'edit') : array('action' => 'add');
 	$destination = isset($GET['destination']) ? $GET['destination']: '';
 
-	echo Form::open( Route::get('admin/user')->uri($parms).URL::query(array($destination)), array('id'=>'user-form', 'class'=>'user-form form form-horizontal', 'role' => 'form'));
+	echo Form::open(Route::get('admin/user')->uri($params).URL::query(array($destination)), array('id'=>'user-form', 'class'=>'user-form form form-horizontal'));
 	include Kohana::find_file('views', 'errors/partial');
 ?>
 

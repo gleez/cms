@@ -11,6 +11,16 @@
 						<i class="fa fa-fw fa-asterisk"></i> <?php echo __('Activity Feed'); ?>
 						<i class="fa fa-fw fa-chevron-right list-group-chevron"></i>
 					</a>
+					<?php
+						if ($is_owner)
+						{
+							echo HTML::anchor('message/inbox', '<i class="fa fa-fw fa-envelope"></i> '.__('Messages') .'<i class="fa fa-fw fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
+						}
+						if ( ! User::is_guest() AND ! $is_owner)
+						{
+							echo HTML::anchor('message/send', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-fw fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
+						}
+					?>
 					<?php echo HTML::anchor('buddy/'.$user->id, '<i class="fa fa-fw fa-group"></i> '.__('Friends') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
 					<?php echo HTML::anchor('user/edit', '<i class="fa fa-fw fa-cog"></i> '.__('Settings') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
 				</div>
