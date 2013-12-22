@@ -77,27 +77,6 @@ class Model_Buddy extends Model
 						->get('total', FALSE);
 	}
 
-	public function isRequest1($user_id, $friend_id)
-	{
-		$total = DB::select(array(DB::expr('COUNT(*)'), 'total'))
-					->from('buddies')
-					->where_open()
-						->where_open()
-							->where('request_from', '=', $friend_id)
-							->where('request_to', '=',$user_id)
-						->where_close()
-						->or_where_open()
-							->where('request_from', '=', $user_id)
-							->where('request_to', '=',$friend_id)
-						->where_close()
-					->where_close()
-					->where('accepted','=','0')
-					->execute()
-					->get('total', false);
-
-		return $total;
-	}
-
 	public function isRequest($user_id, $friend_id)
 	{
 		$total = DB::select(array(DB::expr('COUNT(*)'), 'total'))
@@ -149,5 +128,4 @@ class Model_Buddy extends Model
 					->where('request_from','=',$friend_id)
 					->execute();
 	}
-
 }

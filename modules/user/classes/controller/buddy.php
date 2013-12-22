@@ -66,4 +66,98 @@ class Controller_Buddy extends Template {
 		$this->response->body($view);
 	}
 
+	public function action_add()
+	{
+		$id      = (int) $this->request->param('id');
+		$invitee = ORM::factory('user', $id);
+		$account = Auth::instance()->get_user();
+
+		if ( ! $invitee->loaded() )
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		$model = Model::factory('buddy')->addFriend($account->id, $invitee->id);
+		 
+		Message::success(__("Buddy request sent to %title", array('%title' => $invitee->nick)));
+		$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $id)));
+	}
+
+	public function action_accept()
+	{
+		$id     = (int) $this->request->param('id');
+		$friend = ORM::factory('user', $id);
+
+		if ( ! $friend->loaded())
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		$model = Model::factory('buddy');
+
+		if ( $model->isFriend($this->user->id, $friend->id))
+		{
+			// Already friend
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $friend->id)));
+		}
+
+		if ( $model->isRequest($this->user->id, $friend->id))
+		{
+			$model->accept($this->user->id);		
+			Message::success(__("Buddy request: %title accepted", array('%title' => $friend->nick)));
+		}
+
+		$this->request->redirect(Route::get('user')->uri(array('action' => 'view', 'id' => $id)));
+	}
+
+	public function action_reject()
+	{
+		$id 	= (int) $this->request->param('id');
+		$friend = ORM::factory('user', $id);
+
+		if ( ! $friend->loaded())
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		$model = Model::factory('buddy');
+
+		if ( $model->isFriend($this->user->id, $friend->id))
+		{
+			// Already friend
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $id)));
+		}
+
+		if ( $model->isRequest($this->user->id, $friend->id))
+		{
+			$model->reject($id);
+			Message::success(__("Buddy %title rejected", array('%title' => $friend->nick)));
+		}
+
+		$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $id)));
+	}
+
+	public function action_delete()
+	{
+		$id = (int) $this->request->param('id');
+		$friend = ORM::factory('user', $id);
+
+		if ( ! $friend->loaded())
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		Model::factory('buddy')->delete($id);
+		Message::success( __("Buddy %title deleted", array('%title' => $friend->nick)) );
+
+		$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $this->user->id)));
+	}
 }
