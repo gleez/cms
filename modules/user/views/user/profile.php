@@ -16,7 +16,7 @@
 						{
 							echo HTML::anchor('message/inbox', '<i class="fa fa-fw fa-envelope"></i> '.__('Messages') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
 						}
-						if ( ! User::is_guest() AND ! $is_owner)
+						elseif ( ! User::is_guest())
 						{
 							echo HTML::anchor('message/send', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
 						}
@@ -111,19 +111,19 @@
 			<div class="panel-heading">
 				<h3 class="panel-title"><?php echo __('Friends'); ?></h3>
 			</div>
-			
+
 			<?php foreach($friends as $id): ?>
 				<div class="list-group-item friends panel-body">
 					<?php $accept = User::lookup($id); ?>
 					<?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'rel'=>"popover", 'data-placement'=>"right", 'rel1'=>"tooltip", 'data-html'=>"true", 'data-original-title'=>"<strong>$accept->nick</strong>" )) ?>
 					<?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?>
-		
+
 					<?php if($is_owner): ?>
 						<?php echo HTML::anchor("buddy/delete/".$accept->id , '<i class="fa fa-trash-o"></i>', array('class'=>'action-delete pull-right', 'title'=> __('Delete'))); ?>
 					<?php endif; ?>
 				</div>
 			<?php endforeach ;?>
-			
+
 			<?php if( !empty($friends) ): ?>
 				<div class="panel-footer">
 					<div class="row">
