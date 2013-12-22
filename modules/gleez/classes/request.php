@@ -6,7 +6,7 @@
  * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1.3
+ * @version    1.1.4
  * @author     Gleez Team
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -24,7 +24,7 @@ class Request implements HTTP_Request {
 	 * @var string
 	 */
 	public static $redirect_url;
-	
+
 	/**
 	 * Client user agent
 	 * @var string
@@ -685,7 +685,7 @@ class Request implements HTTP_Request {
 	{
 		//return false for cli request
 		if(Kohana::$is_cli === TRUE) return FALSE;
-		
+
 		// Make sure the request method is POST
 		if ( ! Request::current()->is_post())
 		{
@@ -695,7 +695,7 @@ class Request implements HTTP_Request {
 		// Error occurred if method is POST, and content length is too long
 		return (Arr::get($_SERVER, 'CONTENT_LENGTH') > Request::get_post_max_size());
 	}
-	
+
 	/**
 	 * Fix for pagination on lambda routes
 	 *
@@ -884,7 +884,7 @@ class Request implements HTTP_Request {
 
 		return ($gleez_settings <= $php_settings) ? $gleez_settings : $php_settings;
 	}
-	
+
 	/**
 	 * Creates a new request object for the given URI
 	 *
@@ -1313,7 +1313,7 @@ class Request implements HTTP_Request {
 			// Check Maintenance Mode
 			Gleez::maintenance_mode();
 		}
-		
+
 		if ( ! $this->_route instanceof Route)
 		{
 			return HTTP_Exception::factory(404, 'Unable to find a route to match the URI: :uri', array(
@@ -1753,71 +1753,63 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns whether this request is GET
-	 *
-	 * Thanks to nike-17@ya.ru
+	 * Check to see if the current request is a GET request
 	 *
 	 * Example:
 	 * ~~~
 	 * $this->request->is_get();
 	 * ~~~
 	 *
-	 * @return  boolean
+	 * @return  boolean  Whether the request is a GET request or not
 	 */
 	public function is_get()
 	{
-		return ($this->method() === Request::GET);
+		return (self::GET === $this->_method);
 	}
 
 	/**
-	 * Returns whether this request is POST
-	 *
-	 * Thanks to nike-17@ya.ru
+	 * Check to see if the current request is a POST request
 	 *
 	 * Example:
 	 * ~~~
 	 * $this->request->is_post();
 	 * ~~~
 	 *
-	 * @return  boolean
+	 * @return  boolean  Whether the request is a POST request or not
 	 */
 	public function is_post()
 	{
-		return ($this->method() === Request::POST);
+		return (self::POST === $this->_method);
 	}
 
 	/**
-	 * Returns whether this request is PUT
-	 *
-	 * Thanks to nike-17@ya.ru
+	 * Check to see if the current request is a PUT request
 	 *
 	 * Example:
 	 * ~~~
 	 * $this->request->is_put();
 	 * ~~~
 	 *
-	 * @return  boolean
+	 * @return  boolean  Whether the request is a PUT request or not
 	 */
 	public function is_put()
 	{
-		return ($this->method() === Request::PUT);
+		return (self::PUT === $this->_method);
 	}
 
 	/**
-	 * Returns whether this request is DELETE
-	 *
-	 * Thanks to nike-17@ya.ru
+	 * Check to see if the current request is a DELETE request
 	 *
 	 * Example:
 	 * ~~~
 	 * $this->request->is_delete();
 	 * ~~~
 	 *
-	 * @return  boolean
+	 * @return  boolean  Whether the request is a DELETE request or not
 	 */
 	public function is_delete()
 	{
-		return ($this->method() === Request::DELETE);
+		return (self::DELETE === $this->_method);
 	}
 }
 
