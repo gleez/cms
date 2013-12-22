@@ -60,8 +60,21 @@ class Model_Buddy extends Model
 				$friends[] = $friend["request_from"];
 			}
 		}
-		        
+
 		return $friends;
+	}
+
+	public function countFriends($user_id)
+	{
+		return DB::select(array(DB::expr('COUNT(*)'), 'total'))
+						->from('buddies')
+						->where_open()
+							->where('request_from', '=', $user_id)
+							->or_where('request_to', '=',$user_id)
+						->where_close()
+						->where('accepted','=','1')
+						->execute()
+						->get('total', FALSE);
 	}
 
 	public function isRequest1($user_id, $friend_id)

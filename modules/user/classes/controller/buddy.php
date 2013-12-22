@@ -7,75 +7,63 @@
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
-class Controller_Buddy extends Controller {
+class Controller_Buddy extends Template {
 
-        protected $user;
+	protected $user;
 
-        public function before()
-        {
-                parent::before();
+	public function before()
+	{
+		parent::before();
 
-                if ( $this->_auth->logged_in() == false )
+		if ( $this->_auth->logged_in() == false )
 		{
 			// No user is currently logged in
 			$this->request->redirect('user/login');
 		}
 
-                $this->user = $this->_auth->get_user();
-        }
+		$this->user = $this->_auth->get_user();
+	}
 
-        public function action_add()
-        {
-                $invitee_id = (int) $this->request->param('friend_id');
-                $invitee = ORM::factory('user')->where('id', '=', $invitee_id)->find();
+	public function action_index()
+	{
+		$id 	  = (int) $this->request->param('id');
+		$user     = ORM::factory('user', $id);
+		$is_owner = FALSE;
+		$account  = Auth::instance()->get_user();
 
-                if ( ! $user->has('friends', $invitee) AND ! $this->user->has('requests', $invitee))
-                {
-                        $user->add('requests', $invitee);
-                }
-        }
+		if ( ! $user->loaded())
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
 
-        public function action_accept()
-        {
-                $friend_id = (int) $this->request->param('friend_id');
-                $friend = ORM::factory('user')->where('id', $friend_id)->find();
+		if ($account AND ($user->id === $account->id))
+		{
+			$is_owner = TRUE;
+		}
 
-                if ( ! $this->user->has('friends', $friend))
-                {
-                        $this->user->add('friends', $friend);
-                }
+		$model 	  = Model::factory('buddy');
+		$total    = $model->countFriends($id);
 
-                $obj = new Model_Request();
-                $request = $obj->get_request($this->user->id, $friend_id)->execute()->current();
+		$url = Route::get('user/buddy')->uri( array('action' => 'list','id' => $id) );
+		$pagination = Pagination::factory(array(
+			'current_page'   => array('source'=>'cms', 'key'=>'page'),
+			'total_items' 	 => $total,
+			'items_per_page' => 15,
+			'uri'  			 => $url,
+		));
 
-                $values = array(
-                        'accepted' => true,
-                        'date_accepted' => date('Y-m-d H:i:s'),
-                );
+		$friends  = $model->friends($id, $pagination->items_per_page, $pagination->offset);
 
-                DB::update('buddy_requests')->set($values)->where('id', '=', $request->id)->execute();
-        }
+		$view = View::factory('user/buddy')
+					->set('total',      $total)
+					->set('is_owner',   $is_owner)
+					->set('friends',    $friends)
+					->set('pagination', $pagination);
 
-        public function action_reject()
-        {
-                $friend_id = (int) $this->request->param('friend_id');
-                $friend = ORM::factory('user')->where('id', '=', $friend_id)->find();
-
-                if ($friend->loaded() AND $friend->has('requests', $this->user))
-                {
-                        $friend->remove('requests', $this->user);
-                }
-        }
-
-        public function action_delete()
-        {
-                $friend_id = (int) $this->request->param('friend_id');
-                $friend = ORM::factory('user')->where('id', '=', $friend_id)->find();
-
-                if ($friend->loaded() AND $this->user->has('friends', $friend))
-                {
-                        $this->user->remove('friends', $friend);
-                }
-        }
+		$this->title = __('Friends');
+		$this->response->body($view);
+	}
 
 }
