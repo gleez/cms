@@ -323,7 +323,7 @@ class I18n {
 		$key = I18n::get_plural_key(I18n::$lang, $count);
 
 		// Return the translated string if it exists
-		return isset($table[$string][$key]) ? $table[$string][$key]: $table[$string];
+		return isset($table[$string][$key]) ? $table[$string][$key] : (isset($table[$string]) ? $table[$string] : $string);
 	}
 
 	/**
