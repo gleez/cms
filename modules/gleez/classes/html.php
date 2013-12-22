@@ -139,7 +139,7 @@ class HTML {
 		}
 		else
 		{
-			if (URL::is_absolute($uri))
+			if (strpos($uri, '://') === FALSE)
 			{
 				// Make the URI absolute for non-id anchors
 				$uri = URL::site($uri, $protocol, $index);
@@ -240,14 +240,11 @@ class HTML {
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
 
-		//Auto detect index file
-		if ($index == FALSE AND ! empty(Kohana::$index_file))
-		{
-			$index = TRUE;
-		}
-
 		if (strpos($file, '://') === FALSE)
 		{
+			//Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -281,14 +278,11 @@ class HTML {
 	 */
 	public static function image($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		//Auto detect index file
-		if ($index == FALSE AND ! empty(Kohana::$index_file))
-		{
-			$index = TRUE;
-		}
-
 		if (strpos($file, '://') === FALSE)
 		{
+			//Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -396,14 +390,11 @@ class HTML {
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
 		}
 
-		//Auto detect index file
-		if ($index == FALSE AND ! empty(Kohana::$index_file))
-		{
-			$index = TRUE;
-		}
-
 		if (strpos($file, '://') === FALSE)
 		{
+			//Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -474,11 +465,8 @@ class HTML {
 			}
 
 			//Auto detect index file
-			if ($index == FALSE AND ! empty(Kohana::$index_file))
-			{
-				$index = TRUE;
-			}
-			
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::base($protocol, $index).$file;
 		}
