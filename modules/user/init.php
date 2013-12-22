@@ -80,6 +80,15 @@ if ( ! Route::cache())
 		'controller' => 'buddy',
 		'action'     => 'index',
 	));
+
+	Route::set('user/message', 'message(/<action>)(/<id>)', array(
+		'id'         => '\d+',
+		'action'     => 'index|inbox|outbox|drafts|list|view|edit|compose|delete|bulk'
+	))
+	->defaults(array(
+		'controller' => 'message',
+		'action'     => 'index'
+	));
 }
 
 
