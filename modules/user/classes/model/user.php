@@ -102,8 +102,7 @@ class Model_User extends ORM {
 		'user_tokens' => array('model' => 'user_token'),
 		'roles'       => array('model' => 'role', 'through' => 'roles_users'),
 		'identities'  => array('model' => 'identity'),
-		'friends'     => array('model' => 'user', 'through' => 'buddies', 'foreign_key' => 'buddy_id', 'far_key' => 'user_id'),
-		'requests'    => array('model' => 'user', 'through' => 'buddy_requests', 'foreign_key' => 'request_from', 'far_key' => 'request_to'),
+		'buddies'     => array('model' => 'user', 'through' => 'buddies', 'foreign_key' => 'request_from', 'far_key' => 'request_to'),
 	);
 
 	protected $_ignored_columns = array('password', 'old_pass');

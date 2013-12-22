@@ -475,17 +475,6 @@ CREATE TABLE {sitemaps} (
 
 DROP TABLE IF EXISTS {buddies};
 CREATE TABLE IF NOT EXISTS {buddies} (
-    `user_id` bigint(20) UNSIGNED NOT NULL,
-    `buddy_id` bigint(20) UNSIGNED NOT NULL,
-    PRIMARY KEY (`user_id`,`buddy_id`),
-    KEY `buddy_fk_1` (`user_id`),
-    KEY `buddy_fk_2` (`buddy_id`),
-    CONSTRAINT {buddy_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
-    CONSTRAINT {buddy_ibfk_2} FOREIGN KEY (`buddy_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS {buddy_requests};
-CREATE TABLE IF NOT EXISTS {buddy_requests} (
     `id` INT(11) UNSIGNED NOT NULL,
     `request_from` bigint(20) UNSIGNED NOT NULL,
     `request_to` bigint(20) UNSIGNED NOT NULL,
