@@ -99,7 +99,7 @@
 				// Re-arrange the search input for a form-horizontal layout
 				thisFilter.addClass('form-group')
 				thisFilterLabel.addClass('control-label').attr('for', currentId + '_filter_input')
-				thisFilterInput.addClass('control-label col-xs-4 col-md-3 col-sm-3').attr('id', currentId + '_filter_input')
+				thisFilterInput.addClass('form-control col-xs-4 col-md-3 col-sm-3').attr('id', currentId + '_filter_input')
 				thisFilterInput.appendTo(thisFilter).wrap('<div class="col-xs-8 col-sm-9 col-md-9" />')
 			}
 	  	}
