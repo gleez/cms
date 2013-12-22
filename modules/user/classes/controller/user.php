@@ -287,9 +287,16 @@ class Controller_User extends Template {
 			$is_owner = TRUE;
 		}
 
+		$request = Model::factory('buddy')->isRequest($account->id, $user->id);
+		$friend  = Model::factory('buddy')->isFriend($account->id, $user->id);
+		$friends = Model::factory('buddy')->friends($user->id, 5);
+
 		$view = View::factory('user/profile')
-				->set('user',     $user)
-				->set('is_owner', $is_owner);
+					->set('user',		 $user)
+					->set('is_owner',	 $is_owner)
+					->set('request',	 $request)
+					->set('friend',		 $friend)
+					->set('accept_list', $friends);
 
 		$this->response->body($view);
 	}
