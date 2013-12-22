@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * URL Class Helper
  *
@@ -232,7 +232,7 @@ class URL {
 	 */
 	public static function is_absolute($url)
 	{
-		return (strpos($url, '://') === FALSE);
+		return (strpos($url, '://') !== FALSE);
 	}
 
 	/**
@@ -243,7 +243,17 @@ class URL {
 	 */
 	public static function is_remote($url)
 	{
-		return (strpos($url, '://') !== FALSE);
+		if((strpos($url, '://') !== FALSE))
+		{
+			$base = URL::base(TRUE);
+			
+			$host1 = str_replace('www.', '', parse_url($base, PHP_URL_HOST) );
+			$host2 = str_replace('www.', '', parse_url($url, PHP_URL_HOST) );
+
+			return trim($host1) === trim($host2);
+		}
+
+		return FALSE;
 	}
 
 	/**
