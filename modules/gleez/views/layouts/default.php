@@ -10,6 +10,9 @@
 		<?php echo HTML::script('media/js/html5shiv.js', NULL, TRUE); ?>
 		<?php echo HTML::script('media/js/respond.min.js', NULL, TRUE); ?>
 	<![endif]-->
+	<!--[if gte IE 9]>
+		<?php echo HTML::script('media/css/ie-gte-9.css', NULL, TRUE); ?>
+	<![endif]-->
 	<?php echo Assets::css(); ?>
 </head>
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>" <?php echo $schemaType ? 'itemscope itemtype="http://schema.org/'.$schemaType.'"' : ''?>>
@@ -19,23 +22,23 @@
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
+					<span class="sr-only"><?php _e('Toggle navigation'); ?></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<?php echo HTML::anchor('/', HTML::image($site_logo, array('alt' => $site_slogan, 'class' => 'logo')), array('class' => 'navbar-brand', 'title' => $site_name)) ?>
+				<?php echo HTML::anchor($site_url, HTML::image($site_logo, array('alt' => $site_slogan, 'class' => 'logo')), array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
 			<div class="navbar-collapse collapse">
 				<?php echo $primary_menu; ?>
 
 				<ul class="nav navbar-nav navbar-right">
-						<?php if (User::is_guest()): ?>
-							<?php if (Kohana::$config->load('auth')->get('register')): ?>
-								<li><a href="<?php echo URL::site('/user/register'); ?>"><?php echo __('Sign Up')?></a></li>
-							<?php endif; ?>
-							<li><a href="<?php echo URL::site('/user/login'); ?>"><i class="fa fa-fw fa-chevron-left"></i><?php echo __('Sign In') ?></a></li>
-						<?php else:  ?>
+					<?php if (User::is_guest()): ?>
+						<?php if (Kohana::$config->load('auth')->get('register')): ?>
+							<li><a href="<?php echo URL::site('/user/register'); ?>"><?php echo __('Sign Up')?></a></li>
+						<?php endif; ?>
+						<li><a href="<?php echo URL::site('/user/login'); ?>"><i class="fa fa-fw fa-white fa-chevron-left"></i><?php echo __('Sign In') ?></a></li>
+					<?php else:  ?>
 						<li class="dropdown">
 							<?php echo HTML::anchor('#', User::getAvatar($_user, array('size' => 20)).' '.$_user->name.'<b class="caret"></b>', array('data-toggle' => 'dropdown', 'class' => 'dropdown-toggle')); ?>
 
@@ -55,21 +58,22 @@
 								<li><a href="<?php echo URL::site('/user/logout'); ?>"><i class="fa fa-fw fa-power-off"></i> <?php echo __('Sign Out') ?></a></li>
 							</ul>
 						</li>
-						<?php endif; ?>
+
+					<?php endif; ?>
 				</ul>
-			</div><!--/.nav-collapse -->
+			</div>
 		</div>
 	</div>
 	<!-- ########## Navbar end ########## -->
 
-	<!-- ########## template / container-fluid start ########## -->
+	<!-- ########## template / container start ########## -->
 	<div class="container">
 		<?php
 			$tpl = $is_admin ? 'admin' : 'default';
 			include Kohana::find_file('views', $tpl.'.tpl');
 		?>
 	</div>
-	<!-- ########## template / container-fluid end ########## -->
+	<!-- ########## template / container end ########## -->
 	<!-- ########## Footer start ########## -->
 	<footer class="footer">
 		<?php $footer = Widgets::instance()->render('footer', 'footer'); ?>
