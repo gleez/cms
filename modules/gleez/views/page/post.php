@@ -1,4 +1,4 @@
-<div class="post-page-wrapper">
+<div class="post-page-wrapper col-md-12">
 	<?php if (isset($page)): ?>
 		<div class="post-page">
 			<?php echo $page; ?>
