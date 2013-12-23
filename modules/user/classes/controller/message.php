@@ -35,18 +35,20 @@ class Controller_Message extends Template {
 	const ALL_MAIL = 4;
 
 	/**
-	 * User object
-	 * @var Model_User
-	 */
-	protected $_user;
-
-	/**
 	 * The before() method is called before controller action
 	 *
-	 * @uses  Assets::css
+	 * @throws  HTTP_Exception
+	 *
+	 * @uses    Assets::css
+	 * @uses    User::is_guest
 	 */
 	public function before()
 	{
+		if (User::is_guest())
+		{
+			throw HTTP_Exception::factory(403, 'Permission denied! You must login!');
+		}
+
 		$id = $this->request->param('id', FALSE);
 
 		if ($id AND 'index' == $this->request->action())
