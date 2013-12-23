@@ -89,10 +89,8 @@
 				<?php endif; ?>
 			</fieldset>
 		</div>
-		<div class="panel-footer">
-			<div class="col-md-12 clearfix">
-				<?php echo Form::button('register', __('Register new account'), array('class' => 'btn btn-success pull-right', 'tabindex' => 11, 'type' => 'submit')) ?>
-			</div>
+		<div class="panel-footer form-actions-right">
+			<?php echo Form::button('register', __('Register new account'), array('class' => 'btn btn-success', 'tabindex' => 11, 'type' => 'submit')) ?>
 		</div>
 		<?php echo Form::close(); ?>
 	</div>

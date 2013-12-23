@@ -29,10 +29,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel-footer">
-				<div class="col-md-12 clearfix">
-					<?php echo Form::button('password_confirm', __('Apply new password'), array('class' => 'btn btn-primary pull-right', 'type' => 'submit'))?>
-				</div>
+			<div class="panel-footer form-actions-right">
+				<?php echo Form::button('password_confirm', __('Apply new password'), array('class' => 'btn btn-primary', 'type' => 'submit'))?>
 			</div>
 		<?php echo Form::close(); ?>
 	</div>
