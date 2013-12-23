@@ -124,7 +124,7 @@ class Controller_Message extends Template {
 				$this->_datatables->add_row(
 					array(
 						Form::checkbox('messages['.$message->id.']', $message->id, isset($_POST['messages'][$message->id])),
-						HTML::anchor($message->url, Text::limit_chars($message->subject), array('class' => 'message-'.$message->status)),
+						HTML::anchor($message->url, Text::limit_chars($message->subject, 50) .'<br>'. Text::limit_chars($message->body), array('class' => 'message-'.$message->status)),
 						HTML::anchor($message->user->nick, $message->user->nick),
 						Date::formatted_time($message->sent, 'M d, Y'),
 						HTML::icon($message->delete_url.$destination, 'fa-trash-o', array('title'=> __('Delete Message'), 'data-toggle' => 'popup', 'data-table' => '#user-message-inbox'))
