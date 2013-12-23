@@ -214,7 +214,7 @@ class Controller_Admin_User extends Controller_Admin {
 						unset($_POST['pass']);
 					}
 
-					$post->values($_POST);
+					$post->values($this->request->post());
 					$post->save();
 
 					// Make sure to $_POST is set and it is array
