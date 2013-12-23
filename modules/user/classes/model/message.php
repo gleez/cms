@@ -55,12 +55,6 @@ class Model_Message extends ORM {
 	const DRAFT = 'draft';
 
 	/**
-	 * Current user
-	 * @var Model_User
-	 */
-	protected $_user;
-
-	/**
 	 * Message config
 	 * @var Config_Group
 	 */
@@ -106,16 +100,9 @@ class Model_Message extends ORM {
 	 * Class constructor
 	 *
 	 * @param  mixed $id  Parameter for find or object to load [Optional]
-	 *
-	 * @throws  HTTP_Exception_503
 	 */
 	public function __construct($id = NULL)
 	{
-		if ( ! $this->_user = Auth::instance()->get_user())
-		{
-			throw new HTTP_Exception_503('Permission denied! You must login!');
-		}
-
 		$this->_config = Config::load('message');
 
 		parent::__construct($id);
@@ -205,30 +192,32 @@ class Model_Message extends ORM {
 		{
 			$this->order_by('created', $direction);
 
+			$user = User::active_user();
+
 			switch ($type)
 			{
 				case self::INBOX:
 					$this->where_open()
-						->where('recipient', '=', $this->_user->id)
+						->where('recipient', '=', $user->id)
 						->and_where('status', '!=', self::DRAFT)
 						->where_close();
 				break;
 				case self::OUTBOX:
 					$this->where_open()
-						->where('sender', '=', $this->_user->id)
+						->where('sender', '=', $user->id)
 						->and_where('status', '!=', self::DRAFT)
 						->where_close();
 				break;
 				case self::DRAFT:
 					$this->where_open()
-						->where('sender', '=', $this->_user->id)
+						->where('sender', '=', $user->id)
 						->and_where('status', '=', self::DRAFT)
 						->where_close();
 				break;
 				default:
 					$this->where_open()
-						->where('sender', '=', $this->_user->id)
-						->or_where('recipient', '=', $this->_user->id)
+						->where('sender', '=', $user->id)
+						->or_where('recipient', '=', $user->id)
 						->where_close();
 			}
 		}

@@ -1,3 +1,4 @@
+<?php echo time(); ?>
 <div class="row vcard">
 	<div class="col-md-9" itemprop="about" itemscope itemtype="http://schema.org/Person">
 		<div class="row">
@@ -8,7 +9,7 @@
 
 				<div class="list-group">
 					<a href="javascript:;" class="list-group-item">
-						<i class="fa fa-asterisk"></i> <?php echo __('Activity Feed'); ?>
+						<i class="fa fa-fw fa-asterisk"></i> <?php echo __('Activity Feed'); ?>
 						<i class="fa fa-chevron-right list-group-chevron"></i>
 					</a>
 					<?php

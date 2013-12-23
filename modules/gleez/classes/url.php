@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.0
+ * @version    1.0.1
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -101,7 +101,7 @@ class URL {
 
 	/**
 	 * Callback used for encoding all non-ASCII characters, as per RFC 1738
-	 * Used by URL::site()
+	 * Used by [URL::site]
 	 *
 	 * @param  array $matches  Array of matches from preg_replace_callback()
 	 * @return string          Encoded string
@@ -124,7 +124,7 @@ class URL {
 	 * Typically you would use this when you are sorting query results,
 	 * or something similar.
 	 *
-	 * [!!] Parameters with a NULL value are left out.
+	 * [!!] Note: Parameters with a NULL value are left out.
 	 *
 	 * @param   array    $params   Array of GET parameters [Optional]
 	 * @param   boolean  $use_get  Include current request GET parameters [Optional]
@@ -238,6 +238,9 @@ class URL {
 	/**
 	 * Test whether a URL is remote
 	 *
+	 * @since   1.0.0  Initial functional
+	 * @since   1.0.1  Better handling
+	 *
 	 * @param   string  $url  The URL to test
 	 * @return  boolean
 	 */
@@ -247,8 +250,8 @@ class URL {
 		{
 			$base = URL::base(TRUE);
 
-			$host1 = str_replace('www.', '', parse_url($base, PHP_URL_HOST) );
-			$host2 = str_replace('www.', '', parse_url($url, PHP_URL_HOST) );
+			$host1 = str_replace('www.', '', parse_url($base, PHP_URL_HOST));
+			$host2 = str_replace('www.', '', parse_url($url, PHP_URL_HOST));
 
 			return trim($host1) === trim($host2);
 		}
