@@ -4,7 +4,7 @@
  *
  * @package   Gleez\User\Admin\Controller
  * @author    Gleez Team
- * @version   1.0.2
+ * @version   1.0.3
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -81,6 +81,12 @@ class Controller_Admin_User extends Controller_Admin {
 
 	/**
 	 * Add new user
+	 *
+	 * @uses  Message::success
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Arr::merge
+	 * @uses  Arr::get
 	 */
 	public function action_add()
 	{
@@ -108,16 +114,16 @@ class Controller_Admin_User extends Controller_Admin {
 				// Create the User
 				$post->save();
 
-				// Make sure to add an empty if none of the roles checked to avoid errors
-				if (empty($_POST['roles']))
+				// Make sure to $_POST is set and it is array
+				if ( ! isset($_POST['roles']) OR ! is_array($_POST['roles']))
 				{
-					$_POST['roles'] = array('login');
+					$_POST['roles'] = array();
 				}
 
 				// Make sure to add an empty if none of the roles checked to avoid errors
-				if (empty($_POST['roles']) OR ! in_array('login', $_POST['roles']))
+				if (empty($_POST['roles']) OR is_null(Arr::get($_POST['roles'], 'login', NULL)))
 				{
-					$_POST['roles'] = array();
+					$_POST['roles'] = Arr::merge($_POST['roles'], array('login' => ''));
 				}
 
 				foreach(array_keys($_POST['roles']) as $role)
@@ -128,7 +134,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
 
-				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
+				$this->request->redirect(Route::get('admin/user')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
@@ -141,6 +147,14 @@ class Controller_Admin_User extends Controller_Admin {
 
 	/**
 	 * Edit user
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Log::error
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Arr::merge
+	 * @uses  Arr::get
 	 */
 	public function action_edit()
 	{
@@ -184,10 +198,16 @@ class Controller_Admin_User extends Controller_Admin {
 				$post->values($_POST);
 				$post->save();
 
-				// Make sure to add an empty if none of the roles checked to avoid errors
-				if (empty($_POST['roles']) OR ! in_array('login', $_POST['roles']))
+				// Make sure to $_POST is set and it is array
+				if ( ! isset($_POST['roles']) OR ! is_array($_POST['roles']))
 				{
-					$_POST['roles'] = array('login');
+					$_POST['roles'] = array();
+				}
+
+				// Make sure to add an empty if none of the roles checked to avoid errors
+				if (empty($_POST['roles']) OR is_null(Arr::get($_POST['roles'], 'login', NULL)))
+				{
+					$_POST['roles'] = Arr::merge($_POST['roles'], array('login' => ''));
 				}
 
 				// Roles have to be added separately, and all users have to have the login role
@@ -203,7 +223,7 @@ class Controller_Admin_User extends Controller_Admin {
 
 				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
 
-				$this->request->redirect(Route::get('admin/user')->uri());
+				$this->request->redirect(Route::get('admin/user')->uri(), 200);
 			}
 			catch (ORM_Validation_Exception $e)
 			{
