@@ -35,18 +35,20 @@ class Controller_Message extends Template {
 	const ALL_MAIL = 4;
 
 	/**
-	 * User object
-	 * @var Model_User
-	 */
-	protected $_user;
-
-	/**
 	 * The before() method is called before controller action
 	 *
-	 * @uses  Assets::css
+	 * @throws  HTTP_Exception
+	 *
+	 * @uses    Assets::css
+	 * @uses    User::is_guest
 	 */
 	public function before()
 	{
+		if (User::is_guest())
+		{
+			throw HTTP_Exception::factory(403, 'Permission denied! You must login!');
+		}
+
 		$id = $this->request->param('id', FALSE);
 
 		if ($id AND 'index' == $this->request->action())
@@ -122,7 +124,7 @@ class Controller_Message extends Template {
 				$this->_datatables->add_row(
 					array(
 						Form::checkbox('messages['.$message->id.']', $message->id, isset($_POST['messages'][$message->id])),
-						HTML::anchor($message->url, Text::limit_chars($message->subject), array('class' => 'message-'.$message->status)),
+						HTML::anchor($message->url, Text::limit_chars($message->subject, 50) .'<br>'. Text::limit_chars($message->body), array('class' => 'message-'.$message->status)),
 						HTML::anchor($message->user->nick, $message->user->nick),
 						Date::formatted_time($message->sent, 'M d, Y'),
 						HTML::icon($message->delete_url.$destination, 'fa-trash-o', array('title'=> __('Delete Message'), 'data-toggle' => 'popup', 'data-table' => '#user-message-inbox'))

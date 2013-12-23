@@ -1,43 +1,43 @@
 .empty-photo {
-        width: 150px;
-        height: 150px;
+	width: 150px;
+	height: 150px;
 }
 
 .empty-photo i {
-        margin: 0 auto;
-        display: block;
-        width: 1em;
-        position: relative;
-        top: 70px;
+	margin: 0 auto;
+	display: block;
+	width: 1em;
+	position: relative;
+	top: 70px;
 }
 
 .user-login #content form {
-        width: 400px;
-        margin: 0.5em auto;
+	width: 400px;
+	margin: 0.5em auto;
 }
 
 form ul#auth-providers {
-        border-top: 1px dashed #ccc;
-        list-style: none;
-        margin: 0px;
-        padding: 1em 0;
-        text-decoration: none;
+	border-top: 1px dashed #ccc;
+	list-style: none;
+	margin: 0px;
+	padding: 1em 0;
+	text-decoration: none;
 }
 
 form #auth-providers .provider {
-        list-style: none;
-        display: inline;
-        padding: 2px 5px;
-        text-decoration: none;
-        color: rgba(0, 0, 0, 0);
+	list-style: none;
+	display: inline;
+	padding: 2px 5px;
+	text-decoration: none;
+	color: rgba(0, 0, 0, 0);
 }
 
 .provider a:link, .provider a:active, .provider a:visited {
-        height: 3em;
-        line-height: 2.5em;
-        display: inline-block;
-        text-decoration: none;
-        color: inherit;
+	height: 3em;
+	line-height: 2.5em;
+	display: inline-block;
+	text-decoration: none;
+	color: inherit;
 }
 
 .facebook a { background: url('../images/facebook-32.png') no-repeat; }
@@ -47,29 +47,29 @@ form #auth-providers .provider {
 .github a { background: url('../images/github-32.png') no-repeat; }
 
 #oauth-providers, ul#post-provider-buttons {
-        padding:0px;
-        margin: 0px;
-        display: block;
+	padding:0px;
+	margin: 0px;
+	display: block;
 }
 
 #oauth-providers .oprovider {
-        list-style: none;
-        display: inline;
-        font-size: 12px !important;
-        text-decoration: none;
-        cursor: pointer;
-        border: medium none !important;
-        float: left;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-       -khtml-border-radius: 3px;
-        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-        box-shadow: 1px 0 1px rgba(255, 255, 255, 0.5);
-        padding: 2px 6px;
-        margin-right: 1em;
-        margin-bottom: 0.5em;
+	list-style: none;
+	display: inline;
+	font-size: 12px !important;
+	text-decoration: none;
+	cursor: pointer;
+	border: medium none !important;
+	float: left;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-o-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+	box-shadow: 1px 0 1px rgba(255, 255, 255, 0.5);
+	padding: 2px 6px;
+	margin-right: 1em;
+	margin-bottom: 0.5em;
 }
 
 #oauth-providers li a {
@@ -79,64 +79,63 @@ form #auth-providers .provider {
 }
 
 #oauth-providers li a.base{
-        background-image: url('../images/gleez-16.png');
-        background-repeat: no-repeat;
+	background-image: url('../images/gleez-16.png');
+	background-repeat: no-repeat;
 }
 
 #oauth-providers .facebook a{
-        background-image: url('../images/facebook-16.png');
-        background-repeat: no-repeat;
+	background-image: url('../images/facebook-16.png');
+	background-repeat: no-repeat;
 }
 
 #oauth-providers .google a{
-        background-image: url('../images/google-16.png');
-        background-repeat: no-repeat;
+	background-image: url('../images/google-16.png');
+	background-repeat: no-repeat;
 }
 
 #oauth-providers a.live {
-        color: #3C6B9C;
-        background-image: url('../images/windows-16.png');
-        background-repeat: no-repeat;
+	color: #3C6B9C;
+	background-image: url('../images/windows-16.png');
+	background-repeat: no-repeat;
 }
 
 #oauth-providers .base{
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
+	background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
 }
 
 #oauth-providers .facebook {
-        background: #999; /* for non-css3 browsers */
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5E76AB', endColorstr='#305192'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#5E76AB), to(#305192)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #5E76AB, #305192) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+	background: #999; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5E76AB', endColorstr='#305192'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#5E76AB), to(#305192)); /* for webkit browsers */
+	background: -moz-linear-gradient(center top , #5E76AB, #305192) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
 }
 
 #oauth-providers .google {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
+	background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
 }
 
 #oauth-providers li.live {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ddeff0', endColorstr='#85DCE2'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#ddeff0), to(#85DCE2)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #ddeff0, #85DCE2) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
-        color: #3C6B9C;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ddeff0', endColorstr='#85DCE2'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#ddeff0), to(#85DCE2)); /* for webkit browsers */
+	background: -moz-linear-gradient(center top , #ddeff0, #85DCE2) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+	color: #3C6B9C;
 }
 
 #post-provider-buttons {
-        border: 1px solid #eee;
-        padding: 3px;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-       -khtml-border-radius: 3px;
+	border: 1px solid #eee;
+	padding: 3px;
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	     -o-border-radius: 3px;
+	        border-radius: 3px;
 }
 
 #post-provider-buttons textarea {
-        background: #eeeeee;
+	background: #eee;
 }
 
 /*register css */
@@ -151,13 +150,13 @@ form #auth-providers .provider {
     width: 120px;
 }
 .box{
-    border: 1px solid #EEEEEE;
+    border: 1px solid #eee;
     margin-bottom: 20px;
 }
 
 .box > .box-header{
     padding: 10px 10px 10px 20px;
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1px solid #eee;
     font-weight: 200;
     font-size: 1.2em;
 }
@@ -184,17 +183,16 @@ form #auth-providers .provider {
 
 .corner-all{
     -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+       -moz-border-radius: 4px;
+            border-radius: 4px;
 }
 .corner-top{
     -webkit-border-top-left-radius: 4px;
-    -moz-border-radius-topleft: 4px;
-    border-top-left-radius: 4px;
-
+        -moz-border-radius-topleft: 4px;
+            border-top-left-radius: 4px;
     -webkit-border-top-right-radius: 4px;
-    -moz-border-radius-topright: 4px;
-    border-top-right-radius: 4px;
+        -moz-border-radius-topright: 4px;
+            border-top-right-radius: 4px;
 }
 
 .grd-teal{
@@ -222,9 +220,9 @@ form #auth-providers .provider {
     border: 1px solid #00a600;
 }
 .color-white{
-    color: #FFFFFF;
+    color: #fff;
 }
 .bg-white,
 .bar-st.white > span{
-    background-color: #FFFFFF;
+    background-color: #fff;
 }

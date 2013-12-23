@@ -80,12 +80,12 @@
 						</div>
 					</div>
 					<div class="panel-footer">
-						<div class="col-sm-12 clearfix">
-							<div class="col-xs-6">
+						<div class="row">
+							<div class="col-sm-6">
 								<?php echo HTML::anchor(Route::get('user')->uri(array('action' => 'profile')), '<i class="fa fa-arrow-left"></i> '.__('Profile'), array('class' => 'btn')); ?>
 							</div>
-							<div class="col-xs-6">
-								<?php echo Form::button('user_edit', __('Save'), array('class' => 'btn btn-success pull-right', 'type' => 'submit'))?>
+							<div class="col-sm-6 form-actions-right">
+								<?php echo Form::button('user_edit', __('Save'), array('class' => 'btn btn-success', 'type' => 'submit'))?>
 							</div>
 						</div>
 					</div>
