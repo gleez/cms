@@ -11,30 +11,6 @@
 class Controller_Message extends Template {
 
 	/**
-	 * Used for redirect to inbox when used bulk actions
-	 * @type integer
-	 */
-	const INBOX = 1;
-
-	/**
-	 * Used for redirect to outbox when used bulk actions
-	 * @type integer
-	 */
-	const OUTBOX = 2;
-
-	/**
-	 * Used for redirect to drafts when used bulk actions
-	 * @type integer
-	 */
-	const DRAFTS = 3;
-
-	/**
-	 * Used for redirect to list of all messages when used bulk actions
-	 * @type integer
-	 */
-	const ALL_MAIL = 4;
-
-	/**
 	 * The before() method is called before controller action
 	 *
 	 * @throws  HTTP_Exception
@@ -73,6 +49,8 @@ class Controller_Message extends Template {
 	 *
 	 * @uses  Route::get
 	 * @uses  Route::uri
+	 * @uses  Request::action
+	 * @uses  Assets::editor
 	 */
 	public function after()
 	{
@@ -83,6 +61,12 @@ class Controller_Message extends Template {
 			array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
 			array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
 		);
+
+		if ($this->request->action() == 'compose' OR $this->request->action() == 'edit')
+		{
+			// Add RichText Support
+			Assets::editor('.textarea', I18n::$lang);
+		}
 
 		parent::after();
 	}
@@ -107,13 +91,13 @@ class Controller_Message extends Template {
 
 		$url         = Route::url('user/message', array('action' => 'inbox'), TRUE);
 		$redirect    = Route::get('user/message')->uri(array('action' => 'inbox'));
-		$form_action = Route::get('user/message')->uri(array('action' => 'bulk', 'id' => self::INBOX));
+		$form_action = Route::get('user/message')->uri(array('action' => 'bulk', 'id' => PM::INBOX));
 		$destination = '?destination='.$redirect;
 
 		$is_datatables = Request::is_datatables();
 
 		/** @var $messages Model_Message */
-		$messages = ORM::factory('message')->load('inbox');
+		$messages = ORM::factory('message')->loadInbox();
 
 		if ($is_datatables)
 		{
@@ -263,22 +247,21 @@ class Controller_Message extends Template {
 
 	public function action_bulk()
 	{
-		$id = (int) $this->request->param('id', self::ALL_MAIL);
+		$id = (int) $this->request->param('id', 0);
 
 		switch ($id)
 		{
-			case self::INBOX:
+			case PM::INBOX:
 				$destination = 'inbox';
 			break;
-			case self::OUTBOX:
+			case PM::OUTBOX:
 				$destination = 'outbox';
 			break;
-			case self::DRAFTS:
+			case PM::DRAFTS:
 				$destination = 'drafts';
 			break;
-			case self::ALL_MAIL:
+			default:
 				$destination = 'list';
-			break;
 		}
 
 		$redirect    = Route::get('user/message')->uri(array('action' => $destination));
