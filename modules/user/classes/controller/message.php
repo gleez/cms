@@ -39,9 +39,6 @@ class Controller_Message extends Template {
 		Assets::css('user', 'media/css/user.css', array('theme'), array('weight' => 60));
 
 		parent::before();
-
-		// Disable sidebars on message pages
-		$this->_sidebars = FALSE;
 	}
 
 	/**
@@ -68,6 +65,9 @@ class Controller_Message extends Template {
 				array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
 				array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
 			);
+
+			// Disable sidebars on message pages except compose and edit
+			$this->_sidebars = FALSE;
 		}
 
 		parent::after();
