@@ -199,17 +199,21 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ($this->valid_post('user'))
 		{
-			$data = Validation::factory($this->request->post())
-				->rule('pass', 'not_empty')
-				->rule('pass', 'min_length', array(':value', Config::get('auth.password.length_min', 4)))
-				->label('pass', __('Password'));
+			$data = Validation::factory($this->request->post());
+
+			if ( ! empty($_POST['pass']) OR (trim($_POST['pass']) != ''))
+			{
+				$data->rule('pass', 'not_empty')
+					->rule('pass', 'min_length', array(':value', Config::get('auth.password.length_min', 4)))
+					->label('pass', __('Password'));
+			}
 
 			if ($data->check())
 			{
 				try
 				{
 					// password can be empty - it will be ignored in save.
-					if ((empty($_POST['pass']) || (trim($_POST['pass']) == '')))
+					if (empty($_POST['pass']) OR (trim($_POST['pass']) == ''))
 					{
 						unset($_POST['pass']);
 					}
