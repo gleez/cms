@@ -1,4 +1,3 @@
-<?php echo time(); ?>
 <div class="row vcard">
 	<div class="col-md-9" itemprop="about" itemscope itemtype="http://schema.org/Person">
 		<div class="row">
