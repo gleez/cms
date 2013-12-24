@@ -11,20 +11,6 @@
 class Model_Message extends ORM {
 
 	/**
-	 * Inbox virtual folder name.
-	 * Can be used when determining the type of messages received.
-	 * @type string
-	 */
-	const INBOX = 'inbox';
-
-	/**
-	 * Outbox virtual folder name.
-	 * Can be used when determining the type of messages received.
-	 * @type string
-	 */
-	const OUTBOX = 'outbox';
-
-	/**
 	 * Sort mode of messages - ascending
 	 * @type string
 	 */
@@ -35,24 +21,6 @@ class Model_Message extends ORM {
 	 * @type string
 	 */
 	const DESC = 'DESC';
-
-	/**
-	 * Message status - read
-	 * @type string
-	 */
-	const READ = 'read';
-
-	/**
-	 * Message status - unread
-	 * @type string
-	 */
-	const UNREAD = 'unread';
-
-	/**
-	 * Message status - draft
-	 * @type string
-	 */
-	const DRAFT = 'draft';
 
 	/**
 	 * Message config
@@ -163,30 +131,32 @@ class Model_Message extends ORM {
 	 * Example:
 	 * ~~~
 	 * // Get all messages from inbox. Sorting mode is ascending
-	 * ORM::factory('message')->load('inbox', 'asc')->find_all();
+	 * ORM::factory('message')->load(PM::INBOX, 'asc');
 	 *
 	 * // Get all messages from outbox. Sorting mode is descending
-	 * ORM::factory('message')->load('outbox')->find_all();
+	 * ORM::factory('message')->load(PM::OUTBOX);
 	 *
 	 * // Get all draft messages. Sorting mode is descending
-	 * ORM::factory('message')->load('draft')->find_all();
+	 * ORM::factory('message')->load(PM::DRAFTS);
 	 *
 	 * // Get all messages from inbox, outbox and drafts
 	 * // Sorting mode is descending
-	 * ORM::factory('message')->load()->find_all();
+	 * ORM::factory('message')->load();
 	 * ~~~
 	 *
 	 * [!!] Note: The $direction may be 'asc' for ascending sort mode,
 	 *            or 'desc' for descending sort mode.
 	 *
-	 * @param    string  $type       Message type, eg. 'inbox', 'outbox', 'draft' [Optional]
+	 * For message type constants see [PM] class
+	 *
+	 * @param    integer $type       Message type, eg. PM::INBOX, PM::OUTBOX, PM::DRAFTS [Optional]
 	 * @param    string  $direction  Sort mode of messages [Optional]
 	 *
 	 * @return  Model_Message
 	 *
 	 * @todo    Cache
 	 */
-	public function load($type = NULL, $direction = self::DESC)
+	public function load($type = 0, $direction = self::DESC)
 	{
 		if ( ! $this->loaded())
 		{
@@ -196,22 +166,22 @@ class Model_Message extends ORM {
 
 			switch ($type)
 			{
-				case self::INBOX:
+				case PM::INBOX:
 					$this->where_open()
 						->where('recipient', '=', $user->id)
-						->and_where('status', '!=', self::DRAFT)
+						->and_where('status', '!=', PM::STATUS_DRAFT)
 						->where_close();
 				break;
-				case self::OUTBOX:
+				case PM::OUTBOX:
 					$this->where_open()
 						->where('sender', '=', $user->id)
-						->and_where('status', '!=', self::DRAFT)
+						->and_where('status', '!=', PM::STATUS_DRAFT)
 						->where_close();
 				break;
-				case self::DRAFT:
+				case PM::DRAFTS:
 					$this->where_open()
 						->where('sender', '=', $user->id)
-						->and_where('status', '=', self::DRAFT)
+						->and_where('status', '=', PM::STATUS_DRAFT)
 						->where_close();
 				break;
 				default:
@@ -230,7 +200,7 @@ class Model_Message extends ORM {
 	 *
 	 * Example:
 	 * ~~~
-	 * ORM::factory('message')->loadInbox()->find_all();
+	 * ORM::factory('message')->loadInbox();
 	 * ~~~
 	 *
 	 * [!!] Note: The $direction may be 'asc' for ascending sort mode,
@@ -242,7 +212,7 @@ class Model_Message extends ORM {
 	 */
 	public function loadInbox($direction = self::DESC)
 	{
-		return $this->load(self::INBOX, $direction);
+		return $this->load(PM::INBOX, $direction);
 	}
 
 	/**
@@ -250,7 +220,7 @@ class Model_Message extends ORM {
 	 *
 	 * Example:
 	 * ~~~
-	 * ORM::factory('message')->loadInbox()->find_all();
+	 * ORM::factory('message')->loadInbox();
 	 * ~~~
 	 *
 	 * [!!] Note: The $direction may be 'asc' for ascending sort mode,
@@ -262,7 +232,7 @@ class Model_Message extends ORM {
 	 */
 	public function loadOutbox($direction = self::DESC)
 	{
-		return $this->load(self::OUTBOX, $direction);
+		return $this->load(PM::OUTBOX, $direction);
 	}
 
 	/**
@@ -270,7 +240,7 @@ class Model_Message extends ORM {
 	 *
 	 * Example:
 	 * ~~~
-	 * ORM::factory('message')->loadDrafts()->find_all();
+	 * ORM::factory('message')->loadDrafts();
 	 * ~~~
 	 *
 	 * [!!] Note: The $direction may be 'asc' for ascending sort mode,
@@ -282,7 +252,7 @@ class Model_Message extends ORM {
 	 */
 	public function loadDrafts($direction = self::DESC)
 	{
-		return $this->load(self::DRAFT, $direction);
+		return $this->load(PM::DRAFTS, $direction);
 	}
 
 	/**
@@ -304,14 +274,6 @@ class Model_Message extends ORM {
 		if ( ! $this->loaded())
 		{
 			throw new HTTP_Exception_404('Message not found!');
-		}
-
-		if ($this->status == self::UNREAD AND $this->_user->id == $this->recipient)
-		{
-			DB::update('messages')
-				->set(array('status' => self::READ))
-				->where('id', '=', $this->id)
-				->execute();
 		}
 
 		return $this;
