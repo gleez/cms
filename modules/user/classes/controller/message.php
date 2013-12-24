@@ -61,7 +61,7 @@ class Controller_Message extends Template {
 			// Tabs
 			$this->_tabs =  array(
 				array('link' => Route::get('user/message')->uri(array('action' =>'inbox')), 'text' => __('Inbox')),
-				array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Mail')),
+				array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Messages')),
 				array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
 				array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
 			);
@@ -74,7 +74,7 @@ class Controller_Message extends Template {
 	}
 
 	/**
-	 * Display a list of incoming mail
+	 * Display a list of incoming messages
 	 *
 	 * @uses  Assets::popup
 	 * @uses  Route::url
@@ -132,7 +132,7 @@ class Controller_Message extends Template {
 
 	public function action_outbox()
 	{
-		$this->title = __('Sent Mail');
+		$this->title = __('Sent Messages');
 
 		$view = View::factory('message/outbox');
 
