@@ -40,7 +40,7 @@
 					</div>
 				</div>
 			<?php endif; ?>
-	
+
 			<?php if ($config->use_excerpt): ?>
 				<div class="form-group <?php echo isset($errors['teaser']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
@@ -58,8 +58,7 @@
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
-
-				<div class="form-group format-wrapper <?php echo isset($errors['format']) ? 'has-error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['format']) ? 'has-error': ''; ?>">
 					<div class="controls">
 						<div class="input-group">
 							<span class="input-group-addon"><?php echo __('Text format') ?></span>
@@ -68,30 +67,31 @@
 					</div>
 				</div>
 			<?php endif; ?>
-			
+
 			<?php if ($config->use_captcha  AND ! $captcha->promoted()): ?>
 				<div class="form-group <?php echo isset($errors['captcha']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('_captcha', __('Security'), array('class' => 'wrap')) ?>
 					<?php echo Form::input('_captcha', '', array('class' => 'form-control')); ?><br>
 					<?php echo $captcha; ?>
 				</div>
-	<?php endif; ?>
+			<?php endif; ?>
 
 		</div>
 
 		<div id="side-info-column" class="col-md-3">
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
 				<div id="submitdiv" class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo __('Publication') ?></h3>
-				</div>
-					<div class='panel-body' id="submitpost">
+					<div class="panel-heading">
+						<h3 class="panel-title"><?php echo __('Publication') ?></h3>
+					</div>
+					<div class="panel-body" id="submitpost">
 						<div id="minor-publishing">
-						
+
 							<div class="form-group <?php echo isset($errors['status']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
 								<?php echo Form::select('status', Post::status(), $post->status, array('class' => 'form-control input-sm')); ?>
 							</div>
+
 							<div class="form-group <?php echo isset($errors['sticky']) ? 'has-error': ''; ?>">
 								<?php
 									$sticky  = (isset($post->sticky) AND $post->sticky == 1) ? TRUE : FALSE;
@@ -106,7 +106,6 @@
 									<?php echo Form::label('promote', Form::checkbox('promote', TRUE, $promote).__('Promote this Post')) ?>
 								</div>
 							</div>
-								<div class="clearfix"></div>
 
 							<div class="form-group <?php echo isset($errors['author_date']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('author_date', __('Date'), array('class' => 'control-label') ) ?>
@@ -144,25 +143,25 @@
 
 			<?php if($config->use_category) : ?>
 				<div id="categorydiv" class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo __('Category'); ?></h3>
-				</div>
-					<div class='panel-body'>
+					<div class="panel-heading">
+						<h3 class="panel-title"><?php echo __('Category'); ?></h3>
+					</div>
+					<div class="panel-body">
 						<div class="form-group <?php echo isset($errors['categories']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('categories[1]', $terms, $post->terms_form, array('class' => 'form-control')); ?>
 						</div>
 					</div>
 				</div>
-				
+
 			<?php endif; ?>
 
 			<?php if( $config->use_comment) : ?>
 				<div id="commentdiv" class="panel panel-default">
 					<div class="panel-heading">
-					<h3 class="panel-title"><?php echo  __('Comments'); ?></h3>
+						<h3 class="panel-title"><?php echo  __('Comments'); ?></h3>
 					</div>
 
-					<div class='panel-body'>
+					<div class="panel-body">
 						<div class="form-group <?php echo isset($errors['comment']) ? 'has-error': ''; ?>">
 							<?php
 								if ( ! isset($post->comment))
@@ -195,9 +194,8 @@
 		</div>
 	</div>
 
-	<div class="clearfix"></div>
-
-
-	<?php echo Form::submit('page', __('Save'), array('class' => 'btn btn-success bth-lg')); ?>
+	<div class="form-actions">
+		<?php echo Form::submit('page', __('Save'), array('class' => 'btn btn-success bth-lg')); ?>
+	</div>
 
 <?php echo Form::close() ?>
