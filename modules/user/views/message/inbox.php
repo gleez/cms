@@ -26,8 +26,8 @@
 						<thead>
 							<tr>
 								<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>
-								<th width="55%"><?php _e('Subject'); ?></th>
-								<th width="20%" data-columns='{"bSearchable":false}'><?php _e('Sender'); ?></th>
+								<th width="15%" data-columns='{"bSearchable":false}'><?php _e('Sender'); ?></th>
+								<th width="60%"><?php _e('Message'); ?></th>
 								<th width="12%" data-columns='{"bSearchable":false}'><?php _e('Sent'); ?></th>
 								<th width="8%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 							</tr>
