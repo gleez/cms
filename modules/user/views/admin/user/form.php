@@ -9,7 +9,7 @@
 <div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('username', __('User name'), array('class' => 'control-label col-sm-3')) ?>
 	<div class="controls col-sm-5">
-	<?php print Form::input('name', $post->name, array('class' => 'form-control')); ?>
+	<?php print Form::input('name', isset($_POST['name']) ? $_POST['name'] : $post->name, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
@@ -23,14 +23,14 @@
 <div class="form-group <?php echo isset($errors['nick']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('nick', __('Nick name'), array('class' => 'control-label col-sm-3')) ?>
 	<div class="controls col-sm-5">
-	<?php print Form::input('nick', $post->nick, array('class' => 'form-control')); ?>
+	<?php print Form::input('nick', isset($_POST['nick']) ? $_POST['nick'] : $post->nick, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
 <div class="form-group <?php echo isset($errors['mail']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('mail', __('Email'), array('class' => 'control-label col-sm-3')) ?>
 	<div class="controls col-sm-5">
-	<?php print Form::input('mail', $post->mail, array('class' => 'form-control')); ?>
+	<?php print Form::input('mail', isset($_POST['mail']) ? $_POST['mail'] : $post->mail, array('class' => 'form-control')); ?>
 	</div>
 </div>
 
