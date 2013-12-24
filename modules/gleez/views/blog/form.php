@@ -51,13 +51,12 @@
 			<div class="form-group <?php echo isset($errors['body']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('body', __('Content'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::textarea('body', $blog->rawbody, array('class' => 'form-control', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
+					<?php echo Form::textarea('body', $blog->rawbody, array('class' => 'form-control textarea', 'autofocus', 'placeholder' => __('Enter text...'))) ?>
 				</div>
 			</div>
 
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
-
-				<div class="form-group format-wrapper <?php echo isset($errors['format']) ? 'has-error': ''; ?>">
+				<div class="form-group <?php echo isset($errors['format']) ? 'has-error': ''; ?>">
 					<div class="controls">
 						<div class="input-group">
 							<span class="input-group-addon"><?php echo __('Text format') ?></span>
@@ -66,7 +65,7 @@
 					</div>
 				</div>
 			<?php endif; ?>
-			
+
 			<?php if ($config->use_captcha  AND ! $captcha->promoted()): ?>
 				<div class="form-group <?php echo isset($errors['captcha']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('_captcha', __('Security'), array('class' => 'wrap')) ?>
@@ -80,10 +79,10 @@
 		<div id="side-info-column" class="col-md-3">
 			<?php if (ACL::check('administer content') OR ACL::check('administer page')): ?>
 				<div id="submitdiv" class="panel panel-info">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo __('Publication') ?></h3>
-				</div>
-					<div class='panel-body' id="submitpost">
+					<div class="panel-heading">
+						<h3 class="panel-title"><?php echo __('Publication') ?></h3>
+					</div>
+					<div class="panel-body" id="submitpost">
 						<div id="minor-publishing">
 							<div class="form-group <?php echo isset($errors['status']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
@@ -122,7 +121,7 @@
 							<?php endif; ?>
 						</div>
 					</div>
-						<div class="panel-footer">
+					<div class="panel-footer">
 						<div id="major-publishing-actions" class="row">
 							<?php if ($blog->loaded() AND ACL::post('delete', $post)): ?>
 								<div id="delete-action" class="btn btn-default pull-left">
@@ -135,17 +134,16 @@
 								<?php echo Form::submit('blog', __('Save'), array('class' => 'btn btn-success pull-right')) ?>
 							</div>
 						</div>
-
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<?php if($config->use_category) : ?>
 				<div id="categorydiv" class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo __('Category'); ?></h3>
-				</div>
-					<div class='panel-body'>
+					<div class="panel-heading">
+						<h3 class="panel-title"><?php echo __('Category'); ?></h3>
+					</div>
+					<div class="panel-body">
 						<div class="form-group <?php echo isset($errors['categories']) ? 'has-error': ''; ?>">
 							<?php echo Form::select('categories[1]', $terms, $blog->terms_form, array('class' => 'form-control')); ?>
 						</div>
@@ -156,10 +154,10 @@
 			<?php if( $config->use_comment) : ?>
 				<div id="commentdiv" class="panel panel-default">
 					<div class="panel-heading">
-					<h3 class="panel-title"><?php echo  __('Comments'); ?></h3>
+						<h3 class="panel-title"><?php echo  __('Comments'); ?></h3>
 					</div>
 
-					<div class='panel-body'>
+					<div class="panel-body">
 						<div class="form-group <?php echo isset($errors['comment']) ? 'has-error': ''; ?>">
 							<?php
 								if ( ! isset($blog->comment))
@@ -192,10 +190,8 @@
 		</div>
 	</div>
 
-	<div class="clearfix"></div>
-
-	
-
-	<?php echo Form::submit('blog', __('Save'), array('class' => 'btn btn-success')); ?>
+	<div class="form-actions">
+		<?php echo Form::submit('blog', __('Save'), array('class' => 'btn btn-success bth-lg')); ?>
+	</div>
 
 <?php echo Form::close() ?>
