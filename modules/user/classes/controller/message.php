@@ -54,18 +54,20 @@ class Controller_Message extends Template {
 	 */
 	public function after()
 	{
-		// Tabs
-		$this->_tabs =  array(
-			array('link' => Route::get('user/message')->uri(array('action' =>'inbox')), 'text' => __('Inbox')),
-			array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Mail')),
-			array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
-			array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
-		);
-
 		if ($this->request->action() == 'compose' OR $this->request->action() == 'edit')
 		{
 			// Add RichText Support
 			Assets::editor('.textarea', I18n::$lang);
+		}
+		else
+		{
+			// Tabs
+			$this->_tabs =  array(
+				array('link' => Route::get('user/message')->uri(array('action' =>'inbox')), 'text' => __('Inbox')),
+				array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Mail')),
+				array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
+				array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
+			);
 		}
 
 		parent::after();
