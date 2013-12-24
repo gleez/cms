@@ -110,8 +110,8 @@ class Controller_Message extends Template {
 				$this->_datatables->add_row(
 					array(
 						Form::checkbox('messages['.$message->id.']', $message->id, isset($_POST['messages'][$message->id])),
-						HTML::anchor($message->url, Text::limit_chars($message->subject, 50) .'<br>'. Text::limit_chars($message->body), array('class' => 'message-'.$message->status)),
 						HTML::anchor($message->user->nick, $message->user->nick),
+						HTML::anchor($message->url, Text::limit_chars($message->rawbody), array('class' => 'message-'.$message->status)),
 						Date::formatted_time($message->sent, 'M d, Y'),
 						HTML::icon($message->delete_url.$destination, 'fa-trash-o', array('title'=> __('Delete Message'), 'data-toggle' => 'popup', 'data-table' => '#user-message-inbox'))
 					)
@@ -179,7 +179,18 @@ class Controller_Message extends Template {
 	{
 		$this->title = __('New Message');
 
-		$view = View::factory('message/form');
+		// Set form destination
+		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
+		// Set form action
+		$action = Route::get('user/message')->uri(array('action' => 'compose')).URL::query($destination);
+
+		$view = View::factory('message/form')
+				->bind('message',    $message)
+				->set('destination', $destination)
+				->set('action',      $action)
+				->set('recipient',   FALSE);
+
+		$message = ORM::factory('message');
 
 		$this->response->body($view);
 	}
