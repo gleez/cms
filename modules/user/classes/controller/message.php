@@ -192,6 +192,25 @@ class Controller_Message extends Template {
 
 		$message = ORM::factory('message');
 
+		if ($this->valid_post('message'))
+		{
+			try
+			{
+				$message->values($_POST)->save();
+
+				$act = (isset($_POST['draft']) AND $_POST['draft']) ? __('saved') : __('sent');
+				Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
+				Message::success(__('Message successfully :act.', array(':act' => $act)));
+
+				// Redirect to Inbox
+				$this->request->redirect(Route::get('user/message')->uri());
+			}
+			catch (ORM_Validation_Exception $e)
+			{
+				$this->_errors = $e->errors('models', TRUE);
+			}
+		}
+
 		$this->response->body($view);
 	}
 
@@ -217,17 +236,22 @@ class Controller_Message extends Template {
 
 		$this->title = __('Delete Message');
 
-		$destination = ($this->request->query('destination') !== NULL) ?
-			array('destination' => $this->request->query('destination')) : array();
+		$destination = ($this->request->query('destination') !== NULL)
+			? array('destination' => $this->request->query('destination'))
+			: array();
+
+		$redirect = empty($destination)
+			? Route::get('user/message')->uri()
+			: $this->request->query('destination');
 
 		$view = View::factory('form/confirm')
 			->set('action', $message->delete_url.URL::query($destination))
 			->set('title',  $message->subject);
 
-		// If deletion is not desired, redirect to post
+		// If deletion is not desired, redirect
 		if (isset($_POST['no']) AND $this->valid_post())
 		{
-			$this->request->redirect($message->url);
+			$this->request->redirect($redirect);
 		}
 
 		// If deletion is confirmed
@@ -249,8 +273,6 @@ class Controller_Message extends Template {
 				);
 				Message::error(__('An error occurred deleting message %title',array('%title' => $message->subject)));
 			}
-
-			$redirect = empty($destination) ? Route::get('user/message')->uri(array('action' => 'inbox')) : $this->request->query('destination');
 
 			$this->request->redirect($redirect);
 		}
@@ -317,7 +339,7 @@ class Controller_Message extends Template {
 			{
 				if ($post['operation'] == 'delete')
 				{
-					$ids = array_filter($post['messages']); // Filter out unchecked posts
+					$ids = array_filter($post['messages']); // Filter out unchecked messages
 					$this->title = __('Delete Messages');
 
 					$items = DB::select('id', 'subject')
@@ -354,7 +376,7 @@ class Controller_Message extends Template {
 	 *
 	 * @param  array  $post
 	 *
-	 * @uses   Post::bulk_actions
+	 * @uses   Model_Message::bulk_actions
 	 * @uses   Arr::callback
 	 */
 	private function _bulk_update($post)
