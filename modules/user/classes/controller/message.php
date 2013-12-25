@@ -61,7 +61,7 @@ class Controller_Message extends Template {
 			// Tabs
 			$this->_tabs =  array(
 				array('link' => Route::get('user/message')->uri(array('action' =>'inbox')), 'text' => __('Inbox')),
-				array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Mail')),
+				array('link' => Route::get('user/message')->uri(array('action' =>'outbox')), 'text' => __('Sent Messages')),
 				array('link' => Route::get('user/message')->uri(array('action' =>'drafts')), 'text' => __('Drafts')),
 				array('link' => Route::get('user/message')->uri(array('action' =>'list')), 'text' => __('All Messages'))
 			);
@@ -74,7 +74,7 @@ class Controller_Message extends Template {
 	}
 
 	/**
-	 * Display a list of incoming mail
+	 * Display a list of incoming messages
 	 *
 	 * @uses  Assets::popup
 	 * @uses  Route::url
@@ -110,8 +110,8 @@ class Controller_Message extends Template {
 				$this->_datatables->add_row(
 					array(
 						Form::checkbox('messages['.$message->id.']', $message->id, isset($_POST['messages'][$message->id])),
-						HTML::anchor($message->url, Text::limit_chars($message->subject, 50) .'<br>'. Text::limit_chars($message->body), array('class' => 'message-'.$message->status)),
 						HTML::anchor($message->user->nick, $message->user->nick),
+						HTML::anchor($message->url, Text::limit_chars($message->rawbody), array('class' => 'message-'.$message->status)),
 						Date::formatted_time($message->sent, 'M d, Y'),
 						HTML::icon($message->delete_url.$destination, 'fa-trash-o', array('title'=> __('Delete Message'), 'data-toggle' => 'popup', 'data-table' => '#user-message-inbox'))
 					)
@@ -132,7 +132,7 @@ class Controller_Message extends Template {
 
 	public function action_outbox()
 	{
-		$this->title = __('Sent Mail');
+		$this->title = __('Sent Messages');
 
 		$view = View::factory('message/outbox');
 
@@ -179,7 +179,37 @@ class Controller_Message extends Template {
 	{
 		$this->title = __('New Message');
 
-		$view = View::factory('message/form');
+		// Set form destination
+		$destination = ( ! is_null($this->request->query('destination'))) ? array('destination' => $this->request->query('destination')) : array();
+		// Set form action
+		$action = Route::get('user/message')->uri(array('action' => 'compose')).URL::query($destination);
+
+		$view = View::factory('message/form')
+				->bind('message',    $message)
+				->set('destination', $destination)
+				->set('action',      $action)
+				->set('recipient',   FALSE);
+
+		$message = ORM::factory('message');
+
+		if ($this->valid_post('message'))
+		{
+			try
+			{
+				$message->values($_POST)->save();
+
+				$act = (isset($_POST['draft']) AND $_POST['draft']) ? __('saved') : __('sent');
+				Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
+				Message::success(__('Message successfully :act.', array(':act' => $act)));
+
+				// Redirect to Inbox
+				$this->request->redirect(Route::get('user/message')->uri());
+			}
+			catch (ORM_Validation_Exception $e)
+			{
+				$this->_errors = $e->errors('models', TRUE);
+			}
+		}
 
 		$this->response->body($view);
 	}
@@ -206,17 +236,22 @@ class Controller_Message extends Template {
 
 		$this->title = __('Delete Message');
 
-		$destination = ($this->request->query('destination') !== NULL) ?
-			array('destination' => $this->request->query('destination')) : array();
+		$destination = ($this->request->query('destination') !== NULL)
+			? array('destination' => $this->request->query('destination'))
+			: array();
+
+		$redirect = empty($destination)
+			? Route::get('user/message')->uri()
+			: $this->request->query('destination');
 
 		$view = View::factory('form/confirm')
 			->set('action', $message->delete_url.URL::query($destination))
 			->set('title',  $message->subject);
 
-		// If deletion is not desired, redirect to post
+		// If deletion is not desired, redirect
 		if (isset($_POST['no']) AND $this->valid_post())
 		{
-			$this->request->redirect($message->url);
+			$this->request->redirect($redirect);
 		}
 
 		// If deletion is confirmed
@@ -238,8 +273,6 @@ class Controller_Message extends Template {
 				);
 				Message::error(__('An error occurred deleting message %title',array('%title' => $message->subject)));
 			}
-
-			$redirect = empty($destination) ? Route::get('user/message')->uri(array('action' => 'inbox')) : $this->request->query('destination');
 
 			$this->request->redirect($redirect);
 		}
@@ -306,7 +339,7 @@ class Controller_Message extends Template {
 			{
 				if ($post['operation'] == 'delete')
 				{
-					$ids = array_filter($post['messages']); // Filter out unchecked posts
+					$ids = array_filter($post['messages']); // Filter out unchecked messages
 					$this->title = __('Delete Messages');
 
 					$items = DB::select('id', 'subject')
@@ -343,7 +376,7 @@ class Controller_Message extends Template {
 	 *
 	 * @param  array  $post
 	 *
-	 * @uses   Post::bulk_actions
+	 * @uses   Model_Message::bulk_actions
 	 * @uses   Arr::callback
 	 */
 	private function _bulk_update($post)
