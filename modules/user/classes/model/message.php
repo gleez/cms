@@ -23,12 +23,6 @@ class Model_Message extends ORM {
 	const DESC = 'DESC';
 
 	/**
-	 * Message config
-	 * @var Config_Group
-	 */
-	protected $_config;
-
-	/**
 	 * Table columns
 	 * @var array
 	 */
@@ -65,24 +59,13 @@ class Model_Message extends ORM {
 	);
 
 	/**
-	 * Class constructor
-	 *
-	 * @param  mixed $id  Parameter for find or object to load [Optional]
-	 */
-	public function __construct($id = NULL)
-	{
-		$this->_config = Config::load('message');
-
-		parent::__construct($id);
-	}
-
-	/**
 	 * Reading data from inaccessible properties
 	 *
 	 * @param   string  $field
 	 * @return  mixed
 	 *
 	 * @uses  Text::plain
+	 * @uses  Text::markup
 	 * @uses  Route::get
 	 * @uses  Route::uri
 	 */
@@ -92,6 +75,14 @@ class Model_Message extends ORM {
 		{
 			case 'subject':
 				return Text::plain(parent::__get('subject'));
+			case 'body':
+				return Text::markup($this->rawbody, $this->format);
+			case 'rawsubject':
+				// Raw fields without markup. Usage: during edit or etc!
+				return parent::__get('subject');
+			case 'rawbody':
+				// Raw fields without markup. Usage: during edit or etc!
+				return parent::__get('body');
 			case 'url':
 				return Route::get('user/message')->uri(array( 'id' => $this->id, 'action' => 'view'));
 			case 'delete_url':
