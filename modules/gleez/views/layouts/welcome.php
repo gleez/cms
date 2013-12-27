@@ -20,7 +20,7 @@
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
+					<span class="sr-only"><?php _e('Toggle navigation'); ?></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -45,8 +45,8 @@
 								<li class="dropdown-header"><?php echo $_user->mail ?></li>
 								<li class="divider"></li>
 								<li class="dropdown-header"><?php _e('Profile') ?></li>
-								<li><a href="<?php echo URL::site('/user/profile') ?>"><i class="fa fa-fw fa-cog"></i> <?php echo __('My Profile') ?></a></li>
-								<li><a href="<?php echo URL::site('/message/inbox') ?>"><i class="fa fa-fw fa-envelope"></i> <?php echo __('My Messages') ?></a></li>
+								<li><a href="<?php echo URL::site('/user/profile') ?>"><i class="fa fa-fw fa-cog"></i> <?php echo __('Profile') ?></a></li>
+								<li><a href="<?php echo URL::site('/message/inbox') ?>"><i class="fa fa-fw fa-envelope"></i> <?php echo __('Messages') ?></a></li>
 								<li class="dropdown-header"><?php _e('Settings') ?></li>
 								<li><a href="<?php echo URL::site('/user/edit') ?>"><i class="fa fa-fw fa-pencil"></i> <?php echo __('Profile Settings') ?></a></li>
 								<li><a href="<?php echo URL::site('/user/password') ?>"><i class="fa fa-fw fa-lock"></i> <?php echo __('Change Password') ?></a></li>
