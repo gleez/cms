@@ -222,7 +222,7 @@ class Controller_Message extends Template {
 	 * @uses  Route::get
 	 * @uses  Route::uri
 	 * @uses  URL::query
-	 * @uses  Model_Message::delete
+	 * @uses  PM::delete
 	 * @uses  Message::success
 	 * @uses  Message::error
 	 * @uses  Log::add
@@ -280,6 +280,18 @@ class Controller_Message extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Perform bulk actions
+	 *
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Request::post
+	 * @uses  Request::redirect
+	 * @uses  PM::bulk_delete
+	 * @uses  Message::success
+	 * @uses  Message::error
+	 * @uses  DB::select
+	 */
 	public function action_bulk()
 	{
 		$id = (int) $this->request->param('id', 0);
@@ -314,7 +326,7 @@ class Controller_Message extends Template {
 		{
 			$ids = array_filter($post['items']);
 
-			Model_Message::bulk_delete($ids);
+			PM::bulk_delete($ids);
 
 			Message::success(__('The delete has been performed!'));
 
@@ -376,14 +388,14 @@ class Controller_Message extends Template {
 	 *
 	 * @param  array  $post
 	 *
-	 * @uses   Model_Message::bulk_actions
+	 * @uses   PM::bulk_actions
 	 * @uses   Arr::callback
 	 */
 	private function _bulk_update($post)
 	{
-		$operations = Model_Message::bulk_actions(FALSE);
+		$operations = PM::bulk_actions(FALSE);
 		$operation  = $operations[$post['operation']];
-		$messages = array_filter($post['messages']); // Filter out unchecked pages
+		$messages   = array_filter($post['messages']); // Filter out unchecked pages
 
 		if ($operation['callback'])
 		{
