@@ -1,9 +1,9 @@
 <div class="row vcard">
-	<div class="col-md-9" itemprop="about" itemscope itemtype="http://schema.org/Person">
+	<div class="col-md-9 col-sm-8 col-xs-12" itemprop="about" itemscope itemtype="http://schema.org/Person">
 		<div class="row">
-			<div class="col-md-4 col-sm-5">
+			<div class="col-md-3 col-sm-5 col-xs-5">
 				<div class="thumbnail vcard-avatar">
-					<?php echo User::getAvatar($user, array('size' => 150)); ?>
+					<?php echo User::getAvatar($user, array('size' => 210)); ?>
 				</div>
 
 				<div class="list-group">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-8 col-sm-7">
+			<div class="col-md-9 col-sm-7 col-xs-7">
 				<h2 class="col-md-12 vcard-names">
 					<span itemprop="name"><?php echo $user->nick; ?></span>
 					<em itemprop="additionalName"><?php echo $user->name; ?></em>
@@ -91,7 +91,7 @@
 		</div>
 	</div>
 
-	<div class="col-md-3 col-sm-6 col-sidebar-right">
+	<div class="col-md-3 col-sm-4 col-xs-12 col-sidebar-right">
 		<div class="list-group">
 			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-sign-in"></i></h3>
 				<h4 class="list-group-item-heading"><?php echo Date::date_format($user->created, 'M d, Y'); ?></h4>
