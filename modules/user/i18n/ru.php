@@ -4,7 +4,7 @@
  *
  * @package    User\I18n
  * @author     Sergey Yakovlev <sadhooklay@gmail.com>
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 return array(
@@ -195,7 +195,7 @@ return array(
 	'saved' => 'сохранено',
 	'Security code' => 'Защитный код',
 	'sent' => 'Отправлено',
-	'Sent Messages' => 'Отправленные сообшения',
+	'Sent Messages' => 'Отправленные сообщения',
 	'Sign in using social network:' => 'Войти с помощью социальных сетей:',
 	'Sign in using your registered account' => 'Войдите используя вашу учётную запись',
 	"Special" => 'Особая роль',
