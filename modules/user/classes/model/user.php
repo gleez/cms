@@ -69,6 +69,7 @@ class Model_User extends ORM {
 		'theme'             => array( 'type' => 'string' ),
 		'signature'         => array( 'type' => 'string' ),
 		'signature_format'  => array( 'type' => 'int' ),
+		'access'            => array( 'type' => 'int' ),
 		'logins'            => array( 'type' => 'int' ),
 		'created'           => array( 'type' => 'int' ),
 		'updated'           => array( 'type' => 'int' ),
@@ -683,11 +684,11 @@ class Model_User extends ORM {
 		if ( ! $this->_loaded)
 		{
 			// Add user
-			$this->name = $provider['provider'].'_'.$data['id'];
-			$this->pass = $data['id']; //set id as pass( we can't save without password)
-			$this->nick = $data['nick'];
-			$this->url  = $data['link'];
-			$this->status  = 1;
+			$this->name 	 = $provider['provider'].'_'.$data['id'];
+			$this->pass 	 = $data['id']; //set id as pass( we can't save without password)
+			$this->nick 	 = $data['nick'];
+			$this->homepage  = $data['link'];
+			$this->status  	 = 1;
 
 			// Set email if it's available via OAuth provider
 			if (isset($data['email']))
