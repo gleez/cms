@@ -246,6 +246,9 @@ class Controller_User extends Template {
 		$user     = ORM::factory('user', $id);
 		$account  = FALSE;
 		$is_owner = FALSE;
+		$request  = FALSE;
+		$isFriend = FALSE;
+		$friends  = array();
 
 		// Add Schema.org support
 		$this->schemaType = 'ProfilePage';
@@ -287,9 +290,12 @@ class Controller_User extends Template {
 			$is_owner = TRUE;
 		}
 
-		$request   = Model::factory('buddy')->isRequest($account->id, $user->id);
-		$isFriend  = Model::factory('buddy')->isFriend($account->id, $user->id);
-		$friends   = Model::factory('buddy')->friends($user->id, 5);
+		if($account && $user)
+		{
+			$request   = Model::factory('buddy')->isRequest($account->id, $user->id);
+			$isFriend  = Model::factory('buddy')->isFriend($account->id, $user->id);
+			$friends   = Model::factory('buddy')->friends($user->id, 5);
+		}
 
 		$view = View::factory('user/profile')
 					->set('user',		 $user)
