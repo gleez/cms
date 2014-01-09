@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Buddy extends Model
@@ -126,5 +126,55 @@ class Model_Buddy extends Model
 		return DB::delete('buddies')
 					->where('request_from','=',$friend_id)
 					->execute();
+	}
+
+	public function sents($user_id, $limit = 15, $offset = FALSE)
+	{
+		$query = DB::select()
+					->from('buddies')->where('request_from', '=', $user_id)
+					->where('accepted', '=', '0')
+					->limit($limit);
+
+		if($offset)
+		{
+			$query->offset($offset);
+		}
+
+		return $query->execute();
+	}
+	
+	public function pending($user_id, $limit = 15, $offset = FALSE)
+	{
+		$query = DB::select()
+					->from('buddies')->where('request_to', '=', $user_id)
+					->where('accepted', '=', '0')
+					->limit($limit);
+
+		if($offset)
+		{
+			$query->offset($offset);
+		}
+
+		return $query->execute();
+	}
+
+	public function countPending($user_id)
+	{
+		return DB::select(array(DB::expr('COUNT(*)'), 'total'))
+						->from('buddies')
+						->where('request_to', '=', $user_id)
+						->where('accepted','=','0')
+						->execute()
+						->get('total', FALSE);
+	}
+
+	public function countSent($user_id)
+	{
+		return DB::select(array(DB::expr('COUNT(*)'), 'total'))
+						->from('buddies')
+						->where('request_from', '=', $user_id)
+						->where('accepted','=','0')
+						->execute()
+						->get('total', FALSE);
 	}
 }
