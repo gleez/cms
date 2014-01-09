@@ -67,15 +67,17 @@
 						<?php endif; ?>
 					</div>
 					<div class="col-md-5">
-						<?php if($request AND ($request == $user->id )):?>
-							<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
-							<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
-						<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
-							<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
-						<?php elseif($isfriend AND ! $is_owner): ?>
-							<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
-						<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
-							<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
+						<?php if(Auth::instance()->logged_in()):?>
+							<?php if($request AND ($request == $user->id )):?>
+								<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
+								<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
+							<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
+								<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
+							<?php elseif($isfriend AND ! $is_owner): ?>
+								<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
+							<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
+								<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
+							<?php endif; ?>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -107,30 +109,32 @@
 			</a>
 		</div>
 
-		<div class="list-group list-all panel panel-info">
-			<div class="panel-heading">
-				<h3 class="panel-title"><?php echo __('Friends'); ?></h3>
-			</div>
-
-			<?php foreach($friends as $id): ?>
-				<div class="list-group-item friends panel-body">
-					<?php $accept = User::lookup($id); ?>
-					<?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'rel'=>"popover", 'data-placement'=>"right", 'rel1'=>"tooltip", 'data-html'=>"true", 'data-original-title'=>"<strong>$accept->nick</strong>" )) ?>
-					<?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?>
-
-					<?php if($is_owner): ?>
-						<?php echo HTML::anchor("buddy/delete/".$accept->id , '<i class="fa fa-trash-o"></i>', array('class'=>'action-delete pull-right', 'title'=> __('Delete'))); ?>
-					<?php endif; ?>
+		<?php if(Auth::instance()->logged_in()):?>
+			<div class="list-group list-all1 panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo __('Friends'); ?></h3>
 				</div>
-			<?php endforeach ;?>
 
-			<?php if( !empty($friends) ): ?>
-				<div class="panel-footer">
-					<div class="row">
-						<?php echo HTML::anchor("buddy/list/".$user->id , __('All'),  array('class' => 'all-view pull-right', 'title'=> __('All'))); ?>
+				<?php foreach($friends as $id): ?>
+					<div class="list-group-item friends panel-body">
+						<?php $accept = User::lookup($id); ?>
+						<?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'rel'=>"popover", 'data-placement'=>"right", 'rel1'=>"tooltip", 'data-html'=>"true", 'data-original-title'=>"<strong>$accept->nick</strong>" )) ?>
+						<?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?>
+
+						<?php if($is_owner): ?>
+							<?php echo HTML::anchor("buddy/delete/".$accept->id , '<i class="fa fa-trash-o"></i>', array('class'=>'action-delete pull-right', 'title'=> __('Delete'))); ?>
+						<?php endif; ?>
 					</div>
-				</div>
-			<?php endif; ?>
-		</div>
+				<?php endforeach ;?>
+
+				<?php if( !empty($friends) ): ?>
+					<div class="panel-footer">
+						<div class="row">
+							<?php echo HTML::anchor("buddy/".$user->id , __('All'),  array('class' => 'all-view pull-right', 'title'=> __('All'))); ?>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>
