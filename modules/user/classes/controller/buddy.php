@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Controller_Buddy extends Template {
@@ -61,9 +61,92 @@ class Controller_Buddy extends Template {
 					->set('total',      $total)
 					->set('is_owner',   $is_owner)
 					->set('friends',    $friends)
+					->set('id', $id)
 					->set('pagination', $pagination);
 
 		$this->title = __('Friends');
+		$this->response->body($view);
+	}
+
+	public function action_sent()
+	{
+		$id 	= (int) $this->request->param('id');
+		$user   = ORM::factory('user', $id);
+
+		if ( ! $user->loaded())
+		{
+			Log::error('Attempt to access non-existent user.');
+			// No user is currently logged in
+			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		$model = Model::factory('buddy');
+		$total = $model->countSent($id);
+		
+		$url = Route::get('user/buddy')->uri(array('action'=>'sent','id'=>$id));
+		$pagination = Pagination::factory(array(
+			'current_page'		=> array('source'=>'cms', 'key'=>'page'),
+			'total_items'		=> $total,
+			'items_per_page'	=> 15,
+			'uri'				=> $url,
+		));
+		
+		$sents  = $model->sents($id, $pagination->items_per_page, $pagination->offset);
+			
+		$view = View::factory('user/buddy/sent')
+					->set('id',$id)
+					->set('total',$total)
+					->set('sents',$sents)
+					->set('pagination',$pagination);
+		
+		$this->title = __('Sent Requests');
+		$this->response->body($view);
+	}
+	
+	public function action_pending()
+	{
+		$id 	  = (int) $this->request->param('id');
+		$user     = ORM::factory('user', $id);
+		$is_owner = FALSE;
+		$account  = FALSE;
+		
+		if ( ! $user->loaded())
+			{
+				Log::error('Attempt to access non-existent user.');
+				// No user is currently logged in
+				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+			}
+		
+		if ($this->_auth->logged_in())
+		{
+			$account = Auth::instance()->get_user();
+		}
+		if ($account AND ($user->id === $account->id))
+		{
+			$is_owner = TRUE;
+		}
+		
+		$model = Model::factory('buddy');
+		$total = $model->countPending($id);
+		
+		$url = Route::get('user/buddy')->uri(array('action'=>'pending','id'=>$id));
+		$pagination = Pagination::factory(array(
+			'current_page'		=> array('source'=>'cms', 'key'=>'page'),
+			'total_items'		=> $total,
+			'items_per_page'	=> 15,
+			'uri'				=> $url,
+		));
+		
+		$pending  = $model->pending($id, $pagination->items_per_page, $pagination->offset);
+			
+		$view = View::factory('user/buddy/pending')
+					->set('total',$total)
+					->set('id',$id)
+					->set('pendings',$pending)
+					->set('is_owner',$is_owner)
+					->set('pagination',$pagination);
+		
+		$this->title = __('Pending Requests');
 		$this->response->body($view);
 	}
 
