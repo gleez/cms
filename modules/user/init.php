@@ -72,7 +72,7 @@ if ( ! Route::cache())
 	));
 
 	Route::set('user/buddy', 'buddy(/<action>)(/<id>)(/p<page>)', array(
-		'action'     => 'index|add|accept|reject|delete',
+		'action'     => 'index|add|accept|reject|delete|sent|pending',
 		'id'         => '\d+',
 		'page'       => '\d+',
 	))
