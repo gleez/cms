@@ -35,12 +35,6 @@ class Gleez {
 	public static $installed = FALSE;
 
 	/**
-	 * Default theme name
-	 * @var string
-	 */
-	public static $theme = 'cerber';
-
-	/**
 	 * Public [Gleez_Locale] instance
 	 *
 	 * @todo In the future, this object should be moved to Gleez Core
@@ -83,7 +77,6 @@ class Gleez {
 	 * @uses  Config::load
 	 * @uses  I18n::initialize
 	 * @uses  Module::load_modules
-	 * @uses  Theme::load_themes
 	 */
 	public static function ready()
 	{
@@ -163,9 +156,6 @@ class Gleez {
 
 		// Initialize Gleez modules
 		Module::load_modules(FALSE);
-
-		// Load the active theme(s)
-		Theme::load_themes();
 	}
 
 	/**
