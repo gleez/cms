@@ -37,9 +37,19 @@ class I18n {
 	public static $source = 'en-us';
 
 	/**
+	 * @var  array  array of available languages
+	 */
+	protected static $_languages = array();
+
+	/**
 	 * @var  array  cache of loaded languages
 	 */
 	protected static $_cache = array();
+
+	/**
+	 * @var  string  source language: en-us, es-es, zh-cn, etc
+	 */
+	public static $_cookie = 'lang';
 
 	/**
 	 * Main function to detect and set the default language.
@@ -50,48 +60,54 @@ class I18n {
 	public static function initialize()
 	{
 		//Installed Locales
-		$installed_locales = Config::get('site.installed_locales', array());
-		$default_locale    = Config::get('site.locale', I18n::$lang);
+		self::$_languages = Config::get('site.installed_locales', array());
+		$default_locale   = Config::get('site.locale', I18n::$lang);
 		
 		//allow the user or browser to override the default locale
-		$locale_override   = Config::get('site.locale_override', FALSE);
+		$locale_override  = Config::get('site.locale_override', FALSE);
 
 		// 1. Check the session specific preference (cookie)
-		$locale = I18n::cookieLocale($installed_locales);
+		$locale = I18n::cookieLocale(self::$_languages);
 	
 		// 2. Check the user's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
-			$locale   = I18n::userLocale($installed_locales);
+			$locale = I18n::userLocale(self::$_languages);
 		}
 	
 		// 3. Check the request client/browser's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
-			$locale = I18n::requestLocale($installed_locales);
+			$locale = I18n::requestLocale(self::$_languages);
 		}
 
 		// 4. Check the url preference and get the language from url
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'URL'))
 		{
-			$locale = I18n::urlLocale($installed_locales);
+			$locale = I18n::urlLocale(self::$_languages);
 		}
 
 		// 5. Check the sub-domain preference and get the language form subdomain
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'DOMAIN'))
 		{
-			$locale = I18n::domainLocale($installed_locales);
+			$locale = I18n::domainLocale(self::$_languages);
 		}
 
-		// 6. Default locale preference
-		if(!$locale)
-		{
-			$locale = $default_locale;
-		}
-	
-		//set the locale
-		I18n::lang($locale);
-		setlocale(LC_ALL, $locale.'.utf-8');
+		// 6. Set the locale or Default locale
+		I18n::lang($locale, $default_locale);
+
+		return I18n::$lang;
+	}
+
+	/**
+	 * Test if $lang exists in the list of available langs in config
+	 *
+	 * @param type  string $lang
+	 * @return bool returns TRUE if $lang is available, otherwise FALSE
+	 */
+	public static function isAvailable($lang) 
+	{
+		return (bool) array_key_exists($lang, self::$_languages);
 	}
 
 	/**
@@ -109,7 +125,7 @@ class I18n {
 		//@todo score comparison
 		foreach($requested_locales as $locale => $score)
 		{
-			if (isset($installed_locales[$locale])) 
+			if( self::isAvailable($locale) )
 			{
 				return $locale;
 			}
@@ -132,14 +148,15 @@ class I18n {
 		//Can't set guest users locale, default's to site locale
 		if(User::is_guest()) 
 		{
-			$locale = Config::get('site.locale', 'en_US');
+			// Respect cookie if its set already or use default
+			$locale = Config::get(self::$_cookie, I18n::$lang);
 		}
 		else
 		{
 			$locale	= User::active_user()->language;
 		}
 		
-		if (isset($installed_locales[$locale])) 
+		if( self::isAvailable($locale) )
 		{
 			return $locale;
 		}
@@ -158,15 +175,15 @@ class I18n {
 	 */
 	public static function cookieLocale( array $installed_locales )
 	{
-		$cookie_data = Cookie::get('user_language');
+		$cookie_data = Cookie::get(self::$_cookie);
 		
 		//double check cookie data
 		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
 		{
-			$requested_locale = $matches[1];
-			if (isset($installed_locales[$requested_locale])) 
+			$locale = $matches[1];
+			if( self::isAvailable($locale) )
 			{
-				return $requested_locale;
+				return $locale;
 			}
 		}
 		
@@ -184,9 +201,10 @@ class I18n {
 	 */
 	public static function urlLocale( array $installed_locales )
 	{
-		$uri	= Request::detect_uri();
-		if (preg_match ('/^\/(' . join ('|', array_values($installed_locales)) . ')\/?$/', $uri, $matches)) 
+		$uri = Request::detect_uri();
+		if (preg_match ('/^\/(' . join ('|', array_keys($installed_locales)) . ')\/?$/', $uri, $matches)) 
 		{
+			//'~^(?:' . implode('|', array_keys($installed_locales)) . ')(?=/|$)~i'
 			// matched /lang or /lang/
 			return $matches[1];
 		}
@@ -205,7 +223,7 @@ class I18n {
 	 */
 	public static function domainLocale( array $installed_locales )
 	{
-		if (preg_match ('/^(' . join ('|', array_values($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
+		if (preg_match ('/^(' . join ('|', array_keys($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
 		{
 			return $matches[1];
 		}
@@ -222,16 +240,35 @@ class I18n {
 	 *     // Change the current language to Spanish
 	 *     I18n::lang('es-es');
 	 *
-	 * @param   string  $lang   new language setting
+	 * @param   array  	$lang   	new language setting
+	 * @param   string  $default    Default language
 	 * @return  string
 	 * @since   3.0.2
 	 */
-	public static function lang($lang = NULL)
+	public static function lang($lang = FALSE, $default = FALSE)
 	{
 		if ($lang)
 		{
+			// Store target language in I18n
+			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', self::$_languages[$lang]['i18n_code']));
+
+			// Set locale
+			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
+		}
+		elseif($default)
+		{
 			// Normalize the language
-			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', $lang));
+			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', $default));
+
+			// Set locale
+			setlocale(LC_ALL, $default.'.utf-8');
+		}
+
+		// Update language in cookie
+		if (Cookie::get(self::$_cookie) !== I18n::$lang) 
+		{
+			// Trying to set language to cookies
+			Cookie::set(self::$_cookie, I18n::$lang, Date::YEAR);
 		}
 
 		return I18n::$lang;

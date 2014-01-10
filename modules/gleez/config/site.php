@@ -179,19 +179,6 @@ return array(
 	),
 
 	/**
-	 * Installed locales
-	 * @var array
-	 */
-	'installed_locales' => array(
-		'en_US', // English
-		'et_EE', // Estonian
-		'it_IT', // Italian
-		'ro_RO', // Romanian
-		'ru_RU', // Russian
-		'zh_CN', // Chinese (Simplified)
-	),
-
-	/**
 	 * Default locale.
 	 * Default to 'en_US'
 	 * @var string
@@ -204,6 +191,54 @@ return array(
 	 * @var string
 	 */
 	'locale_override' =>  FALSE,
+
+	/**
+	 * Locale cookie key.
+	 * Default to 'lang'
+	 * @var string
+	 */
+	'locale_cookie' => 'lang',
+
+	/**
+	 * List of all supported languages. Array keys match language segment from the URI.
+	 * A default fallback language can be set by I18n::$default.
+	 *
+	 * Options for each language:
+	 *  i18n_code - The target language for the I18n class
+	 *  locale    - Locale name(s) for setting all locale information (http://php.net/setlocale)
+	 */
+	'installed_locales' => array(
+		'en' => array(
+			'name'		=> 'English',
+			'i18n_code' => 'en',
+			'locale'	=> array('en_US.utf-8'),
+		),
+		'et' => array(
+			'name'		=> 'Estonian',
+			'i18n_code'	=> 'et',
+			'locale'	=> array('et_EE.utf-8'),
+		),
+		'it' => array(
+			'name'		=> 'Italian',
+			'i18n_code'	=> 'it',
+			'locale'	=> array('it_IT.utf-8'),
+		),
+		'ro' => array(
+			'name'		=> 'Romanian',
+			'i18n_code'	=> 'ro',
+			'locale'	=> array('ro_RO.utf-8'),
+		),
+		'ru' => array(
+			'name'		=> 'Russian',
+			'i18n_code'	=> 'ru',
+			'locale'	=> array('ru_RU.utf-8'),
+		),
+		'zh' => array(
+			'name'		=> 'Chinese (Simplified)',
+			'i18n_code'	=> 'zh',
+			'locale'	=> array('zh_CN.utf-8'),
+		),
+	),
 
 	/**
 	 * Default timezone
