@@ -17,8 +17,7 @@
  *
  * @package    Gleez\Internationalization
  * @author     Kohana Team
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
+ * @author     Gleez Team
  * @version    1.2.0
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2014 Gleez Technologies

@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.8
+ * @version    0.10.9
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -38,7 +38,7 @@ class Gleez {
 	 * Default theme name
 	 * @var string
 	 */
-	public static $theme = 'fluid';
+	public static $theme = 'cerber';
 
 	/**
 	 * Public [Gleez_Locale] instance
@@ -81,6 +81,7 @@ class Gleez {
 	 * @uses  Route::set
 	 * @uses  Route::defaults
 	 * @uses  Config::load
+	 * @uses  I18n::initialize
 	 * @uses  Module::load_modules
 	 * @uses  Theme::load_themes
 	 */
@@ -112,7 +113,6 @@ class Gleez {
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			// @todo We need error handler with Gleez Views
 			Gleez_Exception::$error_view = 'errors/stack';
 		}
 
