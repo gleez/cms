@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '0.10.8';
+	const VERSION = '0.10.9';
 
 	/**
 	 * Release codename
@@ -95,27 +95,8 @@ class Gleez {
 		// Gleez is now initialized?
 		self::$_init = TRUE;
 
-		// Link the Kohana locale to gleez for temporary, it's not singleton
-		Gleez::$locale = Gleez_Locale::instance();
-
 		// Set default cookie salt and lifetime
 		self::_set_cookie();
-
-		// Trying to get language from cookies
-		if ($lang = Cookie::get(Gleez_Locale::$cookie))
-		{
-			I18n::$lang = $lang;
-		}
-		elseif (Kohana::$autolocale)
-		{
-			I18n::$lang = Gleez::$locale->get_language();
-			// Trying to set language to cookies
-			Cookie::set(Gleez_Locale::$cookie, I18n::$lang, Date::YEAR);
-		}
-		else
-		{
-			I18n::$lang = 'en-us';
-		}
 
 		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
@@ -124,6 +105,9 @@ class Gleez {
 		{
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
+
+			// Initialize the locale from settings
+			I18n::initialize();
 		}
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)

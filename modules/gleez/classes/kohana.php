@@ -258,13 +258,6 @@ class Kohana {
 			Kohana::$autolocale = (bool) $settings['autolocale'];
 		}
 
-		// By default enable Gleez_Locale
-		if (Kohana::$autolocale)
-		{
-			// @todo use Cookie here
-			Kohana::$locale = Gleez_Locale::instance();
-		}
-
 		// Enable the Kohana shutdown handler, which catches E_FATAL errors.
 		register_shutdown_function(array('Kohana', 'shutdown_handler'));
 
