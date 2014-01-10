@@ -8,8 +8,8 @@
  *
  * @package    Gleez\Menu
  * @author     Gleez Team
- * @author     1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @author     1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Menu {
@@ -332,8 +332,11 @@ class Menu {
 
 			if (empty($items)) return;
 
-			// Set the cache
-			$cache->set($name, $items, DATE::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set($name, $items, DATE::DAY);
+			}
 		}
 
 		// Initiate Menu Object

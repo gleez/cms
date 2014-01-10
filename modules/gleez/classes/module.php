@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Module
  * @author     Gleez Team
- * @version    1.0.3
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
  * @todo      [!!] This class does not do any permission checking
@@ -454,10 +454,6 @@ class Module {
 			$kohana_modules  = $data['kohana_modules'];
 
 			unset($data);
-			if (Kohana::DEVELOPMENT === Kohana::$environment)
-			{
-				Log::debug('Modules Loaded FROM Cache');
-			}
 		}
 		else
 		{
@@ -495,17 +491,16 @@ class Module {
 				}
 			}
 
-			// set cache for performance
-			$data = array();
-			$data['modules'] = $_cache_modules;
-			$data['active']  = $_cache_active;
-			$data['kohana_modules'] = $kohana_modules;
-
-			$cache->set('load_modules', $data, Date::DAY);
-			unset($data, $_cache_modules, $_cache_active);
-			if (Kohana::DEVELOPMENT === Kohana::$environment)
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
 			{
-				Log::debug('Modules Loaded from ORM');
+				$data = array();
+				$data['modules'] = $_cache_modules;
+				$data['active']  = $_cache_active;
+				$data['kohana_modules'] = $kohana_modules;
+
+				$cache->set('load_modules', $data, Date::DAY);
+				unset($data, $_cache_modules, $_cache_active);
 			}
 		}
 
