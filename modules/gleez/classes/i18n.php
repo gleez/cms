@@ -31,9 +31,14 @@ class I18n {
 	public static $lang = 'en-us';
 
 	/**
-	 * @var  string   target language: en-us, es-es, zh-cn, etc
+	 * @var  string   target language: en, es, zh, etc
 	 */
 	public static $default = 'en';
+
+	/**
+	 * @var  string   active language: en, es, zh, etc
+	 */
+	public static $active = 'en';
 
 	/**
 	 * @var  string  source language: en-us, es-es, zh-cn, etc
@@ -253,6 +258,9 @@ class I18n {
 		{
 			// Store target language in I18n
 			I18n::$lang = self::$_languages[$lang]['i18n_code'];
+
+			// Store the identified lang as active
+			I18n::$active = $lang;
 
 			// Set locale
 			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
