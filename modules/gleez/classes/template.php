@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Template
  * @author     Gleez Team
- * @version    1.2.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.3.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 abstract class Template extends Controller {
@@ -216,6 +216,9 @@ abstract class Template extends Controller {
 	 */
 	public function before()
 	{
+		// Load the active theme(s)
+		Theme::load_themes();
+
 		// Execute parent::before first
 		parent::before();
 
