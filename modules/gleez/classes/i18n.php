@@ -31,6 +31,11 @@ class I18n {
 	public static $lang = 'en-us';
 
 	/**
+	 * @var  string   target language: en-us, es-es, zh-cn, etc
+	 */
+	public static $default = 'en';
+
+	/**
 	 * @var  string  source language: en-us, es-es, zh-cn, etc
 	 */
 	public static $source = 'en-us';
@@ -60,7 +65,6 @@ class I18n {
 	{
 		//Installed Locales
 		self::$_languages = Config::get('site.installed_locales', array());
-		$default_locale   = Config::get('site.locale', I18n::$lang);
 		
 		//allow the user or browser to override the default locale
 		$locale_override  = Config::get('site.locale_override', FALSE);
@@ -92,8 +96,14 @@ class I18n {
 			$locale = I18n::domainLocale(self::$_languages);
 		}
 
-		// 6. Set the locale or Default locale
-		I18n::lang($locale, $default_locale);
+		// 6. Default locale
+		if(!$locale)
+		{
+			$locale = Config::get('site.locale', I18n::$default);
+		}
+
+		// Set the locale
+		I18n::lang($locale);
 
 		return I18n::$lang;
 	}
@@ -148,7 +158,7 @@ class I18n {
 		if(User::is_guest()) 
 		{
 			// Respect cookie if its set already or use default
-			$locale = Config::get(self::$_cookie, I18n::$lang);
+			$locale = strtolower(Config::get(self::$_cookie, I18n::$default));
 		}
 		else
 		{
@@ -174,7 +184,7 @@ class I18n {
 	 */
 	public static function cookieLocale( array $installed_locales )
 	{
-		$cookie_data = Cookie::get(self::$_cookie);
+		$cookie_data = strtolower(Cookie::get(self::$_cookie));
 		
 		//double check cookie data
 		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
@@ -239,35 +249,26 @@ class I18n {
 	 *     // Change the current language to Spanish
 	 *     I18n::lang('es-es');
 	 *
-	 * @param   array  	$lang   	new language setting
-	 * @param   string  $default    Default language
+	 * @param   string  	$lang   	new language setting
 	 * @return  string
 	 * @since   3.0.2
 	 */
-	public static function lang($lang = FALSE, $default = FALSE)
+	public static function lang($lang = NULL)
 	{
-		if ($lang)
+		if ($lang && self::isAvailable($lang) )
 		{
 			// Store target language in I18n
 			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', self::$_languages[$lang]['i18n_code']));
 
 			// Set locale
 			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
-		}
-		elseif($default)
-		{
-			// Normalize the language
-			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', $default));
-
-			// Set locale
-			setlocale(LC_ALL, $default.'.utf-8');
-		}
-
-		// Update language in cookie
-		if (Cookie::get(self::$_cookie) !== I18n::$lang) 
-		{
-			// Trying to set language to cookies
-			Cookie::set(self::$_cookie, I18n::$lang, Date::YEAR);
+		
+			// Update language in cookie
+			if (strtolower(Cookie::get(self::$_cookie)) !== $lang) 
+			{
+				// Trying to set language to cookies
+				Cookie::set(self::$_cookie, $lang, Date::YEAR);
+			}
 		}
 
 		return I18n::$lang;

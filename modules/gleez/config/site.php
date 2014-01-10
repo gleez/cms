@@ -183,7 +183,7 @@ return array(
 	 * Default to 'en_US'
 	 * @var string
 	 */
-	'locale' =>  'en_US',
+	'locale' =>  'en',
 
 	/**
 	 * Allow locale override.
