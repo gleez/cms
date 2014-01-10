@@ -75,25 +75,25 @@ class I18n {
 		// 2. Check the user's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
-			$locale = I18n::userLocale(self::$_languages);
+			$locale = I18n::userLocale();
 		}
 	
 		// 3. Check the request client/browser's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
-			$locale = I18n::requestLocale(self::$_languages);
+			$locale = I18n::requestLocale();
 		}
 
 		// 4. Check the url preference and get the language from url
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'URL'))
 		{
-			$locale = I18n::urlLocale(self::$_languages);
+			$locale = I18n::urlLocale();
 		}
 
 		// 5. Check the sub-domain preference and get the language form subdomain
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'DOMAIN'))
 		{
-			$locale = I18n::domainLocale(self::$_languages);
+			$locale = I18n::domainLocale();
 		}
 
 		// 6. Default locale
@@ -125,19 +125,16 @@ class I18n {
 	 *     // Get the language
 	 *     $lang = I18n::requestLocale();
 	 *
-	 * @param   array  $installed_locales   array of instaleld locales
 	 * @return  string
 	 */
-	public static function requestLocale( array $installed_locales )
+	public static function requestLocale()
 	{
-		$requested_locales	= Request::accept_lang();
-		//@todo score comparison
-		foreach($requested_locales as $locale => $score)
+		//  Look for a preferred language in the `Accept-Language` header directive.
+		$locale	= Request::initial()->headers()->preferred_language(array_keys(self::$_languages));
+
+		if( self::isAvailable($locale) )
 		{
-			if( self::isAvailable($locale) )
-			{
-				return $locale;
-			}
+			return $locale;
 		}
 		
 		return FALSE;
@@ -149,10 +146,9 @@ class I18n {
 	 *     // Get the language
 	 *     $lang = I18n::userLocale();
 	 *
-	 * @param   array  $installed_locales   array of instaleld locales
 	 * @return  string
 	 */
-	public static function userLocale( array $installed_locales )
+	public static function userLocale()
 	{
 		//Can't set guest users locale, default's to site locale
 		if(User::is_guest()) 
@@ -179,10 +175,9 @@ class I18n {
 	 *     // Get the language
 	 *     $lang = I18n::cookieLocale();
 	 *
-	 * @param   array  $installed_locales   array of instaleld locales
 	 * @return  string
 	 */
-	public static function cookieLocale( array $installed_locales )
+	public static function cookieLocale()
 	{
 		$cookie_data = strtolower(Cookie::get(self::$_cookie));
 		
@@ -190,6 +185,7 @@ class I18n {
 		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
 		{
 			$locale = $matches[1];
+
 			if( self::isAvailable($locale) )
 			{
 				return $locale;
@@ -205,13 +201,12 @@ class I18n {
 	 *     ex: example.com/fr/
 	 *     $lang = I18n::urlLocale();
 	 *
-	 * @param   array  $installed_locales   array of instaleld locales
 	 * @return  string
 	 */
-	public static function urlLocale( array $installed_locales )
+	public static function urlLocale()
 	{
 		$uri = Request::detect_uri();
-		if (preg_match ('/^\/(' . join ('|', array_keys($installed_locales)) . ')\/?$/', $uri, $matches)) 
+		if (preg_match ('/^\/(' . join ('|', array_keys(self::$_languages)) . ')\/?$/', $uri, $matches)) 
 		{
 			//'~^(?:' . implode('|', array_keys($installed_locales)) . ')(?=/|$)~i'
 			// matched /lang or /lang/
@@ -227,12 +222,11 @@ class I18n {
 	 *		ex: fr.example.com
 	 *     	$lang = I18n::domainLocale();
 	 *
-	 * @param   array  $installed_locales   array of instaleld locales
 	 * @return  string
 	 */
-	public static function domainLocale( array $installed_locales )
+	public static function domainLocale()
 	{
-		if (preg_match ('/^(' . join ('|', array_keys($installed_locales)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
+		if (preg_match ('/^(' . join ('|', array_keys(self::$_languages)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
 		{
 			return $matches[1];
 		}
@@ -258,7 +252,7 @@ class I18n {
 		if ($lang && self::isAvailable($lang) )
 		{
 			// Store target language in I18n
-			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', self::$_languages[$lang]['i18n_code']));
+			I18n::$lang = self::$_languages[$lang]['i18n_code'];
 
 			// Set locale
 			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
