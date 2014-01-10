@@ -5,30 +5,25 @@
 
 	<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('name', __('Username/Email'), array('class' => 'sr-only control-label')) ?>
-		<div class="col-sm-12">
-			<div class="row">
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-user"></i></span>
-					<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))) ?>
-				</div>
-			</div>
+
+		<div class="input-group">
+			<span class="input-group-addon"><i class="fa fa-user"></i></span>
+			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))) ?>
 		</div>
 	</div>
 
 	<div class="form-group <?php echo isset($errors['password']) ? 'has-error': ''; ?>">
 		<?php echo Form::label('name', __('Password'), array('class' => 'sr-only control-label')) ?>
-		<div class="col-sm-12">
-			<div class="row">
-				<div class="input-group">
-					<span class="input-group-addon"><i class="fa fa-key"></i></span>
-					<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))) ?>
-				</div>
-			</div>
+
+		<div class="input-group">
+			<span class="input-group-addon"><i class="fa fa-key"></i></span>
+			<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))) ?>
 		</div>
+
 	</div>
 
 	<div class="form-group">
-		<div class="checkbox col-sm-12">
+		<div class="checkbox">
 			<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in') ?>
 		</div>
 	</div>
@@ -67,7 +62,7 @@
 								$class = $provider;
 						}
 
-						$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
+						$url = Route::get('oauth2/provider')->uri(array('provider' => $provider, 'action' => 'login'));
 						echo HTML::anchor($url, '<i class="fa fa-'.$class.'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $provider))));
 					}
 				?>
@@ -76,4 +71,4 @@
 		</div>
 	<?php endif; ?>
 
-<?php echo Form::close() ?>
+<?php echo Form::close(); ?>
