@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class URL {
@@ -271,12 +271,24 @@ class URL {
 	 * @param   string  $uri        Site URI to convert [Optional]
 	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from [Optional]
 	 * @param   boolean $index		Include the index_page in the URL [Optional]
+	 * @param   mixed   language key to prepend to the URI, or FALSE to not prepend a language
 	 * @return  string
 	 *
 	 * @uses    UTF8::is_ascii
 	 */
-	public static function site($uri = '', $protocol = NULL, $index = TRUE)
+	public static function site($uri = '', $protocol = NULL, $index = TRUE, $lang = FALSE)
 	{
+		if ($lang === TRUE)
+		{
+			// Prepend the current language to the URI
+			$uri = I18n::$active.'/'.ltrim($uri, '/');
+		}
+		elseif (is_string($lang))
+		{
+			// Prepend a custom language to the URI
+			$uri = $lang.'/'.ltrim($uri, '/');
+		}
+
 		// Chop off possible scheme, host, port, user and pass parts
 		$path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));
 
