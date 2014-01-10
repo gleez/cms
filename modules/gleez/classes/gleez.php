@@ -156,6 +156,9 @@ class Gleez {
 
 		// Initialize Gleez modules
 		Module::load_modules(FALSE);
+
+		// Load the active theme(s)
+		Theme::load_themes();
 	}
 
 	/**
