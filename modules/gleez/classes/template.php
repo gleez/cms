@@ -216,9 +216,6 @@ abstract class Template extends Controller {
 	 */
 	public function before()
 	{
-		// Load the active theme(s)
-		Theme::load_themes();
-
 		// Execute parent::before first
 		parent::before();
 
