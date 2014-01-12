@@ -4,11 +4,11 @@
 	<p><?php echo __('Sign in using your registered account'); ?></p>
 
 	<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
-		<?php echo Form::label('name', __('Username/Email'), array('class' => 'sr-only control-label')) ?>
+		<?php echo Form::label('name', __('Username/Email'), array('class' => 'sr-only control-label')); ?>
 
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-user"></i></span>
-			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))) ?>
+			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))); ?>
 		</div>
 	</div>
 
@@ -17,19 +17,19 @@
 
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-key"></i></span>
-			<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))) ?>
+			<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))); ?>
 		</div>
 
 	</div>
 
 	<div class="form-group">
 		<div class="checkbox">
-			<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in') ?>
+			<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-primary btn-block')) ?>
+		<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-primary btn-block')); ?>
 	</div>
 
 	<div class="form-group">
