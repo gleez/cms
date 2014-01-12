@@ -70,14 +70,29 @@ class Controller_Buddy extends Template {
 
 	public function action_sent()
 	{
-		$id 	= (int) $this->request->param('id');
-		$user   = ORM::factory('user', $id);
+		$id       = (int) $this->request->param('id');
+		$user 	  = ORM::factory('user', $id);
+		$account  = FALSE;
 
 		if ( ! $user->loaded())
 		{
 			Log::error('Attempt to access non-existent user.');
 			// No user is currently logged in
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
+		}
+
+		if ($this->_auth->logged_in())
+		{
+			$account = Auth::instance()->get_user();
+		}
+
+		if ($account AND ($user->id === $account->id))
+		{
+			$is_owner = TRUE;
+		}
+		else
+		{
+			throw HTTP_Exception::factory(403, 'Attempt to access without required privileges.');
 		}
 
 		$model = Model::factory('buddy');
@@ -124,6 +139,10 @@ class Controller_Buddy extends Template {
 		if ($account AND ($user->id === $account->id))
 		{
 			$is_owner = TRUE;
+		}
+		else
+		{
+			throw HTTP_Exception::factory(403, 'Attempt to access without required privileges.');
 		}
 		
 		$model = Model::factory('buddy');
