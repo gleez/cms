@@ -3,4 +3,4 @@
 	url = https://github.com/sergeyklay/gleez-mango.git
 [submodule "themes/cerber"]
 	path = themes/cerber
-	url = https://github.com/sergeyklay/gleez-cerber.git
+	url = git@github.com:sergeyklay/gleez-cerber.git
