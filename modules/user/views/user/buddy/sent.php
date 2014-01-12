@@ -20,7 +20,7 @@
 				<?php $accept = User::lookup($sent['request_to']); ?>
 				<?php if($accept): ?>
 					<div class="col-md-2">
-					   <?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'size' => 80, 'title'=> __('view profile'))) ?>
+					   <?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept, array('size' => 80)), array('class' => 'action-view','title'=> __('view profile'))) ?>
 					</div>
 					<div class="col-md-5">
 					    <?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?></br>
