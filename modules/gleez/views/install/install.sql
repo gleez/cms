@@ -506,3 +506,61 @@ CREATE TABLE IF NOT EXISTS {buddies} (
     CONSTRAINT {buddy_requests_ibfk_1} FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE,
     CONSTRAINT {buddy_requests_ibfk_2} FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_clients};
+CREATE TABLE IF NOT EXISTS {oauth_clients} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) NOT NULL,
+    `user_id` bigint(20) NOT NULL,
+    `client_id` varchar(50) NOT NULL,
+    `client_secret` varchar(50) NOT NULL,
+    `redirect_uri` varchar(255) NOT NULL,
+    `grant_types` varchar(255) DEFAULT 'authorization_code',
+    `status` tinyint(2) NOT NULL,
+    `description` text NOT NULL,
+    `logo` varchar(255) NOT NULL,
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_clients_fk_1` (`client_id`),
+    KEY `oauth_clients_fk_2` (`client_secret`),
+    KEY `oauth_clients_fk_3` (`user_id`),
+    CONSTRAINT {oauth_clients_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_codes};
+CREATE TABLE IF NOT EXISTS {oauth_codes} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `code` varchar(50) NOT NULL,
+    `client_id` varchar(50) NOT NULL,
+    `user_id` bigint(20) NOT NULL,
+    `redirect_uri` varchar(255) NOT NULL,
+    `scope` varchar(255) DEFAULT NULL,
+    `expires` int(11) NOT NULL,
+    `created` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_codes_fk_1` (`client_id`),
+    KEY `oauth_codes_fk_2` (`user_id`),
+    KEY `oauth_codes_fk_23` (`code`),
+    CONSTRAINT {oauth_codes_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {oauth_codes_ibfk_2} FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_tokens};
+CREATE TABLE IF NOT EXISTS {oauth_tokens} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `access_token` varchar(50) NOT NULL,
+    `refresh_token` varchar(50) DEFAULT NULL,
+    `client_id` varchar(50) NOT NULL,
+    `user_id` bigint(20) NOT NULL,
+    `scope` varchar(255) DEFAULT NULL,
+    `access_expires` int(11) NOT NULL,
+    `refresh_expires` int(11) NOT NULL,
+    `created` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_tokens_fk_1` (`client_id`),
+    KEY `oauth_tokens_fk_2` (`user_id`),
+    KEY `oauth_tokens_fk_3` (`access_token`),
+    CONSTRAINT {oauth_tokens_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
+    CONSTRAINT {oauth_tokens_ibfk_2} FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
