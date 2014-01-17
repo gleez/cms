@@ -123,7 +123,7 @@
 					</div>
 					<div class="panel-footer">
 						<div id="major-publishing-actions" class="row">
-							<?php if ($blog->loaded() AND ACL::post('delete', $post)): ?>
+							<?php if ($blog->loaded() AND ACL::post('delete', $blog)): ?>
 								<div id="delete-action" class="btn btn-default pull-left">
 									<i class="fa fa-trash-o"></i>
 									<?php echo HTML::anchor($blog->delete_url.URL::query($destination), __('Move to Trash'), array('class' => 'submitdelete')) ?>
