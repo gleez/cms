@@ -460,8 +460,8 @@ INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `regi
 (8, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-lock'),
 (9, 'comment/recent', 'Comments', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-comment'),
 (10, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-bookmark'),
-(11, 'blog/recent',	'Recent Blogs',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'fa-book'),
-(12, 'blog/announce',	'Announce of Recent Blogs',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'fa-book');
+(11, 'blog/recent', 'Recent Blogs', 'gleez',  NULL, 0,  '-1', 0,  0,  0,  NULL, NULL, 1,  NULL, 1,  'fa-book'),
+(12, 'blog/announce', 'Announce of Recent Blogs', 'gleez',  NULL, 0,  '-1', 0,  0,  0,  NULL, NULL, 1,  NULL, 1,  'fa-book');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
@@ -494,7 +494,7 @@ CREATE TABLE {sitemaps} (
 
 DROP TABLE IF EXISTS {buddies};
 CREATE TABLE IF NOT EXISTS {buddies} (
-    `id` INT(11) UNSIGNED NOT NULL,
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `request_from` bigint(20) UNSIGNED NOT NULL,
     `request_to` bigint(20) UNSIGNED NOT NULL,
     `accepted` INT(1) UNSIGNED NOT NULL DEFAULT '0',
@@ -511,9 +511,9 @@ DROP TABLE IF EXISTS {oauth_clients};
 CREATE TABLE IF NOT EXISTS {oauth_clients} (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
     `title` varchar(255) NOT NULL,
-    `user_id` bigint(20) NOT NULL,
-    `client_id` varchar(50) NOT NULL,
-    `client_secret` varchar(50) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `client_secret` varchar(255) NOT NULL,
     `redirect_uri` varchar(255) NOT NULL,
     `grant_types` varchar(255) DEFAULT 'authorization_code',
     `status` tinyint(2) NOT NULL,
@@ -531,9 +531,9 @@ CREATE TABLE IF NOT EXISTS {oauth_clients} (
 DROP TABLE IF EXISTS {oauth_codes};
 CREATE TABLE IF NOT EXISTS {oauth_codes} (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `code` varchar(50) NOT NULL,
-    `client_id` varchar(50) NOT NULL,
-    `user_id` bigint(20) NOT NULL,
+    `code` varchar(255) NOT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
     `redirect_uri` varchar(255) NOT NULL,
     `scope` varchar(255) DEFAULT NULL,
     `expires` int(11) NOT NULL,
@@ -549,10 +549,10 @@ CREATE TABLE IF NOT EXISTS {oauth_codes} (
 DROP TABLE IF EXISTS {oauth_tokens};
 CREATE TABLE IF NOT EXISTS {oauth_tokens} (
     `id` bigint(20) NOT NULL AUTO_INCREMENT,
-    `access_token` varchar(50) NOT NULL,
-    `refresh_token` varchar(50) DEFAULT NULL,
-    `client_id` varchar(50) NOT NULL,
-    `user_id` bigint(20) NOT NULL,
+    `access_token` varchar(255) NOT NULL,
+    `refresh_token` varchar(255) DEFAULT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
     `scope` varchar(255) DEFAULT NULL,
     `access_expires` int(11) NOT NULL,
     `refresh_expires` int(11) NOT NULL,
