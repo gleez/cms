@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Install
  * @author     Gleez Team
- * @version    1.3.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.3.2
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Install_Install extends Controller_Template {
@@ -409,21 +409,21 @@ class Controller_Install_Install extends Controller_Template {
 	{
 		if ( ! $link = @mysqli_connect($hostname, $username, $password))
 		{
-			if (strpos(mysqli_error(), 'Access denied'))
+			if (strpos(mysqli_error($link), 'Access denied'))
 			{
 				throw new Exception('access');
 			}
-			elseif (strpos(mysqli_error(), 'server host'))
+			elseif (strpos(mysqli_error($link), 'server host'))
 			{
 				throw new Exception('unknown_host');
 			}
-			elseif (strpos(mysqli_error(), 'connect to'))
+			elseif (strpos(mysqli_error($link), 'connect to'))
 			{
 				throw new Exception('connect_to_host');
 			}
 			else
 			{
-				throw new Exception(mysqli_error());
+				throw new Exception(mysqli_error($link));
 			}
 		}
 
@@ -505,11 +505,12 @@ class Controller_Install_Install extends Controller_Template {
 			{
 				if (!mysqli_query($link, $this->prepend_prefix($prefix, $buf)))
 				{
-					throw new Exception(mysqli_error());
+					throw new Exception(mysqli_error($link));
 				}
 				$buf = "";
 			}
 		}
+		
 		return true;
 	}
 
