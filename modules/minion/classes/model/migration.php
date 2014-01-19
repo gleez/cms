@@ -27,7 +27,7 @@ class Model_Migration extends Model
 	{
 		$this->_db = $db;
 
-		$this->_table = Kohana::$config->load('migration.table');
+		$this->_table = Config::get('migration.table', 'migrations');
 	}
 
 	/**
@@ -171,7 +171,7 @@ class Model_Migration extends Model
 
 		if ( ! count($query))
 		{
-			$sql = View::factory('minion/task/migrations/schema')
+			$sql = View::factory('minion/db/schema')
 				->set('table_name', $this->_table)
 				->render();
 
