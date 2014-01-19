@@ -2,11 +2,16 @@ Migrations are a convenient way for you to alter your database in a structured a
 
 Migrations module tracks which migrations have already been run so all you have to do is update your source and run ./minion db:migrate. Migrations module will work out which migrations should be run. 
 
-# Options
+Once a Migration has been released (i.e. has possibly been run on a production system) it should not be modified.
+Instead, new Migrations must be created.
 
-* log - this is the logging function to be used, to integrate into whatever controller/backend you are using
-* path - the path to where the migrations will be stored, defaults to APPPATH/migrations
-* type - the driver for the backend for which migrations have been already executed as well as the migrations themselves, defaults to mysql
+## Metadata table
+
+The first time a Migration is run, a special table (by default called `migrations`) is created
+in which to store information about which Migrations have been applied.
+
+The table name can be customised with the `migration.table` [configuration value](../gleez/files/config).
+
 
 # Command line tools
 
