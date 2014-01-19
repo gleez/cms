@@ -12,6 +12,6 @@ class Task_Db_Migrate extends Minion_Task
 {
 	protected function _execute(array $options)
 	{
-		Minion_CLI::write('db:migrate runs migrations for the current env that have not run yet');
+		Minion_CLI::write('db:migrate runs migrations that have not run yet');
 	}
 }
