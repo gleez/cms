@@ -14,6 +14,6 @@ class Task_Db extends Minion_Task
 	{
 		//Minion_CLI::write('Database Migrations');
 
-		echo new View('minion/db/list');
+		echo new View('minion/db/help');
 	}
 }
