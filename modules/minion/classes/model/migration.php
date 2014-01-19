@@ -62,8 +62,8 @@ class Model_Migration extends Model
 			}
 			else
 			{
-				// Skip files without an extension of EXT
-				if ('.'.pathinfo($file, PATHINFO_EXTENSION) !== EXT)
+				// Skip files without an extension of sql
+				if ('.'.pathinfo($file, PATHINFO_EXTENSION) !== '.sql')
 					continue;
 
 				$migration = $this->get_migration_from_filename($file);
@@ -97,16 +97,16 @@ class Model_Migration extends Model
 		// Get rid of the file's "migrations/" prefix, the file extension and then
 		// the filename itself.  The "group" is essentially a slash delimited
 		// path from the migrations folder to the migration file
-		$migration['group'] = dirname(substr($file, 11, -strlen(EXT)));
+		$migration['group'] = dirname(substr($file, 11, -strlen('.sql')));
 
 		if (strpos(basename($file), "_"))
 		{
 			list($migration['timestamp'], $migration['description'])
-				= explode('_', basename($file, EXT), 2);
+				= explode('_', basename($file, '.sql'), 2);
 		}
 		else
 		{
-			$migration['timestamp'] = basename($file, EXT);
+			$migration['timestamp'] = basename($file, '.sql');
 			$migration['description'] = "";
 		}
 		$migration['id'] = $migration['group'].':'.$migration['timestamp'];
@@ -122,7 +122,7 @@ class Model_Migration extends Model
 	 */
 	public function get_filename_from_migration(array $migration)
 	{
-		$group  = $migration['group'];
+		$group  = $migration['mgroup'];
 
 		if ( ! empty($migration['description']))
 		{
@@ -135,28 +135,7 @@ class Model_Migration extends Model
 
 		$group = ( ! empty($group)) ? (rtrim($group, '/').'/') : '';
 
-		return $group.$migration.EXT;
-	}
-
-	/**
-	 * Allows you to work out the class name from either an array of migration
-	 * info, or from a migration id
-	 *
-	 * @param  string|array $migration The migration's ID or array of migration data
-	 * @return string                  The migration class name
-	 */
-	public function get_class_from_migration($migration)
-	{
-		if (is_string($migration))
-		{
-			$migration = str_replace(array(':', '/'), ' ', $migration);
-		}
-		else
-		{
-			$migration = str_replace('/', ' ', $migration['group']).'_'.$migration['timestamp'];
-		}
-
-		return 'Migration_'.str_replace(array(' ', '-'), '_', ucwords($migration));
+		return $group.$migration.'.sql';
 	}
 
 	/**
@@ -167,12 +146,13 @@ class Model_Migration extends Model
 	 */
 	public function ensure_table_exists()
 	{
-		$query = $this->_db->query(Database::SELECT, "SHOW TABLES like '".$this->_table."'");
+		$table = $this->_db->table_prefix().$this->_table;
+		$query = $this->_db->query(Database::SELECT, "SHOW TABLES like '".$table."'");
 
 		if ( ! count($query))
 		{
 			$sql = View::factory('minion/db/schema')
-				->set('table_name', $this->_table)
+				->set('table_name', $table)
 				->render();
 
 			$this->_db->query(NULL, $sql);
@@ -187,7 +167,7 @@ class Model_Migration extends Model
 	public function get_group_statuses()
 	{
 		// Start out using all the installed groups
-		$groups = $this->fetch_current_versions('group');
+		$groups = $this->fetch_current_versions('mgroup');
 		$available = $this->available_migrations();
 
 		foreach ($available as $migration)
@@ -230,7 +210,7 @@ class Model_Migration extends Model
 	 */
 	protected function _select()
 	{
-		return DB::select('*', DB::expr('CONCAT(`group`, ":", CAST(`timestamp` AS CHAR)) AS `id`'))->from($this->_table);
+		return DB::select('*', DB::expr('CONCAT(`mgroup`, ":", CAST(`timestamp` AS CHAR)) AS `id`'))->from($this->_table);
 	}
 
 	/**
@@ -241,7 +221,7 @@ class Model_Migration extends Model
 	 */
 	public function add_migration(array $migration)
 	{
-		DB::insert($this->_table, array('timestamp', 'group', 'description'))
+		DB::insert($this->_table, array('timestamp', 'mgroup', 'description'))
 			->values(array($migration['timestamp'], $migration['group'], $migration['description']))
 			->execute($this->_db);
 
@@ -269,7 +249,7 @@ class Model_Migration extends Model
 
 		return $this->_select()
 			->where('timestamp', '=', (string) $timestamp)
-			->where('group',  '=', (string) $group)
+			->where('mgroup',  '=', (string) $group)
 			->execute($this->_db)
 			->current();
 	}
@@ -294,7 +274,7 @@ class Model_Migration extends Model
 
 		DB::delete($this->_table)
 			->where('timestamp', '=', $timestamp)
-			->where('group',  '=', $group)
+			->where('mgroup',  '=', $group)
 			->execute($this->_db);
 
 		return $this;
@@ -324,7 +304,7 @@ class Model_Migration extends Model
 			DB::update($this->_table)
 				->set($set)
 				->where('timestamp', '=', $current['timestamp'])
-				->where('group', '=', $current['group'])
+				->where('mgroup', '=', $current['group'])
 				->execute($this->_db);
 		}
 
@@ -343,7 +323,7 @@ class Model_Migration extends Model
 		DB::update($this->_table)
 			->set(array('applied' => (int) $applied))
 			->where('timestamp', '=', $migration['timestamp'])
-			->where('group',  '=', $migration['group'])
+			->where('mgroup',  '=', $migration['mgroup'])
 			->execute($this->_db);
 
 		return $this;
@@ -369,7 +349,7 @@ class Model_Migration extends Model
 	 *
 	 * @return Kohana_Database_Result
 	 */
-	public function fetch_current_versions($key = 'group', $value = NULL)
+	public function fetch_current_versions($key = 'mgroup', $value = NULL)
 	{
 		// Little hack needed to do an order by before a group by
 		return DB::select()
@@ -379,7 +359,7 @@ class Model_Migration extends Model
 				->order_by('timestamp', 'DESC'),
 				'temp_table'
 			))
-			->group_by('group')
+			->group_by('mgroup')
 			->execute($this->_db)
 			->as_array($key, $value);
 	}
@@ -393,9 +373,9 @@ class Model_Migration extends Model
 	{
 		return DB::select()
 			->from($this->_table)
-			->group_by('group')
+			->group_by('mgroup')
 			->execute($this->_db)
-			->as_array($group_as_key ? 'group' : NULL, 'group');
+			->as_array($group_as_key ? 'mgroup' : NULL, 'mgroup');
 	}
 
 	/**
@@ -415,7 +395,7 @@ class Model_Migration extends Model
 		{
 			if ( ! isset($current_groups[$group_name]))
 			{
-				throw new Kohana_Exception("Migration group :group does not exist", array(':group' => $group_name));
+				throw new Gleez_Exception("Migration group :group does not exist", array(':group' => $group_name));
 			}
 		}
 
@@ -430,11 +410,11 @@ class Model_Migration extends Model
 			{
 				if (count($group) > 1)
 				{
-					$query->where('group', 'IN', $group);
+					$query->where('mgroup', 'IN', $group);
 				}
 				else
 				{
-					$query->where('group', '=', $group[0]);
+					$query->where('mgroup', '=', $group[0]);
 				}
 			}
 		}
@@ -443,7 +423,7 @@ class Model_Migration extends Model
 		{
 			list($target, $up) = $this->resolve_target($group, $target);
 
-			$query->where('group', '=', $group);
+			$query->where('mgroup', '=', $group);
 
 			if ($target !== NULL)
 			{
@@ -461,9 +441,9 @@ class Model_Migration extends Model
 		// Absolute timestamp
 		else
 		{
-			$query->where('group', '=', $group);
+			$query->where('mgroup', '=', $group);
 
-			$statuses = $this->fetch_current_versions('group', 'timestamp');
+			$statuses = $this->fetch_current_versions('mgroup', 'timestamp');
 			$up = (empty($statuses) OR ($statuses[$group[0]] < $target));
 
 			if ($up)
@@ -506,14 +486,14 @@ class Model_Migration extends Model
 	{
 		if (empty($group))
 		{
-			throw new Kohana_Exception("No group specified");
+			throw new Gleez_Exception("No group specified");
 		}
 
 		if (is_array($group))
 		{
 			if (count($group) > 1)
 			{
-				throw new Kohana_Exception("A target can only be expressed for a single group");
+				throw new Gleez_Exception("A target can only be expressed for a single group");
 			}
 
 			$group = $group[0];
@@ -521,7 +501,7 @@ class Model_Migration extends Model
 
 		if ( ! in_array($target[0], array('+', '-')))
 		{
-			throw new Kohana_Exception("Invalid relative target");
+			throw new Gleez_Exception("Invalid relative target");
 		}
 
 		$query         = $this->_select();
@@ -543,7 +523,7 @@ class Model_Migration extends Model
 		{
 			if ( ! $group_applied)
 			{
-				throw new Kohana_Exception(
+				throw new Gleez_Exception(
 					"Cannot migrate group :group down as none of its migrations have been applied",
 					array(':group' => $group)
 				);
@@ -556,7 +536,7 @@ class Model_Migration extends Model
 
 		$query->limit($amount);
 
-		$query->where('group', '=', $group);
+		$query->where('mgroup', '=', $group);
 
 		$query->order_by('timestamp', ($up ? 'ASC' : 'DESC'));
 

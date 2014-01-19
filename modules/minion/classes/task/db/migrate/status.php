@@ -1,6 +1,6 @@
 <?php
 /**
- * Help task to display general instructons and list all tasks
+ * Displays the current migration status of migrations in all groups
  *
  * @package    Gleez\Minion\DB\Migrate
  * @author     Gleez Team
@@ -10,9 +10,18 @@
  */
 class Task_Db_Migrate_Status extends Minion_Task
 {
+	/**
+	 * Execute the task
+	 *
+	 * @param array $options Config for the task
+	 */
 	protected function _execute(array $options)
 	{
+		$model = new Model_Migration(Database::instance());
+		$view = new View('minion/db/status');
 
-		Minion_CLI::write('db:migrate:status shows current migration status');
+		$view->groups = $model->get_group_statuses();
+
+		echo $view;
 	}
 }
