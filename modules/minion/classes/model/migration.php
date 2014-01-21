@@ -68,6 +68,17 @@ class Model_Migration extends Model
 					continue;
 				}
 
+				// Filename validations. The file name should be valid UTC date with
+				// description string and ends with .UP.sql or .DOWN.sql
+				// However we only check for UP file here to avoid duplicate iterations
+				// The Migration::run_migration() throws errors if the file not found
+				// in the case of DOWN during step down/rollback etc.
+				// ex: 20140119113100_test_initial.UP.sql
+                if ( ! preg_match('/^(\d{14})_(\w+)$/', basename($file, '.UP.sql'), $match))
+                {
+                	continue;
+                }
+
 				$migration = $this->get_migration_from_filename($file, $path);
 
 				$migrations[$migration['group'].':'.$migration['timestamp']] = $migration;
@@ -103,23 +114,23 @@ class Model_Migration extends Model
 		// get module folder name or default application folder name
 
 		//$migration['group'] = dirname(substr($file, 11, -strlen('.sql')));
-		$migration['group'] = basename(dirname(dirname(substr($path, 11, -strlen('.sql')))));
+		$migration['group'] = basename(dirname(dirname(substr($path, 11, -strlen('.UP.sql')))));
 
 		if (strpos(basename($file), "_"))
 		{
 			list($migration['timestamp'], $migration['description'])
-				= explode('_', basename($file, '.sql'), 2);
+				= explode('_', basename($file, '.UP.sql'), 2);
 
 			// Max 100 characters, lowercase filenames.
     		$migration['description'] = str_replace('_', ' ', substr(strtolower($migration['description']), 0, 100));
 		}
 		else
 		{
-			$migration['timestamp'] = basename($file, '.sql');
+			$migration['timestamp'] = basename($file, '.UP.sql');
 			$migration['description'] = "";
 		}
 
-		$migration['filename'] = basename($file);
+		$migration['filename'] = basename($file, '.UP.sql');
 		$migration['id'] = $migration['group'].':'.$migration['timestamp'];
 
 		return $migration;
@@ -131,12 +142,13 @@ class Model_Migration extends Model
 	 * @param  integer|array $migration The migration's ID or an array of timestamp, description
 	 * @return string                   Path to the migration file
 	 */
-	public function get_filename_from_migration(array $migration)
+	public function get_filename_from_migration(array $migration, $method)
 	{
+		$method = strtoupper($method);
 		// New filename detection and return
 		if( isset($migration['filename']) && ! empty($migration['filename']))
 		{
-			return $migration['filename'];
+			return "{$migration['filename']}.{$method}.sql";
 		}
 
 		return FALSE;
@@ -269,7 +281,7 @@ class Model_Migration extends Model
 		if (is_array($migration))
 		{
 			$timestamp = $migration['timestamp'];
-			$group  = $migration['group'];
+			$group  = $migration['mgroup'];
 		}
 		else
 		{

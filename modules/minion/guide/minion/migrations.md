@@ -12,6 +12,16 @@ in which to store information about which Migrations have been applied.
 
 The table name can be customised with the `migration.table` [configuration value](../gleez/files/config).
 
+## File Name Conventions
+
+The file name format is mandatory and it should exist either in application/migrations folder or your module migrations (modules/foo/migrations). The name syntax should be like UTC date with some desciption and UP/DOWN direction and ends with sql extention. The seperator should be underscore and direction should be seperated by dot.
+
+A single migration should consist two files one UP and another DOWN with same name (important).
+
+~~~
+20140121185122_hello_world.UP.sql
+20140121185122_hello_world.DOWN.sql
+~~~
 
 # Command line tools
 
