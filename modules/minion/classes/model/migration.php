@@ -63,10 +63,12 @@ class Model_Migration extends Model
 			else
 			{
 				// Skip files without an extension of sql
-				if ('.'.pathinfo($file, PATHINFO_EXTENSION) !== '.sql')
+				if (pathinfo($file, PATHINFO_EXTENSION) !== 'sql')
+				{
 					continue;
+				}
 
-				$migration = $this->get_migration_from_filename($file);
+				$migration = $this->get_migration_from_filename($file, $path);
 
 				$migrations[$migration['group'].':'.$migration['timestamp']] = $migration;
 			}
@@ -81,34 +83,43 @@ class Model_Migration extends Model
 	 * Returns an array like:
 	 *
 	 *     array(
-	 *        'group'    => 'mygroup',
+	 *        'group'    	=> 'mygroup',
 	 *        'timestamp'   => '1293214439',
 	 *        'description' => 'initial-setup',
 	 *        'id'          => 'mygroup:1293214439'
 	 *     );
 	 *
 	 * @param  string $file The migration's filename
+	 * @param  string $path The migration's file path
 	 * @return array  Array of components about the migration
 	 */
-	public function get_migration_from_filename($file)
+	public function get_migration_from_filename($file, $path)
 	{
 		$migration = array();
 
 		// Get rid of the file's "migrations/" prefix, the file extension and then
 		// the filename itself.  The "group" is essentially a slash delimited
 		// path from the migrations folder to the migration file
-		$migration['group'] = dirname(substr($file, 11, -strlen('.sql')));
+		// get module folder name or default application folder name
+
+		//$migration['group'] = dirname(substr($file, 11, -strlen('.sql')));
+		$migration['group'] = basename(dirname(dirname(substr($path, 11, -strlen('.sql')))));
 
 		if (strpos(basename($file), "_"))
 		{
 			list($migration['timestamp'], $migration['description'])
 				= explode('_', basename($file, '.sql'), 2);
+
+			// Max 100 characters, lowercase filenames.
+    		$migration['description'] = str_replace('_', ' ', substr(strtolower($migration['description']), 0, 100));
 		}
 		else
 		{
 			$migration['timestamp'] = basename($file, '.sql');
 			$migration['description'] = "";
 		}
+
+		$migration['filename'] = basename($file);
 		$migration['id'] = $migration['group'].':'.$migration['timestamp'];
 
 		return $migration;
@@ -122,20 +133,13 @@ class Model_Migration extends Model
 	 */
 	public function get_filename_from_migration(array $migration)
 	{
-		$group  = $migration['mgroup'];
-
-		if ( ! empty($migration['description']))
+		// New filename detection and return
+		if( isset($migration['filename']) && ! empty($migration['filename']))
 		{
-			$migration = $migration['timestamp'].'_'.$migration['description'];
-		}
-		else
-		{
-			$migration = $migration['timestamp'];
+			return $migration['filename'];
 		}
 
-		$group = ( ! empty($group)) ? (rtrim($group, '/').'/') : '';
-
-		return $group.$migration.'.sql';
+		return FALSE;
 	}
 
 	/**
@@ -221,8 +225,8 @@ class Model_Migration extends Model
 	 */
 	public function add_migration(array $migration)
 	{
-		DB::insert($this->_table, array('timestamp', 'mgroup', 'description'))
-			->values(array($migration['timestamp'], $migration['group'], $migration['description']))
+		DB::insert($this->_table, array('timestamp', 'filename','mgroup', 'description'))
+			->values(array($migration['timestamp'], $migration['filename'], $migration['group'], $migration['description']))
 			->execute($this->_db);
 
 		return $this;
