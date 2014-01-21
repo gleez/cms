@@ -8,11 +8,13 @@
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Task_Db_Migrate_Rollback extends Minion_Task
+class Task_Db_Migrate_Rollback extends Task_Db_Migrate
 {
-	protected function _execute(array $options)
+	protected function __construct()
 	{
+		$this->_options['up'] 	= FALSE;
+		$this->_options['down'] = TRUE;
 
-		Minion_CLI::write('db:migrate:rollback rolls back the last migration');
+		parent::__construct();
 	}
 }

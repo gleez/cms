@@ -140,7 +140,7 @@ class Migration {
 				return;
 			}
 
-			$filename = $this->_model->get_filename_from_migration($migration);
+			$filename = $this->_model->get_filename_from_migration($migration, $method);
 
 			if ( ! ($file  = Kohana::find_file('migrations', $filename, FALSE)))
 			{
