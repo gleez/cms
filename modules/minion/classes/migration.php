@@ -153,9 +153,11 @@ class Migration {
 				);
 			}
 
+			$db = $this->_get_db_instance(Database::$default);
+
 			try
 			{
-				$prefix   = $this->_db->table_prefix();
+				$prefix   = $db->table_prefix();
 				$contents = file_get_contents( $file );
 				$queries  = preg_split( "/;\r?\n/", $contents );
 				foreach( $queries as $query ) 
@@ -164,7 +166,7 @@ class Migration {
 					if( empty( $query ) ) { continue; }
 
 					$query = $this->_prependPrefix($prefix, $query);
-					$this->_db->query(NULL, $query, false);
+					$db->query(NULL, $query, false);
 				}
 			}
 			catch (Database_Exception $e)
@@ -174,7 +176,7 @@ class Migration {
 
 			if ($this->_dry_run)
 			{
-				$this->_dry_run_sql[$migration['group']][$migration['timestamp']] = $db->reset_query_stack();
+				$this->_dry_run_sql[$migration['mgroup']][$migration['timestamp']] = $db->reset_query_stack();
 			}
 			else
 			{
@@ -232,7 +234,7 @@ class Migration {
 	 * Gets a database connection for running the migrations
 	 *
 	 * @param  string $db_group Database connection group name
-	 * @return Kohana_Database  Database connection
+	 * @return Database  Database connection
 	 */
 	protected function _get_db_instance($db_group)
 	{
