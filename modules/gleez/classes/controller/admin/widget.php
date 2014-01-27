@@ -28,7 +28,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 					->bind('widgets',        $widget_listing);
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
+		$theme_name = Config::get('site.theme', Theme::$site_theme_name);
 		$theme = Theme::get_info($theme_name);
 
 		if(isset($theme->regions) AND ! empty($theme->regions))
@@ -115,7 +115,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 		$widget = ORM::factory('widget');
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
+		$theme_name = Config::get('site.theme', Theme::$site_theme_name);
 		$theme = Theme::get_info($theme_name);
 
 		if(isset($theme->regions) AND ! empty($theme->regions))
@@ -181,7 +181,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 		}
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
+		$theme_name = Config::get('site.theme', Theme::$site_theme_name);
 		$theme = Theme::get_info($theme_name);
 
 		$handler = Widget::factory($widget->name, $widget);
