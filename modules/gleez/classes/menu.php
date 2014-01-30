@@ -406,8 +406,11 @@ class Menu {
 
 			if (empty($items)) return;
 
-			//set the cache
-			$cache->set($name, $items, DATE::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set($name, $items, DATE::DAY);
+			}
 		}
 
 		//Initiate Menu Object
