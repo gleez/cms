@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Form {
@@ -155,7 +155,7 @@ class Form {
 			$attrs['type'] = 'text';
 		}
 
-		if (! isset($attrs['id']))
+		if (! isset($attrs['id']) && $attrs['type'] != 'hidden')
 		{
 			$attrs['id'] = self::_get_id_by_name($name);
 		}
