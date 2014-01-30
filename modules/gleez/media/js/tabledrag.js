@@ -1278,11 +1278,11 @@
 	// GREET TABLEDRAG DATA-API
 	// ==============
 
-    $(window).on('load.tabledrag.data-api', function (e) {
+	$(window).on('load.tabledrag.data-api', function (e) {
 		$('[data-toggle="tabledrag"]').each(function () {
 			var $table = $(this)
 			$table.tabledrag($table.data())
 		})
-    })
+	})
 
 }(jQuery);
