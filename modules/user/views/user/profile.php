@@ -27,12 +27,12 @@
 			</div>
 
 			<div class="col-md-9 col-sm-7 col-xs-7">
-				<h2 class="col-md-12 vcard-names">
+				<h2 class="vcard-names">
 					<span itemprop="name"><?php echo $user->nick; ?></span>
 					<em itemprop="additionalName"><?php echo $user->name; ?></em>
 				</h2>
 
-				<div class="col-md-12 vcard-details">
+				<div class="row vcard-details">
 					<div class="col-md-7">
 						<?php if ($is_owner OR User::is_admin()): ?>
 							<dl title="<?php echo __('Email') ?>">
@@ -82,7 +82,7 @@
 					</div>
 				</div>
 				<hr>
-				<div class="col-md-12 bio">
+				<div class="bio">
 					<?php if ($user->bio): ?>
 						<div title="<?php _e('Bio')?>">
 							<p><?php echo Text::plain($user->bio); ?></p>
