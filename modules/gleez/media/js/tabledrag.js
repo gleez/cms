@@ -31,6 +31,7 @@
 		// Required object variables.
 		this.table 			= table
 		this.tableSettings	= options
+		this.$element 		= $(table)
 		this.dragObject		= null; // Used to hold information about a current drag operation.
 		this.rowObject		= null; // Provides operations for row manipulation.
 		this.oldRowElement	= null; // Remember the previous element.
@@ -76,8 +77,8 @@
 
 		// Add mouse bindings to the document. The self variable is passed along
 		// as event handlers do not have direct access to the tableDrag object.
-		$(document).bind('mousemove', function (event) { return self.dragRow(event, self); })
-		$(document).bind('mouseup', function (event) { return self.dropRow(event, self); })
+		$(document).bind('mousemove', function (event) { return self.dragRow(event, self) })
+		$(document).bind('mouseup', function (event) { return self.dropRow(event, self) })
 
 		// To stimulate MouseEvent in touch screen devices
 		$(document).bind('touchmove', function(event) {
@@ -300,9 +301,10 @@
 			// Hack for Konqueror, prevent the blur handler from firing.
 			// Konqueror always gives links focus, even after returning false on mousedown.
 			self.safeBlur = false
+		
+			// @ Todo better event Handling
+			self.$element.trigger('dragRow.tabledrag', self)
 
-			// Call optional placeholder function.
-			self.onDrag()
 			return false
 		})
 
@@ -358,7 +360,7 @@
 								groupHeight += $(previousRow).is(':hidden') ? 0 : previousRow.offsetHeight
 							}
 							if (previousRow) {
-								self.rowObject.swap('before', previousRow)
+								self.rowObject.swap('before', previousRow, self)
 								// No need to check for indentation, 0 is the only valid one.
 								window.scrollBy(0, -groupHeight)
 							}
@@ -366,7 +368,7 @@
 						else if (self.table.tBodies[0].rows[0] != previousRow || $(previousRow).is('.draggable')) {
 							// Swap with the previous row (unless previous row is the first one
 							// and undraggable).
-							self.rowObject.swap('before', previousRow)
+							self.rowObject.swap('before', previousRow, self)
 							self.rowObject.interval = null
 							self.rowObject.indent(0)
 							window.scrollBy(0, -parseInt(item.offsetHeight, 10))
@@ -402,7 +404,7 @@
 								})
 
 								nextGroupRow = $(nextGroup.group).filter(':last').get(0)
-								self.rowObject.swap('after', nextGroupRow)
+								self.rowObject.swap('after', nextGroupRow, self)
 
 								// No need to check for indentation, 0 is the only valid one.
 								window.scrollBy(0, parseInt(groupHeight, 10))
@@ -410,7 +412,7 @@
 						}
 						else {
 							// Swap with the next row.
-							self.rowObject.swap('after', nextRow);
+							self.rowObject.swap('after', nextRow, self);
 							self.rowObject.interval = null;
 							self.rowObject.indent(0);
 							window.scrollBy(0, parseInt(item.offsetHeight, 10));
@@ -430,7 +432,9 @@
 
 				self.oldRowElement = item
 				self.restripeTable()
-				self.onDrag()
+
+				// @ Todo better event Handling
+				self.$element.trigger('dragRow.tabledrag', self)
 			}
 
 			// Returning false if we have an arrow key to prevent scrolling.
@@ -460,7 +464,7 @@
 				var touch = event.originalEvent.changedTouches[0]
 			}
 
-			var simulatedEvent = document.createEvent("MouseEvent");
+			var simulatedEvent = document.createEvent("MouseEvent")
 			simulatedEvent.initMouseEvent('mousedown', true, true, window, 1,
 			                             touch.screenX, touch.screenY, touch.clientX, touch.clientY,
 			                             false, false, false, false, 0/*left*/, null);
@@ -570,7 +574,10 @@
 
 		    $(droppedRow).removeClass('drag').addClass('drag-previous')
 		    self.oldRowElement = droppedRow
-		    self.onDrop()
+
+			// @ Todo better event Handling
+			self.$element.trigger('dropRow.tabledrag', self)
+
 		    self.rowObject = null
 		}
 
@@ -622,8 +629,8 @@
 	 *   The y coordinate of the mouse on the page (not the screen).
 	 */
 	TableDrag.prototype.findDropTargetRow = function (x, y) {
-	  var rows = $(this.table.tBodies[0].rows).not(':hidden');
-	  //for (var n = 0; n < rows.length; n++) {
+		var rows = $(this.table.tBodies[0].rows).not(':hidden')
+
 	  for (var n = 0, len = rows.length; n < len; ++n) {
 	    var row = rows[n];
 	    var indentDiff = 0;
@@ -699,73 +706,80 @@
 	 */
 	TableDrag.prototype.updateField = function (changedRow, group) {
 		var rowSettings = this.rowSettings(group, changedRow)
+		, useSibling 	= false
+		, sourceRow
 
-		// Set the row as its own target.
-		if (rowSettings.relationship == 'self' || rowSettings.relationship == 'group') {
-			var sourceRow = changedRow;
+		if(rowSettings == undefined || rowSettings.relationship == undefined){
+			return
 		}
-	  // Siblings are easy, check previous and next rows.
-	  else if (rowSettings.relationship == 'sibling') {
-	    var previousRow = $(changedRow).prev('tr').get(0);
-	    var nextRow = $(changedRow).next('tr').get(0);
-	    var sourceRow = changedRow;
-	    if ($(previousRow).is('.draggable') && $('.' + group, previousRow).length) {
-	      if (this.indentEnabled) {
-	        if ($('.indentations', previousRow).size() == $('.indentations', changedRow)) {
-	          sourceRow = previousRow;
-	        }
-	      }
-	      else {
-	        sourceRow = previousRow;
-	      }
-	    }
-	    else if ($(nextRow).is('.draggable') && $('.' + group, nextRow).length) {
-	      if (this.indentEnabled) {
-	        if ($('.indentations', nextRow).size() == $('.indentations', changedRow)) {
-	          sourceRow = nextRow;
-	        }
-	      }
-	      else {
-	        sourceRow = nextRow;
-	      }
-	    }
-	  }
-	  // Parents, look up the tree until we find a field not in this group.
-	  // Go up as many parents as indentations in the changed row.
-	  else if (rowSettings.relationship == 'parent') {
-	    var previousRow = $(changedRow).prev('tr');
-	    while (previousRow.length && $('.indentation', previousRow).length >= this.rowObject.indents) {
-	      previousRow = previousRow.prev('tr');
-	    }
-	    // If we found a row.
-	    if (previousRow.length) {
-	      sourceRow = previousRow[0];
-	    }
-	    // Otherwise we went all the way to the left of the table without finding
-	    // a parent, meaning this item has been placed at the root level.
-	    else {
-	      // Use the first row in the table as source, because it's guaranteed to
-	      // be at the root level. Find the first item, then compare this row
-	      // against it as a sibling.
-	      sourceRow = $(this.table).find('tr.draggable:first').get(0);
-	      if (sourceRow == this.rowObject.element) {
-	        sourceRow = $(this.rowObject.group[this.rowObject.group.length - 1]).next('tr.draggable').get(0);
-	      }
-	      var useSibling = true;
-	    }
-	  }
+		// Set the row as its own target.
+		else if (rowSettings.relationship == 'self' || rowSettings.relationship == 'group') {
+			sourceRow = changedRow
+		}
+		// Siblings are easy, check previous and next rows.
+		else if (rowSettings.relationship == 'sibling') {
+			var previousRow = $(changedRow).prev('tr').get(0)
+			var nextRow 	= $(changedRow).next('tr').get(0)
+			sourceRow 		= changedRow
 
-	  // Because we may have moved the row from one category to another,
-	  // take a look at our sibling and borrow its sources and targets.
-	  this.copyDragClasses(sourceRow, changedRow, group);
-	  rowSettings = this.rowSettings(group, changedRow);
+			if ($(previousRow).is('.draggable') && $('.' + group, previousRow).length) {
+				if (this.indentEnabled) {
+					if ($('.indentations', previousRow).size() == $('.indentations', changedRow)) {
+						sourceRow = previousRow
+					}
+				}
+				else {
+					sourceRow = previousRow
+				}
+			}
+			else if ($(nextRow).is('.draggable') && $('.' + group, nextRow).length) {
+				if (this.indentEnabled) {
+					if ($('.indentations', nextRow).size() == $('.indentations', changedRow)) {
+						sourceRow = nextRow
+					}
+				}
+				else {
+					sourceRow = nextRow
+				}
+			}
+		}
+		// Parents, look up the tree until we find a field not in this group.
+		// Go up as many parents as indentations in the changed row.
+		else if (rowSettings.relationship == 'parent') {
+			var previousRow = $(changedRow).prev('tr');
+			while (previousRow.length && $('.indentation', previousRow).length >= this.rowObject.indents) {
+				previousRow = previousRow.prev('tr')
+			}
 
-	  // In the case that we're looking for a parent, but the row is at the top
-	  // of the tree, copy our sibling's values.
-	  if (useSibling) {
-	    rowSettings.relationship = 'sibling';
-	    rowSettings.source = rowSettings.fieldClass;
-	  }
+			// If we found a row.
+			if (previousRow.length) {
+				sourceRow = previousRow[0]
+			}
+			// Otherwise we went all the way to the left of the table without finding
+			// a parent, meaning this item has been placed at the root level.
+			else {
+				// Use the first row in the table as source, because it's guaranteed to
+				// be at the root level. Find the first item, then compare this row
+				// against it as a sibling.
+				sourceRow = $(this.table).find('tr.draggable:first').get(0)
+				if (sourceRow == this.rowObject.element) {
+					sourceRow = $(this.rowObject.group[this.rowObject.group.length - 1]).next('tr.draggable').get(0)
+				}
+				useSibling = true
+			}
+		}
+
+		// Because we may have moved the row from one category to another,
+		// take a look at our sibling and borrow its sources and targets.
+		this.copyDragClasses(sourceRow, changedRow, group)
+		rowSettings = this.rowSettings(group, changedRow)
+
+		// In the case that we're looking for a parent, but the row is at the top
+		// of the tree, copy our sibling's values.
+		if (useSibling) {
+			rowSettings.relationship = 'sibling'
+			rowSettings.source 		 = rowSettings.fieldClass
+		}
 
 		var targetClass = '.' + rowSettings.fieldClass
 		var targetElement = $(targetClass, changedRow)
@@ -875,20 +889,6 @@
 			.removeClass('odd even')
 			.filter(':odd').addClass('even').end()
 			.filter(':even').addClass('odd');
-	}
-
-	/**
-	 * Stub function. Allows a custom handler when a row begins dragging.
-	 */
-	TableDrag.prototype.onDrag = function () {
-		return null
-	}
-
-	/**
-	 * Stub function. Allows a custom handler when a row is dropped.
-	 */
-	TableDrag.prototype.onDrop = function () {
-		return null
 	}
 
 	/**
@@ -1018,13 +1018,13 @@
 	 * @param row
 	 *   DOM element what will be swapped with the row group.
 	 */
-	TableDrag.prototype.row.prototype.swap = function (position, row) {
-		// @todo Gleez.detachBehaviors(this.group, Gleez.settings, 'move')
+	TableDrag.prototype.row.prototype.swap = function (position, row, self) {
 		$(row)[position](this.group)
-
-		// @todo Gleez.attachBehaviors(this.group, Gleez.settings)
 		this.changed = true
-		this.onSwap(row)
+
+		// @ Todo better event Handling
+		// Allows a custom handler when a row is swapped.
+		self.$element.trigger('swapRow.tabledrag', row)
 	}
 
 	/**
@@ -1184,13 +1184,6 @@
 	 * Stub function. Allows a custom handler when a row is indented.
 	 */
 	TableDrag.prototype.row.prototype.onIndent = function () {
-		return null
-	}
-
-	/**
-	 * Stub function. Allows a custom handler when a row is swapped.
-	 */
-	TableDrag.prototype.row.prototype.onSwap = function (swappedRow) {
 		return null
 	}
 
