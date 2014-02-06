@@ -118,7 +118,7 @@ a#add-pic:hover {
 
 .vcard dl dd {
 	margin: 0 0 0 2.2em;
-	width: 195px;
+	/*width: 195px;*/
 	overflow-x: hidden;
 	text-overflow: ellipsis;
 }
@@ -339,4 +339,7 @@ ul.tabnav > li {
 }
 .list-all .panel-heading h3{
 	line-height: 1.2em;
+}
+.list-group-item{
+	padding:10px 12px;
 }
