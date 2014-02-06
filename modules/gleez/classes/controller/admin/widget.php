@@ -73,14 +73,6 @@ class Controller_Admin_Widget extends Controller_Admin {
 			$widget_listing[$region][] = $widget;
 		}
 
-		Assets::js('widgets', 'media/js/widgets.js', array('jquery'), FALSE, array('weight' => 5));
-
-		foreach ($widget_regions as $region => $title)
-		{
-			Assets::tabledrag('widgets','match','sibling','widget-region-select','widget-region-'.$region,NULL,FALSE);
-			Assets::tabledrag('widgets', 'order', 'sibling', 'widget-weight', 'widget-weight-' . $region);
-		}
-
 		if ($this->valid_post('widget-list'))
 		{
 			foreach ($_POST['widgets'] as $widget)
@@ -105,6 +97,9 @@ class Controller_Admin_Widget extends Controller_Admin {
 		}
 
 		$this->response->body($view);
+
+		Assets::tabledrag();
+		Assets::js('widgets', 'media/js/widgets.js', array('jquery'), FALSE, array('weight' => 5));
 	}
 
 	/**
