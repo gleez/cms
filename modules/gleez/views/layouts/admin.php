@@ -19,7 +19,7 @@
 
 	<!-- ########## Navbar start ########## -->
 	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="admin-nav container">
+		<div class="admin-nav container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 					<span class="sr-only"><?php _e('Toggle navigation'); ?></span>
@@ -44,7 +44,7 @@
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## admin / container start ########## -->
-	<div class="admin-container container">
+	<div class="admin-container container-fluid">
 		<?php include Kohana::find_file('views', 'admin.tpl'); ?>
 	</div>
 	<!-- ########## template / container end ########## -->
