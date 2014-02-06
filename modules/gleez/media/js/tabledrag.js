@@ -926,6 +926,8 @@
 				this.groupDepth = Math.max($('.indentation', this.group[n]).size(), this.groupDepth)
 			}
 		}
+
+		return this
 	}
 
 	/**
@@ -1148,8 +1150,8 @@
 	    // Since siblings are added in reverse order for previous, reverse the
 	    // completed list of previous siblings. Add the current row and continue.
 	    if (directions[d] == 'prev') {
-	      siblings.reverse();
-	      siblings.push(this.element);
+	      siblings.reverse()
+	      siblings.push(this.element)
 	    }
 	  }
 	  return siblings;
@@ -1205,6 +1207,13 @@
 	var old = $.fn.tabledrag
 
 	$.fn.tabledrag = function (option) {
+		// ugly hack to access the object for widgets
+		$.fn.extend({
+			vObject: function() {
+				return $(this).data('tabledrag')
+			}
+		})
+
 		return this.each(function () {
 			var $this   = $(this)
 			var data    = $this.data('tabledrag')

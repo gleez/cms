@@ -20,13 +20,13 @@
 		return null
     }
 
-	var tableDrag 	= 	$('table#widgets').tabledrag({
-						weight: {
-							fieldClass: 'row-weight',
-							hidden: true 
-						}
-						, parent: 'row-dummy'
-						, group: 'row-dummy'
+	var widgets 	= 	$('table#widgets').tabledrag({
+							weight: {
+								fieldClass: 'row-weight',
+								hidden: true 
+							}
+							, parent: 'row-dummy'
+							, group: 'row-dummy'
 					})
 
 	// Add a handler for when a row is swapped, update empty regions.
@@ -64,13 +64,15 @@
 	})
 
 	// Add the behavior to each region select list.
- 	$('select.widget-region-select111', 'table#widgets').once('widget-region-select111', function () {
+ 	$('select.widget-region-select', 'table#widgets').once('widget-region-select', function () {
 		$(this).change(function (event) {
 			// Make our new row and select field.
-			var row 			= $(this).parents('tr:first')
-			, select 			= $(this)
+			var row 	= $(this).parents('tr:first')
+			, select 	= $(this)
+			, table 	= $('table#widgets')
+			, tableDrag = widgets.vObject()
 
-			tableDrag.rowObject = new TableDrag.row(row)
+			tableDrag.rowObject = new tableDrag.row(row)
 
 			// Find the correct region and insert the row as the first in the region.
 			$('tr.region-message', table).each(function () {
@@ -88,8 +90,10 @@
 
 					tableDrag.oldRowElement = row.get(0)
 					tableDrag.restripeTable()
+
 					tableDrag.rowObject.markChanged()
 					tableDrag.oldRowElement = row
+
 					$(row).addClass('drag-previous')
 				}
 			})
