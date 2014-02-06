@@ -16,14 +16,14 @@
 		</thead>
 		<tbody>
 			<?php foreach ($widget_regions as $region => $title): ?>
-				<tr class="region-title region-title-<?php echo $region?>">
+				<tr class="region-title region-title-<?php echo $region; ?>">
 					<td colspan="4"><?php echo HTML::chars($title) ?></td>
 				</tr>
-				<tr class="region-message region-<?php print $region?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
+				<tr class="region-message region-<?php echo $region; ?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
 					<td colspan="4"><em><?php echo empty($widgets[$region]) ? __('No Widgets in this region') : '&nbsp;'; ?></em></td>
 				</tr>
 				<?php foreach ($widgets[$region] as $i => $widget): ?>
-					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">
+					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable">
 						<?php
 							$split_name = explode('/', $widget->name);
 							$static = ($split_name AND $split_name[0] == 'static') ? TRUE : FALSE;
@@ -36,7 +36,7 @@
 						</td>
 						<td class="tabledrag-hide" >
 							<?php
-								echo Form::weight('widgets['.$widget->name.'][weight]', $widget->weight, array('class' => 'widget-weight widget-weight-'.$region), $weight_delta);
+								echo Form::weight('widgets['.$widget->name.'][weight]', $widget->weight, array('class' => 'row-weight widget-weight-'.$region), $weight_delta);
 								echo Form::hidden('widgets['.$widget->name.'][id]', $widget->id);
 							?>
 						</td>
@@ -53,7 +53,7 @@
 							?>
 						</td>
 					</tr>
-				<?php endforeach ?>
+				<?php endforeach; ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
