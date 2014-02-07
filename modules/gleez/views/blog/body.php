@@ -1,14 +1,14 @@
 <div id="blog-<?php echo $post->id; ?>" class="<?php echo $post->type ?> blog<?php if ($post->sticky) { echo ' sticky'; } ?> <?php echo ' blog-'. $post->status;  ?>">
 
-    <?php
-        $widget_p_top = Widgets::instance()->render('post_top');
-        $widget_p_bot = Widgets::instance()->render('post_bottom');
-    ?>
+	<?php
+		$widget_p_top = Widgets::instance()->render('post_top');
+		$widget_p_bot = Widgets::instance()->render('post_bottom');
+	?>
 
 	<?php if($post->taxonomy OR $config->use_submitted): ?>
-		<div class="row-fluid meta">
+		<div class="row meta">
 			<?php if ($config->use_submitted): ?>
-				<div class="span7">
+				<div class="col-md-7">
 					<span class="author">
 						<?php echo HTML::anchor($post->user->url, User::getAvatar($post->user)); ?>
 						<?php echo HTML::anchor($post->user->url, $post->user->nick, array('title' => $post->user->nick)); ?>
@@ -20,7 +20,7 @@
 			<?php endif;?>
 	
 			<?php if ($post->taxonomy): ?>
-				<div class="taxonomy span5 pull-right">
+				<div class="taxonomy col-md-5 pull-right">
 					<?php echo $post->taxonomy; ?>
 				</div>
 			<?php endif;?>
@@ -32,9 +32,9 @@
 	</div>
 
 	<?php if ($post->tagcloud): ?>
-	    <div class="tagcloud">
-		    <?php echo __('Tagged with :tag', array(':tag' => $post->tagcloud) ); ?>
-	    </div>
+		<div class="tagcloud">
+			<?php echo __('Tagged with :tag', array(':tag' => $post->tagcloud) ); ?>
+		</div>
 	<?php endif;?>
 
 	<?php if($widget_p_bot): ?>
