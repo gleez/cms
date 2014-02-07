@@ -273,14 +273,15 @@ class User {
 
 	/**
 	 * Themed list of providers to print
-	 *
+	 *  
+	 * @todo move to HTML class
 	 * @return string html to display
 	 */
 	public static function providers()
 	{
 		if(! Auth::instance()->logged_in())
 		{
-			$providers = array_filter(Kohana::$config->load('auth.providers'));
+			$providers = array_filter(Auth::providers());
 			return View::factory('oauth/providers')->set('providers', $providers);
 		}
 	}
