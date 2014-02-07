@@ -19,10 +19,24 @@ class Controller_Client extends Template {
 				$posts->where('user_id', '=', $user->id);
 			}
 			
-			$this->_oaclient_list($posts);
+			$this->_datatables = $posts->dataTables( array('title', 'client_id', 'user_id', 'created') );
+		
+			foreach ($this->_datatables->result() as $oaclient)
+			{
+			    
+				$this->_datatables->add_row(array
+				(
+				    HTML::anchor($oaclient->url ,Text::plain($oaclient->title)),
+				    $oaclient->client_id,
+				    $oaclient->user->nick,
+				    System::date('M d, Y',$oaclient->created),
+				    HTML::icon($oaclient->edit_url, 'fa-edit', array('class'=>'action-edit', 'data-toggle' => 'popup1', 'title'=> __('Edit'))) . '&nbsp;' .
+				    HTML::icon($oaclient->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'data-toggle' => 'popup', 'title'=> __('Delete')))
+				));
+			}
 		}
 
-		$this->title = __('Oaclients');
+		$this->title = __('Oauth Clients');
 
 		$view = View::factory('client/list')
 				->bind('datatables', $this->_datatables)
