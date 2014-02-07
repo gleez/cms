@@ -16,18 +16,18 @@
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>" <?php echo $schemaType ? 'itemscope itemtype="http://schema.org/'.$schemaType.'"' : ''?>>
 
 	<!-- ########## Navbar start ########## -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<header class="navbar navbar-inverse navbar-fixed-top" role="banner">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only"><?php _e('Toggle navigation'); ?></span>
+					<span class="sr-only"><?php echo __('Toggle navigation'); ?></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
 				<?php echo HTML::anchor('/', HTML::image($site_logo, array('alt' => $site_slogan, 'class' => 'logo')), array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
-			<div class="navbar-collapse collapse">
+			<nav class="navbar-collapse collapse" role="navigation">
 				<?php echo $primary_menu; ?>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -59,9 +59,9 @@
 						</li>
 						<?php endif; ?>
 				</ul>
-			</div>
+			</nav>
 		</div>
-	</div>
+	</header>
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## template / container start ########## -->
