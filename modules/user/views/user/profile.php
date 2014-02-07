@@ -1,7 +1,7 @@
 <div class="row vcard">
 	<div class="col-md-9 col-sm-8 col-xs-12" itemprop="about" itemscope itemtype="http://schema.org/Person">
 		<div class="row">
-			<div class="col-md-3 col-sm-5 col-xs-5">
+			<div class="col-md-3 col-sm-5 col-xs-12">
 				<div class="thumbnail vcard-avatar">
 					<?php echo User::getAvatar($user, array('size' => 210)); ?>
 				</div>
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-9 col-sm-7 col-xs-7">
+			<div class="col-md-9 col-sm-7 col-xs-12">
 				<h2 class="vcard-names">
 					<span itemprop="name"><?php echo $user->nick; ?></span>
 					<em itemprop="additionalName"><?php echo $user->name; ?></em>
