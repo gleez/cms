@@ -42,7 +42,7 @@ class Auth {
 			{
 				$providers[$name] = array(
 					'name' => $name,
-					'url'  => Route::get('oauth2/provider')->uri(array('provider' => $provider, 'action' => 'login')),
+					'url'  => Route::get('oauth2/provider')->uri(array('provider' => $name, 'action' => 'login')),
 					'icon' => isset($provider['icon']) ? $provider['icon'] : 'facebook',
 					);
 			}
