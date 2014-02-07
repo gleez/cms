@@ -45,28 +45,14 @@
 		<hr>
 		<div class="form-group">
 			<p><?php echo __('Sign in using social network:');?></p>
-			<div class="btn-group">
-				<?php
-					foreach ($providers as $provider => $key)
+				<div class="btn-group">
+					<?php
+					foreach ($providers as $name => $provider)
 					{
-						// @todo Ugly hack
-						switch ($provider)
-						{
-							case 'google':
-								$class = 'google-plus';
-								break;
-							case 'live':
-								$class = 'windows';
-								break;
-							default:
-								$class = $provider;
-						}
-
-						$url = Route::get('oauth2/provider')->uri(array('provider' => $provider, 'action' => 'login'));
-						echo HTML::anchor($url, '<i class="fa fa-'.$class.'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $provider))));
+						echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
 					}
-				?>
-			</div>
+					?>
+				</div>
 			<p><small><?php echo __('Fast, safe & secure way!');?></small></p>
 		</div>
 	<?php endif; ?>

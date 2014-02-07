@@ -4,8 +4,8 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.1
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_User extends Template {
@@ -163,7 +163,7 @@ class Controller_User extends Template {
 		$view = View::factory('user/login')
 			->set('register',     Config::get('auth.register'))
 			->set('use_username', Config::get('auth.username'))
-			->set('providers',    array_filter(Config::get('auth.providers')))
+			->set('providers',    array_filter(Auth::providers()))
 			->set('post',         $user)
 			->set('action',       $action)
 			->bind('errors',      $this->_errors);
