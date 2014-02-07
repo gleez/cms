@@ -18,7 +18,7 @@
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>" <?php echo $schemaType ? 'itemscope itemtype="http://schema.org/'.$schemaType.'"' : ''?>>
 
 	<!-- ########## Navbar start ########## -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<header class="navbar navbar-inverse navbar-fixed-top" role="banner">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,7 +29,7 @@
 				</button>
 				<?php echo HTML::anchor($site_url, HTML::image($site_logo, array('alt' => $site_slogan, 'class' => 'logo')), array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
-			<div class="navbar-collapse collapse">
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<?php echo $primary_menu; ?>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -62,9 +62,9 @@
 
 					<?php endif; ?>
 				</ul>
-			</div>
+			</nav>
 		</div>
-	</div>
+	</header>
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## template / container start ########## -->
