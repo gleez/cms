@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 .user .page-container {
 	background: transparent;
 }
@@ -288,7 +290,7 @@ ul.tabnav > li {
 
 .col-sidebar-right {
     border-left: 1px solid #ddd;
-    padding-left: 2em;
+   /* padding-left: 2em;*/
 }
 
 #form-picture{
