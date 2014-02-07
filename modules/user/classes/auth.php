@@ -31,6 +31,26 @@ class Auth {
 	 */
 	protected $_config;
 
+	public static function providers()
+	{
+		$config = Config::get('oauth2.providers', array());
+		$providers = array();
+		
+		foreach($config as $name => $provider)
+		{
+			if ($provider['enable'] === TRUE)
+			{
+				$providers[$name] = array(
+					'name' => $name,
+					'url'  => Route::get('oauth2/provider')->uri(array('provider' => $provider, 'action' => 'login')),
+					'icon' => isset($provider['icon']) ? $provider['icon'] : 'facebook',
+					);
+			}
+		}
+		
+		return $providers;
+	}
+	
 	/**
 	 * Singleton pattern
 	 *

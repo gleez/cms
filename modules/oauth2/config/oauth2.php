@@ -46,6 +46,7 @@ return array(
 			'secret'   => 'your client secret',
 			'callback' => URL::site('/oauth2/facebook/callback', 'http'),
 			'scope'    => 'email,read_stream,publish_stream',
+			'icon'	   => 'facebook'
 		),
 		/**
 		* Github
@@ -56,6 +57,7 @@ return array(
 			'secret'   => 'your client secret',
 			'callback' => URL::site('/oauth2/github/callback', 'http'),
 			'scope'    => 'userinfo.profile userinfo.email',
+			'icon'	   => 'github'
 		),
 		/**
 		* Gleez
@@ -66,6 +68,7 @@ return array(
 			'secret'   => 'your client secret',
 			'callback' => URL::site('/oauth2/gleez/callback', 'http'),
 			'scope'    => 'userinfo.profile userinfo.email',
+			'icon'	   => 'gleez'
 		),
 		/**
 		* Google
@@ -76,6 +79,7 @@ return array(
 			'secret'   => 'your client secret',
 			'callback' => URL::site('/oauth2/google/callback', 'http'),
 			'scope'    => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+			'icon'	   => 'google-plus'
 		),
 		/**
 		* Windows Live
@@ -86,6 +90,7 @@ return array(
 			'secret'   => 'your client secret',
 			'callback' => URL::site('/oauth2/live/callback', 'http'),
 			'scope'    => 'wl.basic,wl.birthday,wl.emails,wl.offline_access,wl.signin',
+			'icon'	   => 'windows'
 		),
 	)
 );
