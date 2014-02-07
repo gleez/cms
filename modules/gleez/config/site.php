@@ -66,13 +66,13 @@ return array(
 	 * Default active site theme
 	 * @var string
 	 */
-	'theme' => 'fluid',
+	'theme' => 'cerber',
 
 	/**
 	 * Default active admin theme
 	 * @var string
 	 */
-	'admin_theme' => 'fluid',
+	'admin_theme' => 'cerber',
 
 	/**
 	 * Mobile Theme or false
