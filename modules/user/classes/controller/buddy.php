@@ -248,8 +248,9 @@ class Controller_Buddy extends Template {
 
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id');
-		$friend = ORM::factory('user', $id);
+		$id      = (int) $this->request->param('id');
+		$friend  = ORM::factory('user', $id);
+		$account = Auth::instance()->get_user();
 
 		if ( ! $friend->loaded())
 		{
@@ -258,7 +259,7 @@ class Controller_Buddy extends Template {
 			$this->request->redirect(Route::get('user')->uri(array('action' => 'login')), 401);
 		}
 
-		Model::factory('buddy')->delete($id);
+		Model::factory('buddy')->delete($id, $account->id);
 		Message::success( __("Buddy %title deleted", array('%title' => $friend->nick)) );
 
 		$this->request->redirect(Route::get('user')->uri(array('action' => 'profile', 'id' => $this->user->id)));

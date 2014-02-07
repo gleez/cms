@@ -121,10 +121,20 @@ class Model_Buddy extends Model
 					->execute();
 	}
 
-	public function delete($friend_id)
+	public function delete($friend_id,$user_id)
 	{
 		return DB::delete('buddies')
-					->where('request_from','=',$friend_id)
+					->where_open()
+						->where_open()
+							->where('request_from', '=', $friend_id)
+							->where('request_to', '=',$user_id)
+						->where_close()
+						->or_where_open()
+							->where('request_from', '=', $user_id)
+							->where('request_to', '=',$friend_id)
+						->where_close()
+					->where_close()
+					->where('accepted','=','1')
 					->execute();
 	}
 
