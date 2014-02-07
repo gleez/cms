@@ -107,7 +107,8 @@ body.backend {
 }
 
 #admin-list-users .user-roles{
-	margin: 0 0 10px 25px;
+	margin: 0 0 10px 15px;
+	list-style:disc;
 }
 
 .widget-admin-welcome ul {
