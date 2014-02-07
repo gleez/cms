@@ -75,18 +75,12 @@ class Controller_Provider extends Template {
 		// Disable sidebars on user pages
 		$this->_sidebars = FALSE;
 
-		// If loggedin redirect to profile
-		if(Auth::instance()->logged_in())
-		{
-			//$this->request->redirect(Route::get('user')->uri(array('action' => 'profile')), 200);
-		}
-
 		// Load the session
 		$this->session = Session::instance();
 
 		// Set the provider controller
 		$this->provider = strtolower($this->request->param('provider'));
-		$providers = Kohana::$config->load('auth.providers');
+		$providers = Auth::providers();
 
 		// Throw exception if the provider is disabled
 		if( ! array_key_exists($this->provider, array_filter($providers)))
@@ -133,7 +127,7 @@ class Controller_Provider extends Template {
 				$dest = $this->request->query('destination');
 			}
 			
-			Session::instance()->set('destination', $dest);
+			$this->session->set('destination', $dest);
 			
 			// Get the login URL from the provider
 			$url = $this->client->get_authentication_url($this->provider_config['callback'], array(
@@ -146,28 +140,7 @@ class Controller_Provider extends Template {
 		}
 		catch( Exception $e)
 		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
-		}
-	}
-
-	public function action_accessProfile()
-	{
-		try
-		{
-			$tokens = $this->refreshToken();
-			$token = $tokens->param('access_token');
-			
-			// Store the access token
-			$this->session->set($this->key('access'), $token);
-
-			// Redirect to the provider's index page
-			$this->oauthComplete($token);
-			return;
-		}
-		catch( Exception $e)
-		{
-			Kohana::$log->add(LOG::ERROR, (string) $e);
-			Message::error("Error :".(string) $e);
+			Log::error( (string) $e);
 		}
 	}
 
@@ -192,32 +165,19 @@ class Controller_Provider extends Template {
 				$this->session->set($this->key('access'), $access_token);
 				//$this->session->set($this->key('refresh'), $r_token);
 
-				// Redirect to the provider's index page
-				$this->oauthComplete($access_token);
-			}
-			
-			if ($this->token)
-			{
-				// Redirect to the provider's index page
-				$this->oauthComplete($this->token);
+				$this->oauthComplete();
 			}
 
-			// Redirect to the provider's index page
-			$this->request->redirect($this->route->uri(
-				array(
-					'provider'   => $this->provider,
-					'action'     => 'index'
-				))
-			);
 		}
 		catch (ORM_Validation_Exception $e)
 		{
 			Message::info(__("Coudn't login. Contact administer for error!"));
-			//$this->_errors = $e->errors('models', TRUE);
-			Kohana::$log->add(LOG::ERROR, (string) $e);
-
-			// Redirect to the provider's index page
-			$this->request->redirect( Session::instance()->get('destination', Route::get('user')->uri(array('action' => 'profile'))));
+			Log::error( (string) $e);
+		}
+		catch (Database_Exception $e)
+		{
+			// Skiping duplicate record entry exception.
+			Log::error( (string) $e);
 		}
 		catch( Exception $e)
 		{
@@ -230,14 +190,14 @@ class Controller_Provider extends Template {
 				Message::info(__("Coudn't login. Contact administer for error!"));	
 			}
 			
-			Kohana::$log->add(LOG::ERROR, (string) $e);
-		
-			// Redirect to the provider's index page
-			$this->request->redirect( Session::instance()->get('destination', Route::get('user')->uri(array('action' => 'profile'))));
+			Log::error( (string) $e);
 		}
+		
+		// Redirect to the profile page or destination url
+		$this->request->redirect( Session::instance()->get('destination', Route::get('user')->uri(array('action' => 'profile'))));
 	}
 
-	protected function oauthComplete($token)
+	protected function oauthComplete()
 	{
 		// Login succesful
 		$response = $this->client->get_user_data();
@@ -264,7 +224,7 @@ class Controller_Provider extends Template {
 	protected function sso_signup($data, $user = FALSE)
 	{
 		//vars for processing stuff
-		$signup = $creation = FALSE;
+		$creation = FALSE;
 
 		$provider = array();
 		$provider['provider']      = $this->provider;
@@ -285,52 +245,48 @@ class Controller_Provider extends Template {
 						':provider' => $this->provider
 					))
 				);
+
+				return true;
 			}
 		}
-		else
+		else if($user == FALSE AND Auth::instance()->logged_in())
 		{
-			$signup = TRUE;
+			// Associate their new oAuth with their current account.
+			$account = Auth::instance()->get_user();
+			
+			// @see Model_Auth_User::sso_signup for associate this provider
+			$account->sso_signup($data, $provider);
 
-			// Otherwise, if we're here, this identity isn't associated with any one yet.
-			// Are they currently logged in?
-			if (Auth::instance()->logged_in())
-			{
-				// Associate their new oAuth with their current account.
-				$user = Auth::instance()->get_user();
-			}
-			else
-			{
-				// Check whether the email exists or Otherwise, they need a new account
-				$user = ORM::factory('user')->where('mail', '=', $data['email'])->find();
-
-				if(! $user->loaded())
-				{
-					$creation = TRUE;
-				}
-			}
+			Message::success(__('Attached identity :nick (:provider) to your account.',
+					array(':nick' => $account->nick, ':provider' => $this->provider))
+				);
 		}
-
-		if($signup)
+		else if($user == FALSE AND !Auth::instance()->logged_in())
 		{
+			$account = ORM::factory('user')->where('mail', '=', $data['email'])->find();
+			
+			if(!$account->loaded()) $creation = TRUE;
+			
 			// @see Model_Auth_User::sso_signup for create new account/associate this OAuth
-			$user->sso_signup($data, $provider);
-
+			$account->sso_signup($data, $provider);
+			
 			if($creation)
 			{
 				Message::success(__('Thank you :nick for registering via (:provider).',
-					array(':nick' => $user->nick, ':provider' =>  $this->provider))
+					array(':nick' => $account->nick, ':provider' =>  $this->provider))
 				);
 			}
 			else
 			{
 				Message::success(__('Attached identity :nick (:provider) to your account.',
-					array(':nick' => $user->nick, ':provider' => $this->provider))
+					array(':nick' => $account->nick, ':provider' => $this->provider))
 				);
 			}
+			
+			// If yes, log the user in and give him a normal auth session.
+			Auth::instance()->force_login($account);
 		}
 
-		// If yes, log the user in and give him a normal auth session.
-		//Auth::instance()->force_login($user);
 		return;
 	}
 
