@@ -56,29 +56,16 @@
 				</div>
 			</div>
 		<?php echo Form::close() ?>
+
 		<?php if ($providers): ?>
 			<ul class="list-group">
 				<li class="list-group-item text-center">
 					<p><?php echo __('Sign in using social network:');?></p>
 					<div class="btn-group">
 						<?php
-						foreach ($providers as $provider => $key)
+						foreach ($providers as $name => $provider)
 						{
-							// @todo Ugly hack
-							switch ($provider)
-							{
-								case 'google':
-									$class = 'google-plus';
-									break;
-								case 'live':
-									$class = 'windows';
-									break;
-								default:
-									$class = $provider;
-							}
-
-							$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
-							echo HTML::anchor($url, '<i class="fa fa-'.$class.'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $provider))));
+							echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
 						}
 						?>
 					</div>
@@ -86,5 +73,6 @@
 				</li>
 			</ul>
 		<?php endif; ?>
+
 	</div>
 </div>

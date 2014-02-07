@@ -108,27 +108,13 @@
 				<?php
 					_e('You can sign in from any of the following services:');
 
-					$providers = array_filter($config->providers);
+					$providers = Auth::providers();
 
 					echo HTML::anchor(Route::get('user')->uri(array('action' => 'login')), '<i class="fa fa-home"></i> '.$site_name, array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $site_name)), 'rel' => 'tooltip', 'data-placement' => 'right'));
 
-					foreach($providers as $provider => $key)
+					foreach($providers as $name => $provider)
 					{
-						// @todo Ugly hack
-						switch ($provider)
-						{
-							case 'google':
-								$class = 'google-plus';
-								break;
-							case 'live':
-								$class = 'windows';
-								break;
-							default:
-								$class = $provider;
-						}
-
-						$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
-						echo HTML::anchor($url, '<i class="fa fa-'.$class.'"></i> '.ucfirst($provider), array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $provider)), 'rel' => 'tooltip', 'data-placement' => 'right'));
+						echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>'.ucfirst($name), array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name)), 'rel' => 'tooltip', 'data-placement' => 'right'));
 					}
 				?>
 			</div>
