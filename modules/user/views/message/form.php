@@ -6,7 +6,7 @@
 		<div class="col-md-12">
 			<div class="form-group <?php echo isset($errors['recipient']) ? 'has-error': ''; ?>">
 				<div class="controls">
-					<?php echo Form::input('recipient', $recipient, array('class' => 'form-control', 'data-items' => 10, 'placeholder' => __('Enter recipient here')), 'autocomplete/user'); ?>
+					<?php echo Form::input('recipient', $recipient, array('class' => 'form-control', 'placeholder' => __('Enter recipient here'))); ?>
 				</div>
 			</div>
 
@@ -36,8 +36,8 @@
 		<div class="col-sm-12">
 			<div class="form-group <?php echo isset($errors['draft']) ? 'has-error': ''; ?>">
 				<?php
-				$draft  = (isset($message->status) AND $message->status == PM::STATUS_DRAFT) ? TRUE : FALSE;
-				echo Form::hidden('draft', 0);
+					$draft  = (isset($message->status) AND $message->status == PM::STATUS_DRAFT) ? TRUE : FALSE;
+					echo Form::hidden('draft', 0);
 				?>
 				<div class="controls checkbox">
 					<?php echo Form::label('draft', Form::checkbox('draft', TRUE, $draft).__("Don't send, save as draft")) ?>
