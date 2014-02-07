@@ -18,18 +18,18 @@
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>">
 
 	<!-- ########## Navbar start ########## -->
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<header class="navbar navbar-inverse navbar-fixed-top" role="banner">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only"><?php _e('Toggle navigation'); ?></span>
+					<span class="sr-only"><?php echo __('Toggle navigation'); ?></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
 				<?php echo HTML::anchor($site_url, $site_name, array('class' => 'navbar-brand', 'title' => $site_name)) ?>
 			</div>
-			<div class="navbar-collapse collapse">
+			<nav class="navbar-collapse collapse" role="navigation">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<?php echo HTML::anchor(URL::site('/user/profile'), User::getAvatar($_user, array('size' => 20)).' '.$_user->name); ?>
@@ -38,9 +38,9 @@
 						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-fw fa-power-off"></i></a>
 					</li>
 				</ul>
-			</div><!--/.nav-collapse -->
+			</nav><!--/.nav-collapse -->
 		</div>
-	</div>
+	</header>
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## admin / container start ########## -->
