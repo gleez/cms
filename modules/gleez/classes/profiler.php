@@ -15,7 +15,7 @@
  * @author     Gleez Team
  * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://kohanaframework.org/license
  * @license    http://gleezcms.org/license Gleez CMS License Agreement
  */
