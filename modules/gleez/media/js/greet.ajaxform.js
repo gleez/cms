@@ -3,16 +3,17 @@
  * without a refresh. Requires jquery form plugin @link
  *  https://github.com/gleez/greet
  *
- * @package    	Greet\AjaxForm
- * @version    	1.1
- * @requires   	jQuery v1.9 or later
+ * @package    Greet\AjaxForm
+ * @version    2.0
+ * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2013 Gleez Technologies
+ * @copyright  (c) 2005-2014 Gleez Technologies
  * @license    The MIT License (MIT)
- * @link	https://github.com/malsup/form
+ * @link       https://github.com/malsup/form
+ *
  */
 
-!function ($) { "use strict";
++function ($) { 'use strict';
 
 	// GREET AJAXFROM CLASS DEFINITION
 	// ======================
@@ -329,4 +330,4 @@
 	$(document.body).on('submit.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
 	$(document.body).on('click.ajaxform.data-api', 'form', Ajaxform.prototype.captureSubmittingElement)
 
-}(window.jQuery);
+}(jQuery);

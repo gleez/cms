@@ -3,16 +3,15 @@
  * https://github.com/gleez/greet
  * 
  * @package    Greet\DataTables
- * @version    1.2
+ * @version    2.0
  * @requires   jQuery v1.9 or later
- * @requires   jQuery dataTables
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2013 Gleez Technologies
+ * @copyright  (c) 2005-2014 Gleez Technologies
  * @license    The MIT License (MIT)
  *
-*/
+ */
 
-!function ($) { "use strict";
++function ($) { 'use strict';
 
     // GREET DATATABLE CLASS DEFINITION
     // ======================
@@ -258,4 +257,4 @@
 		})
     })
 
-}(window.jQuery);
+}(jQuery);
