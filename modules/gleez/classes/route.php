@@ -30,7 +30,7 @@
  * makes them an extremely powerful and flexible way to generate internal links.
  *
  * @package    Gleez\Base
- * @version    2.1.0
+ * @version    2.1.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -526,7 +526,7 @@ class Route {
 				{
 					// Filter has modified the parameters
 					$params = $return;
-					
+
 					// fix for pagination on lambda routes
 					$this->_uri = Arr::get($params, 'uri', '');
 				}
@@ -569,6 +569,12 @@ class Route {
 	 */
 	public function uri(array $params = NULL)
 	{
+		// Encode all params
+		if ($params)
+		{
+			$params = array_map('rawurlencode', $params);
+		}
+
 		// Start with the routed URI
 		$uri = $this->_uri;
 
