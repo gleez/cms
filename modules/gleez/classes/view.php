@@ -279,7 +279,7 @@ class View {
 			/**
 			 * Display the exception message
 			 *
-			 * We use this method here because it's impossible to throw and
+			 * We use this method here because it's impossible to throw an
 			 * exception from __toString().
 			 */
 			$error_response = Gleez_Exception::_handler($e);
