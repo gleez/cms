@@ -68,15 +68,13 @@
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## template / container start ########## -->
-	<div class="container">
-		<?php
-			$tpl = $is_admin ? 'admin' : 'default';
-			include Kohana::find_file('views', $tpl.'.tpl');
-		?>
-	</div>
+	<main id="content" class="frontend-main" role="main">
+		<?php include Kohana::find_file('views', 'default.tpl'); ?>
+	</main>
 	<!-- ########## template / container end ########## -->
+
 	<!-- ########## Footer start ########## -->
-	<footer class="footer">
+	<footer class="footer" role="contentinfo">
 		<?php $footer = Widgets::instance()->render('footer', 'footer'); ?>
 		<?php if ($footer): ?>
 			<div class="extra">
