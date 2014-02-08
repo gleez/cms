@@ -3,9 +3,9 @@
  * Array and variable validation
  *
  * @package    Gleez\Security
- * @version    1.0
+ * @version    1.0.1
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Validation implements ArrayAccess {
@@ -21,22 +21,40 @@ class Validation implements ArrayAccess {
 		return new Validation($array);
 	}
 
-	// Bound values
+	/**
+	 * Bound values
+	 * @var array
+	 */
 	protected $_bound = array();
 
-	// Field rules
+	/**
+	 * Field rules
+	 * @var array
+	 */
 	protected $_rules = array();
 
-	// Field labels
+	/**
+	 * Field labels
+	 * @var array
+	 */
 	protected $_labels = array();
 
-	// Rules that are executed even when the value is empty
+	/**
+	 * Rules that are executed even when the value is empty
+	 * @var array
+	 */
 	protected $_empty_rules = array('not_empty', 'matches');
 
-	// Error list, field => rule
+	/**
+	 * Error list, field => rule
+	 * @var array
+	 */
 	protected $_errors = array();
 
-	// Array to validate
+	/**
+	 * Array to validate
+	 * @var array
+	 */
 	protected $_data = array();
 
 	/**
@@ -218,7 +236,7 @@ class Validation implements ArrayAccess {
 	 *
 	 * @param   string      $field  field name
 	 * @param   callback    $rule   valid PHP callback or closure
-	 * @param   array       $params extra parameters for the rule
+	 * @param   array       $params extra parameters for the rule [Optional]
 	 * @return  $this
 	 */
 	public function rule($field, $rule, array $params = NULL)
@@ -232,7 +250,7 @@ class Validation implements ArrayAccess {
 		if ($field !== TRUE AND ! isset($this->_labels[$field]))
 		{
 			// Set the field label to the field name
-			$this->_labels[$field] = preg_replace('/[^\pL]+/u', ' ', $field);
+			$this->_labels[$field] = $field;;
 		}
 
 		// Store the rule and params for this rule

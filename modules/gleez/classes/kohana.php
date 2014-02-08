@@ -368,7 +368,7 @@ class Kohana {
 		}
 
 		// Determine if the extremely evil magic quotes are enabled
-		Kohana::$magic_quotes = version_compare(PHP_VERSION, '5.4') < 0 AND get_magic_quotes_gpc();
+		Kohana::$magic_quotes = (bool) get_magic_quotes_gpc();
 
 		// Sanitize all request variables
 		$_GET    = Kohana::sanitize($_GET);
@@ -934,7 +934,7 @@ class Kohana {
 			'.git',
 			'.svn'
 		);
-		
+
 		//no data provided we read
 		if ($data === NULL)
 		{
