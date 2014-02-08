@@ -65,13 +65,13 @@
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## template / container start ########## -->
-	<div class="container">
+	<main id="content" class="welcome-main" role="main">
 		<?php include Kohana::find_file('views', 'welcome'); ?>
-	</div>
-	<!-- ########## template / container-fluid end ########## -->
+	</main>
+	<!-- ########## template / container end ########## -->
 
 	<!-- ########## Footer start ########## -->
-	<footer class="footer">
+	<footer class="footer" role="contentinfo">
 		<?php $footer = Widgets::instance()->render('footer', 'footer'); ?>
 		<?php if ($footer): ?>
 			<div class="extra">

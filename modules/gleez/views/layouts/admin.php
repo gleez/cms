@@ -44,9 +44,9 @@
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## admin / container start ########## -->
-	<div class="container-fluid">
+	<main id="content" class="backend-main" role="main">
 		<?php include Kohana::find_file('views', 'admin.tpl'); ?>
-	</div>
+	</main>
 	<!-- ########## template / container end ########## -->
 
 	<?php echo Assets::js(FALSE); ?>
