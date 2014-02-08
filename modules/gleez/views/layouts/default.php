@@ -5,15 +5,16 @@
 	<?php echo Meta::tags(); ?>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<?php echo Meta::links(); ?>
-	<!-- HTML5 shiv and Respond.js, for IE6-8 support of HTML5 elements and media queries -->
+	<?php echo Assets::css(); ?>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
 		<?php echo HTML::script('media/js/html5shiv.js', NULL, TRUE); ?>
 		<?php echo HTML::script('media/js/respond.min.js', NULL, TRUE); ?>
-	<![endif]-->
-	<!--[if gte IE 9]>
+    <![endif]-->
+	<!--[if gt IE 9]>
 		<?php echo HTML::script('media/css/ie-gte-9.css', NULL, TRUE); ?>
 	<![endif]-->
-	<?php echo Assets::css(); ?>
 </head>
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>" <?php echo $schemaType ? 'itemscope itemtype="http://schema.org/'.$schemaType.'"' : ''?>>
 
