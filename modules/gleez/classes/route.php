@@ -482,9 +482,6 @@ class Route {
 	 */
 	public function matches($uri)
 	{
-		// Get the URI from the Request
-		//$uri = trim($request->uri(), '/');
-
 		if ( ! preg_match($this->_route_regex, $uri, $matches))
 			return FALSE;
 
@@ -509,6 +506,21 @@ class Route {
 				$params[$key] = $value;
 			}
 		}
+
+		/**
+		 * @todo
+		if ( ! empty($params['controller']))
+		{
+		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+		$params['controller'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['controller'])));
+		}
+
+		if ( ! empty($params['directory']))
+		{
+		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+		$params['directory'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['directory'])));
+		}
+		 */
 
 		if ($this->_filters)
 		{
