@@ -302,7 +302,7 @@ return array(
 	'General Settings &mdash; choose your :settings_url.' => 'Основные настройки &mdash; используйте собственные :settings_url.',
 	'Gleez CMS core application' => 'Базовое приложение Gleez CMS',
 	'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS требуется поддержка базы данных MySQL, но ни PHP-:mysql, ни  PHP-:mysqli не обнаружены.',
-	'Gleez CMS requires PHP 5.3 or newer, this version is :php_version.' => 'Для Gleez CMS требуется PHP версии 5.3 или новее, а Ваша версия :php_version.',
+	'Gleez CMS requires PHP :php_min_req or newer, this version is :php_version.' => 'Для Gleez CMS требуется PHP версии :php_min_req или новее, а Ваша версия :php_version.',
 	'Gleez Installer' => 'Установщик Gleez',
 	'Gleez may not work correctly with your environment.' => 'Gleez не может корректно работать в Вашем окружении.',
 	'Gleez requires :gd v2 for the Image class.' => 'Для Gleez требуется библиотека :gd версии 2.',

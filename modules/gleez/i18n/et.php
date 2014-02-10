@@ -417,7 +417,7 @@ return array(
 	'Glace Bay' => 'Glace Bay',
 	'Gleez CMS core application' => 'Baasiline lisa Gleez CMS',
 	'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS vajab MySQL andmebaasi toetust, kuid PHP-:mysql, ega  PHP-:mysqli pole leitud.',
-	'Gleez CMS requires PHP 5.3 or newer, this version is :php_version.' => 'Gleez CMS vajab PHP versiooni 5.3 või uuemat, aga Teie versioon on :php_version.',
+	'Gleez CMS requires PHP :php_min_req or newer, this version is :php_version.' => 'Gleez CMS vajab PHP versiooni :php_min_req või uuemat, aga Teie versioon on :php_version.',
 	'Gleez Installer' => 'Gleez Installer',
 	'Gleez may not work correctly with your environment.' => 'Gleez pole võimalik korrektselt töötada teie keskkonnas.',
 	'Gleez requires :gd v2 for the Image class.' => 'Gleez vajab :gd versiooniga 2.',

@@ -563,7 +563,7 @@ class System {
 	public static function check()
 	{
 		$criteria = array(
-			'php_version'           => version_compare(PHP_VERSION, '5.3.7', '>='),
+			'php_version'           => version_compare(PHP_VERSION, Gleez::PHP_MIN_REQ, '>='),
 			'mysqli'                => function_exists("mysqli_query"),
 			'mysql'                 => function_exists("mysql_query"),
 			'system_directory'      => is_dir(SYSPATH),
