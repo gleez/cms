@@ -154,7 +154,7 @@ return array(
 	 */
 	'meta' => array(
 		'links' => array(
-			URL::site('media/favicon.ico', TRUE) => array(
+			URL::site('media/icons/favicon.ico', TRUE) => array(
 				'rel'  => 'shortcut icon',
 				'type' => 'image/x-icon'
 			),
@@ -169,12 +169,12 @@ return array(
 			),
 		),
 		'tags' => array(
-			'charset'          => Kohana::$charset,
-			'generator'        => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
-			'author'           => 'Gleez Team',
-			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2014. All rights reserved.',
-			'robots'           => 'index, follow, noodp',
-			'viewport'         => 'width=device-width, initial-scale=1.0',
+			'charset'    => Kohana::$charset,
+			'generator'  => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
+			'author'     => 'Gleez Team',
+			'copyright'  => 'Copyright (c) Gleez Technologies 2011-2014. All rights reserved.',
+			'robots'     => 'index, follow, noodp',
+			'viewport'   => 'width=device-width, initial-scale=1.0',
 		),
 	),
 
@@ -209,34 +209,34 @@ return array(
 	 */
 	'installed_locales' => array(
 		'en' => array(
-			'name'		=> 'English',
-			'i18n_code'   => 'en',
-			'locale'	=> array('en_US.utf-8'),
+			'name'      => 'English',
+			'i18n_code' => 'en',
+			'locale'    => array('en_US.utf-8'),
 		),
 		'et' => array(
-			'name'		=> 'Estonian',
-			'i18n_code'	=> 'et',
-			'locale'	=> array('et_EE.utf-8'),
+			'name'      => 'Estonian',
+			'i18n_code' => 'et',
+			'locale'    => array('et_EE.utf-8'),
 		),
 		'it' => array(
-			'name'		=> 'Italian',
-			'i18n_code'	=> 'it',
-			'locale'	=> array('it_IT.utf-8'),
+			'name'      => 'Italian',
+			'i18n_code' => 'it',
+			'locale'    => array('it_IT.utf-8'),
 		),
 		'ro' => array(
-			'name'		=> 'Romanian',
-			'i18n_code'	=> 'ro',
-			'locale'	=> array('ro_RO.utf-8'),
+			'name'      => 'Romanian',
+			'i18n_code' => 'ro',
+			'locale'    => array('ro_RO.utf-8'),
 		),
 		'ru' => array(
-			'name'		=> 'Russian',
-			'i18n_code'	=> 'ru',
-			'locale'	=> array('ru_RU.utf-8'),
+			'name'      => 'Russian',
+			'i18n_code' => 'ru',
+			'locale'    => array('ru_RU.utf-8'),
 		),
 		'zh' => array(
-			'name'		=> 'Chinese (Simplified)',
-			'i18n_code'	=> 'zh',
-			'locale'	=> array('zh_CN.utf-8'),
+			'name'      => 'Chinese (Simplified)',
+			'i18n_code' => 'zh',
+			'locale'    => array('zh_CN.utf-8'),
 		),
 	),
 
@@ -251,14 +251,14 @@ return array(
 	 * Change the default timezone, accepted values: TRUE|FALSE
 	 * @var boolean
 	 */
-	'timezone_override' =>  FALSE,
+	'timezone_override' => FALSE,
 
 	/**
 	 * Blocked ips.
 	 * Default to null, comma separated ip-addresses to block
 	 * @var string
 	 */
-	'blocked_ips' =>  NULL,
+	'blocked_ips' => NULL,
 
 	/**
 	 * Default date first day
