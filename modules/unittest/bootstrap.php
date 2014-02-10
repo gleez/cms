@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The directory in which your application specific resources are located.
  * The application directory must contain the bootstrap.php file.
@@ -16,12 +15,28 @@ $application = 'application';
 $modules = 'modules';
 
 /**
+ * The directory in which the Gleez resources are located. The Gleez system
+ * directory must contain the classes/kohana.php file.
+ *
+ * @link  http://kohanaframework.org/guide/about.install#system
+ */
+$gleez = 'modules/gleez';
+
+/**
  * The directory in which the Kohana resources are located. The system
  * directory must contain the classes/kohana.php file.
  *
  * @link http://kohanaframework.org/guide/about.install#system
  */
 $system = 'system';
+
+/**
+ * The directory in which the Gleez themes directory are located. This directory should contain all the themes,
+ * and the resources you included in your layout of the application.
+ *
+ * This path can be absolute or relative to this file.
+ */
+$themes = 'themes';
 
 /**
  * The default extension of resource files. If you change this, all resources
@@ -32,10 +47,15 @@ $system = 'system';
 define('EXT', '.php');
 
 /**
+ * For convenience, shorten the name of the DIRECTORY_SEPARATOR constant
+ */
+define('DS', DIRECTORY_SEPARATOR);
+
+/**
  * Set the path to the document root
  *
- * This assumes that this file is stored 2 levels below the DOCROOT, if you move 
- * this bootstrap file somewhere else then you'll need to modify this value to 
+ * This assumes that this file is stored 2 levels below the DOCROOT, if you move
+ * this bootstrap file somewhere else then you'll need to modify this value to
  * compensate.
  */
 define('DOCROOT', realpath(dirname(__FILE__).'/../../').DS);
@@ -62,47 +82,45 @@ error_reporting(E_ALL | E_STRICT);
  * @link http://kohanaframework.org/guide/using.configuration
  */
 
-// Make the application relative to the docroot
+// Make the application relative to the docroot, for symlink'd index.php
 if ( ! is_dir($application) AND is_dir(DOCROOT.$application))
-{
 	$application = DOCROOT.$application;
-}
 
-// Make the modules relative to the docroot
+// Make the modules relative to the docroot, for symlink'd index.php
 if ( ! is_dir($modules) AND is_dir(DOCROOT.$modules))
-{
 	$modules = DOCROOT.$modules;
-}
 
-// Make the system relative to the docroot
+// Make the gleez relative to the docroot, for symlink'd index.php
+if ( ! is_dir($gleez) AND is_dir(DOCROOT.$gleez))
+	$gleez = DOCROOT.$gleez;
+
+// Make the system relative to the docroot, for symlink'd index.php
 if ( ! is_dir($system) AND is_dir(DOCROOT.$system))
-{
 	$system = DOCROOT.$system;
-}
+
+// Make the themes relative to the docroot
+if ( ! is_dir($themes) AND is_dir(DOCROOT.$themes))
+	$themes = DOCROOT.$themes;
 
 // Define the absolute paths for configured directories
 define('APPPATH', realpath($application).DS);
 define('MODPATH', realpath($modules).DS);
+define('GLZPATH', realpath($gleez).DS);
 define('SYSPATH', realpath($system).DS);
+define('THEMEPATH', realpath($themes).DS);
 
 // Clean up the configuration vars
-unset($application, $modules, $system);
+unset($application, $modules, $system, $themes);
 
 /**
  * Define the start time of the application, used for profiling.
  */
-if ( ! defined('GLEEZ_START_TIME'))
-{
-	define('GLEEZ_START_TIME', microtime(TRUE));
-}
+defined('GLEEZ_START_TIME') OR define('GLEEZ_START_TIME', microtime(TRUE));
 
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-if ( ! defined('GLEEZ_START_MEMORY'))
-{
-	define('GLEEZ_START_MEMORY', memory_get_usage());
-}
+defined('GLEEZ_START_MEMORY') OR define('GLEEZ_START_MEMORY', memory_get_usage());
 
 // Bootstrap the application
 require APPPATH.'bootstrap'.EXT;
