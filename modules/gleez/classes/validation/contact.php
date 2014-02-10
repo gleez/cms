@@ -5,15 +5,21 @@
  * @package    Gleez\Security
  * @version    1.0.1
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Validation_Contact extends Validation {
 
-	/** Default subject length */
+	/**
+	 * Default subject length
+	 * @type integer
+	 */
 	const SUBJECT_LEN = 80;
 
-	/** Default body length */
+	/**
+	 * Default body length
+	 * @type integer
+	 */
 	const BODY_LEN = 600;
 
 	/**
@@ -26,7 +32,7 @@ class Validation_Contact extends Validation {
 	{
 		return new Validation_Contact($array);
 	}
-	
+
 	/**
 	 * Sets the fields for Contact form
 	 *
