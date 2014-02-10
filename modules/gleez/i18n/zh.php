@@ -202,7 +202,7 @@ return array(
   'Gleez CMS' => 'Gleez CMS',
   'Gleez CMS Light, Simple, Flexible Content Management System' => 'Gleez CMS 轻巧，简单，灵活的内容管理系统',
   'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS需要一个MySQL数据库，但是PHP没有 :mysql 或 :mysqli 扩展。',
-  'Gleez CMS requires PHP 5.3 or newer, this version is :php_version.' => 'Gleez CMS需要PHP 5.3或更高版本，当前版本是 :php_version。',
+  'Gleez CMS requires PHP :php_current or newer, this version is :php_version.' => 'Gleez CMS需要PHP :php_current或更高版本，当前版本是 :php_version。',
   'Gleez Installer' => 'Gleez安装工具',
   'Gleez may not work correctly with your environment.' => 'Gleez可能无法在您的环境正常工作。',
   'Gleez requires :gd v2 for the Image class.' => 'Gleez：:gd v2 的图片类。',
