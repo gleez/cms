@@ -18,13 +18,13 @@ return array(
 	 * Site logo
 	 * @var string
 	 */
-	'site_logo' => '/media/logo.png',
+	'site_logo' => '/media/images/logo.png',
 
 	/**
 	 * Site favicon
 	 * @var string
 	 */
-	'site_favicon' => 'favicon.ico',
+	'site_favicon' => '/media/icons/favicon.ico',
 
 	/**
 	 * Site email
@@ -172,7 +172,7 @@ return array(
 			'charset'          => Kohana::$charset,
 			'generator'        => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
 			'author'           => 'Gleez Team',
-			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2013. All rights reserved.',
+			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2014. All rights reserved.',
 			'robots'           => 'index, follow, noodp',
 			'viewport'         => 'width=device-width, initial-scale=1.0',
 		),
@@ -210,7 +210,7 @@ return array(
 	'installed_locales' => array(
 		'en' => array(
 			'name'		=> 'English',
-			'i18n_code' => 'en',
+			'i18n_code'   => 'en',
 			'locale'	=> array('en_US.utf-8'),
 		),
 		'et' => array(
