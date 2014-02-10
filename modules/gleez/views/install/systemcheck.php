@@ -8,7 +8,7 @@
 			<?php if ($php_version): ?>
 				<td><?php echo PHP_VERSION ?></td>
 			<?php else: ?>
-				<td><?php echo __('Gleez CMS requires PHP 5.3 or newer, this version is :php_version.', array(':php_version' => PHP_VERSION) ); ?>.</td>
+				<td><?php echo __('Gleez CMS requires PHP :php_min_req or newer, this version is :php_version.', array(':php_min_req' => Gleez::PHP_MIN_REQ, ':php_version' => PHP_VERSION) ); ?>.</td>
 			<?php endif ?>
 		</tr>
 

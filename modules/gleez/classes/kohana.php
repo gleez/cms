@@ -1022,7 +1022,6 @@ class Kohana {
 	/**
 	 * Catches errors that are not caught by the error handler, such as E_PARSE.
 	 *
-	 * @uses    Gleez_Exception::handler
 	 * @return  void
 	 */
 	public static function shutdown_handler()
@@ -1032,6 +1031,12 @@ class Kohana {
 			// Do not execute when not active
 			return;
 		}
+
+		// Retrieve the current exception handler
+		$handler = set_exception_handler(array('Gleez_Exception', 'handler'));
+
+		// Restore it back to it's previous state
+		restore_exception_handler();
 
 		try
 		{
@@ -1044,7 +1049,7 @@ class Kohana {
 		catch (Exception $e)
 		{
 			// Pass the exception to the handler
-			Gleez_Exception::handler($e);
+			call_user_func($handler, $e);
 		}
 
 		if (Kohana::$errors AND $error = error_get_last() AND in_array($error['type'], Kohana::$shutdown_errors))
@@ -1053,7 +1058,7 @@ class Kohana {
 			ob_get_level() and ob_clean();
 
 			// Fake an exception for nice debugging
-			Gleez_Exception::handler(new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
+			call_user_func($handler, new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
 
 			// Shutdown now to avoid a "death loop"
 			exit(1);

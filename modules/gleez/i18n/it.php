@@ -183,7 +183,7 @@ return array(
 	'General Settings &mdash; choose your :settings_url.' => 'Impostazioni generali &mdash; scegli la tua :settings_url.',
 	'Gleez CMS core application' => 'Gleez CMS applicazione principale',
 	'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS richiede un database MySQL ma PHP non ha installate n&#269; l\'estensione :mysql n&#269; la :mysqli.',
-	'Gleez CMS requires PHP 5.3 or newer, this version is :php_version.' => 'Gleez CMS richiede PHP versione 5.3 o maggiore, questa versione &#269; la :php_version.',
+	'Gleez CMS requires PHP :php_min_req or newer, this version is :php_version.' => 'Gleez CMS richiede PHP versione :php_min_req o maggiore, questa versione &#269; la :php_version.',
 	'Gleez Installer' => 'installazione di Gleez',
 	'Gleez may not work correctly with your environment.' => 'Gleez potrebbe non funzionare bene nel tuo ambiente.',
 	'Gleez requires :gd v2 for the Image class.' => 'Gleez richiede :gd v2 per elaborare le immagini.',
