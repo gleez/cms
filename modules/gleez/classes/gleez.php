@@ -17,6 +17,12 @@ class Gleez {
 	const VERSION = '0.10.9';
 
 	/**
+	 * Minimal required version of php
+	 * @type string
+	 */
+	const PHP_MIN_REQ = '5.3.9';
+
+	/**
 	 * Release codename
 	 * @type string
 	 */
@@ -42,7 +48,7 @@ class Gleez {
 	 * @var Gleez_Locale
 	 */
 	public static $locale = NULL;
-	
+
 	/**
 	 * Has [Gleez::ready] been called?
 	 * @var boolean
@@ -115,11 +121,11 @@ class Gleez {
 			// Turn off notices and strict errors
 			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 		}
-	
+
 		// Disable the kohana powered headers
 		// @todo Remove it, use Gleez::$expose
 		Kohana::$expose = FALSE;
-	
+
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
 		 * properly installed and send to the installer.
