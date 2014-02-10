@@ -619,6 +619,7 @@ class ORM extends Model implements serializable {
 	 *
 	 * @param   string $column Column name
 	 * @return  mixed
+	 * @throws  Gleez_Exception
 	 */
 	public function __get($column)
 	{
@@ -1319,6 +1320,7 @@ class ORM extends Model implements serializable {
 	 *
 	 * @param  Validation $extra_validation Validation object
 	 * @return ORM
+	 * @throws ORM_Validation_Exception
 	 */
 	public function check(Validation $extra_validation = NULL)
 	{
@@ -1420,9 +1422,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Updates a single record or multiple records, added event support
 	 *
-	 * @chainable
 	 * @param  Validation $validation Validation object
 	 * @return ORM
+	 * @throws Gleez_Exception
 	 */
 	public function update(Validation $validation = NULL)
 	{
@@ -2506,6 +2508,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Setter/Getter for jquery DataTables support
 	 *
+	 * @param  array  $columns  Columns for setting [Optional]
 	 * @return object DataTables
 	 */
 	public function dataTables(array $columns = NULL)

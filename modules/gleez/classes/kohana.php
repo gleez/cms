@@ -727,7 +727,7 @@ class Kohana {
 		}
 
 		//theme class may not be available during initial init phase
-		if ($theme === NULL AND class_exists('theme'))
+		if ($theme === NULL AND class_exists('Theme'))
 		{
 			// Use the active theme
 			$theme = Theme::$active;
