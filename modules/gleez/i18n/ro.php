@@ -183,7 +183,7 @@ return array(
 	'General Settings &mdash; choose your :settings_url.' => 'Setări Generale &mdash; alege-ți :settings_url.',
 	'Gleez CMS core application' => 'Gleez CMS aplicația principală',
 	'Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.' => 'Gleez CMS necesită o bază de date MySQL, însă PHP nu are instalată extensia :mysql sau :mysqli.',
-	'Gleez CMS requires PHP :php_current or newer, this version is :php_version.' => 'Gleez CMS necesită PHP versiunea :php_current sau mai recentă, versiunea aceasta e :php_version.',
+	'Gleez CMS requires PHP :php_min_req or newer, this version is :php_version.' => 'Gleez CMS necesită PHP versiunea :php_min_req sau mai recentă, versiunea aceasta e :php_version.',
 	'Gleez Installer' => 'Instalatorul Gleez',
 	'Gleez may not work correctly with your environment.' => 'S-ar putea ca Gleez să nu funcționeze corespunzător în configurația existentă.',
 	'Gleez requires :gd v2 for the Image class.' => 'Gleez necesită :gd v2 pentru clasa Image.',
