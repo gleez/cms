@@ -195,20 +195,47 @@ class Controller_Message extends Template {
 
 		if ($this->valid_post('message'))
 		{
-			try
+			$post = Validation_Message::factory($this->request->post());
+			$sent   = (isset($post['draft']) AND $post['draft']) ? 0 : time();
+
+			if ($sent != 0)
 			{
-				$message->values($_POST)->save();
-
-				$act = (isset($_POST['draft']) AND $_POST['draft']) ? __('saved') : __('sent');
-				Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
-				Message::success(__('Message successfully :act.', array(':act' => $act)));
-
-				// Redirect to Inbox
-				$this->request->redirect(Route::get('user/message')->uri());
+				$post->rule('recipient', 'not_empty')
+					->rule('body', 'not_empty');
 			}
-			catch (ORM_Validation_Exception $e)
+
+			if ($post->check())
 			{
-				$this->_errors = $e->errors('models', TRUE);
+				try
+				{
+					$sender = Auth::instance()->get_user();
+					$status = 'unread';
+					$act    = $sent == 0 ? __('saved') : __('sent');
+
+					$message->values(array(
+						'sender'    => $sender->id,
+						'recipient' => User::lookup_by_name($post['recipient']),
+						'subject'   => $post['subject'],
+						'body'      => $post['body'],
+						'status'    => $status,
+						'format'    => $post['format'],
+						'sent'      => $sent
+					))->save();
+
+					Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
+					Message::success(__('Message successfully :act.', array(':act' => $act)));
+
+					// Redirect to Inbox
+					$this->request->redirect(Route::get('user/message')->uri());
+				}
+				catch (ORM_Validation_Exception $e)
+				{
+					$this->_errors = $e->errors('models', TRUE);
+				}
+			}
+			else
+			{
+				$this->_errors = $post->errors('models/message', TRUE);
 			}
 		}
 
