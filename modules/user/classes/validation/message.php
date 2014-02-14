@@ -42,7 +42,7 @@ class Validation_Message extends Validation {
 	{
 		return array(
 			'recipient' => array(
-				array(array($this, 'notExists'), array(':value'))
+				array(array($this, 'exists'), array(':value'))
 			),
 			'subject' => array(
 				array('max_length', array(':value', 128)),
@@ -72,7 +72,7 @@ class Validation_Message extends Validation {
 	 * @param  string $recipient User name
 	 * @return bool
 	 */
-	protected function notExists($recipient)
+	public function exists($recipient)
 	{
 		$result = ORM::factory('user')
 				->where('name', '=', $recipient)
