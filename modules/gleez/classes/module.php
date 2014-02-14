@@ -213,6 +213,9 @@ class Module {
 	{
 		self::_add_to_path($module_name);
 
+		//Call DB migrations for this module
+		self::migrate($module_name, 'up');
+
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "install") ))
 		{
@@ -261,7 +264,7 @@ class Module {
 	private static function _remove_from_path($module_name)
 	{
 		$kohana_modules = Kohana::modules();
-		
+
 		if (($key = array_search(MODPATH . $module_name, $kohana_modules)) !== false)
 		{
 			unset($kohana_modules[$key]);
@@ -283,6 +286,9 @@ class Module {
 	 */
 	static function upgrade($module_name)
 	{
+		//Its safe to call here, migrations wont run twice. It runs only if not already run
+		self::migrate($module_name, 'up');
+
 		$version_before  = self::get_version($module_name);
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "upgrade") ))
@@ -337,6 +343,10 @@ class Module {
 	static function activate($module_name)
 	{
 		self::_add_to_path($module_name);
+
+		//Its safe to call here, migrations wont run twice. It runs only if not already run
+		self::migrate($module_name, 'up');
+
 		$installer_class = ucfirst($module_name).'_Installer';
 
 		if (is_callable( array($installer_class, "activate")  ))
@@ -404,8 +414,11 @@ class Module {
 	 * take whatever steps necessary to make sure that all traces of a module are gone.
 	 * @param string $module_name
 	 */
-	static function uninstall($module_name)
+	public static function uninstall($module_name)
 	{
+		//Call DB migrations for this module
+		self::migrate($module_name, 'down');
+
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "uninstall") ))
 		{
@@ -440,7 +453,7 @@ class Module {
 	 * @uses   Log::add
 	 * @uses   Arr::merge
 	 */
-	static function load_modules($reset = TRUE)
+	public static function load_modules($reset = TRUE)
 	{
 		self::$modules = array();
 		self::$active  = array();
@@ -609,9 +622,33 @@ class Module {
 	 * @param   string  $name  Module name
 	 * @return  float   Module version
 	 */
-	static function get_version($name)
+	public static function get_version($name)
 	{
 		return self::get($name)->version;
 	}
 
+	/**
+	 * Migrate the db of the this module
+	 *
+	 * @param   string  $name  Module name
+	 * @param   string  $dir   Migration direction up/down
+	 * @return  void
+	 */
+	private static function migrate($module_name, $dir = 'up')
+	{
+		try
+		{
+			$task = ($dir == 'down') ? 'db:migrate:down' : 'db:migrate:up';
+
+			$options = array(
+					'task'  => $task,
+					'group' => $module_name,
+					'quiet' => 'quiet'
+				);
+
+			//Call DB migrations for this module
+			Minion_Task::factory($options)->execute();
+		}
+		catch(Exception $e){}
+	}
 }
