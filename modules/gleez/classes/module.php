@@ -50,7 +50,10 @@ class Module {
 		$module->version = $version;
 		$module->save();
 
-		Log::debug(':name : version is now :version', array(':name' => $name, ':version' => $version));
+		if (Kohana::$environment === Kohana::DEVELOPMENT)
+		{
+			Log::debug(':name : version is now :version', array(':name' => $name, ':version' => $version));
+		}
 	}
 
 	/**
@@ -65,6 +68,7 @@ class Module {
 		{
 			return ORM::factory('module')->where('name', '=', $name)->find();
 		}
+
 		return self::$modules[$name];
 	}
 
@@ -257,11 +261,13 @@ class Module {
 	private static function _remove_from_path($module_name)
 	{
 		$kohana_modules = Kohana::modules();
+		
 		if (($key = array_search(MODPATH . $module_name, $kohana_modules)) !== false)
 		{
 			unset($kohana_modules[$key]);
 			$kohana_modules = array_values($kohana_modules); // reindex
 		}
+
 		Kohana::modules($kohana_modules);
 		Kohana::include_paths(true);
 	}
