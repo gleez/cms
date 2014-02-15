@@ -16,12 +16,10 @@ class Model_Module extends ORM {
 	protected $_table_columns = array(
 		'id'      => array( 'type'=>'int' ),
 		'name'    => array( 'type'=>'string' ),
-		'title'   => array( 'type'=>'string' ),
 		'active'  => array( 'type'=>'int' ),
 		'weight'  => array( 'type'=>'int' ),
 		'version' => array( 'type'=>'float' ),
-		'path'    => array( 'type'=>'string' ),
-		'visible' => array( 'type'=>'int' )
+		'path'    => array( 'type'=>'string' )
 	);
 
 }
