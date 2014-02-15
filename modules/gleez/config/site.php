@@ -87,6 +87,12 @@ return array(
 	'maintenance_mode' => FALSE,
 
 	/**
+	 * Site locations for custom modules paths
+	 * @var boolean
+	 */
+	'module_dirs' => array(),
+
+	/**
 	 * Offline message in Maintenance Mode
 	 * @var string
 	 */
