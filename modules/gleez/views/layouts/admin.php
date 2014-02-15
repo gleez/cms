@@ -50,6 +50,26 @@
 	</main>
 	<!-- ########## template / container end ########## -->
 
+	<!-- ########## Footer start ########## -->
+	<footer class="footer navbar-default">
+		<div class="container-fluid text-muted">
+			<div class="row">
+				<div class="col-xs-6 col-md-6">
+					<p class="pull-left"><?php echo __('&copy; :year :site', array(':year' => date('Y'), ':site' => HTML::anchor(URL::site(false, true), $site_name)));?></p>
+				</div>
+				<div class="col-xs-6 col-md-6">
+					<p class="pull-right"><?php echo __(':powerdby v{gleez_version}', array(':powerdby' => HTML::anchor('http://gleezcms.org/', 'Gleez CMS')))?></p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center" id="footer-system-info">
+					<small><?php echo __('Rendered in {execution_time}, using {memory_usage} of memory.')?></small>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- ########## Footer end ########## -->
+
 	<?php echo Assets::js(FALSE); ?>
 	<?php echo Assets::codes(FALSE); ?>
 	<?php echo $profiler; ?>
