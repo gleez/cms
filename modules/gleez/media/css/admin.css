@@ -38,6 +38,10 @@ body.backend {
 	right: -1px;
 }
 
+.module-description, .module-version{
+	color: #999999;
+}
+
 .quick-actions{
 	display: inline-block;
 	list-style: none outside none;
