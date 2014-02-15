@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Tag extends Controller_Admin {
@@ -52,8 +52,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 						HTML::anchor($tag->url, $tag->url),
 						Text::plain($tag->type),
 
-						HTML::icon($tag->edit_url, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
-						HTML::icon($tag->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
+						HTML::icon($tag->edit_url, 'fa-edit', array('class'=>'btn btn-sm btn-default action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
+						HTML::icon($tag->delete_url, 'fa-trash-o', array('class'=>'btn btn-sm btn-default action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
 					)
 				);
 			}
