@@ -27,11 +27,11 @@
 				<thead>
 					<tr>
 						<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>
-						<th width="45%"><?php echo __('Title'); ?></th>
+						<th width="40%"><?php echo __('Title'); ?></th>
 						<th width="20%" data-columns='{"bSearchable":false}'><?php echo __('Author'); ?></th>
 						<th width="10%" data-columns='{"bSearchable":false, "sClass": "status"}'><?php echo __('Status'); ?></th>
 						<th width="12%" data-columns='{"bSearchable":false}'><?php echo __('Updated'); ?></th>
-						<th width="8%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
+						<th width="10%" data-columns='{"bSortable":false, "bSearchable":false}'></th>
 					</tr>
 				</thead>
 				<tbody>

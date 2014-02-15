@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Term extends Controller_Admin {
@@ -71,13 +71,7 @@ class Controller_Admin_Term extends Controller_Admin {
 		}
 
 		$this->response->body($view);
-
-		if ( ! $this->_internal)
-		{
-			Assets::tabledrag('term-admin-list', 'match', 'parent', 'term-parent', 'term-parent', 'term-id', FALSE);
-			Assets::tabledrag('term-admin-list', 'depth', 'group', 'term-depth', NULL, NULL, FALSE);
-			Assets::tabledrag('term-admin-list', 'order', 'sibling', 'term-weight');
-		}
+		Assets::tabledrag();
 	}
 
 	/**
