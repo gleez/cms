@@ -9,8 +9,8 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th><?php _e('Module'); ?></th>
-						<th><?php _e('Description'); ?></th>
+						<th><?php echo __('Module'); ?></th>
+						<th><?php echo __('Description'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,7 +24,7 @@
 							<?php endif ?>
 						</td>
 						<td class="module-title-column">
-							<strong><?php echo $module_info->name; ?></strong>
+							<strong><?php echo Text::plain($module_info->title); ?></strong>
 						</td>
 						<td class="module-description-column">
 							<div class="module-description">
@@ -32,7 +32,7 @@
 							</div>
 							<div class="module-version">
 								<?php echo __('Version: %ver | By: :author', array(
-									'%ver' => $module_info->version,
+									'%ver' => Text::plain($module_info->version),
 									':author' => HTML::anchor($module_info->authorURL, __($module_info->author))
 								));
 								?>

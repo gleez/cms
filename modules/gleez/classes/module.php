@@ -43,7 +43,7 @@ class Module {
 		if ( ! $module->loaded())
 		{
 			$module->name   = $name;
-			// Only gleez or user is active by default
+			// Only user is active by default
 			$module->active = ($name == 'user');
 		}
 
@@ -122,21 +122,43 @@ class Module {
 		{
 			$upgrade = FALSE;
 			$modules = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+			$paths 	 = (array) Config::get('site.module_dirs', array(MODPATH) );
 
-			foreach (glob(MODPATH . "*/module.info") as $file)
+			// Make sure MODPATH is set else add last
+			if(!in_array(MODPATH, $paths))
 			{
-				$name           = basename(dirname($file));
-				$modules->$name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+				array_push($paths, MODPATH);
+			}
 
-				$m =& $modules->$name;
-				$m->active       = self::is_active($name);
-				$m->code_version = $m->version;
-				$m->version      = self::get_version($name);
-				$m->locked       = FALSE;
-
-				if ($m->active AND $m->version != $m->code_version)
+			// Iterate over each config path
+			foreach ($paths AS $name => $path)
+			{
+				foreach (glob($path . "*/module.info") as $file)
 				{
-					$upgrade = TRUE;
+					$name           = basename(dirname($file));
+					$modules->$name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+
+					$m =& $modules->$name;
+					$m->active       = self::is_active($name);
+					$m->title 		 = isset($m->title) ? (string) $m->title : $name;
+					$m->code_version = $m->version;
+					$m->version      = self::get_version($name);
+					$m->locked       = false;
+					$m->visible      = isset($m->visible)   ? (bool) $m->visible	 : true;
+					$m->author    	 = isset($m->author)    ? (string) $m->author 	 : 'Gleez Team';
+					$m->authorURL    = isset($m->authorURL) ? (string) $m->authorURL : 'http://gleezcms.org/';
+
+					// Skip this module in list if the module is hidden
+					if($m->visible === false && isset($modules[$name]))
+					{
+						unset($modules[$name]);
+					}
+
+					// Check installed and avialble version and set message
+					if ($m->active AND $m->version != $m->code_version)
+					{
+						$upgrade = TRUE;
+					}
 				}
 			}
 

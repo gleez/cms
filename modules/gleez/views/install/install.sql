@@ -227,15 +227,16 @@ DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(128) NOT NULL,
-  active tinyint(4) NOT NULL DEFAULT '0',
+  type ENUM('module', 'theme') NOT NULL DEFAULT 'module',
+  active tinyint(3) NOT NULL DEFAULT '0',
   weight int(11) NOT NULL DEFAULT '0',
-  version decimal(10,2) NOT NULL DEFAULT '0',
+  version varchar(20) NOT NULL DEFAULT '1.0',
   path varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
-(1, 'user', 1, 0, '2', NULL);
+INSERT INTO {modules} (`id`, `name`, `type`, `active`, `weight`, `version`, `path`) VALUES
+(1, 'user', 'module', 1, 0, '2.0', NULL);
 
 DROP TABLE IF EXISTS {paths};
 CREATE TABLE {paths} (
