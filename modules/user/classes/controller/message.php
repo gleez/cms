@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Gleez Team
  * @version    1.0.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_Message extends Template {

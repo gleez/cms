@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Widget
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2012 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Widget_Comment extends Widget {

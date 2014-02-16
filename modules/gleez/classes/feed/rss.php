@@ -5,7 +5,7 @@
  * @package    Gleez\Feed\RSS
  * @author     Sergey Yakovlev - Gleez
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Feed_Rss extends Feed {

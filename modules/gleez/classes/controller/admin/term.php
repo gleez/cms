@@ -34,8 +34,7 @@ class Controller_Admin_Term extends Controller_Admin {
 	 */
 	public function action_list()
 	{
-		$id = $this->request->param('id', 0);
-
+		$id    = (int) $this->request->param('id', 0);
 		$vocab = ORM::factory('term', array('id' => $id, 'lft' => 1));
 
 		if ( ! $vocab->loaded())
@@ -50,24 +49,23 @@ class Controller_Admin_Term extends Controller_Admin {
 		$params = array('action' => 'add', 'id' => $id);
 
 		$view = View::factory('admin/term/list')
-				->bind('terms',  $terms)
-				->bind('id',     $id)
-				->bind('params', $params);
+					->bind('terms',  $terms)
+					->bind('id',     $id)
+					->bind('params', $params);
 
 		$terms = DB::select()->from('terms')
-			->where('lft', '>', $vocab->lft)
-			->where('rgt', '<', $vocab->rgt)
-			->where('scp', '=', $vocab->scp)
-			->order_by('lft', 'ASC')
-			->execute()
-			->as_array();
+					->where('lft', '>', $vocab->lft)
+					->where('rgt', '<', $vocab->rgt)
+					->where('scp', '=', $vocab->scp)
+					->order_by('lft', 'ASC')
+					->execute()
+					->as_array();
 
 		if (count($terms) == 0)
 		{
 			Message::info(__('There are no Categories that have been created for %vocab.', array('%vocab' => $vocab->name)));
 
-			$view = View::factory('admin/term/none')
-					->bind('params', $params);
+			$view = View::factory('admin/term/none')->bind('params', $params);
 		}
 
 		$this->response->body($view);
@@ -86,7 +84,7 @@ class Controller_Admin_Term extends Controller_Admin {
 	 */
 	public function action_add()
 	{
-		$id = $this->request->param('id', 0);
+		$id    = (int) $this->request->param('id', 0);
 		/** @var $vocab Model_Term */
 		$vocab = ORM::factory('term', array('id' => $id, 'lft' => 1));
 
@@ -112,8 +110,7 @@ class Controller_Admin_Term extends Controller_Admin {
 					->bind('errors', $this->_errors);
 
 		/** @var $post Model_Term */
-		$post = ORM::factory('term')
-				->values($_POST);
+		$post = ORM::factory('term')->values($_POST);
 
 		if ($this->valid_post('term'))
 		{
@@ -147,7 +144,7 @@ class Controller_Admin_Term extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		/** @var $term Model_Term */
 		$term = ORM::factory('term', $id);
 
@@ -205,7 +202,7 @@ class Controller_Admin_Term extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$term = ORM::factory('term', $id);
 
 		if ( ! $term->loaded())

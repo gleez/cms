@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Feed
  * @author     Gleez Team
  * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Feeds_Template extends Controller {
@@ -131,7 +131,7 @@ class Controller_Feeds_Template extends Controller {
 		$this->_offset = ($this->_page == 1) ? $this->_page : ($this->_page - 1) * $this->_limit;
 
 		// Getting settings
-		$this->_config = Kohana::$config->load('site');
+		$this->_config = Config::load('site');
 
 		// Getting site URL
 		$this->_site_url = $this->_config->get('site_url', URL::site(NULL, TRUE));

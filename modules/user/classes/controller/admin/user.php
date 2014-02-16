@@ -5,7 +5,7 @@
  * @package   Gleez\User\Admin\Controller
  * @author    Gleez Team
  * @version   1.0.4
- * @copyright (c) 2011-2013 Gleez Technologies
+ * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Controller_Admin_User extends Controller_Admin {
