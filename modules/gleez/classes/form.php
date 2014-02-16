@@ -928,7 +928,7 @@ class Form {
 	/**
 	 * Creates a form input for date.
 	 *
-	 *     echo Form::hidden('csrf', $token);
+	 *     echo Form::date('author_date', $created);
 	 *
 	 * @param   string  $name       input name
 	 * @param   string  $value      input value
@@ -936,7 +936,7 @@ class Form {
 	 * @return  string
 	 * @uses    Form::input
 	 */
-	public static function date($name, $value = NULL, array $attrs = NULL, $url = '', $smart = TRUE)
+	public static function date($name, $value = NULL, array $attrs = NULL)
 	{
 		$out = '';
 
