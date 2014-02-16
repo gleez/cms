@@ -926,6 +926,62 @@ class Form {
 	}
 
 	/**
+	 * Creates a form input for date.
+	 *
+	 *     echo Form::hidden('csrf', $token);
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 */
+	public static function date($name, $value = NULL, array $attrs = NULL, $url = '', $smart = TRUE)
+	{
+		$out = '';
+
+		// Assign the datepicker assets
+		Assets::css('bootstrap.datepicker', 'media/css/bootstrap-datetimepicker.min.css', array('bootstrap'));
+		Assets::js('bootstrap.datepicker', 'media/js/bootstrap-datetimepicker.js', array('bootstrap'));
+
+		// Set the input name
+		$attrs['name']         = $name;
+		$attrs['type']         = 'text';
+		$attrs['data-provide'] = 'datetimepicker'; 
+		$attrs[]               = 'readonly';
+
+		$attrs['data-date-autoclose']        = true;
+
+		// Set the input value
+		$attrs['value'] = $value;
+
+		if (is_numeric($value))
+		{
+		    $attrs['value'] = System::date("d-m-Y", $value);
+		}
+
+		if ( ! isset($attrs['id']))
+		{
+			$attrs['id'] = Form::_get_id_by_name($name);
+		}  
+
+		$control_attrs['class']  = "input-group date";
+
+		//if (isset($attrs['data-date-format']))
+		//{
+		//    $control_attrs['data-date-format'] = $attrs['data-date-format'];
+		//    unset($attrs['data-date-format']);
+		//}
+
+		$out .= '<div' . HTML::attributes($control_attrs).'>';
+		$out .= '<input'.HTML::attributes($attrs).'>';
+		$out .= '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
+		$out .= '</div>';
+
+		return $out;
+	}
+
+	/**
 	 * Generates a valid HTML ID based the name.
 	 *
 	 * @param  string  $name   Element name

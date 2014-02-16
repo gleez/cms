@@ -110,7 +110,7 @@
 							<div class="form-group <?php echo isset($errors['author_date']) ? 'has-error': ''; ?>">
 								<?php echo Form::label('author_date', __('Date'), array('class' => 'control-label') ) ?>
 								<div class="controls">
-									<?php echo Form::input('author_date', $created, array('class' => 'form-control')); ?>
+									<?php echo Form::date('author_date', $created, array('class' => 'form-control')); ?>
 								</div>
 							</div>
 
