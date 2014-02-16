@@ -1,6 +1,6 @@
 name        = "user"
-title 	     = "User"
-description = "Gleez users and group management"
+title 	    = "User"
+description = "Core users, group and permission management"
 version     = 2.0
 visible     = 1
 author      = "Gleez Team"
