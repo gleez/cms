@@ -93,6 +93,12 @@ return array(
 	'module_dirs' => array(),
 
 	/**
+	 * Site locations for custom themes paths
+	 * @var boolean
+	 */
+	'theme_dirs' => array(),
+
+	/**
 	 * Offline message in Maintenance Mode
 	 * @var string
 	 */
