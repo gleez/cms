@@ -5,7 +5,7 @@
  * @package    Gleez\Widget
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2012 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Widget_Blog extends Widget {

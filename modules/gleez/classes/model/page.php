@@ -4,7 +4,7 @@
  *
  * @package    Gleez\ORM\Page
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Page extends Post {
@@ -29,7 +29,7 @@ class Model_Page extends Post {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		$config = Kohana::$config->load('page');
+		$config = Config::load('page');
 		$this->status = empty($this->status) ? $config->get('default_status', 'draft') : $this->status;
 
 		if( ! $config->use_comment)
@@ -113,4 +113,3 @@ class Model_Page extends Post {
 		return parent::delete($id);
 	}
 }
-

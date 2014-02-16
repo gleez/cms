@@ -5,7 +5,7 @@
  * @package    Gleez\Controller
  * @author     Gleez Team
  * @version    1.0.3
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Page extends Template {
@@ -149,7 +149,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id     = (int) $this->request->param('id', 0);
 		$config = Config::load('page');
 
 		$post = Post::dcache($id, 'page', $config);
@@ -308,7 +308,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
 		if ( ! ACL::post('edit', $post))
@@ -402,7 +402,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
 		if ( ! ACL::post('delete', $post))
@@ -558,8 +558,8 @@ class Controller_Page extends Template {
 	public function action_tag()
 	{
 		$config = Config::load('page');
-		$id = (int) $this->request->param('id', 0);
-		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
+		$id     = (int) $this->request->param('id', 0);
+		$tag    = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
 
 		if ( ! $tag->loaded())
 		{

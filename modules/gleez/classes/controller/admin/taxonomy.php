@@ -7,7 +7,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Taxonomy extends Controller_Admin {
@@ -121,7 +121,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('term', $id);
 
 		if ( ! $post->loaded())
@@ -170,7 +170,7 @@ class Controller_Admin_Taxonomy extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$term = ORM::factory('term', $id);
 
 		if ( ! $term->loaded())

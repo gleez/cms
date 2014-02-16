@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Page extends Controller_Admin {
@@ -77,7 +77,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	{
 		$this->title = __('Page Settings');
 
-		$post     = Kohana::$config->load('page');
+		$post     = Config::load('page');
 		$action   = Route::get('admin/page')->uri(array('action' =>'settings'));
 		$vocabs   = array(__('none'));
 

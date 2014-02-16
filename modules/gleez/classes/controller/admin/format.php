@@ -82,8 +82,8 @@ class Controller_Admin_Format extends Controller_Admin {
 		$formats = $this->_format->get_all();
 		$formats[$id]['id'] = $id;
 
-		$all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
-		$filters = Filter::all();
+		$all_roles       = ORM::factory('role')->find_all()->as_array('id', 'name');
+		$filters         = Filter::all();
 		$enabled_filters = $formats[$id]['filters'];
 
 		// Form attributes

@@ -78,7 +78,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 	{
 		$this->title = __('Blog Settings');
 
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 		$action = Route::get('admin/blog')->uri(array('action' =>'settings'));
 		$vocabs = array(__('none'));
 

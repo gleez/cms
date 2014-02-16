@@ -81,8 +81,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 	public function action_add()
 	{
 		$this->title = __('Add New Tag');
-		$post = ORM::factory('tag');
-		$action = Route::get('admin/tag')->uri(array('action' => 'add'));
+		$post        = ORM::factory('tag');
+		$action      = Route::get('admin/tag')->uri(array('action' => 'add'));
 
 		if ($this->valid_post('tag'))
 		{
@@ -120,7 +120,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('tag', $id);
 
 		if ( ! $post->loaded())
@@ -171,7 +171,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id  = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', $id);
 
 		if ( ! $tag->loaded())

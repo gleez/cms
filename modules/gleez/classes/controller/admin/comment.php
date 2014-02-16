@@ -70,7 +70,7 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id      = (int) $this->request->param('id', 0);
 		$comment = ORM::factory('comment', $id)->access();
 
 		if( ! $comment->loaded())
@@ -139,9 +139,9 @@ class Controller_Admin_Comment extends Controller_Admin {
 	 */
 	public function action_process()
 	{
-		$route = Route::get('admin/comment')->uri(array('action' => 'list'));
+		$route    = Route::get('admin/comment')->uri(array('action' => 'list'));
 		$redirect = empty($this->redirect) ? $route : $this->redirect ;
-		$post = $this->request->post();
+		$post     = $this->request->post();
 
 		// If deletion is not desired, redirect to list
 		if (isset($post['no']) AND $this->valid_post())
@@ -220,9 +220,9 @@ class Controller_Admin_Comment extends Controller_Admin {
 	private function _bulk_update($post)
 	{
 		// Filter out unchecked comments
-		$comments = array_filter($post['comments']);
+		$comments   = array_filter($post['comments']);
 		$operations = Comment::bulk_actions(FALSE);
-		$operation = $operations[$post['operation']];
+		$operation  = $operations[$post['operation']];
 
 		if ($operation['callback'])
 		{

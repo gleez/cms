@@ -1,7 +1,7 @@
 name 	     = "oAuth2"
 title 	     = "oAuth 2"
-description = "Gleez oAuth2 Server and Clients"
-version     = 1.0
-visible     = 1
-author      = "Gleez Team"
-authorURL   = http://gleezcms.org/
+description  = "Gleez oAuth2 Server and Clients"
+version      = 1.0
+visible      = 1
+author       = "Gleez Team"
+authorURL    = http://gleezcms.org/
