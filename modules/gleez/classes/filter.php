@@ -145,8 +145,14 @@ class Filter {
 
 		if ($save)
 		{
-			// Cache all defined routes
-			return $cache->set('Filter::cache()', Filter::$_filters);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				// Cache all defined routes
+				return $cache->set('Filter::cache()', Filter::$_filters);
+			}
+
+			return false;
 		}
 		else
 		{
@@ -298,32 +304,31 @@ class Filter {
 	{
 		if($key == 'title')
 		{
-				return $this->_title;
+			return $this->_title;
 		}
 		else if($key == 'description')
 		{
-				return $this->_description;
+			return $this->_description;
 		}
 		else if($key == 'prepare_callback')
 		{
-				return $this->_callbacks['prepare callback'];
+			return $this->_callbacks['prepare callback'];
 		}
 		else if($key == 'process_callback')
 		{
-				return $this->_callbacks['process callback'];
+			return $this->_callbacks['process callback'];
 		}
 		else if($key == 'callbacks')
 		{
-				return $this->_callbacks;
+			return $this->_callbacks;
 		}
 		else if($key == 'settings')
 		{
-				return $this->_settings;
+			return $this->_settings;
 		}
 		else
 		{
-				throw new Gleez_Exception('The requested property does not exist: :key',
-		array(':key' => $key));
+			throw new Gleez_Exception('The requested property does not exist: :key', array(':key' => $key));
 		}
 	}
 
