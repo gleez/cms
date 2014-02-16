@@ -59,6 +59,51 @@ class Model_Message extends ORM {
 	);
 
 	/**
+	 * Ignored columns
+	 * @var array
+	 */
+	protected $_ignored_columns = array('draft');
+
+	/**
+	 * Sets the rules for Contact form
+	 *
+	 * @return  array
+	 *
+	 * @uses    Config::get
+	 */
+	public function rules()
+	{
+		return array(
+			'recipient' => array(
+				array(array($this, 'toExists'), array(':validation', ':field')),
+			),
+			'subject' => array(
+				array('max_length', array(':value', 128)),
+			),
+			'body' => array(
+				array('not_empty'),
+				array('min_length', array(':value', 2)),
+			)
+		);
+	}
+
+	/**
+	 * Sets the labels for Message form
+	 *
+	 * @return array
+	 */
+	public function labels()
+	{
+		return array(
+			'recipient' => __('Recipient'),
+			'subject'   => __('Subject'),
+			'body'      => __('Body'),
+			'format'    => __('Format'),
+			'draft'     => __('Draft')
+		);
+	}
+
+	/**
 	 * Reading data from inaccessible properties
 	 *
 	 * @param   string  $field
@@ -90,30 +135,6 @@ class Model_Message extends ORM {
 			default:
 				return parent::__get($field);
 		}
-	}
-
-	/**
-	 * Deletes a single message or multiple messages, ignoring relationships
-	 *
-	 * @return  Model_Message
-	 * @throws  Gleez_Exception
-	 *
-	 * @uses    Cache::delete
-	 */
-	public function delete()
-	{
-		if ( ! $this->_loaded)
-		{
-			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.',
-				array(':model' => $this->_object_name)
-			);
-		}
-
-		Cache::instance('message')->delete($this->id);
-
-		parent::delete();
-
-		return $this;
 	}
 
 	/**
@@ -270,4 +291,40 @@ class Model_Message extends ORM {
 		return $this;
 	}
 
+	/**
+	 * Checks whether recipient user exists with the specified name
+	 *
+	 * Validation callback.
+	 *
+	 * @param   Validation  $validation An validation object
+	 * @param   string      $field      Field name
+	 * @return  boolean
+	 */
+	public function toExists(Validation $validation, $field)
+	{
+		if ( $this->draft == 0 AND empty($validation[$field]))
+		{
+			$validation->error($field, 'not_empty', array($validation[$field]));
+		}
+		elseif ( $this->draft == 0 AND $this->exists($validation[$field]))
+		{
+			$validation->error($field, 'exists', array($validation[$field]));
+		}
+	}
+
+	/**
+	 * Checks whether user exists with the specified name
+	 *
+	 * @param  string $recipient User name
+	 * @return bool
+	 */
+	public function exists($recipient)
+	{
+		$result = ORM::factory('user')
+				->where('name', '=', $recipient)
+				->and_where('name', '!=', 'guest')
+				->find();
+
+		return (bool) $result->loaded();
+	}
 }

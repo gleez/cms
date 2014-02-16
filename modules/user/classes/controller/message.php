@@ -186,6 +186,7 @@ class Controller_Message extends Template {
 
 		$view = View::factory('message/form')
 				->bind('message',    $message)
+				->bind('errors',     $this->_errors)
 				->set('destination', $destination)
 				->set('action',      $action)
 				->set('recipient',   FALSE);
