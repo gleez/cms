@@ -941,37 +941,46 @@ class Form {
 		$out = '';
 
 		// Assign the datepicker assets
-		Assets::css('bootstrap.datepicker', 'media/css/bootstrap-datetimepicker.min.css', array('bootstrap'));
+		Assets::css('bootstrap.datepicker', 'media/css/bootstrap-datetimepicker.css', array('bootstrap'));
 		Assets::js('bootstrap.datepicker', 'media/js/bootstrap-datetimepicker.js', array('bootstrap'));
-
-		// Set the input name
-		$attrs['name']         = $name;
-		$attrs['type']         = 'text';
-		$attrs['data-provide'] = 'datetimepicker'; 
-		$attrs[]               = 'readonly';
-
-		$attrs['data-date-autoclose']        = true;
-
-		// Set the input value
-		$attrs['value'] = $value;
-
-		if (is_numeric($value))
-		{
-		    $attrs['value'] = System::date("d-m-Y", $value);
-		}
 
 		if ( ! isset($attrs['id']))
 		{
 			$attrs['id'] = Form::_get_id_by_name($name);
 		}  
 
-		$control_attrs['class']  = "input-group date";
+		// Set the input name
+		$attrs['name']         = $name;
+		$attrs['type']         = 'text'; 
+		$attrs[]               = 'readonly';
 
-		//if (isset($attrs['data-date-format']))
-		//{
-		//    $control_attrs['data-date-format'] = $attrs['data-date-format'];
-		//    unset($attrs['data-date-format']);
-		//}
+		$control_attrs['class']  				= 'input-group date';
+		$control_attrs['data-provide'] 			= 'datetimepicker';
+		$control_attrs['data-date-language'] 	= 'en';
+		$control_attrs['data-date-autoclose'] 	= true;
+		$control_attrs['data-date-todayBtn'] 	= true;
+		$control_attrs['data-show-meridian'] 	= true;
+		$control_attrs['data-picker-position'] 	= 'bottom-left';
+		$control_attrs['data-date-format'] 		= 'dd M yyyy - hh:ii:ss';
+
+		// @todo inconsistencies between php/js date formats
+		if (isset($attrs['data-date-format']))
+		{
+			$control_attrs['data-date-format'] = $attrs['data-date-format'];
+			unset($attrs['data-date-format']);
+		}
+
+		// Set the input value
+		if ($value == false)
+		{
+			$attrs['value'] 			= Date::formatted_time(time(), 'd M Y - h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time(time(), 'd M Y - h:i:s');
+		}
+		elseif ($value != false && is_numeric($value))
+		{
+			$attrs['value'] 			= Date::formatted_time($value, 'd M Y - h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time($value, 'd M Y - h:i:s');
+		}
 
 		$out .= '<div' . HTML::attributes($control_attrs).'>';
 		$out .= '<input'.HTML::attributes($attrs).'>';
