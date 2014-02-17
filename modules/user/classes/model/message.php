@@ -302,11 +302,11 @@ class Model_Message extends ORM {
 	 */
 	public function toExists(Validation $validation, $field)
 	{
-		if ( $this->draft == 0 AND empty($validation[$field]))
+		if ( $this->status != PM::STATUS_DRAFT AND empty($validation[$field]))
 		{
 			$validation->error($field, 'not_empty', array($validation[$field]));
 		}
-		elseif ( $this->draft == 0 AND $this->exists($validation[$field]))
+		elseif ( $this->status != PM::STATUS_DRAFT AND $this->exists($validation[$field]))
 		{
 			$validation->error($field, 'exists', array($validation[$field]));
 		}

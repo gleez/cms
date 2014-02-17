@@ -175,6 +175,9 @@ class Controller_Message extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Compose message
+	 */
 	public function action_compose()
 	{
 		$this->title = __('New Message');
@@ -195,11 +198,23 @@ class Controller_Message extends Template {
 
 		if ($this->valid_post('message'))
 		{
+			$sent   = (isset($_POST['draft']) AND $_POST['draft']) ? 0 : time();
+			$sender = Auth::instance()->get_user();
+			$status = $sent == 0 ? PM::STATUS_DRAFT : PM::STATUS_UNREAD;
+			$act    = $sent == 0 ? __('saved') : __('sent');
+
 			try
 			{
-				$message->values($_POST)->save();
+				$message->values(array(
+					'sender'    => $sender->id,
+					'recipient' => User::lookup_by_name($_POST['recipient']),
+					'subject'   => $_POST['subject'],
+					'body'      => $_POST['body'],
+					'status'    => $status,
+					'format'    => $_POST['format'],
+					'sent'      => $sent
+				))->save();
 
-				$act = (isset($_POST['draft']) AND $_POST['draft']) ? __('saved') : __('sent');
 				Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
 				Message::success(__('Message successfully :act.', array(':act' => $act)));
 
