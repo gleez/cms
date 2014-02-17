@@ -935,6 +935,7 @@ class Form {
 	 * @param   array   $attributes html attributes
 	 * @return  string
 	 * @uses    Form::input
+	 * @link    https//github.com/smalot/bootstrap-datetimepicker
 	 */
 	public static function date($name, $value = NULL, array $attrs = NULL)
 	{
@@ -950,18 +951,19 @@ class Form {
 		}  
 
 		// Set the input name
-		$attrs['name']         = $name;
-		$attrs['type']         = 'text'; 
-		$attrs[]               = 'readonly';
+		$attrs['name']  = $name;
+		$attrs['type']  = 'text'; 
+		$attrs[]        = 'readonly';
 
-		$control_attrs['class']  				= 'input-group date';
-		$control_attrs['data-provide'] 			= 'datetimepicker';
-		$control_attrs['data-date-language'] 	= 'en';
-		$control_attrs['data-date-autoclose'] 	= true;
-		$control_attrs['data-date-todayBtn'] 	= true;
-		$control_attrs['data-show-meridian'] 	= true;
-		$control_attrs['data-picker-position'] 	= 'bottom-left';
-		$control_attrs['data-date-format'] 		= 'dd M yyyy - hh:ii:ss';
+		$control_attrs['class']                = 'input-group date';
+		$control_attrs['data-provide']         = 'datetimepicker';
+		$control_attrs['data-date-language']   = 'en';
+		$control_attrs['data-date-autoclose']  = true;
+		$control_attrs['data-date-todayBtn']   = true;
+		$control_attrs['data-show-meridian']   = true;
+		$control_attrs['data-picker-position'] = 'bottom-left';
+		//$control_attrs['data-format-type']     = 'php';
+		$control_attrs['data-date-format']     = 'dd M yyyy - hh:ii:ss';
 
 		// @todo inconsistencies between php/js date formats
 		if (isset($attrs['data-date-format']))
