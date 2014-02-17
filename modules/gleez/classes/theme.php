@@ -92,11 +92,8 @@ class Theme {
 		if( ! empty(Theme::$active) AND ! in_array(Theme::$active, array_keys($modules)))
 		{
 			// Make sure the theme is available
-			if( in_array(Theme::$active, array_keys(self::$themes) ) )
+			if( $theme = self::getTheme() )
 			{
-				// Get the active theme object
-				$theme = self::$themes[Theme::$active];
-
 				//set absolute theme path and load the request theme as kohana module
 				Kohana::modules(array('theme' => $theme->path) + $modules);
 			}
@@ -108,12 +105,32 @@ class Theme {
 	
 		unset($modules);
 	}
-	
+
+	/**
+	 * Gets info about theme
+	 *
+	 * @param   string       $name   Theme info file
+	 * @return  \Object  	 An object containing information about theme
+	 */
+	public static function getTheme($name = false)
+	{
+		if(empty($name)) $name = Theme::$active;
+
+		// Make sure the theme is available
+		if( in_array($name, array_keys(self::$themes) ) )
+		{
+			// Get the active theme object
+			return self::$themes[$name];
+		}
+
+		return false;
+	}
+
 	/**
 	 * Gets info about theme
 	 *
 	 * @param   string       $file   Theme info file
-	 * @return  \Object  	 An array containing information about theme
+	 * @return  \Object  	 An object containing information about theme
 	 */
 	public static function get_info($file)
 	{
