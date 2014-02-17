@@ -935,7 +935,7 @@ class Form {
 	 * @param   array   $attributes html attributes
 	 * @return  string
 	 * @uses    Form::input
-	 * @link    https//github.com/smalot/bootstrap-datetimepicker
+	 * @link    https://github.com/smalot/bootstrap-datetimepicker
 	 */
 	public static function date($name, $value = NULL, array $attrs = NULL)
 	{
@@ -955,21 +955,51 @@ class Form {
 		$attrs['type']  = 'text'; 
 		$attrs[]        = 'readonly';
 
-		$control_attrs['class']                = 'input-group date';
-		$control_attrs['data-provide']         = 'datetimepicker';
-		$control_attrs['data-date-language']   = 'en';
-		$control_attrs['data-date-autoclose']  = true;
-		$control_attrs['data-date-todayBtn']   = true;
-		$control_attrs['data-show-meridian']   = true;
-		$control_attrs['data-picker-position'] = 'bottom-left';
-		//$control_attrs['data-format-type']     = 'php';
-		$control_attrs['data-date-format']     = 'dd M yyyy - hh:ii:ss';
+		$control_attrs['class']                     = 'input-group date';
+		$control_attrs['data-provide']              = 'datetimepicker';
+		$control_attrs['data-date-language']        = 'en';
+		$control_attrs['data-date-autoclose']       = true;
+		$control_attrs['data-show-meridian']        = true;
+		$control_attrs['data-date-today-highlight'] = true;
+		$control_attrs['data-picker-position']      = 'bottom-left';
+		//$control_attrs['data-format-type']        = 'php';
+		$control_attrs['data-date-format']          = 'dd M yyyy - hh:ii:ss';
 
 		// @todo inconsistencies between php/js date formats
 		if (isset($attrs['data-date-format']))
 		{
 			$control_attrs['data-date-format'] = $attrs['data-date-format'];
 			unset($attrs['data-date-format']);
+		}
+
+		if (isset($attrs['data-date-today-btn']))
+		{
+			$control_attrs['data-date-today-btn'] = $attrs['data-date-today-btn'];
+			unset($attrs['data-date-today-btn']);
+		}
+
+		if (isset($attrs['data-start-view']))
+		{
+			$control_attrs['data-start-view'] = $attrs['data-start-view'];
+			unset($attrs['data-start-view']);
+		}
+
+		if (isset($attrs['data-min-view']))
+		{
+			$control_attrs['data-min-view'] = $attrs['data-min-view'];
+			unset($attrs['data-min-view']);
+		}
+
+		if (isset($attrs['data-max-view']))
+		{
+			$control_attrs['data-max-view'] = $attrs['data-max-view'];
+			unset($attrs['data-max-view']);
+		}
+
+		if (isset($attrs['data-view-select']))
+		{
+			$control_attrs['data-view-select'] = $attrs['data-view-select'];
+			unset($attrs['data-view-select']);
 		}
 
 		// Set the input value
