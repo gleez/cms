@@ -175,6 +175,9 @@ class Controller_Message extends Template {
 		$this->response->body($view);
 	}
 
+	/**
+	 * Compose message
+	 */
 	public function action_compose()
 	{
 		$this->title = __('New Message');
@@ -195,47 +198,32 @@ class Controller_Message extends Template {
 
 		if ($this->valid_post('message'))
 		{
-			$post = Validation_Message::factory($this->request->post());
-			$sent   = (isset($post['draft']) AND $post['draft']) ? 0 : time();
+			$sent   = (isset($_POST['draft']) AND $_POST['draft']) ? 0 : time();
+			$sender = Auth::instance()->get_user();
+			$status = $sent == 0 ? PM::STATUS_DRAFT : PM::STATUS_UNREAD;
+			$act    = $sent == 0 ? __('saved') : __('sent');
 
-			if ($sent != 0)
+			try
 			{
-				$post->rule('recipient', 'not_empty')
-					->rule('body', 'not_empty');
+				$message->values(array(
+					'sender'    => $sender->id,
+					'recipient' => User::lookup_by_name($_POST['recipient']),
+					'subject'   => $_POST['subject'],
+					'body'      => $_POST['body'],
+					'status'    => $status,
+					'format'    => $_POST['format'],
+					'sent'      => $sent
+				))->save();
+
+				Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
+				Message::success(__('Message successfully :act.', array(':act' => $act)));
+
+				// Redirect to Inbox
+				$this->request->redirect(Route::get('user/message')->uri());
 			}
-
-			if ($post->check())
+			catch (ORM_Validation_Exception $e)
 			{
-				try
-				{
-					$sender = Auth::instance()->get_user();
-					$status = 'unread';
-					$act    = $sent == 0 ? __('saved') : __('sent');
-
-					$message->values(array(
-						'sender'    => $sender->id,
-						'recipient' => User::lookup_by_name($post['recipient']),
-						'subject'   => $post['subject'],
-						'body'      => $post['body'],
-						'status'    => $status,
-						'format'    => $post['format'],
-						'sent'      => $sent
-					))->save();
-
-					Log::info('Message :id successfully :act.', array(':id' => $message->id, ':act' => $act));
-					Message::success(__('Message successfully :act.', array(':act' => $act)));
-
-					// Redirect to Inbox
-					$this->request->redirect(Route::get('user/message')->uri());
-				}
-				catch (ORM_Validation_Exception $e)
-				{
-					$this->_errors = $e->errors('models', TRUE);
-				}
-			}
-			else
-			{
-				$this->_errors = $post->errors('models/message', TRUE);
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
