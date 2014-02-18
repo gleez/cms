@@ -942,8 +942,8 @@ class Form {
 		$out = '';
 
 		// Assign the datepicker assets
-		Assets::css('bootstrap.datepicker', 'media/css/bootstrap-datetimepicker.css', array('bootstrap'));
-		Assets::js('bootstrap.datepicker', 'media/js/bootstrap-datetimepicker.js', array('bootstrap'));
+		Assets::css('bs.dt', 'media/css/bootstrap-datetimepicker.css', array('bootstrap'));
+		Assets::js('bs.dt', 'media/js/datepicker/datetimepicker.js', array('bootstrap'));
 
 		if ( ! isset($attrs['id']))
 		{
@@ -964,6 +964,14 @@ class Form {
 		$control_attrs['data-picker-position']      = 'bottom-left';
 		//$control_attrs['data-format-type']        = 'php';
 		$control_attrs['data-date-format']          = 'dd M yyyy - hh:ii:ss';
+
+		// Add locale support to datepicker. @todo CH and latin support
+		if(I18n::$lang != 'en')
+		{
+			$lang                                   = I18n::$lang;
+			$control_attrs['data-date-language']    = $lang;
+			Assets::js('bs.dt.locale', "media/js/datepicker/locales/bootstrap-datetimepicker.{$lang}.js", array('bs.dt'));
+		}
 
 		// @todo inconsistencies between php/js date formats
 		if (isset($attrs['data-date-format']))
