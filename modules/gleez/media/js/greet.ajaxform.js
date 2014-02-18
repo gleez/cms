@@ -44,7 +44,7 @@
 		delete options.replacetarget
 		delete options.includehidden
 		delete options.uploadprogress
-	
+
 		this.init(element, options)
 	}
 
@@ -77,10 +77,12 @@
 			Ajaxform.prototype.validationErrors(data, form);
 		}
 		else if (data.FormSaved == true){
-			var popup     = $(form).data('popup') || $(form).find('[type=submit]').data('popup')
-			var dataTable = $(form).data('datatable') || false
+			var popup     = $(form).data('popup') || false
+			,   dataTable = $(form).data('datatable') || false
+
+			//remove the form from the dom
 			$(form).remove()
-	
+
 			if(dataTable){
 				//redraw dataTables if its a dataTable popup or form add/edit/delete
 				$(dataTable).dataTable().fnDraw()
@@ -88,13 +90,13 @@
 		
 			//Lets check if the form is in popup window
 			if(popup && typeof data.messages !== undefined && data.messages.length > 0){
-				var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbsp'+data.messages[0].text+'</div>'
+				var text = '<div class="alert alert-success alert-block"><i class="fa fa-info"></i>&nbsp'+data.messages[0].text+'</div>'
 				$(popup).find('.popup-title').html(data.messages[0].type)
 				$(popup).find('.popup-body').html(text)
 				$(popup).find('.popup-footer').html('&nbsp')
 			}
 			else if(popup){
-				var text = '<div class="alert alert-success alert-block"><i class="icon-info-sign"></i>&nbspSuccess</div>'
+				var text = '<div class="alert alert-success alert-block"><i class="fa fa-info"></i>&nbspSuccess</div>'
 				$(popup).find('.popup-body').html(text)
 				$(popup).find('.popup-footer').html('&nbsp')
 			}
@@ -110,9 +112,10 @@
 		var title = 'Error'
 		  , tmpl = '<div class="alert alert-error alert-block">'
 	
-		tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>';
-			// Loop through the errors
-			$.each(data.errors, function(i, value) {
+		tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>'
+
+		// Loop through the errors
+		$.each(data.errors, function(i, value) {
 			// And add the error to the list.
 			tmpl += '<li>' + value + '</li>';
 			// Let's guesstimate the input that gave us an error
@@ -121,8 +124,9 @@
 			if ($inputField.length){
 				$($inputField).parent('div.controls').parent('div.control-group').addClass('error')
 			}
-			});
-		tmpl += '</ul></div>';
+		})
+
+		tmpl += '</ul></div>'
 	
 		// If the target block doesn't exist..
 		if (!$('.error-message-container').length){
@@ -173,14 +177,14 @@
 			if (refresh_selector) {
 				$.each($(refresh_selector), function(index, value) {
 					$.getJSON($(value).data('refresh-url'), function(data) {
-					$(value).replaceWith(data.html)
+						$(value).replaceWith(data.html)
 					})
 				})
 			}
 			if (refresh_closest_selector) {
 				$.each($(refresh_closest_selector), function(index, value) {
 					$.getJSON($(value).data('refresh-url'), function(data) {
-					$el.closest($(value)).replaceWith(data.html)
+						$el.closest($(value)).replaceWith(data.html)
 					})
 				})
 			}
@@ -228,11 +232,12 @@
 		
 		if (!($el.is("[type=submit],[type=image]"))) {
 			// is this a child element of the submit el?  (ex: a span within a button)
-			var t = $el.closest('[type=submit]');
+			var t = $el.closest('[type=submit]')
 			if (t.length === 0) {
-			return;
+				return
 			}
-			target = t[0];
+			
+			target = t[0]
 		}
 		
 		var form = this
@@ -316,13 +321,15 @@
 		var $this = $(this)
 		, $target = $this.data('form') || $this.parents('form')
 		, option  = $.extend({}, $target.data(), $this.data())
-	
+
 		// if event has been canceled, don't proceed
 		if (!e.isDefaultPrevented()) {
 			e.preventDefault()
 			
 			option.clkbtn = $this
 			$target.data('clkbtn', $this)
+			$target.data('popup', option.popup)
+			$target.data('datatable', option.datatable)
 			$target.removeData('ajaxform').aform(option)
 		}
 	})
