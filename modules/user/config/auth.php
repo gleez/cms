@@ -20,12 +20,6 @@ return array
 	'hash_method' => 'sha1',
 
 	/**
-	 * Set the hash key that will be used to store the user password's salt
-	 * @var  string
-	 */
-	'hash_key' => 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430',
-
-	/**
 	 * Set the auto-login (remember me) cookie lifetime, in seconds.
 	 * The default lifetime is two weeks.
 	 * @var  integer
@@ -169,68 +163,4 @@ return array
 		'store_location' => APPPATH . 'media/pictures',
 	),
 
-	/**
-	 * 3rd party providers supported/allowed.
-	 */
-	'providers' => array(
-		/**
-		 * Toggle Github support:
-		 *  if set, then users can log in using Github.
-		 *
-		 * Setup:
-		 * - You must register your app with Github and
-		 *   add the information in /config/oauth.php (Oauth's config)
-		 *
-		 * @var  boolean
-		 */
-		'github' => FALSE,
-
-		/**
-		 * Toggle Facebook support:
-		 *  if set, then users can log in using Facebook.
-		 *
-		 * Setup:
-		 * - You must register your app with Facebook and
-		 *   add the information in /config/oauth.php (Oauth's config)
-		 *
-		 * @var  boolean
-		 */
-		'facebook' => FALSE,
-
-		/**
-		 * Toggle Twitter support:
-		 *  if set, users can log in using Twitter
-		 *
-		 * Setup:
-		 * - You must register your app with Twitter and
-		 *   add the information in /config/oauth.php (Oauth's config)
-		 *
-		 * @var  boolean
-		 */
-		'twitter' => FALSE,
-
-		/**
-		 * Toggle Google support:
-		 *  if set, users can log in using their Google account.
-		 *
-		 * Setup:
-		 * - You must register your app with Google and
-		 *   add the information in /config/oauth.php (Oauth's config)
-		 *
-		 * @var  boolean
-		 */
-		'google' => FALSE,
-
-		/**
-		 * Toggle Windows Live support:
-		 *  if set, users can log in using their Windows Live account.
-		 *
-		 * Setup:
-		 * - You must register your app with Windows Live and
-		 *   add the information in /config/oauth.php (Oauth's config)
-		 *
-		 * @var  boolean
-		 */
-		'live' => FALSE,
-	),
 );
