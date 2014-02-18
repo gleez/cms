@@ -143,28 +143,28 @@
 		response.find('.form-actions').hide()
 		response.find('.form-group').hide()
 
-		//add the popup element to form data
-		$(this.forms).attr('data-popup', 'true')
-					.data('popup',	 this.$element)
-					.data('datatable',	 this.options.table)
-
 		//Generate a valid buttons text
 		sText = $(sButton).val() || 'Save changes'
 		cText = $(cButton).val() || 'Close'
 		sAttr = $(sButton).attr('class') || 'btn btn-primary'
 		cAttr = $(cButton).attr('class') || 'btn'
-		
+
 		//create submit and cancel buttons in popup footer
-		$(submitBtn).attr('data-toggle', 'ajaxform')
-				.attr('class',  sAttr)
-				.attr('href',   '#')
-				.data('popup',  this.$element)
-				.data('form',   this.forms)
-				.data('button', sButton)
+		//add the popup element to form data
+		//add the datatable element to form data
+		$(submitBtn)
+				.attr('data-toggle', 'ajaxform')
+				.attr('class',		 sAttr)
+				.attr('href',		 '#')
+				.data('form',		 this.forms)
+				.data('popup',		 this.$element)
+				.data('datatable',	 this.options.table)
+				.data('button',		 sButton)
 				.text(sText)
 		
-		$(closeBtn).attr('class',  cAttr)
-				.attr('href', '#')
+		$(closeBtn)
+				.attr('class',		  cAttr)
+				.attr('href',		  '#')
 				.attr('data-dismiss', 'popup')
 				.text(cText)
 				.delegate('[data-dismiss="popup"]', 'click.dismiss.popup', $.proxy(this.hide, this))
