@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Install
  * @author     Gleez Team
- * @version    1.3.2
+ * @version    1.4.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -563,13 +563,20 @@ class Controller_Install_Install extends Controller_Template {
 		mysqli_select_db($link, $config["database"]);
 		$prefix = trim($config["table_prefix"]);
 
+		// Gleez Private Key
 		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
 		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysqli_query($link, $sql);
 
+		// Auth Hash Key
+		$aKey = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aSkey = serialize($aKey);
+		$aSql = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		mysqli_query($link, $aSql);
+
 		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
+		$pass = hash_hmac('sha1', $password, $aKey);
 		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
 
 		return $password;
@@ -582,13 +589,20 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_select_db($config["database"]);
 		$prefix = trim($config["table_prefix"]);
 
+		// Gleez Private Key
 		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
 		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysql_query($sql);
 
+		// Auth Hash Key
+		$aKey = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aSkey = serialize($aKey);
+		$aSql = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		mysql_query($aSql);
+
 		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
+		$pass = hash_hmac('sha1', $password, $aKey);
 		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
 
 		return $password;
