@@ -197,17 +197,13 @@ class Auth {
 	 * Perform a hmac hash, using the configured method.
 	 *
 	 * @param   string  $str  String to hash
-	 * @throws  Gleez_Exception
 	 * @return  string
 	 */
 	public function hash($str)
 	{
-		if ( ! $this->_config['hash_key'])
-		{
-			throw new Gleez_Exception('A valid hash key must be set in your auth config.');
-		}
+		$key = self::hashKey();
 
-		return hash_hmac($this->_config['hash_method'], $str, $this->_config['hash_key']);
+		return hash_hmac($this->_config['hash_method'], $str, $key);
 	}
 
 	/**
@@ -505,4 +501,23 @@ class Auth {
 		return TRUE;
 	}
 
+	/**
+	 * Ensure the hash key variable used for Auth.
+	 *
+	 * @return  string  The hash key.
+	 *
+	 * @uses    Config::load
+	 */
+	public static function hashKey()
+	{
+		$config = Config::load('site');
+
+		if ( !($key = $config->get('auth_hash_key')) )
+		{
+			$key = sha1(uniqid(mt_rand(), TRUE)) . md5(uniqid(mt_rand(), TRUE));
+			$config->set('auth_hash_key', $key);
+		}
+
+		return $key;
+	}
 }
