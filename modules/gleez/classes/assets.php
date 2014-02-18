@@ -747,7 +747,7 @@ class Assets {
 	{
 		if(isset(self::$js) OR isset(self::$codes) OR isset(self::$settings))
 		{
-			self::js('jquery', 'media/js/jquery-1.10.2.min.js', NULL, FALSE, array('weight' => -20));
+			self::js('jquery', 'media/js/jquery-1.11.0.min.js', NULL, FALSE, array('weight' => -20));
 			self::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
 			self::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 
