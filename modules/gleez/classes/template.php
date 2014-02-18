@@ -219,6 +219,9 @@ abstract class Template extends Controller {
 		// Execute parent::before first
 		parent::before();
 
+		// Load the config
+		$this->_config = Config::load('site');
+
 		if (Kohana::$profiling)
 		{
 			// Start a new benchmark token
@@ -246,6 +249,13 @@ abstract class Template extends Controller {
 			$this->auto_render = FALSE;
 		}
 
+		// Test whether the current request is jquery mobile request. ugly hack
+		if (Request::is_mobile() AND $this->_config->get('mobile_theme', FALSE))
+		{
+			$this->_ajax       = FALSE;
+			$this->auto_render = TRUE;
+		}
+
 		// Test whether the current request is datatables request
 		if (Request::is_datatables())
 		{
@@ -255,7 +265,6 @@ abstract class Template extends Controller {
 
 		$this->response->headers('X-Powered-By', Gleez::getVersion(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
 
-		$this->_config = Kohana::$config->load('site');
 		$this->_auth   = Auth::instance();
 
 		// Get desired response formats
