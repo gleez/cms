@@ -115,8 +115,12 @@ class PM {
 		{
 			foreach ($actions as $name => $value)
 			{
-				$message->$name = $value;
+				if (property_exists($message, $name))
+				{
+					$message->$name = $value;
+				}
 			}
+
 			$message->save();
 		}
 	}
