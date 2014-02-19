@@ -394,6 +394,7 @@ class Controller_Message extends Template {
 			catch( Exception $e)
 			{
 				Message::error(__('The update has not been performed!'));
+				Log::error('Message updates failed: '.$e->getMessage());
 			}
 		}
 
