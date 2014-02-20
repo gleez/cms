@@ -6,11 +6,10 @@
  * @package    Gleez\Helpers
  * @author     Gleez Team
  * @version    1.0.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class PM {
-
 	/**
 	 * Inbox virtual folder name.
 	 * Can be used when determining the type of messages received.
@@ -63,11 +62,13 @@ class PM {
 		$states = array(
 			'read'    => array(
 				'label'     => __('Mark as read'),
-				'callback'  => NULL,
+				'callback'  => 'PM::bulk_update',
+				'arguments' => array('updates' => array('status' => self::STATUS_READ)),
 			),
 			'unread'  => array(
 				'label'     => __('Mark as unread'),
-				'callback'  => NULL,
+				'callback'  => 'PM::bulk_update',
+				'arguments' => array('updates' => array('status' => self::STATUS_UNREAD)),
 			),
 			'delete'  => array(
 				'label'     => __('Delete'),
@@ -91,6 +92,37 @@ class PM {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Bulk update messages
+	 *
+	 * Usage:
+	 * ~~~
+	 * PM::bulk_update(array(1, 2, 3, ...), array('status' => 'read'));
+	 * ~~~
+	 *
+	 * @param  array  $ids      Array of mesage ids
+	 * @param  array  $actions  Array of message actions
+	 */
+	public static function bulk_update(array $ids, array $actions)
+	{
+		$messages = ORM::factory('message')
+			->where('id', 'IN', $ids)
+			->find_all();
+
+		foreach($messages as $message)
+		{
+			foreach ($actions as $name => $value)
+			{
+				if (property_exists($message, $name))
+				{
+					$message->$name = $value;
+				}
+			}
+
+			$message->save();
+		}
 	}
 
 	/**
