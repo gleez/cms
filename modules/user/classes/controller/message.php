@@ -110,8 +110,10 @@ class Controller_Message extends Template {
 				$this->_datatables->add_row(
 					array(
 						Form::checkbox('messages['.$message->id.']', $message->id, isset($_POST['messages'][$message->id])),
-						HTML::anchor($message->user->nick, $message->user->nick),
-						HTML::anchor($message->url, Text::limit_chars($message->rawbody), array('class' => 'message-'.$message->status)),
+						HTML::anchor($message->user->url, $message->user->nick, array('class' => 'message-'.$message->status)),
+						HTML::anchor($message->url, Text::limit_chars($message->subject, 20), array('class' => 'message-'.$message->status))
+						.' '.
+						HTML::anchor($message->url, Text::limit_chars(strip_tags($message->body), 80)),
 						Date::formatted_time($message->sent, 'M d, Y'),
 						HTML::icon($message->delete_url.$destination, 'fa-trash-o', array('title'=> __('Delete Message'), 'data-toggle' => 'popup', 'data-table' => '#user-message-inbox'))
 					)
@@ -392,6 +394,7 @@ class Controller_Message extends Template {
 			catch( Exception $e)
 			{
 				Message::error(__('The update has not been performed!'));
+				Log::error('Message updates failed: '.$e->getMessage());
 			}
 		}
 
