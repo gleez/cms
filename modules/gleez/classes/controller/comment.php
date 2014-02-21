@@ -19,6 +19,9 @@ class Controller_Comment extends Template {
 	{
 		ACL::required('access comment');
 
+		//Disbale sidebars on comments page
+		$this->_sidebars = FALSE;
+
 		parent::before();
 	}
 
