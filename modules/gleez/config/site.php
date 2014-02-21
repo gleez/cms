@@ -87,16 +87,18 @@ return array(
 	'maintenance_mode' => FALSE,
 
 	/**
-	 * Site locations for custom modules paths
-	 * @var boolean
+	 * The module search paths. They are searched in the order given.
+	 *
+	 * @var array
 	 */
-	'module_dirs' => array(),
+	'module_paths' => array(MODPATH),
 
 	/**
-	 * Site locations for custom themes paths
-	 * @var boolean
+	 * The theme search paths. They are searched in the order given.
+	 *
+	 * @var array
 	 */
-	'theme_dirs' => array(),
+	'theme_paths' => array(THEMEPATH),
 
 	/**
 	 * Offline message in Maintenance Mode

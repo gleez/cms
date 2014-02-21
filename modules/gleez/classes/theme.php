@@ -161,7 +161,7 @@ class Theme {
 	public static function available($title = TRUE)
 	{
 		$themes = array();
-		$paths 	= (array) Config::get('site.theme_dirs', array(THEMEPATH) );
+		$paths 	= (array) Config::get('site.theme_paths', array(THEMEPATH) );
 		$cache  = Cache::instance('themes');
 
 		if ( ! $themes = $cache->get('themes', false))
