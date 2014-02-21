@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.3
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.0.4
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Blog extends Template {
@@ -147,7 +147,7 @@ class Controller_Blog extends Template {
 	 */
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id     = (int) $this->request->param('id', 0);
 		$config = Config::load('blog');
 
 		$post = Post::dcache($id, 'blog', $config);
@@ -173,7 +173,7 @@ class Controller_Blog extends Template {
 			AND ACL::check('access comment'))
 		{
 			// Determine pagination offset
-			$p = ((int) $this->request->param('blog', 0)) ? '/p'.$this->request->param('blog', 0) : FALSE;
+			$p = ((int) $this->request->param('page', 0)) ? '/p'.$this->request->param('page', 0) : FALSE;
 
 			// Handle comment listing
 			$comments = Request::factory('comments/blog/public/'.$id.$p)->execute()->body();
