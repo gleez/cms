@@ -1,5 +1,3 @@
-<?php Assets::css('comment', "media/css/comment.css", array('default')); ?>
-
 <h4 class="title"><?php echo __('Comments'); ?></h4>
 
 <ol class="comments" START=<?php echo $pagination->offset + 1; ?>>
