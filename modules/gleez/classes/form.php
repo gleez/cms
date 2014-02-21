@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -963,7 +963,7 @@ class Form {
 		$control_attrs['data-date-today-highlight'] = true;
 		$control_attrs['data-picker-position']      = 'bottom-left';
 		//$control_attrs['data-format-type']        = 'php';
-		$control_attrs['data-date-format']          = 'dd M yyyy - hh:ii:ss';
+		$control_attrs['data-date-format']          = 'dd M yyyy hh:ii:ss';
 
 		// Add locale support to datepicker. @todo CH and latin support
 		if(I18n::$lang != 'en')
@@ -1013,13 +1013,13 @@ class Form {
 		// Set the input value
 		if ($value == false)
 		{
-			$attrs['value'] 			= Date::formatted_time(time(), 'd M Y - h:i:s');
-			$control_attrs['data-date'] = Date::formatted_time(time(), 'd M Y - h:i:s');
+			$attrs['value'] 			= Date::formatted_time(time(), 'd M Y h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time(time(), 'd M Y h:i:s');
 		}
 		elseif ($value != false && is_numeric($value))
 		{
-			$attrs['value'] 			= Date::formatted_time($value, 'd M Y - h:i:s');
-			$control_attrs['data-date'] = Date::formatted_time($value, 'd M Y - h:i:s');
+			$attrs['value'] 			= Date::formatted_time($value, 'd M Y h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time($value, 'd M Y h:i:s');
 		}
 
 		$out .= '<div' . HTML::attributes($control_attrs).'>';
