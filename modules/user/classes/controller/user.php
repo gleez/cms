@@ -4,7 +4,7 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.1
+ * @version    1.3.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -276,7 +276,7 @@ class Controller_User extends Template {
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
-		elseif (ACL::check('access profiles') AND $user->status AND $user->id > Model_User::GUEST_ID)
+		elseif (ACL::check('access profiles') AND $user->status AND $user->id > User::GUEST_ID)
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}

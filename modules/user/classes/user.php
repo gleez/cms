@@ -4,11 +4,47 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class User {
+
+	/**
+	 * Guest user ID
+	 * @type integer
+	 */
+	const GUEST_ID = 1;
+
+	/**
+	 * Main admin user ID
+	 * @type integer
+	 */
+	const ADMIN_ID = 2;
+
+	/**
+	 * Anonymous role ID
+	 * @type integer
+	 */
+	const GUEST_ROLE_ID = 1;
+
+	/**
+	 * Login role ID
+	 * @type integer
+	 */
+	const LOGIN_ROLE_ID = 2;
+
+	/**
+	 * User role ID
+	 * @type integer
+	 */
+	const USER_ROLE_ID = 3;
+
+	/**
+	 * Admin role ID
+	 * @type integer
+	 */
+	const ADMIN_ROLE_ID = 4;
 
 	/**
 	 * All Roles
