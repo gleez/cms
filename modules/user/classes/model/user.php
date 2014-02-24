@@ -4,47 +4,11 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.2
+ * @version    1.3.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_User extends ORM {
-
-	/**
-	 * Guest user ID
-	 * @type integer
-	 */
-	const GUEST_ID = 1;
-
-	/**
-	 * Main admin user ID
-	 * @type integer
-	 */
-	const ADMIN_ID = 2;
-
-	/**
-	 * Anonymous role ID
-	 * @type integer
-	 */
-	const ANONYMOUS_ROLE = 1;
-
-	/**
-	 * Login role ID
-	 * @type integer
-	 */
-	const LOGIN_ROLE = 2;
-
-	/**
-	 * User role ID
-	 * @type integer
-	 */
-	const USER_ROLE = 3;
-
-	/**
-	 * Admin role ID
-	 * @type integer
-	 */
-	const ADMIN_ROLE = 4;
 
 	/**
 	 * Default upload path
@@ -302,7 +266,7 @@ class Model_User extends ORM {
 	protected function before_delete($id)
 	{
 		// If it is an internal request (eg. popup dialog) and id < 3
-		if ($id == self::GUEST_ID OR $id == self::ADMIN_ID)
+		if ($id == User::GUEST_ID OR $id == User::ADMIN_ID)
 		{
 			Log::error('Attempt to delete system user.');
 			throw new Gleez_Exception("You can't delete system users!");
@@ -361,7 +325,7 @@ class Model_User extends ORM {
 	 */
 	public function find_all($id = NULL)
 	{
-		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
+		$this->where($this->_object_name.'.id', '!=', User::GUEST_ID);
 
 		return parent::find_all($id);
 	}
@@ -373,7 +337,7 @@ class Model_User extends ORM {
 	 */
 	public function count_all()
 	{
-		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
+		$this->where($this->_object_name.'.id', '!=', User::GUEST_ID);
 
 		return parent::count_all();
 	}
@@ -706,7 +670,7 @@ class Model_User extends ORM {
 			$this->save();
 
 			// give "login" role as it is verified
-			$this->add('roles', self::LOGIN_ROLE);
+			$this->add('roles', User::LOGIN_ROLE_ID);
 
 			$identity = ORM::factory('identity');
 			$identity->user_id = $this->id;
@@ -735,10 +699,10 @@ class Model_User extends ORM {
 			}
 		}
 
-		if ( ! $this->has('roles', self::USER_ROLE))
+		if ( ! $this->has('roles', User::USER_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::USER_ROLE);
+			$this->add('roles', User::USER_ROLE_ID);
 		}
 
 		// Return user
@@ -771,10 +735,10 @@ class Model_User extends ORM {
 		$this->values($data)->save();
 
 		// Give user the "login" role
-		if ( ! $this->has('roles', self::LOGIN_ROLE))
+		if ( ! $this->has('roles', User::LOGIN_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::LOGIN_ROLE);
+			$this->add('roles', User::LOGIN_ROLE_ID);
 		}
 
 		// Create e-mail body with reset password link
@@ -1059,10 +1023,10 @@ class Model_User extends ORM {
 		// or a the reset password form could be used in case the original sign-up confirmation mail got lost.
 		// Since the user could only come to this point if he supplied a valid email address,
 		// we confirm his account right here.
-		if ( ! $this->has('roles', self::USER_ROLE))
+		if ( ! $this->has('roles', User::USER_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::USER_ROLE);
+			$this->add('roles', User::USER_ROLE_ID);
 		}
 
 		return TRUE;

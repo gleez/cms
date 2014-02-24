@@ -16,7 +16,7 @@
  * - Any ORM implementation
  *
  * @package    Gleez\ACL
- * @version    2.1.2
+ * @version    2.2.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -36,12 +36,6 @@ class ACL {
 
 	/** Rule type: allow */
 	const PERM_ALLOW = 1;
-	
-	/** Guest ID */
-	const ID_GUEST = 1;
-
-	/** Admin ID */
-	const ID_ADMIN = 2;
 
 	/** Anonymous role */
 	const ANONYMOUS_ROLE = 'Anonymous';
@@ -73,9 +67,9 @@ class ACL {
 		$roles = array();
 
 		// User #1 is guest
-		if ($user->id == self::ID_GUEST)
+		if ($user->id == User::GUEST_ID)
 		{
-			$roles[self::ID_GUEST] = self::ANONYMOUS_ROLE;
+			$roles[User::GUEST_ID] = self::ANONYMOUS_ROLE;
 		}
 		else
 		{
@@ -315,7 +309,7 @@ class ACL {
 		}
 
 		// User #2 has all privileges:
-		if ($user->id == self::ID_ADMIN)
+		if ($user->id == User::ADMIN_ID)
 		{
 			return self::ALLOW;
 		}
