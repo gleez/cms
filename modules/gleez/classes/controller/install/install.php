@@ -562,6 +562,7 @@ class Controller_Install_Install extends Controller_Template {
 		$link = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysqli_select_db($link, $config["database"]);
 		$prefix = trim($config["table_prefix"]);
+		$time = time();
 
 		// Gleez Private Key
 		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
@@ -575,9 +576,10 @@ class Controller_Install_Install extends Controller_Template {
 		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
 		mysqli_query($link, $aSql);
 
+		// Update user
 		$password = Text::random('alnum', 8);
 		$pass = hash_hmac('sha1', $password, $aKey);
-		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
+		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
 
 		return $password;
 	}
@@ -588,6 +590,7 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
 		$prefix = trim($config["table_prefix"]);
+		$time = time();
 
 		// Gleez Private Key
 		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
@@ -601,9 +604,10 @@ class Controller_Install_Install extends Controller_Template {
 		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
 		mysql_query($aSql);
 
+		// Update user
 		$password = Text::random('alnum', 8);
 		$pass = hash_hmac('sha1', $password, $aKey);
-		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
+		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
 
 		return $password;
 	}
