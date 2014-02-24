@@ -202,7 +202,7 @@ return array(
 	/**
 	 * Allow locale override.
 	 * Change the default locale, accepted values: FALSE|ALL|USER|CLIENT|URL|DOMAIN
-	 * @var string
+	 * @var string|boolean
 	 */
 	'locale_override' =>  FALSE,
 
