@@ -4,7 +4,7 @@
  *
  * @package   Gleez\I18n
  * @author    Sergey Yakovlev <sadhooklay@gmail.com>
- * @copyright (c) 2011-2013 Gleez Technologies
+ * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 return array(
@@ -369,6 +369,7 @@ return array(
 	'Mbstring Extension' => 'Расширение Mbstring',
 	'Menu %name deleted successful!' => 'Меню %name успешно удалено!',
 	'Menu %name created successful!' => 'Меню %name успешно создано!',
+	'Menu %name saved successful!' => 'Меню %name успешно сохранено!',
 	"Menu doesn't exists!" => 'Меню не найдено!',
 	'Menu Item %name saved successful!' => 'Пункт меню %name успешно сохранён!',
 	'Menu Item %name deleted successful!' => 'Пункт меню :name успешно удалён!',
