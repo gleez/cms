@@ -564,15 +564,15 @@ class Controller_Install_Install extends Controller_Template {
 		$prefix = trim($config["table_prefix"]);
 
 		// Gleez Private Key
-		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
-		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
+		$sql  = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysqli_query($link, $sql);
 
 		// Auth Hash Key
-		$aKey = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aKey  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$aSkey = serialize($aKey);
-		$aSql = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
 		mysqli_query($link, $aSql);
 
 		$password = Text::random('alnum', 8);
@@ -590,15 +590,15 @@ class Controller_Install_Install extends Controller_Template {
 		$prefix = trim($config["table_prefix"]);
 
 		// Gleez Private Key
-		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
-		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
+		$sql  = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysql_query($sql);
 
 		// Auth Hash Key
-		$aKey = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aKey  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$aSkey = serialize($aKey);
-		$aSql = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
 		mysql_query($aSql);
 
 		$password = Text::random('alnum', 8);
