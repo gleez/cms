@@ -43,8 +43,6 @@
 		</div>
 	</header>
 	<nav class="navbar-sub">
-		<div class="container-fluid">
-		</div>
 	</nav>
 	<!-- ########## Navbar end ########## -->
 
@@ -55,7 +53,7 @@
 	<!-- ########## template / container end ########## -->
 
 	<!-- ########## Footer start ########## -->
-	<footer class="footer navbar-default">
+	<footer class="footer navbar">
 		<div class="container-fluid text-muted">
 			<div class="row">
 				<div class="col-xs-6 col-md-6">
