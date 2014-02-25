@@ -19,7 +19,7 @@
 <body id="<?php echo $page_id; ?>" class="<?php echo $page_class; ?>">
 
 	<!-- ########## Navbar start ########## -->
-	<header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+	<header class="navbar navbar-inverse" role="banner">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -42,6 +42,10 @@
 			</nav><!--/.nav-collapse -->
 		</div>
 	</header>
+	<nav class="navbar-sub">
+		<div class="container-fluid">
+		</div>
+	</nav>
 	<!-- ########## Navbar end ########## -->
 
 	<!-- ########## admin / container start ########## -->
