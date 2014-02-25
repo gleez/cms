@@ -37,9 +37,6 @@ class ACL {
 	/** Rule type: allow */
 	const PERM_ALLOW = 1;
 
-	/** Anonymous role */
-	const ANONYMOUS_ROLE = 'Anonymous';
-
 	/**
 	 * @var boolean Indicates whether perms are cached
 	 */
@@ -69,7 +66,8 @@ class ACL {
 		// User #1 is guest
 		if ($user->id == User::GUEST_ID)
 		{
-			$roles[User::GUEST_ID] = self::ANONYMOUS_ROLE;
+			// Role #1 is guest
+			$roles[User::GUEST_ID] = User::getRoleById(User::GUEST_ROLE_ID)->name;
 		}
 		else
 		{
