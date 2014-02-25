@@ -154,6 +154,10 @@ body.backend {
 	border-top: 0;
 }
 
+#backend .sidebar .widget.panel{
+	border: 0;
+}
+
 .dataTables_filter .col-xs-4{
 	padding-left: 5px;
 	padding-right: 5px;
@@ -227,7 +231,7 @@ body.backend {
 	}
 
 	#backend .navbar {
-		height: 77px;
+		height: 67px;
 	}
 
 	#backend .navbar-sub {
@@ -259,16 +263,18 @@ body.backend {
 	#content .content-wrapper {
 		background: #fff;
 		position: relative;
-		top: -110px;
+		top: -75px;
 		padding-left: 15px;
 	}
 
 	#backend .page-header {
 		color: #888888;
-		height: 89px;
+		height: 75px;
 		position: relative;
-		top: -130px;
+		top: -75px;
+		margin: 0;
 		margin-bottom: 5px;
+		padding: 0;
 		background-image: -webkit-gradient(linear, left 0%, left 100%, from(#ffffff), to(#eeeeee));
 		background-image: -webkit-linear-gradient(top, #ffffff, 0%, #eeeeee, 100%);
 		background-image: -moz-linear-gradient(top, #ffffff 0%, #eeeeee 100%);
@@ -280,16 +286,6 @@ body.backend {
 		border-top-left-radius: 4px;
 	}
 
-	.page-header:before,
-	.page-header:after {
-	  content: " ";
-	  /* 1 */
-
-	  display: table;
-	  /* 2 */
-
-	}
-
 	.page-header:after {
 	  clear: both;
 	}
@@ -298,7 +294,7 @@ body.backend {
 		margin: 0;
 		font-size: 28px;
 		font-weight: 400;
-		line-height: 96px;
+		line-height: 76px;
 		letter-spacing: -2px;
 		padding-left: 15px;
 	}
