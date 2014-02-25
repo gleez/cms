@@ -20,12 +20,12 @@ return array(
 	 */
 	'compress' => Kohana::$environment === Kohana::PRODUCTION,
 
-        /**
+	/**
 	 * Combine multiple css/js files into single file. Defaults to FALSE
 	 * @var boolean
 	 */
 	'combine' => FALSE,
-        
+
 	/**
 	 * Supported image formats
 	 * @var array
