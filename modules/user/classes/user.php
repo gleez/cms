@@ -237,11 +237,40 @@ class User {
 	}
 
 	/**
+	 * Get role by id
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  integer  $id  Role id
+	 * @return Model_Role|boolean The Role object, or FALSE if ID is invalid or not found
+	 */
+	public static function getRoleById($id)
+	{
+		try
+		{
+			$role = ORM::factory('role', $id)->find();
+			if ($role->loaded())
+			{
+				return $role;
+			}
+		}
+		catch (Exception $e)
+		{
+			return FALSE;
+		}
+
+		return FALSE;
+	}
+
+	/**
 	 * Is the password provided correct? support old/drupal style md5 and new hash
 	 *
-	 * @param user User Model
-	 * @param string $password a plaintext password
+	 * @param  Model_User $user     User
+	 * @param  string     $password A plaintext password
+	 *
 	 * @return boolean TRUE if the password is correct
+	 *
+	 * @uses   Auth::hash
 	 */
 	public static function check_pass($user, $password)
 	{
