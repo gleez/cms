@@ -154,7 +154,7 @@ class Module {
 						unset($modules[$name]);
 					}
 
-					// Check installed and avialble version and set message
+					// Check installed and available version and set message
 					if ($m->active AND $m->version != $m->code_version)
 					{
 						$upgrade = TRUE;
@@ -189,9 +189,10 @@ class Module {
 	}
 
 	/**
-	 * Check that the module can be activated. (i.e. all the prerequistes exist)
-	 * @param string $module_name
-	 * @return array an array of warning or error messages to be displayed
+	 * Check that the module can be activated. (i.e. all the prerequisites exist)
+	 *
+	 * @param  string $module_name Module name
+	 * @return array An array of warning or error messages to be displayed
 	 */
 	static function can_activate($module_name)
 	{
