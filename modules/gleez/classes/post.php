@@ -55,7 +55,7 @@ class Post extends ORM_Versioned {
 	);
 
 	/**
-	 * Auto fill updated columns
+	 * Auto fill updated column
 	 * @var array
 	 */
 	protected $_updated_column = array(
@@ -91,7 +91,7 @@ class Post extends ORM_Versioned {
 			'far_key'     => 'term_id'
 		),
 		'comments' => array(
-			'model' => 'comment',
+			'model'       => 'comment',
 			'foreign_key' => 'post_id'
 		)
 	);
@@ -193,10 +193,10 @@ class Post extends ORM_Versioned {
 	public function labels()
 	{
 		return array(
-			'title'    => __('Title'),
-			'body'     => __('Body'),
-			'teaser'   => __('Teaser'),
-			'image'    => __('Primary Image'),
+			'title'  => __('Title'),
+			'body'   => __('Body'),
+			'teaser' => __('Teaser'),
+			'image'  => __('Primary Image'),
 		);
 	}
 
@@ -717,12 +717,12 @@ class Post extends ORM_Versioned {
 		// Allow module developers to override
 		$values = Module::action('post_bulk_actions', $states);
 
-		if($list)
+		if ($list)
 		{
 			$options = array('' => __('Bulk Options'));
 			foreach ($values as $operation => $array)
 			{
-				if( $operation == "ct_{$type}") continue;
+				if ($operation == "ct_{$type}") continue;
 				$options[$operation] = $array['label'];
 			}
 
@@ -998,7 +998,7 @@ class Post extends ORM_Versioned {
 	 */
 	protected function _delete_image()
 	{
-		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
+		if ($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
 		{
 			@unlink($this->_image_path.$this->rawimage);
 		}
