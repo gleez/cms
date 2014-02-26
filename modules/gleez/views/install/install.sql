@@ -89,9 +89,7 @@ CREATE TABLE {comments} (
   KEY comment_post_type (post_id, `type`),
   KEY comment_type (`type`),
   KEY comment_post_id  (`post_id`),
-  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {users};
@@ -146,9 +144,7 @@ CREATE TABLE {messages} (
   KEY `message_id` (`id`),
   KEY `message_status_date` (`status`,`created`,`id`),
   KEY `message_author` (`sender`),
-  FOREIGN KEY (`sender`) REFERENCES {users} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`sender`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {config};
@@ -342,9 +338,7 @@ CREATE TABLE {posts_versions} (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   KEY `post_author` (`author`),
-  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_tags};
@@ -356,12 +350,8 @@ CREATE TABLE {posts_tags} (
   created int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (post_id,tag_id),
   KEY fk_tag_id (tag_id),
-  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_terms};
@@ -375,12 +365,8 @@ CREATE TABLE {posts_terms} (
   KEY fk_term_id (term_id),
   KEY `type` (`type`),
   KEY posts_terms_ibfk_1 (post_id,`type`),
-  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {roles};
@@ -405,12 +391,8 @@ CREATE TABLE {roles_users} (
   role_id int(11) unsigned NOT NULL,
   PRIMARY KEY (user_id,role_id),
   KEY fk_role_id (role_id),
-  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {roles_users} (`user_id`, `role_id`) VALUES
@@ -442,9 +424,7 @@ CREATE TABLE {user_tokens} (
   PRIMARY KEY (id),
   UNIQUE KEY uniq_token (token),
   KEY fk_user_id (user_id),
-  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {widgets};
@@ -497,9 +477,7 @@ CREATE TABLE {identities} (
   KEY `provider` (`provider`),
   KEY `provider_id` (`provider`, `provider_id`),
   UNIQUE KEY `user_provider_id` (`user_id`, `provider`, `provider_id`),
-  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {sitemaps};
@@ -527,12 +505,8 @@ CREATE TABLE IF NOT EXISTS {buddies} (
     PRIMARY KEY (`id`),
     KEY `buddy_requests_fk_1` (`request_from`),
     KEY `buddy_requests_fk_2` (`request_to`),
-    FOREIGN KEY (`request_from`) REFERENCES {users} (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
-    FOREIGN KEY (`request_to`) REFERENCES {users} (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE
+    FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {oauth_clients};
@@ -553,9 +527,7 @@ CREATE TABLE IF NOT EXISTS {oauth_clients} (
     KEY `oauth_clients_fk_1` (`client_id`),
     KEY `oauth_clients_fk_2` (`client_secret`),
     KEY `oauth_clients_fk_3` (`user_id`),
-    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {oauth_codes};
@@ -572,12 +544,8 @@ CREATE TABLE IF NOT EXISTS {oauth_codes} (
     KEY `oauth_codes_fk_1` (`client_id`),
     KEY `oauth_codes_fk_2` (`user_id`),
     KEY `oauth_codes_fk_23` (`code`),
-    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
-    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {oauth_tokens};
@@ -595,10 +563,6 @@ CREATE TABLE IF NOT EXISTS {oauth_tokens} (
     KEY `oauth_tokens_fk_1` (`client_id`),
     KEY `oauth_tokens_fk_2` (`user_id`),
     KEY `oauth_tokens_fk_3` (`access_token`),
-    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE,
-    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`)
-      ON DELETE CASCADE
-      ON UPDATE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
