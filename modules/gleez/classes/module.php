@@ -43,6 +43,7 @@ class Module {
 		if ( ! $module->loaded())
 		{
 			$module->name   = $name;
+
 			// Only user is active by default
 			$module->active = ($name == 'user');
 		}
@@ -147,6 +148,7 @@ class Module {
 					$m->visible      = isset($m->visible)   ? (bool) $m->visible	 : true;
 					$m->author    	 = isset($m->author)    ? (string) $m->author 	 : 'Gleez Team';
 					$m->authorURL    = isset($m->authorURL) ? (string) $m->authorURL : 'http://gleezcms.org/';
+					$m->path 		 = realpath( dirname($file) ).DS;
 
 					// Skip this module in list if the module is hidden
 					if($m->visible === false && isset($modules[$name]))
@@ -194,7 +196,7 @@ class Module {
 	 * @param  string $module_name Module name
 	 * @return array An array of warning or error messages to be displayed
 	 */
-	static function can_activate($module_name)
+	public static function can_activate($module_name)
 	{
 		self::_add_to_path($module_name);
 		$messages = array();
@@ -218,7 +220,7 @@ class Module {
 	 * @param string $module_name
 	 * @return array an array of warning or error messages to be displayed
 	 */
-	static function can_deactivate($module_name)
+	public static function can_deactivate($module_name)
 	{
 		$data = (object) array( "module" => $module_name, "messages" => array() );
 		self::event("pre_deactivate", $data);
@@ -232,7 +234,7 @@ class Module {
 	 * Note that after installing, the module must be activated before it is available for use.
 	 * @param string $module_name
 	 */
-	static function install($module_name)
+	public static function install($module_name)
 	{
 		self::_add_to_path($module_name);
 
@@ -274,28 +276,45 @@ class Module {
 		Log::info('Installed module :module_name', array(':module_name' => $module_name));
 	}
 
-	private static function _add_to_path($module_name)
+	private static function _add_to_path($module)
 	{
-		$kohana_modules = Kohana::modules();
-		array_unshift($kohana_modules, MODPATH . $module_name);
-		Kohana::modules($kohana_modules);
+		$available = (array) static::$available;
 
-		// Rebuild the include path so the module installer can benefit from auto loading
-		Kohana::include_paths(true);
-	}
-
-	private static function _remove_from_path($module_name)
-	{
-		$kohana_modules = Kohana::modules();
-
-		if (($key = array_search(MODPATH . $module_name, $kohana_modules)) !== false)
+		if( in_array($module, array_keys($available)) && isset($available[$module]))
 		{
-			unset($kohana_modules[$key]);
-			$kohana_modules = array_values($kohana_modules); // reindex
+			$module = $available[$module];
+
+			$modules = Kohana::modules();
+			array_unshift($modules, $module->path);
+			Kohana::modules($modules);
+
+			// Rebuild the include path so the module installer can benefit from auto loading
+			Kohana::include_paths(true);
+
+			return $module;
 		}
 
-		Kohana::modules($kohana_modules);
-		Kohana::include_paths(true);
+		return false;
+	}
+
+	private static function _remove_from_path($module)
+	{
+		$available      = (array) static::$available;
+		$kohana_modules = Kohana::modules();
+
+		if( in_array($module, array_keys($available)) && isset($available[$module]))
+		{
+			$module = $available[$module];
+
+			if (($key = array_search($module->path, $kohana_modules)) !== false)
+			{
+				unset($kohana_modules[$key]);
+				$kohana_modules = array_values($kohana_modules); // reindex
+			}
+
+			Kohana::modules($kohana_modules);
+			Kohana::include_paths(true);
+		}
 	}
 
 	/**
@@ -365,39 +384,45 @@ class Module {
 	 */
 	static function activate($module_name)
 	{
-		self::_add_to_path($module_name);
+		$module = self::_add_to_path($module_name);
 
-		//Its safe to call here, migrations wont run twice. It runs only if not already run
-		self::migrate($module_name, 'up');
-
-		$installer_class = ucfirst($module_name).'_Installer';
-
-		if (is_callable( array($installer_class, "activate")  ))
+		if($module)
 		{
-			call_user_func_array(array(
-				$installer_class,
-				"activate"
-			), array());
+			//Its safe to call here, migrations wont run twice. It runs only if not already run
+			self::migrate($module_name, 'up');
+
+			$installer_class = ucfirst($module_name).'_Installer';
+
+			if (is_callable( array($installer_class, "activate")  ))
+			{
+				call_user_func_array(array(
+					$installer_class,
+					"activate"
+				), array());
+			}
+
+			$amodule = self::get($module->name);
+
+			if ($amodule->loaded())
+			{
+				$amodule->active = true;
+				$amodule->path   = $module->path;
+				$amodule->save();
+			}
+
+			// clear any cache for sure
+			Cache::instance()->delete('load_modules');
+
+			self::load_modules(TRUE);
+
+			// @todo
+			//Widget::activate($module_name);
+			//Menu_Item::rebuild(TRUE);
+
+			Log::info('Activated module :module_name', array(':module_name' => $module->title));
+			
+			unset($module, $amodule);
 		}
-
-		$module = self::get($module_name);
-
-		if ($module->loaded())
-		{
-			$module->active = true;
-			$module->save();
-		}
-
-		// clear any cache for sure
-		Cache::instance()->delete('load_modules');
-
-		self::load_modules(TRUE);
-
-		// @todo
-		//Widget::activate($module_name);
-		//Menu_Item::rebuild(TRUE);
-
-		Log::info('Activated module :module_name', array(':module_name' => $module_name));
 	}
 
 	/**
