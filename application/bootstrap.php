@@ -71,7 +71,7 @@ if (isset($_SERVER['GLEEZ_ENV']))
 	// Get environment variable from $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
 	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']));
 }
-else if (get_cfg_var('GLEEZ_ENV'))
+elseif (get_cfg_var('GLEEZ_ENV'))
 {
 	// Get environment variable from php.ini or from ini_get('user_ini.filename')
 	Kohana::$environment = constant('Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV')));

@@ -19,7 +19,7 @@ class Controller_Comment extends Template {
 	{
 		ACL::required('access comment');
 
-		//Disbale sidebars on comments page
+		// Disable sidebars on comments page
 		$this->_sidebars = FALSE;
 
 		parent::before();
@@ -29,7 +29,7 @@ class Controller_Comment extends Template {
 	{
 		$id       = (int) $this->request->param('id', 0);
 		$comment  = ORM::factory('comment', $id)->access();
-		$route    =  Route::get('comment')->uri(array('action' => 'list'));
+		$route    = Route::get('comment')->uri(array('action' => 'list'));
 
 		if ( ! $comment->loaded())
 		{
