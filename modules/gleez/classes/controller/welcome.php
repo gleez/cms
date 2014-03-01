@@ -48,7 +48,7 @@ class Controller_Welcome extends Template {
 		$this->schemaType = 'WebPage';
 		$content = View::factory('welcome');
 
-		//Disbale sidebars on welcome page
+		// Disable sidebars on welcome page
 		$this->_sidebars = FALSE;
 
 		$this->response->body($content);
