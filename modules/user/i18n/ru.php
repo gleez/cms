@@ -252,7 +252,7 @@ return array(
 	// X
 	// Y
 	'You can now sign in with your new password.' => 'Теперь вы можете входить используя ваш новый пароль.',
-	'You can sign in from any of the following services:' => 'вы можете авторизоваться с помощью одного из этих сервисов:',
+	'You can sign in from any of the following services:' => 'Вы можете авторизоваться с помощью одного из этих сервисов:',
 	"You can't delete system users!" => 'Вы не можете удалять системных пользователей!',
 	'You may now log in to !uri_brief clicking on this link or copying and pasting it in your browser.' => 'Теперь вы можете войти на сайт нажав на ссылку !uri_brief или скопировав и вставив её в адресную строку браузера',
 	'You must confirm password' => 'Вы должны подтвердить пароль',
