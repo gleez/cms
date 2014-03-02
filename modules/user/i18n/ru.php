@@ -101,7 +101,7 @@ return array(
 	'Fill in the information below to register' => 'Для регистрации заполните регистрационную анкету ниже',
 	'First Visit' => 'Первое посещение',
 	'Friends' => 'Друзья',
-	'For full site access, you will need to click on this link or copy and paste it in your browser: :url' => 'Для полного доступа к сайту и подтверждения регистрации Вы должны перейти по следующей ссылке (или скопируйте и вставьте эту ссылку в адресную строку вашего браузера): :url',
+	'For full site access, you will need to click on this link or copy and paste it in your browser: :url' => 'Для полного доступа к сайту и подтверждения регистрации вы должны перейти по следующей ссылке (или скопируйте и вставьте эту ссылку в адресную строку вашего браузера): :url',
 	'Forgot Password?' => 'Забыли пароль?',
 	// G
 	'Gender' => 'Пол',
@@ -163,7 +163,7 @@ return array(
 	'Password or username is incorrect' => 'Пароль или имя пользователя не верны',
 	'Password successfully changed! We hope you feel safer now.' => 'Пароль успешно изменён! Мы надеемся теперь вы чувствуете себя в безопасности.',
 	'Permission' => 'Полномочие',
-	'Permission denied! You must login!' => 'Доступ запрещён! Вы должны авторизоваться',
+	'Permission denied! You must login!' => 'Доступ запрещён! вы должны авторизоваться',
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
 	'Permissions let you control what users can do on your site. User defined permission override role based permissions.' => 'Разрешения позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Пользовательские разрешения переопределяют разрешения определённые для ролей.',
@@ -218,7 +218,7 @@ return array(
 	'This username already exists' => 'Такое имя пользователя уже существует',
 	'This username is not available' => 'Это имя пользователя не доступно',
 	'This username or password is not valid' => 'Имя пользователя или пароль не верны',
-	'This will verify your account. In the future you will be able to log in using the username and password that you created during registration.' => 'Это подтвердит решистрацию вашу учётную запись. В будущем Вы сможете авторизоваться используя им пользователя (логин) и пароль, которые Вы указали при регистрации.',
+	'This will verify your account. In the future you will be able to log in using the username and password that you created during registration.' => 'Это подтвердит решистрацию вашу учётную запись. В будущем вы сможете авторизоваться используя им пользователя (логин) и пароль, которые вы указали при регистрации.',
 	'Try to come up with a complex password' => 'Постарайтесь придумать сложный пароль',
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',

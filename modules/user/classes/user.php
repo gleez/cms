@@ -248,7 +248,7 @@ class User {
 	{
 		try
 		{
-			$role = ORM::factory('role', $id)->find();
+			$role = ORM::factory('role', $id);
 			if ($role->loaded())
 			{
 				return $role;
