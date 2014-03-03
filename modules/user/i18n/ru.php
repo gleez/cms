@@ -163,7 +163,7 @@ return array(
 	'Password or username is incorrect' => 'Пароль или имя пользователя не верны',
 	'Password successfully changed! We hope you feel safer now.' => 'Пароль успешно изменён! Мы надеемся теперь вы чувствуете себя в безопасности.',
 	'Permission' => 'Полномочие',
-	'Permission denied! You must login!' => 'Доступ запрещён! вы должны авторизоваться',
+	'Permission denied! You must login!' => 'Доступ запрещён! Вы должны авторизоваться',
 	'Permissions' => 'Полномочия',
 	'Permissions let you control what users can do on your site. Each user role (defined on the :user-roles) has its own set of permissions. Permissions also allow trusted users to share the administrative burden of running a busy site.' => 'Полномочия позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Каждая пользовательская роль (определённая в :user-roles) имеет свой набор полномочий.  Полномочия так же позволяют предоставлять доверенным пользователям бремя административного ведения рабочего сайта.',
 	'Permissions let you control what users can do on your site. User defined permission override role based permissions.' => 'Разрешения позволяют вам контролировать то, что пользователи могут делать на вашем сайте. Пользовательские разрешения переопределяют разрешения определённые для ролей.',
