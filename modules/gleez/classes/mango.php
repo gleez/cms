@@ -80,7 +80,7 @@
 class Mango {
 
 	/**
-	 * Instance name
+	 * Current instance name
 	 * @var string
 	 */
 	protected $_name;
@@ -92,7 +92,7 @@ class Mango {
 	protected $_db;
 
 	/**
-	 * Configuration array
+	 * Current configuration
 	 * @var array
 	 */
 	protected $_config;
@@ -167,25 +167,30 @@ class Mango {
 	 *   file using the same group as the name
 	 * - If no group is supplied the [Mango::$default] group is used
 	 *
-	 * @param   string  $name      Config group name [Optional]
-	 * @param   array   $config    Pass a configuration array to bypass the Gleez config [Optional]
-	 * @param   boolean $override  Overrides current instance with a new one (useful for testing) [Optional]
+	 * ### Examples:
 	 *
-	 * Examples:
 	 * ~~~
 	 * // Load the default database
 	 * $db = Mango::instance();
 	 *
-	 * // Create a custom configured instance:
+	 * // Create a custom configured instance
 	 * $db = Mango::instance('custom', $config);
 	 *
-	 * // Access an instantiated group directly:
+	 * // Access an instantiated group directly
 	 * $foo_group = Mango::$instances['foo'];
 	 * ~~~
+	 *
+	 * @param   string  $name      Config group name [Optional]
+	 * @param   array   $config    Pass a configuration array to bypass the Gleez config [Optional]
+	 * @param   boolean $override  Overrides current instance with a new one (useful for testing) [Optional]
 	 *
 	 * @return  Mango
 	 *
 	 * @throws  Mango_Exception
+	 *
+	 * @uses   Config::load
+	 * @uses   Config::get
+	 * @uses   Config::offsetExists
 	 */
 	public static function instance($name = NULL, array $config = NULL, $override = FALSE)
 	{
@@ -278,7 +283,7 @@ class Mango {
 		$this->_connection = new $mongo_class($server, Arr::merge(array('connect' => FALSE), $options));
 
 		// Save profiling option in a public variable
-		$this->profiling = (isset($config['profiling']) AND $config['profiling']) AND Gleez::$profiling;
+		$this->profiling = (isset($config['profiling']) AND $config['profiling']);
 
 		// Optional connect
 		if (Arr::get($options, 'connect', TRUE))
