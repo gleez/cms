@@ -10,9 +10,9 @@
  * $collection = new Mango_Collection('users');
  *
  * // $users now is array of arrays
- * $users = collection->sortDesc('published')
- *                    ->limit(10)
- *                    ->toArray();
+ * $users = $collection->sortDesc('published')
+ *                     ->limit(10)
+ *                     ->toArray();
  * ~~~
  *
  * ## System Requirements
@@ -1057,8 +1057,8 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * @param   string  $name
-	 * @param   mixed   $value
+	 * @param   string  $name   Option Name
+	 * @param   mixed   $value  Option value
 	 *
 	 * @return  Mango_Collection
 	 *
