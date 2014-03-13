@@ -4,7 +4,7 @@
  *
  * @package   Gleez\User\Admin\Controller
  * @author    Gleez Team
- * @version   1.0.4
+ * @version   1.0.5
  * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
@@ -219,7 +219,7 @@ class Controller_Admin_User extends Controller_Admin {
 						unset($_POST['pass']);
 					}
 
-					$post->values($this->request->post());
+					$post->values($_POST);
 					$post->save();
 
 					// Make sure to $_POST is set and it is array
