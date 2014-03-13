@@ -123,7 +123,14 @@ Kohana::modules(array(
  * Attach the file write to logging.
  * Multiple writers are supported.
  */
-Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+if ((Kohana::$environment !== Kohana::DEVELOPMENT) AND (Kohana::$environment !== Kohana::STAGING))
+{
+	Kohana::$log->attach(new Log_File(APPPATH.'logs'), LOG_INFO);
+}
+else
+{
+	Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+}
 
 /**
  * Default path for uploads directory.
