@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '0.10.9';
+	const VERSION = '0.10.10';
 
 	/**
 	 * Minimal required version of php
