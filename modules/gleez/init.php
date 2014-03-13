@@ -172,6 +172,12 @@ if ( ! Route::cache())
 		'controller' => 'setting',
 	));
 
+	Route::set('admin/tool', 'admin/tools(/<action>)')
+	->defaults(array(
+		'directory'  => 'admin',
+		'controller' => 'tool',
+	));
+
 	Route::set('admin', 'admin(/<controller>)(/<action>)(/<id>)(/p<page>)', array(
 		'id'         => '\d+',
 		'page'       => '\d+'
