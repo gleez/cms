@@ -45,7 +45,7 @@
 				<div class="form-group <?php echo isset($errors['teaser']) ? 'has-error': ''; ?>">
 					<?php echo Form::label('excerpt', __('Excerpt'), array('class' => 'control-label') ) ?>
 					<div class="controls">
-						<?php echo Form::textarea('excerpt', $post->rawteaser, array('class' => 'form-control', 'rows' => 3)) ?>
+						<?php echo Form::textarea('teaser', $post->rawteaser, array('class' => 'form-control', 'rows' => 3)) ?>
 					</div>
 				</div>
 			<?php endif; ?>
