@@ -317,7 +317,7 @@ class Widgets {
 			}
 			catch (Exception $e)
 			{
-				Log::error('Error processing widget: :name', array(':name' => $name));
+				Log::error('Error processing widget ":name": :msg', array(':name' => $name, ':msg' => $e->getMessage()));
 			}
 		}
 
