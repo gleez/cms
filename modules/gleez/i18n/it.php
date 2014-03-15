@@ -361,7 +361,6 @@ return array(
 	'Tag %name deleted successful!' => 'Tag %name cancellato correttamente!',
 	'Tag %name saved successful!' => 'Tag %name salvato correttamente!',
 	'Tag doesn\'t exists!' => 'Tag non esistente!',
-	'Tag name can\'t be empty' => 'Il nome del Tag non pu&#328; essere vuoto',
 	'Tags' => 'Tag',
 	'Tagged with :tag' => 'Taggato con :tag',
 	'Tagline' => 'Tagline',
