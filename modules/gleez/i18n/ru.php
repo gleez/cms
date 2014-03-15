@@ -564,7 +564,6 @@ return array(
 	'Tag %name deleted successful!' => 'Тег %name успешно удалён!',
 	'Tag %name saved successful!' => 'Тег %name успешно сохранён!',
 	'Tag doesn\'t exists!' => 'Тег не найден!',
-	'Tag name can\'t be empty' => 'Название тега не может быть пустым',
 	'Tags' => 'Теги',
 	'Tagged with :tag' => 'Теги :tag',
 	'Tagline' => 'Слоган',

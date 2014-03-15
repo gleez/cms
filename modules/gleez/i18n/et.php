@@ -875,7 +875,6 @@ return array(
 	'Tag %name deleted successful!' => 'Teek %name edukalt kustutatud!',
 	'Tag %name saved successful!' => 'Teek %name edukalt salvestatud!',
 	'Tag doesn\'t exists!' => 'Teek pole leitud!',
-	'Tag name can\'t be empty' => 'Teegi nimetus ei saa olla tühi',
 	'Tags' => 'Teek',
 	'Tagged with :tag' => 'Teek :tag',
 	'Tagline' => 'Hüüdlause',

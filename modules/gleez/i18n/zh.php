@@ -402,7 +402,6 @@ Links:
   'Tag doesn\'t exists!' => '标签不存在！',
   'Tagged with :tag' => '已打上标签 :tag',
   'Tagline' => '口号',
-  'Tag name can\'t be empty' => '标签名称不可以是空的',
   'Tags' => '标签',
   'Taxonomy: :name deleted successful!' => '分类：:name 删除成功！',
   'Taxonomy: doesn\'t exists!' => '分类：不存在！',
