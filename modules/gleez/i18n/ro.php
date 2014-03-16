@@ -361,7 +361,6 @@ return array(
 	'Tag %name deleted successful!' => 'Eticheta %name îndepărtată cu succes!',
 	'Tag %name saved successful!' => 'Eticheta %name salvata cu succes!',
 	'Tag doesn\'t exists!' => 'Eticheta nu există!',
-	'Tag name can\'t be empty' => 'Eticheta nu poate rămâne goală',
 	'Tags' => 'Etichete',
 	'Tagged with :tag' => 'Etichetat cu :tag',
 	'Tagline' => 'Slogan',

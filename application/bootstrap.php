@@ -58,9 +58,6 @@ mb_substitute_character('none');
 /**
  * Set Kohana::$environment if a 'GLEEZ_ENV' environment variable has been supplied.
  *
- * [!!] Note: If you supply an invalid environment name, a PHP warning will be thrown
- * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
- *
  * @todo In the future Kohana::$environment should be moved to Gleez Core as Gleez::$environment
  *
  * @link https://github.com/gleez/cms/wiki/Apache
@@ -69,12 +66,18 @@ mb_substitute_character('none');
 if (isset($_SERVER['GLEEZ_ENV']))
 {
 	// Get environment variable from $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
-	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']));
+	$env = 'Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']);
 }
 elseif (get_cfg_var('GLEEZ_ENV'))
 {
 	// Get environment variable from php.ini or from ini_get('user_ini.filename')
-	Kohana::$environment = constant('Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV')));
+	$env = 'Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV'));
+}
+
+if (isset($env))
+{
+	defined($env) AND Kohana::$environment = constant($env);
+	unset($env);
 }
 
 /**
