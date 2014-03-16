@@ -126,7 +126,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 		if ( ! $post->loaded())
 		{
 			Log::error('Attempt to access non-existent tag.');
-			Message::error(__('Tag doesn\'t exists!'));
+			Message::error(__("Tag doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
@@ -177,7 +177,7 @@ class Controller_Admin_Tag extends Controller_Admin {
 		if ( ! $tag->loaded())
 		{
 			Log::error('Attempt to access non-existent tag.');
-			Message::error(__('Tag doesn\'t exists!'));
+			Message::error(__("Tag doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
