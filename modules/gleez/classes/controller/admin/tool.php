@@ -50,7 +50,7 @@ class Controller_Admin_Tool extends Controller_Admin {
 		foreach ($tables as $table)
 		{
 			$tot_data = $table['Data_length'];
-			$tot_idx = $table['Index_length'];
+			$tot_idx  = $table['Index_length'];
 			$tot_free = $table['Data_free'];
 
 			$tables_info[] = array( 'name' => $table['Name'],
@@ -63,9 +63,10 @@ class Controller_Admin_Tool extends Controller_Admin {
 
 		$view = View::factory('admin/tools/dbinfo')
 				->set('tables', $tables_info)
+				->set('count', count($tables))
 				->set('space', $total_space);
 
-		$this->title = __('Database Stats');
+		$this->title = __("Database <small>(:sub)</small>", array(':sub' => Config::get('database.default.connection.database', null)));
 		$this->response->body($view);
 	}
 }

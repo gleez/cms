@@ -46,7 +46,7 @@
 		</tr>
 		<tr>
 			<th><?php _e('PHP Version') ?></th>
-			<td><?php echo HTML::chars(PHP_VERSION); ?></td>
+			<td><?php echo HTML::anchor('admin/tools/php', HTML::chars(PHP_VERSION) ); ?></td>
 		</tr>
 		<tr>
 			<th><?php _e('Zend Engine Version') ?></th>
@@ -62,7 +62,7 @@
 		</tr>
 		<tr>
 			<th><?php _e('MySQL Version') ?></th>
-			<td><?php echo HTML::chars(Database::instance()->version(TRUE)); ?></td>
+			<td><?php echo HTML::anchor('admin/tools/db', HTML::chars(Database::instance()->version(TRUE)) ); ?></td>
 		</tr>
 		<tr>
 			<th><?php _e('Memory Limit') ?></th>

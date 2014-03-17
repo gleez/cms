@@ -457,7 +457,7 @@ class Controller_Install_Install extends Controller_Template {
 		$config->prefix   = $table_prefix;
 		$config->port     = '';
 
-		return file_put_contents(APPPATH.'config/database.php', $config) !== false;
+		return file_put_contents(APPPATH.'config/database.php', $config->render()) !== false;
 	}
 
 	private function mysql_version($link)

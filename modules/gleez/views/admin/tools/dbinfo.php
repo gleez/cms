@@ -1,4 +1,4 @@
-<div class="well well-sm">
+<div class="alert alert-warning">
 	<?php echo __('Database space: :space KB', array(':space' => round($space, 2)) ); ?>
 </div>
 
@@ -6,7 +6,7 @@
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th><?php echo __('Table'); ?></th>
+				<th><?php echo __('Tables (:count)', array(':count' => $count)); ?></th>
 				<th><?php echo __('Rows'); ?></th>
 				<th><?php echo __('Size'); ?> KB</th>
 			</tr>
