@@ -74,7 +74,7 @@ class Cache_Redis extends Cache {
 
 		// Create a new Redis instance and start a connection using the settings provided.
 		$this->_redis = new Redis;
-		$this->_redis->connect($this->config('host'), $this->config('port');
+		$this->_redis->connect($this->config('host'), $this->config('port'));
 
 		parent::__construct($config);
 	}
