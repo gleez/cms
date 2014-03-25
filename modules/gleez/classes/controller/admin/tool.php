@@ -66,7 +66,7 @@ class Controller_Admin_Tool extends Controller_Admin {
 				->set('count', count($tables))
 				->set('space', $total_space);
 
-		$this->title = __("Database <small>(:sub)</small>", array(':sub' => Config::get('database.default.connection.database', null)));
+		$this->title = __('Database :sub', array(':sub' => '<small>('.Config::get('database.default.connection.database', NULL).')</small>'));
 		$this->response->body($view);
 	}
 }
