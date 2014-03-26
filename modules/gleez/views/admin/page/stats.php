@@ -6,7 +6,7 @@
 	<div class="col-md-3 col-sm-6">
 		<div class="microwidget primary">
 			<div class="visual">
-				<i class="fa fa fa-folder-open"></i>
+				<i class="fa fa-folder-open"></i>
 			</div>
 			<div class="details">
 				<span class="content"><?php _e('Categories'); ?></span>

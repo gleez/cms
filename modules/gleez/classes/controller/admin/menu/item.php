@@ -91,11 +91,11 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Message::success(__('Menu Item %name saved successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete($menu->name);
 
-				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id )));
+				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id)));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -149,7 +149,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
