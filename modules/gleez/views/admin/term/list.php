@@ -7,10 +7,10 @@
 	<table id="term-admin-list" class="table table-striped table-bordered table-highlight" data-toggle="tabledrag">
 		<thead>
 		<tr>
-			<th><?php echo __('Name'); ?></th>
+			<th width="30%"><?php echo __('Name'); ?></th>
 			<th class="tabledrag-hide"><?php echo __('Weight'); ?></th>
-			<th><?php echo __('Description'); ?></th>
-			<th><?php echo __('Actions'); ?></th>
+			<th width="50%"><?php echo __('Description'); ?></th>
+			<th width="10%"><?php echo __('Actions'); ?></th>
 		</tr>
 		</thead>
 		<tbody>
