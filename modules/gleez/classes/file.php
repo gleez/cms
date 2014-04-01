@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.2
+ * @version    1.1.3
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -419,7 +419,7 @@ class File extends SplFileInfo {
 		else
 		{
 			$retval = uniqid().($remove_spaces ? preg_replace('/\s+/u', $replacement, $name) : $name);
-			$retval = is_null($length) ? $retval : substr($retval, (int)$length);
+			$retval = is_null($length) ? $retval : substr($retval, 0, (int)$length);
 
 			return $retval;
 		}
