@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.3
+ * @version    1.0.4
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -506,7 +506,7 @@ class Controller_Page extends Template {
 		if ($total == 0)
 		{
 			Log::info('No topics found.');
-			$this->response->body(View::factory('forum/none'));
+			$this->response->body(View::factory('page/none'));
 			return;
 		}
 		$rss_link   = Route::get('rss')->uri(array('controller' => 'page', 'action' => 'term', 'id' => $term->id));
