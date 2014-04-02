@@ -484,7 +484,7 @@ class Controller_Blog extends Template {
 
 		if ( ! $term->loaded())
 		{
-			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
+			throw HTTP_Exception::factory(404, 'Category ":term" not found', array(':term' => $id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
