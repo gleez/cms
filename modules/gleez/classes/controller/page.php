@@ -505,7 +505,7 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Log::info('No topics found.');
+			Log::info('No posts found.');
 			$this->response->body(View::factory('page/none'));
 			return;
 		}
