@@ -506,8 +506,8 @@ class Controller_Blog extends Template {
 
 		if ($total == 0)
 		{
-			Log::info('No topics found.');
-			$this->response->body(View::factory('forum/none'));
+			Log::info('No blogs found.');
+			$this->response->body(View::factory('blog/none'));
 			return;
 		}
 
@@ -531,10 +531,10 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('blog', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+			Meta::links(Route::url('blog', array('action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $term->name,
@@ -601,10 +601,10 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $tag->name,
