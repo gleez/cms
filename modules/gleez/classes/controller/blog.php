@@ -468,6 +468,7 @@ class Controller_Blog extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 * @throws  HTTP_Exception_404
 	 */
 	public function action_term()
 	{
