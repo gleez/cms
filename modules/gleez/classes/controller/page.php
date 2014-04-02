@@ -529,10 +529,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $term->name,
@@ -609,10 +609,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $tag->name,
