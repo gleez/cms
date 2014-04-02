@@ -457,6 +457,7 @@ class Controller_Page extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 * @throws  HTTP_Exception_404
 	 *
 	 * @uses    Config::load
 	 * @uses    Config::get
