@@ -373,6 +373,6 @@ class Upload {
             }
         }
 
-        return FALSE;
+        return NULL;
     }
 }
