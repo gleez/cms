@@ -202,6 +202,9 @@ class Model_Term extends ORM_MPTT {
 			case 'name':
 				return HTML::chars(parent::__get('name'));
 			break;
+			case 'image':
+				return is_null(parent::__get('image')) ? 'media/images/camera.png' : parent::__get('image');
+			break;
 			case 'rawname':
 				// Raw fields without markup. Usage: during edit or etc!
 				return parent::__get('name');

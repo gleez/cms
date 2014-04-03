@@ -27,6 +27,9 @@
 <div class="form-group <?php echo isset($errors['image']) ? 'has-error': ''; ?>">
 	<?php echo Form::label('image', __('Image'), array('class' => 'col-sm-3 control-label')) ?>
 	<div class="col-sm-5">
+		<div class="thumbnail">
+			<?php echo HTML::resize($post->image, array('alt' => $post->name, 'width' => 144, 'height' => 144, 'type' => 'resize')); ?>
+		</div>
 		<?php echo Form::file('image', array('class' => 'form-control')); ?>
 		<span class="help-block"><?php echo __('Allowed image formats: :formats', array(':formats' => '<strong>'.implode('</strong>, <strong>', $allowed_types).'</strong>')); ?></span>
 	</div>
