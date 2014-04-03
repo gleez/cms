@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.2
+ * @version    1.1.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -156,10 +156,11 @@ class Controller_Admin_Term extends Controller_Admin {
 			$this->request->redirect(Route::get('admin/taxonomy')->uri());
 		}
 
-		$this->title = __('Edit Term %name', array('%name' => $term->name));
+		$this->title = __('Edit Category %name', array('%name' => $term->name));
 
 		$action = Route::get('admin/term')->uri(array('action' =>'edit', 'id' => $term->id));
 		$terms = $term->select_list('id', 'name', '--');
+		$allowed_types = Config::get('media.supported_image_formats', array('jpg', 'png', 'gif'));
 
 		$view = View::factory('admin/term/form')
 				->bind('vocab',  $term)
@@ -167,15 +168,18 @@ class Controller_Admin_Term extends Controller_Admin {
 				->bind('errors', $this->_errors)
 				->set('terms',   $terms)
 				->set('path',    $term->url)
-				->set('action',  $action);
+				->set('action',  $action)
+				->set('allowed_types', $allowed_types);
 
 
 		if ($this->valid_post('term'))
 		{
-			$term->values($_POST);
+
 			try
 			{
-				$term->save();
+				$post = Arr::merge($this->request->post(), $_FILES);
+				$term->values($post)->save();
+
 				Message::success(__('Category %name saved successful!', array('%name' => $term->name)));
 
 				// Redirect to listing
