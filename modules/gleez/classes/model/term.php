@@ -4,7 +4,7 @@
  *
  * @package    Gleez\ORM\Terms
  * @author     Gleez Team
- * @version    1.0.0
+ * @version    1.1.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -77,6 +77,20 @@ class Model_Term extends ORM_MPTT {
 		'path',
 		'action'
 	);
+
+	/**
+	 * Filters to run when data is set in this model
+	 *
+	 * @return array Filters
+	 */
+	public function filters()
+	{
+		return array(
+			'image' => array(
+				array(array($this, 'uploadImage'))
+			)
+		);
+	}
 
 	/**
 	 * Rules for the post model
@@ -275,6 +289,22 @@ class Model_Term extends ORM_MPTT {
 
 			$this->insert_as_last_child($target);
 		}
+	}
+
+	/**
+	 * Upload iimage and return file path
+	 *
+	 * @param   string  $file Uploaded file
+	 * @return  NULL|string   NULL when filed, otherwise file path
+	 */
+	public function uploadImage($file)
+	{
+		if (isset($file['tmp_name']) AND ! empty($file['tmp_name']))
+		{
+			return Upload::uploadImage($file);
+		}
+
+		return $this->image;
 	}
 
 }
