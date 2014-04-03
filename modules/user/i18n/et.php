@@ -77,7 +77,6 @@ return array(
 	// F
 	'Fast, safe & secure way!' => 'Kiire ja ohutu!',
 	'Female' => 'Naine',
-	'Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.' => 'Ei suutnud luua kataloog %dir profiili kujutise laadimiseks. Kontrollige veebiserveri pääsmeõigusi selle kataloogi loomiseks.',
 	'Fill in the information below to register' => 'Registreerumiseks täitke allpool toodud ankeet',
 	'First Visit' => 'Esimene visiit',
 	'Forgot Password?' => 'Unustasite paroooli?',

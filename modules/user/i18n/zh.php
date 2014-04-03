@@ -56,7 +56,6 @@ return array(
   'Edit User' => '编辑用户',
   'Edit User %name' => '编辑用户 %name',
   'Email' => '电子邮件',
-  'Failed to create directory %dir for uploading prfile image. Check the permissions the web server to create this directory.' => '不能创建上传图片的目录 %dir，请检查web服务器创建此目录的权限',
   'Fast, safe & secure way!' => '快速，安全和可靠的方式！',
   'Female' => '女性',
   'Fill in the information below to register' => '填写以下信息注册',
