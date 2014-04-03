@@ -4,17 +4,11 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.3.0
+ * @version    1.4.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_User extends ORM {
-
-	/**
-	 * Default upload path
-	 * @type string
-	 */
-	const DEFAULT_PATH = 'media/pictures';
 
 	/**
 	 * Table columns
@@ -130,7 +124,7 @@ class Model_User extends ORM {
 				array(array(Auth::instance(), 'hash'))
 			),
 			'picture' => array(
-				array(array($this, 'upload_photo'))
+				array(array($this, 'uploadPhoto'))
 			)
 		);
 	}
@@ -476,50 +470,19 @@ class Model_User extends ORM {
 	}
 
 	/**
-	 * Picture validation for photo upload
+	 * Upload photo and return file path
 	 *
 	 * @param   string  $file Uploaded file
-	 * @return  NULL|string   File path
-	 *
-	 * @uses    System::mkdir
-	 * @uses    Message::error
-	 * @uses    Log::error
-	 * @uses    Text::plain
-	 * @uses    Upload::valid
-	 * @uses    Upload::save
+	 * @return  NULL|string   NULL when filed, otherwise file path
 	 */
-	public function upload_photo($file)
+	public function uploadPhoto($file)
 	{
-		// Uploads directory and url for profile pictures
-		$picture_path = APPPATH . self::DEFAULT_PATH;
-
-		if ( ! is_dir($picture_path))
+		if (isset($file['tmp_name']) AND ! empty($file['tmp_name']))
 		{
-			if ( ! System::mkdir($picture_path))
-			{
-				Message::error(__('Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.',
-					array('%dir' => Text::plain($picture_path))
-				));
-
-				Log::error('Failed to create directory :dir for uploading profile image.',
-					array(':dir' => Text::plain($picture_path))
-				);
-			}
+			return Upload::uploadImage($file);
 		}
 
-		// Check if there is an uploaded file
-		if (Upload::valid($file))
-		{
-			$filename = File::getUnique($file['name']);
-			$path = Upload::save($file, $filename, $picture_path);
-
-			if ($path)
-			{
-				return self::DEFAULT_PATH.DS.$filename;
-			}
-		}
-
-		return NULL;
+		return $this->picture;
 	}
 
 	/**
