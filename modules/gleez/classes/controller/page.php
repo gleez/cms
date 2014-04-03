@@ -457,6 +457,7 @@ class Controller_Page extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 * @throws  HTTP_Exception_404
 	 *
 	 * @uses    Config::load
 	 * @uses    Config::get
@@ -483,7 +484,7 @@ class Controller_Page extends Template {
 
 		if ( ! $term->loaded())
 		{
-			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
+			throw HTTP_Exception::factory(404, 'Category ":term" not found', array(':term' => $id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
@@ -505,7 +506,7 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Log::info('No topics found.');
+			Log::info('No posts found.');
 			$this->response->body(View::factory('page/none'));
 			return;
 		}
@@ -529,10 +530,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $term->name,
@@ -609,10 +610,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $tag->name,
