@@ -9,6 +9,12 @@ return array(
 	'public_dir' => 'media',
 
 	/**
+	 * Default upload media directory
+	 * @var string
+	 */
+	'upload_dir' => 'media/pictures',
+
+	/**
 	 * Write the files to the public directory?
 	 * @var boolean
 	 */
@@ -36,7 +42,6 @@ return array(
 		'jpeg',
 		'gif',
 		'png',
-		'bmp'
 	),
 
 	/**

@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Gleez Team
- * @version    1.4.3
+ * @version    1.4.4
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -81,8 +81,7 @@ class Gravatar {
 		'jpg',
 		'jpeg',
 		'gif',
-		'png',
-		'bmp'
+		'png'
 	);
 
 	/**
