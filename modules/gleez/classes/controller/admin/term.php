@@ -100,6 +100,7 @@ class Controller_Admin_Term extends Controller_Admin {
 
 		$terms = $vocab->select_list('id', 'name', '--');
 		$action = Route::get('admin/term')->uri(array('action' =>'add', 'id' => $vocab->id));
+		$allowed_types = Config::get('media.supported_image_formats', array('jpg', 'png', 'gif'));
 
 		$view = View::factory('admin/term/form')
 					->bind('vocab',  $vocab)
@@ -107,7 +108,8 @@ class Controller_Admin_Term extends Controller_Admin {
 					->set('action',  $action)
 					->set('terms',   $terms)
 					->set('path',    FALSE)
-					->bind('errors', $this->_errors);
+					->bind('errors', $this->_errors)
+					->set('allowed_types', $allowed_types);
 
 		/** @var $post Model_Term */
 		$post = ORM::factory('term')->values($_POST);
