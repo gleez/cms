@@ -292,6 +292,12 @@ class Model_Term extends ORM_MPTT {
 
 			$this->insert_as_last_child($target);
 		}
+
+		if ($this->loaded())
+		{
+			// Add or remove path aliases
+			$this->_aliases();
+		}
 	}
 
 	/**
