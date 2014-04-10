@@ -112,7 +112,7 @@ class Controller_Admin_Term extends Controller_Admin {
 					->set('allowed_types', $allowed_types);
 
 		/** @var $post Model_Term */
-		$post = ORM::factory('term')->values($_POST);
+		$post = ORM::factory('term')->values(Arr::merge($this->request->post(), $_FILES));
 
 		if ($this->valid_post('term'))
 		{
