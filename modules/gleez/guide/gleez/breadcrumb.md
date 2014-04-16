@@ -4,13 +4,13 @@
 
 Copy `config/breadcrumb.php` to your `application/config` folder if you want to change config values:
 
-* separator
-* last link enabled
+* Separator
+* Last link enabled
 
 Define somewhere your base item:
 
 ~~~
-Breadcrumb::factory()->addItem('Home', Route::url('default'));
+Breadcrumb::instance()->addItem('Home', Route::url('default'));
 ~~~
 
 [!!] Note: the first parameter is always translated in the default view
@@ -18,9 +18,9 @@ Breadcrumb::factory()->addItem('Home', Route::url('default'));
 In the controller or in the view you can add more items:
 
 ~~~
-Breadcrumb::factory()->addItem('Users list', Route::url('users-list'));
-Breadcrumb::factory()->addItem('John Doe');
+Breadcrumb::instance()
+            ->addItem('Users list', Route::url('users-list'));
+            ->addItem('John Doe');
 ~~~
 
 Result: `Home > Users list > John Doe`
-
