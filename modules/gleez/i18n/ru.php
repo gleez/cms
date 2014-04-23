@@ -10,6 +10,7 @@
 return array(
 	// :
 	'(:count) Comments' => '(:count) Комментариев',
+	':field must be a digit' => 'Поле `:field` должно содержать только цифры',
 	':field must be a email address' => 'Поле `:field` должно содержать email адрес',
 	':field must contain only letters' => 'Поле `:field` должно содержать только буквы',
 	':field must contain only letters and numbers' => 'Поле `:field` должно содержать только буквы и цифры',
