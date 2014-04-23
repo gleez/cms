@@ -13,7 +13,7 @@ return array(
 	':field must be a email address' => 'Поле `:field` должно содержать email адрес',
 	':field must contain only letters' => 'Поле `:field` должно содержать только буквы',
 	':field must contain only letters and numbers' => 'Поле `:field` должно содержать только буквы и цифры',
-	':field must contain only numbers, letters and dashes' => 'Поле `:field` должно содержать только цифры, буквы и точки',
+	':field must contain only numbers, letters and dashes' => 'Поле `:field` должно содержать только цифры, буквы и тире',
 	':field must not be empty' => 'Поле `:field` не может быть пустым',
 	':field must be numeric' => 'Значение поля `:field` должно быть числом',
 	':field not valid image file' => ':field не является изображением',
