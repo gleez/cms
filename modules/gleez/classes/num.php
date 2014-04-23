@@ -309,7 +309,7 @@ class Num {
 	}
 
 	/**
-	 * Get the integer value of an IPv4 dotted format address
+	 * Get the integer value from IPv4 dotted format address
 	 *
 	 * Example:
 	 * ~~~
