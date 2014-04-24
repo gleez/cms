@@ -8,15 +8,17 @@
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 return array(
-	// :
-	'(:count) Comments' => '(:count) Комментариев',
+	// Validation
+	':field must be a digit' => 'Поле `:field` должно содержать только цифры',
 	':field must be a email address' => 'Поле `:field` должно содержать email адрес',
 	':field must contain only letters' => 'Поле `:field` должно содержать только буквы',
 	':field must contain only letters and numbers' => 'Поле `:field` должно содержать только буквы и цифры',
-	':field must contain only numbers, letters and dashes' => 'Поле `:field` должно содержать только цифры, буквы и точки',
-	':field must not be empty' => ':field не может быть пустым',
+	':field must contain only numbers, letters and dashes' => 'Поле `:field` должно содержать только цифры, буквы и тире',
+	':field must not be empty' => 'Поле `:field` не может быть пустым',
+	':field must be numeric' => 'Значение поля `:field` должно быть числом',
 	':field not valid image file' => ':field не является изображением',
 	':field does not match the required format' => ':field не соответствует требуемому формату',
+	// :
 	':format words' => ':format слов',
 	':name sent a message using the contact form at :site.' => ':name отправил(а) вам сообщение используя форму отправки сообщений с сайта :site.',
 	':pcre has not been compiled with Unicode property support.' => ':pcre собран без поддержки Unicode.',
@@ -24,6 +26,7 @@ return array(
 	':tag - Recent updates' => ':tag - Последние обновления',
 	':term - Recent updates' => ':term - Последние обновления',
 	// (
+	'(:count) Comments' => '(:count) Комментариев',
 	'(No subject)' => '(Нет темы)',
 	' (not verified)' => ' (не проверен)',
 	// A
