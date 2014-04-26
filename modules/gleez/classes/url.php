@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -167,20 +167,23 @@ class URL {
 	 * echo URL::title('My Blog Post'); // "my-blog-post"
 	 * ~~~
 	 *
+	 * @since   1.0.0    Basic implementation
+	 * @since   1.1.1    Replaced UTF8::transliterate_to_ascii by UTF8::toAscii
+	 *
 	 * @param   string   $title       Phrase to convert
 	 * @param   string   $separator   Word separator (any single character) [Optional]
 	 * @param   boolean  $ascii_only  Transliterate to ASCII? [Optional]
 	 *
 	 * @return  string
 	 *
-	 * @uses    UTF8::transliterate_to_ascii
+	 * @uses    UTF8::toAscii
 	 */
 	public static function title($title, $separator = '-', $ascii_only = FALSE)
 	{
 		if ($ascii_only === TRUE)
 		{
 			// Transliterate non-ASCII characters
-			$title = UTF8::transliterate_to_ascii($title);
+			$title = UTF8::toAscii($title);
 
 			// Remove all characters that are not the separator, a-z, 0-9, or whitespace
 			$title = preg_replace('![^'.preg_quote($separator).'a-z0-9\s]+!', '', strtolower($title));
