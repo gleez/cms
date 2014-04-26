@@ -1,15 +1,13 @@
 <?php
 /**
- * @package    Kohana/Codebench
- * @category   Tests
- * @author     Geert De Deckere <geert@idoe.be>
+ * @package    Gleez/Tests/Codebench
+ * @author     Gleez Team
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Bench_Transliterate extends Codebench {
 
-	public $description =
-		'Inspired by:
-		 http://forum.kohanaframework.org/comments.php?DiscussionID=6113';
-
+	public $description = 'For extending ascii config please use <a href="http://cldr.unicode.org/index/cldr-spec/transliteration-guidelines">Unicode Transliteration Guidelines</a>';
 	public $loops = 10;
 
 	public $subjects = array
@@ -50,9 +48,9 @@ class Bench_Transliterate extends Codebench {
 		'Û', 'Þ', 'Ð', 'Æ', 'İ',
 	);
 
-	public function bench_utf8($subject)
+	public function bench_toAscii($subject)
 	{
-		return UTF8::transliterate_to_ascii($subject);
+		return UTF8::toAscii($subject);
 	}
 
 	public function bench_iconv($subject)
@@ -61,5 +59,4 @@ class Bench_Transliterate extends Codebench {
 		// "Detected an illegal character in input string"
 		return preg_replace('~[^-a-z0-9]+~i', '', @iconv('UTF-8', 'ASCII//TRANSLIT', $subject));
 	}
-
 }
