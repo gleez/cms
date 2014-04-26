@@ -114,29 +114,25 @@ class Kohana_UTF8Test extends Unittest_TestCase
 	}
 
 	/**
-	 * Provides test data for test_transliterate_to_ascii()
+	 * Provides test data for test_toAscii()
 	 */
-	public function provider_transliterate_to_ascii()
+	public function provider_toAscii()
 	{
 		return array(
-			array('Cocoñùт', -1, 'Coconuт'),
-			array('COCOÑÙТ', -1, 'COCOÑÙТ'),
-			array('Cocoñùт', 0, 'Coconuт'),
-			array('COCOÑÙТ', 0, 'COCONUТ'),
-			array('Cocoñùт', 1, 'Cocoñùт'),
-			array('COCOÑÙТ', 1, 'COCONUТ'),
+			array('Cocoñùт', 'Coconut'),
+			array('COCOÑÙТ', 'COCONUT'),
 		);
 	}
 
 	/**
-	 * Tests UTF8::transliterate_to_ascii
+	 * Tests UTF8::toAscii
 	 *
 	 * @test
-	 * @dataProvider provider_transliterate_to_ascii
+	 * @dataProvider provider_toAscii
 	 */
-	public function test_transliterate_to_ascii($input, $case, $expected)
+	public function test_toAscii($input, $expected)
 	{
-		$this->assertSame($expected, UTF8::transliterate_to_ascii($input, $case));
+		$this->assertSame($expected, UTF8::toAscii($input));
 	}
 
 	/**

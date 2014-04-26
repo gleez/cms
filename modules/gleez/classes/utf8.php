@@ -20,6 +20,7 @@
  * @package    Gleez\Base
  * @author     Kohana Team
  * @author     Gleez Team
+ * @version    1.1.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @copyright  (c) 2007-2012 Kohana Team
  * @copyright  (c) 2005 Harry Fuecks
@@ -162,29 +163,32 @@ class UTF8 {
 	 *
 	 * Example:
 	 * ~~~
-	 * $ascii = UTF8::transliterate_to_ascii($utf8);
+	 * $ascii = UTF8::toAscii($utf8);
 	 * ~~~
 	 *
-	 * @author  Andreas Gohr <andi@splitbrain.org>
+	 * @since   1.1.0
+	 * @link    http://cldr.unicode.org/index/cldr-spec/transliteration-guidelines
 	 *
-	 * @param   string   $str   string to transliterate
-	 * @param   integer  $case  -1 lowercase only, +1 uppercase only, 0 both cases [Optional]
+	 * @param   string   $str       String to transliterate
+	 * @param   integer  $asciiOnly Wether to remove non ascii [Optional]
 	 *
 	 * @return  string
 	 *
-	 * @uses    Kohana::find_file
+	 * @uses    Config::get
 	 */
-	public static function transliterate_to_ascii($str, $case = 0)
+	public static function toAscii($str, $asciiOnly = true)
 	{
-		if ( ! isset(self::$called[__FUNCTION__]))
-		{
-			require Kohana::find_file('utf8', __FUNCTION__);
+		$charMap = Config::get('ascii', array());
+		$charMap = is_object($charMap) ? $charMap->as_array() : $charMap;
 
-			// Function has been called
-			self::$called[__FUNCTION__] = TRUE;
+		$str = str_replace(array_keys($charMap), array_values($charMap), $str);
+
+		if ($asciiOnly)
+		{
+			return static::strip_non_ascii($str);
 		}
 
-		return _transliterate_to_ascii($str, $case);
+		return $str;
 	}
 
 	/**
