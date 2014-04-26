@@ -163,40 +163,12 @@ class UTF8 {
 	 *
 	 * Example:
 	 * ~~~
-	 * $ascii = UTF8::transliterate_to_ascii($utf8);
-	 * ~~~
-	 *
-	 * @author  Andreas Gohr <andi@splitbrain.org>
-	 *
-	 * @param   string   $str   string to transliterate
-	 * @param   integer  $case  -1 lowercase only, +1 uppercase only, 0 both cases [Optional]
-	 *
-	 * @return  string
-	 *
-	 * @uses    Kohana::find_file
-	 */
-	public static function transliterate_to_ascii($str, $case = 0)
-	{
-		if ( ! isset(self::$called[__FUNCTION__]))
-		{
-			require Kohana::find_file('utf8', __FUNCTION__);
-
-			// Function has been called
-			self::$called[__FUNCTION__] = TRUE;
-		}
-
-		return _transliterate_to_ascii($str, $case);
-	}
-
-	/**
-	 * Replaces special/accented UTF-8 characters by ASCII-7 "equivalents"
-	 *
-	 * Example:
-	 * ~~~
 	 * $ascii = UTF8::toAscii($utf8);
 	 * ~~~
 	 *
 	 * @since   1.1.0
+	 * @link    http://cldr.unicode.org/index/cldr-spec/transliteration-guidelines
+	 *
 	 * @param   string   $str       String to transliterate
 	 * @param   integer  $asciiOnly Wether to remove non ascii [Optional]
 	 *
@@ -209,7 +181,7 @@ class UTF8 {
 		$charMap = Config::get('ascii', array());
 		$charMap = is_object($charMap) ? $charMap->as_array() : $charMap;
 
-		$str = preg_replace(array_keys($charMap), array_values($charMap), $str);
+		$str = str_replace(array_keys($charMap), array_values($charMap), $str);
 
 		if ($asciiOnly)
 		{
