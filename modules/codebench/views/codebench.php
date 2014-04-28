@@ -76,7 +76,7 @@
 		.help { cursor:help; }
 	</style>
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<?php echo HTML::script('media/js/jquery-1.11.0.min.js', NULL, TRUE); ?>
 	<script>
 		$(document).ready(function() {
 			// Insert "Toggle All" button
