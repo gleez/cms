@@ -5,9 +5,9 @@
  * @package    Gleez\Session\Native
  * @author     Gleez Team
  * @author     Kohana Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2008-2012 Kohana Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://kohanaframework.org/license
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -32,8 +32,31 @@ class Session_Native extends Session {
 	 */
 	protected function _read($id = NULL)
 	{
+		/**
+		 * session_set_cookie_params will override php ini settings
+		 * If Cookie::$domain is NULL or empty and is passed, PHP
+		 * will override ini and sent cookies with the host name
+		 * of the server which generated the cookie
+		 *
+		 * See:
+		 * + http://dev.kohanaframework.org/issues/3604
+		 * + http://www.php.net/manual/en/function.session-set-cookie-params.php
+		 * + http://www.php.net/manual/en/session.configuration.php#ini.session.cookie-domain
+		 *
+		 * set to Cookie::$domain if available, otherwise default to ini setting
+		 */
+		$session_cookie_domain = empty(Cookie::$domain)
+			? ini_get('session.cookie_domain')
+			: Cookie::$domain;
+
 		// Sync up the session cookie with Cookie parameters
-		session_set_cookie_params($this->_lifetime, Cookie::$path, Cookie::$domain, Cookie::$secure, Cookie::$httponly);
+		session_set_cookie_params(
+			$this->_lifetime,
+			Cookie::$path,
+			$session_cookie_domain,
+			Cookie::$secure,
+			Cookie::$httponly
+		);
 
 		// Do not allow PHP to send Cache-Control headers
 		session_cache_limiter(FALSE);

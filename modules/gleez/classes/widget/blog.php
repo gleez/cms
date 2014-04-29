@@ -3,8 +3,9 @@
  * Blog Widget class
  *
  * @package    Gleez\Widget
- * @author     Sergey Yakovlev - Gleez
- * @copyright  (c) 2011-2012 Gleez Technologies
+ * @author     Gleez Team
+ * @version    1.0.1
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Widget_Blog extends Widget {
@@ -110,7 +111,7 @@ class Widget_Blog extends Widget {
 				$items[$blog->id]['url']   = $blog->url;
 
 				$image = is_null($blog->image)
-					? '<div class="empty-photo"><i class="icon-camera-retro icon-2x"></i></div>'
+					? '<div class="empty-photo"><i class="fa fa-camera-retro fa-2x"></i></div>'
 					: HTML::resize($blog->image, array('alt' => $blog->title, 'height' => 140, 'width' => 180, 'type' => 'resize', 'itemprop' => 'image'));
 
 				$items[$blog->id]['image'] = $image;

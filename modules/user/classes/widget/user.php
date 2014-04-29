@@ -4,7 +4,7 @@
  *
  * @package    User\Widget
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Widget_User extends Widget {
@@ -47,7 +47,7 @@ class Widget_User extends Widget {
 		return View::factory('widget/login')
 				->set('register',     Config::get('auth.register'))
 				->set('use_username', Config::get('auth.username'))
-				->set('providers',    array_filter(Config::get('auth.providers')))
+				->set('providers',    array_filter(Auth::providers()))
 				->set('action',       $action)
 				->set('post',         ORM::factory('user'))
 				->render();

@@ -31,6 +31,14 @@ setlocale(LC_ALL, 'en_US.utf-8');
 spl_autoload_register(array('Kohana', 'auto_load'));
 
 /**
+ * Optionally, you can enable a compatibility auto-loader for use with
+ * older modules that have not been updated for PSR-0.
+ *
+ * It is recommended to not enable this unless absolutely necessary.
+ */
+spl_autoload_register(array('Kohana', 'auto_load_lowercase'));
+
+/**
  * Enable the Kohana auto-loader for unserialization.
  *
  * @link  http://php.net/spl_autoload_call
@@ -50,9 +58,6 @@ mb_substitute_character('none');
 /**
  * Set Kohana::$environment if a 'GLEEZ_ENV' environment variable has been supplied.
  *
- * [!!] Note: If you supply an invalid environment name, a PHP warning will be thrown
- * saying "Couldn't find constant Kohana::<INVALID_ENV_NAME>"
- *
  * @todo In the future Kohana::$environment should be moved to Gleez Core as Gleez::$environment
  *
  * @link https://github.com/gleez/cms/wiki/Apache
@@ -61,12 +66,18 @@ mb_substitute_character('none');
 if (isset($_SERVER['GLEEZ_ENV']))
 {
 	// Get environment variable from $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
-	Kohana::$environment = constant('Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']));
+	$env = 'Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']);
 }
-else if (get_cfg_var('GLEEZ_ENV'))
+elseif (get_cfg_var('GLEEZ_ENV'))
 {
 	// Get environment variable from php.ini or from ini_get('user_ini.filename')
-	Kohana::$environment = constant('Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV')));
+	$env = 'Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV'));
+}
+
+if (isset($env))
+{
+	defined($env) AND Kohana::$environment = constant($env);
+	unset($env);
 }
 
 /**
@@ -105,7 +116,7 @@ Kohana::modules(array(
 	'database'    => MODPATH.'database',   // Database access
 	'image'       => MODPATH.'image',      // Image manipulation
 	'captcha'     => MODPATH.'captcha',    // Captcha implementation
-	//'minion'      => MODPATH.'minion',    // For running tasks via the CLI
+	'minion'      => MODPATH.'minion',    // For running tasks via the CLI
 	//'unittest'    => MODPATH.'unittest',   // Unit testing
 	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
 	//'mango'       => MODPATH.'mango',      // Gleez Mango
@@ -115,7 +126,14 @@ Kohana::modules(array(
  * Attach the file write to logging.
  * Multiple writers are supported.
  */
-Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+if ((Kohana::$environment !== Kohana::DEVELOPMENT) AND (Kohana::$environment !== Kohana::STAGING))
+{
+	Kohana::$log->attach(new Log_File(APPPATH.'logs'), LOG_INFO);
+}
+else
+{
+	Kohana::$log->attach(new Log_File(APPPATH.'logs'));
+}
 
 /**
  * Default path for uploads directory.

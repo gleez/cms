@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Install
  * @author     Gleez Team
- * @version    1.3.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.4.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Install_Install extends Controller_Template {
@@ -409,21 +409,21 @@ class Controller_Install_Install extends Controller_Template {
 	{
 		if ( ! $link = @mysqli_connect($hostname, $username, $password))
 		{
-			if (strpos(mysqli_error(), 'Access denied'))
+			if (strpos(mysqli_error($link), 'Access denied'))
 			{
 				throw new Exception('access');
 			}
-			elseif (strpos(mysqli_error(), 'server host'))
+			elseif (strpos(mysqli_error($link), 'server host'))
 			{
 				throw new Exception('unknown_host');
 			}
-			elseif (strpos(mysqli_error(), 'connect to'))
+			elseif (strpos(mysqli_error($link), 'connect to'))
 			{
 				throw new Exception('connect_to_host');
 			}
 			else
 			{
-				throw new Exception(mysqli_error());
+				throw new Exception(mysqli_error($link));
 			}
 		}
 
@@ -457,7 +457,7 @@ class Controller_Install_Install extends Controller_Template {
 		$config->prefix   = $table_prefix;
 		$config->port     = '';
 
-		return file_put_contents(APPPATH.'config/database.php', $config) !== false;
+		return file_put_contents(APPPATH.'config/database.php', $config->render()) !== false;
 	}
 
 	private function mysql_version($link)
@@ -505,11 +505,12 @@ class Controller_Install_Install extends Controller_Template {
 			{
 				if (!mysqli_query($link, $this->prepend_prefix($prefix, $buf)))
 				{
-					throw new Exception(mysqli_error());
+					throw new Exception(mysqli_error($link));
 				}
 				$buf = "";
 			}
 		}
+		
 		return true;
 	}
 
@@ -561,15 +562,24 @@ class Controller_Install_Install extends Controller_Template {
 		$link = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysqli_select_db($link, $config["database"]);
 		$prefix = trim($config["table_prefix"]);
+		$time = time();
 
-		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		// Gleez Private Key
+		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
-		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
+		$sql  = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysqli_query($link, $sql);
 
+		// Auth Hash Key
+		$aKey  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aSkey = serialize($aKey);
+		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		mysqli_query($link, $aSql);
+
+		// Update user
 		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
-		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
+		$pass = hash_hmac('sha1', $password, $aKey);
+		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
 
 		return $password;
 	}
@@ -580,15 +590,24 @@ class Controller_Install_Install extends Controller_Template {
 		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
 		mysql_select_db($config["database"]);
 		$prefix = trim($config["table_prefix"]);
+		$time = time();
 
-		$key = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		// Gleez Private Key
+		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
 		$skey = serialize($key);
-		$sql = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
+		$sql  = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
 		mysql_query($sql);
 
+		// Auth Hash Key
+		$aKey  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+		$aSkey = serialize($aKey);
+		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
+		mysql_query($aSql);
+
+		// Update user
 		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, 'e41eb68d5605ebcc01424519da854c00cf52c342e81de4f88fd336b1d31ff430');
-		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass' WHERE `id` = 2");
+		$pass = hash_hmac('sha1', $password, $aKey);
+		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
 
 		return $password;
 	}

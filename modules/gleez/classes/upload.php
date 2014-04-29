@@ -17,12 +17,9 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @author     Kohana Team
- * @version    1.1.0
- * @copyright  (c) 2007-2012 Kohana Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Upload {
 
@@ -304,11 +301,11 @@ class Upload {
 	}
 
 	/**
-	 * Returns PHP upload_max_filesize
+	 * Get PHP upload_max_filesize
 	 *
 	 * @return  integer
 	 */
-	public static function get_max_size()
+	public static function getUploadMaxFilesize()
 	{
 		$max_size = ini_get('upload_max_filesize');
 		$mul = substr($max_size, -1);
@@ -316,4 +313,66 @@ class Upload {
 
 		return $mul * (int) $max_size;
 	}
+
+    /**
+     * Picture validation for image upload
+     *
+     * @param   array   $file        $_FILES item
+     * @param   string  $upload_dir  Relative upload dir [Optional]
+     *
+     * Example:
+     * ~~~
+     * $filepath = Upload::uploadImage($_FILES);
+     * ~~~
+     *
+     * @since   1.2.0
+     *
+     * @return  NULL|string          NULL when filed, otherwise file path
+     *
+     * @uses    System::mkdir
+     * @uses    Message::error
+     * @uses    Log::error
+     * @uses    Upload::valid
+     * @uses    Upload::save
+     * @uses    Config::get
+     * @uses    File::getUnique
+     */
+    public static function uploadImage($file, $upload_dir = NULL)
+    {
+    	if (is_null($upload_dir))
+    	{
+    		$upload_dir = Config::get('media.upload_dir', 'media/pictures');
+    	}
+
+        $picture_path  = APPPATH . $upload_dir;
+        $valid_formats = Config::get('media.supported_image_formats', array('jpg', 'gif', 'png'));
+        $save          = TRUE;
+
+        if ( ! is_dir($picture_path))
+        {
+            if ( ! System::mkdir($picture_path))
+            {
+                Message::error(__('Failed to create directory %dir for uploading picture.'));
+
+                Log::error('Failed to create directory :dir for uploading picture.',
+                    array(':dir' => $picture_path)
+                );
+
+                $save = FALSE;
+            }
+        }
+        // Check if there is an uploaded file and valid type
+        if ($save AND self::valid($file) AND self::type($file, $valid_formats) and self::size($file, self::getUploadMaxFilesize()))
+        {
+            $filename = File::getUnique($file['name']);
+            $path     = self::save($file, $filename, $picture_path);
+
+            if ($path)
+            {
+                return $upload_dir.DS.$filename;
+            }
+        }
+
+        return NULL;
+    }
 }

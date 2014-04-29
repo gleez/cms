@@ -1,9 +1,7 @@
 <?php
-
 /**
  * The directory in which your site application specific resources are located.
  * The application directory must contain the bootstrap.php file.
- * This automatically detects multi-site configuration found in 'sites' directory
  *
  * @link  http://kohanaframework.org/guide/about.install#application
  */
@@ -111,28 +109,22 @@ unset($application, $modules, $system, $themes);
 /**
  * Define the start time of the application, used for profiling.
  */
-if ( ! defined('GLEEZ_START_TIME'))
-{
-	define('GLEEZ_START_TIME', microtime(TRUE));
-}
+defined('GLEEZ_START_TIME') OR define('GLEEZ_START_TIME', microtime(TRUE));
 
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-if ( ! defined('GLEEZ_START_MEMORY'))
-{
-	define('GLEEZ_START_MEMORY', memory_get_usage());
-}
+defined('GLEEZ_START_MEMORY') OR define('GLEEZ_START_MEMORY', memory_get_usage());
 
 // Bootstrap the application
 require APPPATH.'bootstrap'.EXT;
 
 if (PHP_SAPI == 'cli') // Try and load minion
 {
-    class_exists('Minion_Task') OR die('Please enable the Minion module for CLI support.');
-    set_exception_handler(array('Minion_Exception', 'handler'));
+	class_exists('Minion_Task') OR die('Please enable the Minion module for CLI support.');
+	set_exception_handler(array('Minion_Exception', 'handler'));
 
-    Minion_Task::factory(Minion_CLI::options())->execute();
+	Minion_Task::factory(Minion_CLI::options())->execute();
 }
 else
 {

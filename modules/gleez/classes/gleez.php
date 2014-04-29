@@ -4,8 +4,8 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.7
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    0.10.11
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Gleez {
@@ -14,7 +14,13 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '0.10.7';
+	const VERSION = '0.10.11';
+
+	/**
+	 * Minimal required version of php
+	 * @type string
+	 */
+	const PHP_MIN_REQ = '5.3.9';
 
 	/**
 	 * Release codename
@@ -35,12 +41,6 @@ class Gleez {
 	public static $installed = FALSE;
 
 	/**
-	 * Default theme name
-	 * @var string
-	 */
-	public static $theme = 'fluid';
-
-	/**
 	 * Public [Gleez_Locale] instance
 	 *
 	 * @todo In the future, this object should be moved to Gleez Core
@@ -48,7 +48,7 @@ class Gleez {
 	 * @var Gleez_Locale
 	 */
 	public static $locale = NULL;
-	
+
 	/**
 	 * Has [Gleez::ready] been called?
 	 * @var boolean
@@ -81,8 +81,8 @@ class Gleez {
 	 * @uses  Route::set
 	 * @uses  Route::defaults
 	 * @uses  Config::load
+	 * @uses  I18n::initialize
 	 * @uses  Module::load_modules
-	 * @uses  Theme::load_themes
 	 */
 	public static function ready()
 	{
@@ -95,27 +95,8 @@ class Gleez {
 		// Gleez is now initialized?
 		self::$_init = TRUE;
 
-		// Link the Kohana locale to gleez for temporary, it's not singleton
-		Gleez::$locale = Gleez_Locale::instance();
-
 		// Set default cookie salt and lifetime
 		self::_set_cookie();
-
-		// Trying to get language from cookies
-		if ($lang = Cookie::get(Gleez_Locale::$cookie))
-		{
-			I18n::$lang = $lang;
-		}
-		elseif (Kohana::$autolocale)
-		{
-			I18n::$lang = Gleez::$locale->get_language();
-			// Trying to set language to cookies
-			Cookie::set(Gleez_Locale::$cookie, I18n::$lang, Date::YEAR);
-		}
-		else
-		{
-			I18n::$lang = 'en-us';
-		}
 
 		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
@@ -124,11 +105,13 @@ class Gleez {
 		{
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
+
+			// Initialize the locale from settings
+			I18n::initialize();
 		}
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
 		{
-			// @todo We need error handler with Gleez Views
 			Gleez_Exception::$error_view = 'errors/stack';
 		}
 
@@ -138,11 +121,11 @@ class Gleez {
 			// Turn off notices and strict errors
 			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 		}
-	
+
 		// Disable the kohana powered headers
 		// @todo Remove it, use Gleez::$expose
 		Kohana::$expose = FALSE;
-	
+
 		/**
 		 * If database.php doesn't exist, then we assume that the Gleez is not
 		 * properly installed and send to the installer.

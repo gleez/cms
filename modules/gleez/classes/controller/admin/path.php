@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Path extends Controller_Admin {
@@ -49,8 +49,8 @@ class Controller_Admin_Path extends Controller_Admin {
 					array(
 						Text::plain($path->source),
 						Text::plain($path->alias),
-						HTML::icon($path->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias'))) . '&nbsp;' .
-						HTML::icon($path->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Alias'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-paths'))
+						HTML::icon($path->edit_url, 'fa-edit', array('class'=>'btn btn-sm btn-default action-edit', 'title'=> __('Edit Alias'))) . '&nbsp;' .
+						HTML::icon($path->delete_url, 'fa-trash-o', array('class'=>'btn btn-sm btn-default action-delete', 'title'=> __('Delete Alias'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-paths'))
 					)
 				);
 			}

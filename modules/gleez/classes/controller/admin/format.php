@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Format extends Controller_Admin {
@@ -82,8 +82,8 @@ class Controller_Admin_Format extends Controller_Admin {
 		$formats = $this->_format->get_all();
 		$formats[$id]['id'] = $id;
 
-		$all_roles = ORM::factory('role')->find_all()->as_array('id', 'name');
-		$filters = Filter::all();
+		$all_roles       = ORM::factory('role')->find_all()->as_array('id', 'name');
+		$filters         = Filter::all();
 		$enabled_filters = $formats[$id]['filters'];
 
 		// Form attributes
@@ -105,10 +105,6 @@ class Controller_Admin_Format extends Controller_Admin {
 		}
 
 		$this->response->body($view);
-
-		if ( ! $this->_internal)
-		{
-			Assets::tabledrag('filter-order', 'order', 'sibling', 'filter-order-weight', NULL, NULL, TRUE);
-		}
+		Assets::tabledrag();
 	}
 }

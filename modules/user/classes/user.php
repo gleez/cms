@@ -4,11 +4,47 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class User {
+
+	/**
+	 * Guest user ID
+	 * @type integer
+	 */
+	const GUEST_ID = 1;
+
+	/**
+	 * Main admin user ID
+	 * @type integer
+	 */
+	const ADMIN_ID = 2;
+
+	/**
+	 * Anonymous role ID
+	 * @type integer
+	 */
+	const GUEST_ROLE_ID = 1;
+
+	/**
+	 * Login role ID
+	 * @type integer
+	 */
+	const LOGIN_ROLE_ID = 2;
+
+	/**
+	 * User role ID
+	 * @type integer
+	 */
+	const USER_ROLE_ID = 3;
+
+	/**
+	 * Admin role ID
+	 * @type integer
+	 */
+	const ADMIN_ROLE_ID = 4;
 
 	/**
 	 * All Roles
@@ -201,11 +237,40 @@ class User {
 	}
 
 	/**
+	 * Get role by id
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  integer  $id  Role id
+	 * @return Model_Role|boolean The Role object, or FALSE if ID is invalid or not found
+	 */
+	public static function getRoleById($id)
+	{
+		try
+		{
+			$role = ORM::factory('role', $id);
+			if ($role->loaded())
+			{
+				return $role;
+			}
+		}
+		catch (Exception $e)
+		{
+			return FALSE;
+		}
+
+		return FALSE;
+	}
+
+	/**
 	 * Is the password provided correct? support old/drupal style md5 and new hash
 	 *
-	 * @param user User Model
-	 * @param string $password a plaintext password
+	 * @param  Model_User $user     User
+	 * @param  string     $password A plaintext password
+	 *
 	 * @return boolean TRUE if the password is correct
+	 *
+	 * @uses   Auth::hash
 	 */
 	public static function check_pass($user, $password)
 	{
@@ -273,14 +338,15 @@ class User {
 
 	/**
 	 * Themed list of providers to print
-	 *
+	 *  
+	 * @todo move to HTML class
 	 * @return string html to display
 	 */
 	public static function providers()
 	{
 		if(! Auth::instance()->logged_in())
 		{
-			$providers = array_filter(Kohana::$config->load('auth.providers'));
+			$providers = array_filter(Auth::providers());
 			return View::factory('oauth/providers')->set('providers', $providers);
 		}
 	}

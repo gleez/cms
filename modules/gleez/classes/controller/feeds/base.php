@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Feed
  * @author     Gleez Team
  * @version    1.1.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Feeds_Base extends Controller_Feeds_Template {
@@ -23,16 +23,16 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 	{
 		if (empty($this->_items))
 		{
-			$config = Kohana::$config->load('page');
+			$config = Config::load('page');
 
 			// Cache is Empty so Re-Cache
 			$posts = ORM::factory('post')
-				->where('status', '=', 'publish')
-				->where('promote', '=', 1)
-				->order_by('pubdate', 'DESC')
-				->limit($this->_limit)
-				->offset($this->_offset)
-				->find_all();
+						->where('status', '=', 'publish')
+						->where('promote', '=', 1)
+						->order_by('pubdate', 'DESC')
+						->limit($this->_limit)
+						->offset($this->_offset)
+						->find_all();
 
 			$items = array();
 			foreach($posts as $post)
@@ -148,10 +148,10 @@ class Controller_Feeds_Base extends Controller_Feeds_Template {
 
 			$id   = $this->request->param('id', 0);
 			$term = ORM::factory('term')
-					->where('id', '=', $id)
-					->where('type', '=', $this->_type)
-					->where('lvl', '!=', 1)
-					->find();
+						->where('id', '=', $id)
+						->where('type', '=', $this->_type)
+						->where('lvl', '!=', 1)
+						->find();
 
 			if ( ! $term->loaded())
 			{

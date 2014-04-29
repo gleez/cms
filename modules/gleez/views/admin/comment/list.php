@@ -11,13 +11,13 @@
 	<div class="content">
 		<?php echo Form::open($action, array('id'=>'admin-comment-form', 'class'=>'no-form')); ?>
 			<fieldset class="bulk-actions form-actions rounded">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="control-group <?php echo isset($errors['operation']) ? 'error': ''; ?>">
-							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'span6')); ?>
-							<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn')); ?>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
+							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'form-control col-md-6')); ?>
 						</div>
 					</div>
+					<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn btn-default')); ?>
 				</div>
 			</fieldset>
 			<table id="admin-list-comments" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1","desc"],["2","asc"],["4","desc"]]'>

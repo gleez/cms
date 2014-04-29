@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Widget extends Controller_Admin {
@@ -28,8 +28,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 					->bind('widgets',        $widget_listing);
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
-		$theme = Theme::get_info($theme_name);
+		$theme = Theme::getTheme();
 
 		if(isset($theme->regions) AND ! empty($theme->regions))
 		{
@@ -73,14 +72,6 @@ class Controller_Admin_Widget extends Controller_Admin {
 			$widget_listing[$region][] = $widget;
 		}
 
-		Assets::js('widgets', 'media/js/widgets.js', array('jquery'), FALSE, array('weight' => 5));
-
-		foreach ($widget_regions as $region => $title)
-		{
-			Assets::tabledrag('widgets','match','sibling','widget-region-select','widget-region-'.$region,NULL,FALSE);
-			Assets::tabledrag('widgets', 'order', 'sibling', 'widget-weight', 'widget-weight-' . $region);
-		}
-
 		if ($this->valid_post('widget-list'))
 		{
 			foreach ($_POST['widgets'] as $widget)
@@ -105,6 +96,9 @@ class Controller_Admin_Widget extends Controller_Admin {
 		}
 
 		$this->response->body($view);
+
+		Assets::tabledrag();
+		Assets::js('widgets', 'media/js/widgets.js', array('jquery'), FALSE, array('weight' => 5));
 	}
 
 	/**
@@ -115,8 +109,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 		$widget = ORM::factory('widget');
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
-		$theme = Theme::get_info($theme_name);
+		$theme 			= Theme::getTheme();
 
 		if(isset($theme->regions) AND ! empty($theme->regions))
 		{
@@ -160,7 +153,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			}
 		}
 
-                Assets::select2();
+		Assets::select2();
 		$this->response->body($view);
 	}
 
@@ -169,7 +162,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id     = (int) $this->request->param('id', 0);
 		$widget = ORM::factory('widget', $id);
 
 		if ( ! $widget->loaded())
@@ -181,8 +174,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 		}
 
 		$widget_regions = array();
-		$theme_name = Kohana::$config->load('site.theme', Gleez::$theme);
-		$theme = Theme::get_info($theme_name);
+		$theme          = Theme::getTheme();
 
 		$handler = Widget::factory($widget->name, $widget);
 		$fields = $handler->form();
@@ -236,7 +228,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			}
 		}
 
-                Assets::select2();
+		Assets::select2();
 		$this->response->body($view);
 	}
 
@@ -265,7 +257,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 			$this->request->redirect(Route::get('admin/widget')->uri());
 		}
 
-		$handler = Widget::factory($widget->name, $widget);
+		$handler     = Widget::factory($widget->name, $widget);
 		$this->title = __('Delete :title', array(':title' => $widget->title ));
 		$destination = ($this->request->query('destination') !== NULL) ?
 			array('destination' => $this->request->query('destination')) : array();

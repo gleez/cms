@@ -8,8 +8,8 @@
  *
  * @package    Gleez\Menu
  * @author     Gleez Team
- * @author     1.0.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @author     1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Menu {
@@ -172,8 +172,10 @@ class Menu {
 		if( empty( $items ) ) return;
 
 		$i++;
-		HTML::$current_route = URL::site(Request::current()->uri());
 
+		//This attribute detects we're in nav or widget for styling
+		$is_widget	= isset($attrs['widget']);
+		if($is_widget) unset($attrs['widget']);
 
 		$attrs['class'] = empty($attrs['class']) ? 'level-'.$i : $attrs['class'].' level-'.$i;
 		$menu = '<ul'.HTML::attributes($attrs).'>';
@@ -193,7 +195,7 @@ class Menu {
 			if ( $has_children )
 			{
 				$classes[] = 'parent dropdown';
-				$attributes[] = 'dropdown-toggle';
+				$attributes[] = 'dropdown-toggle collapsed';
 				if($i == 2) $classes[] = 'dropdown-submenu';
 			}
 
@@ -222,13 +224,24 @@ class Menu {
 				$attributes['data-toggle'] = 'dropdown';
 				$item['url'] = '#';
 				$caret = ($i == 2) ? '': '<b class="caret"></b>';
+				$class = 'dropdown-menu';
+			}
+
+			//Twitter bootstrap use collapse for widget menu chlidren
+			if($has_children && $is_widget)
+			{
+				$attributes['data-toggle'] = 'collapse';
+				$attributes['data-parent'] = '#menu-'.$key;
+				$item['url'] ='#collapse-'.$key;
+				$class = 'panel-collapse collapse';
+				$caret = ($i == 2) ? '': '<i class="fa fa-chevron-down submenu"></i>';
 			}
 
 			//set title
-			$title = (isset($item['image'])) ? '<i class="'.$item['image'].'"></i>' : '';
-			$title .= Text::plain($item['title']).$caret;
+			$title = (isset($item['image'])) ? '<i class="fa fa-fw '.$item['image'].'"></i>' : '';
+			$title .= '<span>'.Text::plain($item['title']).$caret.'</span>';
 
-			if($item['descp'] AND !empty($item['descp']))
+			if($item['descp'] && !empty($item['descp']))
 			{
 				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
 			}
@@ -237,7 +250,7 @@ class Menu {
 
 			if ( $has_children )
 			{
-				$menu .= $this->render(array('class' => 'dropdown-menu'),  $item['children']);
+				$menu .= $this->render(array('class' => $class, 'id' => 'collapse-'.$key),  $item['children']);
 			}
 
 			$_i++;
@@ -319,8 +332,11 @@ class Menu {
 
 			if (empty($items)) return;
 
-			// Set the cache
-			$cache->set($name, $items, DATE::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set($name, $items, DATE::DAY);
+			}
 		}
 
 		// Initiate Menu Object
@@ -390,8 +406,11 @@ class Menu {
 
 			if (empty($items)) return;
 
-			//set the cache
-			$cache->set($name, $items, DATE::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set($name, $items, DATE::DAY);
+			}
 		}
 
 		//Initiate Menu Object

@@ -1,35 +1,14 @@
 <?php
 /**
- * Default auth user
+ * User Model
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.2.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.4.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_User extends ORM {
-
-	/** @type integer GUEST_ID Guest user ID */
-	const GUEST_ID = 1;
-
-	/** @type integer ADMIN_ID Main admin user ID */
-	const ADMIN_ID = 2;
-
-	/** @type integer ANONYMOUS_ROLE Anonymous role ID */
-	const ANONYMOUS_ROLE = 1;
-
-	/** @type integer LOGIN_ROLE Login role ID */
-	const LOGIN_ROLE = 2;
-
-	/** @type integer USER_ROLE User role ID */
-	const USER_ROLE = 3;
-
-	/** @type integer ADMIN_ROLE Admin role ID */
-	const ADMIN_ROLE = 4;
-
-	/** @type string DEFAULT_PATH Default upload path */
-	const DEFAULT_PATH = 'media/pictures';
 
 	/**
 	 * Table columns
@@ -48,6 +27,7 @@ class Model_User extends ORM {
 		'theme'             => array( 'type' => 'string' ),
 		'signature'         => array( 'type' => 'string' ),
 		'signature_format'  => array( 'type' => 'int' ),
+		'access'            => array( 'type' => 'int' ),
 		'logins'            => array( 'type' => 'int' ),
 		'created'           => array( 'type' => 'int' ),
 		'updated'           => array( 'type' => 'int' ),
@@ -62,22 +42,26 @@ class Model_User extends ORM {
 	);
 
 	/**
-	 * Auto fill create and update columns
+	 * Auto fill create column
+	 * @var array
 	 */
 	protected $_created_column = array('column' => 'created', 'format' => TRUE);
+
+	/**
+	 * Auto fill update column
+	 * @var array
+	 */
 	protected $_updated_column = array('column' => 'updated', 'format' => TRUE);
 
 	/**
 	 * A user has many tokens and roles
-	 *
 	 * @var array Relationships
 	 */
 	protected $_has_many = array(
 		'user_tokens' => array('model' => 'user_token'),
 		'roles'       => array('model' => 'role', 'through' => 'roles_users'),
 		'identities'  => array('model' => 'identity'),
-		'friends'     => array('model' => 'user', 'through' => 'buddies', 'foreign_key' => 'buddy_id', 'far_key' => 'user_id'),
-		'requests'    => array('model' => 'user', 'through' => 'buddy_requests', 'foreign_key' => 'request_from', 'far_key' => 'request_to'),
+		'buddies'     => array('model' => 'user', 'through' => 'buddies', 'foreign_key' => 'request_from', 'far_key' => 'request_to'),
 	);
 
 	protected $_ignored_columns = array('password', 'old_pass');
@@ -140,7 +124,7 @@ class Model_User extends ORM {
 				array(array(Auth::instance(), 'hash'))
 			),
 			'picture' => array(
-				array(array($this, 'upload_photo'))
+				array(array($this, 'uploadPhoto'))
 			)
 		);
 	}
@@ -276,7 +260,7 @@ class Model_User extends ORM {
 	protected function before_delete($id)
 	{
 		// If it is an internal request (eg. popup dialog) and id < 3
-		if ($id == self::GUEST_ID OR $id == self::ADMIN_ID)
+		if ($id == User::GUEST_ID OR $id == User::ADMIN_ID)
 		{
 			Log::error('Attempt to delete system user.');
 			throw new Gleez_Exception("You can't delete system users!");
@@ -335,7 +319,7 @@ class Model_User extends ORM {
 	 */
 	public function find_all($id = NULL)
 	{
-		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
+		$this->where($this->_object_name.'.id', '!=', User::GUEST_ID);
 
 		return parent::find_all($id);
 	}
@@ -347,7 +331,7 @@ class Model_User extends ORM {
 	 */
 	public function count_all()
 	{
-		$this->where($this->_object_name.'.id', '!=', self::GUEST_ID);
+		$this->where($this->_object_name.'.id', '!=', User::GUEST_ID);
 
 		return parent::count_all();
 	}
@@ -486,50 +470,19 @@ class Model_User extends ORM {
 	}
 
 	/**
-	 * Picture validation for photo upload
+	 * Upload photo and return file path
 	 *
 	 * @param   string  $file Uploaded file
-	 * @return  NULL|string   File path
-	 *
-	 * @uses    System::mkdir
-	 * @uses    Message::error
-	 * @uses    Log::error
-	 * @uses    Text::plain
-	 * @uses    Upload::valid
-	 * @uses    Upload::save
+	 * @return  NULL|string   NULL when filed, otherwise file path
 	 */
-	public function upload_photo($file)
+	public function uploadPhoto($file)
 	{
-		// Uploads directory and url for profile pictures
-		$picture_path = APPPATH . self::DEFAULT_PATH;
-
-		if ( ! is_dir($picture_path))
+		if (isset($file['tmp_name']) AND ! empty($file['tmp_name']))
 		{
-			if ( ! System::mkdir($picture_path))
-			{
-				Message::error(__('Failed to create directory %dir for uploading profile image. Check the permissions the web server to create this directory.',
-					array('%dir' => Text::plain($picture_path))
-				));
-
-				Log::error('Failed to create directory :dir for uploading profile image.',
-					array(':dir' => Text::plain($picture_path))
-				);
-			}
+			return Upload::uploadImage($file);
 		}
 
-		// Check if there is an uploaded file
-		if (Upload::valid($file))
-		{
-			$filename = File::getUnique($file['name']);
-			$path = Upload::save($file, $filename, $picture_path);
-
-			if ($path)
-			{
-				return self::DEFAULT_PATH.DS.$filename;
-			}
-		}
-
-		return NULL;
+		return $this->picture;
 	}
 
 	/**
@@ -658,11 +611,11 @@ class Model_User extends ORM {
 		if ( ! $this->_loaded)
 		{
 			// Add user
-			$this->name = $provider['provider'].'_'.$data['id'];
-			$this->pass = $data['id']; //set id as pass( we can't save without password)
-			$this->nick = $data['nick'];
-			$this->url  = $data['link'];
-			$this->status  = 1;
+			$this->name 	 = $provider['provider'].'_'.$data['id'];
+			$this->pass 	 = $data['id']; //set id as pass( we can't save without password)
+			$this->nick 	 = $data['nick'];
+			$this->homepage  = $data['link'];
+			$this->status  	 = 1;
 
 			// Set email if it's available via OAuth provider
 			if (isset($data['email']))
@@ -680,7 +633,7 @@ class Model_User extends ORM {
 			$this->save();
 
 			// give "login" role as it is verified
-			$this->add('roles', self::LOGIN_ROLE);
+			$this->add('roles', User::LOGIN_ROLE_ID);
 
 			$identity = ORM::factory('identity');
 			$identity->user_id = $this->id;
@@ -709,10 +662,10 @@ class Model_User extends ORM {
 			}
 		}
 
-		if ( ! $this->has('roles', self::USER_ROLE))
+		if ( ! $this->has('roles', User::USER_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::USER_ROLE);
+			$this->add('roles', User::USER_ROLE_ID);
 		}
 
 		// Return user
@@ -745,10 +698,10 @@ class Model_User extends ORM {
 		$this->values($data)->save();
 
 		// Give user the "login" role
-		if ( ! $this->has('roles', self::LOGIN_ROLE))
+		if ( ! $this->has('roles', User::LOGIN_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::LOGIN_ROLE);
+			$this->add('roles', User::LOGIN_ROLE_ID);
 		}
 
 		// Create e-mail body with reset password link
@@ -1014,7 +967,8 @@ class Model_User extends ORM {
 	public function confirm_reset_password_form(array & $data)
 	{
 		$data = Validation::factory($data)
-			->label('pass', __('Password') )
+			->label('pass', __('Password'))
+			->label('pass_confirm', __('Password Confirm'))
 			->rule('pass', 'not_empty' )
 			->rule('pass', 'min_length', array(':value', 4) )
 			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
@@ -1032,10 +986,10 @@ class Model_User extends ORM {
 		// or a the reset password form could be used in case the original sign-up confirmation mail got lost.
 		// Since the user could only come to this point if he supplied a valid email address,
 		// we confirm his account right here.
-		if ( ! $this->has('roles', self::USER_ROLE))
+		if ( ! $this->has('roles', User::USER_ROLE_ID))
 		{
 			// Give the user the "user" role
-			$this->add('roles', self::USER_ROLE);
+			$this->add('roles', User::USER_ROLE_ID);
 		}
 
 		return TRUE;

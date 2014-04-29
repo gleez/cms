@@ -1,59 +1,60 @@
-<div class="account-container">
-	<?php include Kohana::find_file('views', 'errors/partial'); ?>
+<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<?php echo Form::open($action, array('class' => 'row-fluid')); ?>
-		<p><?php echo __('Sign in using your registered account:'); ?></p>
+<?php echo Form::open($action, array('role' => 'form')); ?>
+	<p><?php echo __('Sign in using your registered account'); ?></p>
 
-		<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-			<div class="controls">
-				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-user"></i></span>
-					<?php echo Form::input('name', $post->name, array('class' => 'span10', 'placeholder' => __('Username/Email'))); ?>
+	<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
+		<?php echo Form::label('name', __('Username/Email'), array('class' => 'sr-only control-label')); ?>
+
+		<div class="input-group">
+			<span class="input-group-addon"><i class="fa fa-user"></i></span>
+			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))); ?>
+		</div>
+	</div>
+
+	<div class="form-group <?php echo isset($errors['password']) ? 'has-error': ''; ?>">
+		<?php echo Form::label('name', __('Password'), array('class' => 'sr-only control-label')) ?>
+
+		<div class="input-group">
+			<span class="input-group-addon"><i class="fa fa-key"></i></span>
+			<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))); ?>
+		</div>
+
+	</div>
+
+	<div class="form-group">
+		<div class="checkbox">
+			<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-primary btn-block')); ?>
+	</div>
+
+	<div class="form-group">
+		<ul>
+			<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')) ?></li>
+			<?php if ($register): ?>
+				<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.')))) ?></li>
+			<?php endif ?>
+		</ul>
+	</div>
+
+	<?php if ($providers): ?>
+		<hr>
+		<div class="form-group">
+			<p><?php echo __('Sign in using social network:');?></p>
+				<div class="btn-group">
+					<?php
+					foreach ($providers as $name => $provider)
+					{
+						echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
+					}
+					?>
 				</div>
-			</div>
+			<p><small><?php echo __('Fast, safe & secure way!');?></small></p>
 		</div>
+	<?php endif; ?>
 
-		<div class="control-group <?php echo isset($errors['password']) ? 'error': ''; ?>">
-			<div class="controls">
-				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-key"></i></span>
-					<?php echo Form::password('password', NULL, array('class' => 'span10', 'placeholder' => __('Password'))); ?>
-				</div>
-			</div>
-		</div>
-
-		<div class="control-group clearfix">
-			<div class="span6">
-				<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
-			</div>
-			<div class="span6 clearfix">
-				<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-danger')); ?>
-			</div>
-			<div class="span10">
-				<ul>
-					<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?></li>
-					<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.'))) ); ?></li>
-				</ul>
-			</div>
-		</div>
-
-		<?php if ($providers): ?>
-			<div class="control-group clearfix">
-				<p><?php echo __('Sign in using social network:');?></p>
-				<ul id="auth-providers">
-					<?php foreach ($providers as $provider => $key): ?>
-						<li class="provider <?php echo $provider; ?>">
-							<?php
-							$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
-
-							echo HTML::anchor($url, ucfirst($provider), array('id' => $provider, 'title' =>__('Login with :provider', array(':provider' => $provider))));
-							?>
-						</li>
-					<?php endforeach; ?>
-					<br><small><?php echo __('Fast, safe & secure way!');?></small>
-				</ul>
-			</div>
-		<?php endif; ?>
-
-	<?php echo Form::close() ?>
-</div>
+<?php echo Form::close(); ?>

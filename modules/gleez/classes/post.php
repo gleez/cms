@@ -8,7 +8,7 @@
  * @package    Gleez\Post
  * @author     Gleez Team
  * @version    1.1.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
  * @todo       This class does not do any permission checking
@@ -55,7 +55,8 @@ class Post extends ORM_Versioned {
 	);
 
 	/**
-	 * Auto fill updated columns
+	 * Auto fill updated column
+	 * @var array
 	 */
 	protected $_updated_column = array(
 		'column' => 'updated',
@@ -90,7 +91,7 @@ class Post extends ORM_Versioned {
 			'far_key'     => 'term_id'
 		),
 		'comments' => array(
-			'model' => 'comment',
+			'model'       => 'comment',
 			'foreign_key' => 'post_id'
 		)
 	);
@@ -192,10 +193,10 @@ class Post extends ORM_Versioned {
 	public function labels()
 	{
 		return array(
-			'title'    => __('Title'),
-			'body'     => __('Body'),
-			'teaser'   => __('Teaser'),
-			'image'    => __('Primary Image'),
+			'title'  => __('Title'),
+			'body'   => __('Body'),
+			'teaser' => __('Teaser'),
+			'image'  => __('Primary Image'),
 		);
 	}
 
@@ -716,12 +717,12 @@ class Post extends ORM_Versioned {
 		// Allow module developers to override
 		$values = Module::action('post_bulk_actions', $states);
 
-		if($list)
+		if ($list)
 		{
 			$options = array('' => __('Bulk Options'));
 			foreach ($values as $operation => $array)
 			{
-				if( $operation == "ct_{$type}") continue;
+				if ($operation == "ct_{$type}") continue;
 				$options[$operation] = $array['label'];
 			}
 
@@ -734,10 +735,10 @@ class Post extends ORM_Versioned {
 	/**
 	 * Bulk update posts
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_update(array(1, 2, 3, ...), array('status' => 'publish', 'promote' => 1), 'blog');
-	 * </code>
+	 * Usage:
+	 * ~~~
+	 * Post::bulk_update(array(1, 2, 3, ...), array('status' => 'publish', 'promote' => 1), 'blog');
+	 * ~~~
 	 *
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post actions
@@ -762,13 +763,13 @@ class Post extends ORM_Versioned {
 	/**
 	 * Bulk delete posts
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_delete(array(1, 2, 3, ...), 'blog');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * Post::bulk_delete(array(1, 2, 3, ...), 'blog');
+	 * ~~~
 	 *
-	 * @param   array   $ids   Array of post id's
-	 * @param   string  $type  Type of post [Optional]
+	 * @param  array   $ids   Array of post id's
+	 * @param  string  $type  Type of post [Optional]
 	 */
 	public static function bulk_delete(array $ids, $type = 'post')
 	{
@@ -780,16 +781,15 @@ class Post extends ORM_Versioned {
 		{
 			$post->delete();
 		}
-
 	}
 
 	/**
 	 * Bulk convert post type(s)
 	 *
-	 * Usage:<br>
-	 * <code>
-	 *    Post::bulk_convert(array(1, 2, 3, ...), 'blog');
-	 * </code>
+	 * Example:
+	 * ~~~
+	 * Post::bulk_convert(array(1, 2, 3, ...), 'blog');
+	 * ~~~
 	 *
 	 * @param   array   $ids      Array of post id's
 	 * @param   array   $actions  Array of post type (new type)
@@ -998,7 +998,7 @@ class Post extends ORM_Versioned {
 	 */
 	protected function _delete_image()
 	{
-		if($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
+		if ($this->rawimage AND file_exists($this->_image_path.$this->rawimage))
 		{
 			@unlink($this->_image_path.$this->rawimage);
 		}

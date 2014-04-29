@@ -47,7 +47,7 @@ return array(
 				 * mixed    w                 When a write is given a Write Concern option ("w") the driver will send
 				 *                            the query to MongoDB and piggy back a getLastError command (GLE) with
 				 *                            the Write Concern option at the same time.
-				 *                            See http://www.php.net/manual/ru/mongo.writeconcerns.php
+				 *                            See http://www.php.net/manual/en/mongo.writeconcerns.php
 				 */
 				'db'               => 'gleez', // Required
 				'connectTimeoutMS' => 10000,   // Optional
@@ -60,6 +60,7 @@ return array(
 		),
 		/**
 		 * Whether or not to use profiling.
+		 * Note: [Gleez::$profiling] should be enabled.
 		 *
 		 * boolean  profiling If enabled, profiling data will be shown through Gleez profiler library
 		 */

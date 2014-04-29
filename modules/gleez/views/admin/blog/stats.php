@@ -1,25 +1,54 @@
-<ul class="page-stats">
-	<li>
-		<h3><?php _e('Categories'); ?></h3>
-		<ul>
-			<li><?php _e('Total'); ?>: <?php echo $stats['categories']['total'] ?></li>
-		</ul>
-	</li>
-	<li>
-		<h3><?php _e('Tags'); ?></h3>
-		<ul>
-			<li><?php _e('Total'); ?>: <?php echo $stats['tags']['total'] ?></li>
-		</ul>
-	</li>
-	<li>
-		<h3><?php _e('Blogs'); ?></h3>
-		<ul>
-			<li><?php _e('Total'); ?>: <?php echo $stats['articles']['total'] ?></li>
-		</ul>
-	</li>
-	<li>
-		<h3><?php _e('Comments'); ?></h3>
-		<ul>
-			<li><?php _e('Total'); ?>: <?php echo $stats['comments']['total'] ?></li>
-	</li>
-</ul>
+<div class="help">
+	<p><?php _e('Summary statistics of blogs used on your site'); ?></p>
+</div>
+
+<div class="row">
+	<div class="col-md-3 col-sm-6">
+		<div class="microwidget primary">
+			<div class="visual">
+				<i class="fa fa fa-folder-open"></i>
+			</div>
+			<div class="details">
+				<span class="content"><?php _e('Categories'); ?></span>
+				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['categories']['total'])); ?></span>
+			</div>
+			<?php echo HTML::anchor(Route::get('admin/taxonomy')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6">
+		<div class="microwidget secondary">
+			<div class="visual">
+				<i class="fa fa-tags"></i>
+			</div>
+			<div class="details">
+				<span class="content"><?php _e('Tags'); ?></span>
+				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['tags']['total'])); ?></span>
+			</div>
+			<?php echo HTML::anchor(Route::get('admin/tag')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6">
+		<div class="microwidget tertiary">
+			<div class="visual">
+				<i class="fa fa-file"></i>
+			</div>
+			<div class="details">
+				<span class="content"><?php _e('Posts'); ?></span>
+				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['articles']['total'])); ?></span>
+			</div>
+			<?php echo HTML::anchor(Route::get('admin/page')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+		</div>
+	</div>
+	<div class="col-md-3 col-sm-6">
+		<div class="microwidget">
+			<div class="visual">
+				<i class="fa fa-comments"></i>
+			</div>
+			<div class="details">
+				<span class="content"><?php _e('Comments'); ?></span>
+				<span class="value"><?php _e('Total: %sum', array('%sum' => $stats['comments']['total'])); ?></span>
+			</div>
+			<?php echo HTML::anchor(Route::get('admin/comment')->uri(array('action' => 'list')), '<i class="fa fa-play-circle more"></i>')?>
+		</div>
+	</div>
+</div>

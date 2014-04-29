@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Menu_Item extends Controller_Admin {
@@ -24,7 +24,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 	 */
 	public function action_list()
 	{
-		$id = (int) $this->request->param('id');
+		$id    = (int) $this->request->param('id');
 		$menu  = ORM::factory('menu', array('id' => $id, 'lft' => 1));
 
 		if ( ! $menu->loaded())
@@ -56,11 +56,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 
 		$this->response->body($view);
 
-		if (! $this->_internal)
-		{
-			Assets::tabledrag('admin-list-menu-items', 'match', 'parent', 'menu-plid', 'menu-plid', 'menu-mlid', TRUE, 15);
-			Assets::tabledrag('admin-list-menu-items', 'order', 'sibling', 'menu-weight');
-		}
+		Assets::tabledrag();
 	}
 
 	/**
@@ -68,7 +64,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 	 */
 	public function action_add()
 	{
-		$id = (int) $this->request->param('id');
+		$id   = (int) $this->request->param('id');
 		$menu = ORM::factory('menu', array('id' => $id, 'lft' => 1));
 
 		if ( ! $menu->loaded())
@@ -95,11 +91,11 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 				Message::success(__('Menu Item %name saved successful!', array('%name' => $post->title)));
 				Cache::instance('menus')->delete($menu->name);
 
-				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id )));
+				$this->request->redirect(Route::get('admin/menu/item')->uri(array('action' => 'list', 'id' => $menu->id)));
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -121,7 +117,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$menu = ORM::factory('menu', $id);
 
 		if ( ! $menu->loaded())
@@ -153,7 +149,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 			}
 			catch (ORM_Validation_Exception $e)
 			{
-				$this->_errors = $e->errors('models');
+				$this->_errors = $e->errors('models', TRUE);
 			}
 		}
 
@@ -176,7 +172,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$menu = ORM::factory('menu', $id);
 
 		if ( ! $menu->loaded())
@@ -290,7 +286,7 @@ class Controller_Admin_Menu_Item extends Controller_Admin {
 	private function generate_tree($tree)
 	{
 		$menu = array();
-		$ref = array();
+		$ref  = array();
 
 		foreach($tree as $d)
 		{
