@@ -1,82 +1,10 @@
-<?php
-/**
- * Codebench — A benchmarking module.
- *
- * @package    Kohana/Codebench
- * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
- * @license    http://kohanaphp.com/license.html
- */
-?>
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
-	<meta charset="utf-8" />
-	<title><?php if (!empty($class)): ?>
-			<?php echo $class, ' · ' ?>
-		<?php endif; ?>Codebench</title>
-
-	<style>
-		/* General styles*/
-		body { position:relative; margin:1em 2em; font:12px monaco,monospace; }
-		h1 { font-size:24px; letter-spacing:-0.05em; }
-		h2 { font-size:18px; letter-spacing:-0.1em; }
-		input, code { font:inherit; }
-		code { background:#e5e5e5; }
-		caption { display:none; }
-
-		/* Form */
-		#runner { margin-bottom:2em; }
-		#runner input[type="text"] { letter-spacing:-0.05em; }
-
-		/* Expand/Collapse all */
-		#toggle_all { position:absolute; top:0; right:0; margin:0; padding:0 4px; background:#000; font-size:18px; color:#fff; cursor:pointer; -moz-border-radius:2px; -webkit-border-radius:2px; }
-
-		/* Benchmark main graphs */
-		#bench { margin:2em 0; padding:0; list-style:none; }
-		#bench > li { margin:6px 0; }
-		#bench h2 { position:relative; margin:0; padding:2px; background:#ccc; border:1px solid #999; cursor:pointer; -moz-border-radius:3px; -webkit-border-radius:3px; }
-		#bench h2 > span { display:block; min-width:1px; height:33px; background:#fff; -moz-border-radius:2px; -webkit-border-radius:2px; }
-		#bench h2 .method { position:absolute; top:6px; left:8px; text-shadow:0 -1px 0 rgba(255,255,255,0.6); }
-		#bench h2 .method:before { content:'▸ '; }
-		#bench h2 .percent { position:absolute; top:6px; right:6px; padding:0 4px; background:#000; color:#fff; font-weight:normal; letter-spacing:0; -moz-border-radius:2px; -webkit-border-radius:2px; }
-		#bench h2:hover .method { left:10px; }
-		#bench h2.expanded { margin:12px 0 0; -moz-border-radius-bottomleft:0; -moz-border-radius-bottomright:0; -webkit-border-bottom-left-radius:0; -webkit-border-bottom-right-radius:0; }
-		#bench h2.expanded .method:before { content:'▾ '; }
-
-		/* Colorization of the bars */
-		#bench .grade-A { background:#3f0; }
-		#bench .grade-B { background:#fc0; }
-		#bench .grade-C { background:#f90; }
-		#bench .grade-D { background:#f60; }
-		#bench .grade-E { background:#f30; }
-		#bench .grade-F { background:#f00; }
-
-		/* Benchmark details */
-		#bench > li > div { display:none; margin:0 0 12px; padding:0 0 2px; background:#eee; border:1px solid #999; border-top:0; -moz-border-radius-bottomleft:3px; -moz-border-radius-bottomright:3px; -webkit-border-bottom-left-radius:3px; -webkit-border-bottom-right-radius:3px; }
-		#bench > li > div table { width:100%; background:#eee; border-collapse:collapse; }
-		#bench > li > div th { padding:6px; background:#ddd url(data:image/gif;base64,R0lGODlhAQASALMAAMfHx8TExM7Oztvb29jY2NbW1tPT09DQ0MrKygAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAABABIAAAQNMAQAEBLiHGNKIcQwRAA7) repeat-x 0 1px; text-align:left; }
-		#bench > li > div td { padding:6px; border-top:1px solid #ccc; vertical-align:top; }
-		#bench .numeric { padding-left:18px; text-align:right; }
-		#bench .numeric span { position:relative; display:block; height:16px; }
-		#bench .numeric span span { position:absolute; top:0; right:0; min-width:1px; background:#ccc; -moz-border-radius:2px; -webkit-border-radius:2px; }
-		#bench .numeric span span span { top:0; right:0; background:none; }
-		#bench tbody tr:hover { background:#fff; }
-		#bench tbody tr.highlight { background:#ffc; }
-
-		/* Footer */
-		#footer { margin-top:2em; padding-top:1em; border-top:1px solid #ccc; color:#999; }
-		#footer a { color:inherit; }
-
-		/* Misc text styles */
-		.alert { padding:0 0.5em; background:#900; font-weight:normal; color:#fff; -moz-border-radius:3px; -webkit-border-radius:3px; }
-		.quiet { color:#999; }
-		.help { cursor:help; }
-	</style>
-
+	<meta charset="utf-8">
+	<title><?php echo (!empty($class)) ? "{$class} :: " : '' ?>Codebench</title>
 	<?php echo HTML::script('media/js/jquery-1.11.0.min.js', NULL, TRUE); ?>
+	<?php echo HTML::style('media/css/codebench.css', array('media' => 'screen'), TRUE); ?>
 	<script>
 		$(document).ready(function() {
 			// Insert "Toggle All" button
@@ -252,8 +180,8 @@
 	<p id="footer">
 		Page executed in <strong><?php echo round(microtime(TRUE) - GLEEZ_START_TIME, 2) ?>&nbsp;s</strong>
 		using <strong><?php echo Text::widont(Text::bytes(memory_get_usage(), 'MB')) ?></strong> of memory.<br />
-		<a href="http://github.com/kohana/codebench">Codebench</a>, a <a href="http://kohanaframework.org/">Kohana</a> module
-		by <a href="http://www.geertdedeckere.be/article/introducing-codebench">Geert De Deckere</a>.
+		<a href="https://github.com/gleez/cms/blob/master/modules/codebench">Codebench</a>, a <a href="http://gleezcms.org/">Gleez CMS</a> module
+		by <a href="http://www.geertdedeckere.be/article/introducing-codebench">Geert De Deckere</a> and  <a href="http://gleezcms.org/">Gleez Team</a>.
 	</p>
 
 </body>
