@@ -1,17 +1,14 @@
 <?php
 /**
- * Codebench — A benchmarking module.
+ * Codebench controller
  *
- * @package    Kohana/Codebench
- * @category   Controllers
- * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @package    Codebench\Controller
+ * @author     Gleez Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Controller_Codebench extends Kohana_Controller_Template {
-
-	// The codebench view
-	public $template = 'codebench';
+class Controller_Codebench extends Controller_Template {
 
 	public function action_index()
 	{
