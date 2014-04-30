@@ -16,9 +16,9 @@
  * - Any ORM implementation
  *
  * @package    Gleez\ACL
- * @version    2.1.2
+ * @version    2.2.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
  * @todo       Implement their own exceptions (eg. ACL_Exception)
@@ -36,15 +36,6 @@ class ACL {
 
 	/** Rule type: allow */
 	const PERM_ALLOW = 1;
-	
-	/** Guest ID */
-	const ID_GUEST = 1;
-
-	/** Admin ID */
-	const ID_ADMIN = 2;
-
-	/** Anonymous role */
-	const ANONYMOUS_ROLE = 'Anonymous';
 
 	/**
 	 * @var boolean Indicates whether perms are cached
@@ -73,9 +64,10 @@ class ACL {
 		$roles = array();
 
 		// User #1 is guest
-		if ($user->id == self::ID_GUEST)
+		if ($user->id == User::GUEST_ID)
 		{
-			$roles[self::ID_GUEST] = self::ANONYMOUS_ROLE;
+			// Role #1 is guest
+			$roles[User::GUEST_ID] = User::getRoleById(User::GUEST_ROLE_ID)->name;
 		}
 		else
 		{
@@ -172,8 +164,14 @@ class ACL {
 
 		if ($save)
 		{
-			// Cache all defined perms
-			return $cache->set('ACL::cache()', self::$_all_perms);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				// Cache all defined perms
+				return $cache->set('ACL::cache()', self::$_all_perms);
+			}
+
+			return false;
 		}
 		else
 		{
@@ -309,7 +307,7 @@ class ACL {
 		}
 
 		// User #2 has all privileges:
-		if ($user->id == self::ID_ADMIN)
+		if ($user->id == User::ADMIN_ID)
 		{
 			return self::ALLOW;
 		}
@@ -357,8 +355,11 @@ class ACL {
 		{
 			$roles = ORM::factory('role')->find_all()->as_array('id', 'name');
 			
-			//set the cache
-			$cache->set('site_roles', $roles, DATE::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set('site_roles', $roles, DATE::DAY);
+			}
 		}
 
 		return $roles;
@@ -391,9 +392,12 @@ class ACL {
 			{
 				$perms[$row->rid][$row->permission] = self::ALLOW;
 			}
-			
-			//set the cache
-			$cache->set('site_perms', $perms, DATE::DAY);
+
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set('site_perms', $perms, DATE::DAY);
+			}
 		}
 
 		return $perms;

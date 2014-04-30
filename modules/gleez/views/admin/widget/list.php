@@ -2,10 +2,10 @@
 	<?php echo __('This page provides interface for assigning a widget to a region, and for controlling the order of widgets within regions. Click the configure link next to each widget to configure its specific title and visibility settings.'); ?>
 </div>
 
-<?php echo HTML::anchor(Route::get('admin/widget')->uri( array('action' =>'add')), '<i class="icon-plus icon-white"></i>'.__('Add Widget'), array('class' => 'btn btn-success pull-right')) ?>
+<?php echo HTML::anchor(Route::get('admin/widget')->uri( array('action' =>'add')), '<i class="fa fa-plus fa-white"></i>'.__('Add Widget'), array('class' => 'btn btn-success pull-right')) ?>
 <div class="clearfix"></div><br>
 <?php echo Form::open( Route::url('admin/widget', array('action' => 'index')), array('id'=>'widgets-form', 'class'=>'form') ); ?>
-	<table id="widgets" class="table table-striped table-bordered table-highlight">
+	<table id="widgets" class="table table-striped table-bordered table-apparent">
 		<thead>
 			<tr>
 				<th><?php echo __('Title') ?></th>
@@ -16,14 +16,14 @@
 		</thead>
 		<tbody>
 			<?php foreach ($widget_regions as $region => $title): ?>
-				<tr class="region-title region-title-<?php echo $region?>">
+				<tr class="region-title region-title-<?php echo $region; ?>">
 					<td colspan="4"><?php echo HTML::chars($title) ?></td>
 				</tr>
-				<tr class="region-message region-<?php print $region?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
+				<tr class="region-message region-<?php echo $region; ?>-message <?php echo empty($widgets[$region]) ? 'region-empty' : 'region-populated'; ?>">
 					<td colspan="4"><em><?php echo empty($widgets[$region]) ? __('No Widgets in this region') : '&nbsp;'; ?></em></td>
 				</tr>
 				<?php foreach ($widgets[$region] as $i => $widget): ?>
-					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable <?php echo Text::alternate('odd', 'even') ?>">
+					<tr id="widget-row-<?php echo $widget->id ?>" class="draggable">
 						<?php
 							$split_name = explode('/', $widget->name);
 							$static = ($split_name AND $split_name[0] == 'static') ? TRUE : FALSE;
@@ -36,24 +36,24 @@
 						</td>
 						<td class="tabledrag-hide" >
 							<?php
-								echo Form::weight('widgets['.$widget->name.'][weight]', $widget->weight, array('class' => 'widget-weight widget-weight-'.$region), $weight_delta);
+								echo Form::weight('widgets['.$widget->name.'][weight]', $widget->weight, array('class' => 'row-weight widget-weight-'.$region), $weight_delta);
 								echo Form::hidden('widgets['.$widget->name.'][id]', $widget->id);
 							?>
 						</td>
 						<td class="action">
 							<?php
-								echo HTML::anchor($widget->edit_url, '<i class="icon-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
+								echo HTML::anchor($widget->edit_url, '<i class="fa fa-cog"></i>', array('class'=>'action-edit', 'title'=>__('Configure')));
 
 								if ($static)
 								{
-									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), ' <i class="icon-trash"></i>', array('class'=>'action-delete', 'title'=>__('Delete')));
+									echo HTML::anchor(Route::get('admin/widget')->uri(array('action' => 'delete', 'id'=> $widget->id)), ' <i class="fa fa-trash-o"></i>', array('class'=>'action-delete', 'title'=>__('Delete')));
 								}
 
 								unset($static);
 							?>
 						</td>
 					</tr>
-				<?php endforeach ?>
+				<?php endforeach; ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>

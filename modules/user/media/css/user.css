@@ -1,230 +1,347 @@
+@charset "utf-8";
+
+.user .page-container {
+	background: transparent;
+}
+
+/* Space after footer. Mb should create general margin, and remove this rule? */
+.user-register .panel {
+	margin-bottom: 7em;
+}
+
+/* Overrides for BS3. Big panels should have big title */
+.user-register h3.panel-title,
+.user-reset_password h3.panel-title,
+.user-reset_confirm_password h3.panel-title{
+	font-size: 22px;
+	text-transform: none;
+}
+
+/* Overrides for BS3. Login panel should have big title - this is site name */
+.user-login h1.panel-title {
+	font-size: 36px;
+	text-transform: none;
+}
+
+.vcard dl:first-child {
+	margin-top: 0;
+}
+
+.widget .login-fields {
+	margin-bottom: 0;
+}
+
+/* Use this as standard shadow effect for any windows, widgets, panels, etc. */
+.window-shadow {
+	-webkit-box-shadow: 0 0 20px #DADADA, inset 0 0 0 #E6E6E6;
+	   -moz-box-shadow: 0 0 20px #DADADA, inset 0 0 0 #E6E6E6;
+	        box-shadow: 0 0 20px #DADADA, inset 0 0 0 #E6E6E6;
+}
+
+.login-fields, .login-actions {
+    float: left;
+    margin-bottom: 1.25em;
+    margin-top: -1em;
+    width: 100%;
+}
+
+.input-prepend {
+    display: inline-block;
+    font-size: 0;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.vcard img,
 .empty-photo {
-        width: 150px;
-        height: 150px;
+	padding: 5px;
+	background: #fff;
+	margin: 0 auto;
+	display: block;
 }
 
 .empty-photo i {
-        margin: 0 auto;
-        display: block;
-        width: 1em;
-        position: relative;
-        top: 70px;
+	margin: 0 auto;
+	display: block;
+	width: 1em;
+	position: relative;
+	top: 70px;
 }
 
-.user-login #content form {
-        width: 400px;
-        margin: 0.5em auto;
+a#add-pic {
+	color: #838383;
+	display: block;
 }
 
-form ul#auth-providers {
-        border-top: 1px dashed #ccc;
-        list-style: none;
-        margin: 0px;
-        padding: 1em 0;
-        text-decoration: none;
+a#add-pic:hover {
+	color: indianred;
 }
 
-form #auth-providers .provider {
-        list-style: none;
-        display: inline;
-        padding: 2px 5px;
-        text-decoration: none;
-        color: rgba(0, 0, 0, 0);
+.vcard h2 {
+	font-size: 26px;
+	color: #444;
+	margin: 0;
+	text-transform: none;
 }
 
-.provider a:link, .provider a:active, .provider a:visited {
-        height: 3em;
-        line-height: 2.5em;
-        display: inline-block;
-        text-decoration: none;
-        color: inherit;
+.vcard h2 span {
+	line-height: 1;
+	line-height: 26px;
+	display: inline-block;
+	width: 100%;
+	margin-bottom: 10px;
 }
 
-.facebook a { background: url('../images/facebook-32.png') no-repeat; }
-.google a { background: url('../images/google-32.png') no-repeat; }
-.live a { background: url('../images/windows-32.png') no-repeat; }
-.twitter a { background: url('../images/twitter-32.png') no-repeat; }
-.github a { background: url('../images/github-32.png') no-repeat; }
-
-#oauth-providers, ul#post-provider-buttons {
-        padding:0px;
-        margin: 0px;
-        display: block;
+.vcard h2 em {
+	display: inline-block;
+	width: 100%;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 300;
+	line-height: 24px;
+	margin-bottom: 10px;
 }
 
-#oauth-providers .oprovider {
-        list-style: none;
-        display: inline;
-        font-size: 12px !important;
-        text-decoration: none;
-        cursor: pointer;
-        border: medium none !important;
-        float: left;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-       -khtml-border-radius: 3px;
-        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-        box-shadow: 1px 0 1px rgba(255, 255, 255, 0.5);
-        padding: 2px 6px;
-        margin-right: 1em;
-        margin-bottom: 0.5em;
+.vcard dl {
+	position: relative;
+	margin-bottom: 1em;
+	line-height: 1.65em;
 }
 
-#oauth-providers li a {
-    height: 24px;
-    color: #fff;
-    padding: 2px 0 2px 20px;
+.vcard dl dt {
+	margin: 0;
+	float: left;
 }
 
-#oauth-providers li a.base{
-        background-image: url('../images/gleez-16.png');
-        background-repeat: no-repeat;
+.vcard dl dt i {
+	font-size: 1.25em;
 }
 
-#oauth-providers .facebook a{
-        background-image: url('../images/facebook-16.png');
-        background-repeat: no-repeat;
+.vcard dl dd {
+	margin: 0 0 0 2.2em;
+	/*width: 195px;*/
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 }
 
-#oauth-providers .google a{
-        background-image: url('../images/google-16.png');
-        background-repeat: no-repeat;
+.vcard .list-group-item h3 {
+	margin: 0;
 }
 
-#oauth-providers a.live {
-        color: #3C6B9C;
-        background-image: url('../images/windows-16.png');
-        background-repeat: no-repeat;
+.login-fields,
+.login-actions {
+	float: left;
+	width: 100%;
+	margin-top: -1em;
+	margin-bottom: 1.25em;
 }
 
-#oauth-providers .base{
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+.user-password .login-fields {
+	margin-top: 1em;
 }
 
-#oauth-providers .facebook {
-        background: #999; /* for non-css3 browsers */
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5E76AB', endColorstr='#305192'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#5E76AB), to(#305192)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #5E76AB, #305192) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+.login-fields .field {
+	margin-bottom: 1.25em;
 }
 
-#oauth-providers .google {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7ECE48', endColorstr='#45a059'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#7ECE48), to(#45a059)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #7ECE48, #45a059) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
+
+.login-fields input[type="password"],
+.login-fields input[type="text"] {
+	height: 38px;
+	font-size: 16px;
+	color: #8E8D8D;
+	padding: 0 10px;
+	display: block;
+	margin: 0;
+	-webkit-box-shadow: inset 2px 2px 4px #F1F1F1;
+	   -moz-box-shadow: inset 2px 2px 4px #F1F1F1;
+	        box-shadow: inset 2px 2px 4px #F1F1F1;
 }
 
-#oauth-providers li.live {
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ddeff0', endColorstr='#85DCE2'); /* for IE */
-        background: -webkit-gradient(linear, left top, left bottom, from(#ddeff0), to(#85DCE2)); /* for webkit browsers */
-        background: -moz-linear-gradient(center top , #ddeff0, #85DCE2) repeat scroll 0 0 transparent; /* for firefox 3.6+ */
-        color: #3C6B9C;
+.widget .login-fields input[type="password"],
+.widget .login-fields input[type="text"] {
+	width: 174px;
 }
 
-#post-provider-buttons {
-        border: 1px solid #eee;
-        padding: 3px;
-        border-radius: 3px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -o-border-radius: 3px;
-       -khtml-border-radius: 3px;
+.login-fields .icon-large:before {
+	font-size: 1.8em;
+	padding-top: .1em;
 }
 
-#post-provider-buttons textarea {
-        background: #eeeeee;
+.login-actions ul {
+	list-style-type: none;
+	min-height: 18px;
+	margin-left: 0;
 }
 
-/*register css */
-
-.signin-form, .signup-form{
-    font-size: .9em;
-}
-.signin-form .form-horizontal .controls {
-    margin-left: 130px;
-}
-.signin-form .form-horizontal .control-label {
-    width: 120px;
-}
-.box{
-    border: 1px solid #EEEEEE;
-    margin-bottom: 20px;
+.login-actions ul li {
+	float: left;
+	width: 47%;
+	padding-right: 3%;
+	line-height: 18px;
+	text-align: right;
 }
 
-.box > .box-header{
-    padding: 10px 10px 10px 20px;
-    border-bottom: 1px solid #EEEEEE;
-    font-weight: 200;
-    font-size: 1.2em;
+.login-actions ul li:nth-child(2n) {
+	border-left: 1px solid #838383;
+	margin-left: -1px;
+	text-align: left;
+	padding-left: 3%;
+	padding-right: 0;
 }
 
-.box > .box-header > .header-control{
+.oauth-buttons .btn.btn-default{
+	margin: 1em;
+	min-width: 120px;
+}
+
+.user-register .provider {
+	list-style: none;
+	width: 156px;
+	height: 32px;
+	margin-bottom: .4em;
+	-webkit-border-radius: 3px;
+	   -moz-border-radius: 3px;
+	        border-radius: 3px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 1px rgba(0,0,0,.3);
+	   -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 1px rgba(0,0,0,.3);
+	        box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 1px rgba(0,0,0,.3);
+}
+
+.user-register .provider a {
+	text-decoration: none;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
+	vertical-align: middle;
+	height: 32px;
+	width: 108px;
+	line-height: 32px;
+	display: inline-block;
+	color: #fff;
+	font-weight: bold;
+	font-size: 11px;
+}
+
+.help-signin {
+	color: #333;
+	background: #FDFDFD;
+	margin: 1em .2em;
+	font-family: Cambria, Georgia ,serif;
+	font-size: 100%;
+	line-height: 120%;
+	padding: .8em .9em;
+	border: 1px dashed #E4E4E4;
+	-webkit-border-radius: 4px;
+	   -moz-border-radius: 4px;
+	        border-radius: 4px;
+}
+
+form .captcha {
+	display: block;
+}
+
+ul{
+	list-style:none;
+}
+
+ul.tabnav > li {
+    color: #333;
+    display: inline;
     float: right;
+    font-size: 11px;
+    list-style-type: none;
+    margin: 0 5px 0 0;
 }
 
-.box > .box-header > .header-control a{
-    cursor: pointer;
-    margin-left: 5px;
+.reset_password legend {
+	padding: 0 1em;
 }
 
-.box > .box-body{
-    position: relative;
-    padding: 10px 10px 10px 10px;
+#user .list-group .list-group-item .list-group-chevron {
+	color: #BBB;
+	float: right;
+	margin-top: 5px;
 }
 
-.box > .box-body  form  .form-actions{
-    margin-left: -20px;
-    margin-right: -10px;
-    margin-bottom: -30px;
+#user .list-group .list-group-item i {
+	color: #333;
 }
 
-.corner-all{
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-.corner-top{
-    -webkit-border-top-left-radius: 4px;
-    -moz-border-radius-topleft: 4px;
-    border-top-left-radius: 4px;
-
-    -webkit-border-top-right-radius: 4px;
-    -moz-border-radius-topright: 4px;
-    border-top-right-radius: 4px;
+#user .vcard .caption-label{
+	padding-right: 10px;
 }
 
-.grd-teal{
-    background: #00a0b1;
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwYTBiMSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDgyOTkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  #00a0b1 0%, #008299 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00a0b1), color-stop(100%,#008299));
-    background: -webkit-linear-gradient(top,  #00a0b1 0%,#008299 100%);
-    background: -o-linear-gradient(top,  #00a0b1 0%,#008299 100%);
-    background: -ms-linear-gradient(top,  #00a0b1 0%,#008299 100%);
-    background: linear-gradient(to bottom,  #00a0b1 0%,#008299 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00a0b1', endColorstr='#008299',GradientType=0 );
-    border: 1px solid #00a0b1;
+#user .list-group-chevron + .badge {
+	margin-right: 10px;
 }
-.grd-green{
-    background: #00a600;
-    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwYTYwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDhhMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background: -moz-linear-gradient(top,  #00a600 0%, #008a00 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00a600), color-stop(100%,#008a00));
-    background: -webkit-linear-gradient(top,  #00a600 0%,#008a00 100%);
-    background: -o-linear-gradient(top,  #00a600 0%,#008a00 100%);
-    background: -ms-linear-gradient(top,  #00a600 0%,#008a00 100%);
-    background: linear-gradient(to bottom,  #00a600 0%,#008a00 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00a600', endColorstr='#008a00',GradientType=0 );
-    border: 1px solid #00a600;
+
+.btn-sm .fa, .btn-xs .fa {
+	font-size: 13px;
 }
-.color-white{
-    color: #FFFFFF;
+
+.vcard-details {
+    padding-top:20px;
+    border-top: 1px solid #E9E9E9;
+	color: #444;
 }
-.bg-white,
-.bar-st.white > span{
-    background-color: #FFFFFF;
+.bio .widget-header{
+    padding-top:20px;
+}
+
+.col-sidebar-right {
+    border-left: 1px solid #ddd;
+   /* padding-left: 2em;*/
+}
+
+#form-picture{
+    height:auto;
+}
+
+.message-unread {
+	font-weight: bold;
+}
+.buddy_sent a{
+	float:right;
+}
+
+
+.list-all1 .friends img{
+	height:50px;
+	width:50px;
+	display:inline-block;
+}
+.list-all .allusers img{
+	height:80px;
+	width:80px;
+}
+.list-all .friends .fa{
+	padding-top:15px;
+}
+.list-all .all-view{
+	padding-right: 5px;
+}
+.list-group-item.friends, .list-group-item.allusers{
+	border-left: none;
+	border-right: none;
+}
+.list-all .panel-heading{
+	border-bottom: none;
+}
+
+.list-all .allusers img{
+	height:80px;
+	width:80px;
+}
+.list-all .panel-heading{
+	padding:5px 10px;
+}
+.list-all .panel-heading .btn{
+	padding:2px 10px;
+	margin-right:5px;
+}
+.list-all .panel-heading h3{
+	line-height: 1.2em;
+}
+.list-group-item{
+	padding:10px 12px;
 }

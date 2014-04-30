@@ -6,8 +6,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Num {
@@ -287,5 +287,45 @@ class Num {
 		}
 
 		return $bytes;
+	}
+
+	/**
+	 * Get the IPv4 dotted format address from integer
+	 *
+	 * Example:
+	 * ~~~
+	 * echo Num::toIPv4(4294967295); // 255.255.255.255
+	 * echo Num::toIPv4(3221234342); // 192.0.34.166
+	 * ~~~
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  int $integer_ip An integer value
+	 * @return string
+	 */
+	public static function toIPv4($integer_ip)
+	{
+		return long2ip((int)$integer_ip);
+	}
+
+	/**
+	 * Get the integer value from IPv4 dotted format address
+	 *
+	 * Example:
+	 * ~~~
+	 * echo Num::fromIPv4('255.255.255.255'); // 4294967295
+	 * echo Num::fromIPv4('192.0.34.166');    // 3221234342
+	 * ~~~
+	 *
+	 * @since  1.2.0
+	 *
+	 * @param  string $dottet_ip An standard IPv4 format address
+	 * @return int
+	 */
+	public static function fromIPv4($dottet_ip)
+	{
+		return  (substr($dottet_ip, 0, 3) > 127)
+			? ((ip2long($dottet_ip) & 0x7FFFFFFF) + 0x80000000)
+			: ip2long($dottet_ip);
 	}
 }

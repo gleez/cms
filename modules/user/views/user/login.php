@@ -1,59 +1,78 @@
-<div class="account-container">
+<?php
+	// @todo Should be moved to controller
+	Assets::css('user', 'media/css/user.css', array('weight' => 2));
+?>
+
+<div class="col-sm-4 col-sm-offset-4">
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<?php echo Form::open($action, array('class' => 'row-fluid')); ?>
-		<p><?php echo __('Sign in using your registered account:'); ?></p>
-
-		<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-			<div class="controls">
-				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-user"></i></span>
-					<?php echo Form::input('name', $post->name, array('class' => 'span10', 'placeholder' => __('Username/Email'))); ?>
+	<div class="panel panel-default window-shadow">
+		<div class="panel-heading">
+			<h1 class="panel-title"><?php echo $site_name ?></h1>
+		</div>
+		<?php echo Form::open($action, array('class' => 'form form-horizontal', 'role' => 'form')); ?>
+			<div class="panel-body">
+				<div class="form-group">
+					<div class="col-sm-10 col-sm-offset-1">
+						<p><?php echo __('Sign in using your registered account'); ?></p>
+					</div>
+				</div>
+				<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
+					<div class="col-sm-10 col-sm-offset-1">
+						<?php echo Form::label('name', __('Username/Email'), array('class' => 'sr-only control-label')) ?>
+						<?php echo Form::input('name', $post->name, array('class' =>'form-control', 'placeholder' => __('Username/Email'))); ?>
+					</div>
+				</div>
+				<div class="form-group <?php echo isset($errors['password']) ? 'has-error': ''; ?>">
+					<div class="col-sm-10 col-sm-offset-1">
+						<?php echo Form::label('name', __('Password'), array('class' => 'sr-only control-label')) ?>
+						<?php echo Form::password('password', NULL, array('class' =>'form-control', 'placeholder' => __('Password'))); ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="checkbox">
+							<label for="remember">
+								<input id="remember" name="remember" type="checkbox" class="field login-checkbox" value="1" tabindex="4">&nbsp;
+								<?php _e('Stay Signed in'); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-10 col-sm-offset-1">
+						<?php echo Form::submit('login', __('Login'), array('class' => 'btn btn-primary btn-lg btn-block', 'type' => 'submit')); ?>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-6">
+						<?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?>
+					</div>
+					<?php if ($register): ?>
+						<div class="col-sm-6">
+							<?php echo HTML::anchor('user/register', __("Don't have an account?"), array('class' => 'pull-right')); ?>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
-		</div>
-
-		<div class="control-group <?php echo isset($errors['password']) ? 'error': ''; ?>">
-			<div class="controls">
-				<div class="input-prepend">
-					<span class="add-on"><i class="icon-large icon-key"></i></span>
-					<?php echo Form::password('password', NULL, array('class' => 'span10', 'placeholder' => __('Password'))); ?>
-				</div>
-			</div>
-		</div>
-
-		<div class="control-group clearfix">
-			<div class="span6">
-				<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
-			</div>
-			<div class="span6 clearfix">
-				<?php echo Form::submit('login', __('Sign In'), array('class' => 'btn btn-danger')); ?>
-			</div>
-			<div class="span10">
-				<ul>
-					<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?></li>
-					<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.'))) ); ?></li>
-				</ul>
-			</div>
-		</div>
+		<?php echo Form::close() ?>
 
 		<?php if ($providers): ?>
-			<div class="control-group clearfix">
-				<p><?php echo __('Sign in using social network:');?></p>
-				<ul id="auth-providers">
-					<?php foreach ($providers as $provider => $key): ?>
-						<li class="provider <?php echo $provider; ?>">
-							<?php
-							$url = Route::get('user/oauth')->uri(array('controller' => $provider, 'action' => 'login'));
-
-							echo HTML::anchor($url, ucfirst($provider), array('id' => $provider, 'title' =>__('Login with :provider', array(':provider' => $provider))));
-							?>
-						</li>
-					<?php endforeach; ?>
-					<br><small><?php echo __('Fast, safe & secure way!');?></small>
-				</ul>
-			</div>
+			<ul class="list-group">
+				<li class="list-group-item text-center">
+					<p><?php echo __('Sign in using social network:');?></p>
+					<div class="btn-group">
+						<?php
+						foreach ($providers as $name => $provider)
+						{
+							echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
+						}
+						?>
+					</div>
+					<p><small><?php echo __('Fast, safe & secure way!');?></small></p>
+				</li>
+			</ul>
 		<?php endif; ?>
 
-	<?php echo Form::close() ?>
+	</div>
 </div>

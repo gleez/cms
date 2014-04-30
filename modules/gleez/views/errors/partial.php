@@ -1,5 +1,5 @@
 <?php if ( ! empty($errors)): ?>
-	<div class="alert alert-error alert-block">
+	<div class="alert alert-danger alert-block">
 		<h4 class="alert-heading"><?php echo __('Error'); ?></h4>
 		<?php foreach($errors as $field => $messages): ?>
 			<?php if (is_array($messages)): ?>

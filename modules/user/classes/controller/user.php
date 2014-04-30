@@ -4,8 +4,8 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.1.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.3.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_User extends Template {
@@ -26,7 +26,7 @@ class Controller_User extends Template {
 	 */
 	public function before()
 	{
-		Assets::css('user', 'media/css/user.css', array('weight' => 2));
+		Assets::css('user', 'media/css/user.css', array('theme'), array('weight' => 60));
 
 		parent::before();
 
@@ -41,6 +41,9 @@ class Controller_User extends Template {
 		{
 			$this->request->action('reset_'.$this->request->action());
 		}
+
+		// Disable sidebars on user pages
+		$this->_sidebars = FALSE;
 	}
 
 	/**
@@ -53,8 +56,7 @@ class Controller_User extends Template {
 	 * @uses    Request::action
 	 * @uses    Route::get
 	 * @uses    Route::uri
-	 * @uses    Config::load
-	 * @uses    Config_Group::get
+	 * @uses    Config::get
 	 * @uses    Captcha::instance
 	 * @uses    Message::success
 	 *
@@ -74,6 +76,7 @@ class Controller_User extends Template {
 
 		/** @var $post Model_User */
 		$post   = ORM::factory('user');
+		/** @var $config Config_Group */
 		$config = Config::load('auth');
 
 		if ( ! $config->register)
@@ -148,7 +151,9 @@ class Controller_User extends Template {
 
 		$this->title = __('Sign In');
 		$user        = ORM::factory('user');
-		$config      = Kohana::$config->load('auth');
+
+		// Disable sidebars on login page
+		$this->_sidebars = FALSE;
 
 		// Create form action
 		$destination = isset($_GET['destination']) ? $_GET['destination'] : Request::initial()->uri();
@@ -156,9 +161,9 @@ class Controller_User extends Template {
 		$action      = Route::get('user')->uri($params).URL::query(array('destination' => $destination));
 
 		$view = View::factory('user/login')
-			->set('register',     $config->get('register'))
-			->set('use_username', $config->get('username'))
-			->set('providers',    array_filter($config->get('providers')))
+			->set('register',     Config::get('auth.register'))
+			->set('use_username', Config::get('auth.username'))
+			->set('providers',    array_filter(Auth::providers()))
 			->set('post',         $user)
 			->set('action',       $action)
 			->bind('errors',      $this->_errors);
@@ -196,6 +201,9 @@ class Controller_User extends Template {
 	 */
 	public function action_logout()
 	{
+		// Disable template on logout
+		$this->auto_render = FALSE;
+
 		// Sign out the user
 		Auth::instance()->logout();
 
@@ -238,6 +246,12 @@ class Controller_User extends Template {
 		$user     = ORM::factory('user', $id);
 		$account  = FALSE;
 		$is_owner = FALSE;
+		$request  = FALSE;
+		$isFriend = FALSE;
+		$friends  = array();
+
+		// Add Schema.org support
+		$this->schemaType = 'ProfilePage';
 
 		if ( ! $user->loaded())
 		{
@@ -262,7 +276,7 @@ class Controller_User extends Template {
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
-		elseif (ACL::check('access profiles') AND $user->status AND $user->id > Model_User::GUEST_ID)
+		elseif (ACL::check('access profiles') AND $user->status AND $user->id > User::GUEST_ID)
 		{
 			$this->title = __('Profile %title', array('%title' => Text::ucfirst($user->nick)));
 		}
@@ -276,9 +290,19 @@ class Controller_User extends Template {
 			$is_owner = TRUE;
 		}
 
+		if($account && $user)
+		{
+			$request   = Model::factory('buddy')->isRequest($account->id, $user->id);
+			$isFriend  = Model::factory('buddy')->isFriend($account->id, $user->id);
+			$friends   = Model::factory('buddy')->friends($user->id, 5);
+		}
+
 		$view = View::factory('user/profile')
-				->set('user',     $user)
-				->set('is_owner', $is_owner);
+					->set('user',		 $user)
+					->set('is_owner',	 $is_owner)
+					->set('request',	 $request)
+					->set('isfriend',	 $isFriend)
+					->set('friends', 	 $friends);
 
 		$this->response->body($view);
 	}
@@ -454,7 +478,7 @@ class Controller_User extends Template {
 
 
 		// Make sure nobody else is logged in
-		$this->prevent_user_collision($id);
+		$this->_preventCollision($id);
 
 		// Confirm the user's sign-up
 		if ($this->_user->confirm_signup($id, $token))
@@ -543,7 +567,7 @@ class Controller_User extends Template {
 		$time  = (int) $this->request->param('time');
 
 		// Make sure nobody else is logged in
-		$this->prevent_user_collision($id);
+		$this->_preventCollision($id);
 
 		// Validate the confirmation link first
 		if ( ! $this->_user->confirm_reset_password_link($id, $token, $time))
@@ -568,7 +592,7 @@ class Controller_User extends Template {
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
 			}
 
-			$this->_errors = $post->errors('models', TRUE);
+			$this->_errors = $post->errors('models/user', TRUE);
 		}
 
 		$this->response->body($view);
@@ -582,9 +606,9 @@ class Controller_User extends Template {
 	 * This situation could arise, for example, when a user follows a
 	 * confirmation links while another user was still logged in.
 	 *
-	 * @param   integer $id  User id of the current user
+	 * @param  integer  $id  User id of the current user
 	 */
-	protected function prevent_user_collision($id)
+	protected function _preventCollision($id)
 	{
 		// Another user (on the same browser) is still logged in
 		if ($this->_auth->logged_in() AND $id != $this->_user->id)

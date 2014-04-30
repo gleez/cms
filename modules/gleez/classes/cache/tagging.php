@@ -3,11 +3,8 @@
  * Gleez [Cache](api/Cache) Tagging Interface
  *
  * @package    Gleez\Cache\Base
- * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2009-2012 Kohana Team
- * @copyright  (c) 2012-2013 Gleez Technologies
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 interface Cache_Tagging {

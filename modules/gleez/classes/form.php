@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.2.1
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Form {
@@ -30,6 +30,8 @@ class Form {
 	 * @return  string
 	 *
 	 * @uses    Request::uri
+	 * @uses    Request::current
+	 * @uses    Request::query
 	 * @uses    URL::site
 	 * @uses    URL::is_remote
 	 * @uses    URL::explode
@@ -153,7 +155,7 @@ class Form {
 			$attrs['type'] = 'text';
 		}
 
-		if (! isset($attrs['id']))
+		if (! isset($attrs['id']) && $attrs['type'] != 'hidden')
 		{
 			$attrs['id'] = self::_get_id_by_name($name);
 		}
@@ -921,6 +923,111 @@ class Form {
 		}
 
 		return '<select'.HTML::attributes($attrs).'>'.$options.'</select>';
+	}
+
+	/**
+	 * Creates a form input for date.
+	 *
+	 *     echo Form::date('author_date', $created);
+	 *
+	 * @param   string  $name       input name
+	 * @param   string  $value      input value
+	 * @param   array   $attributes html attributes
+	 * @return  string
+	 * @uses    Form::input
+	 * @link    https://github.com/smalot/bootstrap-datetimepicker
+	 */
+	public static function date($name, $value = NULL, array $attrs = NULL)
+	{
+		$out = '';
+
+		// Assign the datepicker assets
+		Assets::css('bs.dt', 'media/css/bootstrap-datetimepicker.css', array('bootstrap'));
+		Assets::js('bs.dt', 'media/js/datepicker/datetimepicker.js', array('bootstrap'));
+
+		if ( ! isset($attrs['id']))
+		{
+			$attrs['id'] = Form::_get_id_by_name($name);
+		}  
+
+		// Set the input name
+		$attrs['name']  = $name;
+		$attrs['type']  = 'text'; 
+		$attrs[]        = 'readonly';
+
+		$control_attrs['class']                     = 'input-group date';
+		$control_attrs['data-provide']              = 'datetimepicker';
+		$control_attrs['data-date-language']        = 'en';
+		$control_attrs['data-date-autoclose']       = true;
+		$control_attrs['data-show-meridian']        = true;
+		$control_attrs['data-date-today-highlight'] = true;
+		$control_attrs['data-picker-position']      = 'bottom-left';
+		//$control_attrs['data-format-type']        = 'php';
+		$control_attrs['data-date-format']          = 'dd M yyyy hh:ii:ss';
+
+		// Add locale support to datepicker. @todo CH and latin support
+		if(I18n::$lang != 'en')
+		{
+			$lang                                   = I18n::$lang;
+			$control_attrs['data-date-language']    = $lang;
+			Assets::js('bs.dt.locale', "media/js/datepicker/locales/bootstrap-datetimepicker.{$lang}.js", array('bs.dt'));
+		}
+
+		// @todo inconsistencies between php/js date formats
+		if (isset($attrs['data-date-format']))
+		{
+			$control_attrs['data-date-format'] = $attrs['data-date-format'];
+			unset($attrs['data-date-format']);
+		}
+
+		if (isset($attrs['data-date-today-btn']))
+		{
+			$control_attrs['data-date-today-btn'] = $attrs['data-date-today-btn'];
+			unset($attrs['data-date-today-btn']);
+		}
+
+		if (isset($attrs['data-start-view']))
+		{
+			$control_attrs['data-start-view'] = $attrs['data-start-view'];
+			unset($attrs['data-start-view']);
+		}
+
+		if (isset($attrs['data-min-view']))
+		{
+			$control_attrs['data-min-view'] = $attrs['data-min-view'];
+			unset($attrs['data-min-view']);
+		}
+
+		if (isset($attrs['data-max-view']))
+		{
+			$control_attrs['data-max-view'] = $attrs['data-max-view'];
+			unset($attrs['data-max-view']);
+		}
+
+		if (isset($attrs['data-view-select']))
+		{
+			$control_attrs['data-view-select'] = $attrs['data-view-select'];
+			unset($attrs['data-view-select']);
+		}
+
+		// Set the input value
+		if ($value == false)
+		{
+			$attrs['value'] 			= Date::formatted_time(time(), 'd M Y h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time(time(), 'd M Y h:i:s');
+		}
+		elseif ($value != false && is_numeric($value))
+		{
+			$attrs['value'] 			= Date::formatted_time($value, 'd M Y h:i:s');
+			$control_attrs['data-date'] = Date::formatted_time($value, 'd M Y h:i:s');
+		}
+
+		$out .= '<div' . HTML::attributes($control_attrs).'>';
+		$out .= '<input'.HTML::attributes($attrs).'>';
+		$out .= '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
+		$out .= '</div>';
+
+		return $out;
 	}
 
 	/**

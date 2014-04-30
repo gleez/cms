@@ -5,24 +5,26 @@
  * and a route. Routes may also contain keys which can be used to set the
  * controller, action, and parameters.
  *
- * Each <key> will be translated to a regular expression using a default
+ * Each `<key>` will be translated to a regular expression using a default
  * regular expression pattern. You can override the default pattern by providing
  * a pattern for the key:
+ * ~~~
+ * // This route will only match when <id> is a digit
+ * Route::set('user', 'user/<action>/<id>', array('id' => '\d+'));
  *
- *     // This route will only match when <id> is a digit
- *     Route::set('user', 'user/<action>/<id>', array('id' => '\d+'));
- *
- *     // This route will match when <path> is anything
- *     Route::set('file', '<path>', array('path' => '.*'));
+ * // This route will match when <path> is anything
+ * Route::set('file', '<path>', array('path' => '.*'));
+ * ~~~
  *
  * It is also possible to create optional segments by using parentheses in
  * the URI definition:
+ * ~~~
+ * // This is the standard default route, and no keys are required
+ * Route::set('default', '(<controller>(/<action>(/<id>)))');
  *
- *     // This is the standard default route, and no keys are required
- *     Route::set('default', '(<controller>(/<action>(/<id>)))');
- *
- *     // This route only requires the <file> key
- *     Route::set('file', '(<path>/)<file>(.<format>)', array('path' => '.*', 'format' => '\w+'));
+ * // This route only requires the <file> key
+ * Route::set('file', '(<path>/)<file>(.<format>)', array('path' => '.*', 'format' => '\w+'));
+ * ~~~
  *
  * Routes also provide a way to generate URIs (called "reverse routing"), which
  * makes them an extremely powerful and flexible way to generate internal links.
@@ -30,12 +32,8 @@
  * @package    Gleez\Base
  * @version    2.1.0
  * @author     Gleez Team
- * @author     Kohana Team
- * @version    1.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
 class Route {
 
@@ -165,7 +163,8 @@ class Route {
 	 *
 	 * If your routes will remain the same for a long period of time,
 	 * use this to reload the routes from the cache rather than redefining
-	 * them on every page load.
+	 * them on every page load. By default the $cache_life is set by
+	 * [Kohana::init] in APPPATH/bootstrap.php
 	 *
 	 * Example:
 	 * ~~~
@@ -357,7 +356,7 @@ class Route {
 	 * @param   string  $uri    Route URI pattern [Optional]
 	 * @param   array   $regex  Key patterns [Optional]
 	 *
-	 * @uses    Route::_compile
+	 * @uses    Route::compile
 	 */
 	public function __construct($uri = NULL, array $regex = NULL)
 	{
@@ -483,9 +482,6 @@ class Route {
 	 */
 	public function matches($uri)
 	{
-		// Get the URI from the Request
-		//$uri = trim($request->uri(), '/');
-
 		if ( ! preg_match($this->_route_regex, $uri, $matches))
 			return FALSE;
 
@@ -511,6 +507,21 @@ class Route {
 			}
 		}
 
+		/**
+		 * @todo
+		if ( ! empty($params['controller']))
+		{
+		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+		$params['controller'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['controller'])));
+		}
+
+		if ( ! empty($params['directory']))
+		{
+		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+		$params['directory'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['directory'])));
+		}
+		 */
+
 		if ($this->_filters)
 		{
 			foreach ($this->_filters as $callback)
@@ -527,7 +538,7 @@ class Route {
 				{
 					// Filter has modified the parameters
 					$params = $return;
-					
+
 					// fix for pagination on lambda routes
 					$this->_uri = Arr::get($params, 'uri', '');
 				}

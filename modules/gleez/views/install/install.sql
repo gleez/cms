@@ -89,7 +89,7 @@ CREATE TABLE {comments} (
   KEY comment_post_type (post_id, `type`),
   KEY comment_type (`type`),
   KEY comment_post_id  (`post_id`),
-  CONSTRAINT {comments_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {users};
@@ -126,7 +126,26 @@ CREATE TABLE {users} (
 
 INSERT INTO {users} (`id`, `name`, `pass`, `mail`, `nick`, `gender`, `dob`, `theme`, `signature`, `signature_format`, `logins`, `created`, `updated`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `hash`, `data`) VALUES
 (1, 'guest', '', 'guest@example.com', 'Guest', NULL, 0, '', '', NULL, 0, 0, 0, 0, 1, 'UTC', 'en_US', '', '', NULL, NULL),
-(2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@gleez.com', 'Gleez Administrator', NULL, 0, '', '', NULL, 12, 1304109999, 1305386005, 1305386005, 1, 'UTC', 'en_US', '', 'webmaster@gleez.com', NULL, NULL);
+(2, 'admin', 'f06b94fb0479f5596399aa962d9d9f8904d3e09a', 'webmaster@example.com', 'Gleez Administrator', NULL, 0, '', '', NULL, 1, 1393236002, 1393236002, 1393236002, 1, 'UTC', 'en_US', '', 'webmaster@example.com', NULL, NULL);
+
+DROP TABLE IF EXISTS {messages};
+CREATE TABLE {messages} (
+  id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  sender bigint(20) unsigned NOT NULL DEFAULT '0',
+  recipient bigint(20) unsigned NOT NULL DEFAULT '0',
+  subject varchar(128) NOT NULL,
+  body longtext NOT NULL,
+  status varchar(20) NOT NULL DEFAULT 'unread',
+  format tinyint(4) NOT NULL DEFAULT '1',
+  created int(11) NOT NULL DEFAULT '0',
+  sent int(11) NOT NULL DEFAULT '0',
+  lang varchar(12) NOT NULL DEFAULT 'en',
+  PRIMARY KEY (id),
+  KEY `message_id` (`id`),
+  KEY `message_status_date` (`status`,`created`,`id`),
+  KEY `message_author` (`sender`),
+  FOREIGN KEY (`sender`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {config};
 CREATE TABLE {config} (
@@ -137,7 +156,7 @@ CREATE TABLE {config} (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
-('site', 'admin_theme', 's:5:"fluid";'),
+('site', 'admin_theme', 's:6:"cerber";'),
 ('site', 'date_first_day', 's:1:"1";'),
 ('site', 'date_format', 's:9:"l, F j, Y";'),
 ('site', 'date_time_format', 's:15:"l, F j, Y - H:i";'),
@@ -147,14 +166,15 @@ INSERT INTO {config} (`group_name`, `config_key`, `config_value`) VALUES
 ('site', 'offline_message', 's:0:"";'),
 ('site', 'seo_url', 's:1:"1";'),
 ('site', 'site_email', 's:19:"unknown@unknown.com";'),
-('site', 'site_favicon', 's:18:"/media/favicon.ico";'),
-('site', 'site_logo', 's:15:"/media/logo.png";'),
+('site', 'site_favicon', 's:24:"/media/icons/favicon.ico";'),
+('site', 'site_logo', 's:22:"/media/images/logo.png";'),
 ('site', 'site_name', 's:9:"Gleez CMS";'),
 ('site', 'site_slogan', 's:49:"Light, Simple, Flexible Content Management System";'),
-('site', 'theme', 's:5:"fluid";'),
+('site', 'theme', 's:6:"cerber";'),
 ('site', 'timezone', 's:12:"Asia/Kolkata";'),
 ('site', 'time_format', 's:5:"H:i:s";'),
-('site', 'gleez_private_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";');
+('site', 'gleez_private_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";'),
+('site', 'auth_hash_key', 's:72:"d6b7050911d1fa78e8f8eb648feacbb61a03805fa62126cbc303cab12dba77067655674c";');
 
 DROP TABLE IF EXISTS {menus};
 CREATE TABLE {menus} (
@@ -179,44 +199,45 @@ INSERT INTO {menus} (`id`, `title`, `name`, `descp`, `image`, `url`, `params`, `
 (2, 'Management', 'management', 'The Management menu contains links for administrative tasks.', NULL, NULL, '', 1, 0, 1, 30, 1, 2),
 (3, 'Navigation', 'navigation', 'The Navigation menu contains links intended for site visitors. Links are added to the Navigation menu automatically by some modules.', NULL, NULL, '', 1, 0, 1, 2, 1, 3),
 (4, 'User Menu', 'user-menu', 'The User menu contains links related to the user''s account, as well as the ''Log out'' link.', NULL, NULL, '', 1, 0, 1, 4, 1, 4),
-(8, 'Home', 'home', '', 'icon-home', '', NULL, 1, 1, 2, 3, 2, 1),
-(10, 'Pages', 'pages', '', 'icon-book', 'page', NULL, 1, 1, 4, 9, 2, 1),
+(8, 'Home', 'home', '', 'fa-home', '', NULL, 1, 1, 2, 3, 2, 1),
+(10, 'Pages', 'pages', '', 'fa-book', 'page', NULL, 1, 1, 4, 9, 2, 1),
 (11, 'Add Page', 'add-page', '', NULL, 'page/add', NULL, 1, 10, 7, 8, 3, 1),
-(12, 'Contact', 'contact', '', 'icon-envelope', 'contact', NULL, 1, 1, 18, 19, 2, 1),
-(13, 'Administer', 'administer', '', 'icon-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
-(14, 'Menus', 'menus', '', 'icon-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
-(15, 'Blogs', 'blogs', '', 'icon-beer', 'admin/blogs', NULL, 1, 2, 10, 11, 2, 2),
-(16, 'Input Formats', 'input-formats', '', 'icon-magnet', 'admin/formats', NULL, 1, 2, 18, 19, 2, 2),
-(17, 'Settings', 'settings', '', 'icon-cogs', 'admin/settings', NULL, 1, 2, 28, 29, 2, 2),
-(18, 'Path Alias', 'path-alias', '', 'icon-link', 'admin/paths', NULL, 1, 2, 20, 21, 2, 2),
-(19, 'Widgets', 'widgets', '', 'icon-asterisk', 'admin/widgets', NULL, 1, 2, 26, 27, 2, 2),
-(20, 'Taxonomy', 'taxonomy', '', 'icon-folder-open', 'admin/taxonomy', NULL, 1, 2, 14, 15, 2, 2),
-(21, 'Tags', 'tags', '', 'icon-tags', 'admin/tags', NULL, 1, 2, 16, 17, 2, 2),
-(22, 'Modules', 'modules', '', 'icon-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
-(23, 'Users', 'users', '', 'icon-user', 'admin/users', NULL, 1, 2, 22, 23, 2, 2),
-(24, 'Roles', 'roles', '', 'icon-retweet', 'admin/roles', NULL, 1, 2, 24, 25, 2, 2),
-(25, 'Pages', 'admin-pages', '', 'icon-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
-(26, 'Comments', 'admin-comment', '', 'icon-comment', 'admin/comments', NULL, 1, 2, 12, 13, 2, 2),
+(12, 'Contact', 'contact', '', 'fa-envelope', 'contact', NULL, 1, 1, 18, 19, 2, 1),
+(13, 'Administer', 'administer', '', 'fa-cog', 'admin', NULL, 1, 2, 2, 3, 2, 2),
+(14, 'Menus', 'menus', '', 'fa-bookmark', 'admin/menus', NULL, 1, 2, 6, 7, 2, 2),
+(15, 'Blogs', 'blogs', '', 'fa-beer', 'admin/blogs', NULL, 1, 2, 10, 11, 2, 2),
+(16, 'Input Formats', 'input-formats', '', 'fa-magnet', 'admin/formats', NULL, 1, 2, 18, 19, 2, 2),
+(17, 'Settings', 'settings', '', 'fa-cogs', 'admin/settings', NULL, 1, 2, 28, 29, 2, 2),
+(18, 'Path Alias', 'path-alias', '', 'fa-link', 'admin/paths', NULL, 1, 2, 20, 21, 2, 2),
+(19, 'Widgets', 'widgets', '', 'fa-asterisk', 'admin/widgets', NULL, 1, 2, 26, 27, 2, 2),
+(20, 'Categories', 'taxonomy', '', 'fa-folder-open', 'admin/taxonomy', NULL, 1, 2, 14, 15, 2, 2),
+(21, 'Tags', 'tags', '', 'fa-tags', 'admin/tags', NULL, 1, 2, 16, 17, 2, 2),
+(22, 'Modules', 'modules', '', 'fa-list-alt', 'admin/modules', NULL, 1, 2, 4, 5, 2, 2),
+(23, 'Users', 'users', '', 'fa-user', 'admin/users', NULL, 1, 2, 22, 23, 2, 2),
+(24, 'Roles', 'roles', '', 'fa-lock', 'admin/roles', NULL, 1, 2, 24, 25, 2, 2),
+(25, 'Pages', 'admin-pages', '', 'fa-book', 'admin/pages', NULL, 1, 2, 8, 9, 2, 2),
+(26, 'Comments', 'admin-comment', '', 'fa-comment', 'admin/comments', NULL, 1, 2, 12, 13, 2, 2),
 (27, 'Login', 'user-login', '', NULL, '', NULL, 1, 4, 2, 3, 2, 4),
-(28, 'Blogs', 'blogs-1', '', 'icon-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
+(28, 'Blogs', 'blogs-1', '', 'fa-beer', '#', NULL, 1, 1, 10, 15, 2, 1),
 (29, 'Add Blog', 'add-blog', '', NULL, 'blog/add', NULL, 1, 28, 13, 14, 3, 1),
 (30, 'List', 'list', '', NULL, 'page', NULL, 1, 10, 5, 6, 3, 1),
 (31, 'List', 'list-1', '', NULL, 'blog', NULL, 1, 28, 11, 12, 3, 1),
-(32, 'Contact', 'contact-1', '', 'icon-envelope-alt', 'contact', NULL, 1, 1, 16, 17, 2, 1);
+(32, 'Contact', 'contact-1', '', 'fa-envelope-o', 'contact', NULL, 1, 1, 16, 17, 2, 1);
 
 DROP TABLE IF EXISTS {modules};
 CREATE TABLE {modules} (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(128) NOT NULL,
-  active tinyint(4) NOT NULL DEFAULT '0',
+  type ENUM('module', 'theme') NOT NULL DEFAULT 'module',
+  active tinyint(3) NOT NULL DEFAULT '0',
   weight int(11) NOT NULL DEFAULT '0',
-  version decimal(10,2) NOT NULL DEFAULT '0',
+  version varchar(20) NOT NULL DEFAULT '1.0',
   path varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO {modules} (`id`, `name`, `active`, `weight`, `version`, `path`) VALUES
-(1, 'user', 1, 0, '2', NULL);
+INSERT INTO {modules} (`id`, `name`, `type`, `active`, `weight`, `version`, `path`) VALUES
+(1, 'user', 'module', 1, 0, '2.0', NULL);
 
 DROP TABLE IF EXISTS {paths};
 CREATE TABLE {paths} (
@@ -238,7 +259,9 @@ CREATE TABLE {paths} (
 INSERT INTO {paths} (`id`, `source`, `alias`, `lang`, `route_name`, `route_directory`, `route_controller`, `route_action`, `route_id`) VALUES
 (1, 'rss', 'rss.xml', 'und', 'rss', 'feeds', 'base', 'index', NULL),
 (2, 'welcome', '<front>', 'und', 'default', NULL, 'welcome', 'index', NULL),
-(3, 'user/login', 'login', 'und', 'user', NULL, 'user', 'login', NULL);
+(3, 'user/login', 'login', 'und', 'user', NULL, 'user', 'login', NULL),
+(4, 'page/list', 'pages', 'und', 'page', NULL, 'page', 'list', NULL),
+(5, 'blog/list', 'blogs', 'und', 'blog', NULL, 'blog', 'list', NULL);
 
 DROP TABLE IF EXISTS {permissions};
 CREATE TABLE {permissions} (
@@ -315,7 +338,7 @@ CREATE TABLE {posts_versions} (
   PRIMARY KEY (`id`),
   KEY `post_id` (`post_id`),
   KEY `post_author` (`author`),
-  CONSTRAINT {posts_versions_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_tags};
@@ -327,8 +350,8 @@ CREATE TABLE {posts_tags} (
   created int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (post_id,tag_id),
   KEY fk_tag_id (tag_id),
-  CONSTRAINT {posts_tags_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
-  CONSTRAINT {posts_tags_ibfk_2} FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`tag_id`)  REFERENCES {tags}  (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {posts_terms};
@@ -342,8 +365,8 @@ CREATE TABLE {posts_terms} (
   KEY fk_term_id (term_id),
   KEY `type` (`type`),
   KEY posts_terms_ibfk_1 (post_id,`type`),
-  CONSTRAINT {posts_terms_ibfk_1} FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE,
-  CONSTRAINT {posts_terms_ibfk_2} FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`post_id`) REFERENCES {posts} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`term_id`) REFERENCES {terms} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {roles};
@@ -368,8 +391,8 @@ CREATE TABLE {roles_users} (
   role_id int(11) unsigned NOT NULL,
   PRIMARY KEY (user_id,role_id),
   KEY fk_role_id (role_id),
-  CONSTRAINT {roles_users_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
-  CONSTRAINT {roles_users_ibfk_2} FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (`role_id`) REFERENCES {roles} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO {roles_users} (`user_id`, `role_id`) VALUES
@@ -401,7 +424,7 @@ CREATE TABLE {user_tokens} (
   PRIMARY KEY (id),
   UNIQUE KEY uniq_token (token),
   KEY fk_user_id (user_id),
-  CONSTRAINT {user_tokens_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {widgets};
@@ -421,7 +444,7 @@ CREATE TABLE {widgets} (
   `show_title` tinyint(1) DEFAULT '1',
   `body` longtext,
   `format` tinyint(3) NOT NULL DEFAULT '1',
-  `icon` varchar(255) DEFAULT 'icon-none',
+  `icon` varchar(255) DEFAULT 'fa-none',
   PRIMARY KEY (`id`),
   KEY `fk_name` (`name`),
   KEY `fk_module` (`module`),
@@ -429,18 +452,18 @@ CREATE TABLE {widgets} (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO {widgets} (`id`, `name`, `title`, `module`, `theme`, `status`, `region`, `weight`, `cache`, `visibility`, `pages`, `roles`, `show_title`, `body`, `format`, `icon`) VALUES
-(1, 'admin/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '4', 1, NULL, 1, 'icon-gift'),
-(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-retweet'),
-(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'icon-cog'),
-(4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-asterisk'),
-(5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-none'),
-(6, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-flag'),
-(7, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-pushpin'),
-(8, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-lock'),
-(9, 'comment/recent', 'Comments', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-comment'),
-(10, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'icon-bookmark'),
-(11, 'blog/recent',	'Recent Blogs',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book'),
-(12, 'blog/announce',	'Announce of Recent Blogs',	'gleez',	NULL,	0,	'-1',	0,	0,	0,	NULL,	NULL,	1,	NULL,	1,	'icon-book');
+(1, 'admin/donate', 'Donate', 'gleez', NULL, 1, 'right', -5, 0, 0, '', '4', 1, NULL, 1, 'fa-gift'),
+(2, 'menu/main-menu', 'Main Menu', 'gleez', NULL, 1, '-1', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-retweet'),
+(3, 'menu/management', 'Management', 'gleez', NULL, 1, 'right', -2, 0, 0, '', '4', 1, NULL, 0, 'fa-tachometer'),
+(4, 'menu/navigation', 'Navigation', 'gleez', NULL, 0, '-1', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-asterisk'),
+(5, 'menu/user-menu', 'User Menu', 'gleez', NULL, 0, '-1', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-none'),
+(6, 'admin/welcome', 'Welcome', 'gleez', NULL, 1, 'dashboard', -6, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-flag'),
+(7, 'admin/info', 'System', 'gleez', NULL, 1, 'dashboard', -3, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-thumb-tack'),
+(8, 'user/login', 'Login', 'user', NULL, 1, 'right', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-lock'),
+(9, 'comment/recent', 'Comments', 'gleez', NULL, 0, '-1', -4, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-comment'),
+(10, 'admin/shortcut', 'Quick Shortcuts', 'gleez', NULL, 1, 'dashboard', -5, 0, 0, NULL, NULL, 1, NULL, 0, 'fa-bookmark'),
+(11, 'blog/recent', 'Recent Blogs', 'gleez',  NULL, 0,  '-1', 0,  0,  0,  NULL, NULL, 1,  NULL, 1,  'fa-book'),
+(12, 'blog/announce', 'Announce of Recent Blogs', 'gleez',  NULL, 0,  '-1', 0,  0,  0,  NULL, NULL, 1,  NULL, 1,  'fa-book');
 
 DROP TABLE IF EXISTS {identities};
 CREATE TABLE {identities} (
@@ -454,7 +477,7 @@ CREATE TABLE {identities} (
   KEY `provider` (`provider`),
   KEY `provider_id` (`provider`, `provider_id`),
   UNIQUE KEY `user_provider_id` (`user_id`, `provider`, `provider_id`),
-  CONSTRAINT {identities_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
+  FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {sitemaps};
@@ -473,18 +496,7 @@ CREATE TABLE {sitemaps} (
 
 DROP TABLE IF EXISTS {buddies};
 CREATE TABLE IF NOT EXISTS {buddies} (
-    `user_id` bigint(20) UNSIGNED NOT NULL,
-    `buddy_id` bigint(20) UNSIGNED NOT NULL,
-    PRIMARY KEY (`user_id`,`buddy_id`),
-    KEY `buddy_fk_1` (`user_id`),
-    KEY `buddy_fk_2` (`buddy_id`),
-    CONSTRAINT {buddy_ibfk_1} FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE,
-    CONSTRAINT {buddy_ibfk_2} FOREIGN KEY (`buddy_id`) REFERENCES {users} (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS {buddy_requests};
-CREATE TABLE IF NOT EXISTS {buddy_requests} (
-    `id` INT(11) UNSIGNED NOT NULL,
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `request_from` bigint(20) UNSIGNED NOT NULL,
     `request_to` bigint(20) UNSIGNED NOT NULL,
     `accepted` INT(1) UNSIGNED NOT NULL DEFAULT '0',
@@ -493,6 +505,64 @@ CREATE TABLE IF NOT EXISTS {buddy_requests} (
     PRIMARY KEY (`id`),
     KEY `buddy_requests_fk_1` (`request_from`),
     KEY `buddy_requests_fk_2` (`request_to`),
-    CONSTRAINT {buddy_requests_ibfk_1} FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE,
-    CONSTRAINT {buddy_requests_ibfk_2} FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE
+    FOREIGN KEY (`request_from`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`request_to`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_clients};
+CREATE TABLE IF NOT EXISTS {oauth_clients} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `title` varchar(255) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `client_secret` varchar(255) NOT NULL,
+    `redirect_uri` varchar(255) NOT NULL,
+    `grant_types` varchar(255) DEFAULT 'authorization_code',
+    `status` tinyint(2) NOT NULL,
+    `description` text NOT NULL,
+    `logo` varchar(255) NOT NULL,
+    `created` int(11) NOT NULL,
+    `updated` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_clients_fk_1` (`client_id`),
+    KEY `oauth_clients_fk_2` (`client_secret`),
+    KEY `oauth_clients_fk_3` (`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_codes};
+CREATE TABLE IF NOT EXISTS {oauth_codes} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `code` varchar(255) NOT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
+    `redirect_uri` varchar(255) NOT NULL,
+    `scope` varchar(255) DEFAULT NULL,
+    `expires` int(11) NOT NULL,
+    `created` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_codes_fk_1` (`client_id`),
+    KEY `oauth_codes_fk_2` (`user_id`),
+    KEY `oauth_codes_fk_23` (`code`),
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS {oauth_tokens};
+CREATE TABLE IF NOT EXISTS {oauth_tokens} (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `access_token` varchar(255) NOT NULL,
+    `refresh_token` varchar(255) DEFAULT NULL,
+    `client_id` varchar(255) NOT NULL,
+    `user_id` bigint(20) UNSIGNED NOT NULL,
+    `scope` varchar(255) DEFAULT NULL,
+    `access_expires` int(11) NOT NULL,
+    `refresh_expires` int(11) NOT NULL,
+    `created` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `oauth_tokens_fk_1` (`client_id`),
+    KEY `oauth_tokens_fk_2` (`user_id`),
+    KEY `oauth_tokens_fk_3` (`access_token`),
+    FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Page extends Controller_Admin {
@@ -77,7 +77,7 @@ class Controller_Admin_Page extends Controller_Admin {
 	{
 		$this->title = __('Page Settings');
 
-		$post     = Kohana::$config->load('page');
+		$post     = Config::load('page');
 		$action   = Route::get('admin/page')->uri(array('action' =>'settings'));
 		$vocabs   = array(__('none'));
 
@@ -154,8 +154,8 @@ class Controller_Admin_Page extends Controller_Admin {
 						HTML::anchor($page->user->url, $page->user->nick),
 						HTML::label(__($page->status), $page->status),
 						Date::formatted_time($page->updated, 'M d, Y'),
-						HTML::icon($page->edit_url.$destination, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
-						HTML::icon($page->delete_url.$destination, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Page'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-pages'))
+						HTML::icon($page->edit_url.$destination, 'fa-edit', array('class'=>'btn btn-sm btn-default action-edit', 'title'=> __('Edit Page'))) . '&nbsp;' .
+						HTML::icon($page->delete_url.$destination, 'fa-trash-o', array('class'=>'btn btn-sm btn-default action-delete', 'title'=> __('Delete Page'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-pages'))
 					)
 				);
 			}

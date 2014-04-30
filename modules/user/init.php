@@ -4,39 +4,12 @@
  *
  * @package    Gleez\User\Routing
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 if ( ! Route::cache())
 {
-	Route::set('user', 'user(/<action>)(/<id>)(/<token>)', array(
-		'action'     => 'edit|login|logout|view|register|confirm|password|profile|photo',
-		'id'         => '\d+'
-	))
-	->defaults(array(
-		'controller' => 'user',
-		'action'     => 'view',
-		'token'      => NULL,
-	));
-
-	Route::set('user/oauth', 'oauth/<controller>(/<action>)')
-	->defaults(array(
-		'directory'  => 'oauth',
-		'action'     => 'index',
-	));
-
-	Route::set('user/reset', 'user/reset(/<action>)(/<id>)(/<token>)(/<time>)', array(
-		'action'     => 'password|confirm_password',
-		'id'         => '\d+',
-		'time'       => '\d+'
-	))
-	->defaults(array(
-		'controller' => 'user',
-		'action'     => 'confirm_password',
-		'token'      => NULL,
-		'time'       => NULL,
-	));
-
+	//User Backend routes
 	Route::set('admin/permission', 'admin/permissions(/<action>)(/<id>)', array(
 		'id' => '\d+',
 		'action' => 'list|role|user'
@@ -67,6 +40,54 @@ if ( ! Route::cache())
 		'directory'  => 'admin',
 		'controller' => 'user',
 		'action'     => 'list',
+	));
+
+	//User Frontend routes
+	Route::set('user', 'user(/<action>)(/<id>)(/<token>)', array(
+		'action'     => 'edit|login|logout|view|register|confirm|password|profile|photo',
+		'id'         => '\d+'
+	))
+	->defaults(array(
+		'controller' => 'user',
+		'action'     => 'view',
+		'token'      => NULL,
+	));
+
+	Route::set('user/oauth', 'oauth/<controller>(/<action>)')
+	->defaults(array(
+		'directory'  => 'oauth',
+		'action'     => 'index',
+	));
+
+	Route::set('user/reset', 'user/reset(/<action>)(/<id>)(/<token>)(/<time>)', array(
+		'action'     => 'password|confirm_password',
+		'id'         => '\d+',
+		'time'       => '\d+'
+	))
+	->defaults(array(
+		'controller' => 'user',
+		'action'     => 'confirm_password',
+		'token'      => NULL,
+		'time'       => NULL,
+	));
+
+	Route::set('user/buddy', 'buddy(/<action>)(/<id>)(/p<page>)', array(
+		'action'     => 'index|add|accept|reject|delete|sent|pending',
+		'id'         => '\d+',
+		'page'       => '\d+',
+	))
+	->defaults(array(
+		'controller' => 'buddy',
+		'action'     => 'index',
+	));
+
+	Route::set('user/message', 'message(/<action>)(/<id>)', array(
+		'id'         => '\d+',
+		'action'     => 'index|inbox|outbox|drafts|list|view|edit|compose|delete|bulk'
+	))
+	->defaults(array(
+		'controller' => 'message',
+		'action'     => 'index'
 	));
 }
 

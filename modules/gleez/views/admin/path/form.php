@@ -6,18 +6,18 @@
 
 	<?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="control-group <?php echo isset($errors['source']) ? 'error': ''; ?>">
-		<?php echo Form::label('source', __('Existing URL Path'), array('class' => 'control-label')); ?>
-		<div class="controls">
-			<?php echo Form::input('source', $post->source, array('class' => 'input-xxlarge')); ?>
+	<div class="form-group <?php echo isset($errors['source']) ? 'has-error': ''; ?>">
+		<?php echo Form::label('source', __('Existing URL Path'), array('class' => 'control-label col-md-4')); ?>
+		<div class="controls col-md-5">
+			<?php echo Form::input('source', $post->source, array('class' => 'form-control col-md-5')); ?>
 			<p class="help-block"><?php echo HTML::anchor($site_url.(isset($post->source) ? $post->source : '')); ?></p>
 		</div>
 	</div>
 
-	<div class="control-group <?php echo isset($errors['alias']) ? 'error': ''; ?>">
-		<?php echo Form::label('alias', __('Alias'), array('class' => 'control-label')); ?>
-		<div class="controls">
-			<?php echo Form::input('alias', $post->alias, array('class' => 'input-xxlarge')); ?>
+	<div class="form-group <?php echo isset($errors['alias']) ? 'has-error': ''; ?>">
+		<?php echo Form::label('alias', __('Alias'), array('class' => 'control-label col-md-4')); ?>
+		<div class="controls col-md-5">
+			<?php echo Form::input('alias', $post->alias, array('class' => 'form-control col-md-5')); ?>
 			<p class="help-block"><?php echo HTML::anchor($site_url.(isset($post->alias) ? $post->alias : '')); ?></p>
 		</div>
 	</div>

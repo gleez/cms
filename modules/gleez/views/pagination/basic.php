@@ -34,4 +34,4 @@
 		<?php echo __('Last') ?>
 	<?php endif ?>
 
-</p><!-- .pagination -->
+</p>
