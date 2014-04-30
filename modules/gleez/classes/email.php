@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Email
  * @author     Gleez Team
- * @version    1.1.4
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.5
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  * @link       https://github.com/Synchro/PHPMailer
  */
@@ -15,7 +15,7 @@ class Email {
 	 * Mail object
 	 * @var PHPMailer
 	 */
-	protected $mail;
+	protected $_mail;
 
 	/**
 	 * Create a new email message
@@ -38,15 +38,15 @@ class Email {
 		require_once Kohana::find_file('vendor/PHPMailer', 'PHPMailerAutoload');
 
 		// Create phpmailer object
-		$this->mail = new PHPMailer($exceptions);
+		$this->_mail = new PHPMailer($exceptions);
 
 		// Set some defaults
-		$this->mail->setFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());
-		$this->mail->WordWrap = 70;
-		$this->mail->CharSet  = Kohana::$charset;
-		$this->mail->XMailer  = Gleez::getVersion(FALSE, TRUE);
-		$this->mail->setLanguage(I18n::$lang);
-		$this->mail->Debugoutput = 'error_log';
+		$this->_mail->setFrom(Config::get('site.site_email','webmaster@example.com'), Template::getSiteName());
+		$this->_mail->WordWrap = 70;
+		$this->_mail->CharSet  = Kohana::$charset;
+		$this->_mail->XMailer  = Gleez::getVersion(FALSE, TRUE);
+		$this->_mail->setLanguage(I18n::$lang);
+		$this->_mail->Debugoutput = 'error_log';
 	}
 
 	/**
@@ -58,7 +58,7 @@ class Email {
 	public function subject($subject)
 	{
 		// Change the subject
-		$this->mail->Subject = $subject;
+		$this->_mail->Subject = $subject;
 
 		return $this;
 	}
@@ -78,12 +78,12 @@ class Email {
 		if ( ! $type OR $type === 'text/plain')
 		{
 			// Set the main text/plain body
-			$this->mail->Body = $body;
+			$this->_mail->Body = $body;
 		}
 		else
 		{
 			// Add a custom mime type
-			$this->mail->msgHTML($body);
+			$this->_mail->msgHTML($body);
 		}
 
 		return $this;
@@ -104,7 +104,7 @@ class Email {
 	 */
 	public function to($email, $name = NULL)
 	{
-		$this->mail->addAddress($email, $name);
+		$this->_mail->addAddress($email, $name);
 
 		return $this;
 	}
@@ -118,7 +118,7 @@ class Email {
 	 */
 	public function cc($email, $name = NULL)
 	{
-		$this->mail->addCC($email, $name);
+		$this->_mail->addCC($email, $name);
 
 		return $this;
 	}
@@ -132,7 +132,7 @@ class Email {
 	 */
 	public function bcc($email, $name = NULL)
 	{
-		$this->mail->addBCC($email, $name);
+		$this->_mail->addBCC($email, $name);
 
 		return $this;
 	}
@@ -146,7 +146,7 @@ class Email {
 	 */
 	public function from($email, $name = NULL )
 	{
-		$this->mail->setFrom($email, $name);
+		$this->_mail->setFrom($email, $name);
 
 		return $this;
 	}
@@ -160,7 +160,7 @@ class Email {
 	 */
 	public function reply_to($email, $name = NULL)
 	{
-		$this->mail->addReplyTo($email, $name);
+		$this->_mail->addReplyTo($email, $name);
 
 		return $this;
 	}
@@ -173,7 +173,7 @@ class Email {
 	 */
 	public function return_path($email)
 	{
-		$this->mail->Sender = $email;
+		$this->_mail->Sender = $email;
 
 		return $this;
 	}
@@ -187,7 +187,7 @@ class Email {
 	{
 		try
 		{
-			$this->mail->send();
+			$this->_mail->send();
 			return TRUE;
 		}
 		catch(Exception $e)
@@ -204,7 +204,7 @@ class Email {
 	 */
 	public function mail()
 	{
-		return $this->mail;
+		return $this->_mail;
 	}
 
 }

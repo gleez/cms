@@ -9,7 +9,7 @@
  * @package    Gleez\Helpers
  * @author     Gleez Team
  * @version    1.3.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Text {
@@ -658,22 +658,29 @@ class Text {
 	}
 
 	/**
-	 * Returns information about the client user agent.
+	 * Returns information about the client user agent
 	 *
-	 *     // Returns "Chrome" when using Google Chrome
-	 *     $browser = Text::user_agent('browser');
+	 * Example:
+	 * ~~~
+	 * // Returns "Chrome" when using Google Chrome
+	 * $browser = Text::user_agent(Request::$user_agent, 'browser');
+	 * ~~~
 	 *
 	 * Multiple values can be returned at once by using an array:
-	 *
-	 *     // Get the browser and platform with a single call
-	 *     $info = Text::user_agent(array('browser', 'platform'));
+	 * ~~~
+	 * // Get the browser and platform with a single call
+	 * $info = Text::user_agent(Request::$user_agent, array('browser', 'platform'));
+	 * ~~~
 	 *
 	 * When using an array for the value, an associative array will be returned.
 	 *
-	 * @param   string  $agent
-	 * @param   mixed   $value  array or string to return: browser, version, robot, mobile, platform
+	 * @param   string  $agent  Client user agent
+	 * @param   mixed   $value  Array or string to return: browser, version, robot, mobile, platform
 	 *
 	 * @return  mixed
+	 *
+	 * @uses    Config::get
+	 * @uses    Request::$user_agent
 	 */
 	public static function user_agent($agent, $value)
 	{
@@ -1356,91 +1363,6 @@ class Text {
 		$processed_text = self::_replace_fraction('7/8', '&#8542;', $processed_text);
 
 		return $processed_text;
-	}
-
-	/**
-	 * Returns a string with all spaces converted to underscores (by default), accented
-	 * characters converted to non-accented characters, and non word characters removed.
-	 *
-	 * @param   string  $string       The string you want to slug
-	 * @param   string  $replacement  Will replace keys in map [Optional]
-	 *
-	 * @return  string
-	 */
-	public static function convert_accented_characters($string, $replacement = '-')
-	{
-		$string = mb_strtolower($string);
-
-		$foreign_characters = array(
-			'/Ã¤|Ã¦|Ç½/' => 'ae',
-			'/Ã¶|Å“/' => 'oe',
-			'/Ã¼/' => 'ue',
-			'/Ã„/' => 'Ae',
-			'/Ãœ/' => 'Ue',
-			'/Ã–/' => 'Oe',
-			'/Ã€|Ã|Ã‚|Ãƒ|Ã„|Ã…|Çº|Ä€|Ä‚|Ä„|Ç/' => 'A',
-			'/Ã |Ã¡|Ã¢|Ã£|Ã¥|Ç»|Ä|Äƒ|Ä…|ÇŽ|Âª/' => 'a',
-			'/Ã‡|Ä†|Äˆ|ÄŠ|ÄŒ/' => 'C',
-			'/Ã§|Ä‡|Ä‰|Ä‹|Ä/' => 'c',
-			'/Ã|ÄŽ|Ä/' => 'D',
-			'/Ã°|Ä|Ä‘/' => 'd',
-			'/Ãˆ|Ã‰|ÃŠ|Ã‹|Ä’|Ä”|Ä–|Ä˜|Äš/' => 'E',
-			'/Ã¨|Ã©|Ãª|Ã«|Ä“|Ä•|Ä—|Ä™|Ä›/' => 'e',
-			'/Äœ|Äž|Ä |Ä¢/' => 'G',
-			'/Ä|ÄŸ|Ä¡|Ä£/' => 'g',
-			'/Ä¤|Ä¦/' => 'H',
-			'/Ä¥|Ä§/' => 'h',
-			'/ÃŒ|Ã|ÃŽ|Ã|Ä¨|Äª|Ä¬|Ç|Ä®|Ä°/' => 'I',
-			'/Ã¬|Ã­|Ã®|Ã¯|Ä©|Ä«|Ä­|Ç|Ä¯|Ä±/' => 'i',
-			'/Ä´/' => 'J',
-			'/Äµ/' => 'j',
-			'/Ä¶/' => 'K',
-			'/Ä·/' => 'k',
-			'/Ä¹|Ä»|Ä½|Ä¿|Å/' => 'L',
-			'/Äº|Ä¼|Ä¾|Å€|Å‚/' => 'l',
-			'/Ã‘|Åƒ|Å…|Å‡/' => 'N',
-			'/Ã±|Å„|Å†|Åˆ|Å‰/' => 'n',
-			'/Ã’|Ã“|Ã”|Ã•|ÅŒ|ÅŽ|Ç‘|Å|Æ |Ã˜|Ç¾/' => 'O',
-			'/Ã²|Ã³|Ã´|Ãµ|Å|Å|Ç’|Å‘|Æ¡|Ã¸|Ç¿|Âº/' => 'o',
-			'/Å”|Å–|Å˜/' => 'R',
-			'/Å•|Å—|Å™/' => 'r',
-			'/Åš|Åœ|Åž|Å /' => 'S',
-			'/Å›|Å|ÅŸ|Å¡|Å¿/' => 's',
-			'/Å¢|Å¤|Å¦/' => 'T',
-			'/Å£|Å¥|Å§/' => 't',
-			'/Ã™|Ãš|Ã›|Å¨|Åª|Å¬|Å®|Å°|Å²|Æ¯|Ç“|Ç•|Ç—|Ç™|Ç›/' => 'U',
-			'/Ã¹|Ãº|Ã»|Å©|Å«|Å­|Å¯|Å±|Å³|Æ°|Ç”|Ç–|Ç˜|Çš|Çœ/' => 'u',
-			'/Ã|Å¸|Å¶/' => 'Y',
-			'/Ã½|Ã¿|Å·/' => 'y',
-			'/Å´/' => 'W',
-			'/Åµ/' => 'w',
-			'/Å¹|Å»|Å½/' => 'Z',
-			'/Åº|Å¼|Å¾/' => 'z',
-			'/Ã†|Ç¼/' => 'AE',
-			'/ÃŸ/' => 'ss',
-			'/Ä²/' => 'IJ',
-			'/Ä³/' => 'ij',
-			'/Å’/' => 'OE',
-			'/Æ’/' => 'f'
-		);
-
-		if (is_array($replacement))
-		{
-			$map         = $replacement;
-			$replacement = '_';
-		}
-
-		$quotedReplacement = preg_quote($replacement, '/');
-
-		$merge = array(
-			'/[^\s\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
-			'/\\s+/' => $replacement,
-			sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => ''
-		);
-
-		$map = $foreign_characters + $merge;
-
-		return preg_replace(array_keys($map), array_values($map), $string);
 	}
 
 	/**

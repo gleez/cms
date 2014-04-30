@@ -46,8 +46,8 @@
  * @package    Gleez\Assets\Core
  * @author     Corey Worrell
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Assets {
@@ -729,35 +729,12 @@ class Assets {
 	}
 
 	/**
-	 * @param  $table_id
-	 * @param  $action
-	 * @param  $relationship
-	 * @param  $group
-	 * @param  $subgroup [Optional]
-	 * @param  $source [Optional]
-	 * @param  boolean  $hidden [Optional]
-	 * @param  integer  $limit [Optional]
 	 */
-	public static function tabledrag($table_id, $action, $relationship, $group, $subgroup = NULL, $source = NULL, $hidden = TRUE, $limit = 0)
+	public static function tabledrag()
 	{
 		self::js('jquery_once', 'media/js/jquery.once-1.1.js', array('jquery'), FALSE, array('weight' => -10));
-		self::js('tabledrag', 'media/js/tabledrag.js');
-		self::css('tabledrap', 'media/css/tabledrag.css');
-
-		// If a subgroup or source isn't set, assume it is the same as the group.
-		$target = isset($subgroup) ? $subgroup : $group;
-		$source = isset($source) ? $source : $target;
-
-		$settings['tableDrag'][$table_id][$group][] = array(
-			'target'        => $target,
-			'source'        => $source,
-			'relationship'  => $relationship,
-			'action'        => $action,
-			'hidden'        => $hidden,
-			'limit'         => $limit,
-		);
-
-		self::settings(rand(), $settings);
+		self::js('tabledrag', 'media/js/greet.tableDrag.js');
+		self::css('tabledrag', 'media/css/greet.tableDrag.css');
 	}
 
 	/**
@@ -770,7 +747,7 @@ class Assets {
 	{
 		if(isset(self::$js) OR isset(self::$codes) OR isset(self::$settings))
 		{
-			self::js('jquery', 'media/js/jquery-1.10.2.min.js', NULL, FALSE, array('weight' => -20));
+			self::js('jquery', 'media/js/jquery-1.11.0.min.js', NULL, FALSE, array('weight' => -20));
 			self::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
 			self::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 

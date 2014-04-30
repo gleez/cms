@@ -2,7 +2,7 @@
 	<?php echo __('Text formats defines the HTML tags, code, and other formatting that can be used when entering text. Improper text format configuration is a security risk. Text formats are presented on content editing pages in the order defined on this page. The first format available to a user will be selected by default.'); ?>
 </div>
 
-<table id="text-format-order" class="table table-striped table-bordered table-highlight">
+<table id="text-format-order" class="table table-striped table-bordered table-apparent" data-toggle="tabledrag">
 	<thead>
 		<tr>
 			<th><?php echo __('Name') ?></th>
@@ -13,7 +13,7 @@
 	</thead>
 
 	<?php foreach ($formats as $id => $format): ?>
-		<tr id="text-format-row-<?php echo $id ?>" class="draggable <?php echo Text::alternate("odd", "even") ?>">
+		<tr id="text-format-row-<?php echo $id ?>" class="draggable">
 			<td id="text-format-<?php echo $id ?>">
 				<?php echo $format['name'] ?>
 			</td>
@@ -22,7 +22,7 @@
 			</td>
 			<td class="tabledrag-hide">
 				<?php
-					echo Form::weight('formats['.$id.'][weight]', $format['weight'], array('class' => 'text-format-order-weight'));
+					echo Form::weight('formats['.$id.'][weight]', $format['weight'], array('class' => 'row-weight text-format-order-weight'));
 				?>
 			</td>
 			<td class="action">
@@ -32,7 +32,7 @@
 						'action' => 'configure'
 					);
 
-					echo HTML::anchor(Route::get('admin/format')->uri($route_param), '<i class="icon-cog"></i>', array('class' => 'action-list', 'title' => __('Configure')));
+					echo HTML::anchor(Route::get('admin/format')->uri($route_param), '<i class="fa fa-cog"></i>', array('class' => 'action-list', 'title' => __('Configure')));
 				?>
 			</td>
 		</tr>

@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Tag extends Controller_Admin {
@@ -52,8 +52,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 						HTML::anchor($tag->url, $tag->url),
 						Text::plain($tag->type),
 
-						HTML::icon($tag->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
-						HTML::icon($tag->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
+						HTML::icon($tag->edit_url, 'fa-edit', array('class'=>'btn btn-sm btn-default action-edit', 'title'=> __('Edit Tag'))).'&nbsp;'.
+						HTML::icon($tag->delete_url, 'fa-trash-o', array('class'=>'btn btn-sm btn-default action-delete', 'title'=> __('Delete Tag'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-tags'))
 					)
 				);
 			}
@@ -81,8 +81,8 @@ class Controller_Admin_Tag extends Controller_Admin {
 	public function action_add()
 	{
 		$this->title = __('Add New Tag');
-		$post = ORM::factory('tag');
-		$action = Route::get('admin/tag')->uri(array('action' => 'add'));
+		$post        = ORM::factory('tag');
+		$action      = Route::get('admin/tag')->uri(array('action' => 'add'));
 
 		if ($this->valid_post('tag'))
 		{
@@ -120,13 +120,13 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('tag', $id);
 
 		if ( ! $post->loaded())
 		{
 			Log::error('Attempt to access non-existent tag.');
-			Message::error(__('Tag doesn\'t exists!'));
+			Message::error(__("Tag doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}
@@ -171,13 +171,13 @@ class Controller_Admin_Tag extends Controller_Admin {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id  = (int) $this->request->param('id', 0);
 		$tag = ORM::factory('tag', $id);
 
 		if ( ! $tag->loaded())
 		{
 			Log::error('Attempt to access non-existent tag.');
-			Message::error(__('Tag doesn\'t exists!'));
+			Message::error(__("Tag doesn't exists!"));
 
 			$this->request->redirect(Route::get('admin/tag')->uri(), 404);
 		}

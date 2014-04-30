@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Template
  * @author     Gleez Team
- * @version    1.2.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.3.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 abstract class Template extends Controller {
@@ -14,7 +14,7 @@ abstract class Template extends Controller {
 	 * Page template
 	 * @var string
 	 */
-	public $template = 'template';
+	public $template = 'layouts/default';
 
 	/**
 	 * Auto render template?
@@ -46,6 +46,12 @@ abstract class Template extends Controller {
 	 */
 	public $subtitle = FALSE;
 	
+	/**
+	 * The Schema Type
+	 * @var string
+	 */
+	public $schemaType = FALSE;
+
 	/**
 	 * The delimiter page header and site name
 	 * @var string
@@ -213,6 +219,9 @@ abstract class Template extends Controller {
 		// Execute parent::before first
 		parent::before();
 
+		// Load the config
+		$this->_config = Config::load('site');
+
 		if (Kohana::$profiling)
 		{
 			// Start a new benchmark token
@@ -240,6 +249,13 @@ abstract class Template extends Controller {
 			$this->auto_render = FALSE;
 		}
 
+		// Test whether the current request is jquery mobile request. ugly hack
+		if (Request::is_mobile() AND $this->_config->get('mobile_theme', FALSE))
+		{
+			$this->_ajax       = FALSE;
+			$this->auto_render = TRUE;
+		}
+
 		// Test whether the current request is datatables request
 		if (Request::is_datatables())
 		{
@@ -249,7 +265,6 @@ abstract class Template extends Controller {
 
 		$this->response->headers('X-Powered-By', Gleez::getVersion(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
 
-		$this->_config = Kohana::$config->load('site');
 		$this->_auth   = Auth::instance();
 
 		// Get desired response formats
@@ -303,6 +318,7 @@ abstract class Template extends Controller {
 				->set('title',         $this->title)
 				->set('subtitle',      $this->subtitle)
 				->set('icon',          $this->icon)
+				->set('schemaType',    $this->schemaType)
 				->set('front',         FALSE)
 				->set('mission',       FALSE)
 				->set('tabs',          FALSE)
@@ -403,7 +419,7 @@ abstract class Template extends Controller {
 
 			// Set primary menu
 			$primary_menu = Menu::links('main-menu', array(
-				'class' => 'menus nav'
+				'class' => 'menus nav navbar-nav'
 			));
 
 			// Bind the generic page variables
@@ -414,6 +430,7 @@ abstract class Template extends Controller {
 				->set('title',        $this->title)
 				->set('subtitle',     $this->subtitle)
 				->set('icon',         $this->icon)
+				->set('schemaType',   $this->schemaType)
 				->set('mission',      $this->template->mission)
 				->set('content',      $this->response->body())
 				->set('messages',     Message::display())
@@ -654,11 +671,10 @@ abstract class Template extends Controller {
 	 */
 	protected function _set_default_css()
 	{
-		$theme = Theme::$active;
 		Assets::css('bootstrap', 'media/css/bootstrap.min.css', NULL, array('weight' => -15));
 		Assets::css('font-awesome', 'media/css/font-awesome.min.css',  array('bootstrap'), array('weight' => -13));
 		Assets::css('default', 'media/css/default.css', NULL, array('weight' => 0));
-		Assets::css('theme', "media/css/{$theme}.css", array('default'), array('weight' => 20));
+		Assets::css('theme', "media/css/theme.css", array('default'), array('weight' => 50));
 	}
 
 	/**

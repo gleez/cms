@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Debug
  * @author     Gleez Team
- * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Debug {
@@ -281,11 +281,14 @@ class Debug {
 	}
 
 	/**
-	 * Returns an HTML string, highlighting a specific line of a file, with some
-	 * number of lines padded above and below.
+	 * Returns an HTML string, highlighting a specific line of a file,
+	 * with some number of lines padded above and below.
 	 *
-	 *     // Highlights the current line of the current file
-	 *     echo Debug::source(__FILE__, __LINE__);
+	 * Example:
+	 * ~~~
+	 * // Highlights the current line of the current file
+	 * echo Debug::source(__FILE__, __LINE__);
+	 * ~~~
 	 *
 	 * @param   string   $file         File to open
 	 * @param   integer  $line_number  Line number to highlight
@@ -477,6 +480,19 @@ class Debug {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Returns the type of a variable
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   mixed   $var  Variable
+	 * @return  string  Class name or type, if not an object
+	 */
+	public static function type($var)
+	{
+		return is_object($var) ? get_class($var) : gettype($var);
 	}
 
 }

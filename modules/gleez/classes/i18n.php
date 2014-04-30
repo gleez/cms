@@ -17,11 +17,10 @@
  *
  * @package    Gleez\Internationalization
  * @author     Kohana Team
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Sergey Yakovlev - Gleez
- * @version    1.0.1
+ * @author     Gleez Team
+ * @version    1.2.0
  * @copyright  (c) 2008-2012 Kohana Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://kohanaframework.org/license
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -32,57 +31,167 @@ class I18n {
 	public static $lang = 'en-us';
 
 	/**
+	 * @var  string   target language: en, es, zh, etc
+	 */
+	public static $default = 'en';
+
+	/**
+	 * @var  string   active language: en, es, zh, etc
+	 */
+	public static $active = 'en';
+
+	/**
 	 * @var  string  source language: en-us, es-es, zh-cn, etc
 	 */
 	public static $source = 'en-us';
+
+	/**
+	 * @var  array  array of available languages
+	 */
+	protected static $_languages = array();
 
 	/**
 	 * @var  array  cache of loaded languages
 	 */
 	protected static $_cache = array();
 
+	/**
+	 * @var  string  source language: en-us, es-es, zh-cn, etc
+	 */
+	public static $_cookie = 'lang';
+
+	/**
+	 * Main function to detect and set the default language.
+	 *
+	 *     // Set the language
+	 *     $lang = I18n::initialize();
+	 */
 	public static function initialize()
 	{
 		//Installed Locales
-		$installed_locales = Config::get('site.installed_locales', array());
-		$default_locale    = Config::get('site.locale', 'en_US');
+		self::$_languages = Config::get('site.installed_locales', array());
 		
 		//allow the user or browser to override the default locale
-		$locale_override   = Config::get('site.locale_override', FALSE);
+		$locale_override  = Config::get('site.locale_override', FALSE);
 
 		// 1. Check the session specific preference (cookie)
-		$locale = I18n::cookie_locale($installed_locales);
+		$locale = I18n::cookieLocale(self::$_languages);
 	
 		// 2. Check the user's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
-			$locale   = I18n::user_locale($installed_locales);
+			$locale = I18n::userLocale();
 		}
 	
 		// 3. Check the request client/browser's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
-			$locale = I18n::request_locale($installed_locales);
+			$locale = I18n::requestLocale();
 		}
-	
-		// 4. Default locale preference
+
+		// 4. Check the url preference and get the language from url
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'URL'))
+		{
+			$locale = I18n::urlLocale();
+		}
+
+		// 5. Check the sub-domain preference and get the language form subdomain
+		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'DOMAIN'))
+		{
+			$locale = I18n::domainLocale();
+		}
+
+		// 6. Default locale
 		if(!$locale)
 		{
-			$locale = $default_locale;
+			$locale = Config::get('site.locale', I18n::$default);
 		}
-	
-		//set the locale
+
+		// Set the locale
 		I18n::lang($locale);
-		setlocale(LC_ALL, $locale.'.utf-8');
+
+		return I18n::$lang;
 	}
 
-	public static function request_locale( array $installed_locales )
+	/**
+	 * Test if $lang exists in the list of available langs in config
+	 *
+	 * @param type  string $lang
+	 * @return bool returns TRUE if $lang is available, otherwise FALSE
+	 */
+	public static function isAvailable($lang) 
 	{
-		$requested_locales	= Request::accept_lang();
-		//@todo score comparison
-		foreach($requested_locales as $locale => $score)
+		return (bool) array_key_exists($lang, self::$_languages);
+	}
+
+	/**
+	 * Detect language based on the http request.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::requestLocale();
+	 *
+	 * @return  string
+	 */
+	public static function requestLocale()
+	{
+		//  Look for a preferred language in the `Accept-Language` header directive.
+		$locale	= Request::initial()->headers()->preferred_language(array_keys(self::$_languages));
+
+		if( self::isAvailable($locale) )
 		{
-			if (isset($installed_locales[$locale])) 
+			return $locale;
+		}
+		
+		return FALSE;
+	}
+
+	/**
+	 * Detect language based on the user language settings.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::userLocale();
+	 *
+	 * @return  string
+	 */
+	public static function userLocale()
+	{
+		//Can't set guest users locale, default's to site locale
+		if(User::is_guest()) 
+		{
+			// Respect cookie if its set already or use default
+			$locale = strtolower(Config::get(self::$_cookie, I18n::$default));
+		}
+		else
+		{
+			$locale	= User::active_user()->language;
+		}
+		
+		if( self::isAvailable($locale) )
+		{
+			return $locale;
+		}
+		
+		return FALSE;
+	}
+
+	/**
+	 * Detect language based on the request cookie.
+	 *
+	 *     // Get the language
+	 *     $lang = I18n::cookieLocale();
+	 *
+	 * @return  string
+	 */
+	public static function cookieLocale()
+	{
+		$cookie_data = strtolower(Cookie::get(self::$_cookie));
+		
+		//double check cookie data
+		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
+		{
+			$locale = $matches[1];
+
+			if( self::isAvailable($locale) )
 			{
 				return $locale;
 			}
@@ -91,43 +200,45 @@ class I18n {
 		return FALSE;
 	}
 
-	public static function user_locale( array $installed_locales )
+	/**
+	 * Detect language based on the url.
+	 *
+	 *     ex: example.com/fr/
+	 *     $lang = I18n::urlLocale();
+	 *
+	 * @return  string
+	 */
+	public static function urlLocale()
 	{
-		//Can't set guest users locale, default's to site locale
-		if(User::is_guest()) 
+		$uri = Request::detect_uri();
+		if (preg_match ('/^\/(' . join ('|', array_keys(self::$_languages)) . ')\/?$/', $uri, $matches)) 
 		{
-			$locale = Config::get('site.locale', 'en_US');
+			//'~^(?:' . implode('|', array_keys($installed_locales)) . ')(?=/|$)~i'
+			// matched /lang or /lang/
+			return $matches[1];
 		}
-		else
-		{
-			$locale	= User::active_user()->language;
-		}
-		
-		if (isset($installed_locales[$locale])) 
-		{
-			return $locale;
-		}
-		
+
 		return FALSE;
 	}
-	
-	public static function cookie_locale( array $installed_locales )
+
+	/**
+	 * Detect language based on the subdomain.
+	 *
+	 *		ex: fr.example.com
+	 *     	$lang = I18n::domainLocale();
+	 *
+	 * @return  string
+	 */
+	public static function domainLocale()
 	{
-		$cookie_data = Cookie::get('user_language');
-		
-		//double check cookie data
-		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
+		if (preg_match ('/^(' . join ('|', array_keys(self::$_languages)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
 		{
-			$requested_locale = $matches[1];
-			if (isset($installed_locales[$requested_locale])) 
-			{
-				return $requested_locale;
-			}
+			return $matches[1];
 		}
-		
+
 		return FALSE;
 	}
-	
+
 	/**
 	 * Get and set the target language.
 	 *
@@ -137,16 +248,29 @@ class I18n {
 	 *     // Change the current language to Spanish
 	 *     I18n::lang('es-es');
 	 *
-	 * @param   string  $lang   new language setting
+	 * @param   string  	$lang   	new language setting
 	 * @return  string
 	 * @since   3.0.2
 	 */
 	public static function lang($lang = NULL)
 	{
-		if ($lang)
+		if ($lang && self::isAvailable($lang) )
 		{
-			// Normalize the language
-			I18n::$lang = strtolower(str_replace(array(' ', '_'), '-', $lang));
+			// Store target language in I18n
+			I18n::$lang = self::$_languages[$lang]['i18n_code'];
+
+			// Store the identified lang as active
+			I18n::$active = $lang;
+
+			// Set locale
+			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
+		
+			// Update language in cookie
+			if (strtolower(Cookie::get(self::$_cookie)) !== $lang) 
+			{
+				// Trying to set language to cookies
+				Cookie::set(self::$_cookie, $lang, Date::YEAR);
+			}
 		}
 
 		return I18n::$lang;
@@ -238,7 +362,7 @@ class I18n {
 		$key = I18n::get_plural_key(I18n::$lang, $count);
 
 		// Return the translated string if it exists
-		return isset($table[$string][$key]) ? $table[$string][$key]: $table[$string];
+		return isset($table[$string][$key]) ? $table[$string][$key] : (isset($table[$string]) ? $table[$string] : $string);
 	}
 
 	/**

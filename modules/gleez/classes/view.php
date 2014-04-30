@@ -8,7 +8,7 @@
  * @package    Gleez\Base
  * @author     Gleez Team
  * @version    1.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class View {
@@ -279,7 +279,7 @@ class View {
 			/**
 			 * Display the exception message
 			 *
-			 * We use this method here because it's impossible to throw and
+			 * We use this method here because it's impossible to throw an
 			 * exception from __toString().
 			 */
 			$error_response = Gleez_Exception::_handler($e);
@@ -304,19 +304,12 @@ class View {
 	 */
 	public function set_filename($file)
 	{
-		// Search our view directories for the view
-		// instead of just the 'views' directory.
-		if (($path = Kohana::find_file('themes', $file)) === FALSE)
+		if (($path = Kohana::find_file('views', $file)) === FALSE)
 		{
-			// Otherwise, revert to the old method
-			if (($path = Kohana::find_file('views', $file)) === FALSE)
-			{
-				throw new View_Exception('The requested view :file could not be found', array(
-					':file' => $file,
-				));
-			}
+			throw new View_Exception('The requested view :file could not be found', array(
+				':file' => $file,
+			));
 		}
-
 
 		// Store the file path locally
 		$this->_file = $path;

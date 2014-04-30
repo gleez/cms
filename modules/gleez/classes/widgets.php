@@ -6,8 +6,8 @@
  *
  * @package    Gleez\Widget
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Widgets {
@@ -317,7 +317,7 @@ class Widgets {
 			}
 			catch (Exception $e)
 			{
-				Log::error('Error processing widget: :name', array(':name' => $name));
+				Log::error('Error processing widget ":name": :msg', array(':name' => $name, ':msg' => $e->getMessage()));
 			}
 		}
 
@@ -416,8 +416,11 @@ class Widgets {
 				$widgets[] = (object)$_widget->as_array();
 			}
 
-			// set the cache
-			$cache->set('widgets', $widgets, Date::DAY);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set('widgets', $widgets, Date::DAY);
+			}
 		}
 
 		foreach ($widgets as $widget)

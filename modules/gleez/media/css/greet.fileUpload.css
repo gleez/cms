@@ -1,0 +1,129 @@
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.btn-file > input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  margin: 0;
+  font-size: 23px;
+  cursor: pointer;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  transform: translate(-300px, 0) scale(4);
+
+  direction: ltr;
+}
+.fileupload {
+  display: inline-block;
+  margin-bottom: 9px;
+}
+.fileupload .form-control {
+  display: inline-block;
+  padding-top: 7px;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+  vertical-align: middle;
+  cursor: text;
+}
+.fileupload .thumbnail {
+  display: inline-block;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+}
+.fileupload .thumbnail > img {
+  max-height: 100%;
+}
+.fileupload .btn {
+  vertical-align: middle;
+}
+.fileupload-exists .fileupload-new,
+.fileupload-new .fileupload-exists {
+  display: none;
+}
+.fileupload-inline .fileupload-controls {
+  display: inline;
+}
+.fileupload-filename {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.form-control .fileupload-filename {
+  vertical-align: bottom;
+}
+.fileupload-new .input-group .btn-file {
+  border-radius: 0 4px 4px 0;
+}
+.fileupload-new .input-group .btn-file.btn-xs,
+.fileupload-new .input-group .btn-file.btn-sm {
+  border-radius: 0 3px 3px 0;
+}
+.fileupload-new .input-group .btn-file.btn-lg {
+  border-radius: 0 6px 6px 0;
+}
+.form-group.has-warning .fileupload .fileupload-preview {
+  color: #8a6d3b;
+}
+.form-group.has-warning .fileupload .thumbnail {
+  border-color: #faebcc;
+}
+.form-group.has-error .fileupload .fileupload-preview {
+  color: #a94442;
+}
+.form-group.has-error .fileupload .thumbnail {
+  border-color: #ebccd1;
+}
+.form-group.has-success .fileupload .fileupload-preview {
+  color: #3c763d;
+}
+.form-group.has-success .fileupload .thumbnail {
+  border-color: #d6e9c6;
+}
+.input-group-addon:not(:first-child) {
+  border-left: 0;
+}
+.fileupload .fileupload-success, .fileupload .fileupload-error {
+  display: none;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+  -moz-opacity:0.9;    /* Mozilla extension */
+  -khtml-opacity:0.9;  /* Safari/Conqueror extension */
+  opacity:0.9; /* CSS3 */
+  z-index:1000;
+  background-color: #fff;
+  font-size: 30px;
+  padding: 3px;
+  border-radius: 25px;
+  position: absolute;
+}
+.fileupload .fileupload-success {
+  color: #8cc657;
+}
+.fileupload .fileupload-error {
+  color: #ee162d;
+}
+.fileupload .fileupload-message {
+  display: none;
+}
+.fileupload .loading {
+	background: url('../images/progress.gif') center center no-repeat;
+	/* IE filter */
+	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+	-moz-opacity:0.5;    /* Mozilla extension */
+	-khtml-opacity:0.5;  /* Safari/Conqueror extension */
+	opacity:0.5; /* CSS3 */
+	z-index:1000;
+	background-color: #fff;
+	width: 30px;
+	height: 150px;
+	padding: 0;
+	position: absolute;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 auto !important;
+}

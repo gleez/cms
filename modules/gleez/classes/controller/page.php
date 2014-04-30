@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.0.4
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Page extends Template {
@@ -76,6 +76,9 @@ class Controller_Page extends Template {
 			$posts->where('status', '=', 'publish');
 		}
 
+		$this->title = __('Pages');
+		$this->schemaType = 'WebPage';
+
 		/**
 		 * Bug in ORM to repeat the `where()` methods after using `count_all()`
 		 * @link http://forum.kohanaframework.org/discussion/7736 Solved
@@ -90,8 +93,6 @@ class Controller_Page extends Template {
 		}
 
 		$config = Config::load('page');
-
-		$this->title = __('Pages');
 
 		$view = View::factory('page/list')
 					->set('teaser',      TRUE)
@@ -148,7 +149,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id     = (int) $this->request->param('id', 0);
 		$config = Config::load('page');
 
 		$post = Post::dcache($id, 'page', $config);
@@ -195,6 +196,7 @@ class Controller_Page extends Template {
 		}
 
 		$this->title = $post->title;
+		$this->schemaType = 'Article';
 
 		$view = View::factory('page/post')
 				->set('title',             $this->title)
@@ -306,7 +308,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_edit()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
 		if ( ! ACL::post('edit', $post))
@@ -328,7 +330,7 @@ class Controller_Page extends Template {
 				->set('action',       $action)
 				->set('config',       $config)
 				->set('path',         FALSE)
-				->set('created',      Date::formatted_time($post->created, 'Y-m-d H:i:s O'))
+				->set('created',      $post->created)
 				->set('author',       $post->user->name)
 				->set('tags',         Tags::implode($post->tags_form))
 				->bind('errors',      $this->_errors)
@@ -400,7 +402,7 @@ class Controller_Page extends Template {
 	 */
 	public function action_delete()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id   = (int) $this->request->param('id', 0);
 		$post = ORM::factory('page', $id);
 
 		if ( ! ACL::post('delete', $post))
@@ -455,6 +457,7 @@ class Controller_Page extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 * @throws  HTTP_Exception_404
 	 *
 	 * @uses    Config::load
 	 * @uses    Config::get
@@ -481,7 +484,7 @@ class Controller_Page extends Template {
 
 		if ( ! $term->loaded())
 		{
-			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
+			throw HTTP_Exception::factory(404, 'Category ":term" not found', array(':term' => $id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
@@ -503,8 +506,8 @@ class Controller_Page extends Template {
 
 		if ($total == 0)
 		{
-			Log::info('No topics found.');
-			$this->response->body(View::factory('forum/none'));
+			Log::info('No posts found.');
+			$this->response->body(View::factory('page/none'));
 			return;
 		}
 		$rss_link   = Route::get('rss')->uri(array('controller' => 'page', 'action' => 'term', 'id' => $term->id));
@@ -527,10 +530,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $term->name,
@@ -556,8 +559,8 @@ class Controller_Page extends Template {
 	public function action_tag()
 	{
 		$config = Config::load('page');
-		$id = (int) $this->request->param('id', 0);
-		$tag = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
+		$id     = (int) $this->request->param('id', 0);
+		$tag    = ORM::factory('tag', array('id' => $id, 'type' => 'page') );
 
 		if ( ! $tag->loaded())
 		{
@@ -607,10 +610,10 @@ class Controller_Page extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+			Meta::links(Route::url('page', array('action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'page', 'action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $tag->name,

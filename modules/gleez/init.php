@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Routing
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 if ( ! Route::cache())
@@ -170,6 +170,12 @@ if ( ! Route::cache())
 	->defaults(array(
 		'directory'  => 'admin',
 		'controller' => 'setting',
+	));
+
+	Route::set('admin/tool', 'admin/tools(/<action>)')
+	->defaults(array(
+		'directory'  => 'admin',
+		'controller' => 'tool',
 	));
 
 	Route::set('admin', 'admin(/<controller>)(/<action>)(/<id>)(/p<page>)', array(

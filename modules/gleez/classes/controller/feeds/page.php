@@ -6,7 +6,7 @@
  * @author     Sandeep Sangamreddi - Gleez
  * @author     Sergey Yakovlev - Gleez
  * @version    1.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Feeds_Page extends Controller_Feeds_Base {
@@ -35,15 +35,15 @@ class Controller_Feeds_Page extends Controller_Feeds_Base {
 	{
 		if (empty($this->_items))
 		{
-			$config = Kohana::$config->load('page');
+			$config = Config::load('page');
 
 			// Cache is Empty so Re-Cache
 			$pages = ORM::factory('page')
-				->where('status', '=', 'publish')
-				->order_by('pubdate', 'DESC')
-				->limit($this->_limit)
-				->offset($this->_offset)
-				->find_all();
+						->where('status', '=', 'publish')
+						->order_by('pubdate', 'DESC')
+						->limit($this->_limit)
+						->offset($this->_offset)
+						->find_all();
 
 			$items = array();
 			foreach($pages as $page)

@@ -18,13 +18,13 @@ return array(
 	 * Site logo
 	 * @var string
 	 */
-	'site_logo' => '/media/logo.png',
+	'site_logo' => '/media/images/logo.png',
 
 	/**
 	 * Site favicon
 	 * @var string
 	 */
-	'site_favicon' => 'favicon.ico',
+	'site_favicon' => '/media/icons/favicon.ico',
 
 	/**
 	 * Site email
@@ -66,13 +66,13 @@ return array(
 	 * Default active site theme
 	 * @var string
 	 */
-	'theme' => 'fluid',
+	'theme' => 'cerber',
 
 	/**
 	 * Default active admin theme
 	 * @var string
 	 */
-	'admin_theme' => 'fluid',
+	'admin_theme' => 'cerber',
 
 	/**
 	 * Mobile Theme or false
@@ -85,6 +85,20 @@ return array(
 	 * @var boolean
 	 */
 	'maintenance_mode' => FALSE,
+
+	/**
+	 * The module search paths. They are searched in the order given.
+	 *
+	 * @var array
+	 */
+	'module_paths' => array(MODPATH),
+
+	/**
+	 * The theme search paths. They are searched in the order given.
+	 *
+	 * @var array
+	 */
+	'theme_paths' => array(THEMEPATH),
 
 	/**
 	 * Offline message in Maintenance Mode
@@ -154,7 +168,7 @@ return array(
 	 */
 	'meta' => array(
 		'links' => array(
-			URL::site('media/favicon.ico', TRUE) => array(
+			URL::site('media/icons/favicon.ico', TRUE) => array(
 				'rel'  => 'shortcut icon',
 				'type' => 'image/x-icon'
 			),
@@ -169,26 +183,13 @@ return array(
 			),
 		),
 		'tags' => array(
-			'charset'          => Kohana::$charset,
-			'generator'        => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
-			'author'           => 'Gleez Team',
-			'copyright'        => 'Copyright (c) Gleez Technologies 2011-2013. All rights reserved.',
-			'robots'           => 'index, follow, noodp',
-			'viewport'         => 'width=device-width, initial-scale=1.0',
+			'charset'    => Kohana::$charset,
+			'generator'  => 'Gleez '.Gleez::VERSION.' (http://gleezcms.org)',
+			'author'     => 'Gleez Team',
+			'copyright'  => 'Copyright (c) Gleez Technologies 2011-2014. All rights reserved.',
+			'robots'     => 'index, follow, noodp',
+			'viewport'   => 'width=device-width, initial-scale=1.0',
 		),
-	),
-
-	/**
-	 * Installed locales
-	 * @var array
-	 */
-	'installed_locales' => array(
-		'en_US', // English
-		'et_EE', // Estonian
-		'it_IT', // Italian
-		'ro_RO', // Romanian
-		'ru_RU', // Russian
-		'zh_CN', // Chinese (Simplified)
 	),
 
 	/**
@@ -196,14 +197,62 @@ return array(
 	 * Default to 'en_US'
 	 * @var string
 	 */
-	'locale' =>  'en_US',
+	'locale' =>  'en',
 
 	/**
 	 * Allow locale override.
-	 * Change the default locale, accepted values: FALSE|ALL|USER|CLIENT
-	 * @var string
+	 * Change the default locale, accepted values: FALSE|ALL|USER|CLIENT|URL|DOMAIN
+	 * @var string|boolean
 	 */
 	'locale_override' =>  FALSE,
+
+	/**
+	 * Locale cookie key.
+	 * Default to 'lang'
+	 * @var string
+	 */
+	'locale_cookie' => 'lang',
+
+	/**
+	 * List of all supported languages. Array keys match language segment from the URI.
+	 * A default fallback language can be set by I18n::$default.
+	 *
+	 * Options for each language:
+	 *  i18n_code - The target language for the I18n class
+	 *  locale    - Locale name(s) for setting all locale information (http://php.net/setlocale)
+	 */
+	'installed_locales' => array(
+		'en' => array(
+			'name'      => 'English',
+			'i18n_code' => 'en',
+			'locale'    => array('en_US.utf-8'),
+		),
+		'et' => array(
+			'name'      => 'Estonian',
+			'i18n_code' => 'et',
+			'locale'    => array('et_EE.utf-8'),
+		),
+		'it' => array(
+			'name'      => 'Italian',
+			'i18n_code' => 'it',
+			'locale'    => array('it_IT.utf-8'),
+		),
+		'ro' => array(
+			'name'      => 'Romanian',
+			'i18n_code' => 'ro',
+			'locale'    => array('ro_RO.utf-8'),
+		),
+		'ru' => array(
+			'name'      => 'Russian',
+			'i18n_code' => 'ru',
+			'locale'    => array('ru_RU.utf-8'),
+		),
+		'zh' => array(
+			'name'      => 'Chinese (Simplified)',
+			'i18n_code' => 'zh',
+			'locale'    => array('zh_CN.utf-8'),
+		),
+	),
 
 	/**
 	 * Default timezone
@@ -216,14 +265,14 @@ return array(
 	 * Change the default timezone, accepted values: TRUE|FALSE
 	 * @var boolean
 	 */
-	'timezone_override' =>  FALSE,
+	'timezone_override' => FALSE,
 
 	/**
 	 * Blocked ips.
 	 * Default to null, comma separated ip-addresses to block
 	 * @var string
 	 */
-	'blocked_ips' =>  NULL,
+	'blocked_ips' => NULL,
 
 	/**
 	 * Default date first day

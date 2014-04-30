@@ -6,27 +6,27 @@
 
 <?php include Kohana::find_file('views', 'errors/partial'); ?>
 
-	<div class="row-fluid">
-		<div class="span6">
-			<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
 				<div class="controls">
 					<?php echo Form::label('name', __('Title'), array('class' => 'control-label')); ?>
-					<?php echo Form::input('name', $format['name'], array('class' => 'span12')); ?>
+					<?php echo Form::input('name', $format['name'], array('class' => 'form-control')); ?>
 				</div>
 			</div>
 
-			<div class="control-group <?php echo isset($errors['roles']) ? 'error': ''; ?>">
+			<div class="form-group <?php echo isset($errors['roles']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('roles', __('Roles'), array('class' => 'control-label')) ?>
 				<?php foreach($roles as $role => $name): ?>
-					<div class="form-wrap1">
-						<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, FALSE).ucfirst($name), array('class' => 'checkbox')) ?>
+					<div class="checkbox">
+						<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, FALSE).ucfirst($name)); ?>
 					</div>
 				<?php endforeach ?>
 			</div>
 		</div>
 
-		<div class="span6">
-			<div class="control-group">
+		<div class="col-md-6">
+			<div class="form-group">
 				<?php echo Form::label('order', __('Filters'), array('class' => 'control-label')) ?>
 				<table id="filter-order" class="table table-striped table-bordered table-condensed">
 					<?php foreach ($filters as $name => $filter): ?>
@@ -52,7 +52,7 @@
 	</div>
 
 
-	<div class="control-group">
+	<div class="form-group">
 		<div id="settings-filter clearfix">
 			<?php echo Form::label('settings', __('Filter Settings'), array('class' => 'control-label')) ?>
 			<div class="tabbable tabs-left table-bordered">
@@ -69,9 +69,9 @@
 						<?php $settings = $filter->settings; if( !empty($settings) ):?>
 							<div class="tab-pane"  id="<?php echo URL::title($filter->title)?>">
 								<?php foreach($filter->settings as $key => $value): ?>
-								   <div class="control-group">
+								   <div class="form-group">
 									<?php echo Form::label('edit-filters', str_replace('_', ' ', ucfirst($key)), array('class' => 'control-label')) ?>
-									<?php echo Form::input('filters['.$name.'][settings]['.$key.']', $value, array('class' => 'span5')) ?>
+									<?php echo Form::input('filters['.$name.'][settings]['.$key.']', $value, array('class' => 'form-control col-md-5')) ?>
 									<div class="description"><?php //echo Text::plain($filter->description) ?></div>
 								   </div>
 								<?php endforeach; ?>

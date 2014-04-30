@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Module
  * @author     Gleez Team
- * @version    1.0.3
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
  * @todo      [!!] This class does not do any permission checking
@@ -43,14 +43,18 @@ class Module {
 		if ( ! $module->loaded())
 		{
 			$module->name   = $name;
-			// Only gleez or user is active by default
+
+			// Only user is active by default
 			$module->active = ($name == 'user');
 		}
 
 		$module->version = $version;
 		$module->save();
 
-		Log::debug(':name : version is now :version', array(':name' => $name, ':version' => $version));
+		if (Kohana::$environment === Kohana::DEVELOPMENT)
+		{
+			Log::debug(':name : version is now :version', array(':name' => $name, ':version' => $version));
+		}
 	}
 
 	/**
@@ -65,6 +69,7 @@ class Module {
 		{
 			return ORM::factory('module')->where('name', '=', $name)->find();
 		}
+
 		return self::$modules[$name];
 	}
 
@@ -118,21 +123,44 @@ class Module {
 		{
 			$upgrade = FALSE;
 			$modules = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+			$paths 	 = (array) Config::get('site.module_paths', array(MODPATH) );
 
-			foreach (glob(MODPATH . "*/module.info") as $file)
+			// Make sure MODPATH is set else add last
+			if(!in_array(MODPATH, $paths))
 			{
-				$name           = basename(dirname($file));
-				$modules->$name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+				array_push($paths, MODPATH);
+			}
 
-				$m =& $modules->$name;
-				$m->active       = self::is_active($name);
-				$m->code_version = $m->version;
-				$m->version      = self::get_version($name);
-				$m->locked       = FALSE;
-
-				if ($m->active AND $m->version != $m->code_version)
+			// Iterate over each config path
+			foreach ($paths AS $name => $path)
+			{
+				foreach (glob($path . "*/module.info") as $file)
 				{
-					$upgrade = TRUE;
+					$name           = basename(dirname($file));
+					$modules->$name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+
+					$m =& $modules->$name;
+					$m->active       = self::is_active($name);
+					$m->title 		 = isset($m->title) ? (string) $m->title : $name;
+					$m->code_version = $m->version;
+					$m->version      = self::get_version($name);
+					$m->locked       = false;
+					$m->visible      = isset($m->visible)   ? (bool) $m->visible	 : true;
+					$m->author    	 = isset($m->author)    ? (string) $m->author 	 : 'Gleez Team';
+					$m->authorURL    = isset($m->authorURL) ? (string) $m->authorURL : 'http://gleezcms.org/';
+					$m->path 		 = realpath( dirname($file) ).DS;
+
+					// Skip this module in list if the module is hidden
+					if($m->visible === false && isset($modules[$name]))
+					{
+						unset($modules[$name]);
+					}
+
+					// Check installed and available version and set message
+					if ($m->active AND $m->version != $m->code_version)
+					{
+						$upgrade = TRUE;
+					}
 				}
 			}
 
@@ -163,11 +191,12 @@ class Module {
 	}
 
 	/**
-	 * Check that the module can be activated. (i.e. all the prerequistes exist)
-	 * @param string $module_name
-	 * @return array an array of warning or error messages to be displayed
+	 * Check that the module can be activated. (i.e. all the prerequisites exist)
+	 *
+	 * @param  string $module_name Module name
+	 * @return array An array of warning or error messages to be displayed
 	 */
-	static function can_activate($module_name)
+	public static function can_activate($module_name)
 	{
 		self::_add_to_path($module_name);
 		$messages = array();
@@ -191,7 +220,7 @@ class Module {
 	 * @param string $module_name
 	 * @return array an array of warning or error messages to be displayed
 	 */
-	static function can_deactivate($module_name)
+	public static function can_deactivate($module_name)
 	{
 		$data = (object) array( "module" => $module_name, "messages" => array() );
 		self::event("pre_deactivate", $data);
@@ -205,9 +234,12 @@ class Module {
 	 * Note that after installing, the module must be activated before it is available for use.
 	 * @param string $module_name
 	 */
-	static function install($module_name)
+	public static function install($module_name)
 	{
 		self::_add_to_path($module_name);
+
+		//Call DB migrations for this module
+		self::migrate($module_name, 'up');
 
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "install") ))
@@ -244,26 +276,45 @@ class Module {
 		Log::info('Installed module :module_name', array(':module_name' => $module_name));
 	}
 
-	private static function _add_to_path($module_name)
+	private static function _add_to_path($module)
 	{
-		$kohana_modules = Kohana::modules();
-		array_unshift($kohana_modules, MODPATH . $module_name);
-		Kohana::modules($kohana_modules);
+		$available = (array) static::$available;
 
-		// Rebuild the include path so the module installer can benefit from auto loading
-		Kohana::include_paths(true);
+		if( in_array($module, array_keys($available)) && isset($available[$module]))
+		{
+			$module = $available[$module];
+
+			$modules = Kohana::modules();
+			array_unshift($modules, $module->path);
+			Kohana::modules($modules);
+
+			// Rebuild the include path so the module installer can benefit from auto loading
+			Kohana::include_paths(true);
+
+			return $module;
+		}
+
+		return false;
 	}
 
-	private static function _remove_from_path($module_name)
+	private static function _remove_from_path($module)
 	{
+		$available      = (array) static::$available;
 		$kohana_modules = Kohana::modules();
-		if (($key = array_search(MODPATH . $module_name, $kohana_modules)) !== false)
+
+		if( in_array($module, array_keys($available)) && isset($available[$module]))
 		{
-			unset($kohana_modules[$key]);
-			$kohana_modules = array_values($kohana_modules); // reindex
+			$module = $available[$module];
+
+			if (($key = array_search($module->path, $kohana_modules)) !== false)
+			{
+				unset($kohana_modules[$key]);
+				$kohana_modules = array_values($kohana_modules); // reindex
+			}
+
+			Kohana::modules($kohana_modules);
+			Kohana::include_paths(true);
 		}
-		Kohana::modules($kohana_modules);
-		Kohana::include_paths(true);
 	}
 
 	/**
@@ -277,6 +328,9 @@ class Module {
 	 */
 	static function upgrade($module_name)
 	{
+		//Its safe to call here, migrations wont run twice. It runs only if not already run
+		self::migrate($module_name, 'up');
+
 		$version_before  = self::get_version($module_name);
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "upgrade") ))
@@ -330,35 +384,45 @@ class Module {
 	 */
 	static function activate($module_name)
 	{
-		self::_add_to_path($module_name);
-		$installer_class = ucfirst($module_name).'_Installer';
+		$module = self::_add_to_path($module_name);
 
-		if (is_callable( array($installer_class, "activate")  ))
+		if($module)
 		{
-			call_user_func_array(array(
-				$installer_class,
-				"activate"
-			), array());
+			//Its safe to call here, migrations wont run twice. It runs only if not already run
+			self::migrate($module_name, 'up');
+
+			$installer_class = ucfirst($module_name).'_Installer';
+
+			if (is_callable( array($installer_class, "activate")  ))
+			{
+				call_user_func_array(array(
+					$installer_class,
+					"activate"
+				), array());
+			}
+
+			$amodule = self::get($module->name);
+
+			if ($amodule->loaded())
+			{
+				$amodule->active = true;
+				$amodule->path   = $module->path;
+				$amodule->save();
+			}
+
+			// clear any cache for sure
+			Cache::instance()->delete('load_modules');
+
+			self::load_modules(TRUE);
+
+			// @todo
+			//Widget::activate($module_name);
+			//Menu_Item::rebuild(TRUE);
+
+			Log::info('Activated module :module_name', array(':module_name' => $module->title));
+			
+			unset($module, $amodule);
 		}
-
-		$module = self::get($module_name);
-
-		if ($module->loaded())
-		{
-			$module->active = true;
-			$module->save();
-		}
-
-		// clear any cache for sure
-		Cache::instance()->delete('load_modules');
-
-		self::load_modules(TRUE);
-
-		// @todo
-		//Widget::activate($module_name);
-		//Menu_Item::rebuild(TRUE);
-
-		Log::info('Activated module :module_name', array(':module_name' => $module_name));
 	}
 
 	/**
@@ -398,8 +462,11 @@ class Module {
 	 * take whatever steps necessary to make sure that all traces of a module are gone.
 	 * @param string $module_name
 	 */
-	static function uninstall($module_name)
+	public static function uninstall($module_name)
 	{
+		//Call DB migrations for this module
+		self::migrate($module_name, 'down');
+
 		$installer_class = ucfirst($module_name).'_Installer';
 		if (is_callable( array($installer_class, "uninstall") ))
 		{
@@ -434,7 +501,7 @@ class Module {
 	 * @uses   Log::add
 	 * @uses   Arr::merge
 	 */
-	static function load_modules($reset = TRUE)
+	public static function load_modules($reset = TRUE)
 	{
 		self::$modules = array();
 		self::$active  = array();
@@ -454,10 +521,6 @@ class Module {
 			$kohana_modules  = $data['kohana_modules'];
 
 			unset($data);
-			if (Kohana::DEVELOPMENT === Kohana::$environment)
-			{
-				Log::debug('Modules Loaded FROM Cache');
-			}
 		}
 		else
 		{
@@ -495,17 +558,16 @@ class Module {
 				}
 			}
 
-			// set cache for performance
-			$data = array();
-			$data['modules'] = $_cache_modules;
-			$data['active']  = $_cache_active;
-			$data['kohana_modules'] = $kohana_modules;
-
-			$cache->set('load_modules', $data, Date::DAY);
-			unset($data, $_cache_modules, $_cache_active);
-			if (Kohana::DEVELOPMENT === Kohana::$environment)
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
 			{
-				Log::debug('Modules Loaded from ORM');
+				$data = array();
+				$data['modules'] = $_cache_modules;
+				$data['active']  = $_cache_active;
+				$data['kohana_modules'] = $kohana_modules;
+
+				$cache->set('load_modules', $data, Date::DAY);
+				unset($data, $_cache_modules, $_cache_active);
 			}
 		}
 
@@ -608,9 +670,33 @@ class Module {
 	 * @param   string  $name  Module name
 	 * @return  float   Module version
 	 */
-	static function get_version($name)
+	public static function get_version($name)
 	{
 		return self::get($name)->version;
 	}
 
+	/**
+	 * Migrate the db of the this module
+	 *
+	 * @param   string  $name  Module name
+	 * @param   string  $dir   Migration direction up/down
+	 * @return  void
+	 */
+	private static function migrate($module_name, $dir = 'up')
+	{
+		try
+		{
+			$task = ($dir == 'down') ? 'db:migrate:down' : 'db:migrate:up';
+
+			$options = array(
+					'task'  => $task,
+					'group' => $module_name,
+					'quiet' => 'quiet'
+				);
+
+			//Call DB migrations for this module
+			Minion_Task::factory($options)->execute();
+		}
+		catch(Exception $e){}
+	}
 }

@@ -7,8 +7,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.3
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class HTML {
@@ -56,7 +56,7 @@ class HTML {
 	);
 
 	/**
-	 * Use strict XHTML mode?
+	 * Use strict HTML mode?
 	 * @var boolean
 	 */
 	public static $strict = TRUE;
@@ -122,7 +122,7 @@ class HTML {
 	 *
 	 * @uses    URL::base
 	 * @uses    URL::site
-	 * @uses    URL::is_remote
+	 * @uses    URL::is_absolute
 	 */
 	public static function anchor($uri, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = TRUE)
 	{
@@ -139,7 +139,7 @@ class HTML {
 		}
 		else
 		{
-			if (URL::is_absolute($uri))
+			if (strpos($uri, '://') === FALSE)
 			{
 				// Make the URI absolute for non-id anchors
 				$uri = URL::site($uri, $protocol, $index);
@@ -170,7 +170,7 @@ class HTML {
 	 *
 	 * @return  string
 	 *
-	 * @uses    URL::base
+	 * @uses    URL::site
 	 */
 	public static function file_anchor($file, $title = NULL, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
@@ -228,20 +228,22 @@ class HTML {
 	 *
 	 * @return  string
 	 *
-	 * @uses    URL::base
-	 * @uses    URL::is_absolute
+	 * @uses    URL::site
 	 */
 	public static function script($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		//allow theme to serve its own media assets
+		// Allow theme to serve its own media assets
 		if(strpos($file, 'media/js') !== FALSE AND Gleez::$installed AND strpos($file, 'guide/media') === FALSE)
 		{
 			$theme = Theme::$active;
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
 
-		if (URL::is_absolute($file))
+		if (strpos($file, '://') === FALSE)
 		{
+			// Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -270,13 +272,15 @@ class HTML {
 	 *
 	 * @return  string
 	 *
-	 * @uses    URL::base
-	 * @uses    URL::is_absolute
+	 * @uses    URL::site
 	 */
 	public static function image($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
-		if (URL::is_absolute($file))
+		if (strpos($file, '://') === FALSE)
 		{
+			// Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -365,27 +369,29 @@ class HTML {
 	 *
 	 * [!!] Note: Gleez by default use HTML5. In HTML5 attribute `type` not needed
 	 *
-	 * @param   string  $file       File name
-	 * @param   array   $attrs      Default attributes [Optional]
-	 * @param   mixed   $protocol   Protocol to pass to `URL::base()` [Optional]
-	 * @param   boolean $index      Include the index page [Optional]
+	 * @param   string  $file      File name
+	 * @param   array   $attrs     Default attributes [Optional]
+	 * @param   mixed   $protocol  Protocol to pass to `URL::base()` [Optional]
+	 * @param   boolean $index     Include the index page [Optional]
 	 *
 	 * @return  string
 	 *
-	 * @uses    URL::base
-	 * @uses    URL::is_absolute
+	 * @uses    URL::site
 	 */
 	public static function style($file, array $attrs = NULL, $protocol = NULL, $index = FALSE)
 	{
-		// allow theme to serve its own media assets
+		// Allow theme to serve its own media assets
 		if(strpos($file, 'media/css') !== FALSE AND Gleez::$installed AND strpos($file, 'guide/media') === FALSE)
 		{
 			$theme = Theme::$active;
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
 		}
 
-		if (URL::is_absolute($file))
+		if (strpos($file, '://') === FALSE)
 		{
+			//Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::site($file, $protocol, $index);
 		}
@@ -417,8 +423,6 @@ class HTML {
 	 * @return  string
 	 *
 	 * @uses    URL::base
-	 * @uses    URL::site
-	 * @uses    URL::is_remote
 	 */
 	public static function resize($file, array $attributes = NULL, $protocol = NULL, $index = FALSE)
 	{
@@ -447,13 +451,17 @@ class HTML {
 			$type = 'crop';
 		}
 
-		if (URL::is_remote($file) === FALSE)
+		if (strpos($file, '://') === FALSE)
 		{
-			if( isset($width) AND isset($height) )
+			if (isset($width) AND isset($height))
 			{
 				$file = (strpos($file, 'media/') === FALSE) ? $file : str_replace('media/', '', $file);
 				$file = "media/imagecache/$type/{$width}x{$height}/$file";
 			}
+
+			// Auto detect index file
+			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
+
 			// Add the base URL
 			$file = URL::base($protocol, $index).$file;
 		}
@@ -471,8 +479,6 @@ class HTML {
 	 * @param   array  $attributes  Attributes, for example CSS class [Optional]
 	 *
 	 * @return  string
-	 *
-	 * @uses    Request::uri
 	 */
 	public static function links($links, $attributes = array('class' => 'links'))
 	{
@@ -537,7 +543,7 @@ class HTML {
 	 *
 	 * @return  string Prepared HTML
 	 *
-	 * @uses    Request::uri
+	 * @uses    Text::plain
 	 */
 	public static function tabs($tabs, $attributes = array('class' => 'tabs'))
 	{
@@ -569,8 +575,8 @@ class HTML {
 
 				$output .= '<li'.self::attributes(array('class' => $class)).'>';
 
-				//sanitized link text
-				$tab['text'] = Text::plain( $tab['text'] );
+				// Sanitized link text
+				$tab['text'] = Text::plain($tab['text']);
 
 				if(empty($tab['link']))
 				{
@@ -596,6 +602,8 @@ class HTML {
 	 * @param   string  $uri  URI
 	 *
 	 * @return  boolean
+	 *
+	 * @uses    URL::is_active
 	 */
 	public static function is_active($uri)
 	{
@@ -638,7 +646,7 @@ class HTML {
 	 * @return  string  An HTML-prepared image
 	 *
 	 * @uses    Route::uri
-	 * @uses    HTML::image
+	 * @uses    Route::get
 	 */
 	public static function sprite_img($class, $title = NULL)
 	{
@@ -674,8 +682,10 @@ class HTML {
 	 *
 	 * Example:
 	 * ~~~
-	 * echo HTML::icon('/paths/edit/1', 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
+	 * echo HTML::icon('/paths/edit/1', 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Alias')));
 	 * ~~~
+	 *
+	 * @link    http://fontawesome.io/
 	 *
 	 * @param   string  $url    URL
 	 * @param   string  $icon   FontAwesome like icon  class
@@ -685,7 +695,7 @@ class HTML {
 	 */
 	public static function icon($url, $icon, array $attrs = array())
 	{
-		return self::anchor($url, '<i class="'.$icon.'"></i>', $attrs);
+		return self::anchor($url, '<i class="fa '.$icon.'"></i>', $attrs);
 	}
 
 	/**

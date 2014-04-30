@@ -37,8 +37,9 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * Shortcodes
 * oAuth2 login via Google/Facebook/Windows
 * Resize images on fly with caching
-* Other Details like SEO, Media, Gravatar, etc.
 * DataTables, Popups, autocomplete etc
+* ORM, MongoDB, Redis support
+* Other Details like SEO, Media, Gravatar, etc.
 
 ## Frameworks & Libraries
 
@@ -48,6 +49,7 @@ Gleez is simply a module for Kohana 3. It mainly provides the user interfaces(GU
 * jQuery [(http://jquery.com/)](http://jquery.com/)
 * jQuery Form Plugin [http://malsup.com/jquery/form/](http://malsup.com/jquery/form/)
 * jQuery Tabledrag Plugin [(https://github.com/wadmiraal/jquery-tabledrag/)](https://github.com/wadmiraal/jquery-tabledrag/)
+* jQuery Textarea Characters Counter Plugin [(http://roy-jin.appspot.com/jsp/textareaCounter.jsp)](http://roy-jin.appspot.com/jsp/textareaCounter.jsp)
 * Font Awesome [(http://fortawesome.github.io/Font-Awesome/)](http://fortawesome.github.io/Font-Awesome/)
 * Select2 jQuery plugin [(http://ivaynberg.github.io/select2/)](http://ivaynberg.github.io/select2/)
 * DataTables jQuery plugin [(http://datatables.net/)](http://datatables.net/)

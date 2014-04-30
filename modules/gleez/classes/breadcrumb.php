@@ -4,11 +4,11 @@
  *
  * Automatically create breadcrumb links.
  *
- * @package    Gleez\HTML
+ * @package    Gleez\Helpers
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    2.0.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @see        https://github.com/xavividal/Breadcrumbs
  */
 class Breadcrumb
 {
@@ -16,19 +16,19 @@ class Breadcrumb
 	 * Default view
 	 * @var string
 	 */
-	protected $_view = 'breadcrumb';
+	public static $default = 'breadcrumb';
 
 	/**
 	 * Singleton instance
 	 * @var \Breadcrumb
 	 */
-	protected static $_instance;
+	protected static $instance;
 
 	/**
 	 * Stack of breadcrumb items
 	 * @var array
 	 */
-	protected $_items = array();
+	protected $items = array();
 
 	/**
 	 * Constructor
@@ -37,17 +37,31 @@ class Breadcrumb
 	protected function __construct(){}
 
 	/**
+	 * Render the breadcrumb
+	 *
+	 * @since   2.0.0
+	 *
+	 * @return  string
+	 */
+	public function __toString()
+	{
+		return $this->render();
+	}
+
+	/**
 	 * Get the unique instance
+	 *
+	 * @since   2.0.0
 	 *
 	 * @return  \Breadcrumb
 	 */
-	public static function factory()
+	public static function instance()
 	{
-		if (self::$_instance === NULL)
-		{
-			self::$_instance = new Breadcrumb;
+		if (is_null(static::$instance)) {
+			static::$instance = new static();
 		}
-		return self::$_instance;
+
+		return static::$instance;
 	}
 
 	/**
@@ -57,36 +71,67 @@ class Breadcrumb
 	 */
 	public function setView($view)
 	{
-		$this->_view = $view;
+		static::$default = $view;
 	}
 
 	/**
 	 * Add a new item to the breadcrumb stack
 	 *
-	 * @param  string  $label
-	 * @param  string  $url
+	 * @since   2.0.0  Initial implementation
+	 * @since   2.0.0  Return \Breadcrumb
+	 *
+	 * @param  string  $label  Item label
+	 * @param  string  $url    Item url [Optional]
 	 */
 	public function addItem($label, $url = NULL)
 	{
-		$this->_items[] = array(
+		$this->items[] = array(
 			'label' => $label,
 			'url'   => $url
 		);
+
+		return $this;
+	}
+
+	/**
+	 * Clear all items from breadcrumb stack
+	 *
+	 * @since   2.0.0
+	 *
+	 * @return  \Breadcrumb
+	 */
+	public function clear()
+	{
+		$this->items[] = array();
+
+		return $this;
+	}
+
+	/**
+	 * Get all items from breadcrumb stack
+	 *
+	 * @since   2.0.0
+	 *
+	 * @return array
+	 */
+	public function getItems()
+	{
+		return $this->items;
 	}
 
 	/**
 	 * Render the breadcrumb
 	 *
 	 * @return  string
+	 * @uses    Config::get
 	 */
 	public function render()
 	{
-		$view              = View::factory($this->_view);
-		$view->items       = $this->_items;
-		$view->items_count = count($this->_items);
-
-		$view->separator     = Config::get('breadcrumb.separator', '&nbsp;&gt;&nbsp;');
-		$view->last_linkable = Config::get('breadcrumb.last_linkable', FALSE);
+		$view = View::factory(static::$default)
+					->set('items',         $this->items)
+					->set('items_count',   count($this->items))
+					->set('separator',     Config::get('breadcrumb.separator', '&nbsp;&gt;&nbsp;'))
+					->set('last_linkable', Config::get('breadcrumb.last_linkable', false));
 
 		return $view->render();
 	}

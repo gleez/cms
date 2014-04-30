@@ -9,7 +9,7 @@ div.dataTables_length select {
 }
 
 div.dataTables_filter label {
-	float: right;
+	float: left;
 }
 
 div.dataTables_info {
@@ -20,7 +20,10 @@ div.dataTables_paginate {
 	float: right;
 	margin: 0;
 }
-
+div.dataTables_paginate ul.pagination
+{
+    margin: 2px;
+}
 table.table {
 	clear: both;
 	margin-bottom: 6px !important;
@@ -45,6 +48,13 @@ table.table thead .sorting_desc_disabled { background: url('../images/datatables
 table.dataTable th:active {
 	outline: none;
 }
+
+table.dataTable tr.odd td.sorting_1 { background-color: #E9E9E9; }
+table.dataTable tr.odd td.sorting_2 { background-color: #E9E9E9; }
+table.dataTable tr.odd td.sorting_3 { background-color: #E9E9E9; }
+table.dataTable tr.even td.sorting_1 { background-color: #FFF; }
+table.dataTable tr.even td.sorting_2 { background-color: #FFF; }
+table.dataTable tr.even td.sorting_3 { background-color: #FFF; }
 
 div.dataTables_filter {
 	height: 26px;
@@ -76,7 +86,7 @@ table.table-striped tbody tr:nth-child(2n+1) td, .table-striped tbody tr:nth-chi
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
 	filter: progid:dximagetransform.microsoft.gradient(enabled=false);
-	height: 35px;
+	height: 46px;
 	line-height: 35px;
 	padding: 5px 3px 0 3px;
 	margin: 15px 0 0 0;
@@ -98,6 +108,11 @@ table.dataTable td {
     padding:8px;
     border-color: #E1E1E1;
 }
+
+table.dataTable td .description {
+	font-style: oblique;
+}
+
 table thead tr, table thead tr:hover {
     background: #fcfcfc;
     background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZjZmNmYyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmN2Y3ZjciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -114,9 +129,17 @@ table.dataTable tr {
     height: 24px;
     line-height: 24px;
 }
+
+table.dataTable tr .fa {
+	font-size: 13px;
+}
+
 table.dataTable td.dataTables_empty {
-    color: #777777;
+    color: #777;
     font-size: 14px;
     padding: 32px;
     text-align: center;
+}
+table.dataTable td ul {
+	list-style: none;
 }

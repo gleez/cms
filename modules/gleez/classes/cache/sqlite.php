@@ -8,12 +8,9 @@
  * * PDO
  *
  * @package    Gleez\Cache\Base
- * @author     Kohana Team
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0.1
- * @copyright  (c) 2009-2012 Kohana Team
- * @copyright  (c) 2012-2013 Gleez Technologies
- * @license    http://kohanaphp.com/license
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Cache_Sqlite extends Cache implements Cache_Tagging {

@@ -10,7 +10,7 @@
  * @package    Gleez\Cache\Base
  * @author     Gleez Team
  * @version    1.2.0
- * @copyright  (c) 2012-2013 Gleez Technologies
+ * @copyright  (c) 2012-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Cache_Mango extends Cache implements Cache_Tagging {

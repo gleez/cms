@@ -10,7 +10,7 @@
  * @package    Gleez\Core
  * @author     Gleez Team
  * @author     Kohana Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @copyright  (c) 2008-2012 Kohana Team
  * @license    http://gleezcms.org/license Gleez CMS License
  * @license    http://kohanaframework.org/license
@@ -258,13 +258,6 @@ class Kohana {
 			Kohana::$autolocale = (bool) $settings['autolocale'];
 		}
 
-		// By default enable Gleez_Locale
-		if (Kohana::$autolocale)
-		{
-			// @todo use Cookie here
-			Kohana::$locale = Gleez_Locale::instance();
-		}
-
 		// Enable the Kohana shutdown handler, which catches E_FATAL errors.
 		register_shutdown_function(array('Kohana', 'shutdown_handler'));
 
@@ -375,7 +368,7 @@ class Kohana {
 		}
 
 		// Determine if the extremely evil magic quotes are enabled
-		Kohana::$magic_quotes = version_compare(PHP_VERSION, '5.4') < 0 AND get_magic_quotes_gpc();
+		Kohana::$magic_quotes = (bool) get_magic_quotes_gpc();
 
 		// Sanitize all request variables
 		$_GET    = Kohana::sanitize($_GET);
@@ -516,11 +509,13 @@ class Kohana {
 	 * naming conventions](kohana/conventions#class-names-and-file-location).
 	 * See [Loading Classes](kohana/autoloading) for more information.
 	 *
-	 * Class names are converted to file names by making the class name
-	 * lowercase and converting underscores to slashes:
-	 *
-	 *     // Loads classes/my/class/name.php
+	 *     // Loads classes/My/Class/Name.php
 	 *     Kohana::auto_load('My_Class_Name');
+	 *
+	 * or with a custom directory:
+	 *
+	 *     // Loads vendor/My/Class/Name.php
+	 *     Kohana::auto_load('My_Class_Name', 'vendor');
 	 *
 	 * You should never have to call this function, as simply calling a class
 	 * will cause it to be called.
@@ -529,33 +524,77 @@ class Kohana {
 	 *
 	 *     spl_autoload_register(array('Kohana', 'auto_load'));
 	 *
-	 * @param   string  $class  class name
+	 * @param   string  $class      Class name
+	 * @param   string  $directory  Directory to load from
 	 * @return  boolean
 	 */
-	public static function auto_load($class)
+	public static function auto_load($class, $directory = 'classes')
 	{
-		try
+		// Transform the class name according to PSR-0
+		$class     = ltrim($class, '\\');
+		$file      = '';
+		$namespace = '';
+
+		if ($last_namespace_position = strripos($class, '\\'))
 		{
-			// Transform the class name into a path
-			$file = str_replace('_', '/', strtolower($class));
-
-			if ($path = Kohana::find_file('classes', $file))
-			{
-				// Load the class file
-				require $path;
-
-				// Class has been found
-				return TRUE;
-			}
-
-			// Class is not in the filesystem
-			return FALSE;
+			$namespace = substr($class, 0, $last_namespace_position);
+			$class     = substr($class, $last_namespace_position + 1);
+			$file      = str_replace('\\', DIRECTORY_SEPARATOR, $namespace).DIRECTORY_SEPARATOR;
 		}
-		catch (Exception $e)
+
+		$file .= str_replace('_', DIRECTORY_SEPARATOR, $class);
+
+		if ($path = Kohana::find_file($directory, $file))
 		{
-			Gleez_Exception::handler($e);
-			die;
+			// Load the class file
+			require $path;
+
+			// Class has been found
+			return TRUE;
 		}
+
+		// Class is not in the filesystem
+		return FALSE;
+	}
+
+	/**
+	 * Provides auto-loading support of classes that follow Kohana's old class
+	 * naming conventions.
+	 *
+	 * This is included for compatibility purposes with older modules.
+	 *
+	 * @param   string  $class      Class name
+	 * @param   string  $directory  Directory to load from
+	 * @return  boolean
+	 */
+	public static function auto_load_lowercase($class, $directory = 'classes')
+	{
+		// Transform the class name according to PSR-0
+		$class     = ltrim($class, '\\');
+		$file      = '';
+		$namespace = '';
+
+		if ($last_namespace_position = strripos($class, '\\'))
+		{
+			$namespace = substr($class, 0, $last_namespace_position);
+			$class     = substr($class, $last_namespace_position + 1);
+			$file      = str_replace('\\', DIRECTORY_SEPARATOR, $namespace).DIRECTORY_SEPARATOR;
+		}
+
+		// Transform the class name into a path
+		$file .= str_replace('_', DIRECTORY_SEPARATOR, strtolower($class));
+
+		if ($path = Kohana::find_file($directory, $file))
+		{
+			// Load the class file
+			require $path;
+
+			// Class has been found
+			return TRUE;
+		}
+
+		// Class is not in the filesystem
+		return FALSE;
 	}
 
 	/**
@@ -688,7 +727,7 @@ class Kohana {
 		}
 
 		//theme class may not be available during initial init phase
-		if ($theme === NULL AND class_exists('theme'))
+		if ($theme === NULL AND class_exists('Theme'))
 		{
 			// Use the active theme
 			$theme = Theme::$active;
@@ -895,7 +934,7 @@ class Kohana {
 			'.git',
 			'.svn'
 		);
-		
+
 		//no data provided we read
 		if ($data === NULL)
 		{
@@ -983,7 +1022,6 @@ class Kohana {
 	/**
 	 * Catches errors that are not caught by the error handler, such as E_PARSE.
 	 *
-	 * @uses    Gleez_Exception::handler
 	 * @return  void
 	 */
 	public static function shutdown_handler()
@@ -993,6 +1031,12 @@ class Kohana {
 			// Do not execute when not active
 			return;
 		}
+
+		// Retrieve the current exception handler
+		$handler = set_exception_handler(array('Gleez_Exception', 'handler'));
+
+		// Restore it back to it's previous state
+		restore_exception_handler();
 
 		try
 		{
@@ -1005,7 +1049,7 @@ class Kohana {
 		catch (Exception $e)
 		{
 			// Pass the exception to the handler
-			Gleez_Exception::handler($e);
+			call_user_func($handler, $e);
 		}
 
 		if (Kohana::$errors AND $error = error_get_last() AND in_array($error['type'], Kohana::$shutdown_errors))
@@ -1014,7 +1058,7 @@ class Kohana {
 			ob_get_level() and ob_clean();
 
 			// Fake an exception for nice debugging
-			Gleez_Exception::handler(new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
+			call_user_func($handler, new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
 
 			// Shutdown now to avoid a "death loop"
 			exit(1);

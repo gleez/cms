@@ -6,7 +6,7 @@
 		<p><?php echo __('The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.', array(':menus' => 'admin/menu')); ?></p>
 	</div>
 
-	<?php echo HTML::anchor($add_url, '<i class="icon-plus icon-white"></i> '.__('Add Menu'), array('class' => 'btn btn-success pull-right')); ?>
+	<?php echo HTML::anchor($add_url, '<i class="fa fa-plus fa-white"></i> '.__('Add Menu'), array('class' => 'btn btn-success pull-right')); ?>
 	<div class='clearfix'></div><br>
 
 	<table id="admin-list-menus" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["0", "desc"]]'>

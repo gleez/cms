@@ -18,7 +18,7 @@
 </ul>
 
 <div class="clearfix"></div>
-<?php echo Form::submit('no', __('Cancel'), array('class' => 'btn')) ?> &nbsp;
+<?php echo Form::submit('no', __('Cancel'), array('class' => 'btn btn-default')) ?> &nbsp;
 <?php echo Form::submit('yes', __('Delete'), array('class' => 'btn btn-danger')) ?>
 
 <?php echo Form::close(); ?>

@@ -7,40 +7,31 @@
  *
  * @package    Gleez\Theme
  * @author     Gleez Team
- * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
  * @todo       This class does not do any permission checking
  */
 class Theme {
 
-	/** @type string INFO_FILE Theme info filename */
-	const INFO_FILE = 'theme.info';
-
 	/**
 	 * Active theme name
 	 * @var string
 	 */
-	public static $active = 'fluid';
-	
-	/**
-	 * Site theme name
-	 * @var string
-	 */
-	public static $site_theme_name = 'fluid';
-
-	/**
-	 * Admin theme name
-	 * @var string
-	 */
-	public static $admin_theme_name = 'fluid';
+	public static $active = 'cerber';
 
 	/**
 	 * Admin?
 	 * @var boolean
 	 */
 	public static $is_admin = FALSE;
+
+	/**
+	 * Available themes?
+	 * @var array
+	 */
+	public static $themes = array();
 
 	/**
 	 * Load the active theme.
@@ -52,7 +43,8 @@ class Theme {
 	 */
 	public static function load_themes()
 	{
-		$config = Kohana::$config->load('site');
+		$config       = Config::load('site');
+		self::$themes = self::available(FALSE);
 
 		//set admin theme based on path info
 		$path = ltrim(Request::detect_uri(), '/');
@@ -61,37 +53,25 @@ class Theme {
 		if (Theme::$is_admin)
 		{
 			// Load the admin theme
-			Theme::$admin_theme_name = $config->get('admin_theme', Theme::$admin_theme_name);
-			Theme::$active = Theme::$admin_theme_name;
+			Theme::$active  = $config->get('admin_theme', 'cerber');
 		}
 		else
 		{
 			// Load the site theme
-			Theme::$site_theme_name = $config->get('theme', Theme::$site_theme_name);
-			Theme::$active = Theme::$site_theme_name;
+			Theme::$active  = $config->get('theme', 'cerber');
 		}
 	
 		//Set mobile theme, if enabled and mobile request
 		if(Request::is_mobile() AND $config->get('mobile_theme', FALSE))
 		{
 			// Load the mobile theme
-			Theme::$site_theme_name = $config->get('mobile_theme', Theme::$site_theme_name);
-			Theme::$active = Theme::$site_theme_name;
+			Theme::$active = $config->get('mobile_theme', 'cerber');
 		}
 	
 		// Admins can override the site theme, temporarily. This lets us preview themes.
-		if (User::is_admin() AND isset($_GET['theme']) AND $override = $_GET['theme'])
+		if (User::is_admin() AND isset($_GET['theme']) AND $override = Text::plain( $_GET['theme']) )
 		{
-			if (file_exists(THEMEPATH.$override))
-			{
-				Theme::$site_theme_name  = $override;
-				Theme::$admin_theme_name = $override;
-				Theme::$active 		 = $override;
-			}
-			else
-			{
-				Log::error('Missing override site theme: :theme', array(':theme' => $override));
-			}
+			Theme::$active = $override;
 		}
 
 		//Finally set the active theme
@@ -106,40 +86,70 @@ class Theme {
 	public static function set_theme($theme = FALSE)
 	{
 		if( !empty($theme)) Theme::$active = $theme;
-
 		$modules = Kohana::modules();
+
+		// Check if the active theme is not loaded already
 		if( ! empty(Theme::$active) AND ! in_array(Theme::$active, array_keys($modules)))
 		{
-			//set absolute theme path and load the request theme as kohana module
-			Kohana::modules(array('theme' => THEMEPATH.Theme::$active) + $modules);
+			// Make sure the theme is available
+			if( $theme = self::getTheme() )
+			{
+				//set absolute theme path and load the request theme as kohana module
+				Kohana::modules(array('theme' => $theme->path) + $modules);
+			}
+			else
+			{
+				Log::error('Missing site theme: :theme', array(':theme' => Theme::$active) );
+			}
 		}
 	
 		unset($modules);
 	}
-	
+
 	/**
 	 * Gets info about theme
 	 *
-	 * @param   string       $theme_name   Theme name
-	 * @return  \Object  	 An array containing information about theme
+	 * @param   boolean|string  $name  Theme name [Optional]
+	 * @return  \Object  	 An object containing information about theme
 	 */
-	public static function get_info($theme_name)
+	public static function getTheme($name = false)
 	{
-		$info_file               = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
-		$theme_info              = (object) parse_ini_file($info_file, true);
-		$theme_info->title       = __($theme_info->title);
-		$theme_info->description = __($theme_info->description);
+		if(empty($name)) $name = Theme::$active;
+
+		// Make sure the theme is available
+		if( in_array($name, array_keys(self::$themes) ) )
+		{
+			// Get the active theme object
+			return self::$themes[$name];
+		}
+
+		return false;
+	}
+
+	/**
+	 * Gets info about theme
+	 *
+	 * @param   string       $file   Theme info file
+	 * @return  \Object  	 An object containing information about theme
+	 */
+	public static function get_info($file)
+	{
+		$theme              = (object) parse_ini_file($file, true);
+		$theme->name        = basename(dirname($file));
+		$theme->path        = dirname($file);
+		$theme->title       = __($theme->title);
+		$theme->description = __($theme->description);
 
 		// Add i18n support
-		if (isset($theme_info->regions) AND ! empty($theme_info->regions))
+		if (isset($theme->regions) AND ! empty($theme->regions))
 		{
-			foreach ($theme_info->regions as $name => $title)
+			foreach ($theme->regions as $name => $title)
 			{
-				$theme_info->regions[$name] = __($title);
+				$theme->regions[$name] = __($title);
 			}
 		}
 
-		return $theme_info;
+		return $theme;
 	}
 
 	/**
@@ -151,21 +161,39 @@ class Theme {
 	public static function available($title = TRUE)
 	{
 		$themes = array();
+		$paths 	= (array) Config::get('site.theme_paths', array(THEMEPATH) );
+		$cache  = Cache::instance('themes');
 
-		foreach (scandir(THEMEPATH) as $theme_name)
+		if ( ! $themes = $cache->get('themes', false))
 		{
-			$info_file = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
-			// File can be exists and can be readable
-			if (is_readable($info_file))
+			// Make sure THEMEPATH is set else add last
+			if(!in_array(THEMEPATH, $paths))
 			{
-				// Skip hidden files
-				if ($theme_name[0] == ".")
+				array_push($paths, THEMEPATH);
+			}
+
+			// Iterate over each config path
+			foreach ($paths AS $key => $path)
+			{
+				foreach (glob($path . "*/theme.info") as $file)
 				{
-					continue;
+					$name          = basename(dirname($file));
+					$themes[$name] = Theme::get_info($file);
 				}
-				
-				$theme               = Theme::get_info($theme_name);
-				$themes[$theme_name] = ($title === TRUE) ? $theme->title : $theme;
+			}
+		}
+
+		// set the cache for performance in production
+		if (Kohana::$environment === Kohana::PRODUCTION)
+		{
+			$cache->set('themes', $themes, DATE::DAY);
+		}
+
+		if($title === TRUE)
+		{
+			foreach ($themes as $name => $theme)
+			{
+				$themes[$name] = $theme->title;
 			}
 		}
 
@@ -174,32 +202,7 @@ class Theme {
 	
 	public static function route_list()
 	{
-		$themes = array();
-		
-		$cache = Cache::instance('themes');
-
-		if ( ! $themes = $cache->get('themes_route', false))
-		{
-			foreach (scandir(THEMEPATH) as $theme_name)
-			{
-				$info_file = THEMEPATH . $theme_name . DS . Theme::INFO_FILE;
-				
-				// File can be exists and can be readable
-				if (is_readable($info_file))
-				{
-					// Skip hidden files
-					if ($theme_name[0] == ".")
-					{
-						continue;
-					}
-					$themes[$theme_name] = $theme_name;
-				}
-			}
-		
-			$cache->set('themes_route', $themes, DATE::DAY);
-		}
-		
-		return implode("|", $themes);
+		return implode("|", array_keys( self::available()) );
 	}
 
 }

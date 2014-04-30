@@ -42,3 +42,8 @@ html, body {
 	text-align: center;
 	margin: 20px 0;
 }
+
+.table > tbody > tr.success > td code {
+	background-color: #E8F6E2;
+	color: #428bca;
+}

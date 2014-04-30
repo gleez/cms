@@ -11,16 +11,15 @@
 		?>
 	</li>
 
-	<?php foreach($providers as $provider => $key): ?>
-		<li class="oprovider <?php echo $provider; ?>">
+	<?php foreach ($providers as $name => $provider): ?>
+		<li class="oprovider <?php echo $name; ?>">
 			<?php
-				$url = Route::get('user/oauth')->uri( array('controller' => $provider, 'action' => 'login'));
-				$url .= URL::query( array('destination' => Request::current()->uri()));
+				$url = $provider['url'] . URL::query( array('destination' => Request::current()->uri()) );
 
-				echo HTML::anchor($url, __('Log In'), array('class' => $provider, 'title' =>__('Login with :provider account', array(':provider' => ucfirst($provider)))));
+				echo HTML::anchor($url, __('Log In'), array('class' => $name, 'title' =>__('Login with :provider account', array(':provider' => ucfirst($name)))));
 				unset($url);
 			?>
 		</li>
-	<?php endforeach ?>
+	<?php endforeach; ?>
 </ul>
 <div class="clearfix"></div><br>

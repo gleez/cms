@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Widget
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2012 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Widget_Comment extends Widget {
@@ -58,13 +58,16 @@ class Widget_Comment extends Widget {
 				$comments[$blog->id]['post_url'] = $blog->post->url;
 			}
 
-			// set the cache
-			$cache->set('recent_comments', $comments, DATE::HOUR);
+			// set the cache for performance in production
+			if (Kohana::$environment === Kohana::PRODUCTION)
+			{
+				$cache->set('recent_comments', $comments, DATE::HOUR);
+			}
 		}
 	
 		return View::factory('widgets/comment/list')
 					->set('comments', $comments)
 					->render();
-        }
+	}
 
 }

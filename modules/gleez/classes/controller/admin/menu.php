@@ -5,7 +5,7 @@
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Admin_Menu extends Controller_Admin {
@@ -51,10 +51,10 @@ class Controller_Admin_Menu extends Controller_Admin {
 				$this->_datatables->add_row(
 					array(
 						Text::plain($menu->title).'<div class="description">'.Text::plain($menu->descp).'</div>',
-						HTML::icon($menu->list_items_url, 'icon-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
-						HTML::icon($menu->add_item_url, 'icon-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
-						HTML::icon($menu->edit_url, 'icon-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
-						HTML::icon($menu->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-menus'))
+						HTML::icon($menu->list_items_url, 'fa-th-list', array('class'=>'action-list', 'title'=> __('List Links'))),
+						HTML::icon($menu->add_item_url, 'fa-plus', array('class'=>'action-add', 'title'=> __('Add Link'))),
+						HTML::icon($menu->edit_url, 'fa-edit', array('class'=>'action-edit', 'title'=> __('Edit Menu'))),
+						HTML::icon($menu->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete Menu'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-menus'))
 					)
 				);
 			}

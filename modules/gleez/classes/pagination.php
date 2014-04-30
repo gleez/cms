@@ -5,7 +5,7 @@
  * @package    Gleez\Base
  * @version    1.0.1
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Pagination {
@@ -84,7 +84,7 @@ class Pagination {
 	 * Query offset
 	 * @var integer
 	 */
-	protected $_offset;
+	protected $offset;
 
 	/**
 	 * Request object
@@ -258,7 +258,7 @@ class Pagination {
 			$this->next_page          = ($this->current_page < $this->total_pages) ? $this->current_page + 1 : FALSE;
 			$this->first_page         = ($this->current_page === 1) ? FALSE : 1;
 			$this->last_page          = ($this->current_page >= $this->total_pages) ? FALSE : $this->total_pages;
-			$this->_offset            = (int) (($this->current_page - 1) * $this->items_per_page);
+			$this->offset            = (int) (($this->current_page - 1) * $this->items_per_page);
 		}
 
 		return $this;

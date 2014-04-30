@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Controller
  * @author     Gleez Team
- * @version    1.0.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.0.4
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Blog extends Template {
@@ -76,6 +76,9 @@ class Controller_Blog extends Template {
 			$posts->where('status', '=', 'publish');
 		}
 
+		$this->title = __('Blogs');
+		$this->schemaType = 'WebPage';
+
 		/**
 		 * Bug in ORM to repeat the `where()` methods after using `count_all()`
 		 * @link http://forum.kohanaframework.org/discussion/7736 Solved
@@ -90,8 +93,6 @@ class Controller_Blog extends Template {
 		}
 
 		$config = Config::load('blog');
-
-		$this->title = __('Blogs');
 
 		$view = View::factory('blog/list')
 			->set('teaser',      TRUE)
@@ -146,7 +147,7 @@ class Controller_Blog extends Template {
 	 */
 	public function action_view()
 	{
-		$id = (int) $this->request->param('id', 0);
+		$id     = (int) $this->request->param('id', 0);
 		$config = Config::load('blog');
 
 		$post = Post::dcache($id, 'blog', $config);
@@ -172,7 +173,7 @@ class Controller_Blog extends Template {
 			AND ACL::check('access comment'))
 		{
 			// Determine pagination offset
-			$p = ((int) $this->request->param('blog', 0)) ? '/p'.$this->request->param('blog', 0) : FALSE;
+			$p = ((int) $this->request->param('page', 0)) ? '/p'.$this->request->param('page', 0) : FALSE;
 
 			// Handle comment listing
 			$comments = Request::factory('comments/blog/public/'.$id.$p)->execute()->body();
@@ -195,6 +196,7 @@ class Controller_Blog extends Template {
 		}
 
 		$this->title = $post->title;
+		$this->schemaType = 'Article';
 
 		$view = View::factory('blog/post')
 			->set('title',             $this->title)
@@ -329,7 +331,7 @@ class Controller_Blog extends Template {
 			->set('action',       $action)
 			->set('config',       $config)
 			->set('path',         FALSE)
-			->set('created',      Date::formatted_time($post->created, 'Y-m-d H:i:s O'))
+			->set('created',      $post->created)
 			->set('author',       $post->user->name)
 			->set('tags',         Tags::implode($post->tags_form))
 			->set('image',        FALSE)
@@ -466,6 +468,7 @@ class Controller_Blog extends Template {
 	 * Category selector
 	 *
 	 * @throws  HTTP_Exception_403
+	 * @throws  HTTP_Exception_404
 	 */
 	public function action_term()
 	{
@@ -482,7 +485,7 @@ class Controller_Blog extends Template {
 
 		if ( ! $term->loaded())
 		{
-			throw HTTP_Exception::factory(404, 'Term ":term" Not Found', array(':term'=>$id));
+			throw HTTP_Exception::factory(404, 'Category ":term" not found', array(':term' => $id));
 		}
 
 		$this->title = __(':term', array(':term' => $term->name));
@@ -504,8 +507,8 @@ class Controller_Blog extends Template {
 
 		if ($total == 0)
 		{
-			Log::info('No topics found.');
-			$this->response->body(View::factory('forum/none'));
+			Log::info('No blogs found.');
+			$this->response->body(View::factory('blog/none'));
 			return;
 		}
 
@@ -529,10 +532,10 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($term->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('blog', array('action' => 'term', 'id' => $term->id), TRUE ), array(
+			Meta::links(Route::url('blog', array('action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'term', 'id' => $term->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $term->name,
@@ -599,10 +602,10 @@ class Controller_Blog extends Template {
 		if ($this->auto_render)
 		{
 			Meta::links(URL::canonical($tag->url, $pagination), array('rel' => 'canonical'));
-			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE ), array(
+			Meta::links(Route::url('blog', array('action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel' => 'shortlink'
 			));
-			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id)), array(
+			Meta::links(Route::url('rss', array('controller' => 'blog', 'action' => 'tag', 'id' => $tag->id), TRUE), array(
 				'rel'   => 'alternate',
 				'type'  => 'application/rss+xml',
 				'title' => Template::getSiteName() . ' : ' . $tag->name,

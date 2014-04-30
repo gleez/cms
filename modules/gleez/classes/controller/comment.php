@@ -5,7 +5,7 @@
  * @package    Gleez\Controller
  * @author     Gleez Team
  * @version    1.0.1
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Controller_Comment extends Template {
@@ -19,6 +19,9 @@ class Controller_Comment extends Template {
 	{
 		ACL::required('access comment');
 
+		// Disable sidebars on comments page
+		$this->_sidebars = FALSE;
+
 		parent::before();
 	}
 
@@ -26,7 +29,7 @@ class Controller_Comment extends Template {
 	{
 		$id       = (int) $this->request->param('id', 0);
 		$comment  = ORM::factory('comment', $id)->access();
-		$route    =  Route::get('comment')->uri(array('action' => 'list'));
+		$route    = Route::get('comment')->uri(array('action' => 'list'));
 
 		if ( ! $comment->loaded())
 		{

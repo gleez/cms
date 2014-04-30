@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.0.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.1
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class URL {
@@ -101,7 +101,7 @@ class URL {
 
 	/**
 	 * Callback used for encoding all non-ASCII characters, as per RFC 1738
-	 * Used by URL::site()
+	 * Used by [URL::site]
 	 *
 	 * @param  array $matches  Array of matches from preg_replace_callback()
 	 * @return string          Encoded string
@@ -124,7 +124,7 @@ class URL {
 	 * Typically you would use this when you are sorting query results,
 	 * or something similar.
 	 *
-	 * [!!] Parameters with a NULL value are left out.
+	 * [!!] Note: Parameters with a NULL value are left out.
 	 *
 	 * @param   array    $params   Array of GET parameters [Optional]
 	 * @param   boolean  $use_get  Include current request GET parameters [Optional]
@@ -167,20 +167,23 @@ class URL {
 	 * echo URL::title('My Blog Post'); // "my-blog-post"
 	 * ~~~
 	 *
+	 * @since   1.0.0    Basic implementation
+	 * @since   1.1.1    Replaced UTF8::transliterate_to_ascii by UTF8::toAscii
+	 *
 	 * @param   string   $title       Phrase to convert
 	 * @param   string   $separator   Word separator (any single character) [Optional]
 	 * @param   boolean  $ascii_only  Transliterate to ASCII? [Optional]
 	 *
 	 * @return  string
 	 *
-	 * @uses    UTF8::transliterate_to_ascii
+	 * @uses    UTF8::toAscii
 	 */
 	public static function title($title, $separator = '-', $ascii_only = FALSE)
 	{
 		if ($ascii_only === TRUE)
 		{
 			// Transliterate non-ASCII characters
-			$title = UTF8::transliterate_to_ascii($title);
+			$title = UTF8::toAscii($title);
 
 			// Remove all characters that are not the separator, a-z, 0-9, or whitespace
 			$title = preg_replace('![^'.preg_quote($separator).'a-z0-9\s]+!', '', strtolower($title));
@@ -238,12 +241,25 @@ class URL {
 	/**
 	 * Test whether a URL is remote
 	 *
+	 * @since   1.0.0  Initial functional
+	 * @since   1.0.1  Better handling
+	 *
 	 * @param   string  $url  The URL to test
 	 * @return  boolean
 	 */
 	public static function is_remote($url)
 	{
-		return (strpos($url, '://') !== FALSE);
+		if((strpos($url, '://') !== FALSE))
+		{
+			$base = URL::base(TRUE);
+
+			$host1 = str_replace('www.', '', parse_url($base, PHP_URL_HOST));
+			$host2 = str_replace('www.', '', parse_url($url, PHP_URL_HOST));
+
+			return trim($host1) === trim($host2);
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -258,12 +274,24 @@ class URL {
 	 * @param   string  $uri        Site URI to convert [Optional]
 	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from [Optional]
 	 * @param   boolean $index		Include the index_page in the URL [Optional]
+	 * @param   mixed   language key to prepend to the URI, or FALSE to not prepend a language
 	 * @return  string
 	 *
 	 * @uses    UTF8::is_ascii
 	 */
-	public static function site($uri = '', $protocol = NULL, $index = TRUE)
+	public static function site($uri = '', $protocol = NULL, $index = TRUE, $lang = FALSE)
 	{
+		if ($lang === TRUE)
+		{
+			// Prepend the current language to the URI
+			$uri = I18n::$active.'/'.ltrim($uri, '/');
+		}
+		elseif (is_string($lang))
+		{
+			// Prepend a custom language to the URI
+			$uri = $lang.'/'.ltrim($uri, '/');
+		}
+
 		// Chop off possible scheme, host, port, user and pass parts
 		$path = preg_replace('~^[-a-z0-9+.]++://[^/]++/?~', '', trim($uri, '/'));
 

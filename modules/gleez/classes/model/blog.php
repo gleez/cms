@@ -4,7 +4,7 @@
  *
  * @package    Gleez\ORM\Blog
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Blog extends Post {
@@ -34,7 +34,7 @@ class Model_Blog extends Post {
 	 */
 	public function save(Validation $validation = NULL)
 	{
-		$config = Kohana::$config->load('blog');
+		$config = Config::load('blog');
 		$this->status = empty($this->status) ? $config->get('default_status', 'draft') : $this->status;
 
 		if ( ! $config->use_comment)

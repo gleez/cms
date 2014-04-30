@@ -1,66 +1,89 @@
 <div class="help">
 	<p>
 		<?php _e('If you want more information about the %sitename or if you have comments about this website please use the contact form below. If you message is about a specific page on the %site_url website please include the URL in your message for reference.',
-			array(
-				'%sitename' => $site_name,
-				'%site_url' => $config->get('site_url', URL::site(NULL, TRUE ))
-			));
+			array('%sitename' => $site_name, '%site_url' => $site_url));
 		?>
 	</p>
 </div>
 
-<?php echo Form::open($action, array('id'=>'contact-form', 'class'=>'contact-form form form-horizontal')); ?>
-
-	<?php include Kohana::find_file('views', 'errors/partial'); ?>
-
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="control-group <?php echo isset($errors['name']) ? 'error': ''; ?>">
-				<?php echo Form::label('name', __('Your Name'), array('class' => 'control-label')) ?>
-				<div class="controls">
-					<?php echo Form::input('name', $user->nick, array('class' => 'input-xlarge')); ?>
-				</div>
-			</div>
-			<div class="control-group <?php echo isset($errors['email']) ? 'error': ''; ?>">
-				<?php echo Form::label('email', __('Reply-to'), array('class' => 'control-label')) ?>
-				<div class="controls">
-					<?php echo Form::input('email', $user->mail, array('class' => 'input-xlarge')); ?>
-				</div>
-			</div>
-			<div class="control-group <?php echo isset($errors['subject']) ? 'error': ''; ?>">
-				<?php echo Form::label('subject', __('Subject'), array('class' => 'control-label')) ?>
-				<div class="controls">
-					<?php echo Form::input('subject', '', array('class' => 'input-xlarge')); ?>
-					<p class="help-block"><?php echo __('Maximum of :num characters.', array(':num' => $config->subject_length)) ?></p>
-				</div>
-			</div>
-			<div class="control-group <?php echo isset($errors['category']) ? 'error': ''; ?>">
-				<?php echo Form::label('category', __('Category'), array('class' => 'control-label')) ?>
-				<div class="controls">
-					<?php echo Form::select('category', $types, $post['category'], array('class' => 'input-xlarge')); ?>
-				</div>
-			</div>
-			<div class="control-group <?php echo isset($errors['body']) ? 'error': ''; ?>">
-				<?php echo Form::label('body', __('Body'), array('class' => 'control-label') ) ?>
-				<div class="controls">
-					<?php echo Form::textarea('body', '', array('class' => 'textarea span12', 'autofocus')) ?>
-					<p class="help-block"><?php echo __('Maximum of :num characters.', array(':num' => $config->body_length)) ?></p>
-				</div>
-			</div>
-			<hr>
-			<?php if (isset($captcha)  AND ! $captcha->promoted()): ?>
-				<div class="control-group <?php echo isset($errors['captcha']) ? 'error': ''; ?>">
-					<?php echo Form::label('_captcha', __('Security'), array('class' => 'control-label')) ?>
-					<div class="controls">
-						<?php echo Form::input('_captcha', '', array('class' => 'text tiny')); ?><br>
-						<?php echo $captcha; ?>
+<?php echo Form::open($action, array('id' => 'contact-form', 'class'=>'form-horizontal', 'role' => 'form')) ?>
+	<div class="col-sm-12">
+		<div class="form-group <?php echo isset($errors['name']) ? 'has-error': ''; ?>">
+			<?php echo Form::label('name', __('Your Name'), array('class' => 'col-sm-3 control-label')) ?>
+			<div class="col-sm-9">
+				<div class="row">
+					<div class="input-group col-sm-8">
+						<?php echo Form::input('name', $user->nick, array('class' => 'form-control')); ?>
 					</div>
 				</div>
-			<?php endif; ?>
+			</div>
 		</div>
+
+		<div class="form-group <?php echo isset($errors['email']) ? 'has-error': ''; ?>">
+			<?php echo Form::label('email', __('Reply-to'), array('class' => 'col-sm-3 control-label')) ?>
+			<div class="col-sm-9">
+				<div class="row">
+					<div class="input-group col-sm-8">
+						<?php echo Form::input('email', $user->mail, array('class' => 'form-control')) ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group <?php echo isset($errors['category']) ? 'has-error': ''; ?>">
+			<?php echo Form::label('category', __('Category'), array('class' => 'col-sm-3 control-label')) ?>
+			<div class="col-sm-9">
+				<div class="row">
+					<div class="input-group col-sm-8">
+						<?php echo Form::select('category', $types, $post['category'], array('class' => 'form-control')) ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group <?php echo isset($errors['subject']) ? 'has-error': ''; ?>">
+			<?php echo Form::label('subject', __('Subject'), array('class' => 'col-sm-3 control-label')) ?>
+			<div class="col-sm-9">
+				<div class="row">
+					<div class="input-group col-sm-12">
+						<?php echo Form::input('subject', '', array('class' => 'form-control', 'autofocus', 'id' => 'countInput', 'data-max-chars' => $config->subject_length, 'data-display-format' => __(':format words', array(':format' => '#input/#max | #words ')))) ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group <?php echo isset($errors['body']) ? 'has-error': ''; ?>">
+			<?php echo Form::label('body', __('Body'), array('class' => 'col-sm-3 control-label')) ?>
+			<div class="col-sm-9">
+				<div class="row">
+					<div class="input-group col-sm-12">
+						<?php echo Form::textarea('body', '', array('class' => 'form-control', 'rows' => 6, 'id' => 'countTextarea', 'data-max-chars' => $config->body_length, 'data-display-format' => __(':format words', array(':format' => '#input/#max | #words ')))) ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+		<?php if (isset($captcha)  AND ! $captcha->promoted()): ?>
+			<div class="form-group <?php echo isset($errors['captcha']) ? 'has-error': ''; ?>">
+				<?php echo Form::label('_captcha', __('Security'), array('class' => 'col-sm-3 control-label')) ?>
+				<div class="col-sm-9">
+					<div class="row">
+						<div class="input-group col-sm-4">
+							<?php echo Form::input('_captcha', '', array('class' => 'form-control')) ?><br>
+							<?php echo $captcha; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+
 	</div>
 
-	<?php echo Form::submit('contact', __('Send message'), array('class' => 'btn pull-right')); ?>
-	<div class="clearfix"></div><br>
+	<div class="form-group">
+		<div class="col-sm-12 clearfix">
+			<?php echo Form::button('contact', __('Send Message'), array('class' => 'btn btn-success pull-right', 'type' => 'submit'))?>
+		</div>
+	</div>
 
 <?php echo Form::close() ?>

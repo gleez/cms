@@ -1,83 +1,140 @@
-<div class="row-fluid" itemscope itemtype="http://schema.org/Person">
+<div class="row vcard">
+	<div class="col-md-9 col-sm-8 col-xs-12" itemprop="about" itemscope itemtype="http://schema.org/Person">
+		<div class="row">
+			<div class="col-md-3 col-sm-5 col-xs-12">
+				<div class="thumbnail vcard-avatar">
+					<?php echo User::getAvatar($user, array('size' => 210)); ?>
+				</div>
 
-	<div id="Panel" class="span4">
-		<div id="photo" class="well">
-			<div class="Photo">
-				<?php echo User::getAvatar($user, array('size' => 150)); ?>
+				<div class="list-group">
+					<a href="javascript:;" class="list-group-item">
+						<i class="fa fa-fw fa-asterisk"></i> <?php echo __('Activity Feed'); ?>
+						<i class="fa fa-chevron-right list-group-chevron"></i>
+					</a>
+					<?php
+						if ($is_owner)
+						{
+							echo HTML::anchor('message/inbox', '<i class="fa fa-fw fa-envelope"></i> '.__('Messages') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
+						}
+						elseif ( ! User::is_guest())
+						{
+							echo HTML::anchor('message/send', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
+						}
+					?>
+					<?php echo HTML::anchor('buddy', '<i class="fa fa-fw fa-group"></i> '.__('Friends') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
+					<?php echo HTML::anchor('user/edit', '<i class="fa fa-fw fa-cog"></i> '.__('Settings') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
+				</div>
 			</div>
 
-			<?php if ($is_owner OR ACL::check('administer users')): ?>
-				<ul class="nav nav-list">
-					<?php if ( ! Config::get('site.use_gravatars', FALSE)): ?>
-						<li><?php echo HTML::anchor('user/photo', '<i class="icon-upload"></i>'.__('Change Avatar'), array('id' => 'add-pic', 'title' => __('Change your avatar'))) ?></li>
-					<?php endif; ?>
-					<li><?php echo HTML::anchor('user/edit', '<i class="icon-pencil"></i>'.__('Edit Account')) ?></li>
-					<li><?php echo HTML::anchor('user/password', '<i class="icon-cog"></i>'.__('Change Password')) ?></li>
-				</ul>
-			<?php endif;?>
-		</div>
+			<div class="col-md-9 col-sm-7 col-xs-12">
+				<h2 class="vcard-names">
+					<span itemprop="name"><?php echo $user->nick; ?></span>
+					<em itemprop="additionalName"><?php echo $user->name; ?></em>
+				</h2>
 
-		<div class="well about">
-			<h4><i class="icon-user"></i> <?php echo __('About'); ?></h4>
-			<dl>
-				<dt><?php echo __('Name'); ?></dt>
-				<dd itemprop="name"><?php echo $user->nick; ?></dd>
-				<dt><?php echo __('Birthday'); ?></dt>
-				<dd itemprop="birthDate"><?php echo date('M d, Y', $user->dob); ?></dd>
-				<dt><?php echo __('Joined on'); ?></dt>
-				<dd><?php echo date('M d, Y', $user->created); ?></dd>
-				<?php if ($is_owner OR User::is_admin()): ?>
-					<dt><?php echo __('Email'); ?></dt>
-					<dd><?php echo Text::auto_link_emails($user->mail); ?></dd>
-				<?php endif; ?>
-				<?php if ($user->homepage): ?>
-					<dt><?php echo __('Home Page'); ?></dt>
-					<dd><?php echo Text::auto_link($user->homepage); ?></dd>
-				<?php endif; ?>
-				<dt><?php echo __('Visits'); ?></dt>
-				<dd><?php echo $user->logins; ?></dd>
-				<dt><?php echo __('Last Active'); ?></dt>
-				<dd><?php echo date('M d, Y', $user->login); ?> @ <?php echo date('h:i a', $user->login); ?></dd>
-				<?php if (User::is_admin()): ?>
-				<dt><?php echo __('Roles'); ?></dt>
-				<dd>
-					<ul class="user-roles">
-						<?php foreach ($user->roles() as $role): ?>
-							<li><?php echo Text::plain(ucfirst($role)); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				</dd>
-				<?php endif; ?>
-			</dl>
-		</div>
-	</div>
+				<div class="row vcard-details">
+					<div class="col-md-7">
+						<?php if ($is_owner OR User::is_admin()): ?>
+							<dl title="<?php echo __('Email') ?>">
+								<dt><i class="fa fa-fw fa-envelope"></i></dt>
+								<dd><a class="email" data-email="<?php echo $user->mail ?>" href="mailto:<?php echo $user->mail ?>"><?php echo $user->mail ?></a></dd>
+							</dl>
+						<?php endif; ?>
+						<?php if ($user->homepage): ?>
+							<dl title="<?php echo __('Home Page') ?>">
+								<dt><i class="fa fa-fw fa-globe"></i></dt>
+								<dd><?php echo HTML::anchor($user->homepage, $user->homepage, array('itemprop' => 'url')); ?></dd>
+							</dl>
+						<?php endif; ?>
 
-	<div id="Profile" class="span8">
-		<h3><?php echo __('Activity'); ?></h3>
-		<ul class="nav nav-list">
-			<li class="Item activity " id="activity_1">
-				<div class="ItemContent Activity">
-					<div class="Title"><?php echo __(':nick joined.', array(':nick' => $user->nick)); ?></div>
-					<div class="Excerpt"><?php echo __('Welcome to Gleez!') ?></div>
-					<div class="meta"><span class="date-created"><?php echo __(Date::fuzzy_span($user->created)); ?></span></div>
+						<dl title="<?php echo __('Birthday') ?>">
+							<dt><i class="fa fa-fw fa-calendar"></i></dt>
+							<dd>
+								<time itemprop="birthDate" content="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>" datetime="<?php echo Date::date_format($user->dob, DateTime::ISO8601)?>">
+									<?php echo Date::date_format($user->dob); ?>
+								</time>
+							</dd>
+						</dl>
+						<?php if (User::is_admin()): ?>
+							<dl title="<?php echo __('User Groups') ?>">
+								<dt><i class="fa fa-fw fa-group"></i></dt>
+								<dd class="tagcloud">
+									<?php foreach ($user->roles() as $role): ?>
+										<span><?php echo Text::plain(ucfirst($role)); ?></span>
+									<?php endforeach; ?>
+								</dd>
+							</dl>
+						<?php endif; ?>
+					</div>
+					<div class="col-md-5">
+						<?php if(Auth::instance()->logged_in()):?>
+							<?php if($request AND ($request == $user->id )):?>
+								<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
+								<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
+							<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
+								<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
+							<?php elseif($isfriend AND ! $is_owner): ?>
+								<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
+							<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
+								<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
+							<?php endif; ?>
+						<?php endif; ?>
+					</div>
 				</div>
-			</li>
-		</ul>
-		<h3><?php echo __('Bio'); ?></h3>
-		<div class="ItemContent">
-			<?php echo Text::plain($user->bio); ?>
+				<hr>
+				<div class="bio">
+					<?php if ($user->bio): ?>
+						<div title="<?php _e('Bio')?>">
+							<p><?php echo Text::plain($user->bio); ?></p>
+						</div>
+					<?php endif; ?>
+				</div>
+			</div>
 		</div>
 	</div>
 
-</div>
+	<div class="col-md-3 col-sm-4 col-xs-12 col-sidebar-right">
+		<div class="list-group">
+			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-sign-in"></i></h3>
+				<h4 class="list-group-item-heading"><?php echo Date::date_format($user->created, 'M d, Y'); ?></h4>
+				<p class="list-group-item-text"><?php echo __('Joined on'); ?></p>
+			</a>
+			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-power-off"></i></h3>
+				<h4 class="list-group-item-heading"><?php echo $user->logins; ?></h4>
+				<p class="list-group-item-text"><?php echo __('Visits'); ?></p>
+			</a>
+			<a href="#" class="list-group-item"><h3 class="pull-right"><i class="fa fa-fire"></i></h3>
+				<h4 class="list-group-item-heading"><?php echo Date::date_format($user->login, 'h:i a M d, Y'); ?></h4>
+				<p class="list-group-item-text"><?php echo  __('Last Visit'); ?></p>
+			</a>
+		</div>
 
-<div class="modal hide fade in" id="upload-photo" role="dialog" tabindex="-1" aria-hidden="true">
-	<div class="modal-header">
-		<?php echo Form::button('close_window', '&times;', array('class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true')); ?>
-		<h3><?php echo __('Uploading Photos'); ?></h3>
+		<?php if(Auth::instance()->logged_in()):?>
+			<div class="list-group list-all1 panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo __('Friends'); ?></h3>
+				</div>
+
+				<?php foreach($friends as $id): ?>
+					<div class="list-group-item friends panel-body">
+						<?php $accept = User::lookup($id); ?>
+						<?php echo HTML::anchor("user/view/".$accept->id , User::getAvatar($accept), array('class' => 'action-view', 'rel'=>"popover", 'data-placement'=>"right", 'rel1'=>"tooltip", 'data-html'=>"true", 'data-original-title'=>"<strong>$accept->nick</strong>" )) ?>
+						<?php echo HTML::anchor("user/view/".$accept->id , $accept->nick, array('class' => 'action-view', 'title'=> __('view profile'))) ?>
+
+						<?php if($is_owner): ?>
+							<?php echo HTML::anchor("buddy/delete/".$accept->id , '<i class="fa fa-trash-o"></i>', array('class'=>'action-delete pull-right', 'title'=> __('Delete'))); ?>
+						<?php endif; ?>
+					</div>
+				<?php endforeach ;?>
+
+				<?php if( !empty($friends) ): ?>
+					<div class="panel-footer">
+						<div class="row">
+							<?php echo HTML::anchor("buddy/".$user->id , __('All'),  array('class' => 'all-view pull-right', 'title'=> __('All'))); ?>
+						</div>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 	</div>
-	<div class="modal-data"></div>
 </div>
-
-<?php Assets::js('user', 'media/js/user.js', array('jquery'), FALSE, array('weight' => 15)); ?>
-<?php Assets::js('form', 'media/js/jquery.form.min.js', array('jquery'), FALSE, array('weight' => 10)); ?>

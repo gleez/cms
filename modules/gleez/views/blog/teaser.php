@@ -1,9 +1,9 @@
 <div class="<?php echo $post->type ?> blog teaser">
 
 	<?php if($post->taxonomy OR $config->use_submitted): ?>
-		<div class="row-fluid meta">
+		<div class="row meta">
 			<?php if ($config->use_submitted): ?>
-				<div class="span7">
+				<div class="col-md-7">
 					<span class="author">
 						<?php echo HTML::anchor($post->user->url, User::getAvatar($post->user)); ?>
 						<?php echo HTML::anchor($post->user->url, $post->user->nick, array('title' => $post->user->nick)); ?>

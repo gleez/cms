@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.2
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @version    1.1.3
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class File extends SplFileInfo {
@@ -419,7 +419,7 @@ class File extends SplFileInfo {
 		else
 		{
 			$retval = uniqid().($remove_spaces ? preg_replace('/\s+/u', $replacement, $name) : $name);
-			$retval = is_null($length) ? $retval : substr($retval, (int)$length);
+			$retval = is_null($length) ? $retval : substr($retval, 0, (int)$length);
 
 			return $retval;
 		}
@@ -438,4 +438,87 @@ class File extends SplFileInfo {
 	{
 		return pathinfo($file, PATHINFO_EXTENSION);
 	}
+
+	/**
+	* Read file content
+	*
+	* @param $filename fullpath file name
+	*
+	* @return $string or false if not found
+	*/
+	public static function read($filename)
+	{
+		if (is_readable($filename))
+		{
+			$file = fopen($filename, 'r');
+
+			if ($file)
+			{
+				$data = fread($file, filesize($filename));
+				fclose($file);
+				return $data;
+			}
+		}
+
+		return FALSE;
+	}
+
+	/**
+	* Write to file
+	*
+	* @param $filename fullpath file name
+	* @param $content
+	* @param $mode 		Default to 'w'
+	*
+	* @return boolean
+	*/
+	public static function write($filename, $content, $mode =  'w')
+	{
+		$file = fopen($filename, $mode);
+
+		if ($file)
+		{
+			fwrite($file, $content);
+			fclose($file);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	* Delete file or directory recursevely
+	*
+	* @param string $file
+	* @return void
+	*/
+	public static function delete($file)
+	{
+		if (is_dir($file))
+		{
+			$objects = scandir($file);
+			foreach ($objects as $object)
+			{
+				if ($object != '.' && $object != '..')
+				{
+					if (is_dir($file.'/'.$object))
+					{
+						File::delete($file.'/'.$object);
+					}
+					else
+					{
+						@unlink($file.'/'.$object);
+					}
+				}
+			}
+
+			reset($objects);
+			@rmdir($file);
+		}
+		elseif(is_file($file))
+		{
+			@unlink($file);
+		}
+	}
+
 }

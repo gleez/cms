@@ -4,8 +4,8 @@
  *
  * @package   Gleez\User\Admin\Controller
  * @author    Gleez Team
- * @version   1.0.1
- * @copyright (c) 2011-2013 Gleez Technologies
+ * @version   1.0.5
+ * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license
  */
 class Controller_Admin_User extends Controller_Admin {
@@ -28,9 +28,13 @@ class Controller_Admin_User extends Controller_Admin {
 	 * @uses  Request::is_datatables
 	 * @uses  ORM::dataTables
 	 * @uses  Text::plain
+	 * @uses  Text::auto_link
 	 * @uses  User::roles
 	 * @uses  HTML::anchor
+	 * @uses  HTML::icon
+	 * @uses  Route::get
 	 * @uses  Route::url
+	 * @uses  Date::formatted_time
 	 * @uses  Assets::popup
 	 */
 	public function action_list()
@@ -53,10 +57,10 @@ class Controller_Admin_User extends Controller_Admin {
 						Date::formatted_time($user->created, 'M d, Y'),
 						($user->login > 0) ? Date::formatted_time($user->login, 'M d, Y') : __('Never'),
 						User::roles($user),
-						$user->status == 1 ? '<span class="status-active"><i class="icon-ok-sign"></i></span>' : '<span class="status-blocked"><i class="icon-ban-circle"></i></span>',
-						HTML::icon(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), 'icon-edit',  array('class'=>'action-edit', 'title'=> __('Edit User'))) . '&nbsp;' .
-						HTML::icon(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $user->id)), 'icon-key',  array('class'=>'', 'title'=> __('Edit Permission'))) . '&nbsp;' .
-						HTML::icon($user->delete_url, 'icon-trash', array('class'=>'action-delete', 'title'=> __('Delete User'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-users'))
+						$user->status == 1 ? '<span class="status-active"><i class="fa fa-check-circle"></i></span>' : '<span class="status-blocked"><i class="fa fa-ban"></i></span>',
+						HTML::icon(Route::get('admin/user')->uri(array('action' => 'edit', 'id' => $user->id)), 'fa-edit',  array('class'=>'action-edit', 'title'=> __('Edit User'))) . '&nbsp;' .
+						HTML::icon(Route::get('admin/permission')->uri(array('action' => 'user', 'id' => $user->id)), 'fa-key',  array('class'=>'', 'title'=> __('Edit Permission'))) . '&nbsp;' .
+						HTML::icon($user->delete_url, 'fa-trash-o', array('class'=>'action-delete', 'title'=> __('Delete User'), 'data-toggle' => 'popup', 'data-table' => '#admin-list-users'))
 					)
 				);
 			}
@@ -77,10 +81,20 @@ class Controller_Admin_User extends Controller_Admin {
 
 	/**
 	 * Add new user
+	 *
+	 * @uses  Message::success
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Arr::merge
+	 * @uses  Arr::get
+	 * @uses  Config::get
+	 * @uses  Validation::rule
+	 * @uses  Validation::label
 	 */
 	public function action_add()
 	{
 		$this->title = __('Add User');
+
 		$view = View::factory('admin/user/form')
 						->bind('all_roles', $all_roles)
 						->set('user_roles', array())
@@ -95,25 +109,51 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ($this->valid_post('user'))
 		{
-			try
+			$data = Validation::factory($this->request->post())
+				->rule('pass', 'not_empty')
+				->rule('pass', 'min_length', array(':value', Config::get('auth.password.length_min', 4)))
+				->label('pass', __('Password'));
+
+			if ($data->check())
 			{
-				// Affects the sanitized vars to the user object
-				$post->values($_POST);
+				try
+				{
+					// Affects the sanitized vars to the user object
+					$post->values($this->request->post());
 
-				// Create the User
-				$post->save();
+					// Create the User
+					$post->save();
 
-				// Add the login role to the user
-				$login_role = new Model_Role(array('name' =>'login'));
-				$post->add('roles',$login_role);
+					// Make sure to $_POST is set and it is array
+					if ( ! isset($_POST['roles']) OR ! is_array($_POST['roles']))
+					{
+						$_POST['roles'] = array();
+					}
 
-				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
+					// Make sure to add an empty if none of the roles checked to avoid errors
+					if (empty($_POST['roles']) OR is_null(Arr::get($_POST['roles'], 'login', NULL)))
+					{
+						$_POST['roles'] = Arr::merge($_POST['roles'], array('login' => ''));
+					}
 
-				$this->request->redirect(Route::get('admin/user')->uri(array('action' => 'list')), 200);
+					foreach(array_keys($_POST['roles']) as $role)
+					{
+						// add() executes the query immediately, and saves the data
+						$post->add('roles', ORM::factory('role', array('name' => $role)));
+					}
+
+					Message::success(__("User %name saved successful!", array('%name' => $post->name)));
+
+					$this->request->redirect(Route::get('admin/user')->uri(), 200);
+				}
+				catch (ORM_Validation_Exception $e)
+				{
+					$this->_errors = $e->errors('models', TRUE);
+				}
 			}
-			catch (ORM_Validation_Exception $e)
+			else
 			{
-				$this->_errors = $e->errors('models', TRUE);
+				$this->_errors = $data->errors('models', TRUE);
 			}
 		}
 
@@ -122,6 +162,17 @@ class Controller_Admin_User extends Controller_Admin {
 
 	/**
 	 * Edit user
+	 *
+	 * @uses  Message::error
+	 * @uses  Message::success
+	 * @uses  Log::error
+	 * @uses  Route::get
+	 * @uses  Route::uri
+	 * @uses  Arr::merge
+	 * @uses  Arr::get
+	 * @uses  Config::get
+	 * @uses  Validation::rule
+	 * @uses  Validation::label
 	 */
 	public function action_edit()
 	{
@@ -154,47 +205,58 @@ class Controller_Admin_User extends Controller_Admin {
 
 		if ($this->valid_post('user'))
 		{
-			try
+			$data = Validation::factory($this->request->post())
+				->rule('pass', 'min_length', array(':value', Config::get('auth.password.length_min', 4)))
+				->label('pass', __('Password'));
+
+			if ($data->check())
 			{
-				// password can be empty - it will be ignored in save.
-				if ((empty($_POST['pass']) || (trim($_POST['pass']) == '')))
+				try
 				{
-					unset($_POST['pass']);
+					// password can be empty - it will be ignored in save.
+					if (empty($_POST['pass']) OR (trim($_POST['pass']) == ''))
+					{
+						unset($_POST['pass']);
+					}
+
+					$post->values($_POST);
+					$post->save();
+
+					// Make sure to $_POST is set and it is array
+					if ( ! isset($_POST['roles']) OR ! is_array($_POST['roles']))
+					{
+						$_POST['roles'] = array();
+					}
+
+					// Make sure to add an empty if none of the roles checked to avoid errors
+					if (empty($_POST['roles']) OR is_null(Arr::get($_POST['roles'], 'login', NULL)))
+					{
+						$_POST['roles'] = Arr::merge($_POST['roles'], array('login' => ''));
+					}
+
+					// Roles have to be added separately, and all users have to have the login role
+					// you first have to remove the items, otherwise add() will try to add duplicates
+					// could also use array_diff, but this is much simpler
+					DB::delete('roles_users')->where('user_id', '=', $id)->execute();
+
+					foreach(array_keys($_POST['roles']) as $role)
+					{
+						// add() executes the query immediately, and saves the data
+						$post->add('roles', ORM::factory('role', array('name' => $role)));
+					}
+
+					Message::success(__("User %name saved successful!", array('%name' => $post->name)));
+
+					$this->request->redirect(Route::get('admin/user')->uri(), 200);
 				}
-
-				$post->values($_POST);
-				$post->save();
-
-				// Make sure to add an empty if none of the roles checked to avoid errros
-				if (empty($_POST['roles']))
+				catch (ORM_Validation_Exception $e)
 				{
-					$_POST['roles'] = array();
+					$this->_errors = $e->errors('models', TRUE);
 				}
-
-				// Roles have to be added separately, and all users have to have the login role
-				// you first have to remove the items, otherwise add() will try to add duplicates
-				// could also use array_diff, but this is much simpler
-				DB::delete('roles_users')->where('user_id', '=', $id)->execute();
-
-				foreach(array_keys($_POST['roles']) as $role)
-				{
-					// add() executes the query immediately, and saves the data
-					$post->add('roles', ORM::factory('role')->where('name', '=', $role)->find());
-				}
-
-				// Always make sure login role is added if it's not there
-				if ( ! in_array('login', array_keys($_POST['roles'])))
-				{
-					$post->add('roles', ORM::factory('role')->where('name', '=', 'login')->find());
-				}
-
-				Message::success(__("User %name saved successful!", array('%name' => $post->name)));
-
-				$this->request->redirect(Route::get('admin/user')->uri());
 			}
-			catch (ORM_Validation_Exception $e)
+			else
 			{
-				$this->_errors = $e->errors('models', TRUE);
+				$this->_errors = $data->errors('models', TRUE);
 			}
 		}
 
