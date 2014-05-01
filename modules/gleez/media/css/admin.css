@@ -203,7 +203,12 @@ body.backend {
     padding-left: 20px;
     padding-right: 20px;
 }
-
+#admin .backend-main .content1{
+	background-color: #FFFFFF;
+}
+.admin-log{
+	margin-top:20px;
+}
 
 @media (min-width: 768px) {
 	#backend .navbar-brand {

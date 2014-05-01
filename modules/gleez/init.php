@@ -42,7 +42,15 @@ if ( ! Route::cache())
 		'controller' => 'autocomplete',
 		'action'     => 'index',
 	));
-        
+
+	Route::set('admin/login', 'admin/login', array(
+		'action'     => 'index|login',
+	))
+	->defaults(array(
+		'controller' => 'admin',
+		'action'     => 'login',
+	));
+
 	Route::set('admin/module', 'admin/modules(/<action>)')
 	->defaults(array(
 		'directory'  => 'admin',
