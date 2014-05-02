@@ -110,7 +110,7 @@
 
 	Ajaxform.prototype.validationErrors = function(data, form) {
 		var title = 'Error'
-		  , tmpl = '<div class="alert alert-error alert-block">'
+		  , tmpl = '<div class="alert alert-danger alert-block">'
 	
 		tmpl += '<h4 class="alert-heading">' + title + '</h4><ul>'
 
@@ -122,7 +122,7 @@
 			var $inputField = $('[name*="'+i+'"]')
 	
 			if ($inputField.length){
-				$($inputField).parent('div.controls').parent('div.control-group').addClass('error')
+				$($inputField).parent('div.controls').parent('div.form-group').addClass('has-error')
 			}
 		})
 
