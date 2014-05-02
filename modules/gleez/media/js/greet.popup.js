@@ -141,7 +141,6 @@
 		response.find('[type=submit]').hide()
 		response.find('[type=button]').hide()
 		response.find('.form-actions').hide()
-		response.find('.form-group').hide()
 
 		//Generate a valid buttons text
 		sText = $(sButton).val() || 'Save changes'
