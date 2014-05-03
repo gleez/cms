@@ -14,7 +14,7 @@ class Controller_Template extends Controller {
      * Page template
      * @var View
      */
-    public $template = 'codebench';
+    public $template = 'template';
 
     /**
      * Auto render template?
