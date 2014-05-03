@@ -1,7 +1,0 @@
-name 	     = "Userguide"
-title 	     = "User Guide"
-description = "The userguide module provides documentation viewing including browsing the source code comments. After enabling will be enabled public URL http://yoursite.com/guide"
-version     = 1.0
-visible     = 1
-author      = "Kohana Team"
-authorURL   = http://kohanaframework.org/

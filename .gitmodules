@@ -1,6 +1,0 @@
-[submodule "modules/mango"]
-	path = modules/mango
-	url = https://github.com/sergeyklay/gleez-mango.git
-[submodule "themes/cerber"]
-	path = themes/cerber
-	url = https://github.com/sergeyklay/gleez-cerber.git
