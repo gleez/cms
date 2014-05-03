@@ -10,6 +10,12 @@
  */
 class Controller_Codebench extends Controller_Template {
 
+	/**
+	 * Page template
+	 * @var View
+	 */
+	public $template = 'codebench';
+
 	public function action_index()
 	{
 		$class = $this->request->param('class');
