@@ -14,26 +14,29 @@
 class Codebench {
 
 	/**
-	 * @var  string  Some optional explanatory comments about the benchmark file.
-	 *               HTML allowed. URLs will be converted to links automatically.
+	 * Some optional explanatory comments about the benchmark file.
+	 * HTML allowed. URLs will be converted to links automatically.
+	 * @var string
 	 */
 	public $description = '';
 
 	/**
-	 * @var  integer  How many times to execute each method per subject.
+	 * How many times to execute each method per subject.
+	 * @var integer
 	 */
 	public $loops = 1000;
 
 	/**
-	 * @var  array  The subjects to supply iteratively to your benchmark methods.
+	 * The subjects to supply iteratively to your benchmark methods.
+	 * @var array
 	 */
 	public $subjects = array();
 
 	/**
-	 * @var  array  Grade letters with their maximum scores. Used to color the graphs.
+	 * Grade letters with their maximum scores. Used to color the graphs.
+	 * @var array
 	 */
-	public $grades = array
-	(
+	public $grades = array(
 		125 => 'A',
 		150 => 'B',
 		200 => 'C',
@@ -43,20 +46,31 @@ class Codebench {
 	);
 
 	/**
+	 * Default limit of the maximum execution time
+	 * @type int
+	 */
+	const DEFAULT_EXECUTION_TIME = 30;
+
+	/**
 	 * Constructor.
 	 *
 	 * @return  void
+	 *
+	 * @uses    Config::get
 	 */
 	public function __construct()
 	{
 		// Set the maximum execution time
-		set_time_limit(Kohana::$config->load('codebench')->max_execution_time);
+		set_time_limit(Config::get('codebench.max_execution_time', static::DEFAULT_EXECUTION_TIME));
 	}
 
 	/**
 	 * Runs Codebench on the extending class.
 	 *
 	 * @return  array  benchmark output
+	 *
+	 * @uses    Profiler::start
+	 * @uses    Profiler::total
 	 */
 	public function run()
 	{
@@ -115,8 +129,7 @@ class Codebench {
 				$benchmark = Profiler::total($token);
 
 				// Benchmark output specific to the current method and subject
-				$codebench['benchmarks'][$method]['subjects'][$subject_key] = array
-				(
+				$codebench['benchmarks'][$method]['subjects'][$subject_key] = array(
 					'return' => $return,
 					'time'   => $benchmark[0],
 					'memory' => $benchmark[1],
