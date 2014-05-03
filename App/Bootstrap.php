@@ -7,7 +7,7 @@
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 
-require_once  VENPATH.'/Gleez/Loader/Autoloader.php';
+require_once  SRCPATH.'/Gleez/Loader/Autoloader.php';
 
 // autoloader
 $loader = new Gleez\Loader\Autoloader(array(

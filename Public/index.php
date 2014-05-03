@@ -17,7 +17,7 @@ error_reporting(E_ALL | E_STRICT);
 
 // Define the absolute paths for configured directories
 define('APPPATH', realpath('../App'));
-define('VENPATH', realpath('../Vendor'));
+define('SRCPATH', realpath('../src'));
 
 /**
  * The default extension of resource files. If you change this, all resources
