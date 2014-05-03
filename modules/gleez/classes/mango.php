@@ -73,7 +73,7 @@
  *
  * @package    Gleez\Mango\Database
  * @author     Gleez Team
- * @version    0.5.0
+ * @version    0.6.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -196,10 +196,10 @@ class Mango {
 	{
 		if (is_null($name))
 		{
-			$name = self::$default;
+			$name = static::$default;
 		}
 
-		if ($override OR ! isset(self::$instances[$name]))
+		if ($override OR ! isset(static::$instances[$name]))
 		{
 			if (is_null($config))
 			{
@@ -218,10 +218,10 @@ class Mango {
 			}
 
 			// Create the Mango instance
-			new self($name, $config);
+			new static($name, $config);
 		}
 
-		return self::$instances[$name];
+		return static::$instances[$name];
 	}
 
 	/**
@@ -295,7 +295,7 @@ class Mango {
 		$this->setCollectionClass();
 
 		// Store the database instance
-		self::$instances[$name] = $this;
+		static::$instances[$name] = $this;
 	}
 
 	/**
@@ -362,7 +362,7 @@ class Mango {
 		if ( ! isset($config['connection']['options']['w']))
 		{
 			// The default value is 1.
-			$config['connection']['options']['w'] = self::$default_write_concern;
+			$config['connection']['options']['w'] = static::$default_write_concern;
 		}
 
 		return $config;
@@ -518,8 +518,7 @@ class Mango {
 			);
 		}
 
-		$this->_connected    = $this->_connection->connected;
-		$this->_db           = $this->_connected
+		$this->_db = $this->is_connected()
 			? $this->_connection->selectDB(Arr::path($this->_config, 'connection.options.db'))
 			: NULL;
 
