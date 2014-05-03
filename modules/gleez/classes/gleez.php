@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    0.10.11
+ * @version    1.0.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
