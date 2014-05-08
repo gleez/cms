@@ -488,7 +488,6 @@ jQuery.noConflict();
 
 	$(window).on('load', function () {
 		$("[rel='tooltip']").tooltip();
-		$('.collapse').collapse();
 	})
     
     // Class indicating that JS is enabled; used for styling purpose.
