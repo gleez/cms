@@ -748,7 +748,6 @@ class Assets {
 		if(isset(self::$js) OR isset(self::$codes) OR isset(self::$settings))
 		{
 			self::js('jquery', 'media/js/jquery-1.11.0.min.js', NULL, FALSE, array('weight' => -20));
-			self::js('jquery-ua', 'media/js/jquery.browser.js', NULL, FALSE, array('weight' => -18));
 			self::js('gleez', 'media/js/gleez.js', array('jquery'), FALSE, array('weight' => -5));
 
 			$data = Arr::merge(array(array('basePath' => URL::base(TRUE))), self::$settings);
