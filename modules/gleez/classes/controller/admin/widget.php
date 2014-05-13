@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -28,17 +28,21 @@ class Controller_Admin_Widget extends Controller_Admin {
 					->bind('widgets',        $widget_listing);
 
 		$widget_regions = array();
-		$theme = Theme::getTheme();
+		$adminTheme = Theme::getTheme();
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
 
-		if(isset($theme->regions) AND ! empty($theme->regions))
+		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
 		{
-			$widget_regions = $theme->regions;
+			$widget_regions = Arr::merge($widget_regions, $adminTheme->regions);
+		}
+
+		if(isset($frontTheme->regions) AND ! empty($frontTheme->regions))
+		{
+			$widget_regions = Arr::merge($widget_regions, $frontTheme->regions);
 		}
 
 		// Add a last region for disabled blocks.
 		$widget_regions = Arr::merge($widget_regions, array(self::$WIDGET_REGION_NONE => self::$WIDGET_REGION_NONE));
-
-		//$current_widgets = Kohana::list_files('classes/widget');
 
 		$widgets = ORM::factory('widget')
 						->order_by('region')
@@ -109,11 +113,17 @@ class Controller_Admin_Widget extends Controller_Admin {
 		$widget = ORM::factory('widget');
 
 		$widget_regions = array();
-		$theme 			= Theme::getTheme();
+		$adminTheme = Theme::getTheme();
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
 
-		if(isset($theme->regions) AND ! empty($theme->regions))
+		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
 		{
-			$widget_regions = $theme->regions;
+			$widget_regions = Arr::merge($widget_regions, $adminTheme->regions);
+		}
+
+		if(isset($frontTheme->regions) AND ! empty($frontTheme->regions))
+		{
+			$widget_regions = Arr::merge($widget_regions, $frontTheme->regions);
 		}
 		// Add a last region for disabled blocks.
 		$widget_regions = Arr::merge($widget_regions, array(self::$WIDGET_REGION_NONE => self::$WIDGET_REGION_NONE));
@@ -174,15 +184,21 @@ class Controller_Admin_Widget extends Controller_Admin {
 		}
 
 		$widget_regions = array();
-		$theme          = Theme::getTheme();
+		$adminTheme = Theme::getTheme();
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
+
+		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
+		{
+			$widget_regions = Arr::merge($widget_regions, $adminTheme->regions);
+		}
+
+		if(isset($frontTheme->regions) AND ! empty($frontTheme->regions))
+		{
+			$widget_regions = Arr::merge($widget_regions, $frontTheme->regions);
+		}
 
 		$handler = Widget::factory($widget->name, $widget);
 		$fields = $handler->form();
-
-		if(isset($theme->regions) AND ! empty($theme->regions))
-		{
-			$widget_regions = $theme->regions;
-		}
 
 		// Add a last region for disabled blocks.
 		$widget_regions = Arr::merge($widget_regions, array(self::$WIDGET_REGION_NONE => self::$WIDGET_REGION_NONE));
