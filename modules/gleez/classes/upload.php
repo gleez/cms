@@ -17,7 +17,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -364,7 +364,7 @@ class Upload {
         // Check if there is an uploaded file and valid type
         if ($save AND self::valid($file) AND self::type($file, $valid_formats) and self::size($file, self::getUploadMaxFilesize()))
         {
-            $filename = File::getUnique($file['name']);
+            $filename = File::getUnique($file['name']).'.'.pathinfo($file['name'], PATHINFO_EXTENSION);
             $path     = self::save($file, $filename, $picture_path);
 
             if ($path)
