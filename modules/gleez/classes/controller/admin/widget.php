@@ -29,7 +29,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		$widget_regions = array();
 		$adminTheme = Theme::getTheme();
-		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme->name));
 
 		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
 		{
@@ -114,7 +114,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		$widget_regions = array();
 		$adminTheme = Theme::getTheme();
-		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme->name));
 
 		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
 		{
@@ -185,7 +185,7 @@ class Controller_Admin_Widget extends Controller_Admin {
 
 		$widget_regions = array();
 		$adminTheme = Theme::getTheme();
-		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme));
+		$frontTheme = Theme::getTheme(Config::get('site.theme', $adminTheme->name));
 
 		if(isset($adminTheme->regions) AND ! empty($adminTheme->regions))
 		{
