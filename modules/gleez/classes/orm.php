@@ -1697,7 +1697,8 @@ class ORM extends Model implements serializable {
 	 */
 	public function count_all()
 	{
-		$selects = array();
+		$selects  = array();
+		$group_by = array();
 
 		foreach ($this->_db_pending as $key => $method)
 		{
@@ -1713,6 +1714,12 @@ class ORM extends Model implements serializable {
 				$order_by[$key] = $method; // Fix of the fix here!
 				unset($this->_db_pending[$key]);
 			}
+			elseif ($method['name'] == 'group_by')
+			{
+				// Ignore any group by for now
+				$group_by[] = $method;
+				unset($this->_db_pending[$key]);
+			}
 		}
 
 		if ( ! empty($this->_load_with))
@@ -1726,19 +1733,29 @@ class ORM extends Model implements serializable {
 
 		$this->_build(Database::SELECT);
 
-		$records = $this->_db_builder->from(array($this->_table_name, $this->_object_name))
-			->select(array(DB::expr('COUNT(*)'), 'records_found'))
-			->execute($this->_db)
-			->get('records_found');
+		$sql = $this->_db_builder->from(array($this->_table_name, $this->_object_name));
+
+		if(!empty($group_by))
+		{
+			$prefix = $this->_db->table_prefix();
+			$sql->select(array(DB::expr('COUNT(DISTINCT '.$prefix.$this->_object_name.'.id)'), 'records_found'));
+		}
+		else
+		{
+			$sql->select(array(DB::expr('COUNT("*")'), 'records_found'));
+		}
+		
+		$records = $sql->execute($this->_db)->get('records_found');
 
 		// Add back in selected columns
-		//$this->_db_pending += $selects;
 		$this->_db_pending = array_merge($this->_db_pending, $selects);
+
+		// Add back in group by conditions
+		$this->_db_pending = array_merge($this->_db_pending, $group_by);
 
 		if( isset($order_by) )
 		{
 			// Add back in order_by clause
-			//$this->_db_pending += $order_by;
 			$this->_db_pending = array_merge($this->_db_pending, $order_by);
 		}
 
