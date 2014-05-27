@@ -65,6 +65,12 @@ abstract class Template extends Controller {
 	public $icon = FALSE;
 
 	/**
+	 * Turn bare template on?
+	 * @var boolean
+	 */
+	public $bare = FALSE;
+
+	/**
 	 * The sidebar content
 	 * @var array
 	 */
@@ -219,68 +225,71 @@ abstract class Template extends Controller {
 		// Execute parent::before first
 		parent::before();
 
-		// Load the config
-		$this->_config = Config::load('site');
-
-		if (Kohana::$profiling)
+		if($this->bare == FALSE)
 		{
-			// Start a new benchmark token
-			$this->_benchmark = Profiler::start('Gleez', ucfirst($this->request->controller()) .' Controller');
+			// Load the config
+			$this->_config = Config::load('site');
+
+			if (Kohana::$profiling)
+			{
+				// Start a new benchmark token
+				$this->_benchmark = Profiler::start('Gleez', ucfirst($this->request->controller()) .' Controller');
+			}
+
+			// Test whether the current request is command line request
+			if (Kohana::$is_cli)
+			{
+				$this->_ajax       = FALSE;
+				$this->auto_render = FALSE;
+			}
+
+			// Test whether the current request is the first request
+			if ( ! $this->request->is_initial())
+			{
+				$this->_internal   = TRUE;
+				$this->auto_render = FALSE;
+			}
+
+			// Test whether the current request is ajax request
+			if ($this->request->is_ajax())
+			{
+				$this->_ajax       = TRUE;
+				$this->auto_render = FALSE;
+			}
+
+			// Test whether the current request is jquery mobile request. ugly hack
+			if (Request::is_mobile() AND $this->_config->get('mobile_theme', FALSE))
+			{
+				$this->_ajax       = FALSE;
+				$this->auto_render = TRUE;
+			}
+
+			// Test whether the current request is datatables request
+			if (Request::is_datatables())
+			{
+				$this->_ajax       = TRUE;
+				$this->auto_render = FALSE;
+			}
+
+			$this->response->headers('X-Powered-By', Gleez::getVersion(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
+
+			$this->_auth   = Auth::instance();
+
+			// Get desired response formats
+			$accept_types = Request::accept_type();
+			$accept_types = Arr::extract($accept_types, array_keys($this->_accept_formats));
+
+			// Set response format to first matched element
+			$this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
+
+			$site_name = Template::getSiteName();
+			$url       =  URL::site(NULL, TRUE);
+
+			View::bind_global('site_name', $site_name);
+			View::bind_global('site_url',  $url);
 		}
 
-		// Test whether the current request is command line request
-		if (Kohana::$is_cli)
-		{
-			$this->_ajax       = FALSE;
-			$this->auto_render = FALSE;
-		}
-
-		// Test whether the current request is the first request
-		if ( ! $this->request->is_initial())
-		{
-			$this->_internal   = TRUE;
-			$this->auto_render = FALSE;
-		}
-
-		// Test whether the current request is ajax request
-		if ($this->request->is_ajax())
-		{
-			$this->_ajax       = TRUE;
-			$this->auto_render = FALSE;
-		}
-
-		// Test whether the current request is jquery mobile request. ugly hack
-		if (Request::is_mobile() AND $this->_config->get('mobile_theme', FALSE))
-		{
-			$this->_ajax       = FALSE;
-			$this->auto_render = TRUE;
-		}
-
-		// Test whether the current request is datatables request
-		if (Request::is_datatables())
-		{
-			$this->_ajax       = TRUE;
-			$this->auto_render = FALSE;
-		}
-
-		$this->response->headers('X-Powered-By', Gleez::getVersion(TRUE, TRUE) . ' (' . Gleez::CODENAME . ')');
-
-		$this->_auth   = Auth::instance();
-
-		// Get desired response formats
-		$accept_types = Request::accept_type();
-		$accept_types = Arr::extract($accept_types, array_keys($this->_accept_formats));
-
-		// Set response format to first matched element
-		$this->_response_format = $this->request->headers()->preferred_accept(array_keys($this->_accept_formats));
-
-		$site_name = Template::getSiteName();
-		$url       =  URL::site(NULL, TRUE);
-
-		View::bind_global('site_name', $site_name);
-		View::bind_global('site_url',  $url);
-
-		if ($this->auto_render)
+		if ($this->auto_render && $this->bare == FALSE)
 		{
 			// Throw exception if none of the accept-types are supported
 			if ( ! $accept_types = array_filter($accept_types))
@@ -367,7 +376,7 @@ abstract class Template extends Controller {
 	 */
 	public function after()
 	{
-		if ($this->auto_render)
+		if ($this->auto_render && $this->bare == FALSE)
 		{
 			// Controller name as the default page id if none set
 			empty($this->_page_id) AND $this->_page_id = $this->request->controller();
@@ -463,7 +472,7 @@ abstract class Template extends Controller {
 			// Assign the template as the request response and render it
 			$this->response->body($this->template);
 		}
-		elseif ($this->_ajax)
+		elseif ($this->_ajax && $this->bare == FALSE)
 		{
 			$output = $this->response->body();
 			$this->process_ajax();
@@ -478,20 +487,23 @@ abstract class Template extends Controller {
 
 			$this->response->body($output);
 		}
-		elseif ($this->_internal)
+		elseif ($this->_internal && $this->bare == FALSE)
 		{
 			$output = $this->response->body();
 			$this->response->body($output);
 		}
 
-		if (isset($this->_benchmark))
+		if($this->bare == FALSE)
 		{
-			// Stop the benchmark
-			Profiler::stop($this->_benchmark);
-		}
+			if (isset($this->_benchmark))
+			{
+				// Stop the benchmark
+				Profiler::stop($this->_benchmark);
+			}
 
-		// Set header content-type to response format with utf-8
-		$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
+			// Set header content-type to response format with utf-8
+			$this->response->headers('Content-Type', $this->_response_format . '; charset=' . Kohana::$charset);
+		}
 
 		parent::after();
 	}
