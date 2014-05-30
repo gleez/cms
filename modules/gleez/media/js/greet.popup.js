@@ -50,7 +50,7 @@
 				type: "GET",
 				dataType: this.options.type,
 				cache: this.options.cache,
-			beforeSend: function ( xhr ) {}
+				beforeSend: function ( xhr ) {}
 			}, 300)
 			.done(function(data, textStatus, jqXHR){
 				that.show()
@@ -355,7 +355,7 @@
 
 		this.backdrop(function () {
 			var transition = $.support.transition && that.$element.hasClass('fade')
-	  
+
 			if (!that.$element.parent().length) {
 				that.layout()
 				that.$element.appendTo(that.options.manager) //don't move modals dom position
@@ -376,15 +376,15 @@
 			}
 
 			that.$element.show()
-	  
+
 			if (transition) {
 				that.$element[0].offsetWidth // force reflow
 			}
-	  
+
 			that.$element
 			.addClass('in')
 			.attr('aria-hidden', false)
-	  
+
 			that.enforceFocus()
 
 			var e = $.Event('shown.popup', { relatedTarget: _relatedTarget })
@@ -594,6 +594,35 @@
 		return this.modalParent ? true : false
 	}
 
+	Popup.DEFAULTS = {
+		backdrop        : true
+		, keyboard      : true
+		, loading       : true
+		, show          : false
+		, cache         : false
+		, width         : false
+		, height        : false
+		, minWidth      : 100
+		, minHeight     : 100
+		, maxWidth      : 9999
+		, maxHeight     : 9999
+		, modaloverflow : false
+		, consumetab    : true
+		, consumeform   : true
+		, consumedt     : true
+		, table         : false
+		, focusOn       : false
+		, replace       : false
+		, resize        : false
+		, click         : false
+		, type          : 'json'
+		, manager       : 'body'
+		, icon          : false
+		, title         : '&nbsp;'
+		, spinner       : '<div class="InProgress">&nbsp</div>'
+		, template      : '<div id="{popup.id}" class="popup fade" tabIndex="-1" role="dialog"><div class="popup-dialog"><div class="popup-content"><div class="popup-header"><button type="button" class="close" data-dismiss="popup">&times;</button><h4 class="popup-title">&nbsp;</h4></div><div class="popup-body"></div><div class="popup-footer"></div></div></div></div>'
+	}
+
 	// GREET POPUP PLUGIN DEFINITION
 	// =======================
 
@@ -603,7 +632,7 @@
 		return this.each(function () {
 			var $this   = $(this)
 			var data    = $this.data('popup')
-			var options = $.extend({}, $.fn.popup.defaults, $this.data(), typeof option == 'object' && option)
+			var options = $.extend({}, Popup.DEFAULTS, $this.data(), typeof option == 'object' && option)
 
 			if (!data) $this.data('popup', (data = new Popup(this, options)))
 			if (typeof option == 'string') data[option](_relatedTarget)
@@ -611,37 +640,7 @@
 		})
 	}
 
-	$.fn.popup.defaults = {
-	  backdrop: true
-	  , keyboard: true
-	  , loading: true
-	  , show: false
-	  , cache: false
-	  , width : false
-	  , height : false
-	  , minWidth : 100
-	  , minHeight : 100
-	  , maxWidth : 9999
-	  , maxHeight : 9999
-	  , modaloverflow: false
-	  , consumetab: true
-	  , consumeform: true
-	  , consumedt: true
-	  , table: false
-	  , focusOn: false
-	  , replace: false
-	  , resize: false
-	  , click: false
-	  , type: 'json'
-	  , manager: 'body'
-	  , icon: false
-	  , title: '&nbsp;'
-	  , spinner:  '<div class="InProgress">&nbsp</div>'
-	  , template: '<div id="{popup.id}" class="popup fade" tabIndex="-1" role="dialog"><div class="popup-dialog"><div class="popup-content"><div class="popup-header"><button type="button" class="close" data-dismiss="popup">&times;</button><h4 class="popup-title">&nbsp;</h4></div><div class="popup-body"></div><div class="popup-footer"></div></div></div></div>'
-	}
-
 	$.fn.popup.Constructor = Popup
-
 
 	// GREET POPUP NO CONFLICT
 	// =================
@@ -657,7 +656,7 @@
 	$(document).on('click.popup.data-api', '[data-toggle="popup"]', function (e) {
 		var $this   = $(this)
 		var href    = $this.attr('href')
-		var $target = $($.fn.popup.defaults.template.replace('{popup.id}', 'popup-'+ new Date().getTime()))
+		var $target = $(Popup.DEFAULTS.template.replace('{popup.id}', 'popup-'+ new Date().getTime()))
 		var option  = $.extend({ remote:!/#/.test(href) && href }, $target.data(), $this.data())
 
 		e.preventDefault()
