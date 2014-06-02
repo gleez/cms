@@ -23,8 +23,13 @@ class Model_Migration extends Model
 	 *
 	 * @param Kohana_Database $db Database connection to use
 	 */
-	public function __construct(Database $db)
+	public function __construct($db = NULL)
 	{
+		if($db == NULL)
+		{
+			$db = Database::instance(NULL);
+		}
+
 		$this->_db = $db;
 
 		$this->_table = Config::get('migration.table', 'migrations');

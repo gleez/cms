@@ -17,7 +17,7 @@ class Task_Db_Migrate_Status extends Minion_Task
 	 */
 	protected function _execute(array $options)
 	{
-		$model = new Model_Migration(Database::instance());
+		$model = new Model_Migration();
 		$view = new View('minion/db/status');
 
 		$view->groups = $model->get_group_statuses();
