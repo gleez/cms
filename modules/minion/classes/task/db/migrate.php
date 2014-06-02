@@ -93,12 +93,10 @@ class Task_Db_Migrate extends Minion_Task
 			}
 		}
 
-		$db    = Database::instance();
-		$model = new Model_Migration($db);
-
+		$model = new Model_Migration();
 		$model->ensure_table_exists();
 
-		$manager = new Migration($db, $model);
+		$manager = new Migration(NULL, $model);
 
 		// Sync the available migrations with those in the db
 		$manager

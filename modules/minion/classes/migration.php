@@ -44,8 +44,13 @@ class Migration {
 	 * @param Database        $db    The database connection that should be passed to migrations
 	 * @param Model_Migration $model Inject an instance of the minion model into the manager
 	 */
-	public function __construct(Database $db, Model_Migration $model = NULL)
+	public function __construct($db = NULL, Model_Migration $model = NULL)
 	{
+		if($db == NULL)
+		{
+			$db = Database::instance(NULL);
+		}
+
 		if ($model === NULL)
 		{
 			$model = new Model_Migration($db);
