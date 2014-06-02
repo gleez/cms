@@ -409,7 +409,8 @@ CREATE TABLE {sessions} (
   hostname varchar(128) DEFAULT '',
   user_id int(11) DEFAULT '0',
   PRIMARY KEY (session_id),
-  KEY last_active (last_active)
+  KEY last_active (last_active),
+  KEY session (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS {user_tokens};
