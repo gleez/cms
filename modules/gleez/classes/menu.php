@@ -8,7 +8,7 @@
  *
  * @package    Gleez\Menu
  * @author     Gleez Team
- * @author     1.1.0
+ * @author     1.2.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -18,19 +18,13 @@ class Menu {
 	 * Associative array of list items
 	 * @var array
 	 */
-	protected $_items = array();
+	protected $items = array();
 
 	/**
 	 * Associative array of attributes for list
 	 * @var array
 	 */
-	protected $_attrs = array();
-
-	/**
-	 * Current URI
-	 * @var string
-	 */
-	protected $_current;
+	protected $attributes = array();
 
 	/**
 	 * Creates and returns a new menu object
@@ -40,7 +34,7 @@ class Menu {
 	 */
 	public static function factory(array $items = NULL)
 	{
-		return new self($items);
+		return new static($items);
 	}
 
 	/**
@@ -50,7 +44,7 @@ class Menu {
 	 */
 	public function __construct(array $items = NULL)
 	{
-		$this->_items   = $items;
+		$this->items   = $items;
 	}
 
 	/**
@@ -70,16 +64,16 @@ class Menu {
 	{
 		if( $parent_id )
 		{
-			$this->_items = self::_add_child($parent_id, $this->_items, $id, $title, $url, $descp, $params, $image, $children);
+			$this->items = static::add_child($parent_id, $this->items, $id, $title, $url, $descp, $params, $image, $children);
 		}
 		else
 		{
-			$this->_items[$id] = array
+			$this->items[$id] = array
 			(
 				'title'    => $title,
 				'url'      => $url,
 				'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
-				'access'   => TRUE,
+				'access'   => TRUE, // @todo
 				'descp'	   => $descp,
 				'params'   => $params,
 				'image'    => $image
@@ -100,11 +94,11 @@ class Menu {
 	{
 		if ($parent_id)
 		{
-			$this->_items = self::_remove_child($target_id, $this->_items);
+			$this->items = static::remove_child($target_id, $this->items);
 		}
-		else if (isset( $this->_items[$target_id]))
+		else if (isset( $this->items[$target_id]))
 		{
-			unset($this->_items[$target_id]);
+			unset($this->items[$target_id]);
 		}
 
 		return $this;
@@ -122,11 +116,11 @@ class Menu {
 	{
 		if ( $parent_id )
 		{
-			$this->_items = self::_change_title_url($target_id, $this->_items, $title);
+			$this->items = static::change_title_url($target_id, $this->items, $title);
 		}
-		else if ( isset( $this->_items[$target_id] ) )
+		else if ( isset( $this->items[$target_id] ) )
 		{
-			$this->_items[$target_id]['title'] = (string)$title;
+			$this->items[$target_id]['title'] = (string)$title;
 		}
 
 		return $this;
@@ -144,11 +138,11 @@ class Menu {
 	{
 		if ( $parent_id )
 		{
-			$this->_items = self::_change_title_url($target_id, $this->_items, $url, 'url');
+			$this->items = static::change_title_url($target_id, $this->items, $url, 'url');
 		}
-		else if ( isset( $this->_items[$target_id] ) )
+		else if ( isset( $this->items[$target_id] ) )
 		{
-			$this->_items[$target_id]['url'] = (string)$url;
+			$this->items[$target_id]['url'] = (string)$url;
 		}
 
 		return $this;
@@ -157,28 +151,28 @@ class Menu {
 	/**
 	 * Renders the HTML output for the menu
 	 *
-	 * @param   array   $attrs  Associative array of html attributes [Optional]
-	 * @param   array   $items  The parent item's array, only used internally [Optional]
+	 * @param   array   $attributes  Associative array of html attributes [Optional]
+	 * @param   array   $items       The parent item's array, only used internally [Optional]
 	 *
 	 * @return  string  HTML unordered list
 	 */
-	public function render(array $attrs = NULL, array $items = NULL)
+	public function render(array $attributes = NULL, array $items = NULL)
 	{
 		static $i;
 
-		$items = empty($items) ? $this->_items : $items;
-		$attrs = empty($attrs) ? $this->_attrs : $attrs;
+		$items = empty($items) ? $this->items : $items;
+		$attributes = empty($attributes) ? $this->attributes : $attributes;
 
-		if( empty( $items ) ) return;
+		if (empty($items)) return;
 
 		$i++;
 
 		//This attribute detects we're in nav or widget for styling
-		$is_widget	= isset($attrs['widget']);
-		if($is_widget) unset($attrs['widget']);
+		$is_widget	= isset($attributes['widget']);
+		if($is_widget) unset($attributes['widget']);
 
-		$attrs['class'] = empty($attrs['class']) ? 'level-'.$i : $attrs['class'].' level-'.$i;
-		$menu = '<ul'.HTML::attributes($attrs).'>';
+		$attributes['class'] = empty($attributes['class']) ? 'level-'.$i : $attributes['class'].' level-'.$i;
+		$menu = '<ul'.HTML::attributes($attributes).'>';
 		$num_items = count($items);
 		$_i = 1;
 
@@ -287,7 +281,7 @@ class Menu {
 	 */
 	public function debug()
 	{
-		return Debug::vars($this->_items);
+		return Debug::vars($this->items);
 	}
 
 	/**
@@ -297,7 +291,7 @@ class Menu {
 	 */
 	public function get_items()
 	{
-		return $this->_items;
+		return $this->items;
 	}
 
 	/**
@@ -316,7 +310,7 @@ class Menu {
 			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if ( ! $_menu) return;
 
-			$_items = ORM::factory('menu')
+			$items = ORM::factory('menu')
 				->where('lft', '>', $_menu['lft'])
 				->where('rgt', '<', $_menu['rgt'])
 				->where('scp', '=', $_menu['scp'])
@@ -325,7 +319,7 @@ class Menu {
 				->find_all();
 
 			$items = array();
-			foreach($_items as $item)
+			foreach($items as $item)
 			{
 				$items[] = $item->as_array();
 			}
@@ -340,7 +334,7 @@ class Menu {
 		}
 
 		// Initiate Menu Object
-		$menu = self::factory();
+		$menu = static::factory();
 
 		// Start with an empty $right stack
 		$stack = array();
@@ -390,7 +384,7 @@ class Menu {
 			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if( ! $_menu) return;
 
-			$_items = ORM::factory('menu')
+			$items = ORM::factory('menu')
 				->where('lft', '>', $_menu['lft'])
 				->where('rgt', '<', $_menu['rgt'])
 				->where('scp', '=', $_menu['scp'])
@@ -399,7 +393,7 @@ class Menu {
 				->find_all();
 
 			$items = array();
-			foreach($_items as $item)
+			foreach($items as $item)
 			{
 				$items[] = $item->as_array();
 			}
@@ -414,7 +408,7 @@ class Menu {
 		}
 
 		//Initiate Menu Object
-		$menu = self::factory();
+		$menu = static::factory();
 
 		// start with an empty $right stack
 		$stack = array();
@@ -459,7 +453,7 @@ class Menu {
 	 *
 	 * @return  array
 	 */
-	private static function _change_title_url($needle, array $array, $string, $op = 'title')
+	private static function change_title_url($needle, array $array, $string, $op = 'title')
 	{
 		foreach ($array as $key => $value)
 		{
@@ -474,7 +468,7 @@ class Menu {
 
 			if (isset($value['children']))
 			{
-				$array[$key]['children'] = self::_change_title_url($needle, $value['children'], $string, $op);
+				$array[$key]['children'] = static::change_title_url($needle, $value['children'], $string, $op);
 			}
 		}
 
@@ -496,7 +490,7 @@ class Menu {
 	 *
 	 * @return  array
 	 */
-	private static function _add_child($needle, array $array, $id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, Menu $children = NULL)
+	private static function add_child($needle, array $array, $id, $title, $url, $descp = FALSE, array $params = NULL, $image = NULL, Menu $children = NULL)
 	{
 		foreach ($array as $key => $value)
 		{
@@ -507,7 +501,7 @@ class Menu {
 					'title'    => $title,
 					'url'      => $url,
 					'children' => ($children instanceof Menu) ? $children->get_items() : NULL,
-					'access'   => TRUE,
+					'access'   => TRUE, // @todo
 					'descp'	   => $descp,
 					'params'   => $params,
 					'image'    => $image
@@ -518,7 +512,7 @@ class Menu {
 
 			if (isset($value['children']))
 			{
-				$array[$key]['children'] = self::_add_child($needle, $value['children'], $id, $title, $url, $descp, $params, $image, $children);
+				$array[$key]['children'] = static::add_child($needle, $value['children'], $id, $title, $url, $descp, $params, $image, $children);
 			}
 		}
 
@@ -532,7 +526,7 @@ class Menu {
 	 * @param   array    $array  The array of items
 	 * @return  array
 	 */
-	private static function _remove_child($needle, array $array)
+	private static function remove_child($needle, array $array)
 	{
 		foreach ($array as $key => $value)
 		{
@@ -545,7 +539,7 @@ class Menu {
 
 			if (isset($value['children']))
 			{
-				$array[$key]['children'] = self::_remove_child($needle, $value['children']);
+				$array[$key]['children'] = static::remove_child($needle, $value['children']);
 			}
 		}
 
