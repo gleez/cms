@@ -854,7 +854,7 @@ class Model_User extends ORM {
 
 		if ( ! $data->check())
 		{
-			return FALSE;
+			throw new Validation_Exception($data, 'Validation has failed for reset password');
 		}
 
 		// Load user data
@@ -863,7 +863,7 @@ class Model_User extends ORM {
 		// Invalid user
 		if ( ! $this->_loaded)
 		{
-			return FALSE;
+			throw new Validation_Exception($data, 'Email not found');
 		}
 
 		// Token consists of email and the last_login field.
@@ -974,7 +974,9 @@ class Model_User extends ORM {
 			->rule('pass_confirm', 'matches', array(':validation', ':field', 'pass'));
 
 		if ( ! $data->check())
-			return FALSE;
+		{
+			throw new Validation_Exception($data, 'Reset form failed');
+		}
 
 		// Store the new password
 		$this->pass = $data['pass'];
