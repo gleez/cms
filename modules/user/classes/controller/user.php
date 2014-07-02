@@ -522,17 +522,23 @@ class Controller_User extends Template {
 		// Form submitted
 		if ($this->valid_post('reset_pass'))
 		{
-			// Try to reset the password
-			if ($this->_user->reset_password($post = $this->request->post()))
+			try
 			{
+				// Try to reset the password
+				$this->_user->reset_password($_POST);
+
 				Message::success(__('Instructions to reset your password are being sent to your email address %mail.', array('%mail' => $_POST['mail'])));
 				Log::info('Password reset instructions mailed to :name at :mail.',
 					array(':name' => $this->_user->name, ':mail' => $_POST['mail'])
 				);
-				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
-			}
 
-			$this->_errors = $post->errors('models/mail', TRUE);
+				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
+
+			}
+			catch (Validation_Exception $e)
+			{
+				$this->_errors = $e->array->errors('models/mail', TRUE);
+			}
 		}
 
 		$this->response->body($view);
@@ -586,13 +592,18 @@ class Controller_User extends Template {
 		// Form submitted
 		if ($this->valid_post('password_confirm'))
 		{
-			if ($this->_user->confirm_reset_password_form($post = $this->request->post()))
+			try
 			{
+				$this->_user->confirm_reset_password_form($_POST);
+				
 				Message::success(__('You can now sign in with your new password.'));
 				$this->request->redirect(Route::get('user')->uri(array('action' => 'login')));
-			}
 
-			$this->_errors = $post->errors('models/user', TRUE);
+			}
+			catch (Validation_Exception $e)
+			{
+				$this->_errors = $e->array->errors('models/user', TRUE);
+			}
 		}
 
 		$this->response->body($view);
