@@ -310,7 +310,7 @@ class Menu {
 			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if ( ! $_menu) return;
 
-			$items = ORM::factory('menu')
+			$ritems = ORM::factory('menu')
 				->where('lft', '>', $_menu['lft'])
 				->where('rgt', '<', $_menu['rgt'])
 				->where('scp', '=', $_menu['scp'])
@@ -319,7 +319,7 @@ class Menu {
 				->find_all();
 
 			$items = array();
-			foreach($items as $item)
+			foreach($ritems as $item)
 			{
 				$items[] = $item->as_array();
 			}
@@ -384,7 +384,7 @@ class Menu {
 			$_menu = ORM::factory('menu')->where('name', '=', (string)$name)->find()->as_array();
 			if( ! $_menu) return;
 
-			$items = ORM::factory('menu')
+			$ritems = ORM::factory('menu')
 				->where('lft', '>', $_menu['lft'])
 				->where('rgt', '<', $_menu['rgt'])
 				->where('scp', '=', $_menu['scp'])
@@ -393,7 +393,7 @@ class Menu {
 				->find_all();
 
 			$items = array();
-			foreach($items as $item)
+			foreach($ritems as $item)
 			{
 				$items[] = $item->as_array();
 			}
