@@ -17,10 +17,12 @@
  *
  * @package    Gleez\Session\Db
  * @author     Gleez Team
- * @version    1.0.0
+ * @version    1.1.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
+use Gleez\Database\Database;
+
 class Session_Db extends Session {
 
 	/**
@@ -145,9 +147,8 @@ class Session_Db extends Session {
 		{
 			$result = DB::select(array($this->_columns['contents'], 'contents'))
 				->from($this->_table)
-				->where($this->_columns['session_id'], '=', ':id')
+				->where($this->_columns['session_id'], '=', $id)
 				->limit(1)
-				->param(':id', $id)
 				->execute($this->_db);
 
 			if ($result->count())
@@ -200,36 +201,37 @@ class Session_Db extends Session {
 	 */
 	protected function _write()
 	{
+		$hostname = '';
 		if ($this->_update_id === NULL)
 		{
 			// Insert a new row
 			$query = DB::insert($this->_table, $this->_columns)
-				->values(array(':new_id', ':active', ':contents', ':hostname', ':user_id'));
+				->values(array($this->_session_id, $this->_data['last_active'], $this->__toString(), $hostname, $this->_user_id));
 		}
 		else
 		{
 			// Update the row
 			$query = DB::update($this->_table )
-				->value($this->_columns['last_active'], ':active')
-				->value($this->_columns['contents'], ':contents')
-				->value($this->_columns['hostname'], ':hostname')
-				->value($this->_columns['user_id'], ':user_id')
-				->where($this->_columns['session_id'], '=', ':old_id');
+				->value($this->_columns['last_active'], $this->_data['last_active'])
+				->value($this->_columns['contents'], $this->__toString())
+				->value($this->_columns['hostname'], $hostname)
+				->value($this->_columns['user_id'], $this->_user_id)
+				->where($this->_columns['session_id'], '=', $this->_update_id);
 
 			if ($this->_update_id !== $this->_session_id)
 			{
 				// Also update the session id
-				$query->value($this->_columns['session_id'], ':new_id');
+				$query->value($this->_columns['session_id'], $this->_session_id);
 			}
 		}
 
-		$query
-			->param(':new_id',   $this->_session_id)
-			->param(':old_id',   $this->_update_id)
-			->param(':active',   $this->_data['last_active'])
-			->param(':hostname', Request::$client_ip)
-			->param(':user_id',  $this->_user_id)
-			->param(':contents', $this->__toString());
+		// $query
+			// ->param(':new_id',   $this->_session_id)
+			// ->param(':old_id',   $this->_update_id)
+			// ->param(':active',   $this->_data['last_active'])
+			// ->param(':hostname', Request::$client_ip)
+			// ->param(':user_id',  $this->_user_id)
+			// ->param(':contents', $this->__toString());
 
 		// Execute the query
 		$query->execute($this->_db);

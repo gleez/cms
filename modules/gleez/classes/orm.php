@@ -9,13 +9,12 @@
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
  * @package    Gleez\ORM
- * @author     Sandeep Sangamreddi - Gleez
- * @author     Kohana Team
- * @copyright  (c) 2011-2014 Gleez Team
- * @copyright  (c) 2007-2010 Kohana Team
+ * @author     Gleez Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
- * @license    http://kohanaframework.org/license
  */
+use Gleez\Database\Database;
 class ORM extends Model implements serializable {
 
 	const DELETE =  5;
@@ -949,7 +948,7 @@ class ORM extends Model implements serializable {
 			$alias = $target_path.':'.$column;
 
 			// Add the prefix so that load_result can determine the relationship
-			$this->select(array($name, $alias));
+			$this->selectArgs(array($name, $alias));
 		}
 
 		if (isset($parent->_belongs_to[$target_alias]))
@@ -1000,6 +999,9 @@ class ORM extends Model implements serializable {
 		{
 			$name = $method['name'];
 			$args = $method['args'];
+
+			// Gleez DB compatability
+			if($name == 'select') $name = 'selectArgs';
 
 			$this->_db_applied[$name] = $name;
 
@@ -1103,7 +1105,7 @@ class ORM extends Model implements serializable {
 		}
 
 		// Select all columns by default
-		$this->_db_builder->select($this->_object_name.'.*');
+		$this->_db_builder->selectArgs($this->_object_name.'.*');
 
 		if ( ! isset($this->_db_applied['order_by']) AND ! empty($this->_sorting))
 		{
@@ -1738,11 +1740,11 @@ class ORM extends Model implements serializable {
 		if(!empty($group_by))
 		{
 			$prefix = $this->_db->table_prefix();
-			$sql->select(array(DB::expr('COUNT(DISTINCT '.$prefix.$this->_object_name.'.id)'), 'records_found'));
+			$sql->selectArgs(array(DB::expr('COUNT(DISTINCT '.$prefix.$this->_object_name.'.id)'), 'records_found'));
 		}
 		else
 		{
-			$sql->select(array(DB::expr('COUNT("*")'), 'records_found'));
+			$sql->selectArgs(array(DB::expr('COUNT("*")'), 'records_found'));
 		}
 		
 		$records = $sql->execute($this->_db)->get('records_found');

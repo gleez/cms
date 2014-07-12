@@ -1,14 +1,16 @@
 <?php
 /**
- * Database result wrapper.  See [Results](/database/results) for usage and examples.
+ * MySQLi database Expression
  *
- * @package    Kohana/Database
- * @category   Query/Result
- * @author     Kohana Team
- * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @package    Gleez\Database
+ * @version    2.0.0
+ * @author     Gleez Team
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIterator, ArrayAccess {
+namespace Gleez\Database;
+
+class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 	// Executed SQL for this result
 	protected $_query;
@@ -26,6 +28,11 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	// Parameters for __construct when using object results
 	protected $_object_params = NULL;
 
+	/**
+	 * @var int
+	 */
+	protected $_internal_row = 0;
+	
 	/**
 	 * Sets the total number of rows and stores the result locally.
 	 *
@@ -48,23 +55,33 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 			// Get the object class name
 			$as_object = get_class($as_object);
 		}
-
+		
 		// Results as objects or associative arrays
 		$this->_as_object = $as_object;
+
+		// Results as objects or associative arrays
+		//$this->_as_object = ($as_object === TRUE ) ? TRUE : FALSE;
 
 		if ($params)
 		{
 			// Object constructor params
 			$this->_object_params = $params;
 		}
+		
+		// Find the number of rows in the result
+		$this->_total_rows = $result->num_rows;
 	}
 
 	/**
-	 * Result destruction cleans up all open result sets.
-	 *
-	 * @return  void
+	 * Result destruction cleans up all open result sets
 	 */
-	abstract public function __destruct();
+	public function __destruct()
+	{
+		if (is_resource($this->_result))
+		{
+			$this->_result->free();
+		}
+	}
 
 	/**
 	 * Get a cached database result from the current result iterator.
@@ -171,6 +188,18 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 		return $results;
 	}
 
+	public function each_as_array()
+	{
+		$results = array();
+		
+		foreach($this as $row)
+		{ 
+			//$results[] = $row->as_array();
+			$results[] = $row;
+		}
+		return $results;
+	}
+	
 	/**
 	 * Return the named column from the current row.
 	 *
@@ -306,7 +335,7 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 	 */
 	public function prev()
 	{
-		--$this->_current_row;
+		$this->_current_row;
 		return $this;
 	}
 
@@ -335,4 +364,56 @@ abstract class Kohana_Database_Result implements Countable, Iterator, SeekableIt
 		return $this->offsetExists($this->_current_row);
 	}
 
-} // End Database_Result
+	/**
+	 * Seek the arbitrary pointer in table
+	 *
+	 * @param   integer  $offset  The field offset. Must be between zero and the total number of rows minus one
+	 *
+	 * @return  boolean
+	 */
+	public function seek($offset)
+	{
+		if ($this->offsetExists($offset) AND $this->_result->data_seek($offset))
+		{
+			// Set the current row to the offset
+			$this->_current_row = $this->_internal_row = $offset;
+
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	
+	/**
+	 * Returns the current row of a result set
+	 *
+	 * @return  mixed
+	 */
+	public function current()
+	{
+		if ($this->_current_row !== $this->_internal_row AND ! $this->seek($this->_current_row))
+		{
+			return NULL;
+		}
+
+		// Increment internal row for optimization assuming rows are fetched in order
+		$this->_internal_row++;
+
+		if ($this->_as_object === TRUE)
+		{
+			// Return an stdClass
+			return $this->_result->fetch_object();
+		}
+		elseif (is_string($this->_as_object))
+		{
+			// Return an object of given class name
+			return $this->_result->fetch_object($this->_as_object, (array) $this->_object_params);
+		}
+		else
+		{
+			// Return an array of the row
+			return $this->_result->fetch_assoc();
+		}
+	}
+
+}

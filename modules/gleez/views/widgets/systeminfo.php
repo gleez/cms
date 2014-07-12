@@ -62,7 +62,7 @@
 		</tr>
 		<tr>
 			<th><?php _e('MySQL Version') ?></th>
-			<td><?php echo HTML::anchor('admin/tools/db', HTML::chars(Database::instance()->version(TRUE)) ); ?></td>
+			<td><?php echo HTML::anchor('admin/tools/db', HTML::chars(DB::version()) ); ?></td>
 		</tr>
 		<tr>
 			<th><?php _e('Memory Limit') ?></th>
