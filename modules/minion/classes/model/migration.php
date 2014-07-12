@@ -1,10 +1,14 @@
 <?php
-
 /**
  * Model for managing migrations
+ *
+ * @package    Gleez\Minion
+ * @author     Gleez Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Model_Migration extends Model
-{
+class Model_Migration extends Model {
 	/**
 	 * Database connection to use
 	 * @var Kohana_Database
@@ -27,7 +31,7 @@ class Model_Migration extends Model
 	{
 		if($db == NULL)
 		{
-			$db = Database::instance(NULL);
+			$db = \Gleez\Database\Database::instance(NULL);
 		}
 
 		$this->_db = $db;
@@ -168,7 +172,7 @@ class Model_Migration extends Model
 	public function ensure_table_exists()
 	{
 		$table = $this->_db->table_prefix().$this->_table;
-		$query = $this->_db->query(Database::SELECT, "SHOW TABLES like '".$table."'");
+		$query = $this->_db->query(\Gleez\Database\Database::SELECT, "SHOW TABLES like '".$table."'");
 
 		if ( ! count($query))
 		{

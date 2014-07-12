@@ -10,6 +10,7 @@
  *
  * @todo      [!!] This class does not do any permission checking
  */
+use Gleez\Database\Database;
 class Module {
 
 	/**

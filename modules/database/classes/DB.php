@@ -13,14 +13,20 @@
  *
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
- * @package    Kohana/Database
- * @category   Base
- * @author     Kohana Team
- * @copyright  (c) 2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @package    Gleez\Database
+ * @version    2.0.0
+ * @author     Gleez Team
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
-class Kohana_DB {
+use Gleez\Database\Database;
+use Gleez\Database\Query;
+use Gleez\Database\Expression;
 
+class DB {
+
+	protected static $_config = NULL;
+	
 	/**
 	 * Create a new [Database_Query] of the given type.
 	 *
@@ -41,7 +47,7 @@ class Kohana_DB {
 	 */
 	public static function query($type, $sql)
 	{
-		return new Database_Query($type, $sql);
+		//return new Query($type, $sql);
 	}
 
 	/**
@@ -59,7 +65,8 @@ class Kohana_DB {
 	 */
 	public static function select($columns = NULL)
 	{
-		return new Database_Query_Builder_Select(func_get_args());
+		$query = new Query('select', NULL);
+		return $query->select(\func_get_args());
 	}
 
 	/**
@@ -73,7 +80,8 @@ class Kohana_DB {
 	 */
 	public static function select_array(array $columns = NULL)
 	{
-		return new Database_Query_Builder_Select($columns);
+		$query = new Query('select', NULL);
+		return $query->select($columns);
 	}
 
 	/**
@@ -88,7 +96,8 @@ class Kohana_DB {
 	 */
 	public static function insert($table = NULL, array $columns = NULL)
 	{
-		return new Database_Query_Builder_Insert($table, $columns);
+		$query = new Query('insert', NULL);
+		return $query->insert($table, $columns);
 	}
 
 	/**
@@ -102,7 +111,8 @@ class Kohana_DB {
 	 */
 	public static function update($table = NULL)
 	{
-		return new Database_Query_Builder_Update($table);
+		$query = new Query('update', NULL);
+		return $query->update($table);
 	}
 
 	/**
@@ -116,7 +126,8 @@ class Kohana_DB {
 	 */
 	public static function delete($table = NULL)
 	{
-		return new Database_Query_Builder_Delete($table);
+		$query = new Query('delete', NULL);
+		return $query->delete($table);
 	}
 
 	/**
@@ -133,7 +144,11 @@ class Kohana_DB {
 	 */
 	public static function expr($string, $parameters = array())
 	{
-		return new Database_Expression($string, $parameters);
+		return new Expression($string);
 	}
 
-} // End DB
+	public static function version()
+	{
+		return Database::instance(NULL, self::$_config)->version();
+	}
+}

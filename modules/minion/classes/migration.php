@@ -1,12 +1,18 @@
 <?php
-
 /**
  * The migration manager is responsible for locating migration files, syncing
  * them with the migrations table in the database and selecting any migrations
  * that need to be executed in order to reach a target version
  *
- * @author Matt Button <matthew@sigswitch.com>
+ *
+ * @package    Gleez\Minion
+ * @author     Gleez Team
+ * @version    1.1.0
+ * @copyright  (c) 2011-2014 Gleez Technologies
+ * @license    http://gleezcms.org/license  Gleez CMS License
  */
+use Gleez\Database;
+
 class Migration {
 
 	/**
@@ -48,7 +54,7 @@ class Migration {
 	{
 		if($db == NULL)
 		{
-			$db = Database::instance(NULL);
+			$db = \Gleez\Database\Database::instance(NULL);
 		}
 
 		if ($model === NULL)
@@ -121,8 +127,6 @@ class Migration {
 
 	/**
 	 * Run migrations in the specified groups so as to reach specified targets
-	 *
-	 *
 	 *
 	 * @param  array $group  Set of groups to update, empty array means all
 	 * @param  array $target Versions for specified groups
