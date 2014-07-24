@@ -418,8 +418,16 @@ class File extends SplFileInfo {
 		}
 		else
 		{
+			// Find the file extension
+			$ext    = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+			
+			// Remove the extension from the filename
+			$name   = substr($name, 0, -(strlen($ext) + 1));
+
 			$retval = uniqid().($remove_spaces ? preg_replace('/\s+/u', $replacement, $name) : $name);
 			$retval = is_null($length) ? $retval : substr($retval, 0, (int)$length);
+
+			$retval = $retval.'.'.$ext;
 
 			return $retval;
 		}
