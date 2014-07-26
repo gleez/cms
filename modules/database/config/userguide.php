@@ -17,7 +17,7 @@ return array(
 			'description' => 'Database agnostic querying and result management',
 
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2008–2012 Kohana Team',
+			'copyright' => '&copy; 2011–2014 Gleez Team',
 		)
 	)
 );

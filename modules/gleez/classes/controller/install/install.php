@@ -153,7 +153,7 @@ class Controller_Install_Install extends Controller_Template {
 		$view = View::factory('install/systemcheck', System::check());
 
 		if (	$view->php_version
-			AND $view->mysql
+			AND $view->mysqli
 			AND $view->system_directory
 			AND $view->application_directory
 			AND $view->modules_directory
@@ -355,59 +355,8 @@ class Controller_Install_Install extends Controller_Template {
 
 	public function check_database($username, $password, $hostname, $database)
 	{
-		if(function_exists('mysqli_query'))
-		{
-			return $this->_mysqli_check_database($username, $password, $hostname, $database);
-		}
-		else
-		{
-			return $this->_mysql_check_database($username, $password, $hostname, $database);
-		}
-	}
 
-	private function _mysql_check_database($username, $password, $hostname, $database)
-	{
-		if ( ! $link = @mysql_connect($hostname, $username, $password))
-		{
-			if (strpos(mysql_error(), 'Access denied'))
-			{
-				throw new Exception('access');
-			}
-			elseif (strpos(mysql_error(), 'server host'))
-			{
-				throw new Exception('unknown_host');
-			}
-			elseif (strpos(mysql_error(), 'connect to'))
-			{
-				throw new Exception('connect_to_host');
-			}
-			else
-			{
-				throw new Exception(mysql_error());
-			}
-		}
-
-		if (! version_compare($this->mysql_version($link), "5.0.0", ">=") ) {
-				throw new Exception('version');
-		}
-
-		if ($select = mysql_select_db($database, $link)) {
-			return TRUE;
-		}
-		else {
-			mysql_query("CREATE DATABASE `{$database}`");
-
-			if (! $select = mysql_select_db($database, $link)) {
-				throw new Exception('select');
-			}
-		}
-
-		return TRUE;
-	}
-
-	private function _mysqli_check_database($username, $password, $hostname, $database)
-	{
-		if ( ! $link = @mysqli_connect($hostname, $username, $password))
+		if ( ! $link = mysqli_connect($hostname, $username, $password))
 		{
 			if (strpos(mysqli_error($link), 'Access denied'))
 			{
@@ -427,17 +376,21 @@ class Controller_Install_Install extends Controller_Template {
 			}
 		}
 
-		if (! version_compare($this->mysql_version($link), "5.0.0", ">=") ) {
-				throw new Exception('version');
+		if (! version_compare($this->mysql_version($link), "5.0.0", ">=") ) 
+		{
+			throw new Exception('version');
 		}
 
-		if ($select = mysqli_select_db($link, $database)) {
+		if ($select = mysqli_select_db($link, $database)) 
+		{
 			return TRUE;
 		}
-		else {
+		else 
+		{
 			mysqli_query($link, "CREATE DATABASE `{$database}`");
 
-			if (! $select = mysqli_select_db($link, $database)) {
+			if (! $select = mysqli_select_db($link, $database)) 
+			{
 				throw new Exception('select');
 			}
 		}
@@ -449,7 +402,7 @@ class Controller_Install_Install extends Controller_Template {
 	{
 		$config = new View('install/config');
 
-		$config->type	  = function_exists('mysqli_query') ? 'mysqli' : 'mysql';
+		$config->type	  = 'MySQLi';
 		$config->user     = $username;
 		$config->password = $password;
 		$config->host     = $hostname;
@@ -462,33 +415,14 @@ class Controller_Install_Install extends Controller_Template {
 
 	private function mysql_version($link)
 	{
-		if(function_exists('mysqli_query'))
-		{
-			$result = mysqli_query($link, "SHOW VARIABLES WHERE variable_name = \"version\"");
-			$row = mysqli_fetch_object($result);
-		}
-		else
-		{
-			$result = mysql_query("SHOW VARIABLES WHERE variable_name = \"version\"");
-			$row = mysql_fetch_object($result);
-		}
+
+		$result = mysqli_query($link, "SHOW VARIABLES WHERE variable_name = \"version\"");
+		$row = mysqli_fetch_object($result);
 
 		return $row->Value;
 	}
 
 	private function unpack_sql($config)
-	{
-		if(function_exists('mysqli_query'))
-		{
-			return $this->_mysqli_unpack_sql($config);
-		}
-		else
-		{
-			return $this->_mysql_unpack_sql($config);
-		}
-	}
-
-	private function _mysqli_unpack_sql($config)
 	{
 		$prefix = $config["table_prefix"];
 		$buf = null;
@@ -514,31 +448,6 @@ class Controller_Install_Install extends Controller_Template {
 		return true;
 	}
 
-	private function _mysql_unpack_sql($config)
-	{
-		$prefix = $config["table_prefix"];
-		$buf = null;
-
-		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
-		mysql_select_db($config["database"]);
-
-		$sql_file = MODPATH . "gleez/views/install/install.sql";
-
-		foreach (file($sql_file) as $line)
-		{
-			$buf .= trim($line);
-			if (preg_match("/;$/", $buf))
-			{
-				if (!mysql_query($this->prepend_prefix($prefix, $buf)))
-				{
-					throw new Exception(mysql_error());
-				}
-				$buf = "";
-			}
-		}
-		return true;
-	}
-
 	private function prepend_prefix($prefix, $sql)
 	{
 		return  preg_replace("#{([a-zA-Z0-9_]+)}#", "{$prefix}$1", $sql);
@@ -546,23 +455,13 @@ class Controller_Install_Install extends Controller_Template {
 
 	private function add_user()
 	{
-		if(function_exists('mysqli_query'))
-		{
-			return $this->_mysqli_add_user();
-		}
-		else
-		{
-			return $this->_mysql_add_user();
-		}
-	}
-
-	private function _mysqli_add_user()
-	{
 		$config = $this->_session->get('database_data');
-		$link = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
+		$link   = mysqli_connect($config["hostname"], $config["user"], $config["pass"]);
+
 		mysqli_select_db($link, $config["database"]);
+
 		$prefix = trim($config["table_prefix"]);
-		$time = time();
+		$time   = time();
 
 		// Gleez Private Key
 		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
@@ -578,36 +477,8 @@ class Controller_Install_Install extends Controller_Template {
 
 		// Update user
 		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, $aKey);
+		$pass     = hash_hmac('sha1', $password, $aKey);
 		mysqli_query($link, "UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
-
-		return $password;
-	}
-
-	private function _mysql_add_user()
-	{
-		$config = $this->_session->get('database_data');
-		mysql_connect($config["hostname"], $config["user"], $config["pass"]);
-		mysql_select_db($config["database"]);
-		$prefix = trim($config["table_prefix"]);
-		$time = time();
-
-		// Gleez Private Key
-		$key  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
-		$skey = serialize($key);
-		$sql  = "UPDATE `{$prefix}config` SET `config_value` = '$skey' WHERE `group_name` = 'site' AND `config_key` = 'gleez_private_key'";
-		mysql_query($sql);
-
-		// Auth Hash Key
-		$aKey  = sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
-		$aSkey = serialize($aKey);
-		$aSql  = "UPDATE `{$prefix}config` SET `config_value` = '$aSkey' WHERE `group_name` = 'site' AND `config_key` = 'auth_hash_key'";
-		mysql_query($aSql);
-
-		// Update user
-		$password = Text::random('alnum', 8);
-		$pass = hash_hmac('sha1', $password, $aKey);
-		mysql_query("UPDATE `{$prefix}users` SET `pass` = '$pass', `created` = $time, `updated` = $time WHERE `id` = 2");
 
 		return $password;
 	}

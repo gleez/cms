@@ -3,10 +3,10 @@ return array
 (
 	'default' => array
 	(
-		'type'       => '<?php echo $type ?>',
+		'type'       => 'MySQLi',
 		'connection' => array(
 			/**
-			 * The following options are available for MySQL:
+			 * The following options are available for MySQLi:
 			 *
 			 * string   hostname     server hostname, or socket
 			 * string   database     database name

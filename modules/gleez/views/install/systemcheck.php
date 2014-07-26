@@ -12,13 +12,13 @@
 			<?php endif ?>
 		</tr>
 
-		<tr class="<?php echo $mysql ? 'success' : 'danger' ?>">
-			<td><?php echo __('PHP MySQL'); ?></td>
-			<?php if ($mysql): ?>
+		<tr class="<?php echo $mysqli ? 'success' : 'danger' ?>">
+			<td><?php echo __('PHP MySQLi'); ?></td>
+			<?php if ($mysqli): ?>
 				<td><?php echo __('Pass') ?></td>
 			<?php else: ?>
 				<td>
-                    <?php echo __('Gleez CMS requires a MySQL database, but PHP doesn\'t have either the :mysql or the :mysqli extension.', array(':mysql' => HTML::anchor('http://php.net/mysql', 'MySQL'), ':mysqli' => HTML::anchor('http://php.net/mysqli', 'MySQLi'))); ?>
+                    <?php echo __('Gleez CMS requires a MySQL database, but PHP doesn\'t have the :mysqli extension.', array(':mysql' => HTML::anchor('http://php.net/mysql', 'MySQL'), ':mysqli' => HTML::anchor('http://php.net/mysqli', 'MySQLi'))); ?>
 				</td>
 			<?php endif ?>
 		</tr>
