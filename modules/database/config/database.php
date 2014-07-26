@@ -30,7 +30,7 @@ return array
 		'profiling'    => TRUE,
 	),
 	'alternate' => array(
-		'type'       => 'pdo',
+		'type'       => 'mysqli',
 		'connection' => array(
 			/**
 			 * The following options are available for PDO:

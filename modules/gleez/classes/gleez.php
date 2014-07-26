@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '1.1.1';
+	const VERSION = '1.1.2';
 
 	/**
 	 * Minimal required version of php
@@ -26,7 +26,7 @@ class Gleez {
 	 * Release codename
 	 * @type string
 	 */
-	const CODENAME = 'Vicious Delicious';
+	const CODENAME = 'Smiling Buddha';
 
 	/**
 	 * Default message for maintenance mode
