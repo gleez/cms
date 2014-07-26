@@ -1,9 +1,12 @@
 <?php
 
+use Gleez\Database\Database;
+use Gleez\Database\Query;
+use Gleez\Database\Expression;
 /**
  * A faux database connection for doing dry run migrations
  */
-class Migration_Database extends Database_MySQLi {
+class Migration_Database extends \Gleez\Database\Driver_MySQLi {
 
 	/**
 	 * Creates a disposable instance of the faux connection
