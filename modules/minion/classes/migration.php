@@ -11,7 +11,10 @@
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
-use Gleez\Database;
+
+use Gleez\Database\Database;
+use Gleez\Database\Query;
+use Gleez\Database\Expression;
 
 class Migration {
 
@@ -162,7 +165,7 @@ class Migration {
 				);
 			}
 
-			$db = $this->_get_db_instance(Database::$default);
+			$db = $this->_get_db_instance(\Gleez\Database\Database::$default);
 
 			try
 			{
