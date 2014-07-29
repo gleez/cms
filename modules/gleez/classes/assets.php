@@ -46,7 +46,7 @@
  * @package    Gleez\Assets\Core
  * @author     Corey Worrell
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -829,7 +829,6 @@ class Assets {
 	{
 		self::js('datatables', 'media/js/jquery.dataTables.min.js', array('jquery'), FALSE, array('weight' => -10));
 		self::js('greet.dataTables', 'media/js/greet.dataTables.js', array('bootstrap'), FALSE, array('weight' => -6));
-		self::css('datatables', 'media/css/jquery.dataTables.css', array('bootstrap'), array('weight' => -4));
 		self::css('greet.dataTables', 'media/css/greet.dataTables.css', array('datatables'), array('weight' => -2));
 	}
 
