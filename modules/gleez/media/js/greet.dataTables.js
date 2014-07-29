@@ -3,7 +3,7 @@
  * https://github.com/gleez/greet
  * 
  * @package    Greet\DataTables
- * @version    2.0
+ * @version    3.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
  * @copyright  (c) 2005-2014 Gleez Technologies
@@ -25,7 +25,7 @@
 		
 		//exit if no url
 		if(options.target == false) return
-		
+
 		//use data sortable value to disable sorting/searching for a column
 		$('thead th', $(table)).each(function(){
 			var obj   = $(this).data("columns")
@@ -39,45 +39,158 @@
 
 		var oTable = $table.dataTable({
 			"aoColumns": columns
-			,   "aaSorting": options.sorting
-			,   "bProcessing": options.processing
-			,   "bServerSide": options.serverside
-			,   "bDeferRender": options.deferrender
-			,   "bPaginate": options.paginate
-			,   "bFilter ": options.filter 
-			,   "bInfo ": options.info
-			,   "sDom": options.dom
-			,   "sCookiePrefix": options.cookie
-			,   "bLengthChange": options.lengthchange
-			,   "sAjaxSource": options.target
-			,   "sPaginationType": "bootstrap"
-			,   "oLanguage": {
-				"sEmptyTable": options.emptytable
-					, "sUrl": options.localize
+			, "order": options.sorting
+			, "processing": options.processing
+			, "serverSide": options.serverside
+			, "deferRender": options.deferrender
+			, "paging": options.paginate
+			, "sarching": options.filter 
+			, "info ": options.info
+			, "dom": options.dom
+			, "lengthChange": options.lengthchange
+			//, "pagingType": "bootstrap"
+			, "language": {
+					"emptyTable": options.emptytable
+					, "url": options.localize
 				}
-			,   "fnServerData": function ( sUrl, aoData, fnCallback, oSettings ) {
-				oSettings.jqXHR = $.ajax( {
-					"url":  sUrl,
-					"data": aoData,
+			, "ajax": function (data, fnCallback, settings ) {
+				settings.jqXHR = $.ajax( {
+					"url":  options.target,
+					"data": data,
 					"dataType": "json",
 					"cache": false,
-					"type": oSettings.sServerMethod
+					"type": settings.sServerMethod
 				}, 300)
-				.done(function(data, textStatus, jqXHR){
-					$(oSettings.oInstance).trigger('xhr', oSettings)
-					fnCallback( data )
+				.done(function(response, textStatus, jqXHR){
+					$(settings.oInstance).trigger('xhr', settings)
+					fnCallback( response )
 				})
 				.fail(function (jqXHR, textStatus, errorThrown) {
 					var errorText = '<div class="empty_page alert alert-block"><i class="fa fa-info-circle"></i>&nbsp'+errorThrown+'</div>'
-					$(oSettings.oInstance).parent().html(errorText)
+					$(settings.oInstance).parent().html(errorText)
 				})
 			}
 		})
 	}
 
 	/* Set the defaults for DataTables initialisation */
-	$.extend(true, $.fn.dataTable.defaults, {
-		"fnInitComplete": function (oSettings, json) {
+	$.extend( true, $.fn.dataTable.defaults, {
+		"dom":
+			"<'row'<'col-xs-6'l><'col-xs-6'f>r>"+
+			"t"+
+			"<'row'<'col-xs-6'i><'col-xs-6'p>>",
+		"language": {
+			"lengthMenu": "_MENU_ records per page"
+		}
+	} )
+
+	/* Default class modification */
+	$.extend( $.fn.dataTableExt.oStdClasses, {
+		"sWrapper": "dataTables_wrapper form-inline",
+		"sFilterInput": "form-control input-sm",
+		"sLengthSelect": "form-control input-sm"
+	} )
+
+	// In 1.10 we use the pagination renderers to draw the Bootstrap paging,
+	// rather than  custom plug-in
+	if ( $.fn.dataTable.Api ) {
+		$.fn.dataTable.defaults.renderer = 'bootstrap';
+		$.fn.dataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, buttons, page, pages ) {
+			var api = new $.fn.dataTable.Api( settings );
+			var classes = settings.oClasses;
+			var lang = settings.oLanguage.oPaginate;
+			var btnDisplay, btnClass;
+
+			var attach = function( container, buttons ) {
+				var i, ien, node, button;
+				var clickHandler = function ( e ) {
+					e.preventDefault();
+					if ( e.data.action !== 'ellipsis' ) {
+						api.page( e.data.action ).draw( false );
+					}
+				};
+
+				for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
+					button = buttons[i];
+
+					if ( $.isArray( button ) ) {
+						attach( container, button );
+					}
+					else {
+						btnDisplay = '';
+						btnClass = '';
+
+						switch ( button ) {
+							case 'ellipsis':
+								btnDisplay = '&hellip;';
+								btnClass = 'disabled';
+								break;
+
+							case 'first':
+								btnDisplay = lang.sFirst;
+								btnClass = button + (page > 0 ?
+									'' : ' disabled');
+								break;
+
+							case 'previous':
+								btnDisplay = lang.sPrevious;
+								btnClass = button + (page > 0 ?
+									'' : ' disabled');
+								break;
+
+							case 'next':
+								btnDisplay = lang.sNext;
+								btnClass = button + (page < pages-1 ?
+									'' : ' disabled');
+								break;
+
+							case 'last':
+								btnDisplay = lang.sLast;
+								btnClass = button + (page < pages-1 ?
+									'' : ' disabled');
+								break;
+
+							default:
+								btnDisplay = button + 1;
+								btnClass = page === button ?
+									'active' : '';
+								break;
+						}
+
+						if ( btnDisplay ) {
+							node = $('<li>', {
+									'class': classes.sPageButton+' '+btnClass,
+									'aria-controls': settings.sTableId,
+									'tabindex': settings.iTabIndex,
+									'id': idx === 0 && typeof button === 'string' ?
+										settings.sTableId +'_'+ button :
+										null
+								} )
+								.append( $('<a>', {
+										'href': '#'
+									} )
+									.html( btnDisplay )
+								)
+								.appendTo( container );
+
+							settings.oApi._fnBindAction(
+								node, {action: button}, clickHandler
+							);
+						}
+					}
+				}
+			};
+
+			attach(
+				$(host).empty().html('<ul class="pagination"/>').children('ul'),
+				buttons
+			);
+		}
+	}
+
+	/* Set the defaults for DataTables initialisation */
+/*	$.extend(true, $.fn.dataTable.defaults, {
+		"initComplete": function (oSettings, json) {
 			var currentId = $(this).attr('id')
 
 			if (currentId) {
@@ -102,104 +215,7 @@
 				thisFilterInput.appendTo(thisFilter).wrap('<div class="col-xs-8 col-sm-9 col-md-9" />')
 			}
 		}
-	})
-
-	/* Default class modification */
-	$.extend( $.fn.dataTableExt.oStdClasses, {
-		"sWrapper": "dataTables_wrapper form-inline"
-	})
-
-	/* API method to get paging information */
-	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings ){
-		return {
-			"iStart":         oSettings._iDisplayStart,
-			"iEnd":           oSettings.fnDisplayEnd(),
-			"iLength":        oSettings._iDisplayLength,
-			"iTotal":         oSettings.fnRecordsTotal(),
-			"iFilteredTotal": oSettings.fnRecordsDisplay(),
-			"iPage":          Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-			"iTotalPages":    Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-		}
-	}
-
-	/* Bootstrap style pagination control */
-	$.extend( $.fn.dataTableExt.oPagination, {
-		"bootstrap": {
-			"fnInit": function( oSettings, nPaging, fnDraw ) {
-				var oLang = oSettings.oLanguage.oPaginate
-				var fnClickHandler = function ( e ) {
-					e.preventDefault()
-					if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-						fnDraw( oSettings )
-					}
-				}
-				
-				$(nPaging).addClass('dtpager').append(
-					'<ul class="pagination">'+
-					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-					'</ul>'
-				)
-				
-				var els = $('a', nPaging)
-				$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler )
-				$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler )
-			},
-			
-			"fnUpdate": function ( oSettings, fnDraw ) {
-				var iListLength = 5;
-				var iLen;
-				var oPaging = oSettings.oInstance.fnPagingInfo();
-				var an = oSettings.aanFeatures.p;
-				var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
-
-				if ( oPaging.iTotalPages < iListLength) {
-					iStart = 1;
-					iEnd = oPaging.iTotalPages;
-				}
-				else if ( oPaging.iPage <= iHalf ) {
-					iStart = 1;
-					iEnd = iListLength;
-				} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
-					iStart = oPaging.iTotalPages - iListLength + 1;
-					iEnd = oPaging.iTotalPages;
-				} else {
-					iStart = oPaging.iPage - iHalf + 1;
-					iEnd = iStart + iListLength - 1;
-				}
-
-				for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
-					// Remove the middle elements
-					$('li:gt(0)', an[i]).filter(':not(:last)').remove();
-
-					// Add the new list items and their event handlers
-					for ( j=iStart ; j<=iEnd ; j++ ) {
-						sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
-						$('<li '+sClass+'><a href="#">'+j+'</a></li>')
-							.insertBefore( $('li:last', an[i])[0] )
-							.bind('click', function (e) {
-							e.preventDefault();
-							oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength
-							fnDraw( oSettings )
-							})
-					}
-			
-					// Add / remove disabled classes from the static elements
-					if ( oPaging.iPage === 0 ) {
-						$('li:first', an[i]).addClass('disabled')
-					} else {
-						$('li:first', an[i]).removeClass('disabled')
-					}
-
-					if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
-						$('li:last', an[i]).addClass('disabled')
-					} else {
-						$('li:last', an[i]).removeClass('disabled')
-					}
-				}
-			}
-		}
-	})
+	})*/
 
 	DataTable.DEFAULTS = {
 		paginate       : true
@@ -212,8 +228,7 @@
 		, processing   : true
 		, serverside   : true
 		, deferrender  : true
-		, localize     :''
-		, cookie       : "gleez_datatable_"
+		, localize     : ''
 		, emptytable   : "No active record(s) here. Would you like to create one?"
 		, dom          : "<'table_head row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
 	}

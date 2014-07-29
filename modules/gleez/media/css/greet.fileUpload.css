@@ -109,6 +109,8 @@
 }
 .fileupload .fileupload-message {
   display: none;
+  margin-bottom: 0.5em;
+  padding: 5px 3px;
 }
 .fileupload .loading {
 	background: url('../images/progress.gif') center center no-repeat;
