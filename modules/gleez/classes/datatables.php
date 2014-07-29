@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Datatables
  * @author     Gleez Team
- * @version    1.0
+ * @version    2.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -332,41 +332,81 @@ class Datatables {
 		$columns = $this->columns();
 		$this->_count_total = $this->_count_total();
 
-		if ($request->query('iSortCol_0') !== NULL)
+		//DataTables 1.10
+		if ($request->query('order') !== NULL && count($request->query('order')) )
 		{
-			for ($i = 0; $i < intval($request->query('iSortingCols')); $i++)
+			for ($i = 0; $i < count($request->query('order')); $i++)
 			{
-				$column = $columns[intval($request->query('iSortCol_' . $i))];
+				// Convert the column index into the column data property
+				$columnIdx     = intval($request->query('order')[$i]['column']);
+				$requestColumn = $request->query('columns')[$columnIdx];
 
-				$sort = 'Datatables::SORT_' . strtoupper($request->query('sSortDir_' . $i));
-
-				if (defined($sort))
+				if ( $requestColumn['orderable'] == 'true' && isset($columns[$columnIdx]) ) 
 				{
+					$column  = $columns[$columnIdx];
+					$sort    = 'Datatables::SORT_' . strtoupper($request->query('order')[$i]['dir']);
+
 					$this->sort($column, constant($sort));
 				}
 			}
 		}
 
-		if ($request->query('iDisplayStart') !== NULL && $request->query('iDisplayLength') != '-1')
+		//DataTables 1.10
+		if ($request->query('start') !== NULL && $request->query('length') != '-1')
 		{
-			$start = $request->query('iDisplayStart');
-			$length = $request->query('iDisplayLength');
+			$start  = intval($request->query('start'));
+			$length = intval($request->query('length'));
 
 			$this->limit($start, $length);
 		}
 
-		if ($request->query('sSearch'))
+		//Searching/Filtering
+		if ( $request->query('search') !== NULL && $request->query('search')['value'] != '' )
 		{
-			$this->search($request->query('sSearch'));
+			$str = $request->query('search')['value'];
+			for ( $i = 0, $ien = count($request->query('columns')); $i < $ien ; $i++ )
+			{
+				// Convert the column index into the column data property
+				$requestColumn = $request->query('columns')[$i];
+				//$columnIdx     = $requestColumn['data'];
+				//$column        = $columns[$columnIdx];
+
+				// global search
+				if ( $requestColumn['searchable'] == 'true' )
+				{
+					$this->search($str);
+				}
+			}
 		}
 
+		//@todo - Individual column filtering
+		for ( $i = 0, $ien = count($request->query('columns')); $i < $ien ; $i++ )
+		{
+			$requestColumn = $request->query('columns')[$i];
+			//$columnIdx   = $requestColumn['data'];
+			//$column      = $columns[$columnIdx];
 
-				$this->_result = $this->_execute();
+			$str = $requestColumn['search']['value'];
 
-		$this->_count = $this->_count();
+			if ( $requestColumn['searchable'] == 'true'  && $str != '')
+			{
+				//$this->search($str);
+			}
+		}
+
+		// Execute the query
+		$this->_result = $this->_execute();
+		$this->_count  = $this->_count();
 
 		// Count should always match total unless search is being applied
-		$this->_count = ($request->query('sSearch')) ? $this->count() : $this->_count_total;
+		if ( $request->query('search') !== NULL && $request->query('search')['value'] != '' )
+		{
+			$this->_count = $this->count();
+		}
+		else
+		{
+			$this->_count = $this->_count_total;
+		}
 
 		return $this;
 	}
@@ -401,7 +441,9 @@ class Datatables {
 		if ($request === NULL)
 		{
 			if ($this->_request instanceof Request)
+			{
 				return $this->_request;
+			}
 
 			return Request::current();
 		}
@@ -452,13 +494,14 @@ class Datatables {
 
 			$this->_render = json_encode(array
 			(
-				'sEcho'                 => intval($this->request()->query('sEcho')),
-				'iTotalRecords'         => $this->_count_total,
-				'iTotalDisplayRecords'  => $this->_count,
-				'aaData'                => $this->_rows
+				'draw'              => intval($this->request()->query('draw')),
+				'recordsTotal'      => intval($this->_count_total),
+				'recordsFiltered'   => intval($this->_count),
+				'data'              => $this->_rows
 			));
 		}
 
 		return $this->_render;
 	}
+
 }

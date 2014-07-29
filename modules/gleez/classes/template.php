@@ -480,7 +480,7 @@ abstract class Template extends Controller {
 			if ($this->_response_format === 'application/json')
 			{
 				// Check for dataTables request
-				if ($this->request->query('sEcho') !== NULL) return;
+				if ($this->request->query('draw') !== NULL) return;
 
 				$output = $this->_json['Data'];
 			}
@@ -868,7 +868,7 @@ abstract class Template extends Controller {
 
 		if ($this->_response_format === 'application/json')
 		{
-			if ($this->request->query('sEcho') !== NULL) return;
+			if ($this->request->query('draw') !== NULL) return;
 
 			$scripts = Assets::js(FALSE, NULL, NULL, FALSE, NULL, Assets::FORMAT_AJAX);
 			$styles  = Assets::css(FALSE, NULL, NULL, FALSE, Assets::FORMAT_AJAX);
