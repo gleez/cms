@@ -55,7 +55,7 @@
 
 		this.$hidden = this.$element.find('input[type=hidden][name="' + this.name + '"]')
 		if (this.$hidden.length === 0) {
-			this.$hidden = $('<input type="hidden" />')
+			this.$hidden = $('<input type="hidden"/>')
 			this.$element.prepend(this.$hidden)
 		}
 
@@ -84,20 +84,20 @@
 	Fileupload.prototype.accept = function(file) {
 		//restrict number of uploaded files when queue is 0
 		if(this.options.maxfiles > 0 && this.total >= this.options.maxfiles && this.options.queuefiles === 0){
-			this.$element.trigger('error.gt.fileupload', [file, 'maxfiles'])
+			this.acceptErrors(file, 'maxfiles')
 			return false
 		}
 
 		// Check file against file size restrictions
 		if (this.options.size > 0 && (typeof file.size !== 'undefined') && file.size > this.options.size) {
-			this.$element.trigger('error.gt.fileupload', [file, 'size'])
+			this.acceptErrors(file, 'size')
 			return false
 		}
 
 		// Check file against file type restrictions
-		if (this.options.filetypes.push && this.options.filetypes.length) {
+		if (this.options.filetypes && this.options.filetypes.length > 0) {
 			if(!file.type || $.inArray(file.type, this.options.filetypes) < 0) {
-				this.$element.trigger('error.gt.fileupload', [file, 'filetypes'])
+				this.acceptErrors(file, 'filetypes')
 				return false
 			}
 		}
@@ -115,6 +115,7 @@
 		// Set some defaults
 		file.iframe  = false
 		file.chunked = false
+		file.errors  = false
 
 		file.status = Fileupload.ADDED
 		this.files.push(file)
@@ -137,6 +138,7 @@
 		this.$input.attr('name', this.name)
 		this.$element.find('.fileupload-error').css('display', 'none')
 		this.$element.find('.fileupload-success').css('display', 'none')
+		this.$element.find('.fileupload-message').css('display', 'none')
 
 		var files = e.target.files || []
 		,   i     = 0
@@ -326,8 +328,8 @@
 
 		// add any necessary data to the form
 		$.each(this.options.data, function(key, value) {
-			//$('<input type="hidden"/>').attr(key, value).appendTo(form)
-			$('<input type="hidden" name="' + key + '" value="' + value + '" />').appendTo(form)
+			$('<input type="hidden"/>').attr('name', key).attr('value', value).appendTo(form)
+			//$('<input type="hidden" name="' + key + '" value="' + value + '" />').appendTo(form)
 		})
 
 		iframe.bind('load', function(e) {
@@ -511,6 +513,7 @@
 		this.$element.addClass('fileupload-new').removeClass('fileupload-exists')
 		this.$element.find('.fileupload-error').css('display', 'none')
 		this.$element.find('.fileupload-success').css('display', 'none')
+		this.$element.find('.fileupload-message').css('display', 'none')
 
 		if (e !== false) {
 			this.$input.trigger('change')
@@ -526,6 +529,7 @@
 		this.$element.find('.fileupload-filename').text('')
 		this.$element.find('.fileupload-error').css('display', 'none')
 		this.$element.find('.fileupload-success').css('display', 'none')
+		this.$element.find('.fileupload-message').css('display', 'none')
 
 		if (this.original.exists) this.$element.addClass('fileupload-exists').removeClass('fileupload-new')
 		 else this.$element.addClass('fileupload-new').removeClass('fileupload-exists')
@@ -685,7 +689,6 @@
 
 		file.$loading.remove()
 		this.$element.find('.fileupload-error').css('display', 'block')
-
 		this.$element.trigger('error.gt.fileupload', [file, fileIndex])
 	}
 
@@ -719,6 +722,18 @@
 
 			this.$element.find('.fileupload-success').css('display', 'block')
 			this.$element.trigger('uploaded.gt.fileupload', [response, file, fileIndex])
+		}
+	}
+
+	Fileupload.prototype.acceptErrors = function(file, error) {
+		this.$element.trigger('error.gt.fileupload', [file, error])
+		var $message = this.$element.find('.fileupload-message')
+
+		if ($message.length > 0 && error){
+			$message
+				.empty()
+				.css('display', 'block')
+				.html(error)
 		}
 	}
 
