@@ -851,7 +851,7 @@ class Request implements HTTP_Request {
 	{
 		$request = ($request) ? $request : Request::current();
 
-		return (bool) $request->query('sEcho');
+		return (bool) $request->query('draw');
 	}
 
 	/**
