@@ -36,15 +36,17 @@
 
 				<?php echo Form::label('status', __('Status'), array('class' => 'control-label')) ?>
 				<div class="controls">
-					<?php echo Form::label('status', Form::radio('status', 0, $enabled_off).__('Disabled'), array('class' => 'radio inline')) ?>
-					<?php echo Form::label('status', Form::radio('status', 1, $enabled_on).__('Enabled'),  array('class' => 'radio inline')) ?>
+					<?php echo Form::label('status', Form::radio('status', 0, $enabled_off).__('Disabled'), array('class' => 'radio-inline')) ?>
+					<?php echo Form::label('status', Form::radio('status', 1, $enabled_on).__('Enabled'),  array('class' => 'radio-inline')) ?>
 				</div>
 			</div>
 
 			<div class="form-group <?php echo isset($errors['roles']) ? 'has-error': ''; ?>">
 				<?php echo Form::label('roles', __('Roles'), array('class' => 'control-label')) ?>
 				<?php foreach($roles as $role => $name): ?>
-					<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, in_array($role, explode(',', $widget->roles)) ? TRUE : FALSE).ucfirst($name), array('class' => 'checkbox')) ?>
+					<div class="checkbox">
+						<?php echo Form::label('roles', Form::checkbox('roles['.$role.']', $role, in_array($role, explode(',', $widget->roles)) ? TRUE : FALSE).ucfirst($name)); ?>
+					</div>
 				<?php endforeach ?>
 			</div>
 
@@ -63,10 +65,10 @@
 				<?php $show_title_off = (isset($widget->show_title) AND $widget->show_title == 0) ? TRUE : FALSE; ?>
 				<?php $show_title_on = (isset($widget->show_title) AND $widget->show_title == 1) ? TRUE : FALSE; ?>
 
-				<?php echo Form::label('show_title', __('Show Title'), array('class' => 'control-label')) ?>
+				<?php echo Form::label('show_title', __('Show Title'), array('class' => 'control-label')); ?>
 				<div class="controls">
-					<?php echo Form::label('show_title', Form::radio('show_title', 0, $show_title_off).__('Hide'), array('class' => 'radio inline')) ?>
-					<?php echo Form::label('show_title', Form::radio('show_title', 1, $show_title_on).__('Show'), array('class' => 'radio inline')) ?>
+					<?php echo Form::label('show_title', Form::radio('show_title', 0, $show_title_off).__('Hide'), array('class' => 'radio-inline')); ?>
+					<?php echo Form::label('show_title', Form::radio('show_title', 1, $show_title_on).__('Show'), array('class' => 'radio-inline')); ?>
 				</div>
 			</div>
 
@@ -75,8 +77,12 @@
 				<?php $visible_on  = (isset($widget->status) AND $widget->visibility == 1) ? TRUE : FALSE; ?>
 
 				<?php echo Form::label('pages', __('Show widget on specific pages'), array('class' => 'control-label')) ?>
-				<?php echo Form::label('visibility', Form::radio('visibility', 0, $visible_off).__('All pages except those listed'), array('class' => 'radio')) ?>
-				<?php echo Form::label('visibility', Form::radio('visibility', 1, $visible_on).__('Only the listed pages'),  array('class' => 'radio')) ?>
+				<div class="radio">
+					<?php echo Form::label('visibility', Form::radio('visibility', 0, $visible_off).__('All pages except those listed')); ?>
+				</div>
+				<div class="radio">
+					<?php echo Form::label('visibility', Form::radio('visibility', 1, $visible_on).__('Only the listed pages')); ?>
+				</div>
 			</div>
 
 			<div class="form-group <?php echo isset($errors['pages']) ? 'has-error': ''; ?>">
