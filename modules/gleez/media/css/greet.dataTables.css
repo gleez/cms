@@ -10,7 +10,7 @@ div.dataTables_length select {
 
 div.dataTables_filter label {
     font-weight: normal;
-    float: right;
+    /*float: right;*/
 }
 
 div.dataTables_filter input {
@@ -80,7 +80,7 @@ table.dataTable th:active {
     height: 30px;
     margin-left: -125px;
     margin-top: -15px;
-    padding: 14px 0 2px 0;
+    padding: 0;
     border: 1px solid #ddd;
     text-align: center;
     color: #999;
@@ -400,4 +400,10 @@ div.DTFC_LeftFootWrapper table {
  */
 div.FixedHeader_Cloned table {
     margin: 0 !important
+}
+
+@media (min-width: 768px) {
+    .dataTables_filter.form-group{
+        float: right !important;
+    }
 }
