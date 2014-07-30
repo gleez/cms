@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.4.3
+ * @version    1.5.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -718,10 +718,10 @@ class System {
 			'gd_info'               => function_exists('gd_info'),
 		);
 
-		//Allow other modules to override or add
-		$criteriae = Module::action('system_check', $criteria);
+		// Allow other modules to override or add
+		$criteria = Module::action('system_check', $criteria);
 
-		return $criteriae;
+		return $criteria;
 	}
 
 	/**
@@ -745,5 +745,28 @@ class System {
 		$memory_limit = Num::bytes(ini_get('memory_limit'));
 
 		return Text::bytes((int)$memory_limit <= 0 ? self::MIN_MEMORY_LIMIT : $memory_limit, 'MiB');
+	}
+
+	/**
+	 * Compare two hashes in a time-invariant manner
+	 *
+	 * Prevents cryptographic side-channel attacks (timing attacks, specifically).
+	 *
+	 * @since  1.4.0  Introduced
+	 *
+	 * @param  string $a cryptographic hash
+	 * @param  string $b cryptographic hash
+	 *
+	 * @return bool
+	 */
+	public static function equalsHashes($a, $b)
+	{
+		$diff = strlen($a) ^ strlen($b);
+
+		for($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
+			$diff |= ord($a[$i]) ^ ord($b[$i]);
+		}
+
+		return $diff === 0;
 	}
 }
