@@ -7,7 +7,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.3
+ * @version    1.1.4
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -139,9 +139,9 @@ class HTML {
 		}
 		else
 		{
-			if (strpos($uri, '://') === FALSE)
+			if (strpos($uri, '://') === FALSE && $uri[0] !== '#' && $uri[0] !== '?')
 			{
-				// Make the URI absolute for non-id anchors
+				// Make the URI absolute for non-fragment and non-query anchors
 				$uri = URL::site($uri, $protocol, $index);
 			}
 		}
