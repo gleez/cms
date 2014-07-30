@@ -38,7 +38,7 @@
 		})
 
 		var oTable = $table.dataTable({
-			"aoColumns": columns
+			"columns": columns
 			, "order": options.sorting
 			, "processing": options.processing
 			, "serverSide": options.serverside
@@ -48,7 +48,8 @@
 			, "info ": options.info
 			, "dom": options.dom
 			, "lengthChange": options.lengthchange
-			//, "pagingType": "bootstrap"
+			, "stateSave": options.statesave
+			, "stateDuration": options.stateduration
 			, "language": {
 					"emptyTable": options.emptytable
 					, "url": options.localize
@@ -73,17 +74,6 @@
 		})
 	}
 
-	/* Set the defaults for DataTables initialisation */
-	$.extend( true, $.fn.dataTable.defaults, {
-		"dom":
-			"<'row'<'col-xs-6'l><'col-xs-6'f>r>"+
-			"t"+
-			"<'row'<'col-xs-6'i><'col-xs-6'p>>",
-		"language": {
-			"lengthMenu": "_MENU_ records per page"
-		}
-	} )
-
 	/* Default class modification */
 	$.extend( $.fn.dataTableExt.oStdClasses, {
 		"sWrapper": "dataTables_wrapper form-inline",
@@ -91,8 +81,7 @@
 		"sLengthSelect": "form-control input-sm"
 	} )
 
-	// In 1.10 we use the pagination renderers to draw the Bootstrap paging,
-	// rather than  custom plug-in
+	// Pagination renderers to draw the Bootstrap paging,
 	if ( $.fn.dataTable.Api ) {
 		$.fn.dataTable.defaults.renderer = 'bootstrap';
 		$.fn.dataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, buttons, page, pages ) {
@@ -189,7 +178,7 @@
 	}
 
 	/* Set the defaults for DataTables initialisation */
-/*	$.extend(true, $.fn.dataTable.defaults, {
+	$.extend(true, $.fn.dataTable.defaults, {
 		"initComplete": function (oSettings, json) {
 			var currentId = $(this).attr('id')
 
@@ -203,19 +192,18 @@
 				var thisFilterInput = $('#' + currentId + '_filter label input')
 
 				// Re-arrange the records selection for a form-horizontal layout
-				//thisLength.addClass('form-group')
 				thisLengthLabel.addClass('control-label').attr('for', currentId + '_length_select')
 				thisLengthSelect.addClass('form-control input-sm').attr('id', currentId + '_length_select')
-				//thisLengthSelect.prependTo(thisLength).wrap('<div class="col-xs-12 col-sm-5 col-md-6" />')
 
 				// Re-arrange the search input for a form-horizontal layout
 				thisFilter.addClass('form-group')
-				thisFilterLabel.addClass('control-label').attr('for', currentId + '_filter_input')
-				thisFilterInput.addClass('form-control col-xs-4 col-md-3 col-sm-3').attr('id', currentId + '_filter_input')
-				thisFilterInput.appendTo(thisFilter).wrap('<div class="col-xs-8 col-sm-9 col-md-9" />')
+				thisFilterInput.appendTo(thisFilter)
+				thisFilterLabel.remove()
+				thisFilterInput.attr('placeholder', 'Search')
+				thisFilter.parent().removeClass('hide')
 			}
 		}
-	})*/
+	})
 
 	DataTable.DEFAULTS = {
 		paginate       : true
@@ -226,11 +214,13 @@
 		, columns      : false
 		, sorting      : false
 		, processing   : true
+		, statesave    : true
+		, stateduration: 7200
 		, serverside   : true
 		, deferrender  : true
 		, localize     : ''
 		, emptytable   : "No active record(s) here. Would you like to create one?"
-		, dom          : "<'table_head row'<'col-xs-6'l><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>"
+		, dom          : "<'table_head row'<'col-sm-6 hidden-xs'l><'col-xs-12 col-sm-6 hide'f>r>t<'row'<'col-sm-6'i><'col-sm-6'p>>"
 	}
 
 	// GREET DATATABLEs PLUGIN DEFINITION
