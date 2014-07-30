@@ -273,8 +273,8 @@ class URL {
 	 *
 	 * @param   string  $uri        Site URI to convert [Optional]
 	 * @param   mixed   $protocol   Protocol string or [Request] class to use protocol from [Optional]
-	 * @param   boolean $index		Include the index_page in the URL [Optional]
-	 * @param   mixed   language key to prepend to the URI, or FALSE to not prepend a language
+	 * @param   boolean $index      Include the index_page in the URL [Optional]
+	 * @param   mixed   $lang       key to prepend to the URI, or FALSE to not prepend a language
 	 * @return  string
 	 *
 	 * @uses    UTF8::is_ascii
@@ -319,7 +319,7 @@ class URL {
 	{
 		// Process the current URL
 		$request = Request::initial();
-		$name = Route::name($request->route);
+		$name = Route::name($request->route());
 
 		$params = $request->param();
 		$params['action'] = $request->action();
