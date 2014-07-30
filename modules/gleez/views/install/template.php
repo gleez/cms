@@ -56,9 +56,11 @@
 							</ol>
 							<hr>
 							<blockquote>
+								<small>
 								<?php
 									echo __('Did something go wrong? Try the :github.', array(':github' => HTML::anchor('https://github.com/gleez/cms/issues', 'Github Issues') ));
 								?>
+								</small>
 							</blockquote>
 						</div>
 					</div>
