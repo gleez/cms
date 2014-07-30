@@ -32,7 +32,7 @@
 							<?php echo Text::plain($widget->title) ?>
 						</td>
 						<td>
-							<?php echo Form::select('widgets['.$widget->name.'][region]', $widget_regions, $widget->region, array('class' => 'large widget-region-select widget-region-'.$region)); ?>
+							<?php echo Form::select('widgets['.$widget->name.'][region]', $widget_regions, $widget->region, array('class' => 'form-control input-sm widget-region-select widget-region-'.$region)); ?>
 						</td>
 						<td class="tabledrag-hide" >
 							<?php
