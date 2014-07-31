@@ -30,50 +30,47 @@
  * makes them an extremely powerful and flexible way to generate internal links.
  *
  * @package    Gleez\Base
- * @version    2.1.0
+ * @version    2.2.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Route {
+	// Matches a URI group and captures the contents
+	const REGEX_GROUP   = '\(((?:(?>[^()]+)|(?R))*)\)';
 
-	/* Defines the pattern of a <segment> */
+	// Defines the pattern of a <segment>
 	const REGEX_KEY     = '<([a-zA-Z0-9_]++)>';
 
-	/* What can be part of a <segment> value */
+	// What can be part of a <segment> value
 	const REGEX_SEGMENT = '[^/.,;?\n]++';
 
-	/* What must be escaped in the route regex */
+	// What must be escaped in the route regex
 	const REGEX_ESCAPE  = '[.\\+*?[^\\]${}=!|]';
 
 	/**
-	 * Default protocol for all routes
-	 * @var string
+	 * @var  string  default protocol for all routes
 	 *
-	 * @example 'http://'
+	 * @example  'http://'
 	 */
 	public static $default_protocol = 'http://';
 
 	/**
-	 * List of valid localhost entries
-	 * @var array
+	 * @var  array   list of valid localhost entries
 	 */
 	public static $localhosts = array(FALSE, '', 'local', 'localhost');
 
 	/**
-	 * Default action for all routes
-	 * @var string
+	 * @var  string  default action for all routes
 	 */
 	public static $default_action = 'index';
 
 	/**
-	 * Indicates whether routes are cached
-	 * @var boolean
+	 * @var  bool Indicates whether routes are cached
 	 */
 	public static $cache = FALSE;
 
 	/**
-	 * List of routes
 	 * @var  array
 	 */
 	protected static $_routes = array();
@@ -251,9 +248,9 @@ class Route {
 
 		// Create a URI with the route and convert it to a URL
 		if ($route->is_external())
-			return Route::get($name)->uri($params);
+			return $route->uri($params);
 		else
-			return URL::site(Route::get($name)->uri($params), $protocol);
+			return URL::site($route->uri($params), $protocol);
 	}
 
 	/**
@@ -480,8 +477,11 @@ class Route {
 	 * @return  array    Array on success
 	 * @return  boolean  FALSE on failure
 	 */
-	public function matches($uri)
+	public function matches(Request $request)
 	{
+		// Get the URI from the Request
+		$uri = trim($request->uri(), '/');
+
 		if ( ! preg_match($this->_route_regex, $uri, $matches))
 			return FALSE;
 
@@ -511,14 +511,14 @@ class Route {
 		 * @todo
 		if ( ! empty($params['controller']))
 		{
-		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
-		$params['controller'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['controller'])));
+			// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+			$params['controller'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['controller'])));
 		}
 
 		if ( ! empty($params['directory']))
 		{
-		// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
-		$params['directory'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['directory'])));
+			// PSR-0: Replace underscores with spaces, run ucwords, then replace underscore
+			$params['directory'] = str_replace(' ', '_', ucwords(str_replace('_', ' ', $params['directory'])));
 		}
 		 */
 
