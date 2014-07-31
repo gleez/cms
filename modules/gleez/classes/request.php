@@ -6,9 +6,9 @@
  * to send the request to.
  *
  * @package    Gleez\Request
- * @version    1.1.4
+ * @version    1.2.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Request implements HTTP_Request {
@@ -174,9 +174,8 @@ class Request implements HTTP_Request {
 	protected $_client;
 
 	/**
-	 * Creates a new request object for the given URI
-	 *
-	 * New requests should be created using this method.
+	 * Creates a new request object for the given URI. New requests should be
+	 * created using the [Request::instance] or [Request::factory] methods.
 	 *
 	 * Example:
 	 * ~~~
@@ -186,33 +185,21 @@ class Request implements HTTP_Request {
 	 * If $cache parameter is set, the response for the request will attempt to
 	 * be retrieved from the cache.
 	 *
-	 * @param   boolean|string  $uri              URI of the request [Optional]
-	 * @param   HTTP_Cache      $cache
-	 * @param   array           $injected_routes  An array of routes to use, for testing [Optional]
-	 *
+	 * @param   string  $uri              URI of the request
+	 * @param   array   $client_params    An array of params to pass to the request client
+	 * @param   bool    $allow_external   Allow external requests? (deprecated in 3.3)
+	 * @param   array   $injected_routes  An array of routes to use, for testing
 	 * @return  void|Request
-	 *
 	 * @throws  Request_Exception
-	 *
 	 * @uses    Route::all
 	 * @uses    Route::matches
-	 * @uses    HTTP::$protocol
-	 * @uses    HTTP_Request::GET
-	 * @uses    Cookie::get
 	 */
-	public static function factory($uri = TRUE, HTTP_Cache $cache = NULL, $injected_routes = array())
+	public static function factory($uri = TRUE, $client_params = array(), $allow_external = TRUE, $injected_routes = array())
 	{
 		// If this is the initial request
 		if ( ! Request::$initial)
 		{
-			if (isset($_SERVER['SERVER_PROTOCOL']))
-			{
-				$protocol = $_SERVER['SERVER_PROTOCOL'];
-			}
-			else
-			{
-				$protocol = HTTP::$protocol;
-			}
+			$protocol = HTTP::$protocol;
 
 			if (isset($_SERVER['REQUEST_METHOD']))
 			{
@@ -225,7 +212,10 @@ class Request implements HTTP_Request {
 				$method = HTTP_Request::GET;
 			}
 
-			if ( ! empty($_SERVER['HTTPS']) AND filter_var($_SERVER['HTTPS'], FILTER_VALIDATE_BOOLEAN))
+			if (( ! empty($_SERVER['HTTPS']) AND filter_var($_SERVER['HTTPS'], FILTER_VALIDATE_BOOLEAN)) 
+				OR (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) 
+					AND $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') 
+				AND in_array($_SERVER['REMOTE_ADDR'], Request::$trusted_proxies))
 			{
 				// This request is secure
 				$secure = TRUE;
@@ -303,7 +293,7 @@ class Request implements HTTP_Request {
 			}
 
 			// Create the instance singleton
-			Request::$initial = $request = new Request($uri, $cache, $injected_routes);
+			Request::$initial = $request = new Request($uri, $client_params, $allow_external, $injected_routes);
 
 			// Store global GET and POST data in the initial request only
 			$request->protocol($protocol)
@@ -347,7 +337,8 @@ class Request implements HTTP_Request {
 		}
 		else
 		{
-			$request = new Request($uri, $cache, $injected_routes);
+			//$request = new Request($uri, $cache, $injected_routes);
+			$request = new Request($uri, $client_params, $allow_external, $injected_routes);
 		}
 
 		return $request;
@@ -697,15 +688,13 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Fix for pagination on lambda routes
+	 * Process a request to find a matching route
 	 *
-	 * Process URI
-	 *
-	 * @param   string  $uri     URI
-	 * @param   array   $routes  Route [Optional]
+	 * @param   object  $request Request
+	 * @param   array   $routes  Route
 	 * @return  array
 	 */
-	public static function process_uri($uri, $routes = NULL)
+	public static function process(Request $request, $routes = NULL)
 	{
 		// Load routes
 		$routes = (empty($routes)) ? Route::all() : $routes;
@@ -714,18 +703,11 @@ class Request implements HTTP_Request {
 		foreach ($routes as $name => $route)
 		{
 			// We found something suitable
-			if ($params = $route->matches($uri))
+			if ($params = $route->matches($request))
 			{
-				// fix for pagination on lambda routes
-				if ( ! isset($params['uri']))
-				{
-					$params['uri'] = $uri;
-				}
-
 				return array(
 					'params' => $params,
 					'route'  => $route,
-					'name'   => $name,
 				);
 			}
 		}
@@ -907,7 +889,7 @@ class Request implements HTTP_Request {
 	 * @uses    Route::all
 	 * @uses    Route::matches
 	 */
-	public function __construct($uri, HTTP_Cache $cache = NULL, $injected_routes = array())
+	public function __construct($uri, $client_params = array(), $allow_external = TRUE, $injected_routes = array())
 	{
 		// Initialise the header
 		$this->_header = new HTTP_Header(array());
@@ -929,62 +911,15 @@ class Request implements HTTP_Request {
 		}
 
 		// Detect protocol (if present)
-		// Always default to an internal request if we don't have an initial.
-		// This prevents the default index.php from being able to proxy
-		// external pages.
-		if (Request::$initial === NULL OR strpos($uri, '://') === FALSE)
+		// $allow_external = FALSE prevents the default index.php from
+		// being able to proxy external pages.
+		if ( ! $allow_external OR strpos($uri, '://') === FALSE)
 		{
 			// Remove trailing slashes from the URI
-			$uri = trim($uri, '/');
-
-			$processed_uri = Request::process_uri($uri, $this->_routes);
-
-			// Return here rather than throw exception. This will allow
-			// use of Request object even with unmatched route
-			if ($processed_uri === NULL)
-			{
-				$this->_uri = $uri;
-				return;
-			}
-
-			// Store the URI
-			$this->_uri = $uri;
-
-			// Store the matching route
-			$this->_route = $processed_uri['route'];
-			$params = $processed_uri['params'];
-
-			// Is this route external?
-			$this->_external = $this->_route->is_external();
-
-			if (isset($params['directory']))
-			{
-				// Controllers are in a sub-directory
-				$this->_directory = $params['directory'];
-			}
-
-			// Store the controller
-			$this->_controller = $params['controller'];
-
-			if (isset($params['action']))
-			{
-				// Store the action
-				$this->_action = $params['action'];
-			}
-			else
-			{
-				// Use the default action
-				$this->_action = Route::$default_action;
-			}
-
-			// These are accessible as public vars and can be overloaded
-			unset($params['controller'], $params['action'], $params['directory']);
-
-			// Params cannot be changed once matched
-			$this->_params = $params;
+			$this->_uri = trim($uri, '/');
 
 			// Apply the client
-			$this->_client = new Request_Client_Internal(array('cache' => $cache));
+			$this->_client = new Request_Client_Internal($client_params);
 		}
 		else
 		{
@@ -1004,7 +939,7 @@ class Request implements HTTP_Request {
 			$this->_external = TRUE;
 
 			// Setup the client
-			$this->_client = Request_Client_External::factory(array('cache' => $cache));
+			$this->_client = Request_Client_External::factory($client_params);
 		}
 	}
 
@@ -1024,18 +959,28 @@ class Request implements HTTP_Request {
 	}
 
 	/**
-	 * Returns the URI for the current route
+	* Sets and gets the uri from the request.
 	 *
 	 * Example:
 	 * ~~~
 	 * $request->uri();
 	 * ~~~
 	 *
-	 * @return  string
+	 * @param string $uri
+	 * @return mixed
 	 */
-	public function uri()
+	public function uri($uri = NULL)
 	{
-		return empty($this->_uri) ? '/' : $this->_uri;
+		if ($uri === NULL)
+		{
+			// Act as a getter
+			return empty($this->_uri) ? '/' : $this->_uri;
+		}
+
+		// Act as a setter
+		$this->_uri = $uri;
+
+		return $this;
 	}
 
 	/**
@@ -1312,6 +1257,41 @@ class Request implements HTTP_Request {
 
 			// Check Maintenance Mode
 			Gleez::maintenance_mode();
+		}
+
+		if ( ! $this->_external)
+		{
+			$processed = Request::process($this, $this->_routes);
+
+			if ($processed)
+			{
+				// Store the matching route
+				$this->_route = $processed['route'];
+				$params = $processed['params'];
+
+				// Is this route external?
+				$this->_external = $this->_route->is_external();
+
+				if (isset($params['directory']))
+				{
+					// Controllers are in a sub-directory
+					$this->_directory = $params['directory'];
+				}
+
+				// Store the controller
+				$this->_controller = $params['controller'];
+
+				// Store the action
+				$this->_action = (isset($params['action']))
+					? $params['action']
+					: Route::$default_action;
+
+				// These are accessible as public vars and can be overloaded
+				unset($params['controller'], $params['action'], $params['directory']);
+
+				// Params cannot be changed once matched
+				$this->_params = $params;
+			}
 		}
 
 		if ( ! $this->_route instanceof Route)
@@ -1649,7 +1629,7 @@ class Request implements HTTP_Request {
 		}
 		else
 		{
-			$this->headers('content-type', 'application/x-www-form-urlencoded');
+			$this->headers('content-type', 'application/x-www-form-urlencoded'.Kohana::$charset);
 			$body = http_build_query($post, NULL, '&');
 		}
 
