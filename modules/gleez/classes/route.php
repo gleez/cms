@@ -538,9 +538,6 @@ class Route {
 				{
 					// Filter has modified the parameters
 					$params = $return;
-
-					// fix for pagination on lambda routes
-					$this->_uri = Arr::get($params, 'uri', '');
 				}
 			}
 		}
