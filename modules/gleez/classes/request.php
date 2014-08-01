@@ -337,7 +337,6 @@ class Request implements HTTP_Request {
 		}
 		else
 		{
-			//$request = new Request($uri, $cache, $injected_routes);
 			$request = new Request($uri, $client_params, $allow_external, $injected_routes);
 		}
 
