@@ -65,7 +65,7 @@ class Controller_Comments extends Controller {
 
 		// Get group settings
 		$group  = $this->request->param('group');
-		$config = Kohana::$config->load($group);
+		$config = Config::load($group);
 
 		$this->per_page = $config['comments_per_page'];
 		$this->config   = $config;
@@ -107,7 +107,7 @@ class Controller_Comments extends Controller {
 		{
 			$posts->where('post_id', '=', $parent_id);
 
-			$source = $this->group.'/'.$parent_id;
+			$source = $this->group.'/view/'.$parent_id;
 			$uri = Path::alias($source);
 		}
 
