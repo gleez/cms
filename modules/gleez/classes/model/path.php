@@ -172,7 +172,7 @@ class Model_Path extends ORM {
 		foreach ($routes as $name => $route)
 		{
 			// We found something suitable
-			if ($params = $route->matches($uri))
+			if ($params = $route->matches(Request::factory($uri)))
 			{
 				$params['route'] = (string)$name;
 				return $params;
