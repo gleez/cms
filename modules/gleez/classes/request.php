@@ -836,6 +836,15 @@ class Request implements HTTP_Request {
 	}
 
 	/**
+	* Check if we are running under HHVM
+	*
+	* @return Bool
+	*/
+	public static function isHHVM() {
+		return defined('HHVM_VERSION');	
+	}
+
+	/**
 	 * Gets POST max size in bytes
 	 *
 	 * @link    http://php.net/post-max-size
@@ -1791,4 +1800,3 @@ class Request implements HTTP_Request {
 		return (self::DELETE === $this->_method);
 	}
 }
-

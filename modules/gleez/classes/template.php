@@ -808,9 +808,14 @@ abstract class Template extends Controller {
 			}
 		}
 
+		// HHVM's reported memory usage from memory_get_peak_usage()
+		// is not useful when passing false, but we continue passing
+		// false for consistency of historical data in zend.
+		$realMemoryUsage = Request::isHHVM();
+
 		// Get the total memory and execution time
 		$total = array(
-			'{memory_usage}'     => number_format((memory_get_peak_usage() - GLEEZ_START_MEMORY) / 1024 / 1024, 2) . '&nbsp;' . __('MB'),
+			'{memory_usage}'     => number_format((memory_get_peak_usage($realMemoryUsage) - GLEEZ_START_MEMORY) / 1024 / 1024, 2) . '&nbsp;' . __('MB'),
 			'{gleez_version}'    => Gleez::VERSION,
 			'{execution_time}'   => number_format(microtime(TRUE) - GLEEZ_START_TIME, 3) . '&nbsp;' . __('seconds'),
 			'{included_files}'   => count(get_included_files()),

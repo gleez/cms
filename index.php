@@ -106,6 +106,11 @@ define('THEMEPATH', realpath($themes).DS);
 // Clean up the configuration vars
 unset($application, $modules, $system, $themes);
 
+// HHVM's reported memory usage from memory_get_peak_usage()
+// is not useful when passing false, but we continue passing
+// false for consistency of historical data in zend.
+$realMemoryUsage = defined('HHVM_VERSION');
+
 /**
  * Define the start time of the application, used for profiling.
  */
@@ -114,7 +119,7 @@ defined('GLEEZ_START_TIME') OR define('GLEEZ_START_TIME', microtime(TRUE));
 /**
  * Define the memory usage at the start of the application, used for profiling.
  */
-defined('GLEEZ_START_MEMORY') OR define('GLEEZ_START_MEMORY', memory_get_usage());
+defined('GLEEZ_START_MEMORY') OR define('GLEEZ_START_MEMORY', memory_get_usage($realMemoryUsage));
 
 // Bootstrap the application
 require APPPATH.'bootstrap'.EXT;
