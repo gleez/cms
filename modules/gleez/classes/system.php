@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.4.2
+ * @version    1.5.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -399,39 +399,9 @@ class System {
 			'fa-wheelchair' => 'wheelchair',
 			'fa-wrench' => 'wrench',
 			'fa-file' => 'file',
-			'fa-file-archive-o' => 'file-archive-o',
-			'fa-file-audio-o' => 'file-audio-o',
-			'fa-file-code-o' => 'file-code-o',
-			'fa-file-excel-o' => 'file-excel-o',
-			'fa-file-image-o' => 'file-image-o',
-			'fa-file-movie-o' => 'file-movie-o',
 			'fa-file-o' => 'file-o',
-			'fa-file-pdf-o' => 'file-pdf-o',
-			'fa-file-photo-o' => 'file-photo-o',
-			'fa-file-picture-o' => 'file-picture-o',
-			'fa-file-powerpoint-o' => 'file-powerpoint-o',
-			'fa-file-sound-o' => 'file-sound-o',
 			'fa-file-text' => 'file-text',
 			'fa-file-text-o' => 'file-text-o',
-			'fa-file-video-o' => 'file-video-o',
-			'fa-file-word-o' => 'file-word-o',
-			'fa-file-zip-o' => 'file-zip-o',
-			'fa-circle-o-notch' => 'circle-o-notch',
-			'fa-cog' => 'cog',
-			'fa-gear' => 'gear',
-			'fa-refresh' => 'refresh',
-			'fa-spinner' => 'spinner',
-			'fa-check-square' => 'check-square',
-			'fa-check-square-o' => 'check-square-o',
-			'fa-circle' => 'circle',
-			'fa-circle-o' => 'circle-o',
-			'fa-dot-circle-o' => 'dot-circle-o',
-			'fa-minus-square' => 'minus-square',
-			'fa-minus-square-o' => 'minus-square-o',
-			'fa-plus-square' => 'plus-square',
-			'fa-plus-square-o' => 'plus-square-o',
-			'fa-square' => 'square',
-			'fa-square-o' => 'square-o',
 			'fa-bitcoin' => 'bitcoin',
 			'fa-btc' => 'btc',
 			'fa-cny' => 'cny',
@@ -442,7 +412,6 @@ class System {
 			'fa-inr' => 'inr',
 			'fa-jpy' => 'jpy',
 			'fa-krw' => 'krw',
-			'fa-money' => 'money',
 			'fa-rmb' => 'rmb',
 			'fa-rouble' => 'rouble',
 			'fa-rub' => 'rub',
@@ -465,11 +434,6 @@ class System {
 			'fa-copy' => 'copy',
 			'fa-cut' => 'cut',
 			'fa-dedent' => 'dedent',
-			'fa-eraser' => 'eraser',
-			'fa-file' => 'file',
-			'fa-file-o' => 'file-o',
-			'fa-file-text' => 'file-text',
-			'fa-file-text-o' => 'file-text-o',
 			'fa-files-o' => 'files-o',
 			'fa-floppy-o' => 'floppy-o',
 			'fa-font' => 'font',
@@ -522,17 +486,10 @@ class System {
 			'fa-arrow-left' => 'arrow-left',
 			'fa-arrow-right' => 'arrow-right',
 			'fa-arrow-up' => 'arrow-up',
-			'fa-arrows' => 'arrows',
 			'fa-arrows-alt' => 'arrows-alt',
-			'fa-arrows-h' => 'arrows-h',
-			'fa-arrows-v' => 'arrows-v',
 			'fa-caret-down' => 'caret-down',
 			'fa-caret-left' => 'caret-left',
 			'fa-caret-right' => 'caret-right',
-			'fa-caret-square-o-down' => 'caret-square-o-down',
-			'fa-caret-square-o-left' => 'caret-square-o-left',
-			'fa-caret-square-o-right' => 'caret-square-o-right',
-			'fa-caret-square-o-up' => 'caret-square-o-up',
 			'fa-caret-up' => 'caret-up',
 			'fa-chevron-circle-down' => 'chevron-circle-down',
 			'fa-chevron-circle-left' => 'chevron-circle-left',
@@ -550,11 +507,6 @@ class System {
 			'fa-long-arrow-left' => 'long-arrow-left',
 			'fa-long-arrow-right' => 'long-arrow-right',
 			'fa-long-arrow-up' => 'long-arrow-up',
-			'fa-toggle-down' => 'toggle-down',
-			'fa-toggle-left' => 'toggle-left',
-			'fa-toggle-right' => 'toggle-right',
-			'fa-toggle-up' => 'toggle-up',
-			'fa-arrows-alt' => 'arrows-alt',
 			'fa-backward' => 'backward',
 			'fa-compress' => 'compress',
 			'fa-eject' => 'eject',
@@ -577,8 +529,6 @@ class System {
 			'fa-behance-square' => 'behance-square',
 			'fa-bitbucket' => 'bitbucket',
 			'fa-bitbucket-square' => 'bitbucket-square',
-			'fa-bitcoin' => 'bitcoin',
-			'fa-btc' => 'btc',
 			'fa-codepen' => 'codepen',
 			'fa-css3' => 'css3',
 			'fa-delicious' => 'delicious',
@@ -624,8 +574,6 @@ class System {
 			'fa-reddit' => 'reddit',
 			'fa-reddit-square' => 'reddit-square',
 			'fa-renren' => 'renren',
-			'fa-share-alt' => 'share-alt',
-			'fa-share-alt-square' => 'share-alt-square',
 			'fa-skype' => 'skype',
 			'fa-slack' => 'slack',
 			'fa-soundcloud' => 'soundcloud',
@@ -654,16 +602,13 @@ class System {
 			'fa-xing-square' => 'xing-square',
 			'fa-yahoo' => 'yahoo',
 			'fa-youtube' => 'youtube',
-			'fa-youtube-play' => 'youtube-play',
 			'fa-youtube-square' => 'youtube-square',
 			'fa-ambulance' => 'ambulance',
 			'fa-h-square' => 'h-square',
 			'fa-hospital-o' => 'hospital-o',
 			'fa-medkit' => 'medkit',
-			'fa-plus-square' => 'plus-square',
 			'fa-stethoscope' => 'stethoscope',
 			'fa-user-md' => 'user-md',
-			'fa-wheelchair' => 'wheelchair',
 		);
 
 		//sort icons by natural order
@@ -754,7 +699,6 @@ class System {
 		$criteria = array(
 			'php_version'           => version_compare(PHP_VERSION, Gleez::PHP_MIN_REQ, '>='),
 			'mysqli'                => function_exists("mysqli_query"),
-			'mysql'                 => function_exists("mysql_query"),
 			'system_directory'      => is_dir(SYSPATH),
 			'application_directory' => (is_dir(APPPATH) && is_file(APPPATH.'bootstrap'.EXT)),
 			'modules_directory'     => is_dir(MODPATH),
@@ -774,10 +718,10 @@ class System {
 			'gd_info'               => function_exists('gd_info'),
 		);
 
-		//Allow other modules to override or add
-		$criteriae = Module::action('system_check', $criteria);
+		// Allow other modules to override or add
+		$criteria = Module::action('system_check', $criteria);
 
-		return $criteriae;
+		return $criteria;
 	}
 
 	/**
@@ -801,5 +745,28 @@ class System {
 		$memory_limit = Num::bytes(ini_get('memory_limit'));
 
 		return Text::bytes((int)$memory_limit <= 0 ? self::MIN_MEMORY_LIMIT : $memory_limit, 'MiB');
+	}
+
+	/**
+	 * Compare two hashes in a time-invariant manner
+	 *
+	 * Prevents cryptographic side-channel attacks (timing attacks, specifically).
+	 *
+	 * @since  1.4.0  Introduced
+	 *
+	 * @param  string $a cryptographic hash
+	 * @param  string $b cryptographic hash
+	 *
+	 * @return bool
+	 */
+	public static function equalsHashes($a, $b)
+	{
+		$diff = strlen($a) ^ strlen($b);
+
+		for($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
+			$diff |= ord($a[$i]) ^ ord($b[$i]);
+		}
+
+		return $diff === 0;
 	}
 }

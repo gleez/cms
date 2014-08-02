@@ -6,7 +6,7 @@
  * @author     Kohana Team
  * @author     Sergey Yakovlev - Gleez
  * @author     Sandeep Sangamreddi - Gleez
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -62,10 +62,15 @@ class Cookie {
 	 * $theme = Cookie::get('theme', 'blue');
 	 * ~~~
 	 *
+	 * @since   1.0.0   Introduced
+	 * @since   1.0.3   Fixed cookie signature validation
+	 *
 	 * @param   string  $key      Cookie name
 	 * @param   mixed   $default  Default value to return [Optional]
 	 *
 	 * @return  string
+	 *
+	 * @uses    System::equalsHashes
 	 */
 	public static function get($key, $default = NULL)
 	{
@@ -86,7 +91,7 @@ class Cookie {
 			// Separate the salt and the value
 			list ($hash, $value) = explode('~', $cookie, 2);
 
-			if (Cookie::salt($key, $value) === $hash)
+			if (System::equalsHashes(Cookie::salt($key, $value), $hash))
 			{
 				// Cookie signature is valid
 				return $value;

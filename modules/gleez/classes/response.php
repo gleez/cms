@@ -307,7 +307,7 @@ class Response implements HTTP_Response {
 	 * ~~~
 	 * // Get the cookies set to the response
 	 * $cookies = $response->cookie();
-	 *     
+	 *
 	 * // Set a cookie to the response
 	 * $response->cookie('session', array(
 	 *     'value'      => $value,
