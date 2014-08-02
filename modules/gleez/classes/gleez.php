@@ -98,9 +98,6 @@ class Gleez {
 		// Set default cookie salt and lifetime
 		self::_set_cookie();
 
-		// Initialize the locale from settings
-		I18n::initialize();
-
 		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
 
@@ -108,6 +105,9 @@ class Gleez {
 		{
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
+
+			// Initialize the locale from settings
+			I18n::initialize();
 		}
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
