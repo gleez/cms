@@ -18,7 +18,7 @@
  * @package    Gleez\Internationalization
  * @author     Kohana Team
  * @author     Gleez Team
- * @version    1.2.0
+ * @version    1.2.1
  * @copyright  (c) 2008-2012 Kohana Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://kohanaframework.org/license
@@ -68,21 +68,21 @@ class I18n {
 	 */
 	public static function initialize()
 	{
-		//Installed Locales
+		// Installed Locales
 		self::$_languages = Config::get('site.installed_locales', array());
-		
-		//allow the user or browser to override the default locale
+
+		// Allow the user or browser to override the default locale
 		$locale_override  = Config::get('site.locale_override', FALSE);
 
 		// 1. Check the session specific preference (cookie)
-		$locale = I18n::cookieLocale(self::$_languages);
-	
+		$locale = I18n::cookieLocale();
+
 		// 2. Check the user's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'USER'))
 		{
 			$locale = I18n::userLocale();
 		}
-	
+
 		// 3. Check the request client/browser's preference
 		if(!$locale AND ($locale_override == 'ALL' OR $locale_override == 'CLIENT'))
 		{
@@ -119,7 +119,7 @@ class I18n {
 	 * @param type  string $lang
 	 * @return bool returns TRUE if $lang is available, otherwise FALSE
 	 */
-	public static function isAvailable($lang) 
+	public static function isAvailable($lang)
 	{
 		return (bool) array_key_exists($lang, self::$_languages);
 	}
@@ -137,11 +137,11 @@ class I18n {
 		//  Look for a preferred language in the `Accept-Language` header directive.
 		$locale	= Request::initial()->headers()->preferred_language(array_keys(self::$_languages));
 
-		if( self::isAvailable($locale) )
+		if (self::isAvailable($locale))
 		{
 			return $locale;
 		}
-		
+
 		return FALSE;
 	}
 
@@ -155,22 +155,22 @@ class I18n {
 	 */
 	public static function userLocale()
 	{
-		//Can't set guest users locale, default's to site locale
-		if(User::is_guest()) 
+		// Can't set guest users locale, default's to site locale
+		if (User::is_guest())
 		{
 			// Respect cookie if its set already or use default
-			$locale = strtolower(Config::get(self::$_cookie, I18n::$default));
+			$locale = strtolower(Cookie::get(self::$_cookie, I18n::$default));
 		}
 		else
 		{
 			$locale	= User::active_user()->language;
 		}
-		
-		if( self::isAvailable($locale) )
+
+		if (self::isAvailable($locale))
 		{
 			return $locale;
 		}
-		
+
 		return FALSE;
 	}
 
@@ -185,7 +185,7 @@ class I18n {
 	public static function cookieLocale()
 	{
 		$cookie_data = strtolower(Cookie::get(self::$_cookie));
-		
+
 		//double check cookie data
 		if ($cookie_data AND preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches))
 		{
@@ -196,7 +196,7 @@ class I18n {
 				return $locale;
 			}
 		}
-		
+
 		return FALSE;
 	}
 
@@ -211,7 +211,7 @@ class I18n {
 	public static function urlLocale()
 	{
 		$uri = Request::detect_uri();
-		if (preg_match ('/^\/(' . join ('|', array_keys(self::$_languages)) . ')\/?$/', $uri, $matches)) 
+		if (preg_match ('/^\/(' . join ('|', array_keys(self::$_languages)) . ')\/?$/', $uri, $matches))
 		{
 			//'~^(?:' . implode('|', array_keys($installed_locales)) . ')(?=/|$)~i'
 			// matched /lang or /lang/
@@ -231,7 +231,7 @@ class I18n {
 	 */
 	public static function domainLocale()
 	{
-		if (preg_match ('/^(' . join ('|', array_keys(self::$_languages)) . ')\./', $_SERVER['HTTP_HOST'], $matches))  
+		if (preg_match ('/^(' . join ('|', array_keys(self::$_languages)) . ')\./', $_SERVER['HTTP_HOST'], $matches))
 		{
 			return $matches[1];
 		}
@@ -264,9 +264,9 @@ class I18n {
 
 			// Set locale
 			setlocale(LC_ALL, self::$_languages[$lang]['locale']);
-		
+
 			// Update language in cookie
-			if (strtolower(Cookie::get(self::$_cookie)) !== $lang) 
+			if (strtolower(Cookie::get(self::$_cookie)) !== $lang)
 			{
 				// Trying to set language to cookies
 				Cookie::set(self::$_cookie, $lang, Date::YEAR);

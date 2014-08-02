@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    1.1.3
+ * @version    1.1.4
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -14,7 +14,7 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '1.1.3';
+	const VERSION = '1.1.4';
 
 	/**
 	 * Minimal required version of php
@@ -98,6 +98,9 @@ class Gleez {
 		// Set default cookie salt and lifetime
 		self::_set_cookie();
 
+		// Initialize the locale from settings
+		I18n::initialize();
+
 		// Check database config file exist or not
 		Gleez::$installed = file_exists(APPPATH.'config/database.php');
 
@@ -105,9 +108,6 @@ class Gleez {
 		{
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
-
-			// Initialize the locale from settings
-			I18n::initialize();
 		}
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)

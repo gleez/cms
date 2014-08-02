@@ -214,8 +214,6 @@ class Kohana {
 	 * @uses    Kohana::cache
 	 * @uses    Profiler
 	 * @uses    System::mkdir
-	 * @uses    Locale::set_lang_cookie
-	 * @uses    Locale::set_lang_cookie
 	 */
 	public static function init(array $settings = NULL)
 	{

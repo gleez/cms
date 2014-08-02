@@ -54,7 +54,7 @@
 	clear: both;
 	margin-top:10px;
       }
-      
+
 #kohana_error { background: #ddd; font-size: 1em; font-family:sans-serif; text-align: left; color: #111; padding: 10px; }
 #kohana_error h1,
 #kohana_error h2 { margin: 0; padding: 1em; font-size: 1em; font-weight: normal; background: #911; color: #fff; }
@@ -100,21 +100,21 @@ function koggle(elem)
 
 <?php //try { $user = Identity::active_user(); } catch (Exception $e) { } ?>
     <?php $admin = (class_exists('Model_User') AND class_exists('ACL') AND ACL::check('administer site')) ?>
-   
+
     <?php if ($admin): ?>
     <div class="big_box" id="error_details clear-block">
 	    <h2>
 		  <?php echo __("Hey wait, you're an admin!  We can tell you stuff.") ?>
 	    </h2>
 	    <br>
-      
+
             <p>
 		  <?php echo __("There's an error message below and you can find more details in application/logs (look for the file with the most recent date on it)..") ?>
 	    </p>
 	    <br>
-      
+
       <div id="kohana_error">
-	<h1><span class="type"><?php echo $type ?> [ <?php echo $code ?> ]:</span> <span class="message"><?php echo HTML::chars($message) ?></span></h1>
+	<h1><span class="type"><?php echo $type ?> [ <?php echo $code ?> ]:</span> <span class="message"><?php echo htmlspecialchars((string)$message, ENT_QUOTES, Gleez::$charset, true); ?></span></h1>
 	<div id="<?php echo $error_id ?>" class="content">
 		<p><span class="file"><?php echo Debug::path($file) ?> [ <?php echo $line ?> ]</span></p>
 		<?php echo Debug::source($file, $line) ?>
@@ -183,7 +183,7 @@ function koggle(elem)
 			<table cellspacing="0">
 				<?php foreach ($GLOBALS[$var] as $key => $value): ?>
 				<tr>
-					<td><code><?php echo HTML::chars($key) ?></code></td>
+					<td><code><?php echo htmlspecialchars((string)$key, ENT_QUOTES, Gleez::$charset, true); ?></code></td>
 					<td><pre><?php echo Debug::dump($value) ?></pre></td>
 				</tr>
 				<?php endforeach ?>
