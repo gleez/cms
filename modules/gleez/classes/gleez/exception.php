@@ -32,7 +32,7 @@ class Gleez_Exception extends Exception {
 	 * Error rendering view
 	 * @var string
 	 */
-	public static $error_view = 'kohana/error';
+	public static $error_view = 'errors/error';
 
 	/**
 	 * Error view content type
