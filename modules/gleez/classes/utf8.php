@@ -82,7 +82,7 @@ class UTF8 {
 	 */
 	public static function clean($var, $charset = NULL)
 	{
-		if ( ! $charset)
+		if ( $charset === NULL)
 		{
 			// Use the application character set
 			$charset = Kohana::$charset;

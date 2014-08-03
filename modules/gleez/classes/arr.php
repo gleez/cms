@@ -281,7 +281,9 @@ class Arr {
 	public static function range($step = 10, $max = 100)
 	{
 		if ($step < 1)
+		{
 			return array();
+		}
 
 		$array = array();
 		for ($i = $step; $i <= $max; $i += $step)
@@ -356,6 +358,11 @@ class Arr {
 	 */
 	public static function pluck($array, $key)
 	{
+		if (version_compare(PHP_VERSION, '5.5.0') >= 0)
+		{
+			return array_column($array, $key);
+		}
+
 		$values = array();
 
 		foreach ($array as $row)
