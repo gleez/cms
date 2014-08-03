@@ -8,7 +8,7 @@
 
 		<div class="input-group">
 			<span class="input-group-addon"><i class="fa fa-user"></i></span>
-			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Username/Email'))); ?>
+			<?php echo Form::input('name', $post->name, array('class' => 'form-control', 'placeholder' => __('Email'))); ?>
 		</div>
 	</div>
 
@@ -19,12 +19,14 @@
 			<span class="input-group-addon"><i class="fa fa-key"></i></span>
 			<?php echo Form::password('password', NULL, array('class' => 'form-control', 'placeholder' => __('Password'))); ?>
 		</div>
-
 	</div>
 
 	<div class="form-group">
 		<div class="checkbox">
-			<?php echo Form::checkbox('remember', TRUE, FALSE, array('tabindex' => 4)) . ' ' . __('Stay Signed in'); ?>
+			<label for="remember">
+				<input id="remember" name="remember" type="checkbox" class="field login-checkbox" value="1" tabindex="4">&nbsp;
+				<?php _e('Stay Signed in'); ?>
+			</label>
 		</div>
 	</div>
 
@@ -33,27 +35,28 @@
 	</div>
 
 	<div class="form-group">
-		<ul>
-			<li><?php echo HTML::anchor('user/reset/password', __('Forgot Password?')) ?></li>
-			<?php if ($register): ?>
-				<li><?php echo __("Don't have an account? :url", array(':url' => HTML::anchor('user/register', __('Create One.')))) ?></li>
-			<?php endif ?>
-		</ul>
+		<div class="col-sm-8">
+			<?php echo HTML::anchor('user/reset/password', __('Forgot Password?')); ?>
+		</div>
+		<?php if ($register): ?>
+			<div class="col-sm-4">
+				<?php echo HTML::anchor('user/register', __('Register'), array('class' => 'pull-right')); ?>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	<?php if ($providers): ?>
 		<hr>
 		<div class="form-group">
 			<p><?php echo __('Sign in using social network:');?></p>
-				<div class="btn-group">
-					<?php
+			<div class="btn-group">
+				<?php
 					foreach ($providers as $name => $provider)
 					{
-						echo HTML::anchor($provider['url'], '<i class="fa fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
+						echo HTML::anchor($provider['url'], '<i class="fa fa-lg fa-'.$provider['icon'].'"></i>', array('class' => 'btn btn-default', 'title' =>__('Login with :provider', array(':provider' => $name))));
 					}
-					?>
-				</div>
-			<p><small><?php echo __('Fast, safe & secure way!');?></small></p>
+				?>
+			</div>
 		</div>
 	<?php endif; ?>
 
