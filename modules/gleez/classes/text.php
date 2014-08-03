@@ -113,18 +113,26 @@ class Text {
 		$limit = (int) $limit;
 
 		if (trim($str) === '' OR UTF8::strlen($str) <= $limit)
+		{
 			return $str;
+		}
 
 		if ($limit <= 0)
+		{
 			return $end_char;
+		}
 
 		if ($preserve_words === FALSE)
+		{
 			return rtrim(UTF8::substr($str, 0, $limit)).$end_char;
+		}
 
 		// Don't preserve words. The limit is considered the top limit.
 		// No strings with a length longer than $limit should be returned.
 		if ( ! preg_match('/^.{0,'.$limit.'}\s/us', $str, $matches))
+		{
 			return $end_char;
+		}
 
 		return rtrim($matches[0]).((strlen($matches[0]) === strlen($str)) ? '' : $end_char);
 	}
@@ -328,8 +336,9 @@ class Text {
 
 		if (UTF8::strlen($replacement) == 1)
 		{
-			$regex .= 'e';
-			return preg_replace($regex, 'str_repeat($replacement, UTF8::strlen(\'$1\'))', $str);
+			return preg_replace_callback($regex, function($matches) use ($replacement) {
+				return str_repeat($replacement, UTF8::strlen($matches[1]));
+			}, $str);
 		}
 
 		return preg_replace($regex, $replacement, $str);
@@ -764,12 +773,12 @@ class Text {
 			// Check that the word isn't an array itself
 			if (is_array($word))
 			{
-				throw new InvalidArgumentException('The array must only have one dimension.');
+				throw new Gleez_Exception('The array must only have one dimension.');
 			}
 			// Check that the value of the word is appropriate
 			elseif ( ! is_string($word) AND ! is_int($word) AND ! (is_object($word) AND method_exists($word, '__toString')))
 			{
-				throw new InvalidArgumentException('Array values must be either strings or integers.');
+				throw new Gleez_Exception('Array values must be either strings or integers.');
 			}
 		}
 
