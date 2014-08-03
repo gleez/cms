@@ -7,7 +7,7 @@
  *
  * @package    Gleez\Auth\Base
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.2
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -31,11 +31,20 @@ class Auth {
 	 */
 	protected $_config;
 
+	/**
+	 * Get enabled oAuth2 providers
+	 * @return array
+	 *
+	 * @uses   Module::is_active
+	 */
 	public static function providers()
 	{
-		$config = Config::get('oauth2.providers', array());
+		if ( ! Module::is_active('oauth2'))
+			return array();
+
+		$config    = Config::get('oauth2.providers', array());
 		$providers = array();
-		
+
 		foreach($config as $name => $provider)
 		{
 			if ($provider['enable'] === TRUE)
@@ -44,13 +53,13 @@ class Auth {
 					'name' => $name,
 					'url'  => Route::get('oauth2/provider')->uri(array('provider' => $name, 'action' => 'login')),
 					'icon' => isset($provider['icon']) ? $provider['icon'] : 'facebook',
-					);
+				);
 			}
 		}
-		
+
 		return $providers;
 	}
-	
+
 	/**
 	 * Singleton pattern
 	 *
