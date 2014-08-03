@@ -12,7 +12,7 @@
  *
  * @package    Gleez\Gravatar
  * @author     Gleez Team
- * @version    1.4.4
+ * @version    1.4.5
  * @copyright  (c) 2011-2013 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -132,7 +132,7 @@ class Gravatar {
 			if (is_null($config))
 			{
 				// Load the configuration
-				$config = Config::get('auth.gravatar', array());
+				$config = Config::get('gravatar', array());
 			}
 
 			// Create the Gravatar instance
@@ -147,10 +147,10 @@ class Gravatar {
 	 *
 	 * [!!] This method cannot be accessed directly, you must use [Gravatar::instance].
 	 *
-	 * @param   string  $email   User email
-	 * @param   array   $config  Gravatar config
+	 * @param   string              $email   User email
+	 * @param   array|Config_Group  $config  Gravatar config
 	 */
-	protected function __construct($email, array $config)
+	protected function __construct($email, $config)
 	{
 		// Set the email address
 		$this->setEmail($email);
@@ -601,11 +601,11 @@ class Gravatar {
 	 *
 	 * [!!] This is called automatically by [Gravatar::__construct].
 	 *
-	 * @param   array  $config  Gravatar config
+	 * @param   array|Config_Group  $config  Gravatar config
 	 *
 	 * @return  array
 	 */
-	protected function _prepareConfig(array $config)
+	protected function _prepareConfig($config)
 	{
 		if (isset($config['secure_url']) AND $config['secure_url'])
 		{
