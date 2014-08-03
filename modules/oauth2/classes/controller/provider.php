@@ -26,7 +26,7 @@ class Controller_Provider extends Template {
 	 * @var object
 	 */
 	protected $provider;
-	
+
 	/**
 	 * OAuth2_Provider
 	 * @var object
@@ -108,12 +108,12 @@ class Controller_Provider extends Template {
 	{
 		$this->response->body($this->content);
 
-		return parent::after();
+		parent::after();
 	}
 
 	public function action_index()
 	{
-		$this->response->body("we r in provider controller");
+		//$this->response->body("we r in provider controller");
 	}
 
 	public function action_login()
@@ -121,20 +121,20 @@ class Controller_Provider extends Template {
 		try
 		{
 			$dest = Route::get('user')->uri(array('action' => 'profile'));
-			
+
 			if ( ! is_null($this->request->query('destination')) )
 			{
 				$dest = $this->request->query('destination');
 			}
-			
+
 			$this->session->set('destination', $dest);
-			
+
 			// Get the login URL from the provider
 			$url = $this->client->get_authentication_url($this->provider_config['callback'], array(
 				'scope' => $this->provider_config['scope'],
 				'state' => time(),
 			));
-			
+
 			// Redirect to the provider's login page
 			$this->request->redirect($url);
 		}
@@ -147,7 +147,7 @@ class Controller_Provider extends Template {
 	public function action_callback()
 	{
 		try
-		{ 
+		{
 			// Attempt to complete signin
 			if ($code = Arr::get($_REQUEST, 'code'))
 			{
@@ -157,10 +157,10 @@ class Controller_Provider extends Template {
 				$params['client_secret']  = $this->provider_config['secret'];
 				$params['scope']          = $this->provider_config['scope'];
 				$params['redirect_uri']   = $this->provider_config['callback'];
-				
+
 				$access_token = $this->client->get_access_token(OAuth2_Client::GRANT_TYPE_AUTHORIZATION_CODE, $params);
 				$this->client->set_access_token($access_token);
-				
+
 				// Store the access token
 				$this->session->set($this->key('access'), $access_token);
 				//$this->session->set($this->key('refresh'), $r_token);
@@ -171,7 +171,7 @@ class Controller_Provider extends Template {
 		}
 		catch (ORM_Validation_Exception $e)
 		{
-			Message::info(__("Coudn't login. Contact administer for error!"));
+			Message::error(__("Couldn't login. Contact administer for error!"));
 			Log::error( (string) $e);
 		}
 		catch (Database_Exception $e)
@@ -179,20 +179,20 @@ class Controller_Provider extends Template {
 			// Skiping duplicate record entry exception.
 			Log::error( (string) $e);
 		}
-		catch( Exception $e)
+		catch(Exception $e)
 		{
 			if(Auth::instance()->logged_in())
 			{
-				Message::info(__("Identity associated with different user"));
+				Message::error(__('Identity associated with different user'));
 			}
 			else
 			{
-				Message::info(__("Coudn't login. Contact administer for error!"));	
+				Message::error(__("Couldn't login. Contact administer for error!"));
 			}
-			
-			Log::error( (string) $e);
+
+			Log::error((string) $e);
 		}
-		
+
 		// Redirect to the profile page or destination url
 		$this->request->redirect( Session::instance()->get('destination', Route::get('user')->uri(array('action' => 'profile'))));
 	}
@@ -201,7 +201,7 @@ class Controller_Provider extends Template {
 	{
 		// Login succesful
 		$response = $this->client->get_user_data();
-		
+
 		//make sure the response is valid by checking id
 		if (isset($response['id']))
 		{
@@ -214,7 +214,7 @@ class Controller_Provider extends Template {
 				$this->sso_signup( $response, $user );
 			}
 		}
-		
+
 		return $response;
 	}
 
@@ -253,7 +253,7 @@ class Controller_Provider extends Template {
 		{
 			// Associate their new oAuth with their current account.
 			$account = Auth::instance()->get_user();
-			
+
 			// @see Model_Auth_User::sso_signup for associate this provider
 			$account->sso_signup($data, $provider);
 
@@ -264,12 +264,12 @@ class Controller_Provider extends Template {
 		else if($user == FALSE AND !Auth::instance()->logged_in())
 		{
 			$account = ORM::factory('user')->where('mail', '=', $data['email'])->find();
-			
+
 			if(!$account->loaded()) $creation = TRUE;
-			
+
 			// @see Model_Auth_User::sso_signup for create new account/associate this OAuth
 			$account->sso_signup($data, $provider);
-			
+
 			if($creation)
 			{
 				Message::success(__('Thank you :nick for registering via (:provider).',
@@ -282,7 +282,7 @@ class Controller_Provider extends Template {
 					array(':nick' => $account->nick, ':provider' => $this->provider))
 				);
 			}
-			
+
 			// If yes, log the user in and give him a normal auth session.
 			Auth::instance()->force_login($account);
 		}
