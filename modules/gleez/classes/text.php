@@ -611,7 +611,7 @@ class Text {
 				}
 				else
 				{
-					$item = self::number($value).' '.$name;
+					$item = static::number($value).' '.$name;
 				}
 
 				// In the situation that we need to make a composite number (i.e. twenty-three)
@@ -699,7 +699,7 @@ class Text {
 			foreach ($value as $part)
 			{
 				// Add each part to the set
-				$data[$part] = self::user_agent($agent, $part);
+				$data[$part] = static::user_agent($agent, $part);
 			}
 
 			return $data;
@@ -829,7 +829,7 @@ class Text {
 	 */
 	public static function htmlcorrector($text)
 	{
-		return self::dom_serialize(self::dom_load($text));
+		return static::dom_serialize(static::dom_load($text));
 	}
 
 	/**
@@ -875,12 +875,12 @@ class Text {
 
 		foreach ($body_node->getElementsByTagName('script') as $node)
 		{
-			self::escape_cdata_element($dom_document, $node);
+			static::escape_cdata_element($dom_document, $node);
 		}
 
 		foreach ($body_node->getElementsByTagName('style') as $node)
 		{
-			self::escape_cdata_element($dom_document, $node, '/*', '*/');
+			static::escape_cdata_element($dom_document, $node, '/*', '*/');
 		}
 
 		foreach ($body_node->childNodes as $child_node)
@@ -1073,7 +1073,7 @@ class Text {
 
 		if ($filter['settings']['html_nofollow'])
 		{
-			$html_dom = self::dom_load($text);
+			$html_dom = static::dom_load($text);
 			$links = $html_dom->getElementsByTagName('a');
 			foreach ($links as $link)
 			{
@@ -1082,11 +1082,11 @@ class Text {
 				//Shortens long URLs to http://www.example.com/long/url...
 				if ($filter['settings']['url_length'])
 				{
-					$link->nodeValue = self::limit_chars($link->nodeValue,
+					$link->nodeValue = static::limit_chars($link->nodeValue,
 										 (int) $filter['settings']['url_length'], '....');
 				}
 			}
-			$text = self::dom_serialize($html_dom);
+			$text = static::dom_serialize($html_dom);
 		}
 
 		return trim($text);
@@ -1202,30 +1202,29 @@ class Text {
 	 *
 	 * @param   string   $text        Text
 	 * @param   boolean  $auto_links  Convert URLs into links [Optional]
-
 	 * @return  string
 	 */
 	public static function move_links_to_end($text, $auto_links = FALSE)
 	{
 		$search  = '/<a [^>]*href="([^"]+)"[^>]*>(.*?)<\/a>/ie';
-		$replace = 'self::_links_list("\\1", "\\2")';
+		$replace = 'static::_links_list("\\1", "\\2")';
 
 		if($auto_links)
 		{
-			$text = self::auto_link($text);
+			$text = static::auto_link($text);
 		}
 
 		$text = preg_replace($search, $replace, $text);
 
 		// Add link list
-		if ( !empty(self::$_link_list) )
+		if ( !empty(static::$_link_list) )
 		{
-			$text .= __("\n\nLinks:\n") . self::$_link_list;
+			$text .= __("\n\nLinks:\n") . static::$_link_list;
 		}
 
 		//reset these vars to defaults
-		self::$_link_list  = '';
-		self::$_link_count = 0;
+		static::$_link_list  = '';
+		static::$_link_count = 0;
 
 		return $text;
 	}
@@ -1243,9 +1242,9 @@ class Text {
 		if ( substr($link, 0, 7) == 'http://' OR substr($link, 0, 8) == 'https://' OR
 			substr($link, 0, 7) == 'mailto:' )
 		{
-			self::$_link_count++;
-			self::$_link_list .= "[" . self::$_link_count . "] $link\n";
-			$additional = ' <sup>[' . self::$_link_count . ']</sup>';
+			static::$_link_count++;
+			static::$_link_list .= "[" . static::$_link_count . "] $link\n";
+			$additional = ' <sup>[' . static::$_link_count . ']</sup>';
 		}
 		elseif ( substr($link, 0, 11) == 'javascript:' )
 		{
@@ -1255,16 +1254,16 @@ class Text {
 		}
 		else
 		{
-			self::$_link_count++;
-			self::$_link_list .= "[" . self::$_link_count . "] " . URL::site(null, TRUE);
+			static::$_link_count++;
+			static::$_link_list .= "[" . static::$_link_count . "] " . URL::site(null, TRUE);
 
 			if ( substr($link, 0, 1) != '/' )
 			{
-				self::$_link_list .= '/';
+				static::$_link_list .= '/';
 			}
 
-			self::$_link_list .= "$link\n";
-			$additional = ' <sup>[' . self::$_link_count . ']</sup>';
+			static::$_link_list .= "$link\n";
+			$additional = ' <sup>[' . static::$_link_count . ']</sup>';
 		}
 
 		return $display . $additional;
@@ -1361,15 +1360,15 @@ class Text {
 	{
 		// Converts fractions to their html equivalent (for example, 1/4 will become &frac14;).
 		$processed_text = $text;
-		$processed_text = self::_replace_fraction('1/4', '&frac14;', $processed_text);
-		$processed_text = self::_replace_fraction('3/4', '&frac34;', $processed_text);
-		$processed_text = self::_replace_fraction('1/2', '&frac12;', $processed_text);
-		$processed_text = self::_replace_fraction('1/3', '&#8531;', $processed_text);
-		$processed_text = self::_replace_fraction('2/3', '&#8532;', $processed_text);
-		$processed_text = self::_replace_fraction('1/8', '&#8539;', $processed_text);
-		$processed_text = self::_replace_fraction('3/8', '&#8540;', $processed_text);
-		$processed_text = self::_replace_fraction('5/8', '&#8541;', $processed_text);
-		$processed_text = self::_replace_fraction('7/8', '&#8542;', $processed_text);
+		$processed_text = static::_replace_fraction('1/4', '&frac14;', $processed_text);
+		$processed_text = static::_replace_fraction('3/4', '&frac34;', $processed_text);
+		$processed_text = static::_replace_fraction('1/2', '&frac12;', $processed_text);
+		$processed_text = static::_replace_fraction('1/3', '&#8531;', $processed_text);
+		$processed_text = static::_replace_fraction('2/3', '&#8532;', $processed_text);
+		$processed_text = static::_replace_fraction('1/8', '&#8539;', $processed_text);
+		$processed_text = static::_replace_fraction('3/8', '&#8540;', $processed_text);
+		$processed_text = static::_replace_fraction('5/8', '&#8541;', $processed_text);
+		$processed_text = static::_replace_fraction('7/8', '&#8542;', $processed_text);
 
 		return $processed_text;
 	}
@@ -1415,7 +1414,7 @@ class Text {
 			$vars = get_object_vars($value);
 			foreach ($vars as $key => $data)
 			{
-				$value->{$key} = self::strip_slashes($data);
+				$value->{$key} = static::strip_slashes($data);
 			}
 		}
 		elseif (is_string($value))
@@ -1450,7 +1449,7 @@ class Text {
 
 		$crypttext = mcrypt_encrypt(MCRYPT_GOST, $key, $string, MCRYPT_MODE_ECB);
 
-		return trim(self::safe_b64encode($crypttext));
+		return trim(static::safe_b64encode($crypttext));
 	}
 
 	/**
@@ -1475,7 +1474,7 @@ class Text {
 			$key = Config::get('site.gleez_private_key', sha1(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true)));
 		}
 
-		$crypttext = self::safe_b64decode($string);
+		$crypttext = static::safe_b64decode($string);
 		$decrypttext = mcrypt_decrypt(MCRYPT_GOST, $key, $crypttext, MCRYPT_MODE_ECB);
 
 		return trim($decrypttext);
