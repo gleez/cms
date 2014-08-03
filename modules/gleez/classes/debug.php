@@ -4,11 +4,24 @@
  *
  * @package    Gleez\Debug
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Debug {
+
+	/**
+	 * Returns the type of a variable
+	 *
+	 * @since   1.1.0
+	 *
+	 * @param   mixed   $var  Variable
+	 * @return  string  Class name or type, if not an object
+	 */
+	public static function type($var)
+	{
+		return is_object($var) ? get_class($var) : gettype($var);
+	}
 
 	/**
 	 * Returns an HTML string of debugging information about any number of
@@ -268,6 +281,10 @@ class Debug {
 		{
 			$file = 'MODPATH'.DS.substr($file, strlen(MODPATH));
 		}
+		elseif (strpos($file, GLZPATH) === 0)
+		{
+			$file = 'GLZPATH'.DS.substr($file, strlen(GLZPATH));
+		}
 		elseif (strpos($file, THEMEPATH) === 0)
 		{
 			$file = 'THEMEPATH'.DS.substr($file, strlen(THEMEPATH));
@@ -480,19 +497,6 @@ class Debug {
 		}
 
 		return $output;
-	}
-
-	/**
-	 * Returns the type of a variable
-	 *
-	 * @since   1.1.0
-	 *
-	 * @param   mixed   $var  Variable
-	 * @return  string  Class name or type, if not an object
-	 */
-	public static function type($var)
-	{
-		return is_object($var) ? get_class($var) : gettype($var);
 	}
 
 }
