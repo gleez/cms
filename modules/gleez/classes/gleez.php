@@ -105,9 +105,6 @@ class Gleez {
 		{
 			// Database config reader and writer
 			Kohana::$config->attach(new Config_Database);
-
-			// Initialize the locale from settings
-			I18n::initialize();
 		}
 
 		if (Kohana::$environment !== Kohana::DEVELOPMENT)
@@ -122,6 +119,9 @@ class Gleez {
 			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 		}
 
+		// Initialize the locale from settings
+		I18n::initialize();
+
 		// Disable the kohana powered headers
 		// @todo Remove it, use Gleez::$expose
 		Kohana::$expose = FALSE;
@@ -133,7 +133,7 @@ class Gleez {
 		if ( ! Gleez::$installed)
 		{
 			Session::$default = 'cookie';
-			Gleez_Exception::$error_view = 'kohana/error';
+			Gleez_Exception::$error_view = 'errors/error';
 
 			// Static file serving (CSS, JS, images)
 			Route::set('install/media', 'media(/<file>)', array(
