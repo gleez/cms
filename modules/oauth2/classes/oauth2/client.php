@@ -1,13 +1,12 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php
 /*
  * @package		OAuth2 Module
  * @author      Pap Tamas
- * @copyright   (c) 2011-2013 Pap Tamas
+ * @copyright   (c) 2011-2014 Pap Tamas
  * @website		https://github.com/app-skeleton/oauth2
  * @license		http://opensource.org/licenses/MIT
  *
  */
-
 abstract class OAuth2_Client {
 
     /**
@@ -271,7 +270,7 @@ abstract class OAuth2_Client {
     public function get_access_token($grant_type, $parameters, $response = NULL)
     {
         $response = $response ?: $this->request_access_token($grant_type, $parameters);
-        $result = $response['result'];
+        $result   = $response['result'];
 
         if ( ! is_array($result))
         {
@@ -280,7 +279,9 @@ abstract class OAuth2_Client {
         }
 
         if ( ! isset($result[$this->_access_token_param_name]))
+        {
             throw new OAuth2_Client_Exception('Unable to get the access token.', array(), OAuth2_Client_Exception::E_CANT_GET_ACCESS_TOKEN);
+        }
 
         // Return the access token
         return $result[$this->_access_token_param_name];
@@ -410,8 +411,8 @@ abstract class OAuth2_Client {
      */
     protected function _generate_mac_signature($url, $parameters, $http_method)
     {
-        $timestamp = time();
-        $nonce = uniqid();
+        $timestamp  = time();
+        $nonce      = uniqid();
         $parsed_url = parse_url($url);
 
         if ( ! isset($parsed_url['port']))
@@ -519,7 +520,7 @@ abstract class OAuth2_Client {
         // Init cURL
         $ch = curl_init();
 
-        // Set cURL options
+        // Set CURL options
         curl_setopt_array($ch, $curl_options);
 
         // Https handling
@@ -541,8 +542,11 @@ abstract class OAuth2_Client {
             curl_setopt_array($ch, $this->curl_options);
         }
 
-        $result = curl_exec($ch);
-        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        //Github checks for useragent header
+        curl_setopt($ch, CURLOPT_USERAGENT, Template::getSiteName());
+
+        $result       = curl_exec($ch);
+        $http_code    = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
         if ($curl_error = curl_error($ch))
@@ -599,5 +603,3 @@ abstract class OAuth2_Client {
         return new $class_name($client_id, $client_secret, $client_auth_type, $certificate_file);
     }
 }
-
-// END Kohana_OAuth2_Client
