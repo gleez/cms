@@ -7,10 +7,23 @@
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
-class Model_Identity extends ORM
-{
+class Model_Identity extends ORM {
+
+	/**
+	 * Table columns
+	 * @var array
+	 */
+	protected $_table_columns = array(
+		'id'            => array( 'type' => 'int' ),
+		'user_id'       => array( 'type' => 'int' ),
+		'recipient'     => array( 'type' => 'int' ),
+		'provider'      => array( 'type' => 'string' ),
+		'provider_id'   => array( 'type' => 'string' ),
+		'refresh_token' => array( 'type' => 'string' ),
+	);
+
 	protected $_belongs_to = array(
-                        'user' => array('foreign_key' => 'user_id')
+		'user' => array('foreign_key' => 'user_id')
 	);
 
 	/**

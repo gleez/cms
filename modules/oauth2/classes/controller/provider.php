@@ -167,14 +167,13 @@ class Controller_Provider extends Template {
 
 				$this->oauthComplete();
 			}
-
 		}
 		catch (ORM_Validation_Exception $e)
 		{
 			Message::error(__("Couldn't login. Contact administer for error!"));
 			Log::error( (string) $e);
 		}
-		catch (Database_Exception $e)
+		catch (\Gleez\Database\DatabaseException $e)
 		{
 			// Skiping duplicate record entry exception.
 			Log::error( (string) $e);
