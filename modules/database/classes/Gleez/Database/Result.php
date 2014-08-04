@@ -3,7 +3,7 @@
  * MySQLi database Expression
  *
  * @package    Gleez\Database
- * @version    2.0.0
+ * @version    2.1.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -32,7 +32,12 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 * @var int
 	 */
 	protected $_internal_row = 0;
-	
+
+	/**
+	 * @var ReflectionClass
+	 */
+	protected $_reflect_class = NULL;
+
 	/**
 	 * Sets the total number of rows and stores the result locally.
 	 *
@@ -58,9 +63,6 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 		
 		// Results as objects or associative arrays
 		$this->_as_object = $as_object;
-
-		// Results as objects or associative arrays
-		//$this->_as_object = ($as_object === TRUE ) ? TRUE : FALSE;
 
 		if ($params)
 		{
@@ -93,7 +95,8 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 */
 	public function cached()
 	{
-		return new Database_Result_Cached($this->as_array(), $this->_query, $this->_as_object);
+		//return new Database_Result_Cached($this->as_array(), $this->_query, $this->_as_object);
+		throw new DatabaseException('Not Implemented');
 	}
 
 	/**
@@ -166,7 +169,6 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 		else
 		{
 			// Associative columns
-
 			if ($this->_as_object)
 			{
 				foreach ($this as $row)
@@ -267,7 +269,9 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	public function offsetGet($offset)
 	{
 		if ( ! $this->seek($offset))
+		{
 			return NULL;
+		}
 
 		return $this->current();
 	}
@@ -284,7 +288,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 */
 	final public function offsetSet($offset, $value)
 	{
-		throw new Gleez_Exception('Database results are read-only');
+		throw new DatabaseException('Database results are read-only');
 	}
 
 	/**
@@ -298,7 +302,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 */
 	final public function offsetUnset($offset)
 	{
-		throw new Gleez_Exception('Database results are read-only');
+		throw new DatabaseException('Database results are read-only');
 	}
 
 	/**
@@ -399,6 +403,11 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 		// Increment internal row for optimization assuming rows are fetched in order
 		$this->_internal_row++;
 
+		if (defined('HHVM_VERSION'))
+		{
+			return $this->currentHHVM();
+		}
+
 		if ($this->_as_object === TRUE)
 		{
 			// Return an stdClass
@@ -414,6 +423,44 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 			// Return an array of the row
 			return $this->_result->fetch_assoc();
 		}
+	}
+
+	/**
+	 * Returns the current row of a result set under HHVM
+	 * The problem was fetch_object creates new instance of a given class, 
+	 * and attaches resulted key/value pairs after the class was constructed.
+	 *
+	 * @return  mixed
+	 */
+	private function currentHHVM()
+	{
+		// Get row as associated array
+		$row = $this->_result->fetch_assoc();
+
+		if ($this->_as_object === TRUE OR is_string($this->_as_object))
+		{
+			if ($this->_reflect_class === NULL)
+			{
+				// Create reflection class of given classname or stdClass
+				$this->_reflect_class = new \ReflectionClass(is_string($this->_as_object) ? $this->_as_object : 'stdClass');
+			}
+
+			// Get new instance without constructing it
+			$object = $this->_reflect_class->newInstanceWithoutConstructor();
+
+			foreach ($row as $column => $value)
+			{
+				// Trigger the class setter
+				$object->__set($column, $value);
+			}
+
+			// Construct the class with no parameters
+			$object->__construct(NULL);
+
+			return $object;
+		}
+
+		return $row;
 	}
 
 }
