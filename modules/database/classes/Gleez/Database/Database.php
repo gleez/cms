@@ -9,7 +9,7 @@
  * well as quoting, escaping and other related functions.
  *
  * @package    Gleez\Database\Core
- * @version    2.1.0
+ * @version    2.1.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -31,24 +31,24 @@ abstract class Database{
 	const INSERT =  'insert';
 	const UPDATE =  'update';
 	const DELETE =  'delete';
-	
+
 	/**
 	 * Default instance name
 	 * @var string
 	 */
 	public static $default = 'default';
-    
+
 	/**
 	 * Database instances
 	 * @var array
 	 */
 	public static $instances = array();
-    
+
 	/**
 	 * @var string Cache of the name of the readonly connection
 	 */
 	protected static $_readonly = array();
-    
+
 	/**
 	 * Ready for use queries
 	 *
@@ -63,7 +63,7 @@ abstract class Database{
 		'variablesSession'  => 'SHOW SESSION VARIABLES',
 		'variablesGlobal'   => 'SHOW GLOBAL VARIABLES',
 	);
-	
+
 	/**
 	 * Get a singleton Database instance
 	 *
@@ -87,7 +87,8 @@ abstract class Database{
 	 * @param   bool 		$writable 	When replication is enabled, whether to return the master connection
 	 * @return  Database
 	 *
-	 * @throws  Gleez_Exception
+	 * @return \Gleez\Database\Connection
+	 * @throws \Gleez_Exception
 	 */
 	public static function instance($name = NULL, array $config = NULL, $writable = TRUE)
 	{
@@ -129,7 +130,7 @@ abstract class Database{
 
 		return static::$instances[$name];
 	}
-	
+
 	// Instance name
 	protected $_instance;
 
@@ -138,21 +139,21 @@ abstract class Database{
 
 	// Configuration array
 	protected $_config;
-	
+
 	/**
 	 * The last result object.
 	 *
 	 * @var  array
 	 */
 	protected $last_result = null;
-	
+
 	/**
 	 * The last compiled query executed.
 	 *
 	 * @var  string
 	 */
 	protected $last_query = null;
-	
+
 	/**
 	 * Stores the database configuration locally and name the instance.
 	 *
@@ -229,6 +230,15 @@ abstract class Database{
 	}
 
 	/**
+	 * Get last query
+	 * @return string
+	 */
+	public function getLastQuery()
+	{
+		return $this->last_query;
+	}
+
+	/**
 	 * Avoids having the expressions escaped
 	 *
 	 * Example
@@ -243,7 +253,7 @@ abstract class Database{
 	{
 		return new Expression($string);
 	}
-		
+
 	/**
 	 * Returns the result of the last query
 	 *
@@ -253,7 +263,7 @@ abstract class Database{
 	{
 	    return $this->last_result;
 	}
-	
+
 	/**
 	 * Begins transaction
 	 */
@@ -261,7 +271,7 @@ abstract class Database{
 	{
 	    $this->getConnection()->query('BEGIN');
 	}
-	
+
 	/**
 	 * Commits transaction
 	 */
@@ -269,7 +279,7 @@ abstract class Database{
 	{
 	    $this->getConnection()->query('COMMIT');
 	}
-	
+
 	/**
 	 * Rollbacks transaction
 	 */
@@ -293,7 +303,7 @@ abstract class Database{
 		$table = $this->quoteTable($table);
 
 		$info = $this->query(self::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table, FALSE);
-		
+
 		return isset($info[0]['total_row_count']) ? $info[0]['total_row_count'] : FALSE;
 	}
 
@@ -349,7 +359,7 @@ abstract class Database{
 	{
 		return $this->_config['table_prefix'];
 	}
-	
+
 	/**
 	 * Wraps the input with identifiers when necessary.
 	 *
@@ -361,30 +371,30 @@ abstract class Database{
 	{
 		// Identifiers are escaped by repeating them
 		$escaped_identifier = $this->_identifier.$this->_identifier;
-		
+
 		if (is_array($value))
 		{
 			list($value, $alias) = $value;
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
-		
-		if ($value instanceof \Gleez\Database\Expression) 
+
+		if ($value instanceof \Gleez\Database\Expression)
 		{
 			$value = $value->value();
-		} 
+		}
 		elseif ($value instanceof \Gleez\Database\Query)
 		{
 			$value = '('.$value->compile($this).') ';
 		}
-		elseif ($value === '*') 
+		elseif ($value === '*')
 		{
 			return $value;
 		}
 		elseif (strpos($value, '.') !== FALSE) {
-			
+
 			$pieces = explode('.', $value);
 			$count  = count($pieces) ;
-			
+
 			foreach ($pieces as $key => $piece) {
 				if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
 					$piece = $prefix.$piece;
@@ -451,11 +461,11 @@ abstract class Database{
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($table instanceof \Gleez\Database\Expression) 
+		if ($table instanceof \Gleez\Database\Expression)
 		{
 			$table = $table->value();
 		}
-		elseif ($table instanceof \Gleez\Database\Query) 
+		elseif ($table instanceof \Gleez\Database\Query)
 		{
 			$table = '('.$table->compile($this).') ';
 		}
@@ -524,12 +534,12 @@ abstract class Database{
 		{
 			return "'0'";
 		}
-		elseif ($value instanceof \Gleez\Database\Expression) 
+		elseif ($value instanceof \Gleez\Database\Expression)
 		{
 		    // Use the raw expression
 		    return $value->value();
 		}
-		elseif ($value instanceof \Gleez\Database\Query) 
+		elseif ($value instanceof \Gleez\Database\Query)
 		{
 			return '('.$value->compile($this).') ';
 		}
@@ -561,11 +571,11 @@ abstract class Database{
 	public function quoteArr(Array $array)
 	{
 		$result = array();
-	
+
 		foreach ($array as $key => $item) {
 		    $result[$key] = $this->quote($item);
 		}
-	
+
 		return $result;
 	}
 }
