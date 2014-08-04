@@ -10,11 +10,13 @@
  *
  * @package    Gleez\ORM
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
+
 use Gleez\Database\Database;
+
 class ORM extends Model implements serializable {
 
 	const DELETE =  5;
@@ -567,6 +569,8 @@ class ORM extends Model implements serializable {
 	 */
 	public function serialize()
 	{
+		$data = array();
+
 		// Store only information about the object
 		foreach (array('_primary_key_value', '_object', '_changed', '_loaded', '_saved', '_sorting', '_original_values', '_ignored_columns') as $var)
 		{
@@ -580,7 +584,7 @@ class ORM extends Model implements serializable {
 	 * Check whether the model data has been modified.
 	 * If $field is specified, checks whether that field was modified.
 	 *
-	 * @param string  field to check for changes
+	 * @param   string  $field field to check for changes
 	 * @return  bool  Whether or not the field has changed
 	 */
 	public function changed($field = NULL)
@@ -1091,7 +1095,7 @@ class ORM extends Model implements serializable {
 	 * an iterator for multiple rows.
 	 *
 	 * @chainable
-	 * @param  bool $multiple Return an iterator or load a single row
+	 * @param  bool $multiple Return an iterator or load a single row [Optional]
 	 * @return ORM|Database_Result
 	 */
 	protected function _load_result($multiple = FALSE)
@@ -1155,7 +1159,6 @@ class ORM extends Model implements serializable {
 	/**
 	 * Loads an array of values into into the current object.
 	 *
-	 * @chainable
 	 * @param  array $values Values to load
 	 * @return ORM
 	 */
@@ -1320,7 +1323,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Validates the current model's data
 	 *
-	 * @param  Validation $extra_validation Validation object
+	 * @param  Validation $extra_validation Validation object [Optional]
 	 * @return ORM
 	 * @throws ORM_Validation_Exception
 	 */
@@ -1424,7 +1427,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Updates a single record or multiple records, added event support
 	 *
-	 * @param  Validation $validation Validation object
+	 * @param  Validation $validation Validation object [Optional]
 	 * @return ORM
 	 * @throws Gleez_Exception
 	 */
@@ -1498,8 +1501,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Updates or Creates the record depending on loaded()
 	 *
-	 * @chainable
-	 * @param  Validation $validation Validation object
+	 * @param  Validation $validation Validation object [Optional]
 	 * @return ORM
 	 */
 	public function save(Validation $validation = NULL)
@@ -1579,7 +1581,7 @@ class ORM extends Model implements serializable {
 	 *     $model->has('roles')
 	 *
 	 * @param  string  $alias    Alias of the has_many "through" relationship
-	 * @param  mixed   $far_keys Related model, primary key, or an array of primary keys
+	 * @param  mixed   $far_keys Related model, primary key, or an array of primary keys [Optional]
 	 * @return Database_Result
 	 */
 	public function has($alias, $far_keys = NULL)
@@ -1623,7 +1625,7 @@ class ORM extends Model implements serializable {
 	 *
 	 * @param  string  $alias    Alias of the has_many "through" relationship
 	 * @param  mixed   $far_keys Related model, primary key, or an array of primary keys
-	 * @param  array   $data     Additional data to store in "through"/pivot table
+	 * @param  array   $data     Additional data to store in "through"/pivot table [Optional]
 	 * @return ORM
 	 */
 	public function add($alias, $far_keys, $data = NULL)
@@ -1671,7 +1673,7 @@ class ORM extends Model implements serializable {
 	 *     $model->remove('roles');
 	 *
 	 * @param  string $alias    Alias of the has_many "through" relationship
-	 * @param  mixed  $far_keys Related model, primary key, or an array of primary keys
+	 * @param  mixed  $far_keys Related model, primary key, or an array of primary keys [Optional]
 	 * @return ORM
 	 */
 	public function remove($alias, $far_keys = NULL)
@@ -1746,7 +1748,7 @@ class ORM extends Model implements serializable {
 		{
 			$sql->selectArgs(array(DB::expr('COUNT("*")'), 'records_found'));
 		}
-		
+
 		$records = $sql->execute($this->_db)->get('records_found');
 
 		// Add back in selected columns
@@ -1821,14 +1823,14 @@ class ORM extends Model implements serializable {
 	 */
 	public function last_query()
 	{
-		return $this->_db->last_query;
+		return $this->_db->getLastQuery();
 	}
 
 	/**
 	 * Clears query builder.  Passing FALSE is useful to keep the existing
 	 * query conditions for another query.
 	 *
-	 * @param bool $next Pass FALSE to avoid resetting on the next call
+	 * @param  bool $next Pass FALSE to avoid resetting on the next call [Optional]
 	 * @return ORM
 	 */
 	public function reset($next = TRUE)
@@ -1991,9 +1993,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Alias of and_where()
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value
 	 * @return  $this
 	 */
 	public function where($column, $op, $value)
@@ -2010,9 +2012,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Creates a new "AND WHERE" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value
 	 * @return  $this
 	 */
 	public function and_where($column, $op, $value)
@@ -2029,9 +2031,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Creates a new "OR WHERE" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value
 	 * @return  $this
 	 */
 	public function or_where($column, $op, $value)
@@ -2132,8 +2134,8 @@ class ORM extends Model implements serializable {
 	/**
 	 * Applies sorting with "ORDER BY ..."
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  direction of sorting
+	 * @param   mixed   $column     Column name or array($column, $alias) or object
+	 * @param   string  $direction  Direction of sorting [Optional]
 	 * @return  $this
 	 */
 	public function order_by($column, $direction = NULL)
@@ -2150,7 +2152,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Return up to "LIMIT ..." results
 	 *
-	 * @param   integer  maximum results to return
+	 * @param   integer  $number  Maximum results to return
 	 * @return  $this
 	 */
 	public function limit($number)
@@ -2167,7 +2169,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
 	 *
-	 * @param   boolean  enable or disable distinct columns
+	 * @param   boolean  $value  Enable or disable distinct columns
 	 * @return  $this
 	 */
 	public function distinct($value)
@@ -2184,7 +2186,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Choose the columns to select from.
 	 *
-	 * @param   mixed  column name or array($column, $alias) or object
+	 * @param   mixed  $columns  Column name or array($column, $alias) or object
 	 * @param   ...
 	 * @return  $this
 	 */
@@ -2204,7 +2206,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Choose the tables to select "FROM ..."
 	 *
-	 * @param   mixed  table name or array($table, $alias) or object
+	 * @param   mixed  $tables  Table name or array($table, $alias) or object
 	 * @param   ...
 	 * @return  $this
 	 */
@@ -2224,8 +2226,8 @@ class ORM extends Model implements serializable {
 	/**
 	 * Adds addition tables to "JOIN ...".
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  join type (LEFT, RIGHT, INNER, etc)
+	 * @param   mixed   $table  Column name or array($column, $alias) or object
+	 * @param   string  $type   Join type (LEFT, RIGHT, INNER, etc) [Optional]
 	 * @return  $this
 	 */
 	public function join($table, $type = NULL)
@@ -2242,9 +2244,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   mixed   $c1  Column name or array($column, $alias) or object
+	 * @param   string  $op  Logic operator
+	 * @param   mixed   $c2  Column name or array($column, $alias) or object
 	 * @return  $this
 	 */
 	public function on($c1, $op, $c2)
@@ -2261,9 +2263,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   mixed   $c1  Column name or array($column, $alias) or object
+	 * @param   string  $op  Logic operator
+	 * @param   mixed   $c2  Column name or array($column, $alias) or object
 	 * @return  $this
 	 */
 	public function my_on($c1, $op, $c2)
@@ -2280,7 +2282,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Creates a "GROUP BY ..." filter.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   mixed  $columns  Column name or array($column, $alias) or object
 	 * @param   ...
 	 * @return  $this
 	 */
@@ -2300,9 +2302,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Alias of and_having()
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value [Optional]
 	 * @return  $this
 	 */
 	public function having($column, $op, $value = NULL)
@@ -2313,9 +2315,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Creates a new "AND HAVING" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value [Optional]
 	 * @return  $this
 	 */
 	public function and_having($column, $op, $value = NULL)
@@ -2332,9 +2334,9 @@ class ORM extends Model implements serializable {
 	/**
 	 * Creates a new "OR HAVING" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
+	 * @param   mixed   $column  Column name or array($column, $alias) or object
+	 * @param   string  $op      Logic operator
+	 * @param   mixed   $value   Column value [Optional]
 	 * @return  $this
 	 */
 	public function or_having($column, $op, $value = NULL)
@@ -2435,7 +2437,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Start returning results after "OFFSET ..."
 	 *
-	 * @param   integer   starting result number
+	 * @param   integer  $number  Starting result number
 	 * @return  $this
 	 */
 	public function offset($number)
@@ -2452,7 +2454,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Enables the query to be cached for a specified amount of time.
 	 *
-	 * @param   integer  number of seconds to cache
+	 * @param   integer  $lifetime  Number of seconds to cache [Optional]
 	 * @return  $this
 	 * @uses    Kohana::$cache_life
 	 */
@@ -2470,8 +2472,8 @@ class ORM extends Model implements serializable {
 	/**
 	 * Set the value of a parameter in the query.
 	 *
-	 * @param   string   parameter key to replace
-	 * @param   mixed    value to use
+	 * @param   string  $param  Parameter key to replace
+	 * @param   mixed   $value  Value to use
 	 * @return  $this
 	 */
 	public function param($param, $value)
@@ -2488,7 +2490,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Adds "USING ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   string  $columns  column name
+	 * @param   string  $columns  Column name
 	 * @return  $this
 	 */
 	public function using($columns)
@@ -2506,9 +2508,9 @@ class ORM extends Model implements serializable {
 	 * Checks whether a column value is unique.
 	 * Excludes itself if loaded.
 	 *
-	 * @param   string   the field to check for uniqueness
-	 * @param   mixed    the value to check for uniqueness
-	 * @return  bool     whteher the value is unique
+	 * @param   string  $field  The field to check for uniqueness
+	 * @param   mixed   $value  The value to check for uniqueness
+	 * @return  bool    whatever the value is unique
 	 */
 	public function unique($field, $value)
 	{
