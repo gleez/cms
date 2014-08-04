@@ -19,7 +19,7 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 * Themes and Layouts
 * Input formats like Markdown, HTML etc
 * Shortcodes
-* oAuth2 login via Google/Facebook/Windows
+* oAuth2 login via Google/Facebook/Windows/Github
 * Resize images on fly with caching
 * ORM, MongoDB, Redis support
 * Other Details like SEO, Media, Gravatar, etc.
