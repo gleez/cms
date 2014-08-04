@@ -9,7 +9,7 @@
  * well as quoting, escaping and other related functions.
  *
  * @package    Gleez\Database\Core
- * @version    2.0.1
+ * @version    2.1.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -21,6 +21,9 @@ require_once __DIR__ . '/Driver/MySQLi.php';
 require_once __DIR__ . '/Expression.php';
 require_once __DIR__ . '/Result.php';
 require_once __DIR__ . '/Query.php';
+
+class ConnectionException extends \Exception {};
+class DatabaseException extends \Exception {};
 
 abstract class Database{
 	// Query types
@@ -293,7 +296,48 @@ abstract class Database{
 		
 		return isset($info[0]['total_row_count']) ? $info[0]['total_row_count'] : FALSE;
 	}
-	
+
+	/**
+	 * List all of the tables in the database. Optionally, a LIKE string can
+	 * be used to search for specific tables.
+	 *
+	 *     // Get all tables in the current database
+	 *     $tables = $db->list_tables();
+	 *
+	 *     // Get all user-related tables
+	 *     $tables = $db->list_tables('user%');
+	 *
+	 * @param   string   $like  table to search for
+	 * @return  array
+	 */
+	public function list_tables($like = NULL)
+	{
+
+	}
+
+	/**
+	 * Lists all of the columns in a table. Optionally, a LIKE string can be
+	 * used to search for specific fields.
+	 *
+	 *     // Get all columns from the "users" table
+	 *     $columns = $db->list_columns('users');
+	 *
+	 *     // Get all name-related columns
+	 *     $columns = $db->list_columns('users', '%name%');
+	 *
+	 *     // Get the columns from a table that doesn't use the table prefix
+	 *     $columns = $db->list_columns('users', NULL, FALSE);
+	 *
+	 * @param   string  $table       table to get columns from
+	 * @param   string  $like        column to search for
+	 * @param   boolean $add_prefix  whether to add the table prefix automatically or not
+	 * @return  array
+	 */
+	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
+	{
+
+	}
+
 	/**
 	 * Return the table prefix defined in the current configuration.
 	 *
@@ -370,7 +414,7 @@ abstract class Database{
 	 *
 	 * @return  array  The array of quoted strings
 	 */
-	public function quoteIdentifierArr(Array $array = array())
+	public function quoteIdentifierArr(Array $array)
 	{
 	    $result = array();
 
@@ -514,7 +558,7 @@ abstract class Database{
 	*
 	* @return  array  The array of quotes strings
 	*/
-	public function quoteArr(Array $array = array())
+	public function quoteArr(Array $array)
 	{
 		$result = array();
 	

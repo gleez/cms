@@ -39,13 +39,11 @@ class Controller_Admin_Tool extends Controller_Admin {
 
 	public function action_db()
 	{
-		$db = Database::instance('default');
-
 		//get tables names and the size and the index
 		$total_space = 0;
 		$tables_info = array();
 
-		$tables = $db->query(Database::SELECT, 'SHOW TABLE STATUS');
+		$tables = DB::query('select', 'SHOW TABLE STATUS', FALSE);
 
 		foreach ($tables as $table)
 		{

@@ -14,7 +14,7 @@
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
  * @package    Gleez\Database
- * @version    2.0.0
+ * @version    2.1.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -43,11 +43,12 @@ class DB {
 	 *
 	 * @param   integer  $type  type: Database::SELECT, Database::UPDATE, etc
 	 * @param   string   $sql   SQL statement
-	 * @return  Database_Query
+	 *
+	 * @return  Query
 	 */
 	public static function query($type, $sql)
 	{
-		//return new Query($type, $sql);
+		return Database::instance()->query($type, $sql);
 	}
 
 	/**

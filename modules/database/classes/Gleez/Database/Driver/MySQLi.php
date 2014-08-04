@@ -8,15 +8,12 @@
  * - MySQL 5.0 or higher
  *
  * @package    Gleez\Database\Drivers
- * @version    2.0.0
+ * @version    2.0.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 namespace Gleez\Database;
-
-class ConnectionException extends \Exception {};
-class DatabaseException extends \Exception {};
 
 class Driver_MySQLi extends Database {
 
@@ -401,5 +398,35 @@ class Driver_MySQLi extends Database {
 		$row    = $result->fetch_object();
 
 		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
+	}
+
+	public function list_tables($like = NULL)
+	{
+		// Make sure the database is connected
+		$this->_connection OR $this->connect();
+
+		if (is_string($like))
+		{
+			// Search for table names
+			$result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE);
+		}
+		else
+		{
+			// Find all table names
+			$result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
+		}
+
+		$tables = array();
+		foreach ($result as $row)
+		{
+			$tables[] = reset($row);
+		}
+
+		return $tables;
+	}
+
+	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
+	{
+		throw new DatabaseException('Not Implemented');
 	}
 }
