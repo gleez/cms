@@ -723,7 +723,7 @@ class HTML {
 				$status = 'info';
 			break;
 			case 'archive':
-				$status = 'inverse';
+				$status = 'archive';
 			break;
 			case 'debug':
 			case 'draft':
