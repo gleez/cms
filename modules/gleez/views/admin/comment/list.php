@@ -12,12 +12,14 @@
 		<?php echo Form::open($action, array('id'=>'admin-comment-form', 'class'=>'no-form')); ?>
 			<fieldset class="bulk-actions form-actions rounded">
 				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
-							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'form-control col-md-6')); ?>
+					<div class="form-group col-xs-7 col-sm-3 col-md-2">
+						<div class="control-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
+							<?php echo Form::select('operation', $bulk_actions, '', array('class' => 'form-control col-md-5')); ?>
 						</div>
 					</div>
-					<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn btn-default')); ?>
+					<div class="form-group col-xs-5 col-sm-2 col-md-2">
+						<?php echo Form::submit('comment-bulk-actions', __('Apply'), array('class'=>'btn btn-default col-md-5')); ?>
+					</div>
 				</div>
 			</fieldset>
 			<table id="admin-list-comments" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["1","desc"],["2","asc"],["4","desc"]]'>
