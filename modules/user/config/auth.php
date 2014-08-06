@@ -102,5 +102,11 @@ return array
 		 * @var  string
 		 */
 		'login_jail_time' => "15 minutes",
-	)
+	),
+
+	/**
+	 * Enable buddy relationship (FALSE)?
+	 * @var  boolean
+	 */
+	'enable_buddy' => FALSE,
 );
