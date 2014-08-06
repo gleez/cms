@@ -567,3 +567,27 @@ CREATE TABLE IF NOT EXISTS {oauth_tokens} (
     FOREIGN KEY (`user_id`) REFERENCES {users} (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (`client_id`) REFERENCES {oauth_clients} (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS {mail_queue} (
+  id bigint(20) NOT NULL AUTO_INCREMENT,
+  from_name varchar(64) DEFAULT NULL,
+  from_email varchar(128) NOT NULL,
+  to_email varchar(128) NOT NULL,
+  to_name varchar(128) DEFAULT NULL,
+  subject varchar(255) NOT NULL,
+  body text NOT NULL,
+  hash varchar(128) NOT NULL,
+  status tinyint(1) NOT NULL DEFAULT '0',
+  priority tinyint(1) NOT NULL DEFAULT '0',
+  max_attempts tinyint(3) NOT NULL DEFAULT '3',
+  attempts tinyint(3) NOT NULL DEFAULT '0',
+  last_attempt int(11) NOT NULL DEFAULT '0',
+  created int(11) NOT NULL DEFAULT '0',
+  pubdate int(11) NOT NULL DEFAULT '0',
+  sentdate int(11) NOT NULL DEFAULT '0',
+  timezone varchar(32) DEFAULT 'UTC',
+  language varchar(12) DEFAULT 'en_US',
+  template varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `to_email` (`to_email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
