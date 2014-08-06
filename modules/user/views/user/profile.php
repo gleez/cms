@@ -21,7 +21,9 @@
 							echo HTML::anchor('message/send', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
 						}
 					?>
-					<?php echo HTML::anchor('buddy', '<i class="fa fa-fw fa-group"></i> '.__('Friends') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
+					<?php if($enable_buddy): ?>
+						<?php echo HTML::anchor('buddy', '<i class="fa fa-fw fa-group"></i> '.__('Friends') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
+					<?php endif; ?>
 					<?php echo HTML::anchor('user/edit', '<i class="fa fa-fw fa-cog"></i> '.__('Settings') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item')); ?>
 				</div>
 			</div>
@@ -67,16 +69,18 @@
 						<?php endif; ?>
 					</div>
 					<div class="col-md-5">
-						<?php if(Auth::instance()->logged_in()):?>
-							<?php if($request AND ($request == $user->id )):?>
-								<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
-								<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
-							<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
-								<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
-							<?php elseif($isfriend AND ! $is_owner): ?>
-								<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
-							<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
-								<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
+					<?php if($enable_buddy):?>
+							<?php if(Auth::instance()->logged_in()):?>
+								<?php if($request AND ($request == $user->id )):?>
+									<?php echo HTML::anchor("buddy/accept/".$user->id , __('Accept'), array('class' => 'btn btn-success')); ?>
+									<?php echo HTML::anchor("buddy/reject/".$user->id , __('Reject'), array('class' => 'btn btn-danger')); ?>
+								<?php elseif($request AND ! $isfriend AND ! $is_owner) : ?>
+									<div class= 'btn btn-info'><?php echo __('Pending Request'); ?></div>
+								<?php elseif($isfriend AND ! $is_owner): ?>
+									<div class= 'btn btn-info'><?php echo __('Friend'); ?></div>
+								<?php elseif(! $request AND ! $isfriend AND ! $is_owner): ?>
+									<?php echo HTML::anchor("buddy/add/".$user->id , __('Send Request'), array('class' => 'btn btn-success')); ?>
+								<?php endif; ?>
 							<?php endif; ?>
 						<?php endif; ?>
 					</div>
@@ -109,7 +113,7 @@
 			</a>
 		</div>
 
-		<?php if(Auth::instance()->logged_in()):?>
+		<?php if(Auth::instance()->logged_in() && $enable_buddy):?>
 			<div class="list-group list-all1 panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title"><?php echo __('Friends'); ?></h3>

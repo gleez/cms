@@ -249,6 +249,7 @@ class Controller_User extends Template {
 		$request  = FALSE;
 		$isFriend = FALSE;
 		$friends  = array();
+		$enable_buddy = (bool) Config::load('auth.enable_buddy', FALSE);
 
 		// Add Schema.org support
 		$this->schemaType = 'ProfilePage';
@@ -285,12 +286,12 @@ class Controller_User extends Template {
 			throw HTTP_Exception::factory(403, 'Attempt to access without required privileges.');
 		}
 
-		if ($account AND ($user->id === $account->id))
+		if ($account AND ($user->id === $account->id) AND $enable_buddy)
 		{
 			$is_owner = TRUE;
 		}
 
-		if($account && $user)
+		if($account && $user && $enable_buddy)
 		{
 			$request   = Model::factory('buddy')->isRequest($account->id, $user->id);
 			$isFriend  = Model::factory('buddy')->isFriend($account->id, $user->id);
@@ -302,7 +303,8 @@ class Controller_User extends Template {
 					->set('is_owner',	 $is_owner)
 					->set('request',	 $request)
 					->set('isfriend',	 $isFriend)
-					->set('friends', 	 $friends);
+					->set('friends', 	 $friends)
+					->set('enable_buddy',$enable_buddy);
 
 		$this->response->body($view);
 	}
