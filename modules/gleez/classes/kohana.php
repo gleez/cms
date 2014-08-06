@@ -603,7 +603,7 @@ class Kohana {
 	 *
 	 * @param   array   $modules    list of module paths
 	 * @return  array   enabled modules
-	 * @throws  Gleez_Exception
+	 * @throws  \InvalidArgumentException
 	 */
 	public static function modules(array $modules = NULL)
 	{
@@ -626,10 +626,7 @@ class Kohana {
 			else
 			{
 				// This module is invalid, remove it
-				throw new Gleez_Exception('Attempted to load an invalid or missing module \':module\' at \':path\'', array(
-					':module' => $name,
-					':path'   => Debug::path($path),
-				));
+				throw new \InvalidArgumentException(sprintf('Attempted to load an invalid or missing module %s at %s', $name, realpath($path)));
 			}
 		}
 
@@ -907,7 +904,6 @@ class Kohana {
 	 *     // Get the "foo" cache
 	 *     $foo = Kohana::cache('foo');
 	 *
-	 * @throws  Gleez_Exception
 	 * @param   string    $name       name of the cache
 	 * @param   mixed     $data       data to cache
 	 * @param   integer   $lifetime   number of seconds the cache is valid for

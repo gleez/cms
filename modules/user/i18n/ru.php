@@ -15,7 +15,7 @@ return array(
 	':nick joined.' => ':nick присоединился.',
 	':prov account' => 'Учётная запись :prov',
 	':role Permissions' => 'Полномочия :role',
-	':site - Account details for :name (approved)' => ':site - Решистрационные данные учётной записи для :name (одобрено)',
+	':site - Account details for :name (approved)' => ':site - Регистрационные данные учётной записи для :name (одобрено)',
 	':site - Reset password for :name' => ':site - Сброс пароля для :name',
 	':site - Validate account details for :name' => ':site - Проверка регистрационных данных учётной записи для :name',
 	':site Account' => 'Учётная запись :site',
@@ -217,7 +217,7 @@ return array(
 	'This username already exists' => 'Такое имя пользователя уже существует',
 	'This username is not available' => 'Это имя пользователя не доступно',
 	'This username or password is not valid' => 'Имя пользователя или пароль не верны',
-	'This will verify your account. In the future you will be able to log in using the username and password that you created during registration.' => 'Это подтвердит решистрацию вашу учётную запись. В будущем вы сможете авторизоваться используя им пользователя (логин) и пароль, которые вы указали при регистрации.',
+	'This will verify your account. In the future you will be able to log in using the username and password that you created during registration.' => 'Это подтвердит регистрацию вашу учётную запись. В будущем вы сможете авторизоваться используя им пользователя (логин) и пароль, которые вы указали при регистрации.',
 	'Try to come up with a complex password' => 'Постарайтесь придумать сложный пароль',
 	// U
 	'Update Profile' => 'Обновить профиль пользователя',
