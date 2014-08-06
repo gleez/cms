@@ -398,7 +398,7 @@ return array(
 	'Most of the tasks associated with the administration of the contents of this website associated with this permission' => 'Большинство задач, связанных с введением в содержание этого сайта, связанные с этим разрешением',
 	'Monday' => 'Понедельник',
 	'Month' => 'Месяц',
-	'Move to Trash' => 'Перенести в корзину',
+	'Move to Trash' => 'Удалить',
 	'MySQL Version' => 'Версия MySQL',
 	// N
 	'Name' => 'Название',

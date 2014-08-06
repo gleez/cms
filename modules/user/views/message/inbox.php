@@ -9,13 +9,13 @@
 				<?php echo Form::open($action, array('class'=>'form-inline')); ?>
 					<fieldset class="bulk-actions form-actions rounded">
 						<div class="row">
-							<div class="form-group col-xs-8 col-sm-3 col-md-3">
+							<div class="form-group col-xs-7 col-sm-3 col-md-3">
 								<div class="control-group <?php echo isset($errors['operation']) ? 'has-error': ''; ?>">
-									<?php echo Form::select('operation', PM::bulk_actions(TRUE), '', array('class' => 'form-control')); ?>
+									<?php echo Form::select('operation', PM::bulk_actions(TRUE), '', array('class' => 'form-control col-md-5')); ?>
 								</div>
 							</div>
-							<div class="form-group col-xs-4 col-sm-2 col-md-2">
-								<?php echo Form::submit('message-bulk-actions', __('Apply'), array('class'=>'btn btn-primary')); ?>
+							<div class="form-group col-xs-5 col-sm-2 col-md-2">
+								<?php echo Form::submit('message-bulk-actions', __('Apply'), array('class'=>'btn btn-primary col-md-5')); ?>
 							</div>
 							<div class="form-group col-xs-6 col-sm-7 col-md-7 form-actions-right">
 								<?php echo HTML::anchor(Route::get('user/message')->uri(array('action' => 'compose')), '<i class="fa fa-plus fa-white"></i> '.__('Compose'), array('class'=>'btn btn-success')); ?>
