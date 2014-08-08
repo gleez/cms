@@ -4,12 +4,17 @@
  *
  * @package    Gleez\Email
  * @author     Gleez Team
- * @version    1.1.5
+ * @version    1.2.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  * @link       https://github.com/Synchro/PHPMailer
  */
 class Email {
+
+	/**
+	 * Mail queue bool
+	 */
+	protected $queue = FALSE;
 
 	/**
 	 * Mail object
@@ -179,6 +184,29 @@ class Email {
 	}
 
 	/**
+	 * Queue the email for future delivery
+	 *
+	 * @param   int     $timestamp  Email delivery Timestamp (ex: After One hour)
+	 * @param   bool    $unique     Ignore duplicate mails for queuing
+	 * @param   array   $params     Additional params for unique
+	 * @return  Email
+	 */
+	public function queue($timestamp = NULL, $unique = FALSE, $params = NULL)
+	{
+		try
+		{
+			//@todo insert into mailqueue table
+			$this->queue = TRUE;
+		}
+		catch(Exception $e)
+		{
+			Log::error('Error queuing mail error: :e', array(':e' => $e->getMessage()));
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Sends the email
 	 *
 	 * @return  boolean
@@ -187,7 +215,12 @@ class Email {
 	{
 		try
 		{
-			$this->_mail->send();
+			// Send mail if its not queued
+			if($this->queue == FALSE)
+			{
+				$this->_mail->send();
+			}
+	
 			return TRUE;
 		}
 		catch(Exception $e)
