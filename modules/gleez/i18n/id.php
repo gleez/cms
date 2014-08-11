@@ -1,22 +1,22 @@
 <?php
 /**
- * Localized strings into English 
+ * Localized strings into Bahasa Indonesia 
  *
  * @package   Gleez\I18n
- * @author    Sorin Iclanzan
+ * @author    Azuya
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 return array(
-	// :
-	':field must not be empty' => ':field tidak boleh kosong',
-	':pcre has not been compiled with Unicode property support.' => ':pcre belum dikompile dengan dukungan Unicode.',
-	':pcre has not been compiled with UTF-8 support.' => ':pcre belum dikompile dengan dukungan UTF-8.',
-	':tag - Recent updates' => ':tag - Update terbaru',
-	':term - Recent updates' => ':term - Update terbaru',
-	// (
-	'(No subject)' => '(Tidak ada subjek)',
-	// A
+// :
+':field must not be empty' => ':field tidak boleh kosong',
+':pcre has not been compiled with Unicode property support.' => ':pcre belum dikompile dengan dukungan Unicode.',
+':pcre has not been compiled with UTF-8 support.' => ':pcre belum dikompile dengan dukungan UTF-8.',
+':tag - Recent updates' => ':tag - Update terbaru',
+':term - Recent updates' => ':term - Update terbaru',
+// (
+'(No subject)' => '(Tidak ada subjek)',
+// A
 'A text format contains filters that change the user input, for example stripping out malicious HTML or making URLs clickable. Filters are executed from top to bottom and the order is important, since one filter may prevent another filter from doing its job. For example, when URLs are converted into links before disallowed HTML tags are removed, all links may be removed. When this happens, the order of filters may need to be re-arranged.' => 'Belum',
 'Ability to editing own comments' =>'Kemampuan untuk mengedit komentar sendiri',
 'Ability to publish comments' =>'Kemampuan untuk mempublikasikan komentar',
@@ -79,15 +79,14 @@ return array(
 'Attempt to access disabled feature' =>'Mencoba untuk mengakses fitur dinonaktifkan',
 'Author' =>'Penulis',
 
-
-	// B
+// B
 'Before you start using it...' =>'Sebelum Anda mulai menggunakannya ...',
 'Blocked IP addresses' =>'Alamat IP yang diblokir',
 'Blog' =>'Blog',
 'Body' =>'Isi',
 'Bulk Actions' =>'Tindakan sekaligus',
 
-	// C
+// C
 'Cache Directory' =>'Direktori Cache',
 'Categories' =>'Kategori',
 'Category' =>'Kategori',
@@ -145,7 +144,7 @@ return array(
 'Draft' =>'Konsep',
 
 	// E
-	'E-mail address' =>'Alamat E-mail',
+'E-mail address' =>'Alamat E-mail',
 'Edit' =>'Sunting',
 'Edit %widget widget' =>'Sunting %widget widget',
 'Edit %name menu' =>'Menu Edit %name',
@@ -333,7 +332,7 @@ return array(
 'Region' =>'Wilayah',
 'Reflection API' =>'Refleksi API',
 'Remove stickiness' =>'Hapus sticky',
-'Rendered in {execution_time}, using {memory_usage} of memory.' =>'Dikirimkan dalam {execution_time} , menggunakan memori {memory_usage}.',
+'Rendered in {execution_time}, using {memory_usage} of memory.' =>'Di-render dalam {execution_time} , menggunakan memori {memory_usage}.',
 'Right Sidebar' =>'Sidebar Kanan',
 'Roles' =>'Peran',
 
@@ -489,94 +488,92 @@ return array(
 	// Z
 	
 	//menu 
-	'Users' =>'Pengguna',
-	'User' =>'Pengguna',
-	'Input Formats' =>'Format Input',
-	'Tags' =>'Tag',
-	'Add New' =>'Tambahkan',
-	'Main Menu'=>'Menu Utama',
-	'Management'=>'Manajemen',
-	'Navigation'=>'Navigasi',
-	'User Menu'=>'Menu Pengguna',
-	'Home'=>'Beranda',
-	'Pages'=>'Halaman',
-	'Add Page'=>'Tambah halaman',
-	'Contact'=>'Kontak',
-	'Menus'=>'Menu',
-	'Blogs'=>'Bloh',
-	'Input Formats'=>'Format Masukan',
-	'Settings'=>'Pengaturan',
-	'Path Alias'=>'Alias Path',
-	'Widgets'=>'Widget',
-	'Categories'=>'Kategori',
-	'Tags'=>'Tag',
-	'Modules'=>'Modul',
-	'Users'=>'Pengguna',
-	'Roles'=>'Peran',
-	'Pages'=>'Halaman',
-	'Comments'=>'Komentar',
-	'Login'=>'Masuk',
-	'Blogs'=>'Blog',
-	'Add Blog'=>'Tambah Blog',
-	'List'=>'Daftar',
-	'Site'=>'Situs',
+'Users' =>'Pengguna',
+'User' =>'Pengguna',
+'Input Formats' =>'Format Input',
+'Tags' =>'Tag',
+'Add New' =>'Tambahkan',
+'Main Menu'=>'Menu Utama',
+'Management'=>'Manajemen',
+'Navigation'=>'Navigasi',
+'User Menu'=>'Menu Pengguna',
+'Home'=>'Beranda',
+'Pages'=>'Halaman',
+'Add Page'=>'Tambah halaman',
+'Contact'=>'Kontak',
+'Menus'=>'Menu',
+'Blogs'=>'Bloh',
+'Input Formats'=>'Format Masukan',
+'Settings'=>'Pengaturan',
+'Path Alias'=>'Alias Path',
+'Widgets'=>'Widget',
+'Categories'=>'Kategori',
+'Tags'=>'Tag',
+'Modules'=>'Modul',
+'Users'=>'Pengguna',
+'Roles'=>'Peran',
+'Pages'=>'Halaman',
+'Comments'=>'Komentar',
+'Login'=>'Masuk',
+'Blogs'=>'Blog',
+'Add Blog'=>'Tambah Blog',
+'List'=>'Daftar',
+'Site'=>'Situs',
 
-	
-	
+
 	// kontak 
-	'Contact us'=>'Kontak Kami',
-	'Contact Us'=>'Kontak Kami',
-	'Your Name'=>'Nama Anda',
-	'Reply-to'=>'Balas-ke',
-	'Please Choose Category'=>'Pilih kategori',
-	'If you want more information about the %sitename or if you have comments about this website please use the contact form below. If you message is about a specific page on the %site_url website please include the URL in your message for reference.'=>'Jika anda ingin informasi lebih lanjut tentang %sitename atau ingin memberikan kritik, saran tentang website kami, silahkan gunakan form kontak dibawah ini. Jika pesan mengenai halaman yang spesifik di %site_url silahkan masukkan referensi URL',
-	':format words'=>':format kata',
-	'You must provide mail subject'=>'Harus mengisi mail subject',
-	'You must select a category'=>'Harus memilih kategori',
-	'You must provide mail body'=>'Isi pesan tidak boleh kosong',
-	'Features'=>'Fitur',
-	'Whats News'=>'Kabar Terbaru',
-	'Don\'t have an account yet?'=>'Belum punya akun?',
-	'Sign in using your registered account'=>'Masuk menggunakan akun Anda',
-	'Please fill the form for more information about our services, or come and visit Us'=>'Untuk mengetahui lebih lanjut mengenai layanan ini silahkan isi form disamping, atau silahkan berkunjung ke kantor Kami ',
-	'Security Code'=>'Kode pengaman',
-	'Address'=>'Alamat',
-	'Follow Us'=>'Follow Kami',
-	'Contact'=>'Kontak',
-	'Sitemap'=>'Peta Situs',
-	'First Name'=>'Nama Depan',
-	'Place of birth'=>'Tempat lahir',
-	'Date of birth'=>'Tanggal lahir',
-	'Last name'=>'Nama Belakang',
-	'Back to list'=>'Kembali ke daftar',
-	'Full Name'=>'Nama Lengkap',
-	'Place, DoB'=>'TTL',
-	'Search'=>'Cari',
-	'Province'=>'Propinsi',
-	'Slogan'=>'Slogan',
-	'Logo'=>'Logo',
-	'Country'=>'Negara',
-	'General'=>'Umum',
-	'Appearance'=>'Tampilan',
-	'Date & Time'=>'Tanggal & Waktu',
-	'Maintenance'=>'Perawatan',
-	'Zip Code'=>'Kode Pos',
-	'Website'=>'Situs',
-	'Donation'=>'Donasi',
-	//welcome
-	'Get Started Now!'=>'Ayo mulai!',
-	'or learn more.'=>'atau Pelajari lebih lanjut.',
-	'Check out our options and features included.'=>'Lihat berbagai fitur dan opsi yang Kami sediakan',
-	'Verification'=>'Verifikasi',
-	'Data Input'=>'Input Data',
-	'Ready to use'=>'Siap dipakai',
-	'Day'=>'Hari',
-	'Criteria'=>'Kriteria',
-	'Reason'=>'Alasan',
-	'Note'=>'Keterangan',
+'Contact us'=>'Kontak Kami',
+'Contact Us'=>'Kontak Kami',
+'Your Name'=>'Nama Anda',
+'Reply-to'=>'Balas-ke',
+'Please Choose Category'=>'Pilih kategori',
+'If you want more information about the %sitename or if you have comments about this website please use the contact form below. If you message is about a specific page on the %site_url website please include the URL in your message for reference.'=>'Jika anda ingin informasi lebih lanjut tentang %sitename atau ingin memberikan kritik, saran tentang website kami, silahkan gunakan form kontak dibawah ini. Jika pesan mengenai halaman yang spesifik di %site_url silahkan masukkan referensi URL',
+':format words'=>':format kata',
+'You must provide mail subject'=>'Harus mengisi mail subject',
+'You must select a category'=>'Harus memilih kategori',
+'You must provide mail body'=>'Isi pesan tidak boleh kosong',
+'Features'=>'Fitur',
+'Whats News'=>'Kabar Terbaru',
+'Don\'t have an account yet?'=>'Belum punya akun?',
+'Sign in using your registered account'=>'Masuk menggunakan akun Anda',
+'Please fill the form for more information about our services, or come and visit Us'=>'Untuk mengetahui lebih lanjut mengenai layanan ini silahkan isi form disamping, atau silahkan berkunjung ke kantor Kami ',
+'Security Code'=>'Kode pengaman',
+'Address'=>'Alamat',
+'Follow Us'=>'Follow Kami',
+'Contact'=>'Kontak',
+'Sitemap'=>'Peta Situs',
+'First Name'=>'Nama Depan',
+'Place of birth'=>'Tempat lahir',
+'Date of birth'=>'Tanggal lahir',
+'Last name'=>'Nama Belakang',
+'Back to list'=>'Kembali ke daftar',
+'Full Name'=>'Nama Lengkap',
+'Place, DoB'=>'TTL',
+'Search'=>'Cari',
+'Province'=>'Propinsi',
+'Slogan'=>'Slogan',
+'Logo'=>'Logo',
+'Country'=>'Negara',
+'General'=>'Umum',
+'Appearance'=>'Tampilan',
+'Date & Time'=>'Tanggal & Waktu',
+'Maintenance'=>'Perawatan',
+'Zip Code'=>'Kode Pos',
+'Website'=>'Situs',
+'Donation'=>'Donasi',
+//welcome
+'Get Started Now!'=>'Ayo mulai!',
+'or learn more.'=>'atau Pelajari lebih lanjut.',
+'Check out our options and features included.'=>'Lihat berbagai fitur dan opsi yang Kami sediakan',
+'Verification'=>'Verifikasi',
+'Data Input'=>'Input Data',
+'Ready to use'=>'Siap dipakai',
+'Day'=>'Hari',
+'Criteria'=>'Kriteria',
+'Reason'=>'Alasan',
+'Note'=>'Keterangan',
 
 
-	
-	
+
 	
 );
