@@ -9,7 +9,7 @@
  * well as quoting, escaping and other related functions.
  *
  * @package    Gleez\Database\Core
- * @version    2.1.1
+ * @version    2.2.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -577,5 +577,127 @@ abstract class Database{
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Extracts the text between parentheses, if any.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * list($type, $length) = $db->parseType('CHAR(6)');
+	 * </code>
+	 *
+	 * @since  2.2.1
+	 *
+	 * @param  string $type
+	 *
+	 * @return  array list containing the type and length, if any
+	 */
+	protected function parseType($type)
+	{
+		if (false === ($open = strpos($type, '(')))
+			// No length specified
+			return array($type, null);
+
+		// Closing parenthesis
+		$close = strrpos($type, ')', $open);
+
+		// Length without parentheses
+		$length = substr($type, $open + 1, $close - 1 - $open);
+
+		// Type without the length
+		$type = substr($type, 0, $open).substr($type, $close + 1);
+
+		return array($type, $length);
+	}
+
+	/**
+	 * Get data type.
+	 *
+	 * Returns a normalized array describing the SQL data type.
+	 * Example:<br>
+	 * <code>
+	 * $db->getDataType('char');
+	 * </code>
+	 *
+	 * @since  2.2.1
+	 *
+	 * @param  string $type SQL data type
+	 *
+	 * @return array
+	 */
+	public function getDataType($type)
+	{
+		static $types = array
+		(
+			// SQL-92
+			'bit' => array('type' => 'string', 'exact' => true),
+			'bit varying' => array('type' => 'string'),
+			'char' => array('type' => 'string', 'exact' => true),
+			'char varying' => array('type' => 'string'),
+			'character' => array('type' => 'string', 'exact' => true),
+			'character varying' => array('type' => 'string'),
+			'date' => array('type' => 'string'),
+			'dec' => array('type' => 'float', 'exact' => true),
+			'decimal' => array('type' => 'float', 'exact' => true),
+			'double precision' => array('type' => 'float'),
+			'float' => array('type' => 'float'),
+			'int' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
+			'int unsigned' => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'integer' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
+			'integer unsigned' => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'interval' => array('type' => 'string'),
+			'national char' => array('type' => 'string', 'exact' => true),
+			'national char varying' => array('type' => 'string'),
+			'national character' => array('type' => 'string', 'exact' => true),
+			'national character varying' => array('type' => 'string'),
+			'nchar' => array('type' => 'string', 'exact' => true),
+			'nchar varying' => array('type' => 'string'),
+			'numeric' => array('type' => 'float', 'exact' => true),
+			'real' => array('type' => 'float'),
+			'smallint' => array('type' => 'int', 'min' => '-32768', 'max' => '32767'),
+			'smallint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'time' => array('type' => 'string'),
+			'time with time zone' => array('type' => 'string'),
+			'timestamp' => array('type' => 'string'),
+			'timestamp with time zone' => array('type' => 'string'),
+			'varchar' => array('type' => 'string'),
+			// SQL:1999
+			'binary large object' => array('type' => 'string', 'binary' => true),
+			'blob' => array('type' => 'string', 'binary' => true),
+			'boolean' => array('type' => 'bool'),
+			'char large object' => array('type' => 'string'),
+			'character large object' => array('type' => 'string'),
+			'clob' => array('type' => 'string'),
+			'national character large object' => array('type' => 'string'),
+			'nchar large object' => array('type' => 'string'),
+			'nclob' => array('type' => 'string'),
+			'time without time zone' => array('type' => 'string'),
+			'timestamp without time zone' => array('type' => 'string'),
+			// SQL:2003
+			'bigint' => array('type' => 'int', 'min' => '-9223372036854775808', 'max' => '9223372036854775807'),
+			'bigint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
+			// SQL:2008
+			'binary' => array('type' => 'string', 'binary' => true, 'exact' => true),
+			'binary varying' => array('type' => 'string', 'binary' => true),
+			'varbinary' => array('type' => 'string', 'binary' => true),
+			// MySQL
+			'tinyint' => array('type' => 'int', 'min' => '-128', 'max' => '127'),
+			'tinyint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '255'),
+			'mediumint' => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
+			'mediumint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'tinyblob' => array('type' => 'string', 'binary' => true),
+			'mediumblob' => array('type' => 'string', 'binary' => true),
+			'longblob' => array('type' => 'string', 'binary' => true),
+			'text' => array('type' => 'string'),
+			'tinytext' => array('type' => 'string'),
+			'mediumtext' => array('type' => 'string'),
+			'longtext' => array('type' => 'string'),
+		);
+
+		if (isset($types[$type]))
+			return $types[$type];
+
+		return array();
 	}
 }
