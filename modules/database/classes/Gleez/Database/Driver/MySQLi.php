@@ -4,15 +4,16 @@
  *
  * ### System Requirements
  *
- * - PHP 5.3 or higher
+ * - PHP 5.3.9 or higher
  * - MySQL 5.0 or higher
  *
  * @package    Gleez\Database\Drivers
- * @version    2.0.1
+ * @version    2.0.2
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
+
 namespace Gleez\Database;
 
 class Driver_MySQLi extends Database {
@@ -43,7 +44,7 @@ class Driver_MySQLi extends Database {
 
 	/**
 	 * Raw server connection
-	 * @var mysqli
+	 * @var \mysqli
 	 */
 	protected $_connection;
 
@@ -57,7 +58,7 @@ class Driver_MySQLi extends Database {
 	 * $db->connect();
 	 * ~~~
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	public function connect()
 	{
@@ -99,25 +100,16 @@ class Driver_MySQLi extends Database {
 
 		try
 		{
-			// Compare versions
-			if (version_compare(PHP_VERSION, '5.3', '>=') AND (bool)$persistent)
-			{
-				// Create a persistent connection - only available with PHP 5.3+
-				// See http://www.php.net/manual/en/mysqli.persistconns.php
-				$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
-			}
-			else
-			{
-				// Create a connection
-				$this->_connection = new \MySQLi($hostname, $username, $password, $database, (int)$port, $socket);
-			}
+			// Create a persistent connection - only available with PHP 5.3+
+			// See http://www.php.net/manual/en/mysqli.persistconns.php
+			$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new ConnectionException(':error', array(':error' => $e->getMessage()), $e->getCode());
+			throw new ConnectionException($e->getMessage(), $e->getCode());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
@@ -190,14 +182,14 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $database  Database name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	protected function _select_db($database)
 	{
 		if ( ! $this->_connection->select_db($database))
 		{
 			// Unable to select database
-			throw new ConnectionException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new ConnectionException($this->_connection->error, $this->_connection->errno);
 		}
 
 		static::$_current_databases[$this->_connection_id] = $database;
@@ -215,7 +207,7 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $charset  Character set name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 */
 	public function set_charset($charset)
 	{
@@ -235,7 +227,7 @@ class Driver_MySQLi extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new DatabaseException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 	}
 
@@ -260,7 +252,7 @@ class Driver_MySQLi extends Database {
 	 * @uses    Profiler::delete
 	 * @uses    Profiler::stop
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 *
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    List (insert id, row count) for INSERT queries
@@ -314,6 +306,8 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param string $mode  Isolation level
 	 * @return boolean
+	 *
+	 * @throws \Gleez\Database\DatabaseException
 	 */
 	public function begin($mode = NULL)
 	{
@@ -322,9 +316,7 @@ class Driver_MySQLi extends Database {
 
 		if ($mode AND ! $this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error', array(
-				':error' => $this->_connection->error
-			), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 
 		return (bool) $this->_connection->query('START TRANSACTION');
@@ -362,7 +354,7 @@ class Driver_MySQLi extends Database {
 	 * @param  string  $value  The string to escape
 	 *
 	 * @return  string  The escaped string
-	 * @throws  \Foolz\SphinxQL\DatabaseException  If an error was encountered during server-side escape
+	 * @throws  \Gleez\Database\DatabaseException  If an error was encountered during server-side escape
 	 */
 	public function escape($value)
 	{
@@ -425,6 +417,14 @@ class Driver_MySQLi extends Database {
 		return $tables;
 	}
 
+	/**
+	 * @param string $table
+	 * @param mixed  $like
+	 * @param bool   $add_prefix
+	 *
+	 * @return array|void
+	 * @throws \Gleez\Database\DatabaseException
+	 */
 	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
 	{
 		throw new DatabaseException('Not Implemented');
