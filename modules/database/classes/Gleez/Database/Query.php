@@ -11,149 +11,149 @@
 namespace Gleez\Database;
 
 class Query {
-	
+
 	// SQL statement
 	protected $_query;
-	
+
 	// Quoted query parameters
 	protected $_parameters = array();
-	
+
 	// Character that is used to quote identifiers
 	protected $_identifier = '`';
-	
+
 	/**
 	 * Array of select elements that will be comma separated.
 	 *
 	 * @var  array
 	 */
 	protected $select = array();
-	
+
 	/**
 	 * Distinct
 	 *
 	 * @var  array
 	 */
 	protected $distinct = array();
-	
+
 	/**
 	 * From in SQL is the list of indexes that will be used
 	 *
 	 * @var  array
 	 */
 	protected $from = array();
-	
+
 	/**
 	 * Using
 	 *
 	 * @var  array
 	 */
 	protected $using = array();
-	
+
 	/**
 	 * JOIN
 	 *
 	 * @var  array
 	 */
 	protected $join = array();
-	
+
 	/**
 	 * JOIN ON
 	 *
 	 * @var  array
 	 */
 	protected $join_on = array();
-	
+
 	/**
 	 * JOIN AND
 	 *
 	 * @var  array
 	 */
 	protected $join_and = array();
-	
+
 	/**
 	 * The list of where and parenthesis, must be inserted in order
 	 *
 	 * @var  array
 	 */
 	protected $where = array();
-	
+
 	/**
 	 * The list of matches for the MATCH function in SQL
 	 *
 	 * @var  array
 	 */
 	protected $match = array();
-	
+
 	/**
 	 * GROUP BY array to be comma separated
 	 *
 	 * @var  array
 	 */
 	protected $group_by = array();
-	
+
 	/**
 	 * ORDER BY array
 	 *
 	 * @var  array
 	 */
 	protected $within_group_order_by = array();
-	
+
 	/**
 	 * The list of having and parenthesis, must be inserted in order
 	 *
 	 * @var  array
 	 */
 	protected $having = array();
-	
+
 	/**
 	 * ORDER BY array
 	 *
 	 * @var  array
 	 */
 	protected $order_by = array();
-	
+
 	/**
 	 * When not null it adds an offset
 	 *
 	 * @var  null|int
 	 */
 	protected $offset = null;
-	
+
 	/**
 	 * When not null it adds a limit
 	 *
 	 * @var  null|int
 	 */
 	protected $limit = null;
-	
+
 	/**
 	 * Value of INTO query for INSERT or REPLACE
 	 *
 	 * @var  null|string
 	 */
 	protected $into = null;
-	
+
 	/**
 	 * Array of columns for INSERT or REPLACE
 	 *
 	 * @var  array
 	 */
 	protected $columns = array();
-	
+
 	/**
 	 * Array OF ARRAYS of values for INSERT or REPLACE
 	 *
 	 * @var  array
 	 */
 	protected $values = array();
-	
+
 	/**
 	 * Array arrays containing column and value for SET in UPDATE
 	 *
 	 * @var  array
 	 */
 	protected $set = array();
-	
+
 	/**
 	 * Array of OPTION specific to SQL
 	 *
@@ -167,7 +167,7 @@ class Query {
 	 * @var  string
 	 */
 	protected $type = null;
-	
+
 	/**
 	 * Return results as associative arrays or objects
 	 *
@@ -181,13 +181,12 @@ class Query {
 	 * @var  array
 	 */
 	protected $_object_params = array();
-	
+
 	/**
 	 * Creates a new SQL query of the specified type.
 	 *
 	 * @param   integer  $type  query type: Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql   query string
-	 * @return  void
 	 */
 	public function __construct($type, $sql)
 	{
@@ -199,6 +198,8 @@ class Query {
 	 * Return the SQL query string.
 	 *
 	 * @return  string
+	 *
+	 * @throws  \Gleez_Exception
 	 */
 	public function __toString()
 	{
@@ -207,16 +208,20 @@ class Query {
 			// Return the SQL string
 			return $this->compile(Database::instance());
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
-			return Gleez_Exception::text($e);
+			return \Gleez_Exception::text($e);
 		}
 	}
-	
+
 	/**
 	 * Runs the query built
 	 *
-	 * @return  array  The result of the query
+	 * @param   object       $db             The database instance [Optional]
+	 * @param   bool|string  $as_object      Return results as associative arrays or objects? [Optional]
+	 * @param   array        $object_params  Parameters for object results [Optional]
+	 *
+	 * @return  mixed  The result of the query
 	 */
 	public function execute($db = NULL, $as_object = NULL, $object_params = NULL)
 	{
@@ -225,7 +230,7 @@ class Query {
 		    // Get the database instance
 		    $db = Database::instance($db);
 		}
-	
+
 		if ($as_object === NULL)
 		{
 			$as_object = $this->_as_object;
@@ -241,11 +246,12 @@ class Query {
 		// pass the object so execute compiles it by itself
 		return $db->query($this->type, $sql, $as_object, $object_params);
 	}
-	
+
 	/**
 	 * Runs the compile function
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   object  $db  The database instance [Optional]
+	 * @return  string  The current object
 	 */
 	public function compile($db = NULL)
 	{
@@ -254,7 +260,7 @@ class Query {
 			// Get the database instance
 			$db = Database::instance($db);
 		}
-		
+
 		switch ($this->type) {
 			case 'select':
 				$this->compileSelect($db);
@@ -285,7 +291,7 @@ class Query {
 
 		return $sql;
 	}
-	
+
 	/**
 	 * Returns the latest compiled query
 	 *
@@ -295,7 +301,7 @@ class Query {
 	{
 	    return $this->_query;
 	}
-	
+
 	/**
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
@@ -319,7 +325,7 @@ class Query {
 		if (! empty($this->using))
 		{
 			$quote_column = array($db->getConnection(), 'quoteIdentifier');
-			
+
 			// Quote and concat the columns
 			$query .= ' USING ('.implode(', ', array_map($quote_column, $this->using)).')';
 		}
@@ -343,11 +349,11 @@ class Query {
 
 			// Concat the conditions "... AND ..."
 			$query .= ' ON ('.implode(' AND ', $conditions).')';
-		 
+
 			if (! empty($this->join_and))
 			{
 				$and_conditions = array();
-				
+
 				foreach ($this->join_and as $icondition)
 				{
 					// Split the condition
@@ -359,9 +365,9 @@ class Query {
 					}
 
 					// Quote each of the columns used for the condition. v1 is quote value not column
-					$and_conditions[] = $db->getConnection()->quoteIdentifier($c1).$op.' '.$db->quote($v1); 
+					$and_conditions[] = $db->getConnection()->quoteIdentifier($c1).$op.' '.$db->quote($v1);
 				}
-				
+
 				if( !empty($and_conditions) ) {
 					// Concat the conditions "... AND ..."
 					$query .= ' AND '.implode(' AND ', $and_conditions).'';
@@ -377,25 +383,27 @@ class Query {
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
 	 * Used by: SELECT, DELETE, UPDATE
 	 *
+	 * @param   object  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
 	public function compileWhere($db)
 	{
 		return $this->_compileWhereHaving($db, $type = 'where');
 	}
-	
+
 	/**
 	 * Compiles the WHERE part of the queries
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
 	 * Used by: SELECT, DELETE, UPDATE
 	 *
+	 * @param   object  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
 	public function compileHaving($db)
 	{
 		return $this->_compileWhereHaving($db, $type = 'having');
 	}
-	
+
 	private function _compileWhereHaving($db, $type = 'where')
 	{
 		$query = '';
@@ -403,18 +411,18 @@ class Query {
 		$array = $this->where;
 		if($type == 'having')
 		{
-			$array = $this->having;	
+			$array = $this->having;
 		}
-		
+
 		if (! empty($array) && $type == 'where') {
 			$query .= 'WHERE ';
 		}
-		
+
 		if (! empty($array) && $type == 'having')
 		{
 			$query .= 'HAVING ';
 		}
-		
+
 		if ( ! empty($array)) {
 			$just_opened = false;
 
@@ -440,7 +448,7 @@ class Query {
 
 				$just_opened = false;
 
-				if (strtoupper($where['operator']) === 'BETWEEN' AND is_array($where['value'])) 
+				if (strtoupper($where['operator']) === 'BETWEEN' AND is_array($where['value']))
 				{
 					$query .= $db->getConnection()->quoteIdentifier($where['column']);
 					$query .=' BETWEEN ';
@@ -462,15 +470,15 @@ class Query {
 
 					// Quote the min and max value
 					$query .= $min.' AND '.$max;
-				} 
-				else 
+				}
+				else
 				{
 					// id can't be quoted!
-					if ($where['column'] === 'id') 
+					if ($where['column'] === 'id')
 					{
 				    	$query .= 'id ';
 					}
-					else 
+					else
 					{
 				    	$query .= $db->getConnection()->quoteIdentifier($where['column']).' ';
 					}
@@ -483,7 +491,7 @@ class Query {
 					{
 						// Quote the value, it is not a parameter
 						$query .= $where['operator'].' '.$db->getConnection()->quote($where['value']).' ';
-					} 
+					}
 					else
 					{
 						$query .= $where['operator'].' '.$where['value'].' ';
@@ -494,11 +502,12 @@ class Query {
 
 		return $query;
 	}
-	
+
 	/**
 	 * Compiles the statements for SELECT
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   object  $db  The database instance
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function compileSelect($db)
 	{
@@ -506,7 +515,7 @@ class Query {
 
 		// Callback to quote tables
 		$quoteTable = array($db->getConnection(), 'quoteTable');
-	
+
 		if ($this->type == 'select') {
 			$query .= 'SELECT ';
 
@@ -603,11 +612,12 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for INSERT or REPLACE
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   object  $db  The database instance
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function compileInsert($db)
 	{
@@ -640,11 +650,12 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for UPDATE
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   object  $db  The database instance
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function compileUpdate($db)
 	{
@@ -659,19 +670,19 @@ class Query {
 
 			$query_sub = array();
 
-			foreach ($this->set as $column => $value) 
+			foreach ($this->set as $column => $value)
 			{
 				// MVA support
 				if (is_array($value)) {
 					$query_sub[] = $db->getConnection()->quoteIdentifier($column)
 					    .' = ('.implode(', ', $db->getConnection()->quoteArr($value)).')';
-				} 
-				else 
+				}
+				else
 				{
 					if ((is_string($value) AND array_key_exists($value, $this->_parameters)) === FALSE)
 					{
 						$query_sub[] = $db->getConnection()->quoteIdentifier($column).' = '.$db->getConnection()->quote($value);
-					} 
+					}
 					else
 					{
 						$query_sub[] = $db->getConnection()->quoteIdentifier($column).' = '.$value;
@@ -689,11 +700,12 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for DELETE
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   object  $db  The database instance
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function compileDelete($db)
 	{
@@ -713,13 +725,15 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Select the columns
 	 * Gets the arguments passed as $SQL->select('one', 'two')
 	 * Using it without arguments equals to having '*' as argument
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param mixed $columns
+	 *
+	 * @return \Gleez\Database\Query The current object
 	 */
 	public function select($columns = NULL)
 	{
@@ -737,18 +751,18 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set the table and columns for an insert.
 	 *
 	 * @param   mixed  $table    table name or array($table, $alias) or object
 	 * @param   array  $columns  column names
-	 * @return  void
+	 * @return  \Gleez\Database\Query
 	 */
 	public function insert($table = NULL, array $columns = NULL)
 	{
 		$this->reset();
-		
+
 		if ($table)
 		{
 			// Set the inital table name
@@ -764,11 +778,11 @@ class Query {
 		$this->type = 'insert';
 		return $this;
 	}
-	
+
 	/**
 	 * Activates the REPLACE mode
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function replace()
 	{
@@ -777,11 +791,11 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
-	 * Activates the UPDATE mode
+	 * @param  mixed $index
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return \Gleez\Database\Query  The current object
 	 */
 	public function update($index)
 	{
@@ -791,11 +805,13 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Activates the DELETE mode
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @param   mixed $table
+	 *
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function delete($table = NULL)
 	{
@@ -809,14 +825,14 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * FROM clause (Sphinx-specific since it works with multiple indexes)
 	 * func_get_args()-enabled
 	 *
-	 * @param  array  $array  An array of indexes to use
+	 * @param  array  $tables  An array of indexes to use
 	 *
-	 * @return \Gleez\Database\Database  The current object
+	 * @return \Gleez\Database\Query  The current object
 	 */
 	public function from($tables)
 	{
@@ -826,12 +842,12 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
 	 *
-	 * @param   boolean  enable or disable distinct columns
-	 * @return  $this
+	 * @param   boolean  $value or disable distinct columns
+	 * @return  \Gleez\Database\Query
 	 */
 	public function distinct($value)
 	{
@@ -840,13 +856,13 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Adds addition tables to "JOIN ...".
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  join type (LEFT, RIGHT, INNER, etc)
-	 * @return  $this
+	 * @param   mixed   $table Column name or array($column, $alias) or object
+	 * @param   string  $type  Join type (LEFT, RIGHT, INNER, etc) [Optional]
+	 * @return  \Gleez\Database\Query
 	 */
 	public function join($table, $type = NULL)
 	{
@@ -866,16 +882,18 @@ class Query {
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @return  $this
+	 * @param   mixed   $c1  Column name or array($column, $alias) or object
+	 * @param   string  $op  Logic operator
+	 * @param   mixed   $c2  Column name or array($column, $alias) or object
+	 * @return  \Gleez\Database\Query
+	 *
+	 * @throws  \InvalidArgumentException
 	 */
 	public function on($c1, $op, $c2)
 	{
 		if ( ! empty($this->using))
 		{
-			throw new Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new \InvalidArgumentException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		// Add pending database call which is executed after query type is determined
@@ -887,16 +905,19 @@ class Query {
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @return  $this
+	 * @param   mixed   $c1  Column name or array($column, $alias) or object
+	 * @param   string  $op  Logic operator
+	 * @param   mixed   $c2  Column name or array($column, $alias) or object
+	 *
+	 * @return  \Gleez\Database\Query
+	 *
+	 * @throws  \InvalidArgumentException
 	 */
 	public function join_and($c1, $op, $c2)
 	{
 		if ( ! empty($this->using))
 		{
-			throw new Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new \InvalidArgumentException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		// Add pending database call which is executed after query type is determined
@@ -908,27 +929,31 @@ class Query {
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @return  $this
+	 * @param   mixed   $c1  Column name or array($column, $alias) or object
+	 * @param   string  $op  Logic operator
+	 * @param   mixed   $c2  Column name or array($column, $alias) or object
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function my_on($c1, $op, $c2)
 	{
 		return $this->join_and($c1, $op, $c2);
 	}
-	
+
 	/**
 	 * Adds "USING ..." conditions for the last created JOIN statement.
 	 *
-	 * @param   string  $columns  column name
-	 * @return  $this
+	 * @param   string  $columns  Column name
+	 *
+	 * @return  \Gleez\Database\Query
+	 *
+	 * @throws  \InvalidArgumentException
 	 */
 	public function using($columns)
 	{
 		if ( ! empty($this->join_on))
 		{
-			throw new Exception('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
+			throw new \InvalidArgumentException('JOIN ... ON ... cannot be combined with JOIN ... USING ...');
 		}
 
 		$columns = \func_get_args();
@@ -958,12 +983,12 @@ class Query {
 	 *    // WHERE `column` BETWEEN 'value1' AND 'value2'
 	 *    // WHERE `example` BETWEEN 10 AND 100
 	 *
-	 * @param  string   $column    The column name
-	 * @param  string   $operator  The operator to use
-	 * @param  string   $value     The value to check against
-	 * @param  boolean  $or        If it should be prepended with OR (true) or AND (false) - not available as for Sphinx 2.0.2
+	 * @param   string   $column    The column name
+	 * @param   string   $operator  The operator to use
+	 * @param   string   $value     The value to check against [Optional]
+	 * @param   boolean  $or        If it should be prepended with OR (true) or AND (false) [Optional]
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function where($column, $operator, $value = null, $or = false)
 	{
@@ -981,25 +1006,25 @@ class Query {
 
 		return $this;
 	}
-	
+
 	public function and_where($column, $operator, $value = null)
 	{
 	    return $this->where($column, $operator, $value);
 	}
-	
+
 	public function or_where($column, $operator, $value = null)
 	{
 	    return $this->where($column, $operator, $value, true);
 	}
-	
+
 	/**
 	 * OR WHERE - at this time (Sphinx 2.0.2) it's not available
 	 *
 	 * @param  string  $column    The column name
 	 * @param  string  $operator  The operator to use
-	 * @param  mixed   $value     The value to compare against
+	 * @param  mixed   $value     The value to compare against [Optional]
 	 *
-	 * @return \Gleez\Database\Database  The current object
+	 * @return \Gleez\Database\Query  The current object
 	 */
 	public function orWhere($column, $operator, $value = null)
 	{
@@ -1007,18 +1032,18 @@ class Query {
 
 		return $this;
 	}
-	
+
 	public function where_open()
 	{
 		$this->where[] = array('ext_operator' => '(');
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a parenthesis prepended with AND (where necessary)
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function whereOpen()
 	{
@@ -1026,68 +1051,68 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a new "AND WHERE (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function and_where_open()
 	{
-		return $this->whereOpen();	
+		return $this->whereOpen();
 	}
-	
+
 	/**
 	 * Opens a new "OR WHERE (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function or_where_open()
 	{
 		return $this->orWhereOpen();
 	}
-	
+
 	/**
 	 * Opens a parenthesis prepended with OR (where necessary)
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function orWhereOpen()
 	{
 		$this->where[] = array('ext_operator' => 'OR (');
-	    
+
 		return $this;
 	}
-	
+
 	public function where_close()
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes an open "AND WHERE (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function and_where_close()
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes an open "OR WHERE (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function or_where_close()
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes a parenthesis in WHERE
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function whereClose()
 	{
@@ -1095,14 +1120,14 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * GROUP BY clause
 	 * Adds to the previously added columns
 	 *
 	 * @param  string  $column  A column to group by
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function groupBy($column)
 	{
@@ -1110,19 +1135,19 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Creates a "GROUP BY ..." filter.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
+	 * @param   mixed   $columns  Column name or array($column, $alias) or object
 	 * @param   ...
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function group_by($columns)
 	{
 		return $this->groupBy($columns);
 	}
-	
+
 	/**
 	 * WITHIN GROUP ORDER BY clause (SQL-specific)
 	 * Adds to the previously added columns
@@ -1131,7 +1156,7 @@ class Query {
 	 * @param  string  $column     The column to group by
 	 * @param  string  $direction  The group by direction (asc/desc)
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function withinGroupOrderBy($column, $direction = null)
 	{
@@ -1139,14 +1164,17 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Alias of and_having()
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
-	 * @return  $this
+	 * @param   mixed   $column    Column name or array($column, $alias) or object
+	 * @param   string  $operator  Logic operator
+	 * @param   mixed   $value     Column value [Optional]
+	 * @param   bool    $or        Use 'AND' or  'OR'? [Optional]
+	 *
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function having($column, $operator, $value = NULL, $or = FALSE)
 	{
@@ -1164,37 +1192,39 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Creates a new "AND HAVING" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
-	 * @return  $this
+	 * @param   mixed   $column    Column name or array($column, $alias) or object
+	 * @param   string  $operator  Logic operator
+	 * @param   mixed   $value     Column value [Optional]
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function and_having($column, $operator, $value = NULL)
 	{
 		return $this->having($column, $operator, $value);
 	}
-	
+
 	/**
 	 * Creates a new "OR HAVING" condition for the query.
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  logic operator
-	 * @param   mixed   column value
-	 * @return  $this
+	 * @param   mixed   $column    Column name or array($column, $alias) or object
+	 * @param   string  $operator  Logic operator
+	 * @param   mixed   $value     Column value [Optional]
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function or_having($column, $operator, $value = NULL)
 	{
 		return $this->having($column, $operator, $value, true);
 	}
-	
+
 	/**
 	 * Alias of and_having_open()
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function having_open()
 	{
@@ -1204,7 +1234,7 @@ class Query {
 	/**
 	 * Opens a new "AND HAVING (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function and_having_open()
 	{
@@ -1212,11 +1242,11 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a new "OR HAVING (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function or_having_open()
 	{
@@ -1228,19 +1258,19 @@ class Query {
 	/**
 	 * Closes an open "AND HAVING (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function having_close()
 	{
 		$this->having[] = array('ext_operator' => ')');
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Closes an open "AND HAVING (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function and_having_close()
 	{
@@ -1250,33 +1280,34 @@ class Query {
 	/**
 	 * Closes an open "OR HAVING (...)" grouping.
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function or_having_close()
 	{
 		return $this->having_close();
 	}
-	
+
 	/**
 	 * Applies sorting with "ORDER BY ..."
 	 *
-	 * @param   mixed   column name or array($column, $alias) or object
-	 * @param   string  direction of sorting
-	 * @return  $this
+	 * @param   mixed   $column     Column name or array($column, $alias) or object
+	 * @param   string  $direction  Direction of sorting [Optional]
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function order_by($column, $direction = NULL)
 	{
 		return $this->orderBy($column, $direction);
 	}
-	
+
 	/**
 	 * ORDER BY clause
 	 * Adds to the previously added columns
 	 *
-	 * @param  string  $column     The column to order on
-	 * @param  string  $direction  The ordering direction (asc/desc)
+	 * @param   string  $column     The column to order on
+	 * @param   string  $direction  The ordering direction (asc/desc) [Optional]
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function orderBy($column, $direction = null)
 	{
@@ -1284,15 +1315,15 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * LIMIT clause
 	 * Supports also LIMIT offset, limit
 	 *
-	 * @param  int       $offset  Offset if $limit is specified, else limit
-	 * @param  null|int  $limit   The limit to set, null for no limit
+	 * @param   int       $offset  Offset if $limit is specified, else limit
+	 * @param   null|int  $limit   The limit to set, null for no limit [Optional]
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function limit($offset, $limit = null)
 	{
@@ -1306,13 +1337,13 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * OFFSET clause
 	 *
 	 * @param  int  $offset  The offset
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function offset($offset)
 	{
@@ -1320,7 +1351,7 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * OPTION clause (SQL-specific)
 	 * Used by: SELECT
@@ -1328,7 +1359,7 @@ class Query {
 	 * @param  string  $name   Option name
 	 * @param  string  $value  Option value
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function option($name, $value)
 	{
@@ -1336,14 +1367,14 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * INTO clause
 	 * Used by: INSERT, REPLACE
 	 *
 	 * @param  string  $index  The index to insert/replace into
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function into($index)
 	{
@@ -1351,15 +1382,15 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set columns
 	 * Used in: INSERT, REPLACE
 	 * func_get_args()-enabled
 	 *
-	 * @param  array  $array  The array of columns
+	 * @param   mixed  $array  The array of columns [Optional]
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function columns($array = array())
 	{
@@ -1371,15 +1402,15 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set VALUES
 	 * Used in: INSERT, REPLACE
 	 * func_get_args()-enabled
 	 *
-	 * @param  array  $array  The array of values matching the columns from $this->columns()
+	 * @param   mixed  $array  The array of values matching the columns from $this->columns()
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function values($array)
 	{
@@ -1391,36 +1422,36 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set column and relative value
 	 * Used in: INSERT, REPLACE
 	 *
-	 * @param  string  $column  The column name
-	 * @param  string  $value   The value
+	 * @param   string  $column  The column name
+	 * @param   string  $value   The value
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function value($column, $value)
 	{
 		if ($this->type === 'insert' || $this->type === 'replace') {
 			$this->columns[] = $column;
 			$this->values[0][] = $value;
-		} 
+		}
 		else {
 			$this->set[$column] = $value;
 		}
 
 		return $this;
 	}
-	
+
 	/**
 	 * Allows passing an array with the key as column and value as value
 	 * Used in: INSERT, REPLACE, UPDATE
 	 *
-	 * @param  array  $array  Array of key-values
+	 * @param   array  $array  Array of key-values
 	 *
-	 * @return \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function set($array)
 	{
@@ -1435,7 +1466,7 @@ class Query {
 	/**
 	 * Return the table prefix defined in the current configuration.
 	 *
-	 *     $prefix = $db->table_prefix();
+	 * @param   object $db
 	 *
 	 * @return  string
 	 */
@@ -1443,11 +1474,11 @@ class Query {
 	{
 		return $db->table_prefix();
 	}
-	
+
 	/**
 	 * Returns results as associative arrays
 	 *
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function as_assoc()
 	{
@@ -1457,19 +1488,20 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Returns results as objects
 	 *
-	 * @param   string  $class  classname or TRUE for stdClass
-	 * @param   array   $params
-	 * @return  $this
+	 * @param   bool|string  $class   Class name or TRUE for stdClass [Optional]
+	 * @param   array        $params  Object parameters [Optional]
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
-	public function as_object($class = TRUE, array $params = NULL)
+	public function as_object($class = true, array $params = array())
 	{
 		$this->_as_object = $class;
-		
-		if ($params)
+
+		if (!empty($params))
 		{
 			// Add object parameters
 			$this->_object_params = $params;
@@ -1477,13 +1509,14 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set the value of a parameter in the query.
 	 *
 	 * @param   string   $param  parameter key to replace
 	 * @param   mixed    $value  value to use
-	 * @return  $this
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function param($param, $value)
 	{
@@ -1492,13 +1525,14 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Bind a variable to a parameter in the query.
 	 *
 	 * @param   string  $param  parameter key to replace
 	 * @param   mixed   $var    variable to use
-	 * @return  $this
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public function bind($param, & $var)
 	{
@@ -1512,7 +1546,7 @@ class Query {
 	 * Add multiple parameters to the query.
 	 *
 	 * @param   array  $params  list of parameters
-	 * @return  $this
+	 * @return  \Gleez\Database\Query
 	 */
 	public function parameters(array $params)
 	{
@@ -1521,11 +1555,11 @@ class Query {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Clears the existing query build for new query when using the same SQL instance.
 	 *
-	 * @return  \Gleez\Database\Database  The current object
+	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function reset()
 	{
@@ -1552,8 +1586,8 @@ class Query {
 		$this->_object_params = array();
 		$this->_parameters = array();
 		$this->_query = NULL;
-		
+
 		return $this;
 	}
-	
+
 }
