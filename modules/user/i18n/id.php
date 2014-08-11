@@ -1,9 +1,9 @@
 <?php
 /**
- * Localized strings into Estonian
+ * Localized strings into Bahasa Indonesia
  *
  * @package   Gleez\I18n
- * @author    Sergei Moroz <sergeimoroz@gmail.com>
+ * @author    Azuya <disketsa@gmail.com>
  * @copyright (c) 2011-2013 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
@@ -14,7 +14,7 @@ return array(
 	':prov account' => 'Akun :prov',
 	':role Permissions' => 'Izin :role',
 	':site - Reset password for :name' => ':site - Reset kata kunci untuk :name ',
-	':site Account' => ':site Akun',
+	':site Account' => 'Akun :site',
 	':user Permissions' => 'Izin :user ',
 	// %
 	"%title successfully updated!" => '%title telah diperbarui!',
@@ -25,13 +25,13 @@ return array(
 	'Access to all profiles' => 'Akses ke semua profil',
 	'Account %title created successful!' => 'Akun %title telah dibuat!',
 	'Active' => 'Aktif',
-	'Activity' => 'Aktiivsus',
+	'Activity' => 'Aktifitas',
 	'Add New Role' => 'Tambah Peran',
 	'Add New User' => 'Tambah Pengguna Baru',
 	'Add Role' => 'Tambahkan Peran',
-	'Add User' => 'Tambah Pengguna',
+	'Add User' => 'Tambahkan Pengguna',
 	'Administer permissions' => 'Izin Pengelolaan',
-	'Administer users' => 'Pengguna Pengelolaan',
+	'Administer users' => ' Pengelolaan pengguna',
 	'An error occurred deleting user %user: :message' => 'Telah terjadi kesalahan menghapus %user: :message',
 	'After logging in, you will be redirected, so you can change your password. We do not encourage you to lose your password again. Be aware that this behaviour can be dangerous.' => 'Setelah masuk, anda akan dialihkan, jadi bisa langsung ganti password. Mudah2an ga lupa password lagi. Hati2, kebiasaan ini bisa bikin bahaya',
 	'Allow' => 'Bolehkan',
@@ -60,7 +60,7 @@ return array(
 	// D
 	'Delete User' => 'Hapus pengguna',
 	'Description of Role must be less than :param2 characters long' => 'Deskripsi Peran harus kurang dari :param2 karakter',
-	'Disallow' => 'Disallow',
+	'Disallow' => 'Larang',
 	'Display Name' => 'Nama Tampilan',
 	"Don't have an account? :url" => 'Ga\' punya akun? :url',
 	"Don't have an account?" => 'Ga\' punya akun?',
@@ -76,7 +76,7 @@ return array(
 	'E-mail must be a valid email address' => 'Email ga\' valid',
 	// F
 	'Fast, safe & secure way!' => 'Cepat, Instan, Aman!',
-	'Female' => 'Perempuan',
+	'Female' => 'Wanita',
 	'Fill in the information below to register' => 'Isi formulir untuk mendaftar',
 	'First Visit' => 'Kunjungan Pertama',
 	'Forgot Password?' => 'Lupa Password?',
@@ -115,15 +115,15 @@ return array(
 	'Name of Role must be at least :param2 characters long' => 'Nama Peran minimal :param2 karakter',
 	'Name of Role must be less than :param2 characters long' => 'Nama Peran harus kurang dari :param2 huruf',
 	'New password' => 'Password baru',
-	'New password (again)' => 'Password baru lagi',
+	'New password (again)' => 'Password baru (Tegaskan!)',
 	'Nick name' => 'Nama Keren',
 	'No more than 800 characters' => 'Jangan lebih dari 800 huruf',
 	// O
 	'Old password is incorrect' => 'Password lama ga\' bener',
 	'Only authorized users can post comments. :register or login using one of these services:' => 'Cuma pengguna yang berwenang aja yang bisa komentar. :register atau masuk pake layanan ini:',
 	// P
-	'Password' => 'Password',
-	'Password or username is incorrect' => 'Username atow password salah',
+	'Password' => 'Kata sandi',
+	'Password or username is incorrect' => 'Username atawa Kata sandi salah',
 	'Password Confirm must be the same as Password' => 'Konfirmasi password harus sama dengan password',
 	'Password must be at least :param2 characters long' => 'Password paling ngga :param2 karakter',
 	'Password successfully changed! We hope you feel safer now.' => 'Password udah diganti. Mudah2an udah aman sekarang.',
@@ -229,5 +229,10 @@ return array(
 	'Pending'=>'Tertunda',
 	'Sent'=>'Terikirim',
 	'Reject'=>'Tolak',
-	'Reject'=>'Tolak',
+	'Inbox'=>'Kotak Masuk',
+	'Sent Messages'=>'Pesan Terkirim',
+	'Draft'=>'Konsep',
+	'All Messages'=>'Semua Pesan',
+	''=>'',
+	''=>'',
 );
