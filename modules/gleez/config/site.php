@@ -252,6 +252,11 @@ return array(
 			'i18n_code' => 'zh',
 			'locale'    => array('zh_CN.utf-8'),
 		),
+		'id' => array(
+			'name'      => 'Bahasa Indonesia',
+			'i18n_code' => 'id',
+			'locale'    => array('id_ID.utf-8'),
+		),
 	),
 
 	/**
