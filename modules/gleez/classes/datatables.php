@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Datatables
  * @author     Gleez Team
- * @version    2.0
+ * @version    2.0.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -318,13 +318,14 @@ class Datatables {
 	/**
 	 * Execute
 	 *
-	 * @return	$this
+	 * @return $this
+	 * @throws Gleez_Exception
 	 */
 	public function execute()
 	{
 		$request = $this->request();
 
-		if ( ! $request instanceof Request)
+		if (!$request instanceof Request)
 		{
 			throw new Gleez_Exception('DataTables expecting valid Request. If within a sub-request, have controller pass `$this->request`.');
 		}
@@ -332,63 +333,64 @@ class Datatables {
 		$columns = $this->columns();
 		$this->_count_total = $this->_count_total();
 
-		//DataTables 1.10
-		if ($request->query('order') !== NULL && count($request->query('order')) )
+		$requestOrder   = $request->query('order');
+		$requestColumns = $request->query('columns');
+		$requestStart   = $request->query('start');
+		$requestSearch  = $request->query('search');
+		$requestLength  = $request->query('length');
+
+		// DataTables 1.10
+		if (count($requestOrder) > 0)
 		{
-			for ($i = 0; $i < count($request->query('order')); $i++)
+			for ($i = 0; $i < count($requestOrder); $i++)
 			{
 				// Convert the column index into the column data property
-				$columnIdx     = intval($request->query('order')[$i]['column']);
-				$requestColumn = $request->query('columns')[$columnIdx];
+				$columnIdx     = intval($requestOrder[$i]['column']);
+				$requestColumn = $requestColumns[$columnIdx];
 
-				if ( $requestColumn['orderable'] == 'true' && isset($columns[$columnIdx]) ) 
+				if ($requestColumn['orderable'] == 'true' && isset($columns[$columnIdx]))
 				{
 					$column  = $columns[$columnIdx];
-					$sort    = 'Datatables::SORT_' . strtoupper($request->query('order')[$i]['dir']);
+					$sort    = 'Datatables::SORT_' . strtoupper($requestOrder[$i]['dir']);
 
 					$this->sort($column, constant($sort));
 				}
 			}
 		}
 
-		//DataTables 1.10
-		if ($request->query('start') !== NULL && $request->query('length') != '-1')
+		// DataTables 1.10
+		if (count($requestStart) > 0 && $requestLength != '-1')
 		{
-			$start  = intval($request->query('start'));
-			$length = intval($request->query('length'));
+			$start  = intval($requestStart);
+			$length = intval($requestLength);
 
 			$this->limit($start, $length);
 		}
 
-		//Searching/Filtering
-		if ( $request->query('search') !== NULL && $request->query('search')['value'] != '' )
+		// Searching/Filtering
+		if ($requestSearch !== NULL && $requestSearch['value'] != '')
 		{
-			$str = $request->query('search')['value'];
-			for ( $i = 0, $ien = count($request->query('columns')); $i < $ien ; $i++ )
+			$str = $requestSearch['value'];
+			for ($i = 0, $ien = count($requestColumns); $i < $ien ; $i++)
 			{
 				// Convert the column index into the column data property
-				$requestColumn = $request->query('columns')[$i];
-				//$columnIdx     = $requestColumn['data'];
-				//$column        = $columns[$columnIdx];
+				$requestColumn = $requestColumns[$i];
 
 				// global search
-				if ( $requestColumn['searchable'] == 'true' )
+				if ($requestColumn['searchable'] == 'true')
 				{
 					$this->search($str);
 				}
 			}
 		}
 
-		//@todo - Individual column filtering
-		for ( $i = 0, $ien = count($request->query('columns')); $i < $ien ; $i++ )
+		// @todo - Individual column filtering
+		for ($i = 0, $ien = count($requestColumns); $i < $ien ; $i++)
 		{
-			$requestColumn = $request->query('columns')[$i];
-			//$columnIdx   = $requestColumn['data'];
-			//$column      = $columns[$columnIdx];
-
+			$requestColumn = $requestColumns[$i];
 			$str = $requestColumn['search']['value'];
 
-			if ( $requestColumn['searchable'] == 'true'  && $str != '')
+			if ($requestColumn['searchable'] == 'true'  && $str != '')
 			{
 				//$this->search($str);
 			}
@@ -399,7 +401,7 @@ class Datatables {
 		$this->_count  = $this->_count();
 
 		// Count should always match total unless search is being applied
-		if ( $request->query('search') !== NULL && $request->query('search')['value'] != '' )
+		if ($requestSearch !== NULL && $requestSearch['value'] != '')
 		{
 			$this->_count = $this->count();
 		}
