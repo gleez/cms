@@ -82,13 +82,13 @@ abstract class Database{
 	 *   $db = Database::instance('custom', $config);
 	 * </code>
 	 *
-	 * @param   string 		$name 		Instance name [Optional]
-	 * @param   array 		$config 	Configuration parameters [Optional]
-	 * @param   bool 		$writable 	When replication is enabled, whether to return the master connection
-	 * @return  Database
+	 * @param   string 		$name      Instance name [Optional]
+	 * @param   array 		$config    Configuration parameters [Optional]
+	 * @param   bool 		$writable  When replication is enabled, whether to return the master connection
 	 *
-	 * @return \Gleez\Database\Connection
-	 * @throws \Gleez_Exception
+	 * @return  mixed
+	 *
+	 * @throws  \Gleez_Exception
 	 */
 	public static function instance($name = NULL, array $config = NULL, $writable = TRUE)
 	{

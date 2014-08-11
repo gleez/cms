@@ -240,7 +240,7 @@ class ORM extends Model implements serializable {
 
 	/**
 	 * Database query builder
-	 * @var Gleez\Database\Query\_Query_Builder_Where
+	 * @var Gleez\Database\Query
 	 */
 	protected $_db_builder;
 
@@ -1004,8 +1004,8 @@ class ORM extends Model implements serializable {
 			$name = $method['name'];
 			$args = $method['args'];
 
-			// Gleez DB compatability
-			if($name == 'select') $name = 'selectArgs';
+			// Gleez DB compatibility
+			if ($name == 'select') $name = 'selectArgs';
 
 			$this->_db_applied[$name] = $name;
 
