@@ -8,7 +8,7 @@
  * - MySQL 5.0 or higher
  *
  * @package    Gleez\Database\Drivers
- * @version    2.0.2
+ * @version    2.1.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
@@ -418,15 +418,102 @@ class Driver_MySQLi extends Database {
 	}
 
 	/**
-	 * @param string $table
-	 * @param mixed  $like
-	 * @param bool   $add_prefix
+	 * Lists all of the columns in a table.
 	 *
-	 * @return array|void
-	 * @throws \Gleez\Database\DatabaseException
+	 * Optionally, a LIKE string can be used to search for specific fields.
+	 *
+	 * @since  2.2.1
+	 *
+	 * @param  string $table      Table to get columns from
+	 * @param  string $like       Column to search for [Optional]
+	 * @param  bool   $add_prefix Whether to add the table prefix automatically or not [Optional]
+	 *
+	 * @return array
 	 */
-	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
+	public function list_columns($table, $like = null, $add_prefix = true)
 	{
-		throw new DatabaseException('Not Implemented');
+		// Quote the table name
+		$table = (bool)($add_prefix) ? $this->quoteTable($table) : $table;
+
+		$result='';
+
+		if (is_string($like))
+			// Search for column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table.' LIKE '.$this->quote($like), false);
+		else
+			// Find all column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table, false);
+
+
+		$count = 0;
+		$columns = array();
+
+		foreach ($result as $row)
+		{
+			/**
+			 * @var $type string
+			 * @var $length string|null
+			 */
+			list($type, $length) = $this->parseType($row['Type']);
+
+			$column = $this->getDataType($type);
+			$column['column_name']      = $row['Field'];
+			$column['column_default']   = $row['Default'];
+			$column['data_type']        = $type;
+			$column['is_nullable']      = ($row['Null'] == 'YES');
+			$column['ordinal_position'] = ++$count;
+			$column['comment']          = $row['Comment'];
+			$column['extra']            = $row['Extra'];
+			$column['key']              = $row['Key'];
+			$column['privileges']       = $row['Privileges'];
+
+			$r = array();
+			if (!isset($column['type']))
+				$r[] = $column;
+
+			if (isset($column['type']))
+			{
+				switch ($column['type'])
+				{
+					case 'float':
+						if (isset($length))
+							list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+						break;
+					case 'int':
+						if (isset($length))
+							// MySQL attribute
+							$column['display'] = $length;
+						break;
+					case 'string':
+						switch ($column['data_type'])
+						{
+							case 'binary':
+							case 'varbinary':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'char':
+							case 'varchar':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'text':
+							case 'tinytext':
+							case 'mediumtext':
+							case 'longtext':
+								$column['collation_name'] = $row['Collation'];
+								break;
+							case 'enum':
+							case 'set':
+								$column['collation_name'] = $row['Collation'];
+								$column['options'] = explode('\',\'', substr($length, 1, -1));
+								break;
+						}
+						break;
+				}
+			}
+
+			$columns[$row['Field']] = $column;
+		}
+
+		return $columns;
 	}
 }
