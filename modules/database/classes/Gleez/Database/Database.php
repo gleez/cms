@@ -226,7 +226,7 @@ abstract class Database{
 	 */
 	public function getConnection()
 	{
-	    return static::$instances[$this->_instance];
+		return static::$instances[$this->_instance];
 	}
 
 	/**
@@ -261,7 +261,7 @@ abstract class Database{
 	 */
 	public function getResult()
 	{
-	    return $this->last_result;
+		return $this->last_result;
 	}
 
 	/**
@@ -269,7 +269,7 @@ abstract class Database{
 	 */
 	public function transactionBegin()
 	{
-	    $this->getConnection()->query('BEGIN');
+		$this->getConnection()->query('BEGIN');
 	}
 
 	/**
@@ -277,7 +277,7 @@ abstract class Database{
 	 */
 	public function transactionCommit()
 	{
-	    $this->getConnection()->query('COMMIT');
+		$this->getConnection()->query('COMMIT');
 	}
 
 	/**
@@ -285,7 +285,7 @@ abstract class Database{
 	 */
 	public function transactionRollback()
 	{
-	    $this->getConnection()->query('ROLLBACK');
+		$this->getConnection()->query('ROLLBACK');
 	}
 
 	/**
@@ -426,13 +426,13 @@ abstract class Database{
 	 */
 	public function quoteIdentifierArr(Array $array)
 	{
-	    $result = array();
+		$result = array();
 
-	    foreach ($array as $key => $item) {
+		foreach ($array as $key => $item) {
 			$result[$key] = $this->quoteIdentifier($item);
-	    }
+		}
 
-	    return $result;
+		return $result;
 	}
 
 	/**
@@ -536,8 +536,8 @@ abstract class Database{
 		}
 		elseif ($value instanceof \Gleez\Database\Expression)
 		{
-		    // Use the raw expression
-		    return $value->value();
+			// Use the raw expression
+			return $value->value();
 		}
 		elseif ($value instanceof \Gleez\Database\Query)
 		{
@@ -556,9 +556,9 @@ abstract class Database{
 		{
 			// Supports MVA attributes
 			return '('.implode(',', $this->quoteArr($value)).')';
-	    }
+		}
 
-	    return $this->escape($value);
+		return $this->escape($value);
 	}
 
 	/**
@@ -573,7 +573,7 @@ abstract class Database{
 		$result = array();
 
 		foreach ($array as $key => $item) {
-		    $result[$key] = $this->quote($item);
+			$result[$key] = $this->quote($item);
 		}
 
 		return $result;
