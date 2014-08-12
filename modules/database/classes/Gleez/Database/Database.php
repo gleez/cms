@@ -25,7 +25,7 @@ require_once __DIR__ . '/Query.php';
 class ConnectionException extends \Exception {};
 class DatabaseException extends \Exception {};
 
-abstract class Database{
+abstract class Database {
 	// Query types
 	const SELECT =  'select';
 	const INSERT =  'insert';
@@ -86,7 +86,7 @@ abstract class Database{
 	 * @param   array 		$config    Configuration parameters [Optional]
 	 * @param   bool 		$writable  When replication is enabled, whether to return the master connection
 	 *
-	 * @return  mixed
+	 * @return  \Gleez\Database\Database
 	 *
 	 * @throws  \Gleez_Exception
 	 */
@@ -131,13 +131,22 @@ abstract class Database{
 		return static::$instances[$name];
 	}
 
-	// Instance name
+	/**
+	 * Instance name
+	 * @var string
+	 */
 	protected $_instance;
 
-	// Raw server connection
+	/**
+	 * Raw server connection
+	 * @var mixed
+	 */
 	protected $_connection;
 
-	// Configuration array
+	/**
+	 * Configuration
+	 * @var array
+	 */
 	protected $_config;
 
 	/**
@@ -308,45 +317,46 @@ abstract class Database{
 	}
 
 	/**
-	 * List all of the tables in the database. Optionally, a LIKE string can
-	 * be used to search for specific tables.
+	 * List all of the tables in the database.
+	 * Optionally, a LIKE string can be used to search for specific tables.
 	 *
-	 *     // Get all tables in the current database
-	 *     $tables = $db->list_tables();
+	 * Example:<br>
+	 * <code>
+	 * // Get all tables in the current database
+	 * $tables = $db->list_tables();
 	 *
-	 *     // Get all user-related tables
-	 *     $tables = $db->list_tables('user%');
+	 * // Get all user-related tables
+	 * $tables = $db->list_tables('user%');
+	 * </code>
 	 *
-	 * @param   string   $like  table to search for
+	 * @param   string $like  Table to search for [Optional]
 	 * @return  array
 	 */
-	public function list_tables($like = NULL)
-	{
-
-	}
+	abstract public function list_tables($like = NULL);
 
 	/**
-	 * Lists all of the columns in a table. Optionally, a LIKE string can be
-	 * used to search for specific fields.
+	 * Lists all of the columns in a table.
+	 * Optionally, a LIKE string can be used to search for specific fields.
 	 *
-	 *     // Get all columns from the "users" table
-	 *     $columns = $db->list_columns('users');
+	 * Example:<br>
+	 * <code>
+	 * // Get all columns from the "users" table
+	 * $columns = $db->list_columns('users');
 	 *
-	 *     // Get all name-related columns
-	 *     $columns = $db->list_columns('users', '%name%');
+	 * // Get all name-related columns
+	 * $columns = $db->list_columns('users', '%name%');
 	 *
-	 *     // Get the columns from a table that doesn't use the table prefix
-	 *     $columns = $db->list_columns('users', NULL, FALSE);
+	 * // Get the columns from a table that doesn't use the table prefix
+	 * $columns = $db->list_columns('users', NULL, FALSE);
+	 * </code>
 	 *
-	 * @param   string  $table       table to get columns from
-	 * @param   string  $like        column to search for
-	 * @param   boolean $add_prefix  whether to add the table prefix automatically or not
+	 * @param   string  $table       Table to get columns from
+	 * @param   string  $like        Column to search for [Optional]
+	 * @param   boolean $add_prefix  Whether to add the table prefix automatically or not [Optional]
+	 *
 	 * @return  array
 	 */
-	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
-	{
-
-	}
+	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
 	 * Return the table prefix defined in the current configuration.

@@ -392,50 +392,69 @@ class Driver_MySQLi extends Database {
 		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
 	}
 
+	/**
+	 * List all of the tables in the database.
+	 * Optionally, a LIKE string can be used to search for specific tables.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * // Get all tables in the current database
+	 * $tables = $db->list_tables();
+	 *
+	 * // Get all user-related tables
+	 * $tables = $db->list_tables('user%');
+	 * </code>
+	 *
+	 * @param   string $like  Table to search for [Optional]
+	 * @return  array
+	 */
 	public function list_tables($like = NULL)
 	{
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if (is_string($like))
-		{
+		is_string($like)
 			// Search for table names
-			$result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
+			? $result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE)
 			// Find all table names
-			$result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
-		}
+			: $result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
 
 		$tables = array();
+
 		foreach ($result as $row)
-		{
 			$tables[] = reset($row);
-		}
 
 		return $tables;
 	}
 
 	/**
 	 * Lists all of the columns in a table.
-	 *
 	 * Optionally, a LIKE string can be used to search for specific fields.
 	 *
-	 * @since  2.1.0
+	 * Example:<br>
+	 * <code>
+	 * // Get all columns from the "users" table
+	 * $columns = $db->list_columns('users');
 	 *
-	 * @param  string $table      Table to get columns from
-	 * @param  string $like       Column to search for [Optional]
-	 * @param  bool   $add_prefix Whether to add the table prefix automatically or not [Optional]
+	 * // Get all name-related columns
+	 * $columns = $db->list_columns('users', '%name%');
 	 *
-	 * @return array
+	 * // Get the columns from a table that doesn't use the table prefix
+	 * $columns = $db->list_columns('users', NULL, FALSE);
+	 * </code>
+	 *
+	 * @since   2.1.0
+	 *
+	 * @param   string  $table       Table to get columns from
+	 * @param   string  $like        Column to search for [Optional]
+	 * @param   boolean $add_prefix  Whether to add the table prefix automatically or not [Optional]
+	 *
+	 * @return  array
 	 */
 	public function list_columns($table, $like = null, $add_prefix = true)
 	{
 		// Quote the table name
 		$table = (bool)($add_prefix) ? $this->quoteTable($table) : $table;
-
-		$result='';
 
 		if (is_string($like))
 			// Search for column names
