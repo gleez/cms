@@ -643,9 +643,7 @@ abstract class Database{
 			'double precision' => array('type' => 'float'),
 			'float' => array('type' => 'float'),
 			'int' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
-			'int unsigned' => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
 			'integer' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
-			'integer unsigned' => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
 			'interval' => array('type' => 'string'),
 			'national char' => array('type' => 'string', 'exact' => true),
 			'national char varying' => array('type' => 'string'),
@@ -656,7 +654,6 @@ abstract class Database{
 			'numeric' => array('type' => 'float', 'exact' => true),
 			'real' => array('type' => 'float'),
 			'smallint' => array('type' => 'int', 'min' => '-32768', 'max' => '32767'),
-			'smallint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '65535'),
 			'time' => array('type' => 'string'),
 			'time with time zone' => array('type' => 'string'),
 			'timestamp' => array('type' => 'string'),
@@ -676,23 +673,10 @@ abstract class Database{
 			'timestamp without time zone' => array('type' => 'string'),
 			// SQL:2003
 			'bigint' => array('type' => 'int', 'min' => '-9223372036854775808', 'max' => '9223372036854775807'),
-			'bigint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
 			// SQL:2008
 			'binary' => array('type' => 'string', 'binary' => true, 'exact' => true),
 			'binary varying' => array('type' => 'string', 'binary' => true),
-			'varbinary' => array('type' => 'string', 'binary' => true),
-			// MySQL
-			'tinyint' => array('type' => 'int', 'min' => '-128', 'max' => '127'),
-			'tinyint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '255'),
-			'mediumint' => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
-			'mediumint unsigned' => array('type' => 'int', 'min' => '0', 'max' => '65535'),
-			'tinyblob' => array('type' => 'string', 'binary' => true),
-			'mediumblob' => array('type' => 'string', 'binary' => true),
-			'longblob' => array('type' => 'string', 'binary' => true),
-			'text' => array('type' => 'string'),
-			'tinytext' => array('type' => 'string'),
-			'mediumtext' => array('type' => 'string'),
-			'longtext' => array('type' => 'string'),
+			'varbinary' => array('type' => 'string', 'binary' => true)
 		);
 
 		if (isset($types[$type]))

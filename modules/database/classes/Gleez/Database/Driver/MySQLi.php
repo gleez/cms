@@ -422,7 +422,7 @@ class Driver_MySQLi extends Database {
 	 *
 	 * Optionally, a LIKE string can be used to search for specific fields.
 	 *
-	 * @since  2.2.1
+	 * @since  2.1.0
 	 *
 	 * @param  string $table      Table to get columns from
 	 * @param  string $like       Column to search for [Optional]
@@ -515,5 +515,68 @@ class Driver_MySQLi extends Database {
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Get data type.
+	 *
+	 * Returns a normalized array describing the SQL data type.
+	 * Example:<br>
+	 * <code>
+	 * $db->getDataType('char');
+	 * </code>
+	 *
+	 * @since  2.1.0
+	 *
+	 * @param  string $type SQL data type
+	 *
+	 * @return array
+	 */
+	public function getDataType($type)
+	{
+		static $types = array
+		(
+			'blob'                      => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '65535'),
+			'bool'                      => array('type' => 'bool'),
+			'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
+			'datetime'                  => array('type' => 'string'),
+			'decimal unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'double'                    => array('type' => 'float'),
+			'double precision unsigned' => array('type' => 'float', 'min' => '0'),
+			'double unsigned'           => array('type' => 'float', 'min' => '0'),
+			'enum'                      => array('type' => 'string'),
+			'fixed'                     => array('type' => 'float', 'exact' => TRUE),
+			'fixed unsigned'            => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'float unsigned'            => array('type' => 'float', 'min' => '0'),
+			'geometry'                  => array('type' => 'string', 'binary' => TRUE),
+			'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'longblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '4294967295'),
+			'longtext'                  => array('type' => 'string', 'character_maximum_length' => '4294967295'),
+			'mediumblob'                => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '16777215'),
+			'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
+			'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
+			'mediumtext'                => array('type' => 'string', 'character_maximum_length' => '16777215'),
+			'national varchar'          => array('type' => 'string'),
+			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'nvarchar'                  => array('type' => 'string'),
+			'point'                     => array('type' => 'string', 'binary' => TRUE),
+			'real unsigned'             => array('type' => 'float', 'min' => '0'),
+			'set'                       => array('type' => 'string'),
+			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'text'                      => array('type' => 'string', 'character_maximum_length' => '65535'),
+			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '255'),
+			'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
+			'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
+			'tinytext'                  => array('type' => 'string', 'character_maximum_length' => '255'),
+			'year'                      => array('type' => 'string'),
+		);
+
+		$type = str_replace(' zerofill', '', $type);
+
+		if (isset($types[$type]))
+			return $types[$type];
+
+		return parent::getDataType($type);
 	}
 }
