@@ -3,8 +3,8 @@
  * Localized strings into Bahasa Indonesia 
  *
  * @package   Gleez\I18n
- * @author    Azuya
- * @copyright (c) 2011-2013 Gleez Technologies
+ * @author    Azuya (disketsa@gmail.com)
+ * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 return array(
