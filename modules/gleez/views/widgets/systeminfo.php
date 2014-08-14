@@ -2,7 +2,7 @@
 	<tbody>
 		<tr>
 			<th><?php _e('Gleez Version') ?></th>
-			<td><?php echo HTML::chars(Gleez::VERSION); ?></td>
+			<td><?php echo HTML::chars(Gleez::VERSION); ?> <em>(<?php echo HTML::anchor(Route::get('admin/tool')->uri(array('action' => 'environment')), __('more...'))?>)</em></td>
 		</tr>
 		<tr>
 			<th><?php _e('Enabled modules') ?></th>
