@@ -46,7 +46,11 @@
 		</tr>
 		<tr>
 			<th><?php _e('PHP Version') ?></th>
-			<td><?php echo HTML::anchor('admin/tools/php', HTML::chars(PHP_VERSION) ); ?></td>
+			<td><?php echo HTML::anchor('admin/tools/php', System::getPhpVersion()); ?></td>
+		</tr>
+		<tr>
+			<th><?php _e('PHP Version ID') ?></th>
+			<td><?php echo System::getPhpVersion(true); ?></td>
 		</tr>
 		<tr>
 			<th><?php _e('Zend Engine Version') ?></th>
