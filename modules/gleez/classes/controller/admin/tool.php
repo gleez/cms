@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Controller\Admin
  * @author     Gleez Team
- * @version    1.0.0
+ * @version    1.1.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -65,6 +65,35 @@ class Controller_Admin_Tool extends Controller_Admin {
 				->set('space', $total_space);
 
 		$this->title = __('Database :sub', array(':sub' => '<small>('.Config::get('database.default.connection.database', NULL).')</small>'));
+		$this->response->body($view);
+	}
+
+	public function action_environment()
+	{
+		$gleezEnv = array();
+
+		// First Step. The lowest priority
+		// Get environment variable from $_SERVER, .htaccess, apache.conf, nginx.conf, etc.
+		isset($_SERVER['GLEEZ_ENV']) && $gleezEnv['env'] = 'Kohana::'.strtoupper($_SERVER['GLEEZ_ENV']);
+
+		// Second Step. The lowest priority
+		// Get environment variable from php.ini or from ini_get('user_ini.filename')
+		get_cfg_var('GLEEZ_ENV') && $gleezEnv['env'] = 'Kohana::'.strtoupper(get_cfg_var('GLEEZ_ENV'));
+
+		//
+		!empty($gleezEnv) && $gleezEnv['all'] = array(
+			'Kohana::DEVELOPMENT' => Kohana::DEVELOPMENT,
+			'Kohana::TESTING'     => Kohana::TESTING,
+			'Kohana::STAGING'     => Kohana::STAGING,
+			'Kohana::PRODUCTION'  => Kohana::PRODUCTION
+
+		);
+
+		$this->title = __('Gleez Environment');
+
+		$view = View::factory('admin/tools/environment')
+			->set(compact('gleezEnv'));
+
 		$this->response->body($view);
 	}
 }
