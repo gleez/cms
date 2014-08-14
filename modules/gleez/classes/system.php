@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.5.0
+ * @version    1.6.0
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -745,6 +745,19 @@ class System {
 		$memory_limit = Num::bytes(ini_get('memory_limit'));
 
 		return Text::bytes((int)$memory_limit <= 0 ? self::MIN_MEMORY_LIMIT : $memory_limit, 'MiB');
+	}
+
+	/**
+	 * Get PHP version
+	 *
+	 * @since   1.6.0
+	 *
+	 * @param  boolean $idOnly Return PHP version as an integer? [Optional]
+	 * @return string
+	 */
+	public static function getPhpVersion($idOnly = false)
+	{
+		return $idOnly ? PHP_VERSION_ID : PHP_VERSION;
 	}
 
 	/**
