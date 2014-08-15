@@ -9,7 +9,7 @@
  * well as quoting, escaping and other related functions.
  *
  * @package    Gleez\Database\Core
- * @version    2.1.1
+ * @version    2.2.1
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
@@ -25,7 +25,7 @@ require_once __DIR__ . '/Query.php';
 class ConnectionException extends \Exception {};
 class DatabaseException extends \Exception {};
 
-abstract class Database{
+abstract class Database {
 	// Query types
 	const SELECT =  'select';
 	const INSERT =  'insert';
@@ -82,13 +82,13 @@ abstract class Database{
 	 *   $db = Database::instance('custom', $config);
 	 * </code>
 	 *
-	 * @param   string 		$name 		Instance name [Optional]
-	 * @param   array 		$config 	Configuration parameters [Optional]
-	 * @param   bool 		$writable 	When replication is enabled, whether to return the master connection
-	 * @return  Database
+	 * @param   string 		$name      Instance name [Optional]
+	 * @param   array 		$config    Configuration parameters [Optional]
+	 * @param   bool 		$writable  When replication is enabled, whether to return the master connection
 	 *
-	 * @return \Gleez\Database\Connection
-	 * @throws \Gleez_Exception
+	 * @return  \Gleez\Database\Database
+	 *
+	 * @throws  \Gleez_Exception
 	 */
 	public static function instance($name = NULL, array $config = NULL, $writable = TRUE)
 	{
@@ -131,13 +131,22 @@ abstract class Database{
 		return static::$instances[$name];
 	}
 
-	// Instance name
+	/**
+	 * Instance name
+	 * @var string
+	 */
 	protected $_instance;
 
-	// Raw server connection
+	/**
+	 * Raw server connection
+	 * @var mixed
+	 */
 	protected $_connection;
 
-	// Configuration array
+	/**
+	 * Configuration
+	 * @var array
+	 */
 	protected $_config;
 
 	/**
@@ -226,7 +235,7 @@ abstract class Database{
 	 */
 	public function getConnection()
 	{
-	    return static::$instances[$this->_instance];
+		return static::$instances[$this->_instance];
 	}
 
 	/**
@@ -261,7 +270,7 @@ abstract class Database{
 	 */
 	public function getResult()
 	{
-	    return $this->last_result;
+		return $this->last_result;
 	}
 
 	/**
@@ -269,7 +278,7 @@ abstract class Database{
 	 */
 	public function transactionBegin()
 	{
-	    $this->getConnection()->query('BEGIN');
+		$this->getConnection()->query('BEGIN');
 	}
 
 	/**
@@ -277,7 +286,7 @@ abstract class Database{
 	 */
 	public function transactionCommit()
 	{
-	    $this->getConnection()->query('COMMIT');
+		$this->getConnection()->query('COMMIT');
 	}
 
 	/**
@@ -285,7 +294,7 @@ abstract class Database{
 	 */
 	public function transactionRollback()
 	{
-	    $this->getConnection()->query('ROLLBACK');
+		$this->getConnection()->query('ROLLBACK');
 	}
 
 	/**
@@ -308,45 +317,46 @@ abstract class Database{
 	}
 
 	/**
-	 * List all of the tables in the database. Optionally, a LIKE string can
-	 * be used to search for specific tables.
+	 * List all of the tables in the database.
+	 * Optionally, a LIKE string can be used to search for specific tables.
 	 *
-	 *     // Get all tables in the current database
-	 *     $tables = $db->list_tables();
+	 * Example:<br>
+	 * <code>
+	 * // Get all tables in the current database
+	 * $tables = $db->list_tables();
 	 *
-	 *     // Get all user-related tables
-	 *     $tables = $db->list_tables('user%');
+	 * // Get all user-related tables
+	 * $tables = $db->list_tables('user%');
+	 * </code>
 	 *
-	 * @param   string   $like  table to search for
+	 * @param   string $like  Table to search for [Optional]
 	 * @return  array
 	 */
-	public function list_tables($like = NULL)
-	{
-
-	}
+	abstract public function list_tables($like = NULL);
 
 	/**
-	 * Lists all of the columns in a table. Optionally, a LIKE string can be
-	 * used to search for specific fields.
+	 * Lists all of the columns in a table.
+	 * Optionally, a LIKE string can be used to search for specific fields.
 	 *
-	 *     // Get all columns from the "users" table
-	 *     $columns = $db->list_columns('users');
+	 * Example:<br>
+	 * <code>
+	 * // Get all columns from the "users" table
+	 * $columns = $db->list_columns('users');
 	 *
-	 *     // Get all name-related columns
-	 *     $columns = $db->list_columns('users', '%name%');
+	 * // Get all name-related columns
+	 * $columns = $db->list_columns('users', '%name%');
 	 *
-	 *     // Get the columns from a table that doesn't use the table prefix
-	 *     $columns = $db->list_columns('users', NULL, FALSE);
+	 * // Get the columns from a table that doesn't use the table prefix
+	 * $columns = $db->list_columns('users', NULL, FALSE);
+	 * </code>
 	 *
-	 * @param   string  $table       table to get columns from
-	 * @param   string  $like        column to search for
-	 * @param   boolean $add_prefix  whether to add the table prefix automatically or not
+	 * @param   string  $table       Table to get columns from
+	 * @param   string  $like        Column to search for [Optional]
+	 * @param   boolean $add_prefix  Whether to add the table prefix automatically or not [Optional]
+	 *
 	 * @return  array
 	 */
-	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
-	{
-
-	}
+	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
 	 * Return the table prefix defined in the current configuration.
@@ -426,13 +436,13 @@ abstract class Database{
 	 */
 	public function quoteIdentifierArr(Array $array)
 	{
-	    $result = array();
+		$result = array();
 
-	    foreach ($array as $key => $item) {
+		foreach ($array as $key => $item) {
 			$result[$key] = $this->quoteIdentifier($item);
-	    }
+		}
 
-	    return $result;
+		return $result;
 	}
 
 	/**
@@ -536,8 +546,8 @@ abstract class Database{
 		}
 		elseif ($value instanceof \Gleez\Database\Expression)
 		{
-		    // Use the raw expression
-		    return $value->value();
+			// Use the raw expression
+			return $value->value();
 		}
 		elseif ($value instanceof \Gleez\Database\Query)
 		{
@@ -556,9 +566,9 @@ abstract class Database{
 		{
 			// Supports MVA attributes
 			return '('.implode(',', $this->quoteArr($value)).')';
-	    }
+		}
 
-	    return $this->escape($value);
+		return $this->escape($value);
 	}
 
 	/**
@@ -573,9 +583,115 @@ abstract class Database{
 		$result = array();
 
 		foreach ($array as $key => $item) {
-		    $result[$key] = $this->quote($item);
+			$result[$key] = $this->quote($item);
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Extracts the text between parentheses, if any.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * list($type, $length) = $db->parseType('CHAR(6)');
+	 * </code>
+	 *
+	 * @since  2.2.1
+	 *
+	 * @param  string $type
+	 *
+	 * @return  array list containing the type and length, if any
+	 */
+	protected function parseType($type)
+	{
+		if (false === ($open = strpos($type, '(')))
+			// No length specified
+			return array($type, null);
+
+		// Closing parenthesis
+		$close = strrpos($type, ')', $open);
+
+		// Length without parentheses
+		$length = substr($type, $open + 1, $close - 1 - $open);
+
+		// Type without the length
+		$type = substr($type, 0, $open).substr($type, $close + 1);
+
+		return array($type, $length);
+	}
+
+	/**
+	 * Get data type.
+	 *
+	 * Returns a normalized array describing the SQL data type.
+	 * Example:<br>
+	 * <code>
+	 * $db->getDataType('char');
+	 * </code>
+	 *
+	 * @since  2.2.1
+	 *
+	 * @param  string $type SQL data type
+	 *
+	 * @return array
+	 */
+	public function getDataType($type)
+	{
+		static $types = array
+		(
+			// SQL-92
+			'bit' => array('type' => 'string', 'exact' => true),
+			'bit varying' => array('type' => 'string'),
+			'char' => array('type' => 'string', 'exact' => true),
+			'char varying' => array('type' => 'string'),
+			'character' => array('type' => 'string', 'exact' => true),
+			'character varying' => array('type' => 'string'),
+			'date' => array('type' => 'string'),
+			'dec' => array('type' => 'float', 'exact' => true),
+			'decimal' => array('type' => 'float', 'exact' => true),
+			'double precision' => array('type' => 'float'),
+			'float' => array('type' => 'float'),
+			'int' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
+			'integer' => array('type' => 'int', 'min' => '-2147483648', 'max' => '2147483647'),
+			'interval' => array('type' => 'string'),
+			'national char' => array('type' => 'string', 'exact' => true),
+			'national char varying' => array('type' => 'string'),
+			'national character' => array('type' => 'string', 'exact' => true),
+			'national character varying' => array('type' => 'string'),
+			'nchar' => array('type' => 'string', 'exact' => true),
+			'nchar varying' => array('type' => 'string'),
+			'numeric' => array('type' => 'float', 'exact' => true),
+			'real' => array('type' => 'float'),
+			'smallint' => array('type' => 'int', 'min' => '-32768', 'max' => '32767'),
+			'time' => array('type' => 'string'),
+			'time with time zone' => array('type' => 'string'),
+			'timestamp' => array('type' => 'string'),
+			'timestamp with time zone' => array('type' => 'string'),
+			'varchar' => array('type' => 'string'),
+			// SQL:1999
+			'binary large object' => array('type' => 'string', 'binary' => true),
+			'blob' => array('type' => 'string', 'binary' => true),
+			'boolean' => array('type' => 'bool'),
+			'char large object' => array('type' => 'string'),
+			'character large object' => array('type' => 'string'),
+			'clob' => array('type' => 'string'),
+			'national character large object' => array('type' => 'string'),
+			'nchar large object' => array('type' => 'string'),
+			'nclob' => array('type' => 'string'),
+			'time without time zone' => array('type' => 'string'),
+			'timestamp without time zone' => array('type' => 'string'),
+			// SQL:2003
+			'bigint' => array('type' => 'int', 'min' => '-9223372036854775808', 'max' => '9223372036854775807'),
+			// SQL:2008
+			'binary' => array('type' => 'string', 'binary' => true, 'exact' => true),
+			'binary varying' => array('type' => 'string', 'binary' => true),
+			'varbinary' => array('type' => 'string', 'binary' => true)
+		);
+
+		if (isset($types[$type]))
+			return $types[$type];
+
+		return array();
 	}
 }

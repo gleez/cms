@@ -240,7 +240,7 @@ class ORM extends Model implements serializable {
 
 	/**
 	 * Database query builder
-	 * @var Database_Query_Builder_Where
+	 * @var Gleez\Database\Query
 	 */
 	protected $_db_builder;
 
@@ -1004,8 +1004,8 @@ class ORM extends Model implements serializable {
 			$name = $method['name'];
 			$args = $method['args'];
 
-			// Gleez DB compatability
-			if($name == 'select') $name = 'selectArgs';
+			// Gleez DB compatibility
+			if ($name == 'select') $name = 'selectArgs';
 
 			$this->_db_applied[$name] = $name;
 
@@ -1046,7 +1046,7 @@ class ORM extends Model implements serializable {
 	/**
 	 * Finds multiple database rows and returns an iterator of the rows found
 	 *
-	 * @return  Database_Result|ORM
+	 * @return  Gleez\Database\Result|ORM
 	 * @uses    Database::SELECT
 	 * @throws  Gleez_Exception
 	 */
@@ -1096,7 +1096,7 @@ class ORM extends Model implements serializable {
 	 *
 	 * @chainable
 	 * @param  bool $multiple Return an iterator or load a single row [Optional]
-	 * @return ORM|Database_Result
+	 * @return ORM|Gleez\Database\Result
 	 */
 	protected function _load_result($multiple = FALSE)
 	{
