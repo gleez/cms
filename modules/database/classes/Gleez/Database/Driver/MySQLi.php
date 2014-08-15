@@ -4,15 +4,16 @@
  *
  * ### System Requirements
  *
- * - PHP 5.3 or higher
+ * - PHP 5.3.9 or higher
  * - MySQL 5.0 or higher
  *
  * @package    Gleez\Database\Drivers
- * @version    2.0.1
+ * @version    2.1.0
  * @author     Gleez Team
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
+
 namespace Gleez\Database;
 
 class Driver_MySQLi extends Database {
@@ -43,7 +44,7 @@ class Driver_MySQLi extends Database {
 
 	/**
 	 * Raw server connection
-	 * @var mysqli
+	 * @var \mysqli
 	 */
 	protected $_connection;
 
@@ -57,7 +58,7 @@ class Driver_MySQLi extends Database {
 	 * $db->connect();
 	 * ~~~
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	public function connect()
 	{
@@ -99,25 +100,16 @@ class Driver_MySQLi extends Database {
 
 		try
 		{
-			// Compare versions
-			if (version_compare(PHP_VERSION, '5.3', '>=') AND (bool)$persistent)
-			{
-				// Create a persistent connection - only available with PHP 5.3+
-				// See http://www.php.net/manual/en/mysqli.persistconns.php
-				$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
-			}
-			else
-			{
-				// Create a connection
-				$this->_connection = new \MySQLi($hostname, $username, $password, $database, (int)$port, $socket);
-			}
+			// Create a persistent connection - only available with PHP 5.3+
+			// See http://www.php.net/manual/en/mysqli.persistconns.php
+			$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new ConnectionException(':error', array(':error' => $e->getMessage()), $e->getCode());
+			throw new ConnectionException($e->getMessage(), $e->getCode());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
@@ -190,14 +182,14 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $database  Database name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	protected function _select_db($database)
 	{
 		if ( ! $this->_connection->select_db($database))
 		{
 			// Unable to select database
-			throw new ConnectionException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new ConnectionException($this->_connection->error, $this->_connection->errno);
 		}
 
 		static::$_current_databases[$this->_connection_id] = $database;
@@ -215,7 +207,7 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $charset  Character set name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 */
 	public function set_charset($charset)
 	{
@@ -235,7 +227,7 @@ class Driver_MySQLi extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new DatabaseException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 	}
 
@@ -260,7 +252,7 @@ class Driver_MySQLi extends Database {
 	 * @uses    Profiler::delete
 	 * @uses    Profiler::stop
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 *
 	 * @return  object   Database_Result for SELECT queries
 	 * @return  array    List (insert id, row count) for INSERT queries
@@ -314,6 +306,8 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param string $mode  Isolation level
 	 * @return boolean
+	 *
+	 * @throws \Gleez\Database\DatabaseException
 	 */
 	public function begin($mode = NULL)
 	{
@@ -322,9 +316,7 @@ class Driver_MySQLi extends Database {
 
 		if ($mode AND ! $this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error', array(
-				':error' => $this->_connection->error
-			), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 
 		return (bool) $this->_connection->query('START TRANSACTION');
@@ -362,7 +354,7 @@ class Driver_MySQLi extends Database {
 	 * @param  string  $value  The string to escape
 	 *
 	 * @return  string  The escaped string
-	 * @throws  \Foolz\SphinxQL\DatabaseException  If an error was encountered during server-side escape
+	 * @throws  \Gleez\Database\DatabaseException  If an error was encountered during server-side escape
 	 */
 	public function escape($value)
 	{
@@ -400,33 +392,210 @@ class Driver_MySQLi extends Database {
 		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
 	}
 
+	/**
+	 * List all of the tables in the database.
+	 * Optionally, a LIKE string can be used to search for specific tables.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * // Get all tables in the current database
+	 * $tables = $db->list_tables();
+	 *
+	 * // Get all user-related tables
+	 * $tables = $db->list_tables('user%');
+	 * </code>
+	 *
+	 * @param   string $like  Table to search for [Optional]
+	 * @return  array
+	 */
 	public function list_tables($like = NULL)
 	{
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if (is_string($like))
-		{
+		is_string($like)
 			// Search for table names
-			$result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE);
-		}
-		else
-		{
+			? $result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE)
 			// Find all table names
-			$result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
-		}
+			: $result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
 
 		$tables = array();
+
 		foreach ($result as $row)
-		{
 			$tables[] = reset($row);
-		}
 
 		return $tables;
 	}
 
-	public function list_columns($table, $like = NULL, $add_prefix = TRUE)
+	/**
+	 * Lists all of the columns in a table.
+	 * Optionally, a LIKE string can be used to search for specific fields.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * // Get all columns from the "users" table
+	 * $columns = $db->list_columns('users');
+	 *
+	 * // Get all name-related columns
+	 * $columns = $db->list_columns('users', '%name%');
+	 *
+	 * // Get the columns from a table that doesn't use the table prefix
+	 * $columns = $db->list_columns('users', NULL, FALSE);
+	 * </code>
+	 *
+	 * @since   2.1.0
+	 *
+	 * @param   string  $table       Table to get columns from
+	 * @param   string  $like        Column to search for [Optional]
+	 * @param   boolean $add_prefix  Whether to add the table prefix automatically or not [Optional]
+	 *
+	 * @return  array
+	 */
+	public function list_columns($table, $like = null, $add_prefix = true)
 	{
-		throw new DatabaseException('Not Implemented');
+		// Quote the table name
+		$table = (bool)($add_prefix) ? $this->quoteTable($table) : $table;
+
+		if (is_string($like))
+			// Search for column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table.' LIKE '.$this->quote($like), false);
+		else
+			// Find all column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table, false);
+
+
+		$count = 0;
+		$columns = array();
+
+		foreach ($result as $row)
+		{
+			/**
+			 * @var $type string
+			 * @var $length string|null
+			 */
+			list($type, $length) = $this->parseType($row['Type']);
+
+			$column = $this->getDataType($type);
+			$column['column_name']      = $row['Field'];
+			$column['column_default']   = $row['Default'];
+			$column['data_type']        = $type;
+			$column['is_nullable']      = ($row['Null'] == 'YES');
+			$column['ordinal_position'] = ++$count;
+			$column['comment']          = $row['Comment'];
+			$column['extra']            = $row['Extra'];
+			$column['key']              = $row['Key'];
+			$column['privileges']       = $row['Privileges'];
+
+			$r = array();
+			if (!isset($column['type']))
+				$r[] = $column;
+
+			if (isset($column['type']))
+			{
+				switch ($column['type'])
+				{
+					case 'float':
+						if (isset($length))
+							list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+						break;
+					case 'int':
+						if (isset($length))
+							// MySQL attribute
+							$column['display'] = $length;
+						break;
+					case 'string':
+						switch ($column['data_type'])
+						{
+							case 'binary':
+							case 'varbinary':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'char':
+							case 'varchar':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'text':
+							case 'tinytext':
+							case 'mediumtext':
+							case 'longtext':
+								$column['collation_name'] = $row['Collation'];
+								break;
+							case 'enum':
+							case 'set':
+								$column['collation_name'] = $row['Collation'];
+								$column['options'] = explode('\',\'', substr($length, 1, -1));
+								break;
+						}
+						break;
+				}
+			}
+
+			$columns[$row['Field']] = $column;
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Get data type.
+	 *
+	 * Returns a normalized array describing the SQL data type.
+	 * Example:<br>
+	 * <code>
+	 * $db->getDataType('char');
+	 * </code>
+	 *
+	 * @since  2.1.0
+	 *
+	 * @param  string $type SQL data type
+	 *
+	 * @return array
+	 */
+	public function getDataType($type)
+	{
+		static $types = array
+		(
+			'blob'                      => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '65535'),
+			'bool'                      => array('type' => 'bool'),
+			'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
+			'datetime'                  => array('type' => 'string'),
+			'decimal unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'double'                    => array('type' => 'float'),
+			'double precision unsigned' => array('type' => 'float', 'min' => '0'),
+			'double unsigned'           => array('type' => 'float', 'min' => '0'),
+			'enum'                      => array('type' => 'string'),
+			'fixed'                     => array('type' => 'float', 'exact' => TRUE),
+			'fixed unsigned'            => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'float unsigned'            => array('type' => 'float', 'min' => '0'),
+			'geometry'                  => array('type' => 'string', 'binary' => TRUE),
+			'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'longblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '4294967295'),
+			'longtext'                  => array('type' => 'string', 'character_maximum_length' => '4294967295'),
+			'mediumblob'                => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '16777215'),
+			'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
+			'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
+			'mediumtext'                => array('type' => 'string', 'character_maximum_length' => '16777215'),
+			'national varchar'          => array('type' => 'string'),
+			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'nvarchar'                  => array('type' => 'string'),
+			'point'                     => array('type' => 'string', 'binary' => TRUE),
+			'real unsigned'             => array('type' => 'float', 'min' => '0'),
+			'set'                       => array('type' => 'string'),
+			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'text'                      => array('type' => 'string', 'character_maximum_length' => '65535'),
+			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '255'),
+			'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
+			'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
+			'tinytext'                  => array('type' => 'string', 'character_maximum_length' => '255'),
+			'year'                      => array('type' => 'string'),
+		);
+
+		$type = str_replace(' zerofill', '', $type);
+
+		if (isset($types[$type]))
+			return $types[$type];
+
+		return parent::getDataType($type);
 	}
 }
