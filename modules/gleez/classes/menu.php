@@ -233,11 +233,14 @@ class Menu {
 
 			//set title
 			$title = (isset($item['image'])) ? '<i class="fa fa-fw '.$item['image'].'"></i>' : '';
-			$title .= '<span>'.Text::plain($item['title']).$caret.'</span>';
+			// localize item menu
+			$title .= '<span>'.Text::plain(__($item['title'])).$caret.'</span>';
 
 			if($item['descp'] && !empty($item['descp']))
 			{
-				$title .= '<span class="menu-descp">' . Text::plain($item['descp']) . '</span>';
+				// localize item desc
+				$title .= '<span class="menu-descp">' . Text::plain(__($item['descp'])) . '</span>';
+				
 			}
 
 			$menu .= '<li'.$classes.'  ' .$id. '>'.HTML::anchor($item['url'], $title, $attributes);
