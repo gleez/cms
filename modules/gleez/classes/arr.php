@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -295,23 +295,33 @@ class Arr {
 	}
 
 	/**
-	 * Retrieve a single key from an array. If the key does not exist in the
-	 * array, the default value will be returned instead.
+	 * Retrieve a single key from an array.
 	 *
-	 *     // Get the value "username" from $_POST, if it exists
-	 *     $username = Arr::get($_POST, 'username');
+	 * If the key does not exist in the array, the default value will be returned instead.
 	 *
-	 *     // Get the value "sorting" from $_GET, if it exists
-	 *     $sorting = Arr::get($_GET, 'sorting');
+	 * Example:<br>
+	 * <code>
+	 * // Get the value "username" from $_POST, if it exists
+	 * $username = Arr::get($_POST, 'username');
 	 *
-	 * @param   array   $array      array to extract from
-	 * @param   string  $key        key name
-	 * @param   mixed   $default    default value
+	 * // Get the value "sorting" from $_GET, if it exists
+	 * $sorting = Arr::get($_GET, 'sorting');
+	 * </code>
 	 *
-	 * @return  mixed
+	 * @param array|\ArrayObject $array Array to extract from
+	 * @param string $key Key name
+	 * @param mixed $default Default value [Optional]
+	 *
+	 * @link https://github.com/facebook/hhvm/issues/3437
+	 *
+	 * @return mixed
 	 */
 	public static function get($array, $key, $default = NULL)
 	{
+		if ($array instanceof \ArrayObject)
+			// Workaround for inconsistent implementation of isset between PHP and HHVM
+			return $array->offsetExists($key) ? $array->offsetGet($key) : $default;
+
 		return isset($array[$key]) ? $array[$key] : $default;
 	}
 
