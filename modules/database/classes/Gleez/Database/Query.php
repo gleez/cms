@@ -1,15 +1,21 @@
 <?php
 /**
- * MySQLi database Expression
+ * Gleez CMS (http://gleezcms.org)
  *
- * @package    Gleez\Database
- * @version    2.0.0
- * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @link https://github.com/gleez/database Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
  */
+
 namespace Gleez\Database;
 
+/**
+ * MySQLi database Expression
+ *
+ * @package Gleez\Database
+ * @version 2.0.0
+ * @author Gleez Team
+ */
 class Query {
 
 	// SQL statement
@@ -221,7 +227,7 @@ class Query {
 	 * @param   bool|string  $as_object      Return results as associative arrays or objects? [Optional]
 	 * @param   array        $object_params  Parameters for object results [Optional]
 	 *
-	 * @return  mixed  The result of the query
+	 * @return  \Gleez\Database\Result  The result of the query
 	 */
 	public function execute($db = NULL, $as_object = NULL, $object_params = NULL)
 	{
@@ -1563,29 +1569,29 @@ class Query {
 	 */
 	public function reset()
 	{
-		$this->select = array();
-		$this->from   = array();
-		$this->using  = array();
-		$this->join = array();
-		$this->join_on  = array();
-		$this->join_and = array();
-		$this->where = array();
-		$this->match = array();
-		$this->group_by = array();
-		$this->within_group_order_by = array();
-		$this->having = array();
-		$this->order_by = array();
-		$this->offset = null;
-		$this->into = null;
-		$this->columns = array();
-		$this->values  = array();
-		$this->set = array();
-		$this->options = array();
-		$this->limit = null;
-		$this->_as_object = FALSE;
-		$this->_object_params = array();
+		$this->select =
+		$this->from =
+		$this->using =
+		$this->join =
+		$this->join_on =
+		$this->join_and =
+		$this->where =
+		$this->match =
+		$this->group_by =
+		$this->within_group_order_by =
+		$this->having =
+		$this->order_by =
+		$this->columns =
+		$this->values =
+		$this->set =
+		$this->options =
+		$this->_object_params =
 		$this->_parameters = array();
-		$this->_query = NULL;
+		$this->offset =
+		$this->limit =
+		$this->into =
+		$this->_query = null;
+		$this->_as_object = false;
 
 		return $this;
 	}

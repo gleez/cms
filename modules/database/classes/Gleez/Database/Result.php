@@ -1,15 +1,21 @@
 <?php
 /**
- * MySQLi database Expression
+ * Gleez CMS (http://gleezcms.org)
  *
- * @package    Gleez\Database
- * @version    2.1.0
- * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @link https://github.com/gleez/database Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
  */
+
 namespace Gleez\Database;
 
+/**
+ * MySQLi database Expression
+ *
+ * @package Gleez\Database
+ * @version 2.1.0
+ * @author Gleez Team
+ */
 class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 	// Executed SQL for this result
@@ -34,7 +40,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	protected $_internal_row = 0;
 
 	/**
-	 * @var ReflectionClass
+	 * @var \ReflectionClass
 	 */
 	protected $_reflect_class = NULL;
 
@@ -45,7 +51,6 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 * @param   string  $sql        SQL query
 	 * @param   mixed   $as_object
 	 * @param   array   $params
-	 * @return  void
 	 */
 	public function __construct($result, $sql, $as_object = FALSE, array $params = NULL)
 	{
@@ -60,7 +65,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 			// Get the object class name
 			$as_object = get_class($as_object);
 		}
-		
+
 		// Results as objects or associative arrays
 		$this->_as_object = $as_object;
 
@@ -69,7 +74,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 			// Object constructor params
 			$this->_object_params = $params;
 		}
-		
+
 		// Find the number of rows in the result
 		$this->_total_rows = $result->num_rows;
 	}
@@ -87,11 +92,6 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 	/**
 	 * Get a cached database result from the current result iterator.
-	 *
-	 *     $cachable = serialize($result->cached());
-	 *
-	 * @return  Database_Result_Cached
-	 * @since   3.0.5
 	 */
 	public function cached()
 	{
@@ -193,15 +193,15 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	public function each_as_array()
 	{
 		$results = array();
-		
+
 		foreach($this as $row)
-		{ 
+		{
 			//$results[] = $row->as_array();
 			$results[] = $row;
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * Return the named column from the current row.
 	 *
@@ -284,7 +284,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 * @param   int     $offset
 	 * @param   mixed   $value
 	 * @return  void
-	 * @throws  Gleez_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 */
 	final public function offsetSet($offset, $value)
 	{
@@ -298,7 +298,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 *
 	 * @param   int     $offset
 	 * @return  void
-	 * @throws  Gleez_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 */
 	final public function offsetUnset($offset)
 	{
@@ -387,7 +387,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 		return FALSE;
 	}
-	
+
 	/**
 	 * Returns the current row of a result set
 	 *
@@ -427,7 +427,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 	/**
 	 * Returns the current row of a result set under HHVM
-	 * The problem was fetch_object creates new instance of a given class, 
+	 * The problem was fetch_object creates new instance of a given class,
 	 * and attaches resulted key/value pairs after the class was constructed.
 	 *
 	 * @return  mixed
@@ -462,5 +462,4 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 		return $row;
 	}
-
 }
