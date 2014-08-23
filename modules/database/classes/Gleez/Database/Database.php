@@ -1,19 +1,12 @@
 <?php
 /**
- * Database connection wrapper/helper.
+ * Gleez CMS (http://gleezcms.org)
  *
- * You may get a database instance using `Gleez\Database\Database::instance('name')` where
- * name is the [config](database/config) group.
- *
- * This class provides connection instance management via Database Drivers, as
- * well as quoting, escaping and other related functions.
- *
- * @package    Gleez\Database\Core
- * @version    2.2.1
- * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @link https://github.com/gleez/database Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
  */
+
 namespace Gleez\Database;
 
 // Grab the files for HHVM
@@ -25,6 +18,19 @@ require_once __DIR__ . '/Query.php';
 class ConnectionException extends \Exception {};
 class DatabaseException extends \Exception {};
 
+/**
+ * Database connection wrapper/helper.
+ *
+ * You may get a database instance using `Gleez\Database\Database::instance('name')` where
+ * name is the [config](database/config) group.
+ *
+ * This class provides connection instance management via Database Drivers, as
+ * well as quoting, escaping and other related functions.
+ *
+ * @package Gleez\Database\Core
+ * @version 2.2.1
+ * @author Gleez Team
+ */
 abstract class Database {
 	// Query types
 	const SELECT =  'select';
@@ -48,6 +54,12 @@ abstract class Database {
 	 * @var string Cache of the name of the readonly connection
 	 */
 	protected static $_readonly = array();
+
+	/**
+	 * Character that is used to quote identifiers
+	 * @var string
+	 */
+	protected $_identifier = '"';
 
 	/**
 	 * Ready for use queries
@@ -231,7 +243,7 @@ abstract class Database {
 	/**
 	 * Returns the currently attached connection
 	 *
-	 * @returns \Gleez\Database\Connection
+	 * @returns \Gleez\Database\Driver\DriverInterface
 	 */
 	public function getConnection()
 	{
@@ -278,7 +290,7 @@ abstract class Database {
 	 */
 	public function transactionBegin()
 	{
-		$this->getConnection()->query('BEGIN');
+		$this->_connection->query('BEGIN');
 	}
 
 	/**
@@ -286,7 +298,7 @@ abstract class Database {
 	 */
 	public function transactionCommit()
 	{
-		$this->getConnection()->query('COMMIT');
+		$this->_connection->query('COMMIT');
 	}
 
 	/**
@@ -294,8 +306,26 @@ abstract class Database {
 	 */
 	public function transactionRollback()
 	{
-		$this->getConnection()->query('ROLLBACK');
+		$this->_connection->query('ROLLBACK');
 	}
+
+	/**
+	 * Perform an SQL query of the given type
+	 *
+	 * @param   integer  $type       Database::SELECT, Database::INSERT, etc
+	 * @param   string   $sql        SQL query
+	 * @param   boolean  $asObject   Result object class string, TRUE for stdClass, FALSE for assoc array [Optional]
+	 * @param   array    $params     Object construct parameters for result class [Optional]
+	 *
+	 * @return \Gleez\Database\Result
+	 */
+	abstract public function query($type, $sql, $asObject = false, array $params = null);
+
+	/**
+	 * Get DBMS version
+	 * @return mixed
+	 */
+	abstract public function version();
 
 	/**
 	 * Count the number of records in a table.
@@ -464,18 +494,17 @@ abstract class Database {
 	{
 		// Identifiers are escaped by repeating them
 		$escaped_identifier = $this->_identifier.$this->_identifier;
-
 		if (is_array($table))
 		{
 			list($table, $alias) = $table;
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($table instanceof \Gleez\Database\Expression)
+		if ($table instanceof Expression)
 		{
 			$table = $table->value();
 		}
-		elseif ($table instanceof \Gleez\Database\Query)
+		elseif ($table instanceof Query)
 		{
 			$table = '('.$table->compile($this).') ';
 		}
@@ -544,12 +573,12 @@ abstract class Database {
 		{
 			return "'0'";
 		}
-		elseif ($value instanceof \Gleez\Database\Expression)
+		elseif ($value instanceof Expression)
 		{
 			// Use the raw expression
 			return $value->value();
 		}
-		elseif ($value instanceof \Gleez\Database\Query)
+		elseif ($value instanceof Query)
 		{
 			return '('.$value->compile($this).') ';
 		}

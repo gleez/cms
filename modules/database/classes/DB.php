@@ -1,11 +1,25 @@
 <?php
 /**
- * Provides a shortcut to get Database related objects for [making queries](../database/query).
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link https://github.com/gleez/database Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+use Gleez\Database\Database;
+use Gleez\Database\Query;
+use Gleez\Database\Expression;
+
+/**
+ * Gleez DB
+ *
+ * Provides a helpers to get Database related objects for [making queries](../database/query).
  *
  * Shortcut     | Returned Object
  * -------------|---------------
- * [`DB::query()`](#query)   | [Database_Query]
- * [`DB::insert()`](#insert) | [Database_Query_Builder_Insert]
+ * [`DB::query()`](#query)   | [Gleez\Database\Result]
+ * [`DB::insert()`](#insert) | [Gleez\Database\Query]
  * [`DB::select()`](#select),<br />[`DB::select_array()`](#select_array) | [Database_Query_Builder_Select]
  * [`DB::update()`](#update) | [Database_Query_Builder_Update]
  * [`DB::delete()`](#delete) | [Database_Query_Builder_Delete]
@@ -13,19 +27,18 @@
  *
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
- * @package    Gleez\Database
- * @version    2.1.0
- * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @package Gleez\Database
+ * @version 2.1.1
+ * @author Gleez Team
  */
-use Gleez\Database\Database;
-use Gleez\Database\Query;
-use Gleez\Database\Expression;
-
 class DB {
 
 	protected static $_config = NULL;
+
+	/**
+	 * Avoid directly creating
+	 */
+	private function __construct() {}
 
 	/**
 	 * Create a new Query object.
@@ -33,7 +46,7 @@ class DB {
 	 * Example:<br>
 	 * <code>
 	 * // Create a new SELECT query
-	 * $query = DB::query(Database::SELECT, 'SELECT * FROM users');
+	 * $query = DB:query(\Gleez\Database\Database::SELECT, 'SELECT * FROM users');
 	 *
 	 * // Create a new DELETE query
 	 * $query = DB::query(Database::DELETE, 'DELETE FROM users WHERE id = 5');
@@ -47,7 +60,7 @@ class DB {
 	 * @param   integer  $type  type: Database::SELECT, Database::UPDATE, etc
 	 * @param   string   $sql   SQL statement
 	 *
-	 * @return  Query
+	 * @return  \Gleez\Database\Result
 	 */
 	public static function query($type, $sql)
 	{
@@ -57,7 +70,9 @@ class DB {
 	/**
 	 * Create a new Query object
 	 *
-	 * Each argument will be treated as a column. To generate a `foo AS bar` alias, use an array.
+	 * Each argument will be treated as a column.
+	 * To generate a `foo AS bar` alias, use an array.
+	 *
 	 * Example:<br>
 	 * <code>
 	 * // SELECT id, username
@@ -66,6 +81,7 @@ class DB {
 	 * $query = DB::select(array('id', 'user_id'));
 	 * </code>
 	 *
+	 * @param string $columns Query string [Optional]
 	 * @return \Gleez\Database\Query
 	 */
 	public static function select($columns = NULL)
