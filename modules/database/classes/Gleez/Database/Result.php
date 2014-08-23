@@ -434,9 +434,6 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 */
 	private function currentHHVM()
 	{
-		// Get row as associated array
-		$row = $this->_result->fetch_assoc();
-
 		if ($this->_as_object === TRUE OR is_string($this->_as_object))
 		{
 			if ($this->_reflect_class === NULL)
@@ -445,21 +442,39 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 				$this->_reflect_class = new \ReflectionClass(is_string($this->_as_object) ? $this->_as_object : 'stdClass');
 			}
 
-			// Get new instance without constructing it
-			$object = $this->_reflect_class->newInstanceWithoutConstructor();
-
-			foreach ($row as $column => $value)
+			// Support ORM with loaded, when the class has __set and __construct if its ORM
+			if($this->_reflect_class->hasMethod('__set') === TRUE && $this->_reflect_class->hasMethod('__construct') === TRUE)
 			{
-				// Trigger the class setter
-				$object->__set($column, $value);
+				// Get row as associated array
+				$row = $this->_result->fetch_assoc();
+
+				// Get new instance without constructing it
+				$object = $this->_reflect_class->newInstanceWithoutConstructor();
+
+				foreach ($row as $column => $value)
+				{
+					// Trigger the class setter
+					$object->__set($column, $value);
+				}
+
+				// Construct the class with no parameters
+				$object->__construct(NULL);
+
+				return $object;
 			}
-
-			// Construct the class with no parameters
-			$object->__construct(NULL);
-
-			return $object;
+			elseif (is_string($this->_as_object))
+			{
+				// Return an object of given class name
+				return $this->_result->fetch_object($this->_as_object, (array) $this->_object_params);
+			}
+			else
+			{
+				// Return an stdClass
+				return $this->_result->fetch_object();
+			}
 		}
 
-		return $row;
+		// Get row as associated array
+		return $this->_result->fetch_assoc();
 	}
 }

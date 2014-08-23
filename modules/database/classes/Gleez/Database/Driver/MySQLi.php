@@ -107,9 +107,15 @@ class Driver_MySQLi extends Database implements DriverInterface {
 
 		try
 		{
-			// Create a persistent connection - only available with PHP 5.3+
-			// See http://www.php.net/manual/en/mysqli.persistconns.php
-			$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
+			if ($persistent == TRUE)
+			{
+				// See http://www.php.net/manual/en/mysqli.persistconns.php
+				$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
+			}
+			else
+			{
+				$this->_connection = new \MySQLi($hostname, $username, $password, $database, (int)$port, $socket);
+			}
 		}
 		catch (\Exception $e)
 		{
