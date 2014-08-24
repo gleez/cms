@@ -37,12 +37,12 @@ Multiple writers are supported.
 
 Mango Log Writer uses __Gleez Mango__ component. In its turn __Gleez Mango__ uses configuration groups to create MongoDB instances.
 
-The default configuration group is loaded based on the `Mango::$default` setting.
+The default configuration group is loaded based on the `\Gleez\Mango\Client::$default` setting.
 It is set to the `default` group as standard, however this can be changed within the `/application/bootstrap.php` file:
 
 ~~~
 // Change the default config group
-Mango::$default = 'mygroup';
+\Gleez\Mango\Client::$default = 'mygroup';
 
 // Using Gleez Mango Log
 Kohana::$log->attach(new Log_Mango());
@@ -56,7 +56,7 @@ Name           | Required | Description
 -------------- | -------- | ---------------------------------------------------------------
 connection     | __YES__  | (_array_) Connection Setup
 profiling      | __NO__   | (_boolean_) Whether or not to use profiling. If enabled, profiling data will be shown through Gleez profiler library
-collection     | __NO__   | (_string_) You can override the class name for the MongoCollection wrapper. By default using `Mango::$_collection_class` it `Mango_Collection`
+collection     | __NO__   | (_string_) You can override the class name for the MongoCollection wrapper. By default using `\Gleez\Mango\Client::$collectionClass` it `\Gleez\Mango\Collection`
 
 The following options are available for __connection__ group:
 
@@ -71,8 +71,8 @@ Name             | Required | Description
 ---------------- | -------- | ---------------------------------------------------------------
 db               | __YES__  | (_string_) Database to connect to. Cannot contain spaces, dots or be the empty string. The name `system` is also reserved.
 connectTimeoutMS | __NO__   | (_integer_) Default timeout. It is measured in milliseconds.
-connect          | __NO__   | (_boolean_) Connect to DB on creation connection. How do you want to deal with connection errors? __TRUE__ - `Mango::instance` fails and an exception is thrown. Next call to `Mango::instance` will try to connect again. __FALSE__ - Exception is thrown when you run first DB action. Next call to `Mango::instance` will return same object.
+connect          | __NO__   | (_boolean_) Connect to DB on creation connection. How do you want to deal with connection errors? __TRUE__ - `\Gleez\Mango\Client::instance` fails and an exception is thrown. Next call to `\Gleez\Mango\Client::instance` will try to connect again. __FALSE__ - Exception is thrown when you run first DB action. Next call to `\Gleez\Mango\Client::instance` will return same object.
 username         | __NO__   | (_string_) Database username. __FALSE__ and '' are identical.
 password         | __NO__   | (_string_) Database password. __FALSE__ and '' are identical.
 replicaSet       | __NO__   | (_string_) The name of the replica set to connect to. __FALSE__ and '' are identical.
-w                | __NO__   | (_mixed_) When a write is given a [Write Concern](http://www.php.net/manual/ru/mongo.writeconcerns.php) option ("w") the driver will send the query to MongoDB and piggy back a [getLastError](http://docs.mongodb.org/manual/core/write-operations/) command (GLE) with the Write Concern option at the same time.
+w                | __NO__   | (_mixed_) When a write is given a [Write Concern](http://www.php.net/manual/en/mongo.writeconcerns.php) option ("w") the driver will send the query to MongoDB and piggy back a [getLastError](http://docs.mongodb.org/manual/core/write-operations/) command (GLE) with the Write Concern option at the same time.

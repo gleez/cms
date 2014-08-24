@@ -3,7 +3,7 @@
  * Localized strings into Russian
  *
  * @package   Gleez\I18n
- * @author    Sergey Yakovlev <sadhooklay@gmail.com>
+ * @author    Serghei Iakovlev <sadhooklay@gmail.com>
  * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
@@ -241,7 +241,6 @@ return array(
 	'Documentation for Kohana core/system' => 'Документация для ядра и системы Kohana',
 	'Draft' => 'Черновик',
 	'draft' => 'черновик',
-	'Driver version >= :ver required' => 'Требуемая верися драйвера >= :ver',
 	// E
 	'E-mail address' => 'E-mail адрес',
 	'Edit' => 'Изменить',
@@ -391,6 +390,7 @@ return array(
 	"Method doesn't exist: :method" => 'Метод не найден: :method',
 	'Method :method not found' => 'Метод :method не найден',
 	'Mission' => 'Миссия',
+	'Minimal required version of PHP-extension MongoDB :version' => 'Необходима версия PHP-расширения MongoDB не ниже :version',
 	'Minute' => 'Минута',
 	'Module' => 'Модуль',
 	'modules' => 'модули',
@@ -700,7 +700,7 @@ return array(
 	'Year' => 'Год',
 	'Yes' => 'Да',
 	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Вы используете :out браузер. Пожалуйста :url или :frame чтоб расширить возможности браузера',
-	"You can't delete system menu!" => 'Вы не можете удалять системное меню!',
+	"You can't delete system menu!" => 'Вы не можете удалить системное меню!',
 	'You must provide a username' => 'Вы должны ввести имя пользователя',
 	'You must provide mail body' => 'Вы должны ввести содержимое сообщения',
 	'You must provide mail subject' => 'Вы должны ввести тему сообщения',

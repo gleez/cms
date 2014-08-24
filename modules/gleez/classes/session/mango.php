@@ -1,5 +1,15 @@
 <?php
 /**
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link https://github.com/cleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+use \Gleez\Mango\Client;
+
+/**
  * MongoDB-based session class
  *
  * ### System Requirements
@@ -9,21 +19,19 @@
  *
  * @package    Gleez\Session\Mango
  * @author     Gleez Team
- * @version    1.0.0
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @version    1.0.1
  */
 class Session_Mango extends Session {
 
 	/**
-	 * Mango instance
-	 * @var \Mango
+	 * \Gleez\Mango\Client instance
+	 * @var \Gleez\Mango\Client
 	 */
 	protected $_db;
 
 	/**
-	 * Mango_Collection instance
-	 * @var \Mango_Collection
+	 * \Gleez\Mango\Collection name
+	 * @var string
 	 */
 	protected $_collection = 'sessions';
 
@@ -88,11 +96,11 @@ class Session_Mango extends Session {
 		if ( ! isset($config['group']))
 		{
 			// Use the default group
-			$config['group'] = Mango::$default;
+			$config['group'] = Client::$default;
 		}
 
 		// Create Mango instance
-		$this->_db = Mango::instance($config['group']);
+		$this->_db = Client::instance($config['group']);
 
 		if (isset($config['collection']))
 		{

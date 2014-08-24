@@ -1,34 +1,48 @@
 <?php
 /**
- * # Mango Document
+ * Gleez CMS (http://gleezcms.org)
  *
- * This class objectifies a MongoDB document and can be used with one
+ * @link https://github.com/cleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+namespace Gleez\Mango;
+
+use Text;
+use JSON;
+use MongoId;
+
+/**
+ * Gleez Mongo Document
+ *
+ * This class objectifies a \MongoDB document and can be used with one
  * of the following design patterns:
  *
  * ## Usage
  *
  * ### Table Data Gateway pattern:
  * ~~~
- * class Model_Post extends Mango_Document {
- *     protected $_name = 'posts';
+ * class Model_Post extends \Gleez\Mango\Document {
+ *     protected $name = 'posts';
  *     // All model-related code here
  * }
  *
- * $post = Mango_Document::factory('post', $post_id);
+ * $post = \Gleez\Mango\Document::factory('post', $post_id);
  * ~~~
  *
  * ### Row Data Gateway pattern:
  * ~~~
- * class Model_Post_Collection extends Mango_Collection {
- *     protected $_name = 'posts';
+ * class Model_Post_Collection extends \Gleez\Mango\Collection {
+ *     protected $name = 'posts';
  *     // Collection-related code here
  * }
  *
- * class Model_Post extends Mango_Document {
+ * class Model_Post extends \Gleez\Mango\Document {
  *     // Document-related code here
  * }
  *
- * $post = Mango_Document::factory('post', $post_id);
+ * $post = \Gleez\Mango\Document::factory('post', $post_id);
  * ~~~
  *
  * The following examples could be used with either pattern with no differences in usage.
@@ -37,12 +51,12 @@
  *
  * __Example__:
  * ~~~
- * class Model_Document extends Mango_Document {
- *     protected $_name = 'test';
+ * class Model_Document extends \Gleez\Mango\Document {
+ *     protected $name = 'test';
  * }
  *
  * $document = new Model_Document();
- * // or Mango_Document::factory('document');
+ * // or \Gleez\Mango\Document::factory('document');
  *
  * $document->name = 'Mongo';
  * $document->type = 'db';
@@ -52,18 +66,18 @@
  * ~~~
  *
  * The `_id` is aliased to id by default. Other aliases can also be defined using
- * the [Mango_Document::$_aliases] protected property. Aliases can be used anywhere that a
+ * the [\Gleez\Mango\Document::$aliases] protected property. Aliases can be used anywhere that a
  * field name can be used including dot-notation for nesting.
  *
  * __Example__:
  * ~~~
- * $id = $document->id; // MongoId
+ * $id = $document->_id; // \MongoId
  * ~~~
  *
  * All methods that take query parameters support JSON strings as input in addition to PHP arrays.
  * The JSON parser is more lenient than usual.
  *
- * [!!] Note: [Mango], [Mango_Collection] and [Mango_Document] uses Gleez [JSON] helper class.
+ * [!!] Note: [Mango], [\Gleez\Mango\Collection] and [\Gleez\Mango\Document] uses Gleez [JSON] helper class.
  *
  * __Example__:
  * ~~~
@@ -71,10 +85,10 @@
  * // db.test.findOne({"name":"Mongo"});
  * ~~~
  *
- * Methods which are intended to be overridden are {before,after}_{save,load,delete} so that special
+ * Methods which are intended to be overridden are {before,after}{Save,Load,Delete} so that special
  * actions may be taken when these events occur:
  * ~~~
- * public function before_save()
+ * public function beforeSave()
  * {
  *     $this->inc('visits');
  *     $this->last_visit = time();
@@ -88,7 +102,7 @@
  * $doc = new Model_Document($id);
  * ~~~
  *
- * Atomic operations and updates are not executed until [Mango_Document::save] is called
+ * Atomic operations and updates are not executed until [\Gleez\Mango\Document::save] is called
  * and operations are chainable.
  *
  * __Example__:
@@ -124,32 +138,32 @@
  * Documents are reloaded when accessing a property that was modified with
  * an operator and then saved:
  * ~~~
- * in_array($doc->roles, 'admin'); // TRUE
+ * in_array($doc->roles, 'admin'); // true
  *
  * $doc->pull('roles', 'admin');
- * in_array($doc->roles, 'admin'); // TRUE
+ * in_array($doc->roles, 'admin'); // true
  *
  * $doc->save();
- * in_array($doc->roles, 'admin'); // FALSE
+ * in_array($doc->roles, 'admin'); // false
  * ~~~
  *
  * Documents can have references to other documents which will be loaded
  * lazily and saved automatically:
  * ~~~
- * class Model_Post extends Mango_Document {
- *     protected $_name = 'posts';
- *     protected $_references = array('user' => array('model' => 'user'));
+ * class Model_Post extends \Gleez\Mango\Document {
+ *     protected $name = 'posts';
+ *     protected $references = array('user' => array('model' => 'user'));
  * }
  *
- * class Model_User extends Mango_Document {
+ * class Model_User extends \Gleez\Mango\Document {
  *     protected $name = 'users';
  * }
  *
- * $user = Mango_Document::factory('user')
+ * $user = \Gleez\Mango\Document::factory('user')
  *                       ->set('id',    'john')
  *                       ->set('email', 'john@doe.com');
  *
- * $post = Mango_Document::factory('post');
+ * $post = \Gleez\Mango\Document::factory('post');
  *
  * $post->user  = $user;
  * $post->title = 'MongoDB';
@@ -163,7 +177,7 @@
  * $post->_user;
  * // "john" - the post was loaded lazily.
  *
- * $post->user->id;
+ * $post->user->_id;
  * // "john" - the user object was created lazily but not loaded.
  *
  * $post->user->email;
@@ -178,17 +192,17 @@
  * This class was adapted from
  * [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
  *
- * @package    Gleez\Mango\Document
+ * @property   \MongoId $_id
+ *
+ * @package    Gleez\Mango
  * @author     Gleez Team
- * @version    0.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @version    1.0.0-gleez-1.1
  *
  * @link       https://github.com/colinmollenhour/mongodb-php-odm  MongoDB PHP ODM
  * @link       http://www.martinfowler.com/eaaCatalog/tableDataGateway.html  Table Data Gateway pattern
  * @link       http://www.martinfowler.com/eaaCatalog/rowDataGateway.html  Row Data Gateway pattern
  */
-abstract class Mango_Document {
+abstract class Document {
 
 	/**
 	 * Array of document factory names.
@@ -196,7 +210,7 @@ abstract class Mango_Document {
 	 *
 	 * __Example__:
 	 * ~~~
-	 * Mango_Document::$models['foo'] = 'Model_My_Foo';
+	 * \Gleez\Mango\Document::$models['foo'] = 'Model_My_Foo';
 	 * ~~~
 	 *
 	 * @var array
@@ -205,29 +219,29 @@ abstract class Mango_Document {
 
 	/**
 	 * The name of the collection within the database or the gridFS prefix if
-	 * [Mango_Document::$_gridFS] is TRUE. If using a corresponding [Mango_Collection]
-	 * subclass, set this only in the [Mango_Collection] subclass.
+	 * [\Gleez\Mango\Document::$gridFS] is true. If using a corresponding [\Gleez\Mango\Collection]
+	 * subclass, set this only in the [\Gleez\Mango\Collection] subclass.
 	 *
 	 * @var string
 	 */
-	protected $_name;
+	protected $name;
 
 	/**
 	 * The database configuration name (passed to [Mango::instance]).
-	 * If using a corresponding [Mango_Collection] subclass, set this only
-	 * in the [Mango_Collection] subclass.
+	 * If using a corresponding [\Gleez\Mango\Collection] subclass, set this only
+	 * in the [\Gleez\Mango\Collection] subclass.
 	 *
 	 * @var string
 	 */
-	protected $_db;
+	protected $db;
 
 	/**
 	 * Whether or not this collection is a gridFS collection. If using a corresponding
-	 * [Mango_Collection] subclass, set this only in the [Mango_Collection] subclass.
+	 * [\Gleez\Mango\Collection] subclass, set this only in the [\Gleez\Mango\Collection] subclass.
 	 *
 	 * @var boolean
 	 */
-	protected $_gridFS = FALSE;
+	protected $gridFS = false;
 
 	/**
 	 * Definition of references existing in this document. If `model` is not specified it
@@ -237,43 +251,43 @@ abstract class Mango_Document {
 	 * __Example__:
 	 * ~~~
 	 * // Example Document: {_id: 1, user_id: 2, _token: 3}
-	 * protected $_references = array(
+	 * protected $references = array(
 	 *     'user' => array(
 	 *         'model' => 'user',
 	 *         'field' => 'user_id'
 	 *     ),
-	 *     'token' => NULL,
+	 *     'token' => null,
 	 * );
 	 * ~~~
 	 *
 	 * You can also specify getter and setter functions:
 	 *
-	 * + `getter` - NULL will make the value write-only,
+	 * + `getter` - null will make the value write-only,
 	 *              string will call `$this->{$getter}($name)`,
 	 *              callable will be called as `$getter($this, $name)`
-	 * + `setter` - NULL will make the value read-only,
+	 * + `setter` - null will make the value read-only,
 	 *              string will call $this->{$setter}($value),
 	 *              callable will be called as $setter($value, $this, $name)
 	 *
 	 * @var array
 	 */
-	protected $_references = array();
+	protected $references = array();
 
 	/**
-	 * Definition of predefined searches for use with [Mango_Document::__call].
+	 * Definition of predefined searches for use with [\Gleez\Mango\Document::__call].
 	 * This instantiates a collection for the target model and initializes the
 	 * search with the specified field being equal to the `_id` of the current object.
 	 *
 	 * __Example__:
 	 * ~~~
-	 * $_searches
+	 * $searches
 	 * {events: {model: 'event', field: '_user'}}
 	 * // db.event.find({_user: <_id>})
 	 * ~~~
 	 *
 	 * @var array
 	 */
-	protected $_searches = array();
+	protected $searches = array();
 
 	/**
 	 * Field name aliases.
@@ -281,17 +295,17 @@ abstract class Mango_Document {
 	 *
 	 * @var array
 	 */
-	protected $_aliases = array();
+	protected $aliases = array();
 
 	/**
-	 * If set to `TRUE`, operator functions (set, inc, push etc.)
+	 * If set to `true`, operator functions (set, inc, push etc.)
 	 * will emulate database functions for eventual consistency.
 	 *
 	 * __Example__:
 	 * ~~~
-	 * $doc = new Mango_Document();
+	 * $doc = new \Gleez\Mango\Document;
 	 *
-	 * $doc->_emulate = TRUE;
+	 * $doc->emulate = true;
 	 * $doc->number = 1;
 	 * $doc->inc('number');
 	 *
@@ -299,14 +313,14 @@ abstract class Mango_Document {
 	 * echo $doc->number;
 	 * ~~~
 	 *
-	 * If set to `FALSE`, the field will be marked as dirty, and the new
+	 * If set to `false`, the field will be marked as dirty, and the new
 	 * value will only be available after reload.
 	 *
 	 * __Example__:
 	 * ~~~
-	 * $doc = new Mango_Document();
+	 * $doc = new \Gleez\Mango\Document;
 	 *
-	 * $doc->_emulate = FALSE;
+	 * $doc->emulate = false;
 	 * $doc->number = 1;
 	 * $doc->inc('number');
 	 *
@@ -316,27 +330,27 @@ abstract class Mango_Document {
 	 *
 	 * @var boolean
 	 */
-	protected $_emulate = FALSE;
+	protected $emulate  = false;
 
 	/**
 	 * Internal storage of object data
 	 * @var array
 	 */
-	protected $_object = array();
+	protected $object = array();
 
 	/**
-	 * Keep track of fields changed using [Mango_Document::__set]
-	 * or [Mango_Document::load_values]
+	 * Keep track of fields changed using [\Gleez\Mango\Document::__set]
+	 * or [\Gleez\Mango\Document::load_values]
 	 *
 	 * @var array
 	 */
-	protected $_changed = array();
+	protected $changed = array();
 
 	/**
 	 * Set of operations to perform on update/insert
 	 * @var array
 	 */
-	protected $_operations = array();
+	protected $operations = array();
 
 	/**
 	 * Keep track of data that is dirty
@@ -344,30 +358,30 @@ abstract class Mango_Document {
 	 *
 	 * @var array
 	 */
-	protected $_dirty = array();
+	protected $dirty = array();
 
 	/**
 	 * Storage for referenced objects
 	 * @var array
 	 */
-	protected $_related_objects = array();
+	protected $relatedObjects = array();
 
 	/**
 	 * Document loaded status
 	 *
-	 * + `NULL`  - not attempted
-	 * + `FALSE` - failed
-	 * + `TRUE`  - succeeded
+	 * + `null`  - not attempted
+	 * + `false` - failed
+	 * + `true`  - succeeded
 	 *
 	 * @var boolean
 	 */
-	protected $_loaded = NULL;
+	protected $loaded = null;
 
 	/**
-	 * A cache of [Mango_Collection] instances for performance
+	 * A cache of [\Gleez\Mango\Collection] instances for performance
 	 * @var array
 	 */
-	protected static $_collections = array();
+	protected static $collections = array();
 
 	/**
 	 * Designated place for non-persistent data storage
@@ -378,47 +392,43 @@ abstract class Mango_Document {
 	public $data = array();
 
 	/**
-	 * Instantiate an object conforming to Mango_Document conventions
+	 * Instantiate an object conforming to \Gleez\Mango\Document conventions
 	 *
-	 * [!!] Note: The document is not loaded until [Mango_Document::load] is called.
+	 * [!!] Note: The document is not loaded until [\Gleez\Mango\Document::load] is called.
 	 *
 	 * Example:
 	 * ~~~
 	 * // Attempts to create the Model_Post object
-	 * $model = Mango_Document::factory('post');
+	 * $model = \Gleez\Mango\Document::factory('post');
 	 *
 	 * // Attempts to create the Model_User object
-	 * $model = Mango_Document::factory('User');
+	 * $model = \Gleez\Mango\Document::factory('User');
 	 *
 	 * // Attempts to create the Model_Document_First object
-	 * $model = Mango_Document::factory('document_first');
+	 * $model = \Gleez\Mango\Document::factory('document_first');
 	 *
 	 * // Attempts to create the Document object
-	 * $model = Mango_Document::factory('\Document');
+	 * $model = \Gleez\Mango\Document::factory('\Document');
 	 *
 	 * // Attempts to create the \Document\Last object
-	 * $model = Mango_Document::factory('\document\last');
+	 * $model = \Gleez\Mango\Document::factory('\document\last');
 	 * ~~~
 	 *
 	 * @param   string        $name  Model name
 	 * @param   string|array  $id    The _id of the document [Optional]
 	 *
-	 * @return  \Mango_Document
+	 * @return  \Gleez\Mango\Document
+	 *
+	 * @uses    \Text::reduce_slashes
 	 */
-	public static function factory($name, $id = NULL)
+	public static function factory($name, $id = null)
 	{
-		if (isset(self::$models[$name]))
-		{
-			$class = self::$models[$name];
-		}
-		elseif (FALSE !== strpos($name, '\\'))
-		{
-			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));;
-		}
+		if (isset(static::$models[$name]))
+			$class = static::$models[$name];
+		else if (false !== strpos($name, '\\'))
+			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));
 		else
-		{
 			$class = 'Model_' . implode('_', array_map('ucfirst', explode('_', $name)));
-		}
 
 		return new $class($id);
 	}
@@ -431,29 +441,20 @@ abstract class Mango_Document {
 	 *
 	 * @param   string|array  $id  _id of the document to operate on or criteria used to load [Optional]
 	 *
-	 * @return  \Mango_Document
+	 * @return  \Gleez\Mango\Document
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 */
-	public function __construct($id = NULL)
+	public function __construct($id = null)
 	{
-		if ( ! is_null($id))
-		{
-			if (is_array($id))
-			{
+		if (!empty($id)) {
+			if (is_array($id)) {
 				foreach ($id as $key => $value)
-				{
-					$this->_object[$this->getFieldName($key)] = $value;
-				}
-			}
-			elseif(is_string($id))
-			{
-				$this->_object['_id'] = $this->_cast('_id', $id);
-			}
+					$this->object[$this->getFieldName($key)] = $value;
+			} else if (is_string($id))
+				$this->object['_id'] = $this->cast('_id', $id);
 			else
-			{
-				throw new Mango_Exception('_id of the document must be string or array of strings');
-			}
+				throw new Exception('_id of the document must be string or array of strings');
 		}
 	}
 
@@ -464,7 +465,7 @@ abstract class Mango_Document {
 	 */
 	public function __sleep()
 	{
-		return array('_references', '_aliases', '_object', '_changed', '_operations', '_loaded', '_dirty');
+		return array('references', 'aliases', 'object', 'changed', 'operations', 'loaded', 'dirty');
 	}
 
 	/**
@@ -476,20 +477,12 @@ abstract class Mango_Document {
 	 */
 	public function __isset($name)
 	{
-		$name = $this->getFieldName($name, FALSE);
+		$name = $this->getFieldName($name, false);
 
-		if (isset($this->_object[$name]))
-		{
-			return TRUE;
-		}
+		if (isset($this->object[$name]) || $this->get($name))
+			return true;
 
-		// check for dirties...
-		if ($this->get($name))
-		{
-			return TRUE;
-		}
-
-		return isset($this->_object[$name]);
+		return isset($this->object[$name]);
 	}
 
 	/**
@@ -499,7 +492,7 @@ abstract class Mango_Document {
 	 */
 	public function __unset($name)
 	{
-		$this->_unset($name);
+		$this->unsetKey($name);
 	}
 
 	/**
@@ -513,89 +506,79 @@ abstract class Mango_Document {
 	 *
 	 * @return  mixed
 	 *
-	 * @throws Mango_Exception
+	 * @throws \Gleez\Mango\Exception
 	 */
 	public function __get($name)
 	{
-		$name = $this->getFieldName($name, FALSE);
+		$name = $this->getFieldName($name, false);
 
 		// Auto-loading for special references
-		if (array_key_exists($name, $this->_references))
-		{
-			if (isset($this->_references[$name]['getter']))
-			{
-				if (is_null($this->_references[$name]['getter']))
-				{
-					throw new Mango_Exception('$name is write only!');
-				}
-				elseif (is_string($this->_references[$name]['getter']))
-				{
-					return call_user_func(array($this, $this->_references[$name]['getter']), $name);
-				}
+		if (array_key_exists($name, $this->references)) {
+			if (isset($this->references[$name]['getter'])) {
+				if (is_null($this->references[$name]['getter']))
+					throw new Exception('$name is write only!');
+				else if (is_string($this->references[$name]['getter']))
+					return call_user_func(array($this, $this->references[$name]['getter']), $name);
 				else
-				{
-					return call_user_func(array($this, $this->_references[$name]['getter']), $this, $name);
-				}
+					return call_user_func(array($this, $this->references[$name]['getter']), $this, $name);
 			}
 
-			if ( ! isset($this->_related_objects[$name]))
-			{
-				$model = isset($this->_references[$name]['model'])
-					? $this->_references[$name]['model']
+			if (!isset($this->relatedObjects[$name])) {
+				$model = isset($this->references[$name]['model'])
+					? $this->references[$name]['model']
 					: $name;
 
-				$foreign_field = isset($this->_references[$name]['foreign_field'])
-					? $this->_references[$name]['foreign_field']
-					: FALSE;
+				$foreign_field = isset($this->references[$name]['foreign_field'])
+					? $this->references[$name]['foreign_field']
+					: false;
 
-				if ($foreign_field)
-				{
-					$this->_related_objects[$name] = Mango_Document::factory($model)
-						->getCollection(TRUE)
-						->find($foreign_field, $this->id);
+				if ($foreign_field) {
+					$this->relatedObjects[$name] = static::factory($model)
+						->getCollection(true)
+						->find($foreign_field, $this->_id);
 
-					return $this->_related_objects[$name];
+					return $this->relatedObjects[$name];
 				}
 
-				$id_field = isset($this->_references[$name]['field'])
-					? $this->_references[$name]['field']
+				$id_field = isset($this->references[$name]['field'])
+					? $this->references[$name]['field']
 					: "_{$name}";
 
 				$value = $this->__get($id_field);
 
-				if ( ! empty($this->_references[$name]['multiple']))
+				if (!empty($this->references[$name]['multiple']))
 				{
-					$this->_related_objects[$name] = Mango_Document::factory($model)
-						->getCollection(TRUE)
+					$this->relatedObjects[$name] = static::factory($model)
+						->getCollection(true)
 						->find(array('_id' => array('$in' => (array)$value)));
 				}
 				else
 				{
 					// Extract just id if value is a DBRef
-					if (is_array($value) AND isset($value['$id']))
+					if (is_array($value) && isset($value['$id']))
 					{
 						$value = $value['$id'];
 					}
 
-					$this->_related_objects[$name] = Mango_Document::factory($model, $value);
+					$this->relatedObjects[$name] = static::factory($model, $value);
 				}
 			}
 
-			return $this->_related_objects[$name];
+			return $this->relatedObjects[$name];
 		}
 
-		$this->_load_if_needed($name);
+		$this->lazyLoad($name);
 
-		return isset($this->_object[$name])
-			? $this->_object[$name]
-			: NULL;
+		return isset($this->object[$name])
+			? $this->object[$name]
+			: null;
 	}
 
 	/**
 	 * Magic method for setting the value of a field
 	 *
 	 * In order to set the value of a nested field,
-	 * you must use the [Mango_Document::set] method, not the magic method.
+	 * you must use the [\Gleez\Mango\Document::set] method, not the magic method.
 	 *
 	 * Examples:
 	 * ~~~
@@ -609,117 +592,93 @@ abstract class Mango_Document {
 	 * @param   string  $name   The name of the property being interacted with
 	 * @param   mixed   $value  The value the $name'ed property should be set to
 	 *
-	 * @return  mixed|void
+	 * @return  mixed|null
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function __set($name, $value)
 	{
-		$name = $this->getFieldName($name, FALSE);
+		$name = $this->getFieldName($name, false);
 
-		// Automatically save references to other Mango_Document objects
-		if (array_key_exists($name, $this->_references))
-		{
-			if (isset($this->_references[$name]['setter']))
-			{
-				if (is_null($this->_references[$name]['setter']))
-				{
-					throw new Mango_Exception("':name' is read only!", array(
-						':name' => $name
-					));
-				}
-				elseif (is_string($this->_references[$name]['setter']))
-				{
-					return call_user_func(array($this, $this->_references[$name]['setter']), $value, $name);
-				}
+		// Automatically save references to other Document objects
+		if (array_key_exists($name, $this->references)) {
+			if (isset($this->references[$name]['setter'])) {
+				if (is_null($this->references[$name]['setter']))
+					throw new Exception("':name' is read only!", array(':name' => $name));
+				else if (is_string($this->references[$name]['setter']))
+					return call_user_func(array($this, $this->references[$name]['setter']), $value, $name);
 				else
-				{
-					return call_user_func(array($this, $this->_references[$name]['setter']), $value, $this, $name);
-				}
+					return call_user_func(array($this, $this->references[$name]['setter']), $value, $this, $name);
 			}
-			if ( ! $value instanceof Mango_Document)
-			{
-				throw new Mango_Exception('Cannot set reference to object that is not a Mongo_Document');
-			}
+			if (!$value instanceof Document)
+				throw new Exception('Cannot set reference to object that is not a Document');
 
-			$this->_related_objects[$name] = $value;
+			$this->relatedObjects[$name] = $value;
 
-			if (isset($value->_id))
-			{
-				$id_field = isset($this->_references[$name]['field']) ? $this->_references[$name]['field'] : "_{$name}";
+			if (isset($value->_id)) {
+				$id_field = isset($this->references[$name]['field']) ? $this->references[$name]['field'] : "_{$name}";
 				$this->__set($id_field, $value->_id);
 			}
 
-			return;
+			return null;
 		}
 
 		// Do not save sets that result in no change
-		$value = $this->_cast($name, $value);
+		$value = $this->cast($name, $value);
 
-		if (isset($this->_object[$name]) AND $this->_object[$name] === $value)
-		{
-			return;
-		}
+		if (isset($this->object[$name]) && $this->object[$name] === $value)
+			return null;
 
-		$this->_object[$name]  = $value;
-		$this->_changed[$name] = TRUE;
+		$this->object[$name]  = $value;
+		$this->changed[$name] = true;
 	}
 
 	/**
 	 * Current magic methods supported:
 	 *
-	 * + find_<search>() - Perform predefined search (using key from $_searches)
+	 * + find_<search>() - Perform predefined search (using key from $searches)
 	 *
 	 * @param string  $name       The name of the method being called
 	 * @param array   $arguments  Enumerated array containing the parameters passed to the $name'ed method
 	 *
-	 * @return Mango_Collection|Mango_Document
+	 * @return \Gleez\Mango\Collection|\Gleez\Mango\Document
 	 *
-	 * @throws Mango_Exception
+	 * @throws \Gleez\Mango\Exception
 	 */
 	public function __call($name, $arguments)
 	{
 		// Workaround Reserved Keyword 'unset'
-		// http://php.net/manual/en/reserved.keywords.php
 		if ($name == 'unset')
-		{
-			return $this->_unset($arguments[0]);
-		}
+			return $this->unsetKey($arguments[0]);
 
 		$parts = explode('_', $name, 2);
 
-		if ( ! isset($parts[1]))
-		{
-			throw new Mango_Exception('Method :name not found for :class.', array(
+		if (!isset($parts[1]))
+			throw new Exception('Method :name not found for :class.', array(
 					':name'  => $name,
 					':class' => get_class($this)
 			));
-		}
 
-		switch ($parts[0])
-		{
+		switch ($parts[0]) {
 			case 'find':
 				$search = $parts[1];
 
-				if ( ! isset($this->_searches[$search]))
-				{
-					throw new Mango_Exception('Predefined search :search not found for :class', array(
+				if (!isset($this->searches[$search]))
+					throw new Exception('Predefined search :search not found for :class', array(
 							':search' => $search,
 							':class'  => get_class($this)
 					));
-				}
 
-				return Mango_Document::factory($this->_searches[$search]['model'])
-							->getCollection(TRUE)
-							->find(array($this->_searches[$search]['field'] => $this->_id));
-			break;
-
+				return static::factory($this->searches[$search]['model'])
+							->getCollection(true)
+							->find(array($this->searches[$search]['field'] => $this->_id));
+				break;
 			default:
-				throw new Mango_Exception('Method :method not found for :class', array(
+				throw new Exception('Method :method not found for :class', array(
 						':method' => $name,
 						':class'  => get_class($this)
 				));
-			break;
+				break;
 		}
 	}
 
@@ -731,20 +690,16 @@ abstract class Mango_Document {
 	 *
 	 * @return  mixed|\MongoId|string
 	 */
-	protected function _cast($field, $value)
+	protected function cast($field, $value)
 	{
-		switch($field)
-		{
+		switch($field) {
 			case '_id':
 				// Cast _id strings to MongoIds if they convert back and forth without changing
-				if (is_string($value) AND strlen($value) == 24)
-				{
+				if (is_string($value) && strlen($value) == 24) {
 					$id = new MongoId($value);
 
 					if ((string)$id == $value)
-					{
 						return $id;
-					}
 				}
 		}
 
@@ -754,29 +709,26 @@ abstract class Mango_Document {
 	/**
 	 * Unset a key
 	 *
-	 * [!!] Note: unset() method call for _unset() is defined in __call() method
+	 * [!!] Note: unset() method call for unsetKey() is defined in __call() method
 	 *      since 'unset' method name is reserved in PHP.
 	 *      (Requires PHP > 5.2.3. See: http://php.net/manual/en/reserved.keywords.php)
 	 *
 	 * @param  string   $name     The key of the data to update (use dot notation for embedded objects)
-	 * @param  boolean  $emulate  TRUE will emulate the database function for eventual consistency, FALSE will not change the object until save & reload.
+	 * @param  boolean  $emulate  true will emulate the database function for eventual consistency, false will not change the object until save & reload.
 	 *
-	 * @see    $_emulate
+	 * @see    $emulate
 	 *
-	 * @return Mango_Document
+	 * @return \Gleez\Mango\Document
 	 */
-	public function _unset($name, $emulate = NULL)
+	public function unsetKey($name, $emulate = null)
 	{
 		$name = $this->getFieldName($name);
-		$this->_operations['$unset'][$name] = 1;
+		$this->operations['$unset'][$name] = 1;
 
-		if (FALSE === $emulate OR (is_null($emulate) AND FALSE === $this->_emulate))
-		{
-			return $this->_setDirty($name);
-		}
-		else
-		{
-			self::unsetNamedReference($this->_object, $name);
+		if (false === $emulate OR (is_null($emulate) && false === $this->emulate))
+			return $this->setDirty($name);
+		else {
+			static::unsetNamedReference($this->object, $name);
 
 			return $this;
 		}
@@ -785,12 +737,12 @@ abstract class Mango_Document {
 	/**
 	 * Clear the document data
 	 *
-	 * @return  Mango_Document
+	 * @return  \Gleez\Mango\Document
 	 */
 	public function clear()
 	{
-		$this->_object = $this->_changed = $this->_operations = $this->_dirty = $this->_related_objects = array();
-		$this->_loaded = NULL;
+		$this->object = $this->changed = $this->operations = $this->dirty = $this->relatedObjects = array();
+		$this->loaded = null;
 
 		return $this;
 	}
@@ -802,22 +754,16 @@ abstract class Mango_Document {
 	 *
 	 * @return  boolean
 	 */
-	protected function _load_if_needed($name)
+	protected function lazyLoad($name)
 	{
 		// Reload when retrieving dirty data
-		if ($this->_loaded AND empty($this->_operations) AND ! empty($this->_dirty[$name]))
-		{
+		if ($this->loaded && empty($this->operations) && ! empty($this->dirty[$name]))
 			return $this->load();
-		}
 		// Lazy loading!
-		elseif (is_null($this->_loaded) AND isset($this->_object['_id']) AND ! isset($this->_changed['_id']) AND $name != '_id')
-		{
+		else if (is_null($this->loaded) && isset($this->object['_id']) && ! isset($this->changed['_id']) && $name != '_id')
 			return $this->load();
-		}
 		else
-		{
-			return FALSE;
-		}
+			return false;
 	}
 
 	/**
@@ -825,7 +771,7 @@ abstract class Mango_Document {
 	 *
 	 * The first parameter may be one of:
 	 *
-	 * + a FALSE value - the object data will be used to construct the query
+	 * + a false value - the object data will be used to construct the query
 	 * + a JSON string - will be parsed and used for the query
 	 * + an non-array value - the query will be assumed to be for an _id of this value
 	 * + an array - the array will be used for the query
@@ -833,80 +779,61 @@ abstract class Mango_Document {
 	 * @param   string|array  $criteria  Specify additional criteria
 	 * @param   array         $fields    Specify the fields to return [Optional]
 	 *
-	 * @return  boolean  TRUE if the load succeeded
+	 * @return  boolean  true if the load succeeded
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 *
-	 * @uses    JSON::decode
+	 * @uses    \JSON::decode
 	 */
 	public function load($criteria = array(), array $fields = array())
 	{
-		$keepId = NULL;
+		$keepId = null;
 
-		if (is_string($criteria) AND $criteria[0] == "{")
-		{
-			$criteria = JSON::decode($criteria, TRUE);
-		}
-		elseif ($criteria AND ! is_array($criteria))
-		{
+		if (is_string($criteria) && $criteria[0] == "{")
+			$criteria = JSON::decode($criteria, true);
+		else if ($criteria && ! is_array($criteria)) {
 			// in case if we won't load it, we should set this object to this id
 			$keepId   = $criteria;
 			$criteria = array('_id' => $criteria);
-		}
-		elseif (isset($this->_object['_id']))
-		{
+		} else if (isset($this->object['_id'])) {
 			// in case if we won't load it, we should set this object to this id
-			$keepId   = $this->_object['_id'];
-			$criteria = array('_id' => $this->_object['_id']);
-		}
-		elseif (isset($criteria['id']))
-		{
+			$keepId   = $this->object['_id'];
+			$criteria = array('_id' => $this->object['_id']);
+		} elseif (isset($criteria['id'])) {
 			// in case if we won't load it, we should set this object to this id
 			$keepId   = $criteria['id'];
 			$criteria = array('_id' => $criteria['id']);
-		}
-		elseif ( ! $criteria)
-		{
-			$criteria = $this->_object;
-		}
+		} elseif (!$criteria)
+			$criteria = $this->object;
 
-		if ( ! $criteria)
-		{
-			throw new Mango_Exception('Cannot find :class without _id or other search criteria.', array(
-				':class' => get_class($this)
-			));
-		}
+		if (!$criteria)
+			throw new Exception('Cannot find :class without _id or other search criteria.', array(':class' => get_class($this)));
 
 		// Cast query values to the appropriate types and translate aliases
 		$new = array();
 
-		foreach ($criteria as $key => $value)
-		{
+		foreach ($criteria as $key => $value) {
 			$key       = $this->getFieldName($key);
-			$new[$key] = $this->_cast($key, $value);
+			$new[$key] = $this->cast($key, $value);
 		}
 
 		$criteria = $new;
 
 		// Translate field aliases
-		$fields = array_map(array($this,'getFieldName'), $fields);
+		$fields = array_map(array($this, 'getFieldName'), $fields);
 		$values = $this->getCollection()->__call('findOne', array($criteria, $fields));
 
 		// Only clear the object if necessary
-		if ( ! is_null($this->_loaded) OR $this->_changed OR $this->_operations)
-		{
+		if (!is_null($this->loaded) OR $this->changed OR $this->operations)
 			$this->clear();
-		}
 
-		$this->load_values($values, TRUE);
+		$this->load_values($values, true);
 
-		if ( ! $this->_loaded AND $keepId)
-		{
+		if (!$this->loaded && $keepId)
 			// restore the id previously set on this object...
-			$this->id = $keepId;
-		}
+			$this->_id = $keepId;
 
-		return $this->_loaded;
+		return $this->loaded;
 	}
 
 	/**
@@ -917,26 +844,20 @@ abstract class Mango_Document {
 	 * @param   array    $values  field => value pairs
 	 * @param   boolean  $clean   values are clean (from database)?
 	 *
-	 * @return  Mango_Document
+	 * @return  \Gleez\Mango\Document
 	 */
-	public function load_values(array $values, $clean = FALSE)
+	public function load_values(array $values, $clean = false)
 	{
-		if ($clean === TRUE)
-		{
-			$this->_before_load();
+		if ($clean === true) {
+			$this->beforeLoad();
 
-			$this->_object = $values;
-			$this->_loaded = ! empty($this->_object);
+			$this->object = $values;
+			$this->loaded = ! empty($this->object);
 
-			$this->_after_load();
-		}
-		else
-		{
+			$this->afterLoad();
+		} else
 			foreach ($values as $field => $value)
-			{
 				$this->__set($field, $value);
-			}
-		}
 
 		return $this;
 	}
@@ -946,16 +867,14 @@ abstract class Mango_Document {
 	 *
 	 * @param   string  $name  Field name
 	 *
-	 * @return  Mango_Document
+	 * @return  \Gleez\Mango\Document
 	 */
-	protected function _setDirty($name)
+	protected function setDirty($name)
 	{
 		if ($pos = strpos($name, '.'))
-		{
 			$name = substr($name, 0, $pos);
-		}
 
-		$this->_dirty[$name] = TRUE;
+		$this->dirty[$name] = true;
 
 		return $this;
 	}
@@ -971,12 +890,9 @@ abstract class Mango_Document {
 		$keys = explode('.', $name);
 		$data = &$arr;
 
-		foreach ($keys as $i => $key)
-		{
-			if (isset($data[$key]))
-			{
-				if ($i == count($keys) - 1)
-				{
+		foreach ($keys as $i => $key) {
+			if (isset($data[$key])) {
+				if ($i == count($keys) - 1) {
 					unset($data[$key]);
 					return;
 				}
@@ -984,9 +900,7 @@ abstract class Mango_Document {
 				$data = &$data[$key];
 			}
 			else
-			{
 				return;
-			}
 		}
 	}
 
@@ -998,19 +912,17 @@ abstract class Mango_Document {
 	 *
 	 * @return  mixed
 	 */
-	public function get($name, $default = NULL)
+	public function get($name, $default = null)
 	{
 		$name   = $this->getFieldName($name);
 		$dotPos = strpos($name, '.');
 
-		if ( ! $dotPos AND is_null($default))
-		{
+		if (!$dotPos && is_null($default))
 			return $this->__get($name);
-		}
 
-		$this->_load_if_needed($dotPos ? substr($name, 0, $dotPos) : $name);
+		$this->lazyLoad($dotPos ? substr($name, 0, $dotPos) : $name);
 
-		$ref = $this->getFieldReference($name, FALSE, $default);
+		$ref = $this->getFieldReference($name, false, $default);
 
 		return $ref;
 	}
@@ -1019,14 +931,14 @@ abstract class Mango_Document {
 	 * Returns direct reference to a field, using dot notation
 	 *
 	 * @param   string   $name     Name with dot notation
-	 * @param   boolean  $create   TRUE to create a field if it's missing [Optional]
-	 * @param   mixed    $default  Use default value to create missing fields, or return it if $create == FALSE [Optional]
+	 * @param   boolean  $create   true to create a field if it's missing [Optional]
+	 * @param   mixed    $default  Use default value to create missing fields, or return it if $create == false [Optional]
 	 *
 	 * @return  mixed
 	 */
-	public function &getFieldReference($name, $create = FALSE, $default = NULL)
+	public function getFieldReference($name, $create = false, $default = null)
 	{
-		return self::getNamedReference($this->_object, $name, $create, $default);
+		return static::getNamedReference($this->object, $name, $create, $default);
 	}
 
 	/**
@@ -1034,31 +946,27 @@ abstract class Mango_Document {
 	 *
 	 * @param   array    $arr      Array with data
 	 * @param   string   $name     Dot notation name
-	 * @param   boolean  $create   TRUE to create a field if it's missing [Optional]
-	 * @param   mixed    $default  Use default value to create missing fields, or return it if $create == FALSE [Optional]
+	 * @param   boolean  $create   true to create a field if it's missing [Optional]
+	 * @param   mixed    $default  Use default value to create missing fields, or return it if $create == false [Optional]
 	 *
 	 * @return  mixed
 	 */
-	public static function &getNamedReference(&$arr, $name, $create = FALSE, $default = NULL)
+	public static function getNamedReference($arr, $name, $create = false, $default = null)
 	{
 		$keys = explode('.', $name);
-		$data = & $arr;
+		$data = $arr;
 
-		foreach ($keys as $i => $key)
-		{
-			if ( ! isset($data[$key]))
-			{
+		foreach ($keys as $i => $key) {
+			if (!isset($data[$key])) {
 				if ($create)
-				{
 					$data[$key] = $i == count($keys) - 1 ? $default : array();
-				}
-				else
-				{
+				else {
 					$nil = $default;
 					return $nil;
 				}
 			}
-			$data = & $data[$key];
+
+			$data = $data[$key];
 		}
 
 		return $data;
@@ -1067,59 +975,45 @@ abstract class Mango_Document {
 	/**
 	 * Get a corresponding collection singleton
 	 *
-	 * @param   boolean  $new  Pass TRUE if you don't want to get the singleton instance [Optional]
+	 * @param   boolean  $new  Pass true if you don't want to get the singleton instance [Optional]
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @uses    Mango::$default
+	 * @uses    \Gleez\Mango\Client::$default
 	 */
-	public function getCollection($new = FALSE)
+	public function getCollection($new = false)
 	{
-		if ($new)
-		{
-			if ($this->_name)
-			{
-				if (is_null($this->_db))
-				{
-					$this->_db = Mango::$default;
-				}
+		if ($new) {
+			if ($this->name) {
+				if (is_null($this->db))
+					$this->db = Client::$default;
 
-				return new Mango_Collection($this->_name, $this->_db, $this->_gridFS, get_class($this));
-			}
-			else
-			{
-				$class_name = $this->getCollectionClass();
+				return new Collection($this->name, $this->db, $this->gridFS, get_class($this));
+			} else {
+				$className = $this->getCollectionClass();
 
-				return new $class_name(NULL, NULL, NULL, get_class($this));
+				return new $className(null, null, null, get_class($this));
 			}
 		}
 
-		if ($this->name)
-		{
-			$name = "{$this->_db}.{$this->_name}.{$this->_gridFS}";
+		if ($this->name) {
+			$name = "{$this->db}.{$this->name}.{$this->gridFS}";
 
-			if ( ! isset(self::$_collections[$name]))
-			{
-				if (is_null($this->_db))
-				{
-					$this->_db = Mango::$default;
-				}
+			if (!isset(static::$collections[$name])) {
+				if (is_null($this->db))
+					$this->db = Client::$default;
 
-				self::$_collections[$name] = new Mango_Collection($this->_name, $this->_db, $this->_gridFS, get_class($this));
+				static::$collections[$name] = new Collection($this->name, $this->db, $this->gridFS, get_class($this));
 			}
 
-			return self::$_collections[$name];
-		}
-		else
-		{
+			return static::$collections[$name];
+		} else {
 			$name = $this->getCollectionClass();
 
-			if ( ! isset(self::$_collections[$name]))
-			{
-				self::$_collections[$name] = new $name(NULL, NULL, NULL, get_class($this));
-			}
+			if (!isset(static::$collections[$name]))
+				static::$collections[$name] = new $name(null, null, null, get_class($this));
 
-			return self::$_collections[$name];
+			return static::$collections[$name];
 		}
 	}
 
@@ -1130,37 +1024,34 @@ abstract class Mango_Document {
 	 */
 	public function getCollectionClass()
 	{
-		return get_class($this).'_Collection';
+		return Client::instance()->getCollectionClass();
 	}
 
 	/**
 	 * This function translates an alias to a database field name
 	 *
-	 * Aliases are defined in [Mango_Document::$_aliases], and `id` is always aliased to `_id`.
+	 * Aliases are defined in [\Gleez\Mango\Document::$aliases], and `id` is always aliased to `_id`.
 	 * You can override this to disable aliases or define your own aliasing technique.
 	 *
 	 * @param   string   $name  The aliased field name
-	 * @param   boolean  $dot   Use FALSE if a dot is not allowed in the field name for better performance [Optional]
+	 * @param   boolean  $dot   Use false if a dot is not allowed in the field name for better performance [Optional]
 	 *
 	 * @return  string   The field name used within the database
 	 */
-	public function getFieldName($name, $dot = TRUE)
+	public function getFieldName($name, $dot = true)
 	{
-		if ($name == 'id' OR $name == '_id')
-		{
+		if ($name == 'id' || $name == '_id')
 			return '_id';
-		}
 
-		if ( ! $dot OR ! strpos($name, '.'))
-		{
-			return (isset($this->_aliases[$name])
-				? $this->_aliases[$name]
+		if (!$dot || ! strpos($name, '.')) {
+			return (isset($this->aliases[$name])
+				? $this->aliases[$name]
 				: $name
 			);
 		}
 
 		$parts    = explode('.', $name, 2);
-		$parts[0] = $this->getFieldName($parts[0], FALSE);
+		$parts[0] = $this->getFieldName($parts[0], false);
 
 		return implode('.', $parts);
 	}
@@ -1168,34 +1059,34 @@ abstract class Mango_Document {
 	/**
 	 * Override this method to take certain actions before the data is saved
 	 *
-	 * @param  string  $action  The type of save action, one of Mango_Document::SAVE_*
+	 * @param  string  $action  The type of save action, one of \Gleez\Mango\Document::SAVE_*
 	 */
-	protected function _before_save($action) {}
+	protected function beforeSave($action) {}
 
 	/**
 	 * Override this method to take actions after data is saved
 	 *
-	 * @param  string  $action  The type of save action, one of Mango_Document::SAVE_*
+	 * @param  string  $action  The type of save action, one of \Gleez\Mango\Document::SAVE_*
 	 */
-	protected function _after_save($action) {}
+	protected function afterSave($action) {}
 
 	/**
 	 * Override this method to take actions before the values are loaded
 	 */
-	protected function _before_load() {}
+	protected function beforeLoad() {}
 
 	/**
 	 * Override this method to take actions after the values are loaded
 	 */
-	protected function _after_load() {}
+	protected function afterLoad() {}
 
 	/**
 	 * Override this method to take actions before the document is deleted
 	 */
-	protected function _before_delete() {}
+	protected function beforeDelete() {}
 
 	/**
 	 * Override this method to take actions after the document is deleted
 	 */
-	protected function _after_delete() {}
+	protected function afterDelete() {}
 }

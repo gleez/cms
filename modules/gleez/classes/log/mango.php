@@ -1,5 +1,15 @@
 <?php
 /**
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link https://github.com/cleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+use \Gleez\Mango\Client;
+
+/**
  * MongoDB log writer
  *
  * ### System Requirements
@@ -9,9 +19,7 @@
  *
  * @package    Gleez\Logging
  * @author     Gleez Team
- * @version    0.2.3
- * @copyright  (c) 2011-2014 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @version    0.2.4
  */
 class Log_Mango extends Log_Writer {
 
@@ -38,17 +46,17 @@ class Log_Mango extends Log_Writer {
 	/**
 	 * Class constructor
 	 *
-	 * Creates a new MongoDB logger using Gleez [Mango]
+	 * Creates a new MongoDB logger using [\Gleez\Mango\Client]
 	 *
 	 * Example:
 	 * ~~~
 	 * $writer = new Log_Mango($collection);
 	 * ~~~
 	 *
-	 * @param   string  $collection  Collection Name [Optional]
+	 * @param   string  $collection  Collection name [Optional]
 	 * @param   string  $name        Database instance name [Optional]
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function __construct($collection = 'logs', $name = 'default')
 	{
@@ -56,7 +64,7 @@ class Log_Mango extends Log_Writer {
 		$this->_name        = $name;
 
 		// Getting Mango instance
-		$this->_db = Mango::instance($this->_name);
+		$this->_db = Client::instance($this->_name);
 	}
 
 	/**
@@ -92,10 +100,10 @@ class Log_Mango extends Log_Writer {
 			// FIX: $message should consist of an array of strings
 			$message = array_filter($message, 'is_string');
 
-			// See MongoDate::__toString
+			// See \MongoDate::__toString
 			$message['time'] = new MongoDate(strtotime($message['time']));
 
-			if ($exception)
+			if ($exception && method_exists($exception, 'getTraceAsString'))
 			{
 				// Re-use as much as possible, just resetting the body to the trace
 				$message['body']  = $exception->getTraceAsString();
