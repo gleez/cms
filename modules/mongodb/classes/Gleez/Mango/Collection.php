@@ -13,27 +13,9 @@ use Profiler;
 use JSON;
 
 /**
- * Gleez Mongo Collection
+ * Gleez Mango Collection
  *
- * This class can be used directly as a wrapper for MongoCollection/MongoCursor
- *
- * Usage:
- * ~~~
- * $collection = new \Gleez\Mango\Collection('users');
- *
- * // $users now is array of arrays
- * $users = $collection->sortDesc('published')
- *                     ->limit(10)
- *                     ->toArray();
- * ~~~
- *
- * System Requirements
- *
- * - MongoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4.0 or higher
- *
- * This class was adapted from
- * [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ * This class can be used directly as a wrapper for \MongoCollection and \MongoCursor.
  *
  * @method     mixed          batchInsert(array $a, array $options = array())
  * @method     array          createDBRef(array $a)
@@ -57,11 +39,7 @@ use JSON;
  *
  * @package    Gleez\Mango
  * @author     Gleez Team
- * @version    1.0.0-gleez-1.1
- *
- * @link       https://github.com/colinmollenhour/mongodb-php-odm  MongoDB PHP ODM
- * @link       http://www.martinfowler.com/eaaCatalog/tableDataGateway.html  Table Data Gateway pattern
- * @link       http://www.martinfowler.com/eaaCatalog/rowDataGateway.html  Row Data Gateway pattern
+ * @version    1.0.0
  */
 class Collection implements \Iterator, \Countable {
 
@@ -151,10 +129,10 @@ class Collection implements \Iterator, \Countable {
 	 *
 	 * Instantiate a new collection object, can be used for querying, updating, etc..
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $posts = new \Gleez\Mango\Collection('posts');
-	 * ~~~
+	 * </code>
 	 *
 	 * @param   string       $name    The collection name [Optional]
 	 * @param   string       $db      The database configuration name [Optional]
@@ -284,15 +262,15 @@ class Collection implements \Iterator, \Countable {
 	 * @link    http://www.php.net/manual/en/mongocursor.info.php \MongoCursor::info
 	 *
 	 * @since   0.3.0
+	 * @since   1.0.0 is_iterating → isIterating
 	 *
 	 * @return  boolean
 	 */
-	public function is_iterating()
+	public function isIterating()
 	{
-		if (empty($this->cursor))
+		if (!$this->cursor)
 			return false;
 
-		/** @var $info array */
 		$info = $this->cursor->info();
 
 		return $info['started_iterating'];
@@ -302,10 +280,11 @@ class Collection implements \Iterator, \Countable {
 	 * Is the query executed yet?
 	 *
 	 * @since   0.4.0
+	 * @since   1.0.0 is_loaded → isLoaded
 	 *
 	 * @return  boolean
 	 */
-	public function is_loaded()
+	public function isLoaded()
 	{
 		return isset($this->cursor);
 	}
@@ -317,14 +296,31 @@ class Collection implements \Iterator, \Countable {
 	 *      to support high-bandwidth inserts
 	 *
 	 * @since   0.4.0
+	 * @since   1.0.0 is_caped → isCapped
 	 *
 	 * @return  boolean
 	 */
-	public function is_caped()
+	public function isCapped()
 	{
 		$stats = $this->getStats();
 
 		return (!empty($stats['capped']));
+	}
+
+	/**
+	 * Removes all documents from a capped collection.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return array
+	 *
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function emptyCapped()
+	{
+		return $this->getClientInstance()->safeCommand(array(
+			'emptycapped' => $this
+		));
 	}
 
 	/**
@@ -526,20 +522,28 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function safeUpdate(array $criteria, array $new_object, $options = array())
 	{
+		$writeConcern = $this->getClientInstance()->getWriteConcern() == 0 ? 1 : $this->getClientInstance()->getWriteConcern();
+
 		$options = array_merge(
 			array(
-				'w'        => 1,      // The write will be acknowledged by the server
-				'upsert'   => false,  // If no document matches $criteria, a new document will be inserted
-				'multiple' => false   // All documents matching $criteria will be updated?
+				'w'        => $writeConcern, // The write will be acknowledged by the server
+				'upsert'   => false,         // If no document matches $criteria, a new document will be inserted
+				'multiple' => false          // All documents matching $criteria will be updated?
 			),
 			$options
 		);
+
+		// Convert legacy safe option
+		if (isset($options['safe'])) {
+			$options['j'] = $options['safe'];
+			unset($options['safe']);
+		}
 
 		$result = $this->update($criteria, $new_object, $options);
 
 		// A write will not be followed up with a getLastError call,
 		// and therefore not checked ("fire and forget")
-		if ($options['w'] == 0)
+		if ($options['w'] == 0 && empty($options['j']))
 			// boolean
 			return $result;
 
@@ -568,7 +572,7 @@ class Collection implements \Iterator, \Countable {
 	 *
 	 * Same usage as [\MongoCollection::remove] except it throws an exception on error.
 	 *
-	 * Returns number of documents removed if "safe",
+	 * Returns number of documents removed if acknowledged,
 	 * otherwise just if the operation was successfully sent.
 	 *
 	 * [!!] Note: You cannot use this method with a capped collection.
@@ -584,10 +588,12 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function safeRemove(array $criteria = array(), array $options = array())
 	{
+		$writeConcern = $this->getClientInstance()->getWriteConcern() == 0 ? 1 : $this->getClientInstance()->getWriteConcern();
+
 		$options = array_merge(
 			array(
-				'w'       => 1,     // The write will be acknowledged by the server
-				'justOne' => false, // To limit the deletion to just one document, set to true
+				'w'       => $writeConcern, // The write will be acknowledged by the server
+				'justOne' => false,         // To limit the deletion to just one document, set to true
 			),
 			$options
 		);
@@ -596,8 +602,8 @@ class Collection implements \Iterator, \Countable {
 
 		// A write will not be followed up with a getLastError call,
 		// and therefore not checked ("fire and forget")
-		if ($options['w'] == 0)
-			/** @var $result boolean */
+		if ($options['w'] == 0 && empty($options['j']))
+			// boolean
 			return $result;
 
 		// According to the driver docs an exception should have already been
@@ -663,8 +669,8 @@ class Collection implements \Iterator, \Countable {
 	 * [!!] This method accepts either a variable amount of pipeline operators,
 	 *      or a single array of operators constituting the pipeline.
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * // Return all states with a population greater than 10 million:
 	 * $results = $collection->aggregate(
 	 *     array(
@@ -677,7 +683,7 @@ class Collection implements \Iterator, \Countable {
 	 *         )
 	 *     )
 	 * );
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.0
 	 *
@@ -821,6 +827,30 @@ class Collection implements \Iterator, \Countable {
 	}
 
 	/**
+	 * Get a cursor query before executing
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
+	 */
+	public function getQuery()
+	{
+		return $this->query;
+	}
+
+	/**
+	 * Get a cursor fields before executing query
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
+	 */
+	public function getFields()
+	{
+		return $this->fields;
+	}
+
+	/**
 	 * Access the \MongoCursor instance directly, triggers a load if there is none
 	 *
 	 * @since   0.3.0
@@ -857,10 +887,10 @@ class Collection implements \Iterator, \Countable {
 	 * [!!] The `collStats` command returns a variety of storage
 	 *      statistics for a given collection.
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $output = $collection->getStats();
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.0
 	 *
@@ -888,7 +918,7 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function getNext()
 	{
-		if($this->getClientInstance()->profiling && ( ! $this->cursor || ! $this->is_iterating())) {
+		if($this->getClientInstance()->profiling && ( ! $this->cursor || ! $this->isIterating())) {
 			$this->getCursor();
 
 			// Start the benchmark
@@ -936,7 +966,7 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function setOption($name, $value)
 	{
-		if ($name != 'batchSize' && $name != 'timeout' && $this->is_iterating())
+		if (strtolower($name) != 'batchsize' && strtolower($name) != 'timeout' && $this->isIterating())
 			throw new Exception('The cursor has already started iterating');
 
 		if ($name == 'query')
@@ -970,7 +1000,7 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function unsetOption($name)
 	{
-		if ($this->is_iterating())
+		if ($this->isIterating())
 			throw new Exception('The cursor has already started iterating');
 
 		unset($this->options[$name]);
@@ -981,8 +1011,8 @@ class Collection implements \Iterator, \Countable {
 	/**
 	 * See if a cursor has an option to be set before executing the query
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * </code>
 	 * // Set option
 	 * $collection->limit(50)->skip(100);
 	 *
@@ -991,7 +1021,7 @@ class Collection implements \Iterator, \Countable {
 	 * {
 	 *     // some actions...
 	 * }
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.4
 	 *
@@ -1294,7 +1324,22 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function current()
 	{
-		return $this->cursor->current();
+		$data = $this->cursor->current();
+
+		if (isset($this->benchmark)) {
+			// Stop the benchmark
+			Profiler::stop($this->benchmark);
+
+			// Clean benchmark token
+			$this->benchmark = null;
+		}
+
+		if (!$this->model)
+			return $data;
+
+		$model = clone $this->model;
+
+		return $model->loadValues($data ?: array(), true);
 	}
 
 	/**

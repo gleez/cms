@@ -17,54 +17,9 @@ use Arr;
 use MongoClient;
 
 /**
- * Gleez Mongo Client
+ * Gleez Mango Client
  *
- * ### Introduction
- *
- * This class wraps the functionality of \MongoClient (connection) and \MongoDB (database object)
- * into one Mango class and can be instantiated simply by:
- *
- * ~~~
- * $db = \Gleez\Mango\Client::instance();
- * ~~~
- *
- * The above will assume the 'default' configuration from the `config/mango.php` file.
- * Alternatively it may be instantiated with the name and configuration specified as arguments:
- *
- * ~~~
- * $db = \Gleez\Mango\Client::instance('test', array(
- *     'test' => array(
- *         'connection' => array(
- *             'hostnames'  => 'mongodb://whisky:13000/?replicaset=seta',
- *             'options'    => array(
- *                 'db'       => 'MyDB',
- *                 'username' => 'username',
- *                 'password' => 'password',
- *                 ...
- *             )
- *         ),
- *         'profiling' => true,
- *         ...
- *     )
- * ));
- * ~~~
- *
- * The [\Gleez\Mango\Collection] class will gain access to the server by calling the instance method with a
- * configuration name, so if the configuration name is not present in the config file then the
- * instance should be created before using any classes that extend [\Gleez\Mango\Collection].
- *
- * Mango can proxy all methods of \MongoDB to the database instance as well as select collections
- * using the [\Gleez\Mango\Client::__get] magic method and allows for easy benchmarking if profiling is enabled.
- *
- * ### System Requirements
- *
- * - MongoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4.0 or higher
- *
- * This class has appeared thanks to such wonderful projects as:
- *
- * + [Wouterrr/MangoDB](https://github.com/Wouterrr/MangoDB)
- * + [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ * This class wraps the functionality of \MongoClient (connection) and \MongoDB (database object) into one Client class.
  *
  * @method     array           authenticate(string $username, string $password)
  * @method     array           command(array $data, array $options = array())
@@ -90,7 +45,7 @@ use MongoClient;
  *
  * @package    Gleez\Mango
  * @author     Gleez Team
- * @version    1.0.0-gleez-1.1
+ * @version    1.0.0
  */
 class Client {
 
@@ -98,13 +53,19 @@ class Client {
 	 * Gleez Mango Client version
 	 * @type string
 	 */
-	const VERSION = '1.0.0-gleez-1.1';
+	const VERSION = '1.0.0';
 
 	/**
 	 * Minimal required version of PHP-extension MongoDB
 	 * @type string
 	 */
 	const CLIENT_MIN_REQ = '1.4.5';
+
+	/**
+	 * Component config file
+	 * @type string
+	 */
+	const CONFIG_FILE_NAME = 'mongodb';
 
 	/**
 	 * Current instance name
@@ -174,10 +135,10 @@ class Client {
 	public static $instances = array();
 
 	/**
-	 * Default WriteConcern for new client driver
+	 * Default Write Concern for new client driver
 	 * @var mixed
 	 */
-	public static $writeConcern = 1;
+	private $writeConcern = 1;
 
 	/**
 	 * A flag to indicate if profiling is enabled and to allow it to be enabled/disabled on the fly
@@ -194,18 +155,17 @@ class Client {
 	 *   file using the same group as the name
 	 * - If no group is supplied the [\Gleez\Mango\Client\::$default] group is used
 	 *
-	 * ### Examples:
-	 *
-	 * ~~~
+	 * Examples<br>
+	 * <code>
 	 * // Load the default database
 	 * $db = \Gleez\Mango\Client::instance();
 	 *
 	 * // Create a custom configured instance
-	 * $db = \Gleez\Mango\Client::instance('custom', $config);
+	 * $db = \Gleez\Mango\Client::instance('myInstance', $configArray);
 	 *
 	 * // Access an instantiated group directly
 	 * $myGroup = \Gleez\Mango\Client::$instances['foo'];
-	 * ~~~
+	 * </code>
 	 *
 	 * @param   string  $name      Config group name [Optional]
 	 * @param   array   $config    Pass a configuration array to bypass the Gleez config [Optional]
@@ -227,7 +187,7 @@ class Client {
 		if ($override || ! isset(static::$instances[$name])) {
 			if (is_null($config)) {
 				// Load the configuration
-				$config = Config::load('mango');
+				$config = Config::load(static::CONFIG_FILE_NAME);
 
 				if (!$config->offsetExists($name))
 					throw new Exception('Failed to load Mango config group: :group',
@@ -317,6 +277,38 @@ class Client {
 	}
 
 	/**
+	 * Set Write Concern
+	 *
+	 * @since   1.0.0
+	 *
+	 * @link    http://php.net/manual/en/mongo.writeconcerns.php Write Concern
+	 *
+	 * @param   mixed $flag One of available Write Concerns flags
+	 *
+	 * @return  \Gleez\Mango\Client
+	 */
+	public function setWriteConcern($flag = 1)
+	{
+		$this->writeConcern = $flag;
+
+		return $this;
+	}
+
+	/**
+	 * Get Write Concern flag
+	 *
+	 * @since   1.0.0
+	 *
+	 * @link    http://php.net/manual/en/mongo.writeconcerns.php Write Concern
+	 *
+	 * @return  mixed
+	 */
+	public function getWriteConcern()
+	{
+		return $this->writeConcern;
+	}
+
+	/**
 	 * Prepare Mango config.
 	 *
 	 * [!!] This is called automatically by [\Gleez\Mango\Client::__construct].
@@ -348,7 +340,7 @@ class Client {
 		// The 'w' option specifies the Write Concern for the driver
 		if (!isset($config['connection']['options']['w']))
 			// The default value is 1.
-			$config['connection']['options']['w'] = static::$writeConcern;
+			$config['connection']['options']['w'] = $this->$writeConcern;
 
 		return $config;
 	}
@@ -400,10 +392,10 @@ class Client {
 	 * Profiles all methods that have database interaction if profiling is enabled.
 	 * The database connection is established lazily.
 	 *
-	 * Usage:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $db->selectCollectionNames(true);
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.2.0
 	 *
@@ -526,7 +518,7 @@ class Client {
 	 */
 	public function isConnected()
 	{
-		return (bool)$this->connected;
+		return (bool) $this->connected;
 	}
 
 	/**
@@ -638,7 +630,7 @@ class Client {
 	/**
 	 * Get MongoDB version
 	 *
-	 * @since  1.0.0-gleez-1.1
+	 * @since  1.0.0
 	 *
 	 * @return string
 	 *
@@ -785,7 +777,7 @@ class Client {
 	 */
 	public function findAndModify($collection, array $command)
 	{
-		$command = array_merge(array('findAndModify' => (string)$collection), $command);
+		$command = array_merge(array('findAndModify' => (string) $collection), $command);
 		$result  = $this->safeCommand($command);
 
 		return $result['value'];
@@ -795,7 +787,7 @@ class Client {
 	 * Checks if the given collection exists in the currently referenced database
 	 *
 	 * @since   0.3.3
-	 * @since   1.0.0-gleez-1.1 Renamed 'exists' → isCollectionExists
+	 * @since   1.0.0 Renamed 'exists' → isCollectionExists
 	 *
 	 * @param   string  $collection  Collection name
 	 *
