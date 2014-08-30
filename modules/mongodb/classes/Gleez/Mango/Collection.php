@@ -515,13 +515,16 @@ class Collection implements Iterator, Countable
 	 */
 	public function safeUpdate(array $criteria, array $new_object, $options = array())
 	{
-		$writeConcern = $this->getClientInstance()->getWriteConcern() == 0 ? 1 : $this->getClientInstance()->getWriteConcern();
+		$writeConcern = $this->getClientInstance()->getWriteConcern();
+		$w = $writeConcern['w'] == 0 ? 1 : $writeConcern['w'];
+		$wtimeout = $writeConcern['wtimeout'];
 
 		$options = array_merge(
 			array(
-				'w'        => $writeConcern, // The write will be acknowledged by the server
-				'upsert'   => false,         // If no document matches $criteria, a new document will be inserted
-				'multiple' => false          // All documents matching $criteria will be updated?
+				'w'        => $w,        // The write will be acknowledged by the server
+				'wtimeout' => $wtimeout, // Maximum number of milliseconds to wait for the server to satisfy the write concern
+				'upsert'   => false,     // If no document matches $criteria, a new document will be inserted
+				'multiple' => false      // All documents matching $criteria will be updated?
 			),
 			$options
 		);
@@ -581,12 +584,15 @@ class Collection implements Iterator, Countable
 	 */
 	public function safeRemove(array $criteria = array(), array $options = array())
 	{
-		$writeConcern = $this->getClientInstance()->getWriteConcern() == 0 ? 1 : $this->getClientInstance()->getWriteConcern();
+		$writeConcern = $this->getClientInstance()->getWriteConcern();
+		$w = $writeConcern['w'] == 0 ? 1 : $writeConcern['w'];
+		$wtimeout = $writeConcern['wtimeout'];
 
 		$options = array_merge(
 			array(
-				'w'       => $writeConcern, // The write will be acknowledged by the server
-				'justOne' => false,         // To limit the deletion to just one document, set to true
+				'w'        => $w,        // The write will be acknowledged by the server
+				'wtimeout' => $wtimeout, // Maximum number of milliseconds to wait for the server to satisfy the write concern
+				'justOne'  => false      // To limit the deletion to just one document, set to true
 			),
 			$options
 		);

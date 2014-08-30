@@ -339,7 +339,7 @@ abstract class Document
 		if (array_key_exists($name, $this->references)) {
 			if (isset($this->references[$name]['getter'])) {
 				if (is_null($this->references[$name]['getter']))
-					throw new Exception('$name is write only!');
+					throw new Exception(':name is write only!', array(':name' => $name));
 				elseif (is_string($this->references[$name]['getter']))
 					return call_user_func(array($this, $this->references[$name]['getter']), $name);
 				else
@@ -427,7 +427,7 @@ abstract class Document
 		if (array_key_exists($name, $this->references)) {
 			if (isset($this->references[$name]['setter'])) {
 				if (is_null($this->references[$name]['setter']))
-					throw new Exception("':name' is read only!", array(':name' => $name));
+					throw new Exception(':name is read only!', array(':name' => $name));
 				elseif (is_string($this->references[$name]['setter']))
 					return call_user_func(array($this, $this->references[$name]['setter']), $value, $name);
 				else
@@ -497,7 +497,7 @@ abstract class Document
 							->find(array($this->searches[$search]['field'] => $this->_id));
 				break;
 			default:
-				throw new Exception('Method :method not found for :class', array(
+				throw new Exception('Method :method not found for :class.', array(
 						':method' => $name,
 						':class'  => get_class($this)
 				));

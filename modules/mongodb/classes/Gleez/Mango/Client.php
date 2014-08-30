@@ -9,12 +9,13 @@
 
 namespace Gleez\Mango;
 
-use Config;
+use MongoClient;
+use MongoDB;
 use MongoCode;
+use Config;
 use JSON;
 use Profiler;
 use Arr;
-use MongoClient;
 
 /**
  * Gleez Mango Client
@@ -60,7 +61,7 @@ class Client
 	 * Minimal required version of PHP-extension MongoDB
 	 * @type string
 	 */
-	const CLIENT_MIN_REQ = '1.4.5';
+	const DRIVER_MIN_REQ = '1.4.5';
 
 	/**
 	 * Component config file
@@ -139,7 +140,13 @@ class Client
 	 * Default Write Concern for new client driver
 	 * @var mixed
 	 */
-	private $writeConcern = 1;
+	private $w = 1;
+
+	/**
+	 * The number of milliseconds to wait for \MongoDB::$w replications to take place
+	 * @var int
+	 */
+	private $wtimeout = 10000;
 
 	/**
 	 * A flag to indicate if profiling is enabled and to allow it to be enabled/disabled on the fly
@@ -227,8 +234,8 @@ class Client
 		if (!extension_loaded('mongo'))
 			throw new Exception('The php-mongo extension is not installed or is disabled.');
 
-		if (version_compare(\MongoClient::VERSION, static::CLIENT_MIN_REQ) < 0)
-			throw new Exception('Minimal required version of MongoDB is :version', array(':version' => static::CLIENT_MIN_REQ));
+		if (version_compare(\MongoClient::VERSION, static::DRIVER_MIN_REQ) < 0)
+			throw new Exception('Minimal required version of MongoDB driver is :version', array(':version' => static::DRIVER_MIN_REQ));
 
 		// Set the instance name
 		$this->name = $name;
@@ -278,35 +285,58 @@ class Client
 	}
 
 	/**
-	 * Set Write Concern
+	 * Set the write concern for this database
 	 *
 	 * @since   1.0.0
 	 *
 	 * @link    http://php.net/manual/en/mongo.writeconcerns.php Write Concern
 	 *
-	 * @param   mixed $flag One of available Write Concerns flags
+	 * @param   mixed $w         The write concern
+	 * @param   int   $wtimeout  The maximum number of milliseconds to wait for the server to satisfy the write concern. [Optional]
 	 *
 	 * @return  \Gleez\Mango\Client
+	 * @throws  \Gleez\Mango\Exception
 	 */
-	public function setWriteConcern($flag = 1)
+	public function setWriteConcern($w, $wtimeout = 10000)
 	{
-		$this->writeConcern = $flag;
+		if (!is_numeric($wtimeout))
+			throw new Exception('Param $wtimeout must be numeric value.');
+
+		try {
+			$this->config['connection']['options']['w'] = $w;
+			$this->config['connection']['options']['wtimeout'] = (int) $wtimeout;
+
+			// PECL mongo >=1.5.0
+			if (version_compare(\MongoClient::VERSION, '1.5.0') >= 0)
+				MongoDB::setWriteConcern($w, (int) $wtimeout);
+
+		} catch(Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
 
 		return $this;
 	}
 
 	/**
-	 * Get Write Concern flag
+	 * Get an array describing the write concern for this database
 	 *
 	 * @since   1.0.0
 	 *
 	 * @link    http://php.net/manual/en/mongo.writeconcerns.php Write Concern
 	 *
-	 * @return  mixed
+	 * @return  array
 	 */
 	public function getWriteConcern()
 	{
-		return $this->writeConcern;
+		// PECL mongo >=1.5.0
+		if (version_compare(\MongoClient::VERSION, '1.5.0') >= 0) {
+			return MongoDB::getWriteConcern();
+		}
+
+		return array(
+			'w' => $this->config['connection']['options']['w'],
+			'wtimeout' => $this->config['connection']['options']['wtimeout'],
+		);
 	}
 
 	/**
@@ -341,7 +371,10 @@ class Client
 		// The 'w' option specifies the Write Concern for the driver
 		if (!isset($config['connection']['options']['w']))
 			// The default value is 1.
-			$config['connection']['options']['w'] = $this->$writeConcern;
+			$config['connection']['options']['w'] = $this->w;
+
+		if (!isset($config['connection']['options']['wtimeout']) || !is_numeric($config['connection']['options']['wtimeout']))
+			$config['connection']['options']['wtimeout'] = $this->wtimeout;
 
 		return $config;
 	}
@@ -362,15 +395,12 @@ class Client
 	 */
 	final public function __destruct()
 	{
-		try
-		{
+		try {
 			$this->disconnect();
 			$this->db = null;
 			$this->connection = null;
 			$this->connected  = false;
-		}
-		catch(Exception $e)
-		{
+		} catch(Exception $e) {
 			// can't throw exceptions in __destruct
 		}
 	}
@@ -412,7 +442,7 @@ class Client
 	 */
 	public function __call($name, $arguments)
 	{
-		$this->connected || $this->connect();
+		$this->isConnected() || $this->connect();
 
 		if (!method_exists($this->db, $name))
 			throw new Exception("Method doesn't exist: :method",
@@ -458,7 +488,7 @@ class Client
 	 */
 	public function connect()
 	{
-		if ($this->connected)
+		if ($this->isConnected())
 			return true;
 
 		try {
@@ -483,10 +513,10 @@ class Client
 		}
 
 		$this->db = $this->isConnected()
-			? $this->connection->selectDB(\Arr::path($this->config, 'connection.options.db'))
+			? $this->connection->selectDB(Arr::path($this->config, 'connection.options.db'))
 			: null;
 
-		return $this->connected;
+		return $this->isConnected();
 	}
 
 	/**
@@ -497,7 +527,7 @@ class Client
 	 */
 	public function disconnect()
 	{
-		if ($this->connected) {
+		if ($this->isConnected()) {
 			$connections = $this->connection->getConnections();
 
 			foreach ($connections as $connection)
@@ -538,7 +568,7 @@ class Client
 	 */
 	public function getDb()
 	{
-		$this->connected || $this->connect();
+		$this->isConnected() || $this->connect();
 
 		return $this->db;
 	}
@@ -609,7 +639,7 @@ class Client
 	 */
 	public function getGridFS($prefix = 'fs')
 	{
-		$this->connected || $this->connect();
+		$this->isConnected() || $this->connect();
 
 		return new $this->collectionClass($prefix, $this->name, true);
 	}
@@ -681,7 +711,7 @@ class Client
 	 */
 	public function selectCollection($name)
 	{
-		$this->connected || $this->connect();
+		$this->isConnected() || $this->connect();
 
 		return new $this->collectionClass($name, $this->name);
 	}
