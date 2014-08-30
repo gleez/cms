@@ -9,6 +9,9 @@
 
 namespace Gleez\Mango;
 
+use Iterator;
+use Countable;
+use MongoCollection;
 use Profiler;
 use JSON;
 
@@ -41,20 +44,8 @@ use JSON;
  * @author     Gleez Team
  * @version    1.0.0
  */
-class Collection implements \Iterator, \Countable {
-
-	/**
-	 * Sort mode - ascending
-	 * @type integer
-	 */
-	const ASC = 1;
-
-	/**
-	 * Sort mode - descending
-	 * @type integer
-	 */
-	const DESC = -1;
-
+class Collection implements Iterator, Countable
+{
 	/**
 	 * The name of the collection within the database or the gridFS prefix if gridFS is true
 	 * @var string
@@ -182,12 +173,12 @@ class Collection implements \Iterator, \Countable {
 			return call_user_func_array(array($this->cursor, $name), $arguments);
 
 		if (method_exists($this->getCollection(), $name)) {
-			if ($this->getClientInstance()->profiling) {
+			if ($this->getClientInstance()->profiling && in_array($name, array('batchInsert','findOne','getDBRef','group','insert','remove','save','update'))) {
 				$json_args = array();
 				foreach($arguments as $arg)
-					$json_args[] = JSON::encode($arg);
+					$json_args[] = JSON::encode((is_array($arg) ? (object) $arg : $arg));
 
-				$this->benchmark = Profiler::start(__CLASS__."::{$this->db}", "db.{$this->name}.{$name}(" . implode(', ', $json_args) . ")");
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", "db.{$this->name}.{$name}(" . implode(', ', $json_args) . ")");
 			}
 
 			$retval = call_user_func_array(array($this->getCollection(), $name), $arguments);
@@ -203,6 +194,8 @@ class Collection implements \Iterator, \Countable {
 			return $retval;
 		} else
 			throw new Exception('Method :method not found', array(':method' => get_class($this->getCollection())."::{$name}"));
+
+		//trigger_error('Method not found by Mongo_Collection: '.$name);
 	}
 
 	/**
@@ -1176,7 +1169,7 @@ class Collection implements \Iterator, \Countable {
 	 *
 	 * @throws  \Gleez\Mango\Exception
 	 */
-	public function sort($fields, $dir = self::ASC)
+	public function sort($fields, $dir = MongoCollection::ASCENDING)
 	{
 		if ($this->cursor)
 			throw new Exception('The cursor has already started iterating');
@@ -1192,9 +1185,9 @@ class Collection implements \Iterator, \Countable {
 		foreach ($fields as $field => $dir) {
 			if (is_string($dir)) {
 				if (strtolower($dir) == 'asc' || $dir == '1')
-					$dir = static::ASC;
+					$dir = MongoCollection::ASCENDING;
 				else
-					$dir = static::DESC;
+					$dir = MongoCollection::DESCENDING;
 			}
 
 			$this->options['sort'][$this->getFieldName($field)] = $dir;
@@ -1214,7 +1207,7 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function sortAsc($field)
 	{
-		return $this->sort($field, static::ASC);
+		return $this->sort($field, MongoCollection::ASCENDING);
 	}
 
 	/**
@@ -1228,7 +1221,7 @@ class Collection implements \Iterator, \Countable {
 	 */
 	public function sortDesc($field)
 	{
-		return $this->sort($field, static::DESC);
+		return $this->sort($field, MongoCollection::DESCENDING);
 	}
 
 	/**
@@ -1370,7 +1363,7 @@ class Collection implements \Iterator, \Countable {
 		if (is_bool($query)) {
 			// Profile count operation for cursor
 			if ($this->getClientInstance()->profiling)
-				$this->benchmark = Profiler::start(__CLASS__."::{$this->db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
 
 			$this->cursor || $this->load();
 			$count = $this->cursor->count($query);
@@ -1387,7 +1380,7 @@ class Collection implements \Iterator, \Countable {
 
 			// Profile count operation for collection
 			if ($this->getClientInstance()->profiling)
-				$this->benchmark = Profiler::start(__CLASS__."::{$this->db}", "db.{$this->name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", "db.{$this->name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
 
 			$count = $this->getCollection()->count($query);
 		}
