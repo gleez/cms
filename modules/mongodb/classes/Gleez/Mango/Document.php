@@ -9,7 +9,6 @@
 
 namespace Gleez\Mango;
 
-use Text;
 use JSON;
 use MongoId;
 
@@ -241,15 +240,13 @@ abstract class Document
 	 * @param   string|array  $id    The _id of the document [Optional]
 	 *
 	 * @return  \Gleez\Mango\Document
-	 *
-	 * @uses    \Text::reduce_slashes
 	 */
 	public static function factory($name, $id = null)
 	{
 		if (isset(static::$models[$name]))
 			$class = static::$models[$name];
 		elseif (false !== strpos($name, '\\'))
-			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));
+			$class = implode('\\', array_map('ucfirst', explode('\\', preg_replace('#(?<!:)//+#', '/', $name))));
 		else
 			$class = 'Model_' . implode('_', array_map('ucfirst', explode('_', $name)));
 
