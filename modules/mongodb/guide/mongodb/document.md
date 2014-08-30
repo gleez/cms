@@ -54,7 +54,7 @@ $id = $document->_id; // \MongoId
 
 All methods that take query parameters support JSON strings as input in addition to PHP arrays. The JSON parser is more lenient than usual.
 
-[!!] Note: `\Gleez\Mango\Client`, `\Gleez\Mango\Collection` and `\Gleez\Mango\Document` uses Gleez [JSON], [Profiler], [Arr], [Text] helper classes.
+[!!] Note: `\Gleez\Mango\Client`, `\Gleez\Mango\Collection` and `\Gleez\Mango\Document` uses Gleez [JSON], [Profiler] helper classes.
 
 **Example**:
 ~~~
