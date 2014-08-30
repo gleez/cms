@@ -31,10 +31,10 @@ abstract class Document
 	 * Array of document factory names.
 	 * You can specify own factory name to class mapping.
 	 *
-	 * __Example__:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * \Gleez\Mango\Document::$models['foo'] = 'Model_My_Foo';
-	 * ~~~
+	 * </code>
 	 *
 	 * @var array
 	 */
@@ -71,8 +71,8 @@ abstract class Document
 	 * defaults to the reference name. If `field` is not specified it defaults to the
 	 * reference name prefixed with an `_`.
 	 *
-	 * __Example__:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * // Example Document: {_id: 1, user_id: 2, _token: 3}
 	 * protected $references = array(
 	 *     'user' => array(
@@ -81,7 +81,7 @@ abstract class Document
 	 *     ),
 	 *     'token' => null,
 	 * );
-	 * ~~~
+	 * </code>
 	 *
 	 * You can also specify getter and setter functions:
 	 *
@@ -101,12 +101,12 @@ abstract class Document
 	 * This instantiates a collection for the target model and initializes the
 	 * search with the specified field being equal to the `_id` of the current object.
 	 *
-	 * __Example__:
-	 * ~~~
+	 * Example<br>:
+	 * <code>
 	 * $searches
 	 * {events: {model: 'event', field: '_user'}}
 	 * // db.event.find({_user: <_id>})
-	 * ~~~
+	 * </code>
 	 *
 	 * @var array
 	 */
@@ -124,8 +124,8 @@ abstract class Document
 	 * If set to `true`, operator functions (set, inc, push etc.)
 	 * will emulate database functions for eventual consistency.
 	 *
-	 * __Example__:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $doc = new \Gleez\Mango\Document;
 	 *
 	 * $doc->emulate = true;
@@ -134,13 +134,13 @@ abstract class Document
 	 *
 	 * // This will print '2'
 	 * echo $doc->number;
-	 * ~~~
+	 * </code>
 	 *
 	 * If set to `false`, the field will be marked as dirty, and the new
 	 * value will only be available after reload.
 	 *
-	 * __Example__:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $doc = new \Gleez\Mango\Document;
 	 *
 	 * $doc->emulate = false;
@@ -149,7 +149,7 @@ abstract class Document
 	 *
 	 * // This will print '1'
 	 * echo $doc->number;
-	 * ~~~
+	 * </code>
 	 *
 	 * @var boolean
 	 */
@@ -219,8 +219,8 @@ abstract class Document
 	 *
 	 * [!!] Note: The document is not loaded until [\Gleez\Mango\Document::load] is called.
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * // Attempts to create the Model_Post object
 	 * $model = \Gleez\Mango\Document::factory('post');
 	 *
@@ -235,7 +235,7 @@ abstract class Document
 	 *
 	 * // Attempts to create the \Document\Last object
 	 * $model = \Gleez\Mango\Document::factory('\document\last');
-	 * ~~~
+	 * </code>
 	 *
 	 * @param   string        $name  Model name
 	 * @param   string|array  $id    The _id of the document [Optional]
@@ -403,14 +403,14 @@ abstract class Document
 	 * In order to set the value of a nested field,
 	 * you must use the [\Gleez\Mango\Document::set] method, not the magic method.
 	 *
-	 * Examples:
-	 * ~~~
+	 * Examples:<br>
+	 * <code>
 	 * // Works
 	 * $doc->set('address.city', 'Visakhapatnam');
 	 *
 	 * // Does not work
 	 * $doc->address['city'] = 'Visakhapatnam';
-	 * ~~~
+	 * </code>
 	 *
 	 * @param   string  $name   The name of the property being interacted with
 	 * @param   mixed   $value  The value the $name'ed property should be set to
