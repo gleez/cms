@@ -237,7 +237,7 @@ class Collection implements Iterator, Countable
 				if ($key == '$in')
 					$array1[$key] = array_intersect($array1[$key], $value);
 				// Union $nin and $all queries
-				else if ($key == '$nin' || $key == '$all')
+				elseif ($key == '$nin' || $key == '$all')
 					$array1[$key] = array_unique(array_splice($array1[$key], count($array1[$key]), 0, $value));
 				// Recursively merge all other queries/values
 				else
@@ -423,7 +423,7 @@ class Collection implements Iterator, Countable
 					if ( ! isset($this->query['$or']))
 						$this->query['$or'] = array();
 					$this->query['$or'][] = $value;
-				} else if ($field == '$where')
+				} elseif ($field == '$where')
 					$this->query['$where'] = $value;
 				else
 					$queryFields[$field] = $value;
@@ -551,7 +551,7 @@ class Collection implements Iterator, Countable
 			// integer
 			return $result['n'];
 		// Return the upserted id if a document was upserted with a new _id
-		else if ($options['upsert'] && ! $result['updatedExisting'] && isset($result['upserted']))
+		elseif ($options['upsert'] && ! $result['updatedExisting'] && isset($result['upserted']))
 			// MongoId
 			return $result['upserted'];
 		// Return the updatedExisting flag for single, non-upsert updates
@@ -964,7 +964,7 @@ class Collection implements Iterator, Countable
 
 		if ($name == 'query')
 			$this->query = $value;
-		else if ($name == 'fields')
+		elseif ($name == 'fields')
 			$this->fields = $value;
 		else {
 			if ($this->cursor) {
