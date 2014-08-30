@@ -47,7 +47,8 @@ use MongoClient;
  * @author     Gleez Team
  * @version    1.0.0
  */
-class Client {
+class Client
+{
 
 	/**
 	 * Gleez Mango Client version

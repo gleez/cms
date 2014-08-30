@@ -24,7 +24,8 @@ use MongoId;
  * @author     Gleez Team
  * @version    1.0.0
  */
-abstract class Document {
+abstract class Document
+{
 
 	/**
 	 * Array of document factory names.
@@ -247,7 +248,7 @@ abstract class Document {
 	{
 		if (isset(static::$models[$name]))
 			$class = static::$models[$name];
-		else if (false !== strpos($name, '\\'))
+		elseif (false !== strpos($name, '\\'))
 			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));
 		else
 			$class = 'Model_' . implode('_', array_map('ucfirst', explode('_', $name)));
@@ -273,7 +274,7 @@ abstract class Document {
 			if (is_array($id)) {
 				foreach ($id as $key => $value)
 					$this->object[$this->getFieldName($key)] = $value;
-			} else if (is_string($id))
+			} elseif (is_string($id))
 				$this->object['_id'] = $this->cast('_id', $id);
 			else
 				throw new Exception('_id of the document must be string or array of strings');
@@ -339,7 +340,7 @@ abstract class Document {
 			if (isset($this->references[$name]['getter'])) {
 				if (is_null($this->references[$name]['getter']))
 					throw new Exception('$name is write only!');
-				else if (is_string($this->references[$name]['getter']))
+				elseif (is_string($this->references[$name]['getter']))
 					return call_user_func(array($this, $this->references[$name]['getter']), $name);
 				else
 					return call_user_func(array($this, $this->references[$name]['getter']), $this, $name);
@@ -427,7 +428,7 @@ abstract class Document {
 			if (isset($this->references[$name]['setter'])) {
 				if (is_null($this->references[$name]['setter']))
 					throw new Exception("':name' is read only!", array(':name' => $name));
-				else if (is_string($this->references[$name]['setter']))
+				elseif (is_string($this->references[$name]['setter']))
 					return call_user_func(array($this, $this->references[$name]['setter']), $value, $name);
 				else
 					return call_user_func(array($this, $this->references[$name]['setter']), $value, $this, $name);
@@ -582,7 +583,7 @@ abstract class Document {
 		if ($this->loaded && empty($this->operations) && ! empty($this->dirty[$name]))
 			return $this->load();
 		// Lazy loading!
-		else if (is_null($this->loaded) && isset($this->object['_id']) && ! isset($this->changed['_id']) && $name != '_id')
+		elseif (is_null($this->loaded) && isset($this->object['_id']) && ! isset($this->changed['_id']) && $name != '_id')
 			return $this->load();
 		else
 			return false;
@@ -613,11 +614,11 @@ abstract class Document {
 
 		if (is_string($criteria) && $criteria[0] == "{")
 			$criteria = JSON::decode($criteria, true);
-		else if ($criteria && ! is_array($criteria)) {
+		elseif ($criteria && ! is_array($criteria)) {
 			// in case if we won't load it, we should set this object to this id
 			$keepId   = $criteria;
 			$criteria = array('_id' => $criteria);
-		} else if (isset($this->object['_id'])) {
+		} elseif (isset($this->object['_id'])) {
 			// in case if we won't load it, we should set this object to this id
 			$keepId   = $this->object['_id'];
 			$criteria = array('_id' => $this->object['_id']);
