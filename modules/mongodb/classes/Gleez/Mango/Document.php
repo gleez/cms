@@ -25,6 +25,9 @@ use MongoId;
  */
 abstract class Document
 {
+	const INSERT = 'insert';
+	const UPDATE = 'update';
+	const UPSERT = 'upsert';
 
 	/**
 	 * Array of document factory names.
@@ -657,6 +660,161 @@ abstract class Document
 	}
 
 	/**
+	 * Update assumed existing document
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  \Gleez\Mango\Document
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function update()
+	{
+		$this->beforeSave(static::UPDATE);
+
+		if ($this->changed) {
+			foreach ($this->changed as $name => $changed)
+				$this->operations['$set'][$name] = $this->object[$name];
+		}
+
+		if ($this->operations) {
+			if (!$this->getCollection()->update(array('_id' => $this->object['_id']), $this->operations)) {
+				$err = $this->getClientInstance()->lastError();
+				throw new Exception('Update of :class failed: :err', array(':class' => get_class($this), ':err' => $err['err']));
+			}
+		}
+
+		$this->changed = $this->operations = array();
+		$this->afterSave(static::UPDATE);
+
+		return $this;
+	}
+
+	/**
+	 * Insert new record.
+	 *
+	 * For newly created documents the _id will be retrieved.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @param   array $options Insert options [Optional]
+	 *
+	 * @return  \Gleez\Mango\Document
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function create(array $options = array())
+	{
+		$this->beforeSave(static::INSERT);
+
+		// Prepare options before insert
+		$writeConcern = $this->getClientInstance()->getWriteConcern();
+		$w = $writeConcern['w'] == 0 ? 1 : $writeConcern['w'];
+		$wtimeout = $writeConcern['wtimeout'];
+
+		if (isset($options['safe'])) {
+			$options['w'] = (int) $options['safe'];
+			$options['j'] = (bool) $options['safe'];
+			unset($options['safe']);
+		}
+
+		if (!isset($options['w']))
+			$options['w'] = $w;
+
+		if (!isset($options['wtimeout']))
+			$options['wtimeout'] = $wtimeout;
+
+		$values = array();
+		foreach($this->changed as $name => $changed)
+			$values[$name] = $this->object[$name];
+
+		if (empty($values))
+			throw new Exception('Cannot insert empty array.');
+
+		$result = $this->getCollection()->insert($values, $options);
+
+		if ($result['err'] && (!empty($options['w']) || !empty($options['j'])))
+			throw new Exception('Unable to insert :class: :err', array(':class' => get_class($this), ':err' => $result['err']));
+
+		if (!isset($this->object['_id'])) {
+			// Store (assigned) MongoID in object
+			$this->object['_id'] = $values['_id'];
+			$this->loaded = true;
+		}
+
+		// Save any additional operations
+		if ($this->operations) {
+			if (!$this->getCollection()->update(array('_id' => $this->object['_id']), $this->operations)) {
+				$err = $this->getClientInstance()->lastError();
+				throw new Exception('Save :class failed: :err', array(':class' => get_class($this), ':err' => $err['err']));
+			}
+		}
+
+		$this->changed = $this->operations = array();
+		$this->afterSave(static::INSERT);
+
+		return $this;
+	}
+
+	/**
+	 * Document is new?
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  bool
+	 */
+	public function isNew()
+	{
+		// if no _id or _id was set by user
+		return (!isset($this->object['_id']) || isset($this->changed['_id']));
+	}
+
+	/**
+	 * Updates or Creates and save the Document depending on isNew()
+	 *
+	 * @since   1.0.0
+	 *
+	 * @param   array|bool $options Insert options [Optional]
+	 *
+	 * @return  \Gleez\Mango\Document
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function save(array $options = array())
+	{
+		// Update references to referenced models
+		$this->updateReferences();
+
+		return $this->isNew() ? $this->create($options) : $this->update();
+	}
+
+	/**
+	 * Delete the current document using the current data.
+	 *
+	 * The document does not have to be loaded.
+	 * Use <code>$doc->getCollection()->remove($criteria)</code> to delete multiple documents.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  \Gleez\Mango\Document
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function delete()
+	{
+		if (!$this->isNew())
+			throw new Exception('Cannot delete new document :class');
+
+		$this->beforeDelete();
+
+		$criteria = array('_id' => $this->object['_id']);
+
+		if (!$this->getCollection()->remove($criteria, array('justOne' => true)))
+			throw new Exception('Failed to delete :class', array(get_class($this)));
+
+		$this->clear();
+		$this->afterDelete();
+
+		return $this;
+	}
+
+	/**
 	 * Load all of the values in an associative array
 	 *
 	 * Ignores all fields not in the model.
@@ -796,6 +954,18 @@ abstract class Document
 	}
 
 	/**
+	 * Return the \Gleez\Mango\Client reference (proxy to the collection's getClientInstance() method)
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  \Gleez\Mango\Client
+	 */
+	public function getClientInstance()
+	{
+		return $this->getCollection()->getClientInstance();
+	}
+
+	/**
 	 * Get a corresponding collection singleton
 	 *
 	 * @param   boolean  $new  Pass true if you don't want to get the singleton instance [Optional]
@@ -866,17 +1036,30 @@ abstract class Document
 		if ($name == 'id' || $name == '_id')
 			return '_id';
 
-		if (!$dot || ! strpos($name, '.')) {
-			return (isset($this->aliases[$name])
-				? $this->aliases[$name]
-				: $name
-			);
-		}
+		if (!$dot || ! strpos($name, '.'))
+			return (isset($this->aliases[$name]) ? $this->aliases[$name] : $name);
 
 		$parts    = explode('.', $name, 2);
 		$parts[0] = $this->getFieldName($parts[0], false);
 
 		return implode('.', $parts);
+	}
+
+	/**
+	 * Updates references but does not save models to avoid infinite loops
+	 */
+	protected function updateReferences()
+	{
+		foreach ($this->references as $name => $ref) {
+			if (isset($this->relatedObjects[$name]) && $this->relatedObjects[$name] instanceof Document) {
+				$model = $this->relatedObjects[$name];
+				$idField = isset($ref['field']) ? $ref['field'] : "_$name";
+
+				if (!$this->__isset($idField) || $this->__get($idField) != $model->_id) {
+					$this->__set($idField, $model->_id);
+				}
+			}
+		}
 	}
 
 	/**
