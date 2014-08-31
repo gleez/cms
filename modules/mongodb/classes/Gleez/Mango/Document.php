@@ -9,6 +9,7 @@
 
 namespace Gleez\Mango;
 
+use Traversable;
 use JSON;
 use MongoId;
 
@@ -194,9 +195,11 @@ abstract class Document
 	/**
 	 * Document loaded status
 	 *
-	 * + `null`  - not attempted
-	 * + `false` - failed
-	 * + `true`  - succeeded
+	 * <pre>
+	 * null  - not attempted
+	 * false - failed
+	 * true  - succeeded
+	 * </pre>
 	 *
 	 * @var boolean
 	 */
@@ -239,8 +242,8 @@ abstract class Document
 	 * $model = \Gleez\Mango\Document::factory('\document\last');
 	 * </code>
 	 *
-	 * @param   string        $name  Model name
-	 * @param   string|array  $id    The _id of the document [Optional]
+	 * @param   string $name  Model name
+	 * @param   mixed  $id    The _id of the document to operate on or criteria used to load [Optional]
 	 *
 	 * @return  \Gleez\Mango\Document
 	 */
@@ -262,22 +265,18 @@ abstract class Document
 	 * If an id or other data is passed then it will be assumed that
 	 * the document exists in the database and updates will be performed without loading the document first.
 	 *
-	 * @param   string|array  $id  _id of the document to operate on or criteria used to load [Optional]
+	 * @param   mixed  $id  _id of the document to operate on or criteria used to load [Optional]
 	 *
 	 * @return  \Gleez\Mango\Document
-	 *
-	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function __construct($id = null)
 	{
 		if (!empty($id)) {
-			if (is_array($id)) {
+			if (is_array($id) || $id  instanceof Traversable) {
 				foreach ($id as $key => $value)
 					$this->object[$this->getFieldName($key)] = $value;
-			} elseif (is_string($id))
+			} else
 				$this->object['_id'] = $this->cast('_id', $id);
-			else
-				throw new Exception('_id of the document must be string or array of strings');
 		}
 	}
 
@@ -373,7 +372,7 @@ abstract class Document
 				{
 					$this->relatedObjects[$name] = static::factory($model)
 						->getCollection(true)
-						->find(array('_id' => array('$in' => (array)$value)));
+						->find(array('_id' => array('$in' => (array) $value)));
 				}
 				else
 				{
@@ -508,8 +507,8 @@ abstract class Document
 	/**
 	 * Override to cast values when they are set with untrusted data
 	 *
-	 * @param   string  $field  The field name being set
-	 * @param   mixed   $value  The value being set
+	 * @param   mixed  $field  The field name being set
+	 * @param   mixed  $value  The value being set
 	 *
 	 * @return  mixed|\MongoId|string
 	 */
@@ -518,10 +517,12 @@ abstract class Document
 		switch($field) {
 			case '_id':
 				// Cast _id strings to MongoIds if they convert back and forth without changing
-				if (is_string($value) && strlen($value) == 24) {
+				if ($value instanceof MongoId)
+					return $value;
+				if ((is_string($value) || ctype_xdigit($value) || (is_object($value) && method_exists($value, '__toString'))) && strlen($value) == 24) {
 					$id = new MongoId($value);
 
-					if ((string)$id == $value)
+					if ((string) $id == $value)
 						return $id;
 				}
 		}
@@ -614,7 +615,7 @@ abstract class Document
 
 		if (is_string($criteria) && $criteria[0] == "{")
 			$criteria = JSON::decode($criteria, true);
-		elseif ($criteria && ! is_array($criteria)) {
+		elseif ($criteria && !is_array($criteria)) {
 			// in case if we won't load it, we should set this object to this id
 			$keepId   = $criteria;
 			$criteria = array('_id' => $criteria);
@@ -765,6 +766,25 @@ abstract class Document
 	{
 		// if no _id or _id was set by user
 		return (!isset($this->object['_id']) || isset($this->changed['_id']));
+	}
+
+	/**
+	 * Field has been changed?
+	 *
+	 * No parameter returns true if there are *any* changes.
+	 *
+	 * @param   string $name Field name [Optional]
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  bool
+	 */
+	public function isChanged($name = null)
+	{
+		if(is_null($name))
+			return ($this->changed || $this->operations);
+		else
+			return isset($this->changed[$this->getFieldName($name)]) || isset($this->dirty[$this->getFieldName($name)]);
 	}
 
 	/**
