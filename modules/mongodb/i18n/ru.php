@@ -48,9 +48,9 @@ return array(
 	'The cursor has already started iterating' => 'Курсор уже начал итерацию',
 	'The php-mongo extension is not installed or is disabled.' => 'Расширение php-mongo не установлено или выключено.',
 	// U
-	'Update of :class failed: :err' => 'Обновление :class не удалось: :err',
+	'Update of :class failed: :err' => 'не удалось обновить :class: :err',
 	'Unable to connect to MongoDB server. MongoDB said :message' => 'Не удалось подключиться к серверу MongoDB. Ответ MongoDB :message',
-	'Unable to insert :class: :err' => 'Не удалось вставить :class: :err',
+	'Unable to insert :class: :err' => 'Не удалось создать :class: :err',
 	// Z
 	// Y
 	// X
