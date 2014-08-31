@@ -16,9 +16,12 @@ return array(
 	// A
 	// B
 	// C
+	'Cannot delete new document :class' => 'Не возможно удалить новый документ :class',
+	'Cannot insert empty array.' => 'Не возможно вставить пустой массив.',
 	// D
 	// E
 	// F
+	'Failed to delete :class' => 'Не удалось удалить :class',
 	'Failed to load Mango config group: :group' => 'Mango не удалось загрузить конфигурационную группу :group',
 	// G
 	// H
@@ -38,13 +41,16 @@ return array(
 	// Q
 	// R
 	// S
+	'Save :class failed: :err' => 'Не удалось сохранить :class: :err',
 	// T
 	'The code must be a string or an instance of MongoCode' => 'Код должен быть строкой или экземпляром MongoCode',
 	'The cursor has already been instantiated' => 'Экземпляр курсора уже создан',
 	'The cursor has already started iterating' => 'Курсор уже начал итерацию',
 	'The php-mongo extension is not installed or is disabled.' => 'Расширение php-mongo не установлено или выключено.',
 	// U
+	'Update of :class failed: :err' => 'Обновление :class не удалось: :err',
 	'Unable to connect to MongoDB server. MongoDB said :message' => 'Не удалось подключиться к серверу MongoDB. Ответ MongoDB :message',
+	'Unable to insert :class: :err' => 'Не удалось вставить :class: :err',
 	// Z
 	// Y
 	// X
