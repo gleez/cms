@@ -661,6 +661,21 @@ abstract class Document
 	}
 
 	/**
+	 * Whether the document is loaded?
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return  bool
+	 */
+	public function isLoaded()
+	{
+		if (null === $this->loaded)
+			$this->load();
+
+		return $this->loaded;
+	}
+
+	/**
 	 * Update assumed existing document
 	 *
 	 * @since   1.0.0
@@ -818,8 +833,8 @@ abstract class Document
 	 */
 	public function delete()
 	{
-		if (!$this->isNew())
-			throw new Exception('Cannot delete new document :class');
+		if (!isset($this->object['_id']))
+			throw new Exception('Cannot delete new document :class', array(':class' => get_class($this)));
 
 		$this->beforeDelete();
 
