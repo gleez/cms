@@ -12,7 +12,6 @@ return array(
 	':name is read only!' => 'Поле :name доступно только для чтения!',
 	':name is write only!' => 'Поле :name доступно только для записи!',
 	// _
-	'_id of the document must be string or array of strings' => '_id документа должен быть строкой или массивом строк',
 	// A
 	// B
 	// C
