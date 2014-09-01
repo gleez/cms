@@ -419,8 +419,8 @@ class Collection implements Iterator, Countable
 			// Special purpose condition
 			if ($field[0] == '$') {
 				// $or and $where and possibly other special values
-				if ($field == '$or' && ! is_int(key($value))) {
-					if ( ! isset($this->query['$or']))
+				if ($field == '$or' && !is_int(key($value))) {
+					if (!isset($this->query['$or']))
 						$this->query['$or'] = array();
 					$this->query['$or'][] = $value;
 				} elseif ($field == '$where')
@@ -545,7 +545,7 @@ class Collection implements Iterator, Countable
 
 		// According to the driver docs an exception should have already been
 		// thrown if there was an error, but just in case
-		if ( ! $result['ok'])
+		if (!$result['ok'])
 			throw new Exception($result['err']);
 
 		// Return the number of documents updated for multiple updates or
@@ -554,7 +554,7 @@ class Collection implements Iterator, Countable
 			// integer
 			return $result['n'];
 		// Return the upserted id if a document was upserted with a new _id
-		elseif ($options['upsert'] && ! $result['updatedExisting'] && isset($result['upserted']))
+		elseif ($options['upsert'] && !$result['updatedExisting'] && isset($result['upserted']))
 			// MongoId
 			return $result['upserted'];
 		// Return the updatedExisting flag for single, non-upsert updates
@@ -917,7 +917,7 @@ class Collection implements Iterator, Countable
 	 */
 	public function getNext()
 	{
-		if($this->getClientInstance()->profiling && ( ! $this->cursor || ! $this->isIterating())) {
+		if($this->getClientInstance()->profiling && (!$this->cursor || !$this->isIterating())) {
 			$this->getCursor();
 
 			// Start the benchmark
