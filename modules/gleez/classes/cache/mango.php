@@ -1,6 +1,16 @@
 <?php
 /**
- * [Cache](api/Cache) Mango driver
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link https://github.com/cleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+use \Gleez\Mango\Client;
+
+/**
+ * [Cache](api/Cache) MongoDB driver
  *
  * ### System requirements
  *
@@ -9,15 +19,13 @@
  *
  * @package    Gleez\Cache\Base
  * @author     Gleez Team
- * @version    1.2.0
- * @copyright  (c) 2012-2014 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @version    1.2.1
  */
 class Cache_Mango extends Cache implements Cache_Tagging {
 
 	/**
 	 * Mango_Collection instance
-	 * @var Mango_Collection
+	 * @var \Gleez\Mango\Collection
 	 */
 	private $collection;
 
@@ -42,7 +50,7 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		// Set default config
 		$default = array(
 			'driver'         => 'mango',
-			'group'          => Mango::$default,
+			'group'          => Client::$default,
 			'collection'     => 'cache',
 			'default_expire' => Cache::DEFAULT_EXPIRE,
 		);
@@ -56,8 +64,8 @@ class Cache_Mango extends Cache implements Cache_Tagging {
 		// Get collection name
 		$collection  = $this->config('collection');
 
-		// Get Mango_Collection instance
-		$this->collection = Mango::instance($this->config('group'))->{$collection};
+		// Get \Gleez\Mango\Collection instance
+		$this->collection = Client::instance($this->config('group'))->{$collection};
 	}
 
 	/**

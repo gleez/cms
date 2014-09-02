@@ -112,14 +112,15 @@ Kohana::$config->attach(new Config_File);
  * Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	'user'        => MODPATH.'user',       // User and group Administration
-	'database'    => MODPATH.'database',   // Database access
-	'image'       => MODPATH.'image',      // Image manipulation
-	'captcha'     => MODPATH.'captcha',    // Captcha implementation
+	'user'        => MODPATH.'user',      // User and group Administration
+	'database'    => MODPATH.'database',  // Database access
+	'image'       => MODPATH.'image',     // Image manipulation
+	'captcha'     => MODPATH.'captcha',   // Captcha implementation
 	'minion'      => MODPATH.'minion',    // For running tasks via the CLI
-	//'unittest'    => MODPATH.'unittest',   // Unit testing
-	//'codebench'   => MODPATH.'codebench',  // Benchmarking tool
-	//'mango'       => MODPATH.'mango',      // Gleez Mango
+	//'unittest'    => MODPATH.'unittest',  // Unit testing
+	//'codebench'   => MODPATH.'codebench', // Benchmarking tool
+	//'mongodb'     => MODPATH.'mongodb',   // Gleez Mango Component
+	//'mango'       => MODPATH.'mango',     // Mango Reader
 ));
 
 /**

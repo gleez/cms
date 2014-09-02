@@ -1,27 +1,24 @@
 <?php
 /**
- * # Mango Collection
+ * Gleez CMS (http://gleezcms.org)
  *
- * This class can be used directly as a wrapper for MongoCollection/MongoCursor
+ * @link https://github.com/cleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+namespace Gleez\Mango;
+
+use Iterator;
+use Countable;
+use MongoCollection;
+use Profiler;
+use JSON;
+
+/**
+ * Gleez Mango Collection
  *
- * ## Usage
- *
- * ~~~
- * $collection = new Mango_Collection('users');
- *
- * // $users now is array of arrays
- * $users = $collection->sortDesc('published')
- *                     ->limit(10)
- *                     ->toArray();
- * ~~~
- *
- * ## System Requirements
- *
- * - MongoDB 2.4 or higher
- * - PHP-extension MongoDB 1.4.0 or higher
- *
- * This class was adapted from
- * [colinmollenhour/mongodb-php-odm](https://github.com/colinmollenhour/mongodb-php-odm)
+ * This class can be used directly as a wrapper for \MongoCollection and \MongoCursor.
  *
  * @method     mixed          batchInsert(array $a, array $options = array())
  * @method     array          createDBRef(array $a)
@@ -34,147 +31,114 @@
  * @method     string         getName()
  * @method     array          getReadPreference()
  * @method     boolean        getSlaveOkay()
- * @method     array          group(mixed $keys, array $initial, MongoCode $reduce, array $options = array())
+ * @method     array          group(mixed $keys, array $initial, \MongoCode $reduce, array $options = array())
  * @method     boolean|array  insert(array $data, array $options = array())
  * @method     boolean|array  remove(array $criteria = array(), array $options = array())
  * @method     mixed          save(array $a, array $options = array())
  * @method     boolean        setReadPreference(string $read_preference, array $tags = array())
- * @method     boolean        setSlaveOkay(boolean $ok = TRUE)
+ * @method     boolean        setSlaveOkay(boolean $ok = true)
  * @method     boolean|array  update(array $criteria, array $new_object, array $options = array())
- * @method     array          validate(boolean $scan_data = FALSE)
+ * @method     array          validate(boolean $scan_data = false)
  *
- * @package    Gleez\Mango\Collection
+ * @package    Gleez\Mango
  * @author     Gleez Team
- * @version    0.7.0
- * @copyright  (c) 2011-2013 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
- *
- * @link       https://github.com/colinmollenhour/mongodb-php-odm  MongoDB PHP ODM
- * @link       http://www.martinfowler.com/eaaCatalog/tableDataGateway.html  Table Data Gateway pattern
- * @link       http://www.martinfowler.com/eaaCatalog/rowDataGateway.html  Row Data Gateway pattern
+ * @version    1.0.0
  */
-class Mango_Collection implements Iterator, Countable {
-
+class Collection implements Iterator, Countable
+{
 	/**
-	 * Sort mode - ascending
-	 * @type integer
-	 */
-	const ASC = 1;
-
-	/**
-	 * Sort mode - descending
-	 * @type integer
-	 */
-	const DESC = -1;
-
-	/**
-	 * Required driver version
-	 * @type string
-	 */
-	const REQUIRED_VERSION = '1.0.10';
-
-	/**
-	 * The name of the collection within the database or the gridFS prefix if gridFS is TRUE
+	 * The name of the collection within the database or the gridFS prefix if gridFS is true
 	 * @var string
 	 */
-	protected $_name;
+	protected $name;
 
 	/**
 	 * The database configuration name
-	 * Passed to [Mango::instance]
+	 * Passed to [\Gleez\Mango\Client::instance]
 	 * @var string
 	 */
-	protected $_db;
+	protected $db;
 
 	/**
 	 * Whether or not this collection is a gridFS collection
 	 * @var boolean
 	 */
-	protected $_gridFS = FALSE;
+	protected $gridFS = false;
 
 	/**
 	 * The class name or instance of the corresponding
-	 * document model or NULL if direct mode
+	 * document model or null if direct mode
 	 *
 	 * @var mixed
 	 */
-	protected $_model;
+	protected $model;
 
 	/**
 	 * Benchmark token
 	 * @var string
 	 */
-	protected $_benchmark = NULL;
+	protected $benchmark = null;
 
 	/**
 	 * The cursor instance in use while iterating a collection
-	 * @var MongoCursor
+	 * @var \MongoCursor
 	 */
-	protected $_cursor;
+	protected $cursor;
 
 	/**
 	 * The current query options
 	 * @var array
 	 */
-	protected $_options = array();
+	protected $options = array();
 
 	/**
 	 * The current query fields (a hash of 'field' => 1)
 	 * @var array
 	 */
-	protected $_fields = array();
+	protected $fields = array();
 
 	/**
 	 * The current query criteria (with field names translated)
 	 * @var array
 	 */
-	protected $_query = array();
+	protected $query = array();
 
 	/**
-	 * A cache of MongoCollection instances for performance
+	 * A cache of \MongoCollection instances for performance
 	 * @var array
 	 */
-	protected static $_collections = array();
+	protected static $collections = array();
 
 	/**
-	 * A cache of [Mango_Document] model instances for performance
+	 * A cache of [\Gleez\Mango\Document] model instances for performance
 	 * @var array
 	 */
-	protected static $_models = array();
+	protected static $models = array();
 
 	/**
 	 * Class constructor
 	 *
 	 * Instantiate a new collection object, can be used for querying, updating, etc..
 	 *
-	 * Example:
-	 * ~~~
-	 * $posts = new Mango_Collection('posts');
-	 * ~~~
+	 * Example:<br>
+	 * <code>
+	 * $posts = new \Gleez\Mango\Collection('posts');
+	 * </code>
 	 *
-	 * @param   string          $name    The collection name [Optional]
-	 * @param   string          $db      The database configuration name [Optional]
-	 * @param   boolean         $gridFS  Is the collection a gridFS instance? [Optional]
-	 * @param   boolean|string  $model   Class name of template model for new documents [Optional]
+	 * @param   string       $name    The collection name [Optional]
+	 * @param   string       $db      The database configuration name [Optional]
+	 * @param   boolean      $gridFS  Is the collection a gridFS instance? [Optional]
+	 * @param   bool|string  $model   Class name of template model for new documents [Optional]
 	 */
-	public function __construct($name = NULL, $db = NULL, $gridFS = FALSE, $model = FALSE)
+	public function __construct($name = null, $db = null, $gridFS = false, $model = false)
 	{
-		if ( ! is_null($name))
-		{
-			if (is_null($db))
-			{
-				$db = Mango::$default;
-			}
-
-			$this->_name   = $name;
-			$this->_db     = $db;
-			$this->_gridFS = $gridFS;
+		if (!empty($name)) {
+			$this->name   = $name;
+			$this->db     = $db ?: Client::$default;
+			$this->gridFS = $gridFS;
 		}
 
-		if ($model)
-		{
-			$this->_model = $model;
-		}
+		$this->model = $model ?: null;
 	}
 
 	/**
@@ -184,64 +148,54 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function  __toString()
 	{
-		return $this->_name;
+		return $this->name;
 	}
 
 	/**
 	 * Magic method override
 	 *
-	 * Passes on method calls to either the MongoCursor or the MongoCollection
+	 * Passes on method calls to either the \MongoCursor or the \MongoCollection
 	 *
 	 * @param   string  $name       Name of the method being called
 	 * @param   array   $arguments  Enumerated array containing the parameters passed to the $name
 	 *
 	 * @return  mixed
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 *
-	 * @uses    Profiler::start
-	 * @uses    Profiler::stop
-	 * @uses    JSON::encode
+	 * @uses    \Profiler::start
+	 * @uses    \Profiler::stop
+	 * @uses    \JSON::encode
 	 */
 	public function __call($name, $arguments)
 	{
-		if ($this->_cursor AND method_exists($this->_cursor, $name))
-		{
-			return call_user_func_array(array($this->_cursor, $name), $arguments);
-		}
+		if ($this->cursor && method_exists($this->cursor, $name))
+			return call_user_func_array(array($this->cursor, $name), $arguments);
 
-		if (method_exists($this->getCollection(), $name))
-		{
-			if ($this->getMangoInstance()->profiling)
-			{
+		if (method_exists($this->getCollection(), $name)) {
+			if ($this->getClientInstance()->profiling && in_array($name, array('batchInsert','findOne','getDBRef','group','insert','remove','save','update'))) {
 				$json_args = array();
 				foreach($arguments as $arg)
-				{
-					$json_args[] = JSON::encode($arg);
-				}
+					$json_args[] = JSON::encode((is_array($arg) ? (object) $arg : $arg));
 
-				$this->_benchmark = Profiler::start(__CLASS__."::{$this->_db}", "db.{$this->_name}.{$name}(" . implode(', ', $json_args) . ")");
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", "db.{$this->name}.{$name}(" . implode(', ', $json_args) . ")");
 			}
 
 			$retval = call_user_func_array(array($this->getCollection(), $name), $arguments);
 
-			if ($this->_benchmark)
-			{
+			if ($this->benchmark) {
 				// Stop the benchmark
-				Profiler::stop($this->_benchmark);
+				Profiler::stop($this->benchmark);
 
 				// Clean benchmark token
-				$this->_benchmark = NULL;
+				$this->benchmark = null;
 			}
 
 			return $retval;
-		}
-		else
-		{
-			throw new Mango_Exception('Method :method not found',
-				array(':method' => "Mango::{$name}")
-			);
-		}
+		} else
+			throw new Exception('Method :method not found', array(':method' => get_class($this->getCollection())."::{$name}"));
+
+		//trigger_error('Method not found by Mongo_Collection: '.$name);
 	}
 
 	/**
@@ -251,7 +205,7 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function __clone()
 	{
-		$this->reset(TRUE);
+		$this->reset(true);
 	}
 
 	/**
@@ -271,37 +225,25 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @return  array
 	 */
-	protected static function _mergeDistinctArrays(array $array1, array $array2)
+	protected static function mergeDistinctArrays(array $array1, array $array2)
 	{
-		if ( ! count($array1))
-		{
+		if (!count($array1))
 			return $array2;
-		}
 
 		foreach ($array2 as $key => $value)
 		{
-			if (is_array($value) AND isset($array1[$key]) AND is_array($array1[$key]))
-			{
+			if (is_array($value) && isset($array1[$key]) && is_array($array1[$key])) {
 				// Intersect $in queries
 				if ($key == '$in')
-				{
 					$array1[$key] = array_intersect($array1[$key], $value);
-				}
 				// Union $nin and $all queries
-				elseif ($key == '$nin' OR $key == '$all')
-				{
+				elseif ($key == '$nin' || $key == '$all')
 					$array1[$key] = array_unique(array_splice($array1[$key], count($array1[$key]), 0, $value));
-				}
 				// Recursively merge all other queries/values
 				else
-				{
-					$array1 [$key] = self::_mergeDistinctArrays($array1 [$key], $value);
-				}
-			}
-			else
-			{
+					$array1 [$key] = static::mergeDistinctArrays($array1 [$key], $value);
+			} else
 				$array1[$key] = $value;
-			}
 		}
 
 		return $array1;
@@ -310,28 +252,19 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Is the query iterating yet?
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.info.php MongoCursor::info
+	 * @link    http://www.php.net/manual/en/mongocursor.info.php \MongoCursor::info
 	 *
 	 * @since   0.3.0
+	 * @since   1.0.0 is_iterating → isIterating
 	 *
 	 * @return  boolean
-	 *
-	 * @throws  Gleez_Exception
 	 */
-	public function is_iterating()
+	public function isIterating()
 	{
-		if (empty($this->_cursor))
-		{
-			return FALSE;
-		}
+		if (!$this->cursor)
+			return false;
 
-		/** @var $info array */
-		$info = $this->_cursor->info();
-
-		if ( ! isset($info['started_iterating']))
-		{
-			throw new Gleez_Exception('Driver version >= :ver required', array(':ver' => self::REQUIRED_VERSION));
-		}
+		$info = $this->cursor->info();
 
 		return $info['started_iterating'];
 	}
@@ -340,12 +273,13 @@ class Mango_Collection implements Iterator, Countable {
 	 * Is the query executed yet?
 	 *
 	 * @since   0.4.0
+	 * @since   1.0.0 is_loaded → isLoaded
 	 *
 	 * @return  boolean
 	 */
-	public function is_loaded()
+	public function isLoaded()
 	{
-		return isset($this->_cursor);
+		return isset($this->cursor);
 	}
 
 	/**
@@ -355,14 +289,31 @@ class Mango_Collection implements Iterator, Countable {
 	 *      to support high-bandwidth inserts
 	 *
 	 * @since   0.4.0
+	 * @since   1.0.0 is_caped → isCapped
 	 *
 	 * @return  boolean
 	 */
-	public function is_caped()
+	public function isCapped()
 	{
 		$stats = $this->getStats();
 
-		return ( ! empty($stats['capped']));
+		return (!empty($stats['capped']));
+	}
+
+	/**
+	 * Removes all documents from a capped collection.
+	 *
+	 * @since   1.0.0
+	 *
+	 * @return array
+	 *
+	 * @throws  \Gleez\Mango\Exception
+	 */
+	public function emptyCapped()
+	{
+		return $this->getClientInstance()->safeCommand(array(
+			'emptycapped' => $this
+		));
 	}
 
 	/**
@@ -372,33 +323,25 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * @uses    JSON::encodeMongo
+	 * @uses    \JSON::encodeMongo
 	 */
 	public function shellQuery()
 	{
 		$query = array();
 
-		if ($this->_query)
-		{
-			$query[] = JSON::encodeMongo($this->_query);
-		}
+		if ($this->query)
+			$query[] = JSON::encodeMongo($this->query);
 		else
-		{
 			$query[] = '{}';
-		}
 
-		if($this->_fields)
-		{
-			$query[] = JSON::encodeMongo($this->_fields);
-		}
+		if ($this->fields)
+			$query[] = JSON::encodeMongo($this->fields);
 
 		/** @var $query string */
-		$query = "db.{$this->_name}.find(" . implode(',', $query) . ")";
+		$query = "db.{$this->name}.find(" . implode(',', $query) . ")";
 
-		foreach ($this->_options as $key => $value)
-		{
+		foreach ($this->options as $key => $value)
 			$query .= ".$key(" . JSON::encodeMongo($value) . ")";
-		}
 
 		return $query;
 	}
@@ -410,38 +353,25 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @throws  MongoCursorException
-	 * @throws  MongoException
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function load()
 	{
 		// Execute the query, add query to any thrown exceptions
-		try
-		{
-			$this->_cursor = $this->getCollection()->find($this->_query, $this->_fields);
-		}
-		catch(MongoCursorException $e)
-		{
-			throw new MongoCursorException("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
-		}
-		catch(MongoException $e)
-		{
-			throw new MongoException("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
+		try {
+			$this->cursor = $this->getCollection()->find($this->query, $this->fields);
+		} catch(\Exception $e) {
+			throw new Exception("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
 		}
 
 		// Add cursor options
-		foreach ($this->_options as $key => $value)
-		{
+		foreach ($this->options as $key => $value) {
 			if(is_null($value))
-			{
-				$this->_cursor->$key();
-			}
+				$this->cursor->$key();
 			else
-			{
-				$this->_cursor->$key($value);
-			}
+				$this->cursor->$key($value);
 		}
 
 		return $this;
@@ -450,7 +380,7 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Set some criteria for the query
 	 *
-	 * Unlike [MongoCollection::find], this can be called multiple times and the
+	 * Unlike [\MongoCollection::find], this can be called multiple times and the
 	 * query parameters will be merged together.
 	 *
 	 * The possible values for `$query`:
@@ -464,66 +394,44 @@ class Mango_Collection implements Iterator, Countable {
 	 * @param   mixed  $query  An array of parameters or a key [Optional]
 	 * @param   mixed  $value  If $query is a key, this is the value [Optional]
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @throws  MongoCursorException
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 *
-	 * @uses    JSON::decode
+	 * @uses    \JSON::decode
 	 */
-	public function find($query = array(), $value = NULL)
+	public function find($query = array(), $value = null)
 	{
-		if ($this->_cursor)
-		{
-			throw new MongoCursorException('The cursor has already been instantiated');
-		}
+		if ($this->cursor)
+			throw new Exception('The cursor has already been instantiated');
 
-		if ( ! is_array($query))
-		{
+		if (!is_array($query)) {
 			if ($query[0] == "{")
-			{
-				$query = JSON::decode($query, TRUE);
-			}
+				$query = JSON::decode($query, true);
 			else
-			{
 				$query = array($query => $value);
-			}
 		}
 
 		// Translate field aliases
-		$query_fields = array();
+		$queryFields = array();
 
-		foreach ($query as $field => $value)
-		{
+		foreach ($query as $field => $value) {
 			// Special purpose condition
-			if ($field[0] == '$')
-			{
+			if ($field[0] == '$') {
 				// $or and $where and possibly other special values
-				if ($field == '$or' AND ! is_int(key($value)))
-				{
-					if ( ! isset($this->_query['$or']))
-					{
-						$this->_query['$or'] = array();
-					}
-					$this->_query['$or'][] = $value;
-				}
-				elseif ($field == '$where')
-				{
-					$this->_query['$where'] = $value;
-				}
+				if ($field == '$or' && !is_int(key($value))) {
+					if (!isset($this->query['$or']))
+						$this->query['$or'] = array();
+					$this->query['$or'][] = $value;
+				} elseif ($field == '$where')
+					$this->query['$where'] = $value;
 				else
-				{
-					$query_fields[$field] = $value;
-				}
-			}
-			// Simple key = value condition
-			else
-			{
-				$query_fields[$this->getFieldName($field)] = $value;
-			}
+					$queryFields[$field] = $value;
+			} else // Simple key = value condition
+				$queryFields[$this->getFieldName($field)] = $value;
 		}
 
-		$this->_query = self::_mergeDistinctArrays($this->_query, $query_fields);
+		$this->query = static::mergeDistinctArrays($this->query, $queryFields);
 
 		return $this;
 	}
@@ -531,49 +439,39 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Queries this collection, returning a single element
 	 *
-	 * Wrapper for [MongoCollection::findOne] which adds field name translations
+	 * Wrapper for [\MongoCollection::findOne] which adds field name translations
 	 * and allows query to be a single `_id`.
 	 *
-	 * Return record matching query or NULL
+	 * Return record matching query or null
 	 *
 	 * @param   mixed  $query   An _id, a JSON encoded query or an array by which to search [Optional]
 	 * @param   array  $fields  Fields of the results to return [Optional]
 	 *
 	 * @return  mixed
 	 *
-	 * @uses    JSON::decode
+	 * @uses    \JSON::decode
 	 */
 	public function findOne($query = array(), $fields = array())
 	{
 		// String query is either JSON encoded or an _id
-		if ( ! is_array($query))
-		{
+		if (!is_array($query)) {
 			if ($query[0] == "{")
-			{
-				$query = JSON::decode($query, TRUE);
-			}
+				$query = JSON::decode($query, true);
 			else
-			{
 				$query = array('_id' => $query);
-			}
 		}
 
 		// Translate field aliases
 		$query_trans = array();
 		foreach ($query as $field => $value)
-		{
 			$query_trans[$this->getFieldName($field)] = $value;
-		}
 
 		$fields_trans = array();
-		if ($fields AND is_int(key($fields)))
-		{
+		if ($fields && is_int(key($fields)))
 			$fields = array_fill_keys($fields, 1);
-		}
+
 		foreach ($fields as $field => $value)
-		{
 			$fields_trans[$this->getFieldName($field)] = $value;
-		}
 
 		return $this->__call('findOne', array($query_trans, $fields_trans));
 	}
@@ -587,17 +485,17 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @return  mixed
 	 *
-	 * @uses    Mango::findAndModify
+	 * @uses    \Gleez\Mango\Client::findAndModify
 	 */
 	public function findAndModify(array $command)
 	{
-		return $this->getMangoInstance()->findAndModify($this->_name, $command);
+		return $this->getClientInstance()->findAndModify($this->name, $command);
 	}
 
 	/**
 	 * Perform an update, throw exception on errors
 	 *
-	 * Same usage as [MongoCollection::update] except it throws an exception on error.
+	 * Same usage as [\MongoCollection::update] except it throws an exception on error.
 	 *
 	 * Return values depend on type of update:
 	 *
@@ -611,67 +509,66 @@ class Mango_Collection implements Iterator, Countable {
 	 * @param   array  $new_object  The object with which to update the matching records
 	 * @param   array  $options     Associative array of the form array("optionname" => <boolean>, ...) [Optional]
 	 *
-	 * @return  integer|boolean|MongoId
+	 * @return  integer|boolean|\MongoId
 	 *
-	 * @throws  MongoException
-	 *
-	 * @uses    Arr::merge
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function safeUpdate(array $criteria, array $new_object, $options = array())
 	{
-		$options = Arr::merge(
+		$writeConcern = $this->getClientInstance()->getWriteConcern();
+		$w = $writeConcern['w'] == 0 ? 1 : $writeConcern['w'];
+		$wtimeout = $writeConcern['wtimeout'];
+
+		$options = array_merge(
 			array(
-				'w'        => 1,      // The write will be acknowledged by the server
-				'upsert'   => FALSE,  // If no document matches $criteria, a new document will be inserted
-				'multiple' => FALSE   // All documents matching $criteria will be updated?
+				'w'        => $w,        // The write will be acknowledged by the server
+				'wtimeout' => $wtimeout, // Maximum number of milliseconds to wait for the server to satisfy the write concern
+				'upsert'   => false,     // If no document matches $criteria, a new document will be inserted
+				'multiple' => false      // All documents matching $criteria will be updated?
 			),
 			$options
 		);
+
+		// Convert legacy safe option
+		if (isset($options['safe'])) {
+			$options['j'] = $options['safe'];
+			unset($options['safe']);
+		}
 
 		$result = $this->update($criteria, $new_object, $options);
 
 		// A write will not be followed up with a getLastError call,
 		// and therefore not checked ("fire and forget")
-		if ($options['w'] == 0)
-		{
+		if ($options['w'] == 0 && empty($options['j']))
 			// boolean
 			return $result;
-		}
 
 		// According to the driver docs an exception should have already been
 		// thrown if there was an error, but just in case
-		if ( ! $result['ok'])
-		{
-			throw new MongoException($result['err']);
-		}
+		if (!$result['ok'])
+			throw new Exception($result['err']);
 
 		// Return the number of documents updated for multiple updates or
 		// the updatedExisting flag for single updates
 		if ($options['multiple'])
-		{
 			// integer
 			return $result['n'];
-		}
 		// Return the upserted id if a document was upserted with a new _id
-		elseif ($options['upsert'] AND ! $result['updatedExisting'] AND isset($result['upserted']))
-		{
+		elseif ($options['upsert'] && !$result['updatedExisting'] && isset($result['upserted']))
 			// MongoId
 			return $result['upserted'];
-		}
 		// Return the updatedExisting flag for single, non-upsert updates
 		else
-		{
 			// boolean
 			return $result['updatedExisting'];
-		}
 	}
 
 	/**
 	 * Remove, throw exception on errors
 	 *
-	 * Same usage as [MongoCollection::remove] except it throws an exception on error.
+	 * Same usage as [\MongoCollection::remove] except it throws an exception on error.
 	 *
-	 * Returns number of documents removed if "safe",
+	 * Returns number of documents removed if acknowledged,
 	 * otherwise just if the operation was successfully sent.
 	 *
 	 * [!!] Note: You cannot use this method with a capped collection.
@@ -683,16 +580,19 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @return  array|bool
 	 *
-	 * @throws  MongoException
-	 *
-	 * @uses    Arr::merge
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function safeRemove(array $criteria = array(), array $options = array())
 	{
-		$options = Arr::merge(
+		$writeConcern = $this->getClientInstance()->getWriteConcern();
+		$w = $writeConcern['w'] == 0 ? 1 : $writeConcern['w'];
+		$wtimeout = $writeConcern['wtimeout'];
+
+		$options = array_merge(
 			array(
-				'w'       => 1,     // The write will be acknowledged by the server
-				'justOne' => FALSE, // To limit the deletion to just one document, set to true
+				'w'        => $w,        // The write will be acknowledged by the server
+				'wtimeout' => $wtimeout, // Maximum number of milliseconds to wait for the server to satisfy the write concern
+				'justOne'  => false      // To limit the deletion to just one document, set to true
 			),
 			$options
 		);
@@ -701,18 +601,14 @@ class Mango_Collection implements Iterator, Countable {
 
 		// A write will not be followed up with a getLastError call,
 		// and therefore not checked ("fire and forget")
-		if ($options['w'] == 0)
-		{
-			/** @var $result boolean */
+		if ($options['w'] == 0 && empty($options['j']))
+			// boolean
 			return $result;
-		}
 
 		// According to the driver docs an exception should have already been
 		// thrown if there was an error, but just in case
-		if ( ! $result['ok'])
-		{
-			throw new MongoException($result['err']);
-		}
+		if (!$result['ok'])
+			throw new Exception($result['err']);
 
 		// Return the number of documents removed
 		return $result['n'];
@@ -725,42 +621,40 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @return  boolean
 	 *
-	 * @throws  Mango_Exception
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function safeDrop()
 	{
 		$result = $this->drop();
 
-		if ( ! $result['ok'])
-		{
-			throw new Mango_Exception($result['errmsg']);
-		}
+		if (!$result['ok'])
+			throw new Exception($result['errmsg']);
 
-		return TRUE;
+		return true;
 	}
 
 	/**
 	 * Retrieve a list of distinct values for the given key across a collection
 	 *
-	 * Same usage as [MongoCollection::distinct] except it throws an exception on error.
+	 * Same usage as [\MongoCollection::distinct] except it throws an exception on error.
 	 *
 	 * @since   0.4.0
 	 *
-	 * @link    http://www.php.net/manual/en/mongocollection.distinct.php MongoCollection::distinct
+	 * @link    http://www.php.net/manual/en/mongocollection.distinct.php \MongoCollection::distinct
 	 *
 	 * @param   string  $key    The key to use
 	 * @param   array   $query  An optional query parameters [Optional]
 	 *
 	 * @return  array
 	 *
-	 * @throws  MongoException
+	 * @throws  \Gleez\Mango\Exception
 	 *
-	 * @uses    Mango::safeCommand
+	 * @uses    \Gleez\Mango\Client::safeCommand
 	 */
 	public function distinct($key, array $query = array())
 	{
-		return $this->getMangoInstance()->safeCommand(array(
-			'distinct' => $this->_name,
+		return $this->getClientInstance()->safeCommand(array(
+			'distinct' => $this->name,
 			'key'      => (string)$key,
 			'query'    => $query
 		));
@@ -769,13 +663,13 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * Perform an aggregation using the aggregation framework
 	 *
-	 * Same usage as [MongoCollection::aggregate] except it throws an exception on error.
+	 * Same usage as [\MongoCollection::aggregate] except it throws an exception on error.
 	 *
 	 * [!!] This method accepts either a variable amount of pipeline operators,
 	 *      or a single array of operators constituting the pipeline.
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * // Return all states with a population greater than 10 million:
 	 * $results = $collection->aggregate(
 	 *     array(
@@ -788,24 +682,24 @@ class Mango_Collection implements Iterator, Countable {
 	 *         )
 	 *     )
 	 * );
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.0
 	 *
-	 * @link    http://www.php.net/manual/en/mongocollection.aggregate.php MongoCollection::aggregate
+	 * @link    http://www.php.net/manual/en/mongocollection.aggregate.php \MongoCollection::aggregate
 	 *
 	 * @param   array  $pipeline  An array of pipeline operators
 	 *
 	 * @return  array
 	 *
-	 * @throws  MongoException
+	 * @throws  \Gleez\Mango\Exception
 	 *
-	 * @uses    Mango::safeCommand
+	 * @uses    \Gleez\Mango\Client::safeCommand
 	 */
 	public function aggregate(array $pipeline)
 	{
-		return $this->getMangoInstance()->safeCommand(array(
-			'aggregate' => $this->_name,
+		return $this->getClientInstance()->safeCommand(array(
+			'aggregate' => $this->name,
 			'pipeline'  => $pipeline,
 		));
 	}
@@ -819,16 +713,14 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   boolean  $cursor_only  Reset cursor only?
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
-	public function reset($cursor_only = FALSE)
+	public function reset($cursor_only = false)
 	{
-		if ( ! $cursor_only)
-		{
-			$this->_query = $this->_fields = $this->_options = array();
-		}
+		if (!$cursor_only)
+			$this->query = $this->fields = $this->options = array();
 
-		$this->_cursor = NULL;
+		$this->cursor = null;
 
 		return $this;
 	}
@@ -838,54 +730,46 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.4.0
 	 *
-	 * @param   boolean  $objects  Pass FALSE to get raw data
+	 * @param   boolean  $objects  Pass false to get raw data
 	 *
 	 * @return  array
 	 */
-	public function toArray($objects = TRUE)
+	public function toArray($objects = true)
 	{
 		$array = array();
 
 		// Iterate using wrapper
 		if ($objects)
-		{
 			foreach ($this as $key => $value)
-			{
 				$array[$key] = $value;
-			}
-		}
 		// Iterate bypassing wrapper
-		else
-		{
+		else {
 			$this->rewind();
 
-			foreach ($this->_cursor as $key => $value)
-			{
+			foreach ($this->cursor as $key => $value)
 				$array[$key] = $value;
-			}
 		}
 
 		return $array;
 	}
 
 	/**
-	 * Get the corresponding MongoCollection instance
+	 * Get the corresponding \MongoCollection instance
 	 *
-	 * @return  MongoCollection
+	 * @return  \MongoCollection
 	 *
-	 * @uses    Mango::db
+	 * @uses    \Gleez\Mango\Client::db
 	 */
 	public function getCollection()
 	{
-		$name = "{$this->_db}.{$this->_name}.{$this->_gridFS}";
+		$name = "{$this->db}.{$this->name}.{$this->gridFS}";
 
-		if ( ! isset(self::$_collections[$name]))
-		{
-			$method = ($this->_gridFS ? 'getGridFS' : 'selectCollection');
-			self::$_collections[$name] = $this->getMangoInstance()->getDb()->$method($this->_name);
+		if (!isset(static::$collections[$name])) {
+			$method = ($this->gridFS ? 'getGridFS' : 'selectCollection');
+			static::$collections[$name] = $this->getClientInstance()->getDb()->$method($this->name);
 		}
 
-		return self::$_collections[$name];
+		return static::$collections[$name];
 	}
 
 	/**
@@ -893,17 +777,16 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.6.0
 	 *
-	 * @return  Mango_Document
+	 * @return  \Gleez\Mango\Document
 	 */
 	public function getModel()
 	{
-		if ( ! isset(self::$_models[$this->_model]))
-		{
-			$model = $this->_model;
-			self::$_models[$this->_model] = new $model;
+		if (!isset(static::$models[$this->model])) {
+			$model = $this->model;
+			static::$models[$this->model] = new $model;
 		}
 
-		return self::$_models[$this->_model];
+		return static::$models[$this->model];
 	}
 
 	/**
@@ -911,14 +794,15 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0  Initial Mango_Collection::getDB method
 	 * @since   0.7.0  Renamed to Mango_Collection::getMangoInstance
+	 * @since   1.0.0  Renamed to \Gleez\Mango\Collection::getClientInstance
 	 *
-	 * @return  Mango
+	 * @return  \Gleez\Mango\Client
 	 *
-	 * @uses    Mango::instance
+	 * @uses    \Gleez\Mango\Client::instance
 	 */
-	public function getMangoInstance()
+	public function getClientInstance()
 	{
-		return Mango::instance($this->_db);
+		return Client::instance($this->db);
 	}
 
 	/**
@@ -933,51 +817,67 @@ class Mango_Collection implements Iterator, Countable {
 	public function getOption($name)
 	{
 		if ($name == 'query')
-		{
-			return $this->_query;
-		}
-		if ($name == 'fields')
-		{
-			return $this->_fields;
-		}
+			return $this->query;
 
-		return isset($this->_options[$name]) ? $this->_options[$name] : NULL;
+		if ($name == 'fields')
+			return $this->fields;
+
+		return isset($this->options[$name]) ? $this->options[$name] : null;
 	}
 
 	/**
-	 * Access the MongoCursor instance directly, triggers a load if there is none
+	 * Get a cursor query before executing
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
+	 */
+	public function getQuery()
+	{
+		return $this->query;
+	}
+
+	/**
+	 * Get a cursor fields before executing query
+	 *
+	 * @since  1.0.0
+	 *
+	 * @return array
+	 */
+	public function getFields()
+	{
+		return $this->fields;
+	}
+
+	/**
+	 * Access the \MongoCursor instance directly, triggers a load if there is none
 	 *
 	 * @since   0.3.0
 	 *
-	 * @return  MongoCursor
+	 * @return  \MongoCursor
 	 */
 	public function getCursor()
 	{
-		$this->_cursor OR $this->load();
+		$this->cursor || $this->load();
 
-		return $this->_cursor;
+		return $this->cursor;
 	}
 
 	/**
 	 * Translate a field name according to aliases defined in the model if they exist
 	 *
 	 * @since   0.4.0  getFieldName($name)  Introduced
-	 * @since   0.6.0  getFieldName($name)  Used $this->_model
+	 * @since   0.6.0  getFieldName($name)  Used $this->model
 	 *
 	 * @param   string  $name  Field name
 	 *
 	 * @return  string
 	 *
-	 * @uses    Mango_Document::getFieldName
+	 * @uses    \Gleez\Mango\Document::getFieldName
 	 */
 	public function getFieldName($name)
 	{
-		if ( ! $this->_model)
-		{
-			return $name;
-		}
-
-		return $this->getModel()->getFieldName($name);
+		return $this->model ? $this->getModel()->getFieldName($name) : $name;
 	}
 
 	/**
@@ -986,10 +886,10 @@ class Mango_Collection implements Iterator, Countable {
 	 * [!!] The `collStats` command returns a variety of storage
 	 *      statistics for a given collection.
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * <code>
 	 * $output = $collection->getStats();
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.0
 	 *
@@ -998,8 +898,8 @@ class Mango_Collection implements Iterator, Countable {
 	 */
 	public function getStats($scale = 1024)
 	{
-		return $this->getMangoInstance()->safeCommand(array(
-			'collStats' => $this->_name,
+		return $this->getClientInstance()->safeCommand(array(
+			'collStats' => $this->name,
 			'scale'     => $scale
 		));
 	}
@@ -1010,35 +910,34 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.6.0
 	 *
-	 * @return array|Mango_Document
+	 * @return array|\Gleez\Mango\Document
+	 *
+	 * @uses   \Profiler::start
+	 * @uses   \Profiler::stop
 	 */
 	public function getNext()
 	{
-		if($this->getMangoInstance()->profiling AND ( ! $this->_cursor OR ! $this->is_iterating()))
-		{
+		if($this->getClientInstance()->profiling && (!$this->cursor || !$this->isIterating())) {
 			$this->getCursor();
 
 			// Start the benchmark
-			$this->_benchmark = Profiler::start("Mongo_Database::{$this->_db}", $this->shellQuery());
+			$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", $this->shellQuery());
 
 			$this->getCursor()->next();
 
 			// Stop the benchmark
-			Profiler::stop($this->_benchmark);
+			Profiler::stop($this->benchmark);
 
 			// Clean benchmark token
-			$this->_benchmark = NULL;
-		}
-		else
-		{
+			$this->benchmark = null;
+		} else
 			$this->getCursor()->next();
-		}
 
 		return $this->current();
 	}
 
 	/**
-	 * Implement [MongoCursor::hasNext] to ensure that the cursor is loaded
+	 * Implement [\MongoCursor::hasNext] to ensure that the cursor is loaded
 	 *
 	 * @since   0.6.0
 	 *
@@ -1060,40 +959,28 @@ class Mango_Collection implements Iterator, Countable {
 	 * @param   string  $name   Option Name
 	 * @param   mixed   $value  Option value
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @throws  MongoCursorException
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function setOption($name, $value)
 	{
-		if ($name != 'batchSize' AND $name != 'timeout' AND $this->is_iterating())
-		{
-			throw new MongoCursorException(__('The cursor has already started iterating'));
-		}
+		if (strtolower($name) != 'batchsize' && strtolower($name) != 'timeout' && $this->isIterating())
+			throw new Exception('The cursor has already started iterating');
 
 		if ($name == 'query')
-		{
-			$this->_query = $value;
-		}
+			$this->query = $value;
 		elseif ($name == 'fields')
-		{
-			$this->_fields = $value;
-		}
-		else
-		{
-			if ($this->_cursor)
-			{
+			$this->fields = $value;
+		else {
+			if ($this->cursor) {
 				if (is_null($value))
-				{
-					$this->_cursor->$name();
-				}
+					$this->cursor->$name();
 				else
-				{
-					$this->_cursor->$name($value);
-				}
+					$this->cursor->$name($value);
 			}
 
-			$this->_options[$name] = $value;
+			$this->options[$name] = $value;
 		}
 
 		return $this;
@@ -1106,18 +993,16 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   string  $name  Option name
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @throws  MongoCursorException
+	 * @throws  \Gleez\Mango\Exception
 	 */
 	public function unsetOption($name)
 	{
-		if ($this->is_iterating())
-		{
-			throw new MongoCursorException(__('The cursor has already started iterating'));
-		}
+		if ($this->isIterating())
+			throw new Exception('The cursor has already started iterating');
 
-		unset($this->_options[$name]);
+		unset($this->options[$name]);
 
 		return $this;
 	}
@@ -1125,8 +1010,8 @@ class Mango_Collection implements Iterator, Countable {
 	/**
 	 * See if a cursor has an option to be set before executing the query
 	 *
-	 * Example:
-	 * ~~~
+	 * Example:<br>
+	 * </code>
 	 * // Set option
 	 * $collection->limit(50)->skip(100);
 	 *
@@ -1135,7 +1020,7 @@ class Mango_Collection implements Iterator, Countable {
 	 * {
 	 *     // some actions...
 	 * }
-	 * ~~~
+	 * </code>
 	 *
 	 * @since   0.4.4
 	 *
@@ -1146,11 +1031,9 @@ class Mango_Collection implements Iterator, Countable {
 	public function hasOption($name)
 	{
 		if (is_string($name))
-		{
-			return array_key_exists($name, $this->_options);
-		}
+			return array_key_exists($name, $this->options);
 
-		return FALSE;
+		return false;
 	}
 
 	/**
@@ -1166,7 +1049,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   mixed  $index  Index to use for the query
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function hint($index)
 	{
@@ -1185,9 +1068,9 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   boolean|integer  $liveForever  If the cursor should be immortal [Optional]
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
-	public function immortal($liveForever = TRUE)
+	public function immortal($liveForever = true)
 	{
 		return $this->setOption('immortal', (bool)$liveForever);
 	}
@@ -1201,7 +1084,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   integer  $num  The number of results to return
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function limit($num)
 	{
@@ -1217,7 +1100,7 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param  integer  $num  The number of results to skip
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function skip($num)
 	{
@@ -1233,9 +1116,9 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   boolean|integer  $okay  If it is okay to query the secondary [Optional]
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
-	public function slaveOkay($okay = TRUE)
+	public function slaveOkay($okay = true)
 	{
 		return $this->setOption('slaveOkay', (bool)$okay);
 	}
@@ -1252,11 +1135,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.5.0
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function snapshot()
 	{
-		return$this->setOption('snapshot', NULL);
+		return$this->setOption('snapshot', null);
 	}
 
 	/**
@@ -1264,18 +1147,18 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * Sets whether this cursor will be left open after fetching the last results.
 	 *
-	 * By default, MongoDB will automatically close a cursor when the client has
+	 * By default, \MongoDB will automatically close a cursor when the client has
 	 * exhausted all results in the cursor. However, for capped collections you
 	 * may use a Tailable Cursor that remains open after the client exhausts the
 	 * results in the initial cursor.
 	 *
 	 * @since   0.4.5
 	 *
-	 * @param   boolean  $tail  If TRUE will be sets tailable option
+	 * @param   boolean  $tail  If true will be sets tailable option
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
-	public function tailable($tail = TRUE)
+	public function tailable($tail = true)
 	{
 		return $this->setOption('tailable', $tail);
 	}
@@ -1288,44 +1171,32 @@ class Mango_Collection implements Iterator, Countable {
 	 * @param   array|string    $fields  A sort criteria or a key (requires corresponding $value)
 	 * @param   string|integer  $dir     The direction if $fields is a key [Optional]
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 *
-	 * @throws  MongoCursorException
+	 * @throws  \Gleez\Mango\Exception
 	 */
-	public function sort($fields, $dir = self::ASC)
+	public function sort($fields, $dir = MongoCollection::ASCENDING)
 	{
-		if ($this->_cursor)
-		{
-			throw new MongoCursorException(__('The cursor has already started iterating'));
-		}
+		if ($this->cursor)
+			throw new Exception('The cursor has already started iterating');
 
-		if ( ! isset($this->_options['sort']))
-		{
+		if (!isset($this->options['sort']))
 			// Clear current sort option
-			$this->_options['sort'] = array();
-		}
+			$this->options['sort'] = array();
 
-		if ( ! is_array($fields))
-		{
+		if (!is_array($fields))
 			$fields = array($fields => $dir);
-		}
 
 		// Translate field aliases
-		foreach ($fields as $field => $dir)
-		{
-			if (is_string($dir))
-			{
-				if (strtolower($dir) == 'asc' OR $dir == '1')
-				{
-					$dir = self::ASC;
-				}
+		foreach ($fields as $field => $dir) {
+			if (is_string($dir)) {
+				if (strtolower($dir) == 'asc' || $dir == '1')
+					$dir = MongoCollection::ASCENDING;
 				else
-				{
-					$dir = self::DESC;
-				}
+					$dir = MongoCollection::DESCENDING;
 			}
 
-			$this->_options['sort'][$this->getFieldName($field)] = $dir;
+			$this->options['sort'][$this->getFieldName($field)] = $dir;
 		}
 
 		return $this;
@@ -1338,11 +1209,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   string  $field  The field name to sort by
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function sortAsc($field)
 	{
-		return $this->sort($field, self::ASC);
+		return $this->sort($field, MongoCollection::ASCENDING);
 	}
 
 	/**
@@ -1352,11 +1223,11 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @param   string  $field  The field name to sort by
 	 *
-	 * @return  Mango_Collection
+	 * @return  \Gleez\Mango\Collection
 	 */
 	public function sortDesc($field)
 	{
-		return $this->sort($field, self::DESC);
+		return $this->sort($field, MongoCollection::DESCENDING);
 	}
 
 	/**
@@ -1364,15 +1235,15 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Iterator::valid]
+	 * See [\Iterator::valid]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.valid.php MongoCursor::valid
+	 * @link    http://www.php.net/manual/en/mongocursor.valid.php \MongoCursor::valid
 	 *
 	 * @return  boolean
 	 */
 	public function valid()
 	{
-		return $this->_cursor->valid();
+		return $this->cursor->valid();
 	}
 
 	/**
@@ -1380,41 +1251,33 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Iterator::rewind]
+	 * See [\Iterator::rewind]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.rewind.php MongoCursor::rewind
+	 * @link    http://www.php.net/manual/en/mongocursor.rewind.php \MongoCursor::rewind
 	 *
-	 * @uses    Profiler::start
-	 * @uses    Profiler::stop
-	 * @uses    Mango::$profiling
+	 * @throws  \Gleez\Mango\Exception
+	 *
+	 * @uses    \Profiler::start
+	 * @uses    \Profiler::stop
+	 * @uses    \Gleez\Mango\Client::$profiling
 	 */
 	public function rewind()
 	{
-		try
-		{
-			if ($this->getMangoInstance()->profiling)
-			{
-				$this->_benchmark = Profiler::start("Mango::{$this->_db}", $this->shellQuery());
-			}
+		try {
+			if ($this->getClientInstance()->profiling)
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", $this->shellQuery());
 
 			$this->getCursor()->rewind();
 
-			if ($this->_benchmark)
-			{
+			if ($this->benchmark) {
 				// Stop the benchmark
-				Profiler::stop($this->_benchmark);
+				Profiler::stop($this->benchmark);
 
 				// Clean benchmark token
-				$this->_benchmark = NULL;
+				$this->benchmark = null;
 			}
-		}
-		catch(MongoCursorException $e)
-		{
-			throw new MongoCursorException("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
-		}
-		catch(MongoException $e)
-		{
-			throw new MongoException("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
+		} catch(\Exception $e) {
+			throw new Exception("{$e->getMessage()}: {$this->shellQuery()}", $e->getCode());
 		}
 	}
 
@@ -1423,13 +1286,13 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Iterator::next]
+	 * See [\Iterator::next]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.next.php MongoCursor::next
+	 * @link    http://www.php.net/manual/en/mongocursor.next.php \MongoCursor::next
 	 */
 	public function next()
 	{
-		$this->_cursor->next();
+		$this->cursor->next();
 	}
 
 	/**
@@ -1437,14 +1300,14 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Iterator::key]
+	 * See [\Iterator::key]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.key.php MongoCursor::key
+	 * @link    http://www.php.net/manual/en/mongocursor.key.php \MongoCursor::key
 	 * @return  string
 	 */
 	public function key()
 	{
-		return $this->_cursor->key();
+		return $this->cursor->key();
 	}
 
 	/**
@@ -1452,87 +1315,89 @@ class Mango_Collection implements Iterator, Countable {
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Iterator::current]
+	 * See [\Iterator::current]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.current.php MongoCursor::current
+	 * @link    http://www.php.net/manual/en/mongocursor.current.php \MongoCursor::current
 	 *
 	 * @return  array
 	 */
 	public function current()
 	{
-		return $this->_cursor->current();
+		$data = $this->cursor->current();
+
+		if (isset($this->benchmark)) {
+			// Stop the benchmark
+			Profiler::stop($this->benchmark);
+
+			// Clean benchmark token
+			$this->benchmark = null;
+		}
+
+		if (!$this->model)
+			return $data;
+
+		$model = clone $this->model;
+
+		return $model->loadValues($data ?: array(), true);
 	}
 
 	/**
 	 * Count the results from the query
 	 *
-	 * + Count the results from the current query: pass FALSE for "all" results (disregard limit/skip)
+	 * + Count the results from the current query: pass false for "all" results (disregard limit/skip)
 	 * + Count results of a separate query: pass an array or JSON string of query parameters
 	 *
 	 * @since   0.3.0
 	 *
-	 * See [Countable::count]
+	 * See [\Countable::count]
 	 *
-	 * @link    http://www.php.net/manual/en/mongocursor.count.php MongoCursor::count
+	 * @link    http://www.php.net/manual/en/mongocursor.count.php \MongoCursor::count
 	 *
 	 * @param   boolean|array|string  $query
 	 *
 	 * @return  integer
 	 *
-	 * @throws  Exception
+	 * @throws  \Exception
 	 *
-	 * @uses    JSON::encodeMongo
-	 * @uses    JSON::decode
-	 * @uses    Profiler::start
-	 * @uses    Profiler::stop
+	 * @uses    \JSON::encodeMongo
+	 * @uses    \JSON::decode
+	 * @uses    \Profiler::start
+	 * @uses    \Profiler::stop
 	 */
-	public function count($query = TRUE)
+	public function count($query = true)
 	{
-		if (is_bool($query))
-		{
+		if (is_bool($query)) {
 			// Profile count operation for cursor
-			if ($this->getMangoInstance()->profiling)
-			{
-				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
-			}
+			if ($this->getClientInstance()->profiling)
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", $this->shellQuery() . ".count(" . JSON::encodeMongo($query) .")");
 
-			$this->_cursor OR $this->load(TRUE);
-
-			$count = $this->_cursor->count($query);
-		}
-		else
-		{
-			if (is_string($query) AND $query[0] == "{")
-			{
-				$query = JSON::decode($query, TRUE);
-			}
+			$this->cursor || $this->load();
+			$count = $this->cursor->count($query);
+		} else {
+			if (is_string($query) && $query[0] == "{")
+				$query = JSON::decode($query, true);
 
 			$query_trans = array();
 
 			foreach ($query as $field => $value)
-			{
 				$query_trans[$this->getFieldName($field)] = $value;
-			}
 
 			$query = $query_trans;
 
 			// Profile count operation for collection
-			if ($this->getMangoInstance()->profiling)
-			{
-				$this->_benchmark = Profiler::start("Mango_Collection::{$this->_db}", "db.{$this->_name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
-			}
+			if ($this->getClientInstance()->profiling)
+				$this->benchmark = Profiler::start(get_class($this->getClientInstance())."::{$this->db}", "db.{$this->name}.count(" . ($query ? JSON::encodeMongo($query) : '') .")");
 
 			$count = $this->getCollection()->count($query);
 		}
 
 		// End profiling count
-		if ($this->_benchmark)
-		{
+		if ($this->benchmark) {
 			// Stop the benchmark
-			Profiler::stop($this->_benchmark);
+			Profiler::stop($this->benchmark);
 
 			// Clean benchmark token
-			$this->_benchmark = NULL;
+			$this->benchmark = null;
 		}
 
 		return $count;

@@ -4,11 +4,11 @@ return array(
 	/**
 	 * Configuration Name
 	 *
-	 * You use this name when initializing a new Gleez Mango instance
+	 * Use this name when initializing a new \Gleez\Mango\Client instance
 	 *
 	 * Example:
 	 * ~~~
-	 * $db = Mango::instance('default');
+	 * $db = \Gleez\Mango\Client::instance('default');
 	 * ~~~
 	 *
 	 * @var array
@@ -22,7 +22,7 @@ return array(
 		 */
 		'connection' => array(
 			/**
-			 * The following options are available for Mango:
+			 * The following options are available for \Gleez\Mango\Client:
 			 *
 			 * string  hostnames  Server hostname, or socket. Separate multiple hosts by commas.
 			 *                    FALSE and '' are identical. Optional value
@@ -37,10 +37,10 @@ return array(
 				 *                            The name "system" is also reserved.
 				 * integer  connectTimeoutMS  Default timeout. It is measured in milliseconds.
 				 * boolean  connect           Connect to DB on creation connection. How do you want to deal with
-				 *                            connection errors. TRUE - Mango::instance fails and an exception is
-				 *                            thrown. Next call to Mango::instance will try to connect again.
-				 *                            FALSE - Exception is thrown when you run first DB action.
-				 *                            Next call to Mango::instance will return same object.
+				 *                            connection errors. TRUE — \Gleez\Mango\Client::instance fails and an
+				 *                            exception is thrown. Next call to \Gleez\Mango\Client::instance will try
+				 *                            to connect again. FALSE — Exception is thrown when you run first DB action.
+				 *                            Next call to \Gleez\Mango\Client::instance will return same object.
 				 * string   username          Database username. FALSE and '' are identical.
 				 * string   password          Database password. FALSE and '' are identical.
 				 * string   replicaSet        The name of the replica set to connect to. FALSE and '' are identical
@@ -48,6 +48,8 @@ return array(
 				 *                            the query to MongoDB and piggy back a getLastError command (GLE) with
 				 *                            the Write Concern option at the same time.
 				 *                            See http://www.php.net/manual/en/mongo.writeconcerns.php
+				 * int      wtimeout          The number of milliseconds to wait for \MongoDB::$w replications to take
+				 *                            place.
 				 */
 				'db'               => 'gleez', // Required
 				'connectTimeoutMS' => 10000,   // Optional
@@ -56,21 +58,22 @@ return array(
 				'password'         => FALSE,   // Optional
 				'replicaSet'       => FALSE,   // Optional
 				'w'                => 1,       // Optional
+				'wtimeout'         => 10000,   // Optional
 			),
 		),
 		/**
 		 * Whether or not to use profiling.
-		 * Note: [Gleez::$profiling] should be enabled.
+		 * Note: [\Gleez::$profiling] should be enabled.
 		 *
 		 * boolean  profiling If enabled, profiling data will be shown through Gleez profiler library
 		 */
 		'profiling' => TRUE, // Optional
 
 		/**
-		 * You can override the class name for the MongoCollection wrapper
-		 * By default using [Mango::$_collection_class] it [Mango_Collection]
+		 * You can override the class name for the \MongoCollection wrapper
+		 * By default using [\Gleez\Mango\Client::collectionClass] it [\Gleez\Mango\Collection]
 		 *
-		 * string  collection  The class name for the MongoCollection wrapper
+		 * string  collection  The class name for the \MongoCollection wrapper
 		 */
 		'collection' => '', // Optional
 	)
