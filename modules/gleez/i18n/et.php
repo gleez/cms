@@ -1,6 +1,6 @@
 <?php
 /**
- * Localized strings into Estonian
+ * Translation into Estonian
  *
  * @package   Gleez\I18n
  * @author    Sergei Moroz <sergeimoroz@gmail.com>
@@ -382,8 +382,6 @@ return array(
 	'Failed to autodetect of Locale!' => 'Ei suutnud automaatselt tuvastada lokaali!',
 	'Failed to load Gleez Cache group: :group' => 'Ei suutnud laadida konfiguratsiooni gruppi Gleez Cache: :group',
 	'Failed to load locale: :locale' => 'Ei suutnud laadida lokaali: :locale',
-	'Failed to load Mango config' => 'Ei suutnud laadida Mango konfiguratsiooni',
-	'Failed to load Mango config group: :group' => 'Ei suutnud laadida Mango konfiguratsiooni gruppi :group',
 	'Fakaofo' => 'Fakaofo',
 	'Faroe' => 'Faroe',
 	'Favicon' => 'Veebi märk',
@@ -598,8 +596,6 @@ return array(
 	'Menu Items order has been saved.' => 'Menüü puntide kord on edukalt salvestatud.',
 	'Menus' => 'Menüü',
 	'Merida' => 'Merida',
-	"Method doesn't exist: :method" => 'Meetod ei ole leitud: :method',
-	'Method :method not found' => 'Meetod :method ei ole leitud',
 	'Metlakatla' => 'Metlakatla',
 	'Mexico City' => 'Mehhiko',
 	'Midway' => 'Midway',
@@ -910,11 +906,9 @@ return array(
 	'The :spl extension is either not loaded or not compiled in.' => 'Andmebaas :spl pole laetud, või PHP on koostatud ilma tema toeta.',
 	'The ability to create pages' => 'Lehekülgede koostamise võimalus',
 	'The admin menu provides quick access to all of :cms_url\'s options and settings. Here are a few of the most used options to get you started.' => 'Administraatori menüü pakub kiiret juurdepääsu kõikidele võimalustele ja sätetele :cms_url. Siin on mõned enamkasutatavatest võimalustest mis aitavad teile alustada.',
-	'The code must be a string or an instance of MongoCode' => 'Kood peab olema riba või MongoCode eksemplaar',
 	'The configured :application directory does not exist or does not contain required files.' => 'Sätetud kataloog :application rakendusele pole olemas või ei sisalda vajatavaid faile.',
 	'The configured :modules directory does not exist or does not contain required files.' => 'Sätetud kataloog :modules mooduli jaoks pole olemas või ei sisalda vajatavaid faile.',
 	'The configured :system directory does not exist or does not contain required files.' => 'Sätetud kataloog :system süsteemi jaoks pole olemas või ei sisalda vajatavaid faile.',
-	'The cursor has already started iterating' => 'Kursor juba alustas iteratsiooni',
 	'The date :param1 does not exist' => 'Andmeid :param1 pole olemas',
 	'The date :param1 is invalid' => ':param1 &mdash; andmed ebakorrektsed',
 	'The delete has been performed!' => 'Edukalt kustutatud!',
@@ -925,7 +919,6 @@ return array(
 	'The name :param1 does not exist' => 'Nimetus :param1 pole leitud',
 	'The name :param1 you used belongs to a registered user' => 'Teie kasutatav nimetus :param1 kuulub registreeeritud kasutajale',
 	'The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.' => 'Master menüü on keskkond menüü sätestamiseks. Menüü on hierarhiline viidete kogu, mis võivas olla kui sisemised, kui ka välised veebilehe kohta, ja enamjaolt, on kasutatavad navigeerimiseks.',
-	'The php-mongo extension is not installed or is disabled.' => 'php-mongo pole installitud või on väljalülitatud.',
 	'The publish date :param1 is invalid' => 'Publikatsiooni kuupäev :param1 on vale',
 	'The security answer was wrong.' => 'Kontrollküsimuse vastus on vale.',
 	'The security code can\'t be empty.' => 'Turvakood ei saa olla tühi.',
@@ -977,7 +970,6 @@ return array(
 	'Unavailable' => 'Pole saadaval',
 	"Unexpected bad things will happen if you don't read this!" => "Võib juhtuda ootamatuid ja vastikuid asju, kui Te ei loe seda!",
 	'Updated' => 'Uuendatud',
-	'Unable to connect to MongoDB server. MongoDB said :message' => 'Ei suutnud liituda MongoDB serveri juurde. MongoDB vastus :message',
 	'Unable to set the Cookie!' => 'Ei suutnud installida cookie!',
 	'Unauthorised access attempt to action :perm.' => 'Lubamatu juurdepääsu katse õigustele :perm.',
 	'Unknown JSON decoding error' => 'Tundmatu dekodeerimise viga JSON',

@@ -732,7 +732,7 @@ class HTML {
 			case 'critical':
 			case 'error':
 			case 'emergency':
-				$status = 'important';
+				$status = 'danger';
 			break;
 			case 'alert':
 				$status = 'warning';

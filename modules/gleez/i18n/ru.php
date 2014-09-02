@@ -1,9 +1,9 @@
 <?php
 /**
- * Localized strings into Russian
+ * Translation into Russian
  *
  * @package   Gleez\I18n
- * @author    Sergey Yakovlev <sadhooklay@gmail.com>
+ * @author    Serghei Iakovlev <sadhooklay@gmail.com>
  * @copyright (c) 2011-2014 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
@@ -241,7 +241,6 @@ return array(
 	'Documentation for Kohana core/system' => 'Документация для ядра и системы Kohana',
 	'Draft' => 'Черновик',
 	'draft' => 'черновик',
-	'Driver version >= :ver required' => 'Требуемая верися драйвера >= :ver',
 	// E
 	'E-mail address' => 'E-mail адрес',
 	'Edit' => 'Изменить',
@@ -284,8 +283,6 @@ return array(
 	'Failed to create directory %dir for uploading picture.' => 'Не удалось создать каталог %dir для загрузки изображения.',
 	'Failed to load Gleez Cache group: :group' => 'Не удалось загрузить конфигурационную группу Gleez Cache: :group',
 	'Failed to load locale: :locale' => 'Не удалось загрузить локаль: :locale',
-	'Failed to load Mango config' => 'Не удалось загрузить конфигурацию для Mango',
-	'Failed to load Mango config group: :group' => 'Mango не удалось загрузить конфигурационную группу :group',
 	'Favicon' => 'Значок сайта',
 	'Feed images require a link, url, and title' => 'Изображения в подписках должны содержать ссылку на сайт, ссылку на расположение самой картинки и подпись',
 	'Feed lifetime (min.)' => 'Время жизни подписки на канал (в минутах)',
@@ -388,8 +385,6 @@ return array(
 	'Menu Items order has been saved.' => 'Порядок пунктов меню успешно сохранён.',
 	'Menus' => 'Меню',
 	'Memory Limit' => 'Лимит памяти',
-	"Method doesn't exist: :method" => 'Метод не найден: :method',
-	'Method :method not found' => 'Метод :method не найден',
 	'Mission' => 'Миссия',
 	'Minute' => 'Минута',
 	'Module' => 'Модуль',
@@ -596,11 +591,9 @@ return array(
 	'The ability to create pages' => 'Возможность создавать страницы',
 	'The admin menu provides quick access to all of :cms_url\'s options and settings. Here are a few of the most used options to get you started.' => 'Меню администратора предоставляет быстрый доступ ко всем опциям и настройкам :cms_url. Вот некоторые из наиболее часто используемых опций которые помогут вам начать.',
 	'The bottom of the main content' => 'Низ основного содержимого страницы',
-	'The code must be a string or an instance of MongoCode' => 'Код должен быть строкой или экземпляром MongoCode',
 	'The configured :application directory does not exist or does not contain required files.' => 'Настроенный каталог для приложения :application не существует или не содержит требуемых файлов.',
 	'The configured :modules directory does not exist or does not contain required files.' => 'Настроенный каталог для модулей :modules не существует или не содержит требуемых файлов.',
 	'The configured :system directory does not exist or does not contain required files.' => 'Настроенный каталог для системы :system не существует или не содержит требуемых файлов.',
-	'The cursor has already started iterating' => 'Курсор уже начал итерацию',
 	'The date :param1 does not exist' => 'Дата :param1 не существует',
 	'The date :param1 is invalid' => ':param1 &mdash; не корректная дата',
 	'The delete has been performed!' => 'Удаление успешно выполнено!',
@@ -611,7 +604,6 @@ return array(
 	'The name :param1 does not exist' => 'Имя :param1 не найдено',
 	'The name :param1 you used belongs to a registered user' => 'Имя которое вы используете :param1 принадлежит зарегистрированному пользователю',
 	'The Menu wizard provides an interface for managing menus. A menu is a hierarchical collection of links, which can be within or external to the site, generally used for navigation.' => 'Мастер меню предоставляет интерфейс для управления меню. Меню представляет собой иерархическую коллекцию ссылок, которые могут быть как внутренними, так и внешними по отношению к сайту, и как правило, используется для навигации.',
-	'The php-mongo extension is not installed or is disabled.' => 'Расширение php-mongo не установлено или выключено.',
 	'The publish date :param1 is invalid' => 'Дата публикации :param1 не верная',
 	'The security answer was wrong.' => 'Защитный код не верный.',
 	'The security code can\'t be empty.' => 'Защитный код не может быть пустым.',
@@ -653,7 +645,6 @@ return array(
 	'Unavailable' => 'Не доступно',
 	"Unexpected bad things will happen if you don't read this!" => "Могут произойти неожиданные неприятные вещи, если вы не прочтёте это!",
 	'Updated' => 'Обновлено',
-	'Unable to connect to MongoDB server. MongoDB said :message' => 'Не удалось подключиться к серверу MongoDB. Ответ MongoDB :message',
 	'Unable to set the Cookie!' => 'Не удалось установить cookie!',
 	'Unauthorised access attempt to action :perm.' => 'Попытка несанкционированного доступа к полномочиям :perm.',
 	'Unknown JSON decoding error' => 'Неопределимая ошибка декодирования JSON',
@@ -700,7 +691,7 @@ return array(
 	'Year' => 'Год',
 	'Yes' => 'Да',
 	'You are using an :out browser. Please :url or :frame to improve your experience' => 'Вы используете :out браузер. Пожалуйста :url или :frame чтоб расширить возможности браузера',
-	"You can't delete system menu!" => 'Вы не можете удалять системное меню!',
+	"You can't delete system menu!" => 'Вы не можете удалить системное меню!',
 	'You must provide a username' => 'Вы должны ввести имя пользователя',
 	'You must provide mail body' => 'Вы должны ввести содержимое сообщения',
 	'You must provide mail subject' => 'Вы должны ввести тему сообщения',
