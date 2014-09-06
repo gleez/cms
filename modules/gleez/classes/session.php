@@ -433,7 +433,7 @@ abstract class Session {
 		catch (Exception $e)
 		{
 			// Log & ignore all errors when a write fails
-			Log::error(Kohana_Exception::text($e))->write();
+			Log::error(Gleez_Exception::text($e))->write();
 
 			return FALSE;
 		}
