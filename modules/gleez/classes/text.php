@@ -8,7 +8,7 @@
  *
  * @package    Gleez\Helpers
  * @author     Gleez Team
- * @version    1.3.2
+ * @version    1.3.3
  * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -672,13 +672,13 @@ class Text {
 	 * Example:
 	 * ~~~
 	 * // Returns "Chrome" when using Google Chrome
-	 * $browser = Text::user_agent(Request::$user_agent, 'browser');
+	 * $browser = Text::user_agent($agent, 'browser');
 	 * ~~~
 	 *
 	 * Multiple values can be returned at once by using an array:
 	 * ~~~
 	 * // Get the browser and platform with a single call
-	 * $info = Text::user_agent(Request::$user_agent, array('browser', 'platform'));
+	 * $info = Text::user_agent($agent, array('browser', 'platform'));
 	 * ~~~
 	 *
 	 * When using an array for the value, an associative array will be returned.
@@ -720,7 +720,7 @@ class Text {
 					// Set the browser name
 					$info['browser'] = $name;
 
-					if (preg_match('#'.preg_quote($search).'[^0-9.]*+([0-9.][0-9.a-z]*)#i', Request::$user_agent, $matches))
+					if (preg_match('#'.preg_quote($search).'[^0-9.]*+([0-9.][0-9.a-z]*)#i', $agent, $matches))
 					{
 						// Set the version number
 						$info['version'] = $matches[1];
