@@ -472,10 +472,9 @@ class Route {
 	 * }
 	 * ~~~
 	 *
-	 * @param   string  $uri  URI to match
+	 * @param   Request  $request  URI to match
 	 *
-	 * @return  array    Array on success
-	 * @return  boolean  FALSE on failure
+	 * @return  array|bool    Array on success, FALSE on failure
 	 */
 	public function matches(Request $request)
 	{

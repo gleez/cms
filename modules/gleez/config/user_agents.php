@@ -104,5 +104,8 @@ return array(
 		'fastcrawler'         => 'FastCrawler',
 		'infoseek'            => 'InfoSeek Robot 1.0',
 		'lycos'               => 'Lycos',
+		'bing'                => 'bingbot',
+		'googlewp'            => 'Google Web Preview', //Google Search Instant preview
+		'googlemobil'         => 'Googlebot-Mobile',
 	),
 );
