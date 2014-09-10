@@ -763,7 +763,7 @@ class Text {
 	 *
 	 * @return  string
 	 *
-	 * @throws  InvalidArgumentException
+	 * @throws  \Gleez_Exception
 	 */
 	public static function readable_list(array $words, $conjunction = 'and', $serial_comma = TRUE)
 	{
