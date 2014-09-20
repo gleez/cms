@@ -30,9 +30,9 @@ class Controller_Admin_Blog extends Controller_Admin {
 	public function after()
 	{
 		$this->_tabs =  array(
-			array('link' => Route::url('admin/blog', array('action' =>'index')), 'text' => __('Statistics')),
-			array('link' => Route::url('admin/blog', array('action' =>'list')), 'text' => __('List')),
-			array('link' => Route::url('admin/blog', array('action' =>'settings')),'text' => __('Settings')),
+			array('link' => Route::get('admin/blog')->uri(array('action' =>'index')), 'text' => __('Statistics')),
+			array('link' => Route::get('admin/blog')->uri(array('action' =>'list')), 'text' => __('List')),
+			array('link' => Route::get('admin/blog')->uri(array('action' =>'settings')),'text' => __('Settings')),
 		);
 
 		parent::after();
@@ -255,7 +255,7 @@ class Controller_Admin_Blog extends Controller_Admin {
 				Message::error(__('No bulk operation selected.'));
 				$this->request->redirect($redirect);
 			}
-			
+
 			if ( ! isset($post['blogs']) OR ( ! is_array($post['blogs']) OR ! count(array_filter($post['blogs']))))
 			{
 				Message::error(__('No blogs selected.'));
