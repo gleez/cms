@@ -33,7 +33,7 @@
 			<nav class="navbar-collapse collapse" role="navigation">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<?php echo HTML::anchor(URL::site('/user/profile'), User::getAvatar($_user, array('size' => 20)).' '.$_user->name); ?>
+						<?php echo HTML::anchor(Route::get('user')->uri(array('action' => 'profile')), User::getAvatar($_user, array('size' => 20)).' '.$_user->name); ?>
 					</li>
 					<li>
 						<a href="<?php echo URL::site('/user/logout'); ?>" title="<?php echo __('Sign Out') ?>"><i class="fa fa-fw fa-power-off"></i></a>
