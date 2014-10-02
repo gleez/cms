@@ -18,7 +18,7 @@
 						}
 						elseif ( ! User::is_guest())
 						{
-							echo HTML::anchor('message/send', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
+							echo HTML::anchor('message/compose', '<i class="fa fa-fw fa-envelope"></i> '.__('Send Message') .'<i class="fa fa-chevron-right list-group-chevron"></i>' , array('class' => 'list-group-item'));
 						}
 					?>
 					<?php if($enable_buddy): ?>
