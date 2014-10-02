@@ -85,11 +85,14 @@ return array(
 'Blog' =>'Blog',
 'Body' =>'Isi',
 'Bulk Actions' =>'Tindakan sekaligus',
-
+'Blog specific settings, default status, tags, comments etc.'=>'Setingan blog, status bawaan, tag, komentar, dll',
+'Blog entries per page'=>'Jumlah Tampilan blog/halaman',
+'Default Blog Status'=>'Status bawaan blog',
 // C
 'Cache Directory' =>'Direktori Cache',
 'Categories' =>'Kategori',
 'Category' =>'Kategori',
+'Categories are needed for grouping content. Categories are grouped by category groups. For example, a category group called "Fruit" would contain the categories "Apple" and "Banana".'=>'Kategori diperlukan untuk mengelompokkan konten. Kategori dikelompokkan oleh kelompok kategori. Sebagai contoh, sebuah kelompok kategori yang disebut "Buah" akan berisi kategori "Apel" dan "Pisang".',
 'Comment display mode' =>'Mode tampilan komentar',
 'Comment Order' =>'Order Komentar',
 'Comments' =>'Komentar',
@@ -113,7 +116,7 @@ return array(
 'Creating an Alias' =>'Membuat Alias',
 'Create pages' =>'Buat halaman',
 'Customize &mdash; :modules_url to add cool features!' =>'Sesuaikan &mdash; :modules_url untuk menambahkan fitur keren!',
-
+'Comma separated ip\'s for multiple addresses'=>'Pembatasan dengan koma untuk beberapa alamat',
 
 	// D
 'Database' =>'Basis Data',
@@ -142,7 +145,7 @@ return array(
 'Disabled' =>'Non-aktif',
 'Discussion' =>'Diskusi',
 'Draft' =>'Konsep',
-
+'Description for search engines'=>'Deskripsi untuk mesin pencari',
 	// E
 'E-mail address' =>'Alamat E-mail',
 'Edit' =>'Sunting',
@@ -177,8 +180,8 @@ return array(
 'Finish' =>'Selesai',
 'Filters' =>'Filter',
 'Filtered HTML' =>'Filtered HTML',
-'Flat list &mdash; expanded' =>'Daftar Flat &mdash; diperluas',
-'Flat list &mdash; collapsed' =>'Daftar Flat &mdash; runtuh',
+'Flat list &mdash; expanded' =>'Daftar Flat &mdash; Expand',
+'Flat list &mdash; collapsed' =>'Daftar Flat &mdash; Collapsed',
 'Footer' =>'Footer',
 'Forum' =>'Forum',
 'Front page' =>'Halaman depan',
@@ -216,6 +219,7 @@ return array(
 	// J
 'JavaScript Object Notation (JSON)' =>'JavaScript Object Notation (JSON)',
 	// K
+'Keywords for search engines'=>'Kata kunci untuk mesin pencari',
 	// L
 'Language' =>'Bahasa',
 'Language must be at least :param2 characters long' =>'panjang bahasa harus setidaknya :param2 karakter',
@@ -315,6 +319,8 @@ return array(
 'Post doesn\'t exists!' =>'Posting tidak ada!',
 'Post List' =>'Daftar Posting',
 'Posts' =>'Tulisan',
+'Posted In'=>'Di-posting di',
+'Created'=>'Dibuat pada',
 'Power up your Gleez CMS by adding more modules! Each module provides new cool features.' =>'Nyalakan Gleez CMS Anda dengan menambahkan modul lebih ! Setiap modul menyediakan fitur baru yang keren  .',
 'Powered by :gleez' =>'Didukung oleh :gleez',
 'Profile' =>'Profil',
@@ -366,7 +372,10 @@ return array(
 'Statistics' =>'Statistika',
 'Status' =>'Status',
 'Sticky this Post' =>'Sticky Posting ini',
+'Subject'=>'Judul',
 'Success!' =>'Sukses!',
+'Summary statistics of pages used on your site'=>'Total statistik halaman yang diggunakan di situs anda',
+'Summary statistics of blogs used on your site'=>'Total statistik artikel blog yang diggunakan di situs anda',
 'System Check' =>'sistem Periksa',
 'System Directory' =>'sistem Direktori',
 
@@ -422,6 +431,8 @@ return array(
 'The update has not been performed!' =>'Pembaruan belum dilakukan !',
 'The username :param1 does not exist' =>'Username :param1 tidak ada',
 'The Widget settings have been updated.' =>'Pengaturan Widget telah diperbarui .',
+'The main parameters of the site set up here. The following are all of the settings that define your site as a whole: settings which determine how your site behaves, how you interact with your site, and how the rest of the world interacts with your site.'
+=>'Parameter utama pengaturan situs anda disini. Berikut ini adalah semua pengaturan yang mendefinisikan situs Anda secara keseluruhan: pengaturan yang menentukan bagaimana situs Anda beraksi, bagaimana Anda berinteraksi dengan situs Anda, dan bagaimana seluruh dunia berinteraksi dengan situs Anda.',
 'There are no Comments.' =>'Tidak ada Komentar .',
 'There are no Formats.' =>'Tidak ada Format .',
 'There are no Menu Items.' =>'Tidak ada daftar menu.',
@@ -458,7 +469,9 @@ return array(
 'Version' =>'Versi',
 'View' =>'Lihat',
 'View, edit, and delete your site\'s pages.' =>'Melihat, mengedit, dan menghapus halaman situs Anda .',
-'View, edit, and delete your site\'s posts.' =>'Melihat, mengedit, dan menghapus tulisan di itus Anda.',
+'View, edit, and delete your site\'s posts.' =>'Melihat, mengedit, dan menghapus tulisan di situs Anda.',
+'View, edit, and delete your site\'s blog posts.' =>'Melihat, mengedit, dan menghapus blog di situs Anda.',
+'View, edit, and delete your site\'s comments.' =>'Melihat, mengedit, dan menghapus komentar di situs Anda.',
 'Vocabulary' =>'Kosa kata',
 'Vocabulary doesn\'t exists!' =>'Kosakata tidak ada!',
 
