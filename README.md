@@ -43,6 +43,7 @@ The available locale(s) in Gleez are:
 + Estonian
 + Chinese (Simplified)
 + Russian
++ Indonesian
 + Italian
 + Romanian
 
