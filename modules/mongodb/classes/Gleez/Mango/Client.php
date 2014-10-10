@@ -285,7 +285,7 @@ class Client
 	}
 
 	/**
-	 * Set the write concern for this database
+	 *  Set the write concern for this connection
 	 *
 	 * @since   1.0.0
 	 *
@@ -299,16 +299,16 @@ class Client
 	 */
 	public function setWriteConcern($w, $wtimeout = 10000)
 	{
-		if (!is_numeric($wtimeout))
+		if (!ctype_digit($wtimeout))
 			throw new Exception('Param $wtimeout must be numeric value.');
 
 		try {
 			$this->config['connection']['options']['w'] = $w;
-			$this->config['connection']['options']['wtimeout'] = (int) $wtimeout;
+			$this->config['connection']['options']['wTimeoutMS'] = (int) $wtimeout;
 
 			// PECL mongo >=1.5.0
 			if (version_compare(\MongoClient::VERSION, '1.5.0') >= 0)
-				MongoDB::setWriteConcern($w, (int) $wtimeout);
+				$this->connection->setWriteConcern($w, (int) $wtimeout);
 
 		} catch(Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());
@@ -318,7 +318,7 @@ class Client
 	}
 
 	/**
-	 * Get an array describing the write concern for this database
+	 * Get an array describing the write concern for this connection
 	 *
 	 * @since   1.0.0
 	 *
@@ -330,12 +330,12 @@ class Client
 	{
 		// PECL mongo >=1.5.0
 		if (version_compare(\MongoClient::VERSION, '1.5.0') >= 0) {
-			return MongoDB::getWriteConcern();
+			return $this->connection->getWriteConcern();
 		}
 
 		return array(
 			'w' => $this->config['connection']['options']['w'],
-			'wtimeout' => $this->config['connection']['options']['wtimeout'],
+			'wtimeout' => $this->config['connection']['options']['wTimeoutMS'],
 		);
 	}
 
@@ -373,8 +373,8 @@ class Client
 			// The default value is 1.
 			$config['connection']['options']['w'] = $this->w;
 
-		if (!isset($config['connection']['options']['wtimeout']) || !is_numeric($config['connection']['options']['wtimeout']))
-			$config['connection']['options']['wtimeout'] = $this->wtimeout;
+		if (!isset($config['connection']['options']['wTimeoutMS']) || !is_numeric($config['connection']['options']['wTimeoutMS']))
+			$config['connection']['options']['wTimeoutMS'] = $this->wtimeout;
 
 		return $config;
 	}
