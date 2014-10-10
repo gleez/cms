@@ -299,8 +299,9 @@ class Client
 	 */
 	public function setWriteConcern($w, $wtimeout = 10000)
 	{
-		if (!ctype_digit($wtimeout))
-			throw new Exception('Param $wtimeout must be numeric value.');
+		if (!is_int($wtimeout)) {
+                  throw new Exception('Param $wtimeout must be numeric value.');
+                }
 
 		try {
 			$this->config['connection']['options']['w'] = $w;
