@@ -48,7 +48,7 @@ return array(
 				 *                            the query to MongoDB and piggy back a getLastError command (GLE) with
 				 *                            the Write Concern option at the same time.
 				 *                            See http://www.php.net/manual/en/mongo.writeconcerns.php
-				 * int      wtimeout          The number of milliseconds to wait for \MongoDB::$w replications to take
+				 * int      wTimeoutMS        The number of milliseconds to wait for \MongoDB::$w replications to take
 				 *                            place.
 				 */
 				'db'               => 'gleez', // Required
@@ -58,7 +58,7 @@ return array(
 				'password'         => FALSE,   // Optional
 				'replicaSet'       => FALSE,   // Optional
 				'w'                => 1,       // Optional
-				'wtimeout'         => 10000,   // Optional
+				'wTimeoutMS'       => 10000,   // Optional
 			),
 		),
 		/**
