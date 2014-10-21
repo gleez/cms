@@ -43,7 +43,7 @@ abstract class Model {
 	{
 		if (FALSE !== strpos($name, '\\'))
 		{
-			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));;
+			$class = implode('\\', array_map('ucfirst', explode('\\', Text::reduce_slashes($name))));
 		}
 		else
 		{

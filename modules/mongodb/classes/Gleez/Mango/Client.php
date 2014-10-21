@@ -276,7 +276,7 @@ class Client
 	 * [!!] This is called automatically by [\Gleez\Mango\Client::__construct].
 	 *
 	 * - [\MongoClient::DEFAULT_HOST] is localhost
-	 * - [\MongoClient::DEFAULT_P||T] is 27017
+	 * - [\MongoClient::DEFAULT_PORT] is 27017
 	 */
 	protected function setDsn()
 	{
