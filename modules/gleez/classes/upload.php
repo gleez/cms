@@ -185,7 +185,8 @@ class Upload {
 			return TRUE;
 		}
 
-		$ext = File::getExt($file['name']);
+		$allowed = array_map('strtolower', $allowed);
+		$ext = strtolower(File::getExt($file['name']));
 
 		return in_array($ext, $allowed);
 	}
