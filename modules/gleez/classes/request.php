@@ -664,7 +664,7 @@ class Request implements HTTP_Request {
 	 * Determines if a file larger than the post_max_size has been uploaded
 	 *
 	 * PHP does not handle this situation gracefully on its own, so this method
-	 * helps to solve that problem.
+	 * helps to solve that issue.
 	 *
 	 * @return  boolean
 	 *
@@ -673,14 +673,8 @@ class Request implements HTTP_Request {
 	 */
 	public static function post_max_size_exceeded()
 	{
-		//return false for cli request
-		if(Kohana::$is_cli === TRUE) return FALSE;
-
-		// Make sure the request method is POST
-		if ( ! Request::current()->is_post())
-		{
-			return FALSE;
-		}
+		// Return false for cli request and Make sure the request method is POST
+		if(Kohana::$is_cli === TRUE || ! Request::current()->is_post()) return FALSE;
 
 		// Error occurred if method is POST, and content length is too long
 		return (Arr::get($_SERVER, 'CONTENT_LENGTH') > Request::get_post_max_size());
@@ -863,7 +857,7 @@ class Request implements HTTP_Request {
 		// Set post_max_size default value if it not exists
 		if (is_null($max_size))
 		{
-			Config::set('media', 'post_max_size', Request::DEFAULT_POST_MAX_SIZE);
+			Config::set('media', 'post_max_size', $max_size = static::DEFAULT_POST_MAX_SIZE);
 		}
 
 		// Get the post_max_size in bytes from php.ini
@@ -872,7 +866,7 @@ class Request implements HTTP_Request {
 		// Get the post_max_size in bytes from `config/media`
 		$gleez_settings = Num::bytes($max_size);
 
-		return ($gleez_settings <= $php_settings) ? $gleez_settings : $php_settings;
+		return min($gleez_settings, $php_settings);
 	}
 
 	/**
