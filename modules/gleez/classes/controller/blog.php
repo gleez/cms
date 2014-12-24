@@ -429,17 +429,18 @@ class Controller_Blog extends Template {
 			->set('title', $post->title);
 
 		// If deletion is not desired, redirect to post
-		if (isset($_POST['no']) AND $this->valid_post())
+		if ($this->valid_post('no'))
 		{
 			$this->request->redirect($post->url);
 		}
 
 		// If deletion is confirmed
-		if (isset($_POST['yes']) AND $this->valid_post())
+		if ($this->valid_post('yes'))
 		{
+			$title = $post->title;
+
 			try
 			{
-				$title = $post->title;
 				$post->delete();
 
 				Cache::instance('blog')->delete('blog-'.$id);
@@ -452,7 +453,7 @@ class Controller_Blog extends Template {
 				Log::error('Error occurred deleting blog id: :id, :msg',
 					array(':id' => $post->id, ':msg' => $e->getMessage())
 				);
-				Message::error(__('An error occurred deleting blog %post',array('%post' => $post->title)));
+				Message::error(__('An error occurred deleting blog %post',array('%post' => $title)));
 			}
 
 			$redirect = empty($destination) ? Route::get('blog')->uri(array('action' => 'list')) :

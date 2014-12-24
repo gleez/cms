@@ -253,10 +253,10 @@ class Num {
 	public static function bytes($size, $si = TRUE)
 	{
 		// Prepare the size
-		$size = trim( (string) $size);
+		$size = trim($size);
 
 		// Construct an OR list of byte units for the regex
-		$accepted = implode('|', array_keys(self::$byte_units));
+		$accepted = implode('|', array_keys(static::$byte_units));
 
 		// Construct the regex pattern for verifying the size format
 		$pattern = '/^([0-9]+(?:\.[0-9]+)?)('.$accepted.')?$/Di';
@@ -275,15 +275,15 @@ class Num {
 		// Find the actual unit, assume B if no unit specified
 		$unit = Arr::get($matches, 2, 'B');
 
-		if (array_key_exists($unit, self::$si_prefixes) AND $si === TRUE)
+		if (array_key_exists($unit, static::$si_prefixes) AND $si === TRUE)
 		{
 			// Convert the size into bytes using SI prefixes (decimal)
-			$bytes = $size * pow(10, self::$si_prefixes[$unit]);
+			$bytes = $size * pow(10, static::$si_prefixes[$unit]);
 		}
 		else
 		{
 			// Convert the size into bytes
-			$bytes = $size * pow(2, self::$byte_units[$unit]);
+			$bytes = $size * pow(2, static::$byte_units[$unit]);
 		}
 
 		return $bytes;
