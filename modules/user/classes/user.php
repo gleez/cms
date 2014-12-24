@@ -359,12 +359,12 @@ class User {
 	 */
 	public static function roles(ORM $user)
 	{
-		$roles = '<ul class="user-roles">';
+		$roles = '<div class="user-roles">';
 		foreach ($user->roles() as $role)
 		{
-			$roles .= '<li>'. Text::plain($role) . '</li>';
+			$roles .= '<p><span class="label label-default">'. Text::plain($role) . '</span></p>';
 		}
-		$roles .= '</ul>';
+		$roles .= '</div>';
 
 		return $roles;
 	}
