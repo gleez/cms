@@ -210,6 +210,10 @@ body.backend {
 	margin-top:20px;
 }
 
+.user-roles .label {
+	font-size: 95%;
+}
+
 @media (min-width: 768px) {
 	#backend .navbar-brand {
 		padding-top: 25px;
