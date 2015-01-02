@@ -10,8 +10,8 @@
  *
  * @package    Gleez\ORM
  * @author     Gleez Team
- * @version    1.1.1
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @version    1.1.2
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 
@@ -177,6 +177,12 @@ class ORM extends Model implements serializable {
 	 * @var string
 	 */
 	protected $_created_column = NULL;
+
+	/**
+	 * Soft-delete columns for deletion
+	 * @var string
+	 */
+	protected $_deleted_column = NULL;
 
 	/**
 	 * Auto-serialize and unserialize columns on get/set
@@ -1102,6 +1108,12 @@ class ORM extends Model implements serializable {
 	{
 		$this->_db_builder->from(array($this->_table_name, $this->_object_name));
 
+		if (is_array($this->_deleted_column))
+		{
+			$column = $this->_object_name.'.'.$this->_deleted_column['column'];
+			$this->_db_builder->where($column, '=', 0);
+		}
+
 		if ($multiple === FALSE)
 		{
 			// Only fetch 1 record
@@ -1568,6 +1580,46 @@ class ORM extends Model implements serializable {
 	}
 
 	/**
+	 * SoftDeletes a single record, ignoring relationships
+	 *
+	 * @return  ORM
+	 * @uses    Module::event
+	 * @uses    DB::update
+	 * @throws  Gleez_Exception
+	 */
+	protected function softDelete()
+	{
+		if ( ! $this->_loaded)
+		{
+			throw new Gleez_Exception('Cannot softDelete :model model because it is not loaded.', array(':model' => $this->_object_name));
+		}
+
+		if (is_array($this->_deleted_column))
+		{
+			// Use primary key value
+			$id = $this->pk();
+			$data = array();
+			Module::event($this->_object_name .'_presoftdelete', $this);
+
+			// Fill the deleted column
+			$column = $this->_deleted_column['column'];
+			$format = $this->_deleted_column['format'];
+
+			$data[$column] = $this->_object[$column] = ($format === TRUE) ? time() : date($format);
+		
+			// Update a single record mark as soft deleted
+			DB::update($this->_table_name)
+				->set($data)
+				->where($this->_primary_key, '=', $id)
+				->execute($this->_db);
+
+			Module::event($this->_object_name .'_softdelete', $this);
+		}
+
+		return $this->clear();
+	}
+
+	/**
 	 * Tests if this object has a relationship to a different model,
 	 * or an array of different models.
 	 *
@@ -1747,6 +1799,12 @@ class ORM extends Model implements serializable {
 		else
 		{
 			$sql->selectArgs(array(DB::expr('COUNT("*")'), 'records_found'));
+		}
+
+		if (is_array($this->_deleted_column))
+		{
+			$column = $this->_object_name.'.'.$this->_deleted_column['column'];
+			$sql->where($column, '=', 0);
 		}
 
 		$records = $sql->execute($this->_db)->get('records_found');
@@ -1937,6 +1995,11 @@ class ORM extends Model implements serializable {
 	public function updated_column()
 	{
 		return $this->_updated_column;
+	}
+
+	public function deleted_column()
+	{
+		return $this->_deleted_column;
 	}
 
 	public function validation()
