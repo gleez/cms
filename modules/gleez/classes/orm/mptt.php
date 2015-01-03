@@ -12,7 +12,7 @@
  * @author     Paul Banks
  * @author     Brotkin Ivan
  * @author     Brandon Summers
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class ORM_MPTT extends ORM {
@@ -399,15 +399,11 @@ class ORM_MPTT extends ORM {
 	/**
 	 * Deletes the current node and all descendants.
 	 *
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @throws  Gleez_Exception
 	 */
-	public function delete($query = NULL)
+	public function delete($soft = FALSE)
 	{
-		if ($query !== NULL)
-		{
-			throw new Gleez_Exception('ORM_MPTT does not support passing a query object to delete()');
-		}
-		
 		// Start the transaction
 		$this->_db->begin();
 
