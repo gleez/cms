@@ -10,7 +10,7 @@
  *
  * @package    Gleez\ORM
  * @author     Gleez Team
- * @version    1.1.2
+ * @version    1.2.0
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -675,7 +675,7 @@ class ORM extends Model implements serializable {
 		}
 		elseif (isset($this->_has_many[$column]))
 		{
-			$model = ORM::factory($this->_has_many[$column]['model']);
+			$model  = ORM::factory($this->_has_many[$column]['model']);
 
 			if (isset($this->_has_many[$column]['through']))
 			{
@@ -703,8 +703,8 @@ class ORM extends Model implements serializable {
 		}
 		elseif (isset($this->_has_many_keys[$column]))
 		{
-			$model = ORM::factory($this->_has_many_keys[$column]['model']);
-			$far_key = $this->_has_many_keys[$column]['far_key'];
+			$model     = ORM::factory($this->_has_many_keys[$column]['model']);
+			$far_key   = $this->_has_many_keys[$column]['far_key'];
 
 			foreach( $this->_has_many_keys[$column]['foreign_key'] as $fcol => $fvalue )
 			{
@@ -1524,12 +1524,13 @@ class ORM extends Model implements serializable {
 	/**
 	 * Deletes a single record or multiple records, ignoring relationships
 	 *
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @return  ORM
 	 * @uses    Module::event
 	 * @uses    DB::delete
 	 * @throws  Gleez_Exception
 	 */
-	public function delete()
+	public function delete($soft = FALSE)
 	{
 		if ( ! $this->_loaded)
 		{
@@ -1539,16 +1540,20 @@ class ORM extends Model implements serializable {
 		// Use primary key value
 		$id = $this->pk();
 
-		$this->before_delete($id);
-		Module::event($this->_object_name .'_predelete', $this);
+		$this->before_delete($id, $soft);
+		Module::event($this->_object_name .'_predelete', $this, $soft);
 
-		// Delete the object
-		DB::delete($this->_table_name)
-			->where($this->_primary_key, '=', $id)
-			->execute($this->_db);
+		if (is_array($this->_deleted_column) && $soft == TRUE)
+		{
+			$this->softDelete();
+		}
+		else
+		{
+			$this->forceDelete();
+		}
 
-		$this->after_delete($id);
-		Module::event($this->_object_name .'_delete', $this);
+		$this->after_delete($id, $soft);
+		Module::event($this->_object_name .'_delete', $this, $soft);
 
 		return $this->clear();
 	}
@@ -1558,23 +1563,56 @@ class ORM extends Model implements serializable {
 	 *
 	 * This does NOT destroy relationships that have been created with other objects.
 	 *
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard
 	 * @return  ORM
 	 * @uses    Module::event
 	 * @throws  Gleez_Exception
 	 */
-	public function delete_all()
+	public function delete_all($soft = FALSE)
 	{
 		if ($this->_loaded)
 		{
 			throw new Gleez_Exception('Cannot delete all :model model because it is loaded.', array(':model' => $this->_object_name));
 		}
 
-		Module::event($this->_object_name .'_pre_delete_all', $this);
+		Module::event($this->_object_name .'_pre_delete_all', $this, $soft);
 
-		$this->_build(ORM::DELETE);
-		$this->_db_builder->execute($this->_db);
+		if (is_array($this->_deleted_column) && $soft == TRUE)
+		{
 
-		Module::event($this->_object_name .'_delete_all', $this);
+		}
+		else
+		{
+			$this->_build(ORM::DELETE);
+			$this->_db_builder->execute($this->_db);
+		}
+
+		Module::event($this->_object_name .'_delete_all', $this, $soft);
+
+		return $this->clear();
+	}
+
+	/**
+	 * Deletes a single record from db, ignoring relationships
+	 *
+	 * @return  ORM
+	 * @uses    DB::delete
+	 * @throws  Gleez_Exception
+	 */
+	protected function forceDelete()
+	{
+		if ( ! $this->_loaded)
+		{
+			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
+		}
+
+		// Use primary key value
+		$id = $this->pk();
+
+		// Delete the object
+		DB::delete($this->_table_name)
+			->where($this->_primary_key, '=', $id)
+			->execute($this->_db);
 
 		return $this->clear();
 	}
@@ -1583,7 +1621,6 @@ class ORM extends Model implements serializable {
 	 * SoftDeletes a single record, ignoring relationships
 	 *
 	 * @return  ORM
-	 * @uses    Module::event
 	 * @uses    DB::update
 	 * @throws  Gleez_Exception
 	 */
@@ -1599,7 +1636,6 @@ class ORM extends Model implements serializable {
 			// Use primary key value
 			$id = $this->pk();
 			$data = array();
-			Module::event($this->_object_name .'_presoftdelete', $this);
 
 			// Fill the deleted column
 			$column = $this->_deleted_column['column'];
@@ -1608,12 +1644,10 @@ class ORM extends Model implements serializable {
 			$data[$column] = $this->_object[$column] = ($format === TRUE) ? time() : date($format);
 		
 			// Update a single record mark as soft deleted
-			DB::update($this->_table_name)
+			DB::update(array($this->_table_name, $this->_object_name))
 				->set($data)
 				->where($this->_primary_key, '=', $id)
 				->execute($this->_db);
-
-			Module::event($this->_object_name .'_softdelete', $this);
 		}
 
 		return $this->clear();
@@ -1638,6 +1672,8 @@ class ORM extends Model implements serializable {
 	 */
 	public function has($alias, $far_keys = NULL)
 	{
+		//$model = ORM::factory($this->_has_many[$alias]['model']);
+
 		if ($far_keys === NULL)
 		{
 			return (bool) DB::select(array(DB::expr('COUNT(*)'), 'records_found'))
@@ -1653,13 +1689,22 @@ class ORM extends Model implements serializable {
 
 		// Nothing to check if the model isn't loaded or we don't have any far_keys
 		if ( ! $far_keys OR ! $this->_loaded)
+		{
 			return FALSE;
+		}
 
-		$count = (int) DB::select(array(DB::expr('COUNT(*)'), 'records_found'))
+		$sql = DB::select(array(DB::expr('COUNT(*)'), 'records_found'))
 			->from($this->_has_many[$alias]['through'])
 			->where($this->_has_many[$alias]['foreign_key'], '=', $this->pk())
-			->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys)
-			->execute($this->_db)->get('records_found');
+			->where($this->_has_many[$alias]['far_key'], 'IN', $far_keys);
+
+/*		if (is_array($delColumn) && isset($delColumn['column']))
+		{
+			$hcolumn = $model->object_name().'.'.$delColumn['column'];
+			$sql->where($hcolumn, '=', 0);
+		}*/
+
+		$count = (int) $sql->execute($this->_db)->get('records_found');
 
 		// Rows found need to match the rows searched
 		return $count === count($far_keys);
@@ -2046,12 +2091,12 @@ class ORM extends Model implements serializable {
 	/**
 	 * Override this method to take actions before the document is deleted
 	 */
-	protected function before_delete($id){}
+	protected function before_delete($id, $soft = FALSE){}
 
 	/**
 	 * Override this method to take actions after the document is deleted
 	 */
-	protected function after_delete($id){}
+	protected function after_delete($id, $soft = FALSE){}
 
 	/**
 	 * Alias of and_where()

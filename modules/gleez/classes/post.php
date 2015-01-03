@@ -7,8 +7,8 @@
  *
  * @package    Gleez\Post
  * @author     Gleez Team
- * @version    1.1.1
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  *
  * @todo       This class does not do any permission checking
@@ -486,13 +486,14 @@ class Post extends ORM_Versioned {
 	/**
 	 * Deletes a single post or multiple posts, ignoring relationships
 	 *
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @return  Post
 	 * @throws  Gleez_Exception
 	 *
 	 * @uses    Cache::delete
 	 * @uses    Path::delete
 	 */
-	public function delete()
+	public function delete($soft = FALSE)
 	{
 		if ( ! $this->_loaded)
 		{
@@ -501,16 +502,23 @@ class Post extends ORM_Versioned {
 			);
 		}
 
-		//delete image if exists, to cleanup stale images
-		$this->_delete_image();
+		if (is_array($this->_deleted_column) && $soft == TRUE)
+		{
 
-		$source = $this->rawurl;
-		Cache::instance($this->type)->delete($this->type.'-'.$this->id);
-		parent::delete();
+		}
+		else
+		{
+			//delete image if exists, to cleanup stale images
+			$this->_delete_image();
 
-		// Delete the path aliases associated with this object
-		Path::delete(array('source' => $source));
-		unset($source);
+			$source = $this->rawurl;
+			Cache::instance($this->type)->delete($this->type.'-'.$this->id);
+			parent::delete($soft);
+
+			// Delete the path aliases associated with this object
+			Path::delete(array('source' => $source));
+			unset($source);
+		}
 
 		return $this;
 	}

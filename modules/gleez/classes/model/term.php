@@ -5,7 +5,7 @@
  * @package    Gleez\ORM\Terms
  * @author     Gleez Team
  * @version    1.1.0
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Term extends ORM_MPTT {
@@ -134,7 +134,7 @@ class Model_Term extends ORM_MPTT {
 	 * @throws  Gleez_Exception
 	 * @uses    Path::delete
 	 */
-	public function delete($query = NULL)
+	public function delete($soft = FALSE)
 	{
 		if ( ! $this->_loaded)
 		{
@@ -143,13 +143,20 @@ class Model_Term extends ORM_MPTT {
 			);
 		}
 
-		$source = $this->rawurl;
+		if (is_array($this->_deleted_column) && $soft == TRUE)
+		{
 
-		parent::delete($query);
+		}
+		else
+		{
+			$source = $this->rawurl;
 
-		// Delete the path aliases associated with this object
-		Path::delete(array('source' => $source));
-		unset($source);
+			parent::delete($soft);
+
+			// Delete the path aliases associated with this object
+			Path::delete(array('source' => $source));
+			unset($source);
+		}
 
 		return $this;
 	}

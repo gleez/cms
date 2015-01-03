@@ -4,8 +4,8 @@
  *
  * @package    Gleez\User
  * @author     Gleez Team
- * @version    1.4.0
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @version    1.5.0
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Model_User extends ORM {
@@ -257,7 +257,7 @@ class Model_User extends ORM {
 	 *
 	 * @uses    Log::error
 	 */
-	protected function before_delete($id)
+	protected function before_delete($id, $soft = FALSE)
 	{
 		// If it is an internal request (eg. popup dialog) and id < 3
 		if ($id == User::GUEST_ID OR $id == User::ADMIN_ID)
@@ -266,7 +266,7 @@ class Model_User extends ORM {
 			throw new Gleez_Exception("You can't delete system users!");
 		}
 
-		parent::before_delete($id);
+		parent::before_delete($id, $soft = FALSE);
 	}
 
 	/**
