@@ -4,7 +4,7 @@
  *
  * @package    Gleez\ORM\Blog
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Blog extends Post {
@@ -110,14 +110,14 @@ class Model_Blog extends Post {
 	/**
 	 * Deletes a single record or multiple records, ignoring relationships
 	 *
-	 * @param   integer  $id  Row ID. The search criteria [Optional]
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @return  Post
 	 */
-	public function delete($id = NULL)
+	public function delete($soft = FALSE)
 	{
 		$this->where($this->_object_name.'.type', '=', $this->_post_type);
 
-		return parent::delete($id);
+		return parent::delete($soft);
 	}
 
 }

@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Tags
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Model_Tag extends ORM {
@@ -91,24 +91,32 @@ class Model_Tag extends ORM {
 	/**
 	 * Deletes a single post or multiple posts, ignoring relationships.
 	 *
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @return  ORM
 	 * @throws  Gleez_Exception
 	 * @uses    Path::delete
 	 */
-	public function delete()
+	public function delete($soft = FALSE)
 	{
 		if ( ! $this->_loaded)
 		{
 			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
 		}
 
-		$source = $this->rawurl;
+		if (is_array($this->_deleted_column) && $soft == TRUE)
+		{
 
-		parent::delete();
+		}
+		else
+		{
+			$source = $this->rawurl;
 
-		// Delete the path aliases associated with this object
-		Path::delete( array('source' => $source) );
-		unset($source);
+			parent::delete($soft);
+
+			// Delete the path aliases associated with this object
+			Path::delete( array('source' => $source) );
+			unset($source);
+		}
 
 		return $this;
 	}

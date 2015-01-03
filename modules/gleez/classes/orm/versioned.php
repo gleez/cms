@@ -6,7 +6,7 @@
  *
  * @package    Gleez\ORM
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class ORM_Versioned extends ORM {
@@ -18,7 +18,7 @@ class ORM_Versioned extends ORM {
 	 * @var boolean
 	 */
 	protected $_restore =  FALSE;
-        
+
 	/**
 	 * Overload `ORM::update` to support versioned data
 	 *
@@ -41,30 +41,34 @@ class ORM_Versioned extends ORM {
 
 		// Create version only if its general update not version restore
 		if ($this->_saved AND ! $this->_restore)
-		{                        
+		{
 			$data = array();
 			foreach ($object as $key => $value)
 			{
 				if ($key === $this->_primary_key OR array_key_exists($key, $this->_ignored_columns))
+				{
 					continue;
-                                
+				}
+
 				if ($key === 'version')
 				{
 					// Always use the current version
 					$value = $this->_last_version;
 				}
-			
-                                //make sure only column names except primary key is stored in revision
+
+				//make sure only column names except primary key is stored in revision
 				if(array_key_exists($key, $this->_table_columns))
-                                        $data[$key] = $value;
+				{
+					$data[$key] = $value;
+				}
 			}
-                
+
 			$data[$this->foreign_key()] = $this->id;
-                       
-                        DB::insert($this->version_table())
-                                        ->columns(array_keys($data))
-                                        ->values(array_values($data))
-                                        ->execute($this->_db);
+
+			DB::insert($this->version_table())
+				->columns(array_keys($data))
+				->values(array_values($data))
+				->execute($this->_db);
 		}
 
 		return $this;
@@ -80,12 +84,12 @@ class ORM_Versioned extends ORM {
 	{
 		if ( ! $this->loaded())
 			return $this;
-               
-                $query = DB::select()->from($this->version_table())
-                                ->where($this->foreign_key(), '=', $this->pk())
-                                ->where('version', '=', $version)
-                                ->limit(1)
-                                ->execute($this->_db);
+
+		$query = DB::select()->from($this->version_table())
+			->where($this->foreign_key(), '=', $this->pk())
+			->where('version', '=', $version)
+			->limit(1)
+			->execute($this->_db);
 
 		if (count($query))
 		{
@@ -122,24 +126,24 @@ class ORM_Versioned extends ORM {
 	 * @chainable
 	 * @return  ORM
 	 */
-        public function version( $version = FALSE )
-        {
-                if ( ! $this->loaded())
-                        return $this;
+	public function version( $version = FALSE )
+	{
+		if ( ! $this->loaded())
+			return $this;
 
-                $query = DB::select()->from($this->version_table())
-                                ->where($this->foreign_key(), '=', $this->pk())
-                                ->where('version', '=', $version)
-                                ->limit(1)
-                                ->execute($this->_db);
-                
-                if (count($query))
-                {
-                        $this->values($query->current());
-                }
+		$query = DB::select()->from($this->version_table())
+					->where($this->foreign_key(), '=', $this->pk())
+					->where('version', '=', $version)
+					->limit(1)
+					->execute($this->_db);
 
-                return $this;
-        }
+		if (count($query))
+		{
+			$this->values($query->current());
+		}
+
+		return $this;
+	}
 
 	/**
 	 * Overloads ORM::delete() to delete all versioned entries of current object
@@ -148,25 +152,46 @@ class ORM_Versioned extends ORM {
 	 * @param   integer  id of the object you want to delete
 	 * @return  ORM
 	 */
-	public function delete()
+	public function delete($soft = FALSE)
 	{
-                if ( ! $this->_loaded)
+		if ( ! $this->_loaded)
+		{
 			throw new Gleez_Exception('Cannot delete :model model because it is not loaded.', array(':model' => $this->_object_name));
-	
-                // Use primary key value
+		}
+
+		// Use primary key value
 		$id = $this->pk();
 
-		if ($status = parent::delete())
+		if ($status = parent::delete($soft))
 		{
-                        // Delete the object
-			DB::delete($this->version_table())
-                                        ->where($this->foreign_key(), '=', $id)
-                                        ->execute($this->_db);
+			if (is_array($this->_deleted_column) && $soft == TRUE)
+			{
+				$data = array();
+
+				// Fill the deleted column
+				$column = $this->_deleted_column['column'];
+				$format = $this->_deleted_column['format'];
+
+				$data[$column] = $this->_object[$column] = ($format === TRUE) ? time() : date($format);
+				
+				// Update a single record mark as soft deleted
+				DB::update($this->version_table())
+					->set($data)
+					->where($this->foreign_key(), '=', $id)
+					->execute($this->_db);
+			}
+			else
+			{
+				// Delete the object
+				DB::delete($this->version_table())
+					->where($this->foreign_key(), '=', $id)
+					->execute($this->_db);
+			}
 		}
 
 		return $status;
 	}
-        
+
 	/**
 	 * Determines the name of a foreign key for a specific table.
 	 *
@@ -186,5 +211,5 @@ class ORM_Versioned extends ORM {
 	{
 		return $this->_table_name.'_versions';
 	}
-        
+ 
 }
