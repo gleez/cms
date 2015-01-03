@@ -149,7 +149,7 @@ class ORM_Versioned extends ORM {
 	 * Overloads ORM::delete() to delete all versioned entries of current object
 	 * and the object itself
 	 *
-	 * @param   integer  id of the object you want to delete
+	 * @param  	boolean $soft    Make delete as soft or hard. Default hard [Optional]
 	 * @return  ORM
 	 */
 	public function delete($soft = FALSE)

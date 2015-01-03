@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Gleez Team
  * @version    1.0.0
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license
  */
 class Model_Role extends ORM {
@@ -81,9 +81,9 @@ class Model_Role extends ORM {
 	/**
 	 * Override the delete method to clear cache
 	 */
-	public function delete()
+	public function delete($soft = FALSE)
 	{
-		parent::delete();
+		parent::delete($soft);
 
 		//cleanup the cache
 		Cache::instance('roles')->delete_all();
