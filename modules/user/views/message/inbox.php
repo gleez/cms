@@ -22,7 +22,7 @@
 							</div>
 						</div>
 					</fieldset>
-					<table id="user-message-inbox" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["5", "desc"]]'>
+					<table id="user-message-inbox" class="table table-striped table-bordered table-highlight" data-toggle="datatable" data-target="<?php echo $url?>" data-sorting='[["3", "desc"]]'>
 						<thead>
 							<tr>
 								<th width="5%" data-columns='{"bSortable":false, "bSearchable":false}'> # </th>

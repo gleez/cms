@@ -5,7 +5,7 @@
  * @package    Gleez\User
  * @author     Gleez Team
  * @version    1.0.0
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Controller_Message extends Template {
@@ -99,7 +99,7 @@ class Controller_Message extends Template {
 		$is_datatables = Request::is_datatables();
 
 		/** @var $messages Model_Message */
-		$messages = ORM::factory('message')->loadInbox();
+		$messages = ORM::factory('Message')->loadInbox();
 
 		if ($is_datatables)
 		{
