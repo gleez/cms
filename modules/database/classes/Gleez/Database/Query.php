@@ -10,7 +10,7 @@
 namespace Gleez\Database;
 
 /**
- * MySQLi Database Expression
+ * MySQLi Database Query
  *
  * @package Gleez\Database
  * @version 2.0.1
@@ -19,47 +19,56 @@ namespace Gleez\Database;
 class Query
 {
 
-	// SQL statement
+	/**
+	 * SQL statement
+	 * @var string
+	 */
 	protected $_query;
 
-	// Quoted query parameters
+	/**
+	 * Quoted query parameters
+	 * @var array
+	 */
 	protected $_parameters = array();
 
-	// Character that is used to quote identifiers
+	/**
+	 * Character that is used to quote identifiers
+	 * @var string
+	 */
 	protected $_identifier = '`';
 
 	/**
 	 * Array of select elements that will be comma separated.
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $select = array();
 
 	/**
 	 * Distinct
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $distinct = array();
 
 	/**
 	 * From in SQL is the list of indexes that will be used
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $from = array();
 
 	/**
 	 * Using
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $using = array();
 
 	/**
 	 * JOIN
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $join = array();
 
@@ -71,119 +80,119 @@ class Query
 	/**
 	 * The list of where and parenthesis, must be inserted in order
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $where = array();
 
 	/**
 	 * The list of matches for the MATCH function in SQL
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $match = array();
 
 	/**
 	 * GROUP BY array to be comma separated
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $group_by = array();
 
 	/**
 	 * ORDER BY array
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $within_group_order_by = array();
 
 	/**
 	 * The list of having and parenthesis, must be inserted in order
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $having = array();
 
 	/**
 	 * ORDER BY array
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $order_by = array();
 
 	/**
 	 * When not null it adds an offset
 	 *
-	 * @var  null|int
+	 * @var null|int
 	 */
 	protected $offset = null;
 
 	/**
 	 * When not null it adds a limit
 	 *
-	 * @var  null|int
+	 * @var null|int
 	 */
 	protected $limit = null;
 
 	/**
 	 * Value of INTO query for INSERT or REPLACE
 	 *
-	 * @var  null|string
+	 * @var null|string
 	 */
 	protected $into = null;
 
 	/**
-	 * Array of columns for INSERT or REPLACE
+	 * Array of arrays of values for INSERT or REPLACE
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $columns = array();
 
 	/**
 	 * Array OF ARRAYS of values for INSERT or REPLACE
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $values = array();
 
 	/**
-	 * Array arrays containing column and value for SET in UPDATE
+	 * Array of arrays containing column and value for SET in UPDATE
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $set = array();
 
 	/**
 	 * Array of OPTION specific to SQL
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $options = array();
 
 	/**
 	 * The last chosen method (select, insert, replace, update, delete).
 	 *
-	 * @var  string
+	 * @var string
 	 */
 	protected $type = null;
 
 	/**
 	 * Return results as associative arrays or objects
 	 *
-	 * @var  bool|string
+	 * @var bool|string
 	 */
 	protected $_as_object = FALSE;
 
 	/**
 	 * Parameters for __construct when using object results
 	 *
-	 * @var  array
+	 * @var array
 	 */
 	protected $_object_params = array();
 
 	/**
 	 * Creates a new SQL query of the specified type.
 	 *
-	 * @param   integer  $type  query type: Database::SELECT, Database::INSERT, etc
+	 * @param   string  $type  query type: Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql   query string
 	 */
 	public function __construct($type, $sql)
@@ -215,17 +224,16 @@ class Query
 	/**
 	 * Runs the query built
 	 *
-	 * @param   object       $db             The database instance [Optional]
-	 * @param   bool|string  $as_object      Return results as associative arrays or objects? [Optional]
-	 * @param   array        $object_params  Parameters for object results [Optional]
+	 * @param Database|string $db The database instance [Optional]
+	 * @param bool|null|string $as_object Return results as associative arrays or objects? [Optional]
+	 * @param bool|null|array $object_params Parameters for object results [Optional]
 	 *
 	 * @return  \Gleez\Database\Result  The result of the query
 	 */
-	public function execute($db = NULL, $as_object = NULL, $object_params = NULL)
+	public function execute($db = null, $as_object = null, $object_params = null)
 	{
-		if ( ! is_object($db))
-		{
-		    // Get the database instance
+		// Get the database instance
+		if (!$db instanceof Database) {
 		    $db = Database::instance($db);
 		}
 
@@ -249,26 +257,27 @@ class Query
 	 * Runs the compile function
 	 *
 	 * @param   \Gleez\Database\Database $db  The database instance [Optional]
-	 * @return  string  The current object
+	 * @return  string
 	 */
-	public function compile(Database $db = null)
+	public function compile($db = null)
 	{
-		if (null == $db)
-			// Get the database instance
+		// Get the database instance
+		if (!$db instanceof Database) {
 			$db = Database::instance($db);
+		}
 
 		switch ($this->type) {
-			case 'select':
+			case Database::SELECT:
 				$this->compileSelect($db);
 				break;
-			case 'insert':
-			case 'replace':
+			case Database::INSERT:
+			case Database::REPLACE:
 				$this->compileInsert($db);
 				break;
-			case 'update':
+			case Database::UPDATE:
 				$this->compileUpdate($db);
 				break;
-			case 'delete':
+			case Database::DELETE:
 				$this->compileDelete($db);
 				break;
 		}
@@ -302,9 +311,10 @@ class Query
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
 	 * @param   \Gleez\Database\Database  $db  Database instance or name of instance
+	 * @param   array  The array of join condition
 	 * @return  string
 	 */
-	protected function compileJoin($db, $join)
+	protected function compileJoin(Database $db, $join)
 	{
 		if (! empty($join['type']))
 		{
@@ -382,7 +392,7 @@ class Query
 	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
-	public function compileWhere($db)
+	public function compileWhere(Database $db)
 	{
 		return $this->_compileWhereHaving($db, $type = 'where');
 	}
@@ -395,7 +405,7 @@ class Query
 	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
-	public function compileHaving($db)
+	public function compileHaving(Database $db)
 	{
 		return $this->_compileWhereHaving($db, $type = 'having');
 	}
@@ -406,7 +416,7 @@ class Query
 	 *
 	 * @return string
 	 */
-	private function _compileWhereHaving($db, $type = 'where')
+	private function _compileWhereHaving(Database $db, $type = 'where')
 	{
 		$query = '';
 
@@ -432,14 +442,14 @@ class Query
 				if (in_array($where['ext_operator'], array('AND (', 'OR (', ')', '('))) {
 					// if match is not empty we've got to use an operator
 					if ($key == 0 || ! empty($this->match)) {
-					    $query .= '(';
+						$query .= '(';
 
-					    $just_opened = true;
+						$just_opened = true;
 					} else {
-					    $query .= $where['ext_operator'].' ';
-					    	if ($where['ext_operator'] != ')') {
+						$query .= $where['ext_operator'].' ';
+						if ($where['ext_operator'] != ')') {
 							$just_opened = true;
-					    }
+						}
 					}
 					continue;
 				}
@@ -478,16 +488,16 @@ class Query
 					// id can't be quoted!
 					if ($where['column'] === 'id')
 					{
-				    	$query .= 'id ';
+						$query .= 'id ';
 					}
 					else
 					{
-				    	$query .= $db->getConnection()->quoteIdentifier($where['column']).' ';
+						$query .= $db->getConnection()->quoteIdentifier($where['column']).' ';
 					}
 
 					if (strtoupper($where['operator']) === 'IN')
 					{
-					    $query .= 'IN ('.implode(', ', $db->getConnection()->quoteArr($where['value'])).') ';
+						$query .= 'IN ('.implode(', ', $db->getConnection()->quoteArr($where['value'])).') ';
 					}
 					elseif ((is_string($where['value']) AND array_key_exists($where['value'], $this->_parameters)) === FALSE)
 					{
@@ -508,7 +518,7 @@ class Query
 	/**
 	 * Compiles the statements for SELECT
 	 *
-	 * @param   \Gleez\Database\Database  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The Database instance
 	 * @return  \Gleez\Database\Query  The current object
 	 */
 	public function compileSelect(Database $db)
@@ -518,7 +528,7 @@ class Query
 		// Callback to quote tables
 		$quoteTable = array($db->getConnection(), 'quoteTable');
 
-		if ($this->type == 'select') {
+		if ($this->type == Database::SELECT) {
 			$query .= 'SELECT ';
 
 			if ( ! empty($this->distinct)) {
@@ -582,13 +592,13 @@ class Query
 			$order_arr = array();
 
 			foreach ($this->order_by as $order) {
-			$order_sub = $db->getConnection()->quoteIdentifier($order['column']).' ';
+				$order_sub = $db->getConnection()->quoteIdentifier($order['column']).' ';
 
-			if ($order['direction'] !== null) {
-				$order_sub .= ((strtolower($order['direction']) === 'desc') ? 'DESC' : 'ASC');
-			}
+				if ($order['direction'] !== null) {
+					$order_sub .= ((strtolower($order['direction']) === 'desc') ? 'DESC' : 'ASC');
+				}
 
-			$order_arr[] = $order_sub;
+				$order_arr[] = $order_sub;
 			}
 
 			$query .= implode(', ', $order_arr).' ';
@@ -630,7 +640,7 @@ class Query
 	 */
 	public function compileInsert(Database $db)
 	{
-		if ($this->type == 'insert') {
+		if ($this->type == Database::INSERT) {
 			$query = 'INSERT ';
 		} else {
 			$query = 'REPLACE ';
@@ -640,11 +650,11 @@ class Query
 			$query .= 'INTO '.$this->_identifier.$db->table_prefix().$this->into.$this->_identifier.' ';
 		}
 
-		if ( ! empty ($this->columns)) {
+		if ( ! empty($this->columns)) {
 			$query .= '('.implode(', ', $db->getConnection()->quoteIdentifierArr($this->columns)).') ';
 		}
 
-		if ( ! empty ($this->values)) {
+		if ( ! empty($this->values)) {
 			$query .= 'VALUES ';
 			$query_sub = '';
 
@@ -704,7 +714,6 @@ class Query
 
 		$query .= $this->compileWhere($db);
 
-		// pass the
 		$this->_query = trim($query);
 
 		return $this;
@@ -747,7 +756,7 @@ class Query
 	public function select($columns = NULL)
 	{
 		$this->reset();
-		$this->type = 'select';
+		$this->type = Database::SELECT;
 		$this->select = $columns;
 
 		return $this;
@@ -755,7 +764,7 @@ class Query
 
 	public function selectArgs($columns = NULL)
 	{
-		$this->type = 'select';
+		$this->type = Database::SELECT;
 		$this->select = array_merge($this->select, \func_get_args());
 
 		return $this;
@@ -764,8 +773,8 @@ class Query
 	/**
 	 * Set the table and columns for an insert.
 	 *
-	 * @param   mixed  $table    table name or array($table, $alias) or object
-	 * @param   array  $columns  column names
+	 * @param mixed $table Table name or array($table, $alias) or object [Optional]
+	 * @param array $columns Column names [Optional]
 	 * @return  \Gleez\Database\Query
 	 */
 	public function insert($table = NULL, array $columns = NULL)
@@ -774,7 +783,7 @@ class Query
 
 		if ($table)
 		{
-			// Set the inital table name
+			// Set the initial table name
 			$this->into($table);
 		}
 
@@ -784,7 +793,7 @@ class Query
 			$this->columns($columns);
 		}
 
-		$this->type = 'insert';
+		$this->type = Database::INSERT;
 		return $this;
 	}
 
@@ -796,7 +805,7 @@ class Query
 	public function replace()
 	{
 		$this->reset();
-		$this->type = 'replace';
+		$this->type = Database::REPLACE;
 
 		return $this;
 	}
@@ -809,7 +818,7 @@ class Query
 	public function update($index)
 	{
 		$this->reset();
-		$this->type = 'update';
+		$this->type = Database::UPDATE;
 		$this->into($index);
 
 		return $this;
@@ -830,7 +839,7 @@ class Query
 			// Set the inital table name
 			$this->into($table);
 		}
-		$this->type = 'delete';
+		$this->type = Database::DELETE;
 
 		return $this;
 	}
@@ -855,10 +864,10 @@ class Query
 	/**
 	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
 	 *
-	 * @param   boolean  $value or disable distinct columns
+	 * @param   boolean $value Enable or disable distinct columns [Optional]
 	 * @return  \Gleez\Database\Query
 	 */
-	public function distinct($value)
+	public function distinct($value = true)
 	{
 		// Add pending database call which is executed after query type is determined
 		$this->distinct[] = (bool) $value;
@@ -1138,7 +1147,7 @@ class Query
 	 *
 	 * @param  string  $column  A column to group by
 	 *
-	 * @return  \Gleez\Database\Query  The current object
+	 * @return  \Gleez\Database\Query  The current object [Optional]
 	 */
 	public function groupBy($column)
 	{
@@ -1403,7 +1412,7 @@ class Query
 	 *
 	 * @return  \Gleez\Database\Query  The current object
 	 */
-	public function columns($array = array())
+	public function columns($array)
 	{
 		if (is_array($array)) {
 			$this->columns = $array;
@@ -1419,7 +1428,7 @@ class Query
 	 * Used in: INSERT, REPLACE
 	 * func_get_args()-enabled
 	 *
-	 * @param   mixed  $array  The array of values matching the columns from $this->columns()
+	 * @param   mixed  $array  The array of values matching the columns from Query::columns
 	 *
 	 * @return  \Gleez\Database\Query  The current object
 	 */
@@ -1445,7 +1454,7 @@ class Query
 	 */
 	public function value($column, $value)
 	{
-		if ($this->type === 'insert' || $this->type === 'replace') {
+		if ($this->type == Database::INSERT || $this->type == Database::REPLACE) {
 			$this->columns[] = $column;
 			$this->values[0][] = $value;
 		}
@@ -1524,8 +1533,8 @@ class Query
 	/**
 	 * Set the value of a parameter in the query.
 	 *
-	 * @param   string   $param  parameter key to replace
-	 * @param   mixed    $value  value to use
+	 * @param   string   $param  Parameter key to replace
+	 * @param   mixed    $value  Value to use
 	 *
 	 * @return  \Gleez\Database\Query
 	 */
@@ -1576,6 +1585,7 @@ class Query
 	{
 		$this->select =
 		$this->from =
+		$this->distinct =
 		$this->using =
 		$this->join =
 		$this->where =
@@ -1590,10 +1600,12 @@ class Query
 		$this->options =
 		$this->_object_params =
 		$this->_parameters = array();
+
 		$this->offset =
 		$this->limit =
 		$this->into =
 		$this->_query = null;
+
 		$this->_as_object = false;
 		$this->last_join = 0;
 

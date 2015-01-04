@@ -13,8 +13,7 @@ use Gleez\Database\ConnectionException;
 use Gleez\Database\DatabaseException;
 use Gleez\Database\Database;
 use Gleez\Database\Result;
-
-use RuntimeException;
+use Exception;
 
 /**
  * MySQLi database connection driver
@@ -25,7 +24,7 @@ use RuntimeException;
  * - MySQL 5.0 or higher
  *
  * @package Gleez\Database\Driver
- * @version 2.1.2
+ * @version 2.1.3
  * @author  Gleez Team
  */
 class MySQLi extends Database implements DriverInterface
@@ -40,16 +39,17 @@ class MySQLi extends Database implements DriverInterface
 	 * Use SET NAMES to set the character set
 	 * @var boolean
 	 */
-	protected static $_set_names;
+	protected static $_set_names = false;
 
 	/**
 	 * Identifier for this connection within the PHP driver
 	 * @var string
 	 */
-	protected $_connection_id;
+	protected $_connection_id = null;
 
 	/**
 	 * MySQL uses a backticks for identifiers
+	 * For enabling double quotation marks use SET sql_mode='ANSI_QUOTES';
 	 * @var string
 	 */
 	protected $_identifier = '`';
@@ -58,36 +58,23 @@ class MySQLi extends Database implements DriverInterface
 	 * Raw server connection
 	 * @var \mysqli
 	 */
-	protected $_connection;
+	protected $_connection = null;
 
 	/**
 	 * Check environment
 	 *
 	 * @return bool
-	 * @throws RuntimeException
+	 * @throws \Gleez\Database\DatabaseException
 	 */
 	public function checkEnvironment()
 	{
 		if (!extension_loaded('mysqli')) {
-			throw new RuntimeException(
+			throw new DatabaseException(
 				sprintf('The "mysqli" extension is required for %s driver but the extension is not loaded.', __CLASS__)
 			);
 		}
 
 		return true;
-	}
-
-	/**
-	 * Class constructor
-	 *
-	 * @param string $name   Instance name
-	 * @param array  $config Configuration parameters
-	 */
-	public function __construct($name, array $config)
-	{
-		$this->checkEnvironment();
-
-		parent::__construct($name, $config);
 	}
 
 	/**
@@ -104,46 +91,53 @@ class MySQLi extends Database implements DriverInterface
 	 */
 	public function connect()
 	{
-		if ($this->_connection)
-		{
-			return;
+		// Don't allow to execute twice
+		if ($this->_connection) {
+			return $this;
 		}
 
-		if (is_null(self::$_set_names))
-		{
+		// @todo Gleez use at least PHP 5.3.x & MySQL 5.x
+		if (!self::$_set_names) {
 			// Determine if we can use mysqli_set_charset(), which is only
 			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
 			self::$_set_names = ! \function_exists('mysqli_set_charset');
 		}
 
-		/**
-		 * Extract the connection parameters, adding required variables
-		 *
-		 * @var  $database   string
-		 * @var  $hostname   string
-		 * @var  $username   string
-		 * @var  $password   string
-		 * @var  $socket     string
-		 * @var  $port       string
-		 * @var  $persistent boolean
-		 */
-		extract($this->_config['connection'] + array(
-			'database'   => '',
-			'hostname'   => '',
-			'username'   => '',
-			'password'   => '',
-			'socket'     => '',
-			'port'       => 3306,
-			'persistent' => FALSE,
-		));
+		// localize
+		$config = $this->_config['connection'];
+
+		$findConfigValue = function ($key, $default = null) use ($config) {
+			if (isset($config[$key])) {
+			return $config[$key];
+			}
+
+			return $default;
+		};
+
+		$hostname  = $findConfigValue('hostname', '');
+		$database  = $findConfigValue('database', '');
+		$username  = $findConfigValue('username', '');
+		$password  = $findConfigValue('password', '');
+		$port      = $findConfigValue('port', 3306);
+		$socket    = $findConfigValue('socket');
+		$persist   = $findConfigValue('persistent', false);
+		$charset   = $findConfigValue('charset');
+		$variables = $findConfigValue('variables', []);
+		$nolock    = $findConfigValue('nolock');
 
 		// Prevent this information from showing up in traces
-		unset($this->_config['connection']['username'], $this->_config['connection']['password']);
+		if ($password) {
+			unset($this->_config['password']);
+		}
+
+		if ($username) {
+			unset($this->_config['user']);
+		}
 
 		try
 		{
 			// See http://www.php.net/manual/en/mysqli.persistconns.php
-			$this->_connection = new \MySQLi(($persistent ? 'p:' : '') . $hostname, $username, $password, $database, (int)$port, $socket);
+			$this->_connection = new \MySQLi(($persist ? 'p:' : '') . $hostname, $username, $password, $database, (int) $port, $socket);
 		}
 		catch (\Exception $e)
 		{
@@ -156,24 +150,27 @@ class MySQLi extends Database implements DriverInterface
 		// \xFF is a better delimiter, but the PHP driver uses underscore
 		$this->_connection_id = \sha1($hostname.'_'.$username.'_'.$password);
 
-		if ( ! empty($this->_config['charset']))
-		{
+		if ($charset) {
 			// Set the character set
-			$this->set_charset($this->_config['charset']);
+			$this->set_charset($charset);
 		}
 
-		if ( ! empty($this->_config['connection']['variables']) AND is_array($this->_config['connection']['variables']))
-		{
+		if ($variables && is_array($variables)) {
 			// Set session variables
-			$variables = array();
+			$vars = array();
 
-			foreach ($this->_config['connection']['variables'] as $var => $val)
-			{
-				$variables[] = 'SESSION '.$var.' = '.$this->quote($val);
+			foreach ($variables as $var => $val) {
+				$vars[] = 'SESSION '.$var.' = '.$this->quote($val);
 			}
 
-			$this->_connection->query('SET '.\implode(', ', $variables));
+			$this->_connection->query('SET '.\implode(', ', $vars));
 		}
+
+		if ($nolock) {
+			$this->_connection->query('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;');
+		}
+
+		return $this;
 	}
 
 	/**
@@ -284,7 +281,7 @@ class MySQLi extends Database implements DriverInterface
 	 * $db->query(Database::SELECT, 'SELECT * FROM users LIMIT 1', 'Model_User');
 	 * ~~~
 	 *
-	 * @param   integer  $type       Database::SELECT, Database::INSERT, etc
+	 * @param   string   $type       Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql        SQL query
 	 * @param   boolean  $as_object  Result object class string, TRUE for stdClass, FALSE for assoc array [Optional]
 	 * @param   array    $params     Object construct parameters for result class [Optional]
@@ -304,7 +301,10 @@ class MySQLi extends Database implements DriverInterface
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== self::$_current_databases[$this->_connection_id])
+		if (!empty($this->_config['connection']['persistent']) &&
+			isset(static::$_current_databases[$this->_connection_id]) &&
+			$this->_config['connection']['database'] !== static::$_current_databases[$this->_connection_id]
+		)
 		{
 			// Select database on persistent connections
 			$this->_select_db($this->_config['connection']['database']);
@@ -313,22 +313,21 @@ class MySQLi extends Database implements DriverInterface
 		// Execute the query
 		if (($resource = $this->_connection->query($sql)) === FALSE)
 		{
-			throw new DatabaseException('['.$this->_connection->errno.'] '.
-			$this->_connection->error.' [ '.$sql.']', $this->_connection->errno);
+			throw new DatabaseException(sprintf('[%s] [%s]', $this->_connection->errno, $this->_connection->error), $this->_connection->errno);
 		}
 
 		// Set the last query
 		$this->last_query = $sql;
 
-		if ($type === 'select')
+		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			return new Result($resource, $sql, $as_object, $params);
+			$this->last_result = new Result($resource, $sql, $as_object, $params);
 		}
-		elseif ($type === 'insert')
+		elseif ($type === Database::INSERT)
 		{
 			// Return a list of insert id and rows created
-			return array(
+			$this->last_result = array(
 				$this->_connection->insert_id,
 				$this->_connection->affected_rows,
 			);
@@ -336,8 +335,10 @@ class MySQLi extends Database implements DriverInterface
 		else
 		{
 			// Return the number of rows affected
-			return $this->_connection->affected_rows;
+			$this->last_result = $this->_connection->affected_rows;
 		}
+
+		return $this->last_result;
 	}
 
 	/**

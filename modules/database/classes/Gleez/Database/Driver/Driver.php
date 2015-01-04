@@ -12,7 +12,7 @@ namespace Gleez\Database\Driver;
 /**
  * Driver Registry
  *
- * @package Gleez\Database\Adapter\Driver
+ * @package Gleez\Database\Driver
  * @version 1.0.0
  * @author  Gleez Team
  */
