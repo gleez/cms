@@ -41,7 +41,7 @@
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0.1
  * @copyright  (c) 2009-2012 Kohana Team
- * @copyright  (c) 2012-2013 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://kohanaphp.com/license
  * @license    http://gleezcms.org/license Gleez CMS License
  */

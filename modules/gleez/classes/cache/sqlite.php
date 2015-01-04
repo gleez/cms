@@ -10,7 +10,7 @@
  * @package    Gleez\Cache\Base
  * @author     Sandeep Sangamreddi - Gleez
  * @version    1.0.1
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Cache_Sqlite extends Cache implements Cache_Tagging {
