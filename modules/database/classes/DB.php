@@ -3,7 +3,7 @@
  * Gleez CMS (http://gleezcms.org)
  *
  * @link https://github.com/gleez/database Canonical source repository
- * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license http://gleezcms.org/license Gleez CMS License
  */
 
@@ -16,14 +16,15 @@ use Gleez\Database\Expression;
  *
  * Provides a helpers to get Database related objects for [making queries](../database/query).
  *
- * Shortcut     | Returned Object
- * -------------|---------------
- * [`DB::query()`](#query)   | [Gleez\Database\Result]
- * [`DB::insert()`](#insert) | [Gleez\Database\Query]
- * [`DB::select()`](#select),<br />[`DB::select_array()`](#select_array) | [Database_Query_Builder_Select]
- * [`DB::update()`](#update) | [Database_Query_Builder_Update]
- * [`DB::delete()`](#delete) | [Database_Query_Builder_Delete]
- * [`DB::expr()`](#expr)     | [Database_Expression]
+ * Shortcut                              | Returned Object
+ * --------------------------------------|---------------
+ * [`DB::query()`](#query)               | [Gleez\Database\Result]|mixed
+ * [`DB::insert()`](#insert)             | [Gleez\Database\Query]
+ * [`DB::select()`](#select)             | [\Gleez\Database\Query]
+ * [`DB::select_array()`](#select_array) | [\Gleez\Database\Query]
+ * [`DB::update()`](#update)             | [\Gleez\Database\Query]
+ * [`DB::delete()`](#delete)             | [\Gleez\Database\Query]
+ * [`DB::expr()`](#expr)                 | [\Gleez\Database\Expression]
  *
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
@@ -31,7 +32,8 @@ use Gleez\Database\Expression;
  * @version 2.1.1
  * @author Gleez Team
  */
-class DB {
+class DB
+{
 
 	protected static $_config = NULL;
 
@@ -46,21 +48,20 @@ class DB {
 	 * Example:<br>
 	 * <code>
 	 * // Create a new SELECT query
-	 * $query = DB:query(\Gleez\Database\Database::SELECT, 'SELECT * FROM users');
-	 *
+	 * $result = DB:query(\Gleez\Database\Database::SELECT, 'SELECT * FROM gl_users');
 	 * // Create a new DELETE query
-	 * $query = DB::query(Database::DELETE, 'DELETE FROM users WHERE id = 5');
+	 * $query = DB::query(\Gleez\Database\Database::DELETE, 'DELETE FROM gl_users WHERE id = 5');
 	 * </code>
 	 *
-	 * Specifying the type changes the returned result. When using
-	 * `Database::SELECT`, a [Database_Query_Result] will be returned.
-	 * `Database::INSERT` queries will return the insert id and number of rows.
+	 * Specifying the type changes the returned result.
+	 * When using Database::SELECT a \Gleez\Database\Result will be returned.
+	 * Database::INSERT queries will return the insert id and number of rows.
 	 * For all other queries, the number of affected rows is returned.
 	 *
-	 * @param   integer  $type  type: Database::SELECT, Database::UPDATE, etc
-	 * @param   string   $sql   SQL statement
+	 * @param   integer $type Type: Database::SELECT, Database::UPDATE, etc
+	 * @param   string  $sql  SQL statement
 	 *
-	 * @return  \Gleez\Database\Result
+	 * @return  mixed
 	 */
 	public static function query($type, $sql)
 	{
@@ -173,7 +174,7 @@ class DB {
 	 * $expression = DB::expr('COUNT(users.id)');
 	 * $query = DB::update('users')->set(array('login_count' => DB::expr('login_count + 1')))->where('id', '=', $id);
 	 * $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
-	 * <code>
+	 * </code>
 	 *
 	 * @param   string  $string      Expression
 	 * @param   array   $parameters  Parameters [Optional]

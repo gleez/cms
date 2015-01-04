@@ -2,12 +2,17 @@
 /**
  * Gleez CMS (http://gleezcms.org)
  *
- * @link https://github.com/gleez/database Canonical source repository
- * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @link https://github.com/gleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license http://gleezcms.org/license Gleez CMS License
  */
 
 namespace Gleez\Database;
+
+use Gleez\Database\Driver\Driver;
+use Gleez_Exception;
+use Config;
+use Arr;
 
 // Grab the files for HHVM
 require_once __DIR__ . '/Driver/MySQLi.php';
@@ -21,22 +26,23 @@ class DatabaseException extends \Exception {};
 /**
  * Database connection wrapper/helper.
  *
- * You may get a database instance using `Gleez\Database\Database::instance('name')` where
- * name is the [config](database/config) group.
+ * You may get a database instance using Database::instance('name') where
+ * name is the config group.
  *
  * This class provides connection instance management via Database Drivers, as
  * well as quoting, escaping and other related functions.
  *
- * @package Gleez\Database\Core
+ * @package Gleez\Database
  * @version 2.2.1
- * @author Gleez Team
+ * @author  Gleez Team
  */
-abstract class Database {
+abstract class Database
+{
 	// Query types
-	const SELECT =  'select';
-	const INSERT =  'insert';
-	const UPDATE =  'update';
-	const DELETE =  'delete';
+	const SELECT = 'select';
+	const INSERT = 'insert';
+	const UPDATE = 'update';
+	const DELETE = 'delete';
 
 	/**
 	 * Default instance name
@@ -82,16 +88,14 @@ abstract class Database {
 	 * If configuration is not specified, it will be loaded from the database
 	 * configuration file using the same group as the name.
 	 *
-	 * ### Examples
-	 *
 	 * Load the default database:<br>
 	 * <code>
-	 *   $db = Database::instance();
+	 * $db = Database::instance();
 	 * </code>
 	 *
 	 * Create a custom configured instance:<br>
 	 * <code>
-	 *   $db = Database::instance('custom', $config);
+	 * $db = Database::instance('custom', $config);
 	 * </code>
 	 *
 	 * @param   string 		$name      Instance name [Optional]
@@ -110,9 +114,9 @@ abstract class Database {
 			$name = static::$default;
 		}
 
-		if ( ! $writable and ($readonly = \Config::get("database.{$name}.readonly", false)))
+		if ( ! $writable and ($readonly = Config::get("database.{$name}.readonly", false)))
 		{
-			! isset(static::$_readonly[$name]) and static::$_readonly[$name] = \Arr::get($readonly, array_rand($readonly));
+			! isset(static::$_readonly[$name]) and static::$_readonly[$name] = Arr::get($readonly, array_rand($readonly));
 			$name = static::$_readonly[$name];
 		}
 
@@ -121,17 +125,25 @@ abstract class Database {
 			if ($config === NULL)
 			{
 				// Load the configuration for this database
-				$config = \Config::get("database.{$name}");
+				$config = Config::get("database.{$name}");
 			}
 
 			if ( ! isset($config['type']))
 			{
-				throw new \Gleez_Exception('Database type not defined in :name configuration',
+				throw new Gleez_Exception('Database type not defined in :name configuration',
 				array(':name' => $name));
 			}
 
+			if (!array_key_exists(strtolower($config['type']), Driver::$drivers)) {
+				throw new Gleez_Exception('Database Driver for ":type" type not defined', array(':type' => $config['type']));
+			}
+
 			// Set the driver class name
-			$driver = '\Gleez\Database\Driver_'.ucfirst($config['type']);
+			$driver = Driver::$drivers[strtolower($config['type'])];
+
+			if (!class_exists($driver)) {
+				throw new Gleez_Exception('Database Driver ":driver" not found', array(':name' => $driver));
+			}
 
 			// Create the database connection instance
 			$driver = new $driver($name, $config);
@@ -287,26 +299,32 @@ abstract class Database {
 
 	/**
 	 * Begins transaction
+	 *
+	 * @return bool
 	 */
 	public function transactionBegin()
 	{
-		$this->_connection->query('BEGIN');
+		return (bool) $this->_connection->query('BEGIN');
 	}
 
 	/**
 	 * Commits transaction
+	 *
+	 * @return bool
 	 */
 	public function transactionCommit()
 	{
-		$this->_connection->query('COMMIT');
+		return (bool) $this->_connection->query('COMMIT');
 	}
 
 	/**
 	 * Rollbacks transaction
+	 *
+	 * @return bool
 	 */
 	public function transactionRollback()
 	{
-		$this->_connection->query('ROLLBACK');
+		return (bool) $this->_connection->query('ROLLBACK');
 	}
 
 	/**
@@ -389,6 +407,20 @@ abstract class Database {
 	abstract public function list_columns($table, $like = NULL, $add_prefix = TRUE);
 
 	/**
+	 * Sanitize a string by escaping characters that could cause an SQL injection attack.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * $value = $db->escape('any string');
+	 * </code>
+	 *
+	 * @param  string $value Value to quote
+	 *
+	 * @return string
+	 */
+	abstract public function escape($value);
+
+	/**
 	 * Return the table prefix defined in the current configuration.
 	 *
 	 *     $prefix = $db->table_prefix();
@@ -418,11 +450,11 @@ abstract class Database {
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($value instanceof \Gleez\Database\Expression)
+		if ($value instanceof Expression)
 		{
 			$value = $value->value();
 		}
-		elseif ($value instanceof \Gleez\Database\Query)
+		elseif ($value instanceof Query)
 		{
 			$value = '('.$value->compile($this).') ';
 		}

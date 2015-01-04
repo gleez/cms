@@ -47,7 +47,7 @@
  * @author     Corey Worrell
  * @author     Gleez Team
  * @version    1.1.1
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Assets {
@@ -101,7 +101,7 @@ class Assets {
 	 */
 	public static function css($handle = NULL, $src = NULL, $deps = NULL, $attrs = NULL, $format = self::FORMAT_TAG)
 	{
-		$config = Kohana::$config->load('media');
+		$config = Config::load('media');
 
 		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
@@ -247,7 +247,7 @@ class Assets {
 	 */
 	public static function js($handle, $src = NULL, $deps = NULL, $footer = FALSE, $attrs = NULL, $format = Assets::FORMAT_TAG)
 	{
-		$config = Kohana::$config->load('media');
+		$config = Config::load('media');
 
 		if(Kohana::$environment === Kohana::PRODUCTION AND $config->get('combine', FALSE))
 		{
@@ -869,7 +869,7 @@ class Assets {
 		$compiled = "";
 
 		// Load config file
-		$config = Kohana::$config->load('media');
+		$config = Config::load('media');
 
 		// If no files to compile, no tag necessary
 		if (empty($files))

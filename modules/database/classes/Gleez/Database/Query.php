@@ -2,21 +2,22 @@
 /**
  * Gleez CMS (http://gleezcms.org)
  *
- * @link https://github.com/gleez/database Canonical source repository
- * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @link https://github.com/gleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license http://gleezcms.org/license Gleez CMS License
  */
 
 namespace Gleez\Database;
 
 /**
- * MySQLi database Expression
+ * MySQLi Database Expression
  *
  * @package Gleez\Database
- * @version 2.0.0
- * @author Gleez Team
+ * @version 2.0.1
+ * @author  Gleez Team
  */
-class Query {
+class Query
+{
 
 	// SQL statement
 	protected $_query;
@@ -63,18 +64,9 @@ class Query {
 	protected $join = array();
 
 	/**
-	 * JOIN ON
-	 *
-	 * @var  array
+	 * The last JOIN array index
 	 */
-	protected $join_on = array();
-
-	/**
-	 * JOIN AND
-	 *
-	 * @var  array
-	 */
-	protected $join_and = array();
+	protected $last_join = 0;
 
 	/**
 	 * The list of where and parenthesis, must be inserted in order
@@ -256,16 +248,14 @@ class Query {
 	/**
 	 * Runs the compile function
 	 *
-	 * @param   object  $db  The database instance [Optional]
+	 * @param   \Gleez\Database\Database $db  The database instance [Optional]
 	 * @return  string  The current object
 	 */
-	public function compile($db = NULL)
+	public function compile(Database $db = null)
 	{
-		if ( ! is_object($db))
-		{
+		if (null == $db)
 			// Get the database instance
 			$db = Database::instance($db);
-		}
 
 		switch ($this->type) {
 			case 'select':
@@ -311,14 +301,14 @@ class Query {
 	/**
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
-	 * @param   mixed  $db  Database instance or name of instance
+	 * @param   \Gleez\Database\Database  $db  Database instance or name of instance
 	 * @return  string
 	 */
-	protected function compileJoin($db)
+	protected function compileJoin($db, $join)
 	{
-		if (! empty($this->join['type']))
+		if (! empty($join['type']))
 		{
-			$query = strtoupper($this->join['type']).' JOIN';
+			$query = strtoupper($join['type']).' JOIN';
 		}
 		else
 		{
@@ -326,7 +316,7 @@ class Query {
 		}
 
 		// Quote the table name that is being joined
-		$query .= ' '.$db->getConnection()->quoteTable($this->join['table']);
+		$query .= ' '.$db->getConnection()->quoteTable($join['table']);
 
 		if (! empty($this->using))
 		{
@@ -335,10 +325,10 @@ class Query {
 			// Quote and concat the columns
 			$query .= ' USING ('.implode(', ', array_map($quote_column, $this->using)).')';
 		}
-		elseif ( ! empty($this->join_on))
+		elseif (isset($join['on']) && ! empty($join['on']))
 		{
 			$conditions = array();
-			foreach ($this->join_on as $condition)
+			foreach ($join['on'] as $k => $condition)
 			{
 				// Split the condition
 				list($c1, $op, $c2) = $condition;
@@ -356,11 +346,11 @@ class Query {
 			// Concat the conditions "... AND ..."
 			$query .= ' ON ('.implode(' AND ', $conditions).')';
 
-			if (! empty($this->join_and))
+			if (isset($join['and']) && ! empty($join['and']))
 			{
 				$and_conditions = array();
 
-				foreach ($this->join_and as $icondition)
+				foreach ($join['and'] as $icondition)
 				{
 					// Split the condition
 					list($c1, $op, $v1) = $icondition;
@@ -389,7 +379,7 @@ class Query {
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
 	 * Used by: SELECT, DELETE, UPDATE
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
 	public function compileWhere($db)
@@ -402,7 +392,7 @@ class Query {
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
 	 * Used by: SELECT, DELETE, UPDATE
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  string  The compiled WHERE
 	 */
 	public function compileHaving($db)
@@ -410,6 +400,12 @@ class Query {
 		return $this->_compileWhereHaving($db, $type = 'having');
 	}
 
+	/**
+	 * @param \Gleez\Database\Database $db
+	 * @param string $type
+	 *
+	 * @return string
+	 */
 	private function _compileWhereHaving($db, $type = 'where')
 	{
 		$query = '';
@@ -512,10 +508,10 @@ class Query {
 	/**
 	 * Compiles the statements for SELECT
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  \Gleez\Database\Query  The current object
 	 */
-	public function compileSelect($db)
+	public function compileSelect(Database $db)
 	{
 		$query = '';
 
@@ -543,8 +539,15 @@ class Query {
 		}
 
 		if ( ! empty($this->join)) {
+			$statements = array();
+			foreach ($this->join as $join)
+			{
+				// Compile each of the join statements
+				$statements[] = $this->compileJoin($db, $join);
+			}
+
 			// Add tables to join
-			$query .= $this->compileJoin($db).' ';
+			$query .= implode(' ', $statements).' ';
 		}
 
 		$query .= $this->compileWhere($db);
@@ -614,7 +617,7 @@ class Query {
 			$query .= 'OPTION '.implode(', ', $options);
 		}
 
-		$this->_query = $query;
+		$this->_query = trim($query);
 
 		return $this;
 	}
@@ -622,10 +625,10 @@ class Query {
 	/**
 	 * Compiles the statements for INSERT or REPLACE
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  \Gleez\Database\Query  The current object
 	 */
-	public function compileInsert($db)
+	public function compileInsert(Database $db)
 	{
 		if ($this->type == 'insert') {
 			$query = 'INSERT ';
@@ -652,7 +655,7 @@ class Query {
 			$query .= implode(', ', $query_sub);
 		}
 
-		$this->_query = $query;
+		$this->_query = trim($query);
 
 		return $this;
 	}
@@ -660,10 +663,10 @@ class Query {
 	/**
 	 * Compiles the statements for UPDATE
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  \Gleez\Database\Query  The current object
 	 */
-	public function compileUpdate($db)
+	public function compileUpdate(Database $db)
 	{
 		$query = 'UPDATE ';
 
@@ -702,7 +705,7 @@ class Query {
 		$query .= $this->compileWhere($db);
 
 		// pass the
-		$this->_query = $query;
+		$this->_query = trim($query);
 
 		return $this;
 	}
@@ -710,10 +713,10 @@ class Query {
 	/**
 	 * Compiles the statements for DELETE
 	 *
-	 * @param   object  $db  The database instance
+	 * @param   \Gleez\Database\Database  $db  The database instance
 	 * @return  \Gleez\Database\Query  The current object
 	 */
-	public function compileDelete($db)
+	public function compileDelete(Database $db)
 	{
 		$query = 'DELETE ';
 
@@ -727,7 +730,7 @@ class Query {
 			$query .= $this->compileWhere($db);
 		}
 
-		$this->_query = $query;
+		$this->_query = trim($query);
 
 		return $this;
 	}
@@ -872,15 +875,17 @@ class Query {
 	 */
 	public function join($table, $type = NULL)
 	{
-		// Set the table to JOIN on
-		$this->join['table'] = $table;
-		$this->join['type']  = '';
-
-		if ($type !== NULL)
+		if (! is_null($type))
 		{
 			// Set the JOIN type
-			$this->join['type'] = (string) $type;
+			$type  = (string) $type;
 		}
+
+		//Store the index for reference the on conditions
+		$this->last_join  = $this->last_join + 1;
+
+		// Set the table to JOIN on
+		$this->join[$this->last_join] = array('table' => $table, 'type' => $type);
 
 		return $this;
 	}
@@ -903,7 +908,7 @@ class Query {
 		}
 
 		// Add pending database call which is executed after query type is determined
-		$this->join_on[] = array($c1, $op, $c2);
+		$this->join[$this->last_join]['on'][] = array($c1, $op, $c2);
 
 		return $this;
 	}
@@ -927,7 +932,7 @@ class Query {
 		}
 
 		// Add pending database call which is executed after query type is determined
-		$this->join_and[] = array($c1, $op, $c2);
+		$this->join[$this->last_join]['and'][] = array($c1, $op, $c2);
 
 		return $this;
 	}
@@ -1573,8 +1578,6 @@ class Query {
 		$this->from =
 		$this->using =
 		$this->join =
-		$this->join_on =
-		$this->join_and =
 		$this->where =
 		$this->match =
 		$this->group_by =
@@ -1592,6 +1595,7 @@ class Query {
 		$this->into =
 		$this->_query = null;
 		$this->_as_object = false;
+		$this->last_join = 0;
 
 		return $this;
 	}
