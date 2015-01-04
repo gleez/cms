@@ -7,7 +7,7 @@
  * @package    Gleez\Exceptions
  * @author     Gleez Team
  * @version    1.1.0
- * @copyright  (c) 2011-2013 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Gleez_Exception extends Exception {
@@ -242,6 +242,16 @@ class Gleez_Exception extends Exception {
 						if ( ! isset($frame['type']))
 						{
 							$frame['type'] = '??';
+						}
+
+						// Xdebug returns the words 'dynamic' and 'static' instead of using '->' and '::' symbols
+						if ('dynamic' === $frame['type'])
+						{
+							$frame['type'] = '->';
+						}
+						elseif ('static' === $frame['type'])
+						{
+							$frame['type'] = '::';
 						}
 
 						// XDebug also has a different name for the parameters array

@@ -144,11 +144,11 @@ class View {
 	 */
 	public static function set_global($key, $value = NULL)
 	{
-		if (is_array($key))
+		if (is_array($key) OR $key instanceof Traversable)
 		{
-			foreach ($key as $key2 => $value)
+			foreach ($key as $name => $value)
 			{
-				self::$_global_data[$key2] = $value;
+				self::$_global_data[$name] = $value;
 			}
 		}
 		else
@@ -339,7 +339,7 @@ class View {
 	 */
 	public function set($key, $value = NULL)
 	{
-		if (is_array($key))
+		if (is_array($key) OR $key instanceof Traversable)
 		{
 			foreach ($key as $name => $value)
 			{

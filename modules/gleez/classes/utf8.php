@@ -103,13 +103,7 @@ class UTF8 {
 
 			if ( ! self::is_ascii($var) && UTF8::$server_utf8)
 			{
-				// Disable notices
-				$error_reporting = error_reporting(~E_NOTICE);
-
 				$var = mb_convert_encoding($var, $charset, $charset);
-
-				// Turn notices back on
-				error_reporting($error_reporting);
 			}
 		}
 
