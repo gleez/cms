@@ -679,10 +679,8 @@ class Date {
 		$tz   = new DateTimeZone($settimezone ? $settimezone : date_default_timezone_get());
 		$time = new DateTime($datetime_str, $tz);
 
-		if ($time->getTimeZone()->getName() !== $tz->getName())
-		{
-			$time->setTimeZone($tz);
-		}
+		//https://github.com/facebook/hhvm/issues/2302
+		$time->setTimeZone($tz);
 
 		return $time->format($timestamp_format);
 	}

@@ -239,7 +239,7 @@ class HTML {
 			$file = str_replace(array('media/js'), "media/{$theme}/js", $file);
 		}
 
-		if (strpos($file, '://') === FALSE)
+		if (strpos($file, '://') === FALSE && strpos($file, '//') !== 0)
 		{
 			// Auto detect index file
 			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
@@ -387,7 +387,7 @@ class HTML {
 			$file = str_replace(array('media/css'), "media/{$theme}/css", $file);
 		}
 
-		if (strpos($file, '://') === FALSE)
+		if (strpos($file, '://') === FALSE && strpos($file, '//') !== 0)
 		{
 			//Auto detect index file
 			$index = ($index == FALSE AND ! empty(Kohana::$index_file)) ? TRUE : $index;
