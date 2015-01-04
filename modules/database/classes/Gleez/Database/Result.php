@@ -16,7 +16,7 @@ use ArrayAccess;
 use ReflectionClass;
 
 /**
- * MySQLi Database Expression
+ * Database Result Class
  *
  * @package Gleez\Database
  * @version 2.1.0
@@ -24,21 +24,40 @@ use ReflectionClass;
  */
 class Result implements Countable, Iterator, SeekableIterator, ArrayAccess
 {
-
-	// Executed SQL for this result
+	/**
+	 * Executed SQL for this result
+	 * @var string
+	 */
 	protected $_query;
 
-	// Raw result resource
+	/**
+	 * Raw result resource
+	 * @var \mysqli_result
+	 */
 	protected $_result;
 
-	// Total number of rows and current row
+	/**
+	 * Total number of rows
+	 * @var int
+	 */
 	protected $_total_rows  = 0;
+
+	/**
+	 * Current row
+	 * @var int
+	 */
 	protected $_current_row = 0;
 
-	// Return rows as an object or associative array
+	/**
+	 * Return rows as an object or associative array
+	 * @var bool|string
+	 */
 	protected $_as_object;
 
-	// Parameters for __construct when using object results
+	/**
+	 * Parameters for __construct when using object results
+	 * @var array
+	 */
 	protected $_object_params = NULL;
 
 	/**

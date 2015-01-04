@@ -58,7 +58,7 @@ class DB
 	 * Database::INSERT queries will return the insert id and number of rows.
 	 * For all other queries, the number of affected rows is returned.
 	 *
-	 * @param   integer $type Type: Database::SELECT, Database::UPDATE, etc
+	 * @param   string  $type Type: Database::SELECT, Database::UPDATE, etc
 	 * @param   string  $sql  SQL statement
 	 *
 	 * @return  mixed
@@ -69,7 +69,7 @@ class DB
 	}
 
 	/**
-	 * Create a new Query object
+	 * Select the columns
 	 *
 	 * Each argument will be treated as a column.
 	 * To generate a `foo AS bar` alias, use an array.
@@ -82,12 +82,12 @@ class DB
 	 * $query = DB::select(array('id', 'user_id'));
 	 * </code>
 	 *
-	 * @param string $columns Query string [Optional]
-	 * @return \Gleez\Database\Query
+	* @param mixed $columns Query string [Optional]
+	* @return \Gleez\Database\Query Create a new Query object
 	 */
 	public static function select($columns = NULL)
 	{
-		$query = new Query('select', NULL);
+		$query = new Query(Database::SELECT, NULL);
 		return $query->select(\func_get_args());
 	}
 
@@ -105,7 +105,7 @@ class DB
 	 */
 	public static function select_array(array $columns = NULL)
 	{
-		$query = new Query('select', NULL);
+		$query = new Query(Database::SELECT, NULL);
 		return $query->select($columns);
 	}
 
@@ -118,14 +118,14 @@ class DB
 	 * $query = DB::insert('users', array('id', 'username'));
 	 * </code>
 	 *
-	 * @param   string  $table    table to insert into
-	 * @param   array   $columns  list of column names or array($column, $alias) or object
+	* @param string $table Table to insert into [Optional]
+	* @param array $columns List of column names or array($column, $alias) or object [Optional]
 	 *
 	 * @return  \Gleez\Database\Query
 	 */
 	public static function insert($table = NULL, array $columns = NULL)
 	{
-		$query = new Query('insert', NULL);
+		$query = new Query(Database::INSERT, NULL);
 		return $query->insert($table, $columns);
 	}
 
@@ -138,12 +138,12 @@ class DB
 	 * $query = DB::update('users');
 	 * </code>
 	 *
-	 * @param   string  $table  table to update
+	 * @param string $table Table to update [Optional]
 	 * @return  \Gleez\Database\Query
 	 */
 	public static function update($table = NULL)
 	{
-		$query = new Query('update', NULL);
+		$query = new Query(Database::UPDATE, NULL);
 		return $query->update($table);
 	}
 
@@ -161,7 +161,7 @@ class DB
 	 */
 	public static function delete($table = NULL)
 	{
-		$query = new Query('delete', NULL);
+		$query = new Query(Database::DELETE, NULL);
 		return $query->delete($table);
 	}
 

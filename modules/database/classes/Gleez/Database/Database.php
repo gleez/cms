@@ -39,10 +39,11 @@ class DatabaseException extends \Exception {};
 abstract class Database
 {
 	// Query types
-	const SELECT = 'select';
-	const INSERT = 'insert';
-	const UPDATE = 'update';
-	const DELETE = 'delete';
+	const SELECT  = 'select';
+	const INSERT  = 'insert';
+	const UPDATE  = 'update';
+	const DELETE  = 'delete';
+	const REPLACE = 'replace';
 
 	/**
 	 * Default instance name
@@ -197,6 +198,8 @@ abstract class Database
 	 */
 	public function __construct($name, array $config)
 	{
+		$this->checkEnvironment();
+
 		// Set the instance name
 		$this->_instance = $name;
 
@@ -330,7 +333,7 @@ abstract class Database
 	/**
 	 * Perform an SQL query of the given type
 	 *
-	 * @param   integer  $type       Database::SELECT, Database::INSERT, etc
+	 * @param   string   $type       Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql        SQL query
 	 * @param   boolean  $asObject   Result object class string, TRUE for stdClass, FALSE for assoc array [Optional]
 	 * @param   array    $params     Object construct parameters for result class [Optional]
@@ -363,6 +366,13 @@ abstract class Database
 
 		return isset($info[0]['total_row_count']) ? $info[0]['total_row_count'] : FALSE;
 	}
+
+	/**
+	 * Check environment
+	 * @return bool
+	 * @throws RuntimeException
+	 */
+	abstract public function checkEnvironment();
 
 	/**
 	 * List all of the tables in the database.
@@ -435,9 +445,9 @@ abstract class Database
 	/**
 	 * Wraps the input with identifiers when necessary.
 	 *
-	 * @param  \Gleez\Database\Expression|string  $value  The string to be quoted, or an Expression to leave it untouched
+	 * @param  mixed  $value  The string to be quoted, or an Expression to leave it untouched
 	 *
-	 * @return  \Gleez\Database\Expression|string  The untouched Expression or the quoted string
+	 * @return  mixed  The untouched Expression or the quoted string
 	 */
 	public function quoteIdentifier($value)
 	{
@@ -465,7 +475,7 @@ abstract class Database
 		elseif (strpos($value, '.') !== FALSE) {
 
 			$pieces = explode('.', $value);
-			$count  = count($pieces) ;
+			$count  = count($pieces);
 
 			foreach ($pieces as $key => $piece) {
 				if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
@@ -490,13 +500,13 @@ abstract class Database
 	}
 
 	/**
-	 * Calls $this->quoteIdentifier() on every element of the array passed.
+	 * Calls Database::quoteIdentifier on every element of the array passed.
 	 *
 	 * @param  array  $array  An array of strings to be quoted
 	 *
 	 * @return  array  The array of quoted strings
 	 */
-	public function quoteIdentifierArr(Array $array)
+	public function quoteIdentifierArr(array $array)
 	{
 		$result = array();
 
@@ -519,7 +529,6 @@ abstract class Database
 	 *
 	 * @param   mixed   $table  table name or array(table, alias)
 	 * @return  string
-	 * @uses    Database::quote_identifier
 	 * @uses    Database::table_prefix
 	 */
 	public function quoteTable($table)
@@ -587,9 +596,9 @@ abstract class Database
 	/**
 	 * Adds quotes around values when necessary.
 	 *
-	 * @param  \Gleez\Database\Expression|string  $value  The input string, eventually wrapped in an expression to leave it untouched
+	 * @param   mixed  $value  The input string, eventually wrapped in an expression to leave it untouched
 	 *
-	 * @return  \Gleez\Database\Expression|string  The untouched Expression or the quoted string
+	 * @return  mixed  The untouched Expression or the quoted string
 	 */
 	public function quote($value)
 	{
@@ -633,13 +642,13 @@ abstract class Database
 	}
 
 	/**
-	* Calls $this->quote() on every element of the array passed.
+	* Calls Database::quote on every element of the array passed.
 	*
 	* @param  array  $array  The array of strings to quote
 	*
 	* @return  array  The array of quotes strings
 	*/
-	public function quoteArr(Array $array)
+	public function quoteArr(array $array)
 	{
 		$result = array();
 
