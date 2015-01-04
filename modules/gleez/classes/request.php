@@ -8,7 +8,7 @@
  * @package    Gleez\Request
  * @version    1.2.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Request implements HTTP_Request {
