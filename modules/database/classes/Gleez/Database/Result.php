@@ -2,21 +2,28 @@
 /**
  * Gleez CMS (http://gleezcms.org)
  *
- * @link https://github.com/gleez/database Canonical source repository
+ * @link https://github.com/gleez/cms Canonical source repository
  * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license http://gleezcms.org/license Gleez CMS License
  */
 
 namespace Gleez\Database;
 
+use Countable;
+use Iterator;
+use SeekableIterator;
+use ArrayAccess;
+use ReflectionClass;
+
 /**
- * MySQLi database Expression
+ * MySQLi Database Expression
  *
  * @package Gleez\Database
  * @version 2.1.0
- * @author Gleez Team
+ * @author  Gleez Team
  */
-class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
+class Result implements Countable, Iterator, SeekableIterator, ArrayAccess
+{
 
 	// Executed SQL for this result
 	protected $_query;
@@ -439,7 +446,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 			if ($this->_reflect_class === NULL)
 			{
 				// Create reflection class of given classname or stdClass
-				$this->_reflect_class = new \ReflectionClass(is_string($this->_as_object) ? $this->_as_object : 'stdClass');
+				$this->_reflect_class = new ReflectionClass(is_string($this->_as_object) ? $this->_as_object : 'stdClass');
 			}
 
 			// Support ORM with loaded, when the class has __set and __construct if its ORM

@@ -10,18 +10,19 @@
 namespace Gleez\Database\Driver;
 
 /**
- * Database Driver interface
+ * Driver Registry
  *
- * @package Gleez\Database\Driver
+ * @package Gleez\Database\Adapter\Driver
  * @version 1.0.0
  * @author  Gleez Team
  */
-interface DriverInterface
+class Driver
 {
-	/**
-	 * Check environment
-	 *
-	 * @return bool
-	 */
-	public function checkEnvironment();
+	const SQLITE = 'sqlite';
+	const MYSQLI = 'mysqli';
+
+	public static $drivers = [
+		self::SQLITE => 'Gleez\Database\Driver\SQLite',
+		self::MYSQLI => 'Gleez\Database\Driver\MySQLi'
+	];
 }

@@ -2,29 +2,34 @@
 /**
  * Gleez CMS (http://gleezcms.org)
  *
- * @link https://github.com/gleez/database Canonical source repository
- * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @link https://github.com/gleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license http://gleezcms.org/license Gleez CMS License
  */
 
-namespace Gleez\Database;
+namespace Gleez\Database\Driver;
 
-use Gleez\Database\Driver\DriverInterface;
+use Gleez\Database\ConnectionException;
+use Gleez\Database\DatabaseException;
+use Gleez\Database\Database;
+use Gleez\Database\Result;
+
+use RuntimeException;
 
 /**
  * MySQLi database connection driver
  *
- * ### System Requirements
+ * System Requirements:
  *
  * - PHP 5.3.9 or higher
  * - MySQL 5.0 or higher
  *
- * @package Gleez\Database\Drivers
- * @version 2.1.1
- * @author Gleez Team
+ * @package Gleez\Database\Driver
+ * @version 2.1.2
+ * @author  Gleez Team
  */
-class Driver_MySQLi extends Database implements DriverInterface {
-
+class MySQLi extends Database implements DriverInterface
+{
 	/**
 	 * Database in use by each connection
 	 * @var array
@@ -54,6 +59,36 @@ class Driver_MySQLi extends Database implements DriverInterface {
 	 * @var \mysqli
 	 */
 	protected $_connection;
+
+	/**
+	 * Check environment
+	 *
+	 * @return bool
+	 * @throws RuntimeException
+	 */
+	public function checkEnvironment()
+	{
+		if (!extension_loaded('mysqli')) {
+			throw new RuntimeException(
+				sprintf('The "mysqli" extension is required for %s driver but the extension is not loaded.', __CLASS__)
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Class constructor
+	 *
+	 * @param string $name   Instance name
+	 * @param array  $config Configuration parameters
+	 */
+	public function __construct($name, array $config)
+	{
+		$this->checkEnvironment();
+
+		parent::__construct($name, $config);
+	}
 
 	/**
 	 * Connect to the database
@@ -107,15 +142,8 @@ class Driver_MySQLi extends Database implements DriverInterface {
 
 		try
 		{
-			if ($persistent == TRUE)
-			{
-				// See http://www.php.net/manual/en/mysqli.persistconns.php
-				$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
-			}
-			else
-			{
-				$this->_connection = new \MySQLi($hostname, $username, $password, $database, (int)$port, $socket);
-			}
+			// See http://www.php.net/manual/en/mysqli.persistconns.php
+			$this->_connection = new \MySQLi(($persistent ? 'p:' : '') . $hostname, $username, $password, $database, (int)$port, $socket);
 		}
 		catch (\Exception $e)
 		{
@@ -345,7 +373,7 @@ class Driver_MySQLi extends Database implements DriverInterface {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) $this->_connection->query('COMMIT');
+		return $this->transactionCommit();
 	}
 
 	/**
@@ -358,7 +386,7 @@ class Driver_MySQLi extends Database implements DriverInterface {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) $this->_connection->query('ROLLBACK');
+		return $this->transactionRollback();
 	}
 
 	/**
@@ -371,14 +399,14 @@ class Driver_MySQLi extends Database implements DriverInterface {
 	 */
 	public function escape($value)
 	{
-	    //$this->ping();
-	    $this->_connection OR $this->connect();
+		//$this->ping();
+		$this->_connection OR $this->connect();
 
-	    if (($value = $this->_connection->real_escape_string((string) $value)) === false) {
-	        throw new DatabaseException($this->_connection->error, $this->_connection->errno);
-	    }
+		if (($value = $this->_connection->real_escape_string((string) $value)) === false) {
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
+		}
 
-	    // SQL standard is to use single-quotes for all values
+		// SQL standard is to use single-quotes for all values
 		return "'$value'";
 	}
 
