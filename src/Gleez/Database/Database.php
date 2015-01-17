@@ -11,7 +11,7 @@
  * @package    Gleez\Database\Core
  * @version    2.0.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 namespace Gleez\Database;
@@ -22,24 +22,24 @@ abstract class Database{
 	const INSERT =  'insert';
 	const UPDATE =  'update';
 	const DELETE =  'delete';
-	
+
 	/**
 	 * Default instance name
 	 * @var string
 	 */
 	public static $default = 'default';
-    
+
 	/**
 	 * Database instances
 	 * @var array
 	 */
 	public static $instances = array();
-    
+
 	/**
 	 * @var string Cache of the name of the readonly connection
 	 */
 	protected static $_readonly = array();
-    
+
 	/**
 	 * Ready for use queries
 	 *
@@ -54,7 +54,7 @@ abstract class Database{
 		'variablesSession'  => 'SHOW SESSION VARIABLES',
 		'variablesGlobal'   => 'SHOW GLOBAL VARIABLES',
 	);
-	
+
 	/**
 	 * Get a singleton Database instance
 	 *
@@ -146,12 +146,12 @@ abstract class Database{
 
 		// Create the database connection instance
 		$driver = new $driver($name, $config);
-		
+
 		// Create the database connection instance and store
 		return $driver;
-		
+
 	}
-	
+
 	// Character that is used to quote identifiers
 	protected $_identifier = '"';
 
@@ -163,182 +163,182 @@ abstract class Database{
 
 	// Configuration array
 	protected $_config;
-	
+
 	protected $_query = TRUE;
-	
+
 	// Quoted query parameters
 	protected $_parameters = array();
-	
+
 	/**
 	 * The last result object.
 	 *
 	 * @var  array
 	 */
 	protected $last_result = null;
-	
+
 	/**
 	 * The last compiled query executed.
 	 *
 	 * @var  string
 	 */
 	protected $last_query = null;
-	
+
 	/**
 	 * The last chosen method (select, insert, replace, update, delete).
 	 *
 	 * @var  string
 	 */
 	protected $type = null;
-	
+
 	/**
 	 * Array of select elements that will be comma separated.
 	 *
 	 * @var  array
 	 */
 	protected $select = array();
-	
+
 	/**
 	 * Distinct
 	 *
 	 * @var  array
 	 */
 	protected $distinct = array();
-	
+
 	/**
 	 * From in SQL is the list of indexes that will be used
 	 *
 	 * @var  array
 	 */
 	protected $from = array();
-	
+
 	/**
 	 * Using
 	 *
 	 * @var  array
 	 */
 	protected $using = array();
-	
+
 	/**
 	 * JOIN
 	 *
 	 * @var  array
 	 */
 	protected $join = array();
-	
+
 	/**
 	 * JOIN ON
 	 *
 	 * @var  array
 	 */
 	protected $join_on = array();
-	
+
 	/**
 	 * JOIN AND
 	 *
 	 * @var  array
 	 */
 	protected $join_and = array();
-	
+
 	/**
 	 * The list of where and parenthesis, must be inserted in order
 	 *
 	 * @var  array
 	 */
 	protected $where = array();
-	
+
 	/**
 	 * The list of matches for the MATCH function in SQL
 	 *
 	 * @var  array
 	 */
 	protected $match = array();
-	
+
 	/**
 	 * GROUP BY array to be comma separated
 	 *
 	 * @var  array
 	 */
 	protected $group_by = array();
-	
+
 	/**
 	 * ORDER BY array
 	 *
 	 * @var  array
 	 */
 	protected $within_group_order_by = array();
-	
+
 	/**
 	 * The list of having and parenthesis, must be inserted in order
 	 *
 	 * @var  array
 	 */
 	protected $having = array();
-	
+
 	/**
 	 * ORDER BY array
 	 *
 	 * @var  array
 	 */
 	protected $order_by = array();
-	
+
 	/**
 	 * When not null it adds an offset
 	 *
 	 * @var  null|int
 	 */
 	protected $offset = null;
-	
+
 	/**
 	 * When not null it adds a limit
 	 *
 	 * @var  null|int
 	 */
 	protected $limit = null;
-	
+
 	/**
 	 * Value of INTO query for INSERT or REPLACE
 	 *
 	 * @var  null|string
 	 */
 	protected $into = null;
-	
+
 	/**
 	 * Value of INTO query for INSERT or REPLACE
 	 *
 	 * @var  null|string
 	 */
 	protected $_as_object = FALSE;
-	
+
 	protected $_object_params = array();
-	
+
 	/**
 	 * Array of columns for INSERT or REPLACE
 	 *
 	 * @var  array
 	 */
 	protected $columns = array();
-	
+
 	/**
 	 * Array OF ARRAYS of values for INSERT or REPLACE
 	 *
 	 * @var  array
 	 */
 	protected $values = array();
-	
+
 	/**
 	 * Array arrays containing column and value for SET in UPDATE
 	 *
 	 * @var  array
 	 */
 	protected $set = array();
-	
+
 	/**
 	 * Array of OPTION specific to SQL
 	 *
 	 * @var  array
 	 */
 	protected $options = array();
-	
+
 	/**
 	 * The reference to the object that queued itself and created this object
 	 *
@@ -366,7 +366,7 @@ abstract class Database{
 			$this->_config['table_prefix'] = '';
 		}
 	}
-	
+
 	/**
 	 * Returns the currently attached connection
 	 *
@@ -376,7 +376,7 @@ abstract class Database{
 	{
 	    return static::$instances[$this->_instance];
 	}
-	
+
 	/**
 	 * Used for the SHOW queries
 	 *
@@ -402,10 +402,10 @@ abstract class Database{
 
 			return $ordered;
 		}
-	
+
 		throw new \BadMethodCallException($method);
 	}
-	
+
 	/**
 	 * Avoids having the expressions escaped
 	 *
@@ -421,7 +421,7 @@ abstract class Database{
 	{
 		return new Expression($string);
 	}
-	
+
 	/**
 	 * Runs the query built
 	 *
@@ -434,7 +434,7 @@ abstract class Database{
 		    // Get the database instance
 		    //$db = Gleez\Database\Core::instance($db);
 		}
-	
+
 		if ($as_object === NULL)
 		{
 			$as_object = $this->_as_object;
@@ -444,20 +444,20 @@ abstract class Database{
 		{
 			$object_params = $this->_object_params;
 		}
-		
+
 		// For query statements
 		if ($this->last_query != NULL && $this->_query === TRUE)
 		{
 			$sql = $this->last_query;
-			
+
 			if ( ! empty($this->_parameters))
 			{
 				// Quote all of the values
 				$values = array_map(array($this->getConnection(), 'quote'), $this->_parameters);
-		
+
 				// Replace the values in the SQL
 				$sql = strtr($sql, $values);
-		
+
 				$this->last_query = $sql;
 			}
 		}
@@ -465,13 +465,13 @@ abstract class Database{
 		{
 			$sql = $this->compile()->getCompiled();
 		}
-		
+
 		$this->_query = FALSE;
-		
+
 		// pass the object so execute compiles it by itself
 		return $this->last_result = $this->query($this->type, $sql, $as_object, $object_params);
 	}
-	
+
 	/**
 	 * Executes a batch of queued queries
 	 *
@@ -492,7 +492,7 @@ abstract class Database{
 
 		return $this->last_result = $this->getConnection()->multiQuery($queue);
 	}
-	
+
 	/**
 	 * Enqueues the current object and returns a new one
 	 *
@@ -505,7 +505,7 @@ abstract class Database{
 
 		return $sq;
 	}
-	
+
 	/**
 	 * Returns the ordered array of enqueued objects
 	 *
@@ -524,7 +524,7 @@ abstract class Database{
 
 		return array_reverse($queue);
 	}
-	
+
 	/**
 	 * Gets the enqueued object
 	 *
@@ -534,7 +534,7 @@ abstract class Database{
 	{
 	    return $this->queue_prev;
 	}
-	
+
 	/**
 	 * Sets the reference to the enqueued object
 	 *
@@ -545,10 +545,10 @@ abstract class Database{
 	public function setQueuePrev($sq)
 	{
 	    $this->queue_prev = $sq;
-	
+
 	    return $this;
 	}
-	
+
 	/**
 	 * Returns the result of the last query
 	 *
@@ -558,7 +558,7 @@ abstract class Database{
 	{
 	    return $this->last_result;
 	}
-	
+
 	/**
 	 * Returns the latest compiled query
 	 *
@@ -568,7 +568,7 @@ abstract class Database{
 	{
 	    return $this->last_query;
 	}
-	
+
 	/**
 	 * SET syntax
 	 *
@@ -606,7 +606,7 @@ abstract class Database{
 
 		$this->getConnection()->query($query);
 	}
-	
+
 	/**
 	 * Begins transaction
 	 */
@@ -614,7 +614,7 @@ abstract class Database{
 	{
 	    $this->getConnection()->query('BEGIN');
 	}
-	
+
 	/**
 	 * Commits transaction
 	 */
@@ -622,7 +622,7 @@ abstract class Database{
 	{
 	    $this->getConnection()->query('COMMIT');
 	}
-	
+
 	/**
 	 * Rollbacks transaction
 	 */
@@ -630,7 +630,7 @@ abstract class Database{
 	{
 	    $this->getConnection()->query('ROLLBACK');
 	}
-	
+
 	/**
 	 * CALL SNIPPETS syntax
 	 *
@@ -644,10 +644,10 @@ abstract class Database{
 	{
 	    array_unshift($extra, $index);
 	    array_unshift($extra, $data);
-	
+
 	    return $this->getConnection()->query('CALL SNIPPETS('.implode(', ', $this->getConnection()->quoteArr($extra)).')');
 	}
-	
+
 	/**
 	 * CALL KEYWORDS syntax
 	 *
@@ -663,10 +663,10 @@ abstract class Database{
 	    if ($hits !== null) {
 			$arr[] = $hits;
 	    }
-	
+
 	    return $this->getConnection()->query('CALL KEYWORDS('.implode(', ', $this->getConnection()->quoteArr($arr)).')');
 	}
-	
+
 	/**
 	 * DESCRIBE syntax
 	 *
@@ -678,7 +678,7 @@ abstract class Database{
 	{
 	    return $this->getConnection()->query('DESCRIBE '.$this->getConnection()->quoteIdentifier($index));
 	}
-	
+
 	/**
 	 * CREATE FUNCTION syntax
 	 *
@@ -693,7 +693,7 @@ abstract class Database{
 	    return $this->getConnection()->query('CREATE FUNCTION '.$this->getConnection()->quoteIdentifier($udf_name).
 		' RETURNS '.$returns.' SONAME '.$this->getConnection()->quote($so_name));
 	}
-	
+
 	/**
 	 * DROP FUNCTION syntax
 	 *
@@ -705,7 +705,7 @@ abstract class Database{
 	{
 	    return $this->getConnection()->query('DROP FUNCTION '.$this->getConnection()->quoteIdentifier($udf_name));
 	}
-	
+
 	/**
 	 * ATTACH INDEX * TO RTINDEX * syntax
 	 *
@@ -719,7 +719,7 @@ abstract class Database{
 	    return $this->getConnection()->query('ATTACH INDEX '.$this->getConnection()->quoteIdentifier($disk_index).
 		' TO RTINDEX '. $this->getConnection()->quoteIdentifier($rt_index));
 	}
-	
+
 	/**
 	 * FLUSH RTINDEX syntax
 	 *
@@ -731,7 +731,7 @@ abstract class Database{
 	{
 	    return $this->getConnection()->query('FLUSH RTINDEX '.$this->getConnection()->quoteIdentifier($index));
 	}
-	
+
 	/**
 	 * Returns results as objects
 	 *
@@ -742,7 +742,7 @@ abstract class Database{
 	public function as_object($class = TRUE, array $params = NULL)
 	{
 		$this->_as_object = $class;
-		
+
 		if ($params)
 		{
 			// Add object parameters
@@ -751,7 +751,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Count the number of records in a table.
 	 *
@@ -765,15 +765,15 @@ abstract class Database{
 	{
 		// Quote the table name
 		$table = $this->quoteTable($table);
-		
+
 		// To execute the query statement
 		$this->_query = FALSE;
-		
+
 		$info = $this->query(self::SELECT, 'SELECT COUNT(*) AS total_row_count FROM '.$table, FALSE);
-		
+
 		return isset($info[0]['total_row_count']) ? $info[0]['total_row_count'] : FALSE;
 	}
-	
+
 	/**
 	 * Runs the compile function
 	 *
@@ -799,7 +799,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compile the SQL partial for a JOIN statement and return it.
 	 *
@@ -823,7 +823,7 @@ abstract class Database{
 		if (! empty($this->using))
 		{
 			$quote_column = array($this->getConnection(), 'quoteIdentifier');
-			
+
 			// Quote and concat the columns
 			//$query .= ' USING ('.implode(', ', array_map(array($this, 'quote_column'), $this->using)).')';
 			$query .= ' USING ('.implode(', ', array_map($quote_column, $this->using)).')';
@@ -848,11 +848,11 @@ abstract class Database{
 
 			// Concat the conditions "... AND ..."
 			$query .= ' ON ('.implode(' AND ', $conditions).')';
-		 
+
 			if (! empty($this->join_and))
 			{
 				$and_conditions = array();
-				
+
 				foreach ($this->join_and as $icondition)
 				{
 					// Split the condition
@@ -864,9 +864,9 @@ abstract class Database{
 					}
 
 					// Quote each of the columns used for the condition. v1 is quote value not column
-					$and_conditions[] = $this->getConnection()->quoteIdentifier($c1).$op.' '.$this->quote($v1); 
+					$and_conditions[] = $this->getConnection()->quoteIdentifier($c1).$op.' '.$this->quote($v1);
 				}
-				
+
 				if( !empty($and_conditions) ) {
 					// Concat the conditions "... AND ..."
 					$query .= ' AND '.implode(' AND ', $and_conditions).'';
@@ -876,7 +876,7 @@ abstract class Database{
 
 		return $query;
 	}
-	
+
 	/**
 	 * Compiles the MATCH part of the queries
 	 * Used by: SELECT, DELETE, UPDATE
@@ -912,7 +912,7 @@ abstract class Database{
 
 		return $query;
 	}
-	
+
 	/**
 	 * Compiles the WHERE part of the queries
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
@@ -978,7 +978,7 @@ abstract class Database{
 
 		return $query;
 	}
-	
+
 	/**
 	 * Compiles the WHERE part of the queries
 	 * It interacts with the MATCH() and of course isn't usable stand-alone
@@ -1044,7 +1044,7 @@ abstract class Database{
 
 		return $query;
 	}
-	
+
 	/**
 	 * Compiles the statements for SELECT
 	 *
@@ -1062,7 +1062,7 @@ abstract class Database{
 			    // Select only unique results
 			    $query .= 'DISTINCT ';
 		    }
-		    
+
 		    if ( ! empty($this->select)) {
 			$query .= implode(', ', $this->getConnection()->quoteIdentifierArr($this->select)).' ';
 		    } else {
@@ -1079,7 +1079,7 @@ abstract class Database{
 			// Add tables to join
 			$query .= $this->compileJoin().' ';
 		}
-		    
+
 		$query .= $this->compileMatch().$this->compileWhere();
 
 		if ( ! empty($this->group_by)) {
@@ -1105,7 +1105,7 @@ abstract class Database{
 		}
 
 		    $query .= $this->compileHaving();
-		    
+
 		if ( ! empty($this->order_by)) {
 		    $query .= 'ORDER BY ';
 
@@ -1151,7 +1151,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for INSERT or REPLACE
 	 *
@@ -1188,7 +1188,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for UPDATE
 	 *
@@ -1227,7 +1227,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Compiles the statements for DELETE
 	 *
@@ -1251,7 +1251,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Select the columns
 	 * Gets the arguments passed as $SQL->select('one', 'two')
@@ -1268,10 +1268,10 @@ abstract class Database{
 			// Set the initial columns
 			$this->select = $columns;
 		}
-	
+
 		return $this;
 	}
-	
+
 	/**
 	 * Set the table and columns for an insert.
 	 *
@@ -1282,7 +1282,7 @@ abstract class Database{
 	public function insert($table = NULL, array $columns = NULL)
 	{
 		$this->reset();
-		
+
 		if ($table)
 		{
 			// Set the inital table name
@@ -1298,7 +1298,7 @@ abstract class Database{
 		$this->type = 'insert';
 		return $this;
 	}
-	
+
 	/**
 	 * Activates the REPLACE mode
 	 *
@@ -1311,7 +1311,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Activates the UPDATE mode
 	 *
@@ -1325,7 +1325,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Activates the DELETE mode
 	 *
@@ -1343,7 +1343,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * FROM clause (Sphinx-specific since it works with multiple indexes)
 	 * func_get_args()-enabled
@@ -1360,7 +1360,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Enables or disables selecting only unique columns using "SELECT DISTINCT"
 	 *
@@ -1374,7 +1374,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Adds addition tables to "JOIN ...".
 	 *
@@ -1396,7 +1396,7 @@ abstract class Database{
 
 		return $this;
 	}
- 
+
 	/**
 	 * Adds "ON ..." conditions for the last created JOIN statement.
 	 *
@@ -1451,7 +1451,7 @@ abstract class Database{
 	{
 		return $this->join_and($c1, $op, $c2);
 	}
-	
+
 	/**
 	 * Adds "USING ..." conditions for the last created JOIN statement.
 	 *
@@ -1471,7 +1471,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * MATCH clause (Sphinx-specific)
 	 *
@@ -1487,7 +1487,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * WHERE clause
 	 *
@@ -1531,17 +1531,17 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	public function and_where($column, $operator, $value = null)
 	{
 	    return $this->where($column, $operator, $value);
 	}
-	
+
 	public function or_where($column, $operator, $value = null)
 	{
 	    return $this->where($column, $operator, $value, true);
 	}
-	
+
 	/**
 	 * OR WHERE - at this time (Sphinx 2.0.2) it's not available
 	 *
@@ -1557,14 +1557,14 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	public function where_open()
 	{
 		$this->where[] = array('ext_operator' => '(');
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a parenthesis prepended with AND (where necessary)
 	 *
@@ -1576,7 +1576,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a new "AND WHERE (...)" grouping.
 	 *
@@ -1584,9 +1584,9 @@ abstract class Database{
 	 */
 	public function and_where_open()
 	{
-		return $this->whereOpen();	
+		return $this->whereOpen();
 	}
-	
+
 	/**
 	 * Opens a new "OR WHERE (...)" grouping.
 	 *
@@ -1596,7 +1596,7 @@ abstract class Database{
 	{
 		return $this->orWhereOpen();
 	}
-	
+
 	/**
 	 * Opens a parenthesis prepended with OR (where necessary)
 	 *
@@ -1605,15 +1605,15 @@ abstract class Database{
 	public function orWhereOpen()
 	{
 		$this->where[] = array('ext_operator' => 'OR (');
-	    
+
 		return $this;
 	}
-	
+
 	public function where_close()
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes an open "AND WHERE (...)" grouping.
 	 *
@@ -1623,7 +1623,7 @@ abstract class Database{
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes an open "OR WHERE (...)" grouping.
 	 *
@@ -1633,7 +1633,7 @@ abstract class Database{
 	{
 		return $this->whereClose();
 	}
-	
+
 	/**
 	 * Closes a parenthesis in WHERE
 	 *
@@ -1645,7 +1645,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * GROUP BY clause
 	 * Adds to the previously added columns
@@ -1660,7 +1660,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Creates a "GROUP BY ..." filter.
 	 *
@@ -1672,7 +1672,7 @@ abstract class Database{
 	{
 		return $this->groupBy($columns);
 	}
-	
+
 	/**
 	 * WITHIN GROUP ORDER BY clause (SQL-specific)
 	 * Adds to the previously added columns
@@ -1689,7 +1689,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Alias of and_having()
 	 *
@@ -1714,7 +1714,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Creates a new "AND HAVING" condition for the query.
 	 *
@@ -1727,7 +1727,7 @@ abstract class Database{
 	{
 		return $this->having($column, $operator, $value);
 	}
-	
+
 	/**
 	 * Creates a new "OR HAVING" condition for the query.
 	 *
@@ -1740,7 +1740,7 @@ abstract class Database{
 	{
 		return $this->having($column, $operator, $value, true);
 	}
-	
+
 	/**
 	 * Alias of and_having_open()
 	 *
@@ -1762,7 +1762,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Opens a new "OR HAVING (...)" grouping.
 	 *
@@ -1783,10 +1783,10 @@ abstract class Database{
 	public function having_close()
 	{
 		$this->having[] = array('ext_operator' => ')');
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Closes an open "AND HAVING (...)" grouping.
 	 *
@@ -1806,7 +1806,7 @@ abstract class Database{
 	{
 		return $this->having_close();
 	}
-	
+
 	/**
 	 * Applies sorting with "ORDER BY ..."
 	 *
@@ -1818,7 +1818,7 @@ abstract class Database{
 	{
 		return $this->orderBy($column, $direction);
 	}
-	
+
 	/**
 	 * ORDER BY clause
 	 * Adds to the previously added columns
@@ -1834,7 +1834,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * LIMIT clause
 	 * Supports also LIMIT offset, limit
@@ -1856,7 +1856,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * OFFSET clause
 	 *
@@ -1870,7 +1870,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * OPTION clause (SQL-specific)
 	 * Used by: SELECT
@@ -1886,7 +1886,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * INTO clause
 	 * Used by: INSERT, REPLACE
@@ -1901,7 +1901,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set columns
 	 * Used in: INSERT, REPLACE
@@ -1921,7 +1921,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set VALUES
 	 * Used in: INSERT, REPLACE
@@ -1941,7 +1941,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Set column and relative value
 	 * Used in: INSERT, REPLACE
@@ -1956,14 +1956,14 @@ abstract class Database{
 		if ($this->type === 'insert' || $this->type === 'replace') {
 			$this->columns[] = $column;
 			$this->values[0][] = $value;
-		} 
+		}
 		else {
 			$this->set[$column] = $value;
 		}
 
 		return $this;
 	}
-	
+
 	/**
 	 * Allows passing an array with the key as column and value as value
 	 * Used in: INSERT, REPLACE, UPDATE
@@ -1981,7 +1981,7 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 	/**
 	 * Escapes the query for the MATCH() function
 	 *
@@ -1996,7 +1996,7 @@ abstract class Database{
 
 		return str_replace($from, $to, $string);
 	}
-	
+
 	/**
 	 * Escapes the query for the MATCH() function
 	 * Allows some of the control characters to pass through for use with a search field: -, |, "
@@ -2038,7 +2038,7 @@ abstract class Database{
 
 		return $string;
 	}
-	
+
 	/**
 	 * Return the table prefix defined in the current configuration.
 	 *
@@ -2050,7 +2050,7 @@ abstract class Database{
 	{
 		return $this->_config['table_prefix'];
 	}
-	
+
 	/**
 	 * Clears the existing query build for new query when using the same SQL instance.
 	 *
@@ -2079,5 +2079,5 @@ abstract class Database{
 
 		return $this;
 	}
-	
+
 }
