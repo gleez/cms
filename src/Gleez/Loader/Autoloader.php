@@ -131,7 +131,7 @@ class Autoloader implements Autoloadable
     /**
      * Class constructor
      *
-     * Defined by Autoloadable. Allows to configure the autoloader during
+     * Defined by Gleez\Loader\Autoloadable. Allows to configure the autoloader during
      * creation of the object.
      *
      * @param null|array|\Traversable $config Autoloader configuration [Optional]
@@ -146,7 +146,7 @@ class Autoloader implements Autoloadable
     /**
      * Autoload classes
      *
-     * Defined by Autoloadable.
+     * Defined by Gleez\Loader\Autoloadable.
      *
      * @param  string $class Class name
      *
@@ -185,7 +185,7 @@ class Autoloader implements Autoloadable
     /**
      * Registers this instance as an autoloader
      *
-     * Defined by Autoloadable.
+     * Defined by Gleez\Loader\Autoloadable.
      *
      * @param bool $prepend Whether to prepend the autoloader or not
      */
@@ -197,7 +197,7 @@ class Autoloader implements Autoloadable
     /**
      * Unregisters this instance as an autoloader
      *
-     * Defined by Autoloadable.
+     * Defined by Gleez\Loader\Autoloadable.
      */
     public function unregister()
     {
@@ -263,7 +263,7 @@ class Autoloader implements Autoloadable
      *
      * @param  bool $flag true/false or, for example 1/0
      *
-     * @return Autoloader
+     * @return Gleez\Loader\Autoloader
      */
     public function setFallback($flag)
     {
@@ -297,7 +297,7 @@ class Autoloader implements Autoloadable
      *
      * @param array|\Traversable $config Autoloader configuration
      *
-     * @return Autoloader
+     * @return Gleez\Loader\Autoloader
      */
     public function setConfig($config)
     {
@@ -353,7 +353,7 @@ class Autoloader implements Autoloadable
      * @param  mixed  $pr   Prefix or an array of pairs
      * @param  string $path Path, if $pr is string [Optional]
      *
-     * @return Autoloader
+     * @return Gleez\Loader\Autoloader
      */
     public function setPrefixes($pr, $path = null)
     {
@@ -414,7 +414,7 @@ class Autoloader implements Autoloadable
      * @param  mixed  $ns   Namespace or array of namespace
      * @param  string $path Path, if $ns is string [Optional]
      *
-     * @return Autoloader
+     * @return Gleez\Loader\Autoloader
      */
     public function setNamespaces($ns, $path = null)
     {
