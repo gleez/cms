@@ -5,7 +5,7 @@
  * @package    Gleez\Database
  * @version    2.0.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 namespace Gleez\Database;
@@ -32,7 +32,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	 * @var int
 	 */
 	protected $_internal_row = 0;
-	
+
 	/**
 	 * Sets the total number of rows and stores the result locally.
 	 *
@@ -58,7 +58,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 		//
 		//// Results as objects or associative arrays
 		//$this->_as_object = $as_object;
-				     
+
 		// Results as objects or associative arrays
 		$this->_as_object = ($as_object === TRUE ) ? TRUE : FALSE;
 
@@ -67,7 +67,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 			// Object constructor params
 			$this->_object_params = $params;
 		}
-		
+
 		// Find the number of rows in the result
 		$this->_total_rows = $result->num_rows;
 	}
@@ -191,15 +191,15 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 	public function each_as_array()
 	{
 		$results = array();
-		
+
 		foreach($this as $row)
-		{ 
+		{
 			//$results[] = $row->as_array();
 			$results[] = $row;
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * Return the named column from the current row.
 	 *
@@ -383,7 +383,7 @@ class Result implements \Countable, \Iterator, \SeekableIterator, \ArrayAccess {
 
 		return FALSE;
 	}
-	
+
 	/**
 	 * Returns the current row of a result set
 	 *

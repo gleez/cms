@@ -16,7 +16,7 @@
  * @package    Gleez\Database
  * @version    2.0.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 use Gleez\Database\Database;
@@ -37,7 +37,7 @@ class DB {
 			'caching'      => FALSE,
 			'profiling'    => FALSE,
 		);
-	
+
 	/**
 	 * Create a new [Database_Query] of the given type.
 	 *
