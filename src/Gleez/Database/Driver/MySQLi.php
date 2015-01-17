@@ -10,7 +10,7 @@
  * @package    Gleez\Database\Drivers
  * @version    2.0.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2014 Gleez Technologies
+ * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 namespace Gleez\Database;
@@ -275,10 +275,10 @@ class Driver_MySQLi extends Database {
 		{
 			$this->type       = $type;
 			$this->last_query = $sql;
-			
+
 			return $this;
 		}
-		
+
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
@@ -298,10 +298,10 @@ class Driver_MySQLi extends Database {
 
 		// Set the last query
 		$this->last_query = $sql;
-		
+
 		// Set the query to default
 		$this->_query = TRUE;
-		
+
 		if ($type === 'select')
 		{
 			// Return an iterator of results
@@ -436,7 +436,7 @@ class Driver_MySQLi extends Database {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Wraps the input with identifiers when necessary.
 	 *
@@ -448,18 +448,18 @@ class Driver_MySQLi extends Database {
 	{
 		// Identifiers are escaped by repeating them
 		$escaped_identifier = $this->_identifier.$this->_identifier;
-		
+
 		if (is_array($value))
 		{
 			list($value, $alias) = $value;
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
-		
+
 		if ($value instanceof \Gleez\Database\Expression) {
-			
+
 			$value = $value->value();
 		} elseif ($value instanceof \Gleez\Database\Driver_MySQLi) {
-			
+
 			if ($value->last_query != NULL)
 			{
 				$value = '('.$value->last_query.') ';
@@ -469,13 +469,13 @@ class Driver_MySQLi extends Database {
 				$value = '('.$value->compile()->getCompiled().') ';
 			}
 		} elseif ($value === '*') {
-			
+
 			return $value;
 		} elseif (strpos($value, '.') !== FALSE) {
-			
+
 			$pieces = explode('.', $value);
 			$count  = count($pieces) ;
-			
+
 			foreach ($pieces as $key => $piece) {
 				if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
 					$piece = $prefix.$piece;
@@ -485,16 +485,16 @@ class Driver_MySQLi extends Database {
 
 			$value = implode('.', $pieces);
 		} else {
-			
+
 			$value = $this->_identifier.$value.$this->_identifier;
 		}
-		
+
 		if (isset($alias))
 		{
 			// Attach table prefix to alias
 			$value .= ' AS '.$this->_identifier.$alias.$this->_identifier;
 		}
-		
+
 		return $value;
 	}
 
@@ -542,11 +542,11 @@ class Driver_MySQLi extends Database {
 			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
 		}
 
-		if ($table instanceof \Gleez\Database\Expression) 
+		if ($table instanceof \Gleez\Database\Expression)
 		{
 			$table = $table->value();
 		}
-		elseif ($table instanceof \Gleez\Database\Driver_MySQLi) 
+		elseif ($table instanceof \Gleez\Database\Driver_MySQLi)
 		{
 			$table = '('.$table->compile()->getCompiled().') ';
 		}
@@ -616,12 +616,12 @@ class Driver_MySQLi extends Database {
 		{
 			return "'0'";
 		}
-		elseif ($value instanceof \Gleez\Database\Expression) 
+		elseif ($value instanceof \Gleez\Database\Expression)
 		{
 		    // Use the raw expression
 		    return $value->value();
 		}
-		elseif ($value instanceof \Gleez\Database\Driver_MySQLi) 
+		elseif ($value instanceof \Gleez\Database\Driver_MySQLi)
 		{
 			if ($value->last_query != NULL)
 			{
@@ -637,7 +637,7 @@ class Driver_MySQLi extends Database {
 		elseif (strpos($value, '.') !== FALSE) {
 			    $pieces = explode('.', $value);
 			    $count  = count($pieces) ;
-			    
+
 			    foreach ($pieces as $key => $piece) {
 				    if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
 					    $piece = $prefix.$piece;
@@ -664,7 +664,7 @@ class Driver_MySQLi extends Database {
 
 	    return $this->escape($value);
 	}
-	
+
 	/**
 	* Calls $this->quote() on every element of the array passed.
 	*
@@ -675,11 +675,11 @@ class Driver_MySQLi extends Database {
 	public function quoteArr(Array $array = array())
 	{
 		$result = array();
-	
+
 		foreach ($array as $key => $item) {
 		    $result[$key] = $this->quote($item);
 		}
-	
+
 		return $result;
 	}
 }

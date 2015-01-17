@@ -3,7 +3,7 @@
  * Gleez CMS (http://gleezcms.org)
  *
  * @link      https://github.com/gleez/cms Canonical source repository
- * @copyright Copyright (c) 2011-2014 Gleez Technologies
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
  * @license   http://gleezcms.org/license Gleez CMS License
  */
 
@@ -472,7 +472,7 @@ class Autoloader implements Autoloadable
      *
      * @return string
      */
-    protected function getFilenameFromClassname($class, $dir) 
+    protected function getFilenameFromClassname($class, $dir)
     {
         // $class may contain a namespace portion, in  which case we need
         // to preserve any underscores in that portion.
