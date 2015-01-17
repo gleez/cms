@@ -1,156 +1,193 @@
 <?php
 /**
- * Provides a shortcut to get Database related objects for [making queries](../database/query).
+ * Gleez CMS (http://gleezcms.org)
  *
- * Shortcut     | Returned Object
- * -------------|---------------
- * [`DB::query()`](#query)   | [Database_Query]
- * [`DB::insert()`](#insert) | [Database_Query_Builder_Insert]
- * [`DB::select()`](#select),<br />[`DB::select_array()`](#select_array) | [Database_Query_Builder_Select]
- * [`DB::update()`](#update) | [Database_Query_Builder_Update]
- * [`DB::delete()`](#delete) | [Database_Query_Builder_Delete]
- * [`DB::expr()`](#expr)     | [Database_Expression]
+ * @link https://github.com/gleez/database Canonical source repository
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+use Gleez\Database\Database;
+use Gleez\Database\Query;
+use Gleez\Database\Expression;
+
+/**
+ * Gleez DB
+ *
+ * Provides a helpers to get Database related objects for [making queries](../database/query).
+ *
+ * Shortcut                              | Returned Object
+ * --------------------------------------|---------------
+ * [`DB::query()`](#query)               | [Gleez\Database\Result]|mixed
+ * [`DB::insert()`](#insert)             | [Gleez\Database\Query]
+ * [`DB::select()`](#select)             | [\Gleez\Database\Query]
+ * [`DB::select_array()`](#select_array) | [\Gleez\Database\Query]
+ * [`DB::update()`](#update)             | [\Gleez\Database\Query]
+ * [`DB::delete()`](#delete)             | [\Gleez\Database\Query]
+ * [`DB::expr()`](#expr)                 | [\Gleez\Database\Expression]
  *
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
- * @package    Gleez\Database
- * @version    2.0.0
- * @author     Gleez Team
- * @copyright  (c) 2011-2015 Gleez Technologies
- * @license    http://gleezcms.org/license  Gleez CMS License
+ * @package Gleez\Database
+ * @version 2.1.1
+ * @author Gleez Team
  */
-use Gleez\Database\Database;
+class DB
+{
 
-class DB {
-
-	protected static $_config = array(
-			'type' => 'MySQLi',
-			'connection' => array(
-					'hostname'   => 'localhost',
-					'database'   => '',
-					'username'   => '',
-					'password'   => '',
-					'persistent' => FALSE,
-				),
-			'table_prefix' => '',
-			'charset'      => 'utf8',
-			'caching'      => FALSE,
-			'profiling'    => FALSE,
-		);
+	protected static $_config = NULL;
 
 	/**
-	 * Create a new [Database_Query] of the given type.
+	 * Avoid directly creating
+	 */
+	private function __construct() {}
+
+	/**
+	 * Create a new Query object.
 	 *
-	 *     // Create a new SELECT query
-	 *     $query = DB::query(Database::SELECT, 'SELECT * FROM users');
+	 * Example:<br>
+	 * <code>
+	 * // Create a new SELECT query
+	 * $result = DB:query(\Gleez\Database\Database::SELECT, 'SELECT * FROM gl_users');
+	 * // Create a new DELETE query
+	 * $query = DB::query(\Gleez\Database\Database::DELETE, 'DELETE FROM gl_users WHERE id = 5');
+	 * </code>
 	 *
-	 *     // Create a new DELETE query
-	 *     $query = DB::query(Database::DELETE, 'DELETE FROM users WHERE id = 5');
-	 *
-	 * Specifying the type changes the returned result. When using
-	 * `Database::SELECT`, a [Database_Query_Result] will be returned.
-	 * `Database::INSERT` queries will return the insert id and number of rows.
+	 * Specifying the type changes the returned result.
+	 * When using Database::SELECT a \Gleez\Database\Result will be returned.
+	 * Database::INSERT queries will return the insert id and number of rows.
 	 * For all other queries, the number of affected rows is returned.
 	 *
-	 * @param   integer  $type  type: Database::SELECT, Database::UPDATE, etc
-	 * @param   string   $sql   SQL statement
-	 * @return  Database_Query
+	 * @param   string  $type Type: Database::SELECT, Database::UPDATE, etc
+	 * @param   string  $sql  SQL statement
+	 *
+	 * @return  mixed
 	 */
 	public static function query($type, $sql)
 	{
-		return Database::instance('gleez', self::$_config)->query($type, $sql);
+		return Database::instance()->query($type, $sql);
 	}
 
 	/**
-	 * Create a new [Database_Query_Builder_Select]. Each argument will be
-	 * treated as a column. To generate a `foo AS bar` alias, use an array.
+	 * Select the columns
 	 *
-	 *     // SELECT id, username
-	 *     $query = DB::select('id', 'username');
+	 * Each argument will be treated as a column.
+	 * To generate a `foo AS bar` alias, use an array.
 	 *
-	 *     // SELECT id AS user_id
-	 *     $query = DB::select(array('id', 'user_id'));
+	 * Example:<br>
+	 * <code>
+	 * // SELECT id, username
+	 * $query = DB::select('id', 'username');
+	 * // SELECT id AS user_id
+	 * $query = DB::select(array('id', 'user_id'));
+	 * </code>
 	 *
-	 * @param   mixed   $columns  column name or array($column, $alias) or object
-	 * @return  Database_Query_Builder_Select
+	* @param mixed $columns Query string [Optional]
+	* @return \Gleez\Database\Query Create a new Query object
 	 */
 	public static function select($columns = NULL)
 	{
-		return Database::instance('gleez', self::$_config)->select(\func_get_args());
+		$query = new Query(Database::SELECT, NULL);
+		return $query->select(\func_get_args());
 	}
 
 	/**
-	 * Create a new [Database_Query_Builder_Select] from an array of columns.
+	 * Create a new Query object from an array of columns.
 	 *
-	 *     // SELECT id, username
-	 *     $query = DB::select_array(array('id', 'username'));
+	 * Example:<br>
+	 * <code>
+	 * // SELECT id, username
+	 * $query = DB::select_array(array('id', 'username'));
+	 * </code>
 	 *
 	 * @param   array   $columns  columns to select
-	 * @return  Database_Query_Builder_Select
+	 * @return  \Gleez\Database\Query
 	 */
 	public static function select_array(array $columns = NULL)
 	{
-		return Database::instance('gleez', $this->_config)->select($columns);
+		$query = new Query(Database::SELECT, NULL);
+		return $query->select($columns);
 	}
 
 	/**
-	 * Create a new [Database_Query_Builder_Insert].
+	 * Create a new Query object.
 	 *
-	 *     // INSERT INTO users (id, username)
-	 *     $query = DB::insert('users', array('id', 'username'));
+	 * Example::<br>
+	 * <code>
+	 * // INSERT INTO users (id, username)
+	 * $query = DB::insert('users', array('id', 'username'));
+	 * </code>
 	 *
-	 * @param   string  $table    table to insert into
-	 * @param   array   $columns  list of column names or array($column, $alias) or object
-	 * @return  Database_Query_Builder_Insert
+	* @param string $table Table to insert into [Optional]
+	* @param array $columns List of column names or array($column, $alias) or object [Optional]
+	 *
+	 * @return  \Gleez\Database\Query
 	 */
 	public static function insert($table = NULL, array $columns = NULL)
 	{
-		return Database::instance('gleez', self::$_config)->insert($table, $columns);
+		$query = new Query(Database::INSERT, NULL);
+		return $query->insert($table, $columns);
 	}
 
 	/**
-	 * Create a new [Database_Query_Builder_Update].
+	 * Create a new Query object.
 	 *
-	 *     // UPDATE users
-	 *     $query = DB::update('users');
+	 * Example:<br>
+	 * <code>
+	 * // UPDATE users
+	 * $query = DB::update('users');
+	 * </code>
 	 *
-	 * @param   string  $table  table to update
-	 * @return  Database_Query_Builder_Update
+	 * @param string $table Table to update [Optional]
+	 * @return  \Gleez\Database\Query
 	 */
 	public static function update($table = NULL)
 	{
-		return Database::instance('gleez', self::$_config)->update($table);
+		$query = new Query(Database::UPDATE, NULL);
+		return $query->update($table);
 	}
 
 	/**
-	 * Create a new [Database_Query_Builder_Delete].
+	 * Create a new Query object.
 	 *
-	 *     // DELETE FROM users
-	 *     $query = DB::delete('users');
+	 * Example:<br>
+	 * <code>
+	 * // DELETE FROM users
+	 * $query = DB::delete('users');
+	 * </code>
 	 *
-	 * @param   string  $table  table to delete from
-	 * @return  Database_Query_Builder_Delete
+	 * @param   string  $table  Table to delete from [Optional]
+	 * @return  \Gleez\Database\Query
 	 */
 	public static function delete($table = NULL)
 	{
-		return Database::instance('gleez', self::$_config)->delete($table);
+		$query = new Query(Database::DELETE, NULL);
+		return $query->delete($table);
 	}
 
 	/**
-	 * Create a new [Database_Expression] which is not escaped. An expression
-	 * is the only way to use SQL functions within query builders.
+	 * Create a new Expression object which is not escaped.
 	 *
-	 *     $expression = DB::expr('COUNT(users.id)');
-	 *     $query = DB::update('users')->set(array('login_count' => DB::expr('login_count + 1')))->where('id', '=', $id);
-	 *     $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
+	 * An expression is the only way to use SQL functions within query builders.
+	 * Example:<br>
+	 * <code>
+	 * $expression = DB::expr('COUNT(users.id)');
+	 * $query = DB::update('users')->set(array('login_count' => DB::expr('login_count + 1')))->where('id', '=', $id);
+	 * $users = ORM::factory('user')->where(DB::expr("BINARY `hash`"), '=', $hash)->find();
+	 * </code>
 	 *
-	 * @param   string  $string  expression
-	 * @param   array   parameters
-	 * @return  Database_Expression
+	 * @param   string  $string      Expression
+	 * @param   array   $parameters  Parameters [Optional]
+	 *
+	 * @return  \Gleez\Database\Expression
 	 */
 	public static function expr($string, $parameters = array())
 	{
-		return Database::instance('gleez', self::$_config)->expr($string);
+		return new Expression($string);
 	}
 
+	public static function version()
+	{
+		return Database::instance(NULL, self::$_config)->version();
+	}
 }

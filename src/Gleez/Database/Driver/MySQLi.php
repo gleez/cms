@@ -1,25 +1,34 @@
 <?php
 /**
+ * Gleez CMS (http://gleezcms.org)
+ *
+ * @link https://github.com/gleez/cms Canonical source repository
+ * @copyright Copyright (c) 2011-2015 Gleez Technologies
+ * @license http://gleezcms.org/license Gleez CMS License
+ */
+
+namespace Gleez\Database\Driver;
+
+use Gleez\Database\ConnectionException;
+use Gleez\Database\DatabaseException;
+use Gleez\Database\Database;
+use Gleez\Database\Result;
+use Exception;
+
+/**
  * MySQLi database connection driver
  *
- * ### System Requirements
+ * System Requirements:
  *
- * - PHP 5.3 or higher
+ * - PHP 5.3.9 or higher
  * - MySQL 5.0 or higher
  *
- * @package    Gleez\Database\Drivers
- * @version    2.0.0
- * @author     Gleez Team
- * @copyright  (c) 2011-2015 Gleez Technologies
- * @license    http://gleezcms.org/license Gleez CMS License
+ * @package Gleez\Database\Driver
+ * @version 2.1.3
+ * @author  Gleez Team
  */
-namespace Gleez\Database;
-
-class ConnectionException extends \Exception {};
-class DatabaseException extends \Exception {};
-
-class Driver_MySQLi extends Database {
-
+class MySQLi extends Database implements DriverInterface
+{
 	/**
 	 * Database in use by each connection
 	 * @var array
@@ -30,25 +39,43 @@ class Driver_MySQLi extends Database {
 	 * Use SET NAMES to set the character set
 	 * @var boolean
 	 */
-	protected static $_set_names;
+	protected static $_set_names = false;
 
 	/**
 	 * Identifier for this connection within the PHP driver
 	 * @var string
 	 */
-	protected $_connection_id;
+	protected $_connection_id = null;
 
 	/**
 	 * MySQL uses a backticks for identifiers
+	 * For enabling double quotation marks use SET sql_mode='ANSI_QUOTES';
 	 * @var string
 	 */
 	protected $_identifier = '`';
 
 	/**
 	 * Raw server connection
-	 * @var mysqli
+	 * @var \mysqli
 	 */
-	protected $_connection;
+	protected $_connection = null;
+
+	/**
+	 * Check environment
+	 *
+	 * @return bool
+	 * @throws \Gleez\Database\DatabaseException
+	 */
+	public function checkEnvironment()
+	{
+		if (!extension_loaded('mysqli')) {
+			throw new DatabaseException(
+				sprintf('The "mysqli" extension is required for %s driver but the extension is not loaded.', __CLASS__)
+			);
+		}
+
+		return true;
+	}
 
 	/**
 	 * Connect to the database
@@ -60,90 +87,90 @@ class Driver_MySQLi extends Database {
 	 * $db->connect();
 	 * ~~~
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	public function connect()
 	{
-		if ($this->_connection)
-		{
-			return;
+		// Don't allow to execute twice
+		if ($this->_connection) {
+			return $this;
 		}
 
-		if (is_null(self::$_set_names))
-		{
+		// @todo Gleez use at least PHP 5.3.x & MySQL 5.x
+		if (!self::$_set_names) {
 			// Determine if we can use mysqli_set_charset(), which is only
 			// available on PHP 5.2.3+ when compiled against MySQL 5.0+
 			self::$_set_names = ! \function_exists('mysqli_set_charset');
 		}
 
-		/**
-		 * Extract the connection parameters, adding required variables
-		 *
-		 * @var  $database   string
-		 * @var  $hostname   string
-		 * @var  $username   string
-		 * @var  $password   string
-		 * @var  $socket     string
-		 * @var  $port       string
-		 * @var  $persistent boolean
-		 */
-		extract($this->_config['connection'] + array(
-			'database'   => '',
-			'hostname'   => '',
-			'username'   => '',
-			'password'   => '',
-			'socket'     => '',
-			'port'       => 3306,
-			'persistent' => FALSE,
-		));
+		// localize
+		$config = $this->_config['connection'];
+
+		$findConfigValue = function ($key, $default = null) use ($config) {
+			if (isset($config[$key])) {
+			return $config[$key];
+			}
+
+			return $default;
+		};
+
+		$hostname  = $findConfigValue('hostname', '');
+		$database  = $findConfigValue('database', '');
+		$username  = $findConfigValue('username', '');
+		$password  = $findConfigValue('password', '');
+		$port      = $findConfigValue('port', 3306);
+		$socket    = $findConfigValue('socket');
+		$persist   = $findConfigValue('persistent', false);
+		$charset   = $findConfigValue('charset');
+		$variables = $findConfigValue('variables', []);
+		$nolock    = $findConfigValue('nolock');
 
 		// Prevent this information from showing up in traces
-		unset($this->_config['connection']['username'], $this->_config['connection']['password']);
+		if ($password) {
+			unset($this->_config['password']);
+		}
+
+		if ($username) {
+			unset($this->_config['user']);
+		}
 
 		try
 		{
-			// Compare versions
-			if (version_compare(PHP_VERSION, '5.3', '>=') AND (bool)$persistent)
-			{
-				// Create a persistent connection - only available with PHP 5.3+
-				// See http://www.php.net/manual/en/mysqli.persistconns.php
-				$this->_connection = new \MySQLi('p:'.$hostname, $username, $password, $database, (int)$port, $socket);
-			}
-			else
-			{
-				// Create a connection
-				$this->_connection = new \MySQLi($hostname, $username, $password, $database, (int)$port, $socket);
-			}
+			// See http://www.php.net/manual/en/mysqli.persistconns.php
+			$this->_connection = new \MySQLi(($persist ? 'p:' : '') . $hostname, $username, $password, $database, (int) $port, $socket);
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			// No connection exists
 			$this->_connection = NULL;
 
-			throw new ConnectionException(':error', array(':error' => $e->getMessage()), $e->getCode());
+			throw new ConnectionException($e->getMessage(), $e->getCode());
 		}
 
 		// \xFF is a better delimiter, but the PHP driver uses underscore
 		$this->_connection_id = \sha1($hostname.'_'.$username.'_'.$password);
 
-		if ( ! empty($this->_config['charset']))
-		{
+		if ($charset) {
 			// Set the character set
-			$this->set_charset($this->_config['charset']);
+			$this->set_charset($charset);
 		}
 
-		if ( ! empty($this->_config['connection']['variables']) AND is_array($this->_config['connection']['variables']))
-		{
+		if ($variables && is_array($variables)) {
 			// Set session variables
-			$variables = array();
+			$vars = array();
 
-			foreach ($this->_config['connection']['variables'] as $var => $val)
-			{
-				$variables[] = 'SESSION '.$var.' = '.$this->quote($val);
+			foreach ($variables as $var => $val) {
+				$vars[] = 'SESSION '.$var.' = '.$this->quote($val);
 			}
 
-			$this->_connection->query('SET '.\implode(', ', $variables));
+			$this->_connection->query('SET '.\implode(', ', $vars));
 		}
+
+		if ($nolock) {
+			$this->_connection->query('SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;');
+		}
+
+		return $this;
 	}
 
 	/**
@@ -193,14 +220,14 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $database  Database name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\ConnectionException
 	 */
 	protected function _select_db($database)
 	{
 		if ( ! $this->_connection->select_db($database))
 		{
 			// Unable to select database
-			throw new ConnectionException(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new ConnectionException($this->_connection->error, $this->_connection->errno);
 		}
 
 		static::$_current_databases[$this->_connection_id] = $database;
@@ -218,7 +245,7 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param   string  $charset  Character set name
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 */
 	public function set_charset($charset)
 	{
@@ -238,7 +265,7 @@ class Driver_MySQLi extends Database {
 
 		if ($status === FALSE)
 		{
-			throw new Database_Exception(':error', array(':error' => $this->_connection->error), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 	}
 
@@ -254,7 +281,7 @@ class Driver_MySQLi extends Database {
 	 * $db->query(Database::SELECT, 'SELECT * FROM users LIMIT 1', 'Model_User');
 	 * ~~~
 	 *
-	 * @param   integer  $type       Database::SELECT, Database::INSERT, etc
+	 * @param   string   $type       Database::SELECT, Database::INSERT, etc
 	 * @param   string   $sql        SQL query
 	 * @param   boolean  $as_object  Result object class string, TRUE for stdClass, FALSE for assoc array [Optional]
 	 * @param   array    $params     Object construct parameters for result class [Optional]
@@ -263,26 +290,21 @@ class Driver_MySQLi extends Database {
 	 * @uses    Profiler::delete
 	 * @uses    Profiler::stop
 	 *
-	 * @throws  Database_Exception
+	 * @throws  \Gleez\Database\DatabaseException
 	 *
-	 * @return  object   Database_Result for SELECT queries
+	 * @return  \Gleez\Database\Result  Database result for SELECT queries
 	 * @return  array    List (insert id, row count) for INSERT queries
 	 * @return  integer  Number of affected rows for all other queries
 	 */
 	public function query($type, $sql, $as_object = FALSE, array $params = NULL)
 	{
-		if ($this->_query == TRUE)
-		{
-			$this->type       = $type;
-			$this->last_query = $sql;
-
-			return $this;
-		}
-
 		// Make sure the database is connected
 		$this->_connection OR $this->connect();
 
-		if ( ! empty($this->_config['connection']['persistent']) AND $this->_config['connection']['database'] !== self::$_current_databases[$this->_connection_id])
+		if (!empty($this->_config['connection']['persistent']) &&
+			isset(static::$_current_databases[$this->_connection_id]) &&
+			$this->_config['connection']['database'] !== static::$_current_databases[$this->_connection_id]
+		)
 		{
 			// Select database on persistent connections
 			$this->_select_db($this->_config['connection']['database']);
@@ -291,27 +313,21 @@ class Driver_MySQLi extends Database {
 		// Execute the query
 		if (($resource = $this->_connection->query($sql)) === FALSE)
 		{
-			throw new DatabaseException('['.$this->_connection->errno.'] '.
-			$this->_connection->error.' [ '.$sql.']', $this->_connection->errno);
+			throw new DatabaseException(sprintf('[%s] [%s]', $this->_connection->errno, $this->_connection->error), $this->_connection->errno);
 		}
-
 
 		// Set the last query
 		$this->last_query = $sql;
 
-		// Set the query to default
-		$this->_query = TRUE;
-
-		if ($type === 'select')
+		if ($type === Database::SELECT)
 		{
 			// Return an iterator of results
-			$result = new Result($resource, $sql, $as_object, $params);
-			return $result;
+			$this->last_result = new Result($resource, $sql, $as_object, $params);
 		}
-		elseif ($type === 'insert')
+		elseif ($type === Database::INSERT)
 		{
 			// Return a list of insert id and rows created
-			return array(
+			$this->last_result = array(
 				$this->_connection->insert_id,
 				$this->_connection->affected_rows,
 			);
@@ -319,8 +335,10 @@ class Driver_MySQLi extends Database {
 		else
 		{
 			// Return the number of rows affected
-			return $this->_connection->affected_rows;
+			$this->last_result = $this->_connection->affected_rows;
 		}
+
+		return $this->last_result;
 	}
 
 	/**
@@ -330,6 +348,8 @@ class Driver_MySQLi extends Database {
 	 *
 	 * @param string $mode  Isolation level
 	 * @return boolean
+	 *
+	 * @throws \Gleez\Database\DatabaseException
 	 */
 	public function begin($mode = NULL)
 	{
@@ -338,9 +358,7 @@ class Driver_MySQLi extends Database {
 
 		if ($mode AND ! $this->_connection->query("SET TRANSACTION ISOLATION LEVEL $mode"))
 		{
-			throw new Database_Exception(':error', array(
-				':error' => $this->_connection->error
-			), $this->_connection->errno);
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
 		}
 
 		return (bool) $this->_connection->query('START TRANSACTION');
@@ -356,7 +374,7 @@ class Driver_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) $this->_connection->query('COMMIT');
+		return $this->transactionCommit();
 	}
 
 	/**
@@ -369,7 +387,7 @@ class Driver_MySQLi extends Database {
 		// Make sure the database is connected
 		$this->_connection or $this->connect();
 
-		return (bool) $this->_connection->query('ROLLBACK');
+		return $this->transactionRollback();
 	}
 
 	/**
@@ -378,308 +396,248 @@ class Driver_MySQLi extends Database {
 	 * @param  string  $value  The string to escape
 	 *
 	 * @return  string  The escaped string
-	 * @throws  \Foolz\SphinxQL\DatabaseException  If an error was encountered during server-side escape
+	 * @throws  \Gleez\Database\DatabaseException  If an error was encountered during server-side escape
 	 */
 	public function escape($value)
 	{
-	    //$this->ping();
-	    $this->_connection OR $this->connect();
+		//$this->ping();
+		$this->_connection OR $this->connect();
 
-	    if (($value = $this->_connection->real_escape_string((string) $value)) === false) {
-	        throw new DatabaseException($this->_connection->error, $this->_connection->errno);
-	    }
+		if (($value = $this->_connection->real_escape_string((string) $value)) === false) {
+			throw new DatabaseException($this->_connection->error, $this->_connection->errno);
+		}
 
-	    // SQL standard is to use single-quotes for all values
+		// SQL standard is to use single-quotes for all values
 		return "'$value'";
 	}
 
 	/**
-	 * Set the value of a parameter in the query.
+	 * Get MySQL version
 	 *
-	 * @param   string   $param  parameter key to replace
-	 * @param   mixed    $value  value to use
-	 * @return  $this
-	 */
-	public function param($param, $value)
-	{
-		// Add or overload a new parameter
-		$this->_parameters[$param] = $value;
-
-		return $this;
-	}
-
-	/**
-	 * Bind a variable to a parameter in the query.
+	 * Example:
+	 * ~~~
+	 * $db->version();
+	 * ~~~
 	 *
-	 * @param   string  $param  parameter key to replace
-	 * @param   mixed   $var    variable to use
-	 * @return  $this
-	 */
-	public function bind($param, & $var)
-	{
-		// Bind a value to a variable
-		$this->_parameters[$param] =& $var;
-
-		return $this;
-	}
-
-	/**
-	 * Add multiple parameters to the query.
+	 * @param   boolean  $full  Show full version [Optional]
 	 *
-	 * @param   array  $params  list of parameters
-	 * @return  $this
-	 */
-	public function parameters(array $params)
-	{
-		// Merge the new parameters in
-		$this->_parameters = $params + $this->_parameters;
-
-		return $this;
-	}
-
-	/**
-	 * Wraps the input with identifiers when necessary.
-	 *
-	 * @param  \Gleez\Database\Expression|string  $value  The string to be quoted, or an Expression to leave it untouched
-	 *
-	 * @return  \Gleez\Database\Expression|string  The untouched Expression or the quoted string
-	 */
-	public function quoteIdentifier($value)
-	{
-		// Identifiers are escaped by repeating them
-		$escaped_identifier = $this->_identifier.$this->_identifier;
-
-		if (is_array($value))
-		{
-			list($value, $alias) = $value;
-			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
-		}
-
-		if ($value instanceof \Gleez\Database\Expression) {
-
-			$value = $value->value();
-		} elseif ($value instanceof \Gleez\Database\Driver_MySQLi) {
-
-			if ($value->last_query != NULL)
-			{
-				$value = '('.$value->last_query.') ';
-			}
-			else
-			{
-				$value = '('.$value->compile()->getCompiled().') ';
-			}
-		} elseif ($value === '*') {
-
-			return $value;
-		} elseif (strpos($value, '.') !== FALSE) {
-
-			$pieces = explode('.', $value);
-			$count  = count($pieces) ;
-
-			foreach ($pieces as $key => $piece) {
-				if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
-					$piece = $prefix.$piece;
-				}
-				$pieces[$key] = ($piece != '*') ? '`'.$piece.'`' : $piece;
-			}
-
-			$value = implode('.', $pieces);
-		} else {
-
-			$value = $this->_identifier.$value.$this->_identifier;
-		}
-
-		if (isset($alias))
-		{
-			// Attach table prefix to alias
-			$value .= ' AS '.$this->_identifier.$alias.$this->_identifier;
-		}
-
-		return $value;
-	}
-
-	/**
-	 * Calls $this->quoteIdentifier() on every element of the array passed.
-	 *
-	 * @param  array  $array  An array of strings to be quoted
-	 *
-	 * @return  array  The array of quoted strings
-	 */
-	public function quoteIdentifierArr(Array $array = array())
-	{
-	    $result = array();
-
-	    foreach ($array as $key => $item) {
-			$result[$key] = $this->quoteIdentifier($item);
-	    }
-
-	    return $result;
-	}
-
-	/**
-	 * Quote a database table name and adds the table prefix if needed.
-	 *
-	 *     $table = $db->quote_table($table);
-	 *
-	 * Objects passed to this function will be converted to strings.
-	 * [Database_Expression] objects will be compiled.
-	 * [Database_Query] objects will be compiled and converted to a sub-query.
-	 * All other objects will be converted using the `__toString` method.
-	 *
-	 * @param   mixed   $table  table name or array(table, alias)
 	 * @return  string
-	 * @uses    Database::quote_identifier
-	 * @uses    Database::table_prefix
 	 */
-	public function quoteTable($table)
+	public function version($full = FALSE)
 	{
-		// Identifiers are escaped by repeating them
-		$escaped_identifier = $this->_identifier.$this->_identifier;
+		// Make sure the database is connected
+		$this->_connection OR $this->connect();
 
-		if (is_array($table))
-		{
-			list($table, $alias) = $table;
-			$alias = str_replace($this->_identifier, $escaped_identifier, $alias);
-		}
+		$result = $this->_connection->query('SHOW VARIABLES WHERE variable_name = '. $this->quote('version'));
+		$row    = $result->fetch_object();
 
-		if ($table instanceof \Gleez\Database\Expression)
-		{
-			$table = $table->value();
-		}
-		elseif ($table instanceof \Gleez\Database\Driver_MySQLi)
-		{
-			$table = '('.$table->compile()->getCompiled().') ';
-		}
+		return $full ? $row->Value : substr($row->Value, 0, strpos($row->Value, "-"));
+	}
+
+	/**
+	 * List all of the tables in the database.
+	 * Optionally, a LIKE string can be used to search for specific tables.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * // Get all tables in the current database
+	 * $tables = $db->list_tables();
+	 *
+	 * // Get all user-related tables
+	 * $tables = $db->list_tables('user%');
+	 * </code>
+	 *
+	 * @param   string $like  Table to search for [Optional]
+	 * @return  array
+	 */
+	public function list_tables($like = NULL)
+	{
+		// Make sure the database is connected
+		$this->_connection OR $this->connect();
+
+		is_string($like)
+			// Search for table names
+			? $result = $this->_connection->query('select', 'SHOW TABLES LIKE '.$this->quote($like), FALSE)
+			// Find all table names
+			: $result = $this->_connection->query('select', 'SHOW TABLES', FALSE);
+
+		$tables = array();
+
+		foreach ($result as $row)
+			$tables[] = reset($row);
+
+		return $tables;
+	}
+
+	/**
+	 * Lists all of the columns in a table.
+	 * Optionally, a LIKE string can be used to search for specific fields.
+	 *
+	 * Example:<br>
+	 * <code>
+	 * // Get all columns from the "users" table
+	 * $columns = $db->list_columns('users');
+	 *
+	 * // Get all name-related columns
+	 * $columns = $db->list_columns('users', '%name%');
+	 *
+	 * // Get the columns from a table that doesn't use the table prefix
+	 * $columns = $db->list_columns('users', NULL, FALSE);
+	 * </code>
+	 *
+	 * @since   2.1.0
+	 *
+	 * @param   string  $table       Table to get columns from
+	 * @param   string  $like        Column to search for [Optional]
+	 * @param   boolean $add_prefix  Whether to add the table prefix automatically or not [Optional]
+	 *
+	 * @return  array
+	 */
+	public function list_columns($table, $like = null, $add_prefix = true)
+	{
+		// Quote the table name
+		$table = (bool)($add_prefix) ? $this->quoteTable($table) : $table;
+
+		if (is_string($like))
+			// Search for column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table.' LIKE '.$this->quote($like), false);
 		else
+			// Find all column names
+			$result = $this->query(Database::SELECT, 'SHOW FULL COLUMNS FROM '.$table, false);
+
+
+		$count = 0;
+		$columns = array();
+
+		foreach ($result as $row)
 		{
-			// Convert to a string
-			$table = (string) $table;
+			/**
+			 * @var $type string
+			 * @var $length string|null
+			 */
+			list($type, $length) = $this->parseType($row['Type']);
 
-			$table = str_replace($this->_identifier, $escaped_identifier, $table);
+			$column = $this->getDataType($type);
+			$column['column_name']      = $row['Field'];
+			$column['column_default']   = $row['Default'];
+			$column['data_type']        = $type;
+			$column['is_nullable']      = ($row['Null'] == 'YES');
+			$column['ordinal_position'] = ++$count;
+			$column['comment']          = $row['Comment'];
+			$column['extra']            = $row['Extra'];
+			$column['key']              = $row['Key'];
+			$column['privileges']       = $row['Privileges'];
 
-			if (strpos($table, '.') !== FALSE)
+			$r = array();
+			if (!isset($column['type']))
+				$r[] = $column;
+
+			if (isset($column['type']))
 			{
-				$parts = explode('.', $table);
-
-				if ($prefix = $this->table_prefix())
+				switch ($column['type'])
 				{
-					// Get the offset of the table name, last part
-					$offset = count($parts) - 1;
-
-					// Add the table prefix to the table name
-					$parts[$offset] = $prefix.$parts[$offset];
+					case 'float':
+						if (isset($length))
+							list($column['numeric_precision'], $column['numeric_scale']) = explode(',', $length);
+						break;
+					case 'int':
+						if (isset($length))
+							// MySQL attribute
+							$column['display'] = $length;
+						break;
+					case 'string':
+						switch ($column['data_type'])
+						{
+							case 'binary':
+							case 'varbinary':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'char':
+							case 'varchar':
+								$column['character_maximum_length'] = $length;
+								break;
+							case 'text':
+							case 'tinytext':
+							case 'mediumtext':
+							case 'longtext':
+								$column['collation_name'] = $row['Collation'];
+								break;
+							case 'enum':
+							case 'set':
+								$column['collation_name'] = $row['Collation'];
+								$column['options'] = explode('\',\'', substr($length, 1, -1));
+								break;
+						}
+						break;
 				}
-
-				foreach ($parts as & $part)
-				{
-					// Quote each of the parts
-					$part = $this->_identifier.$part.$this->_identifier;
-				}
-
-				$table = implode('.', $parts);
 			}
-			else
-			{
-				// Add the table prefix
-				$table = $this->_identifier.$this->table_prefix().$table.$this->_identifier;
-			}
+
+			$columns[$row['Field']] = $column;
 		}
 
-		if (isset($alias))
-		{
-			// Attach table prefix to alias
-			$table .= ' AS '.$this->_identifier.$this->table_prefix().$alias.$this->_identifier;
-		}
-
-		return $table;
+		return $columns;
 	}
 
 	/**
-	 * Adds quotes around values when necessary.
-	 * Based on FuelPHP's quoting function.
+	 * Get data type.
 	 *
-	 * @param  \Gleez\Database\Expression|string  $value  The input string, eventually wrapped in an expression to leave it untouched
+	 * Returns a normalized array describing the SQL data type.
+	 * Example:<br>
+	 * <code>
+	 * $db->getDataType('char');
+	 * </code>
 	 *
-	 * @return  \Gleez\Database\Expression|string  The untouched Expression or the quoted string
+	 * @since  2.1.0
+	 *
+	 * @param  string $type SQL data type
+	 *
+	 * @return array
 	 */
-	public function quote($value)
+	public function getDataType($type)
 	{
-		if ($value === NULL)
-		{
-			return 'NULL';
-		}
-		elseif ($value === TRUE)
-		{
-			return "'1'";
-		}
-		elseif ($value === FALSE)
-		{
-			return "'0'";
-		}
-		elseif ($value instanceof \Gleez\Database\Expression)
-		{
-		    // Use the raw expression
-		    return $value->value();
-		}
-		elseif ($value instanceof \Gleez\Database\Driver_MySQLi)
-		{
-			if ($value->last_query != NULL)
-			{
+		static $types = array
+		(
+			'blob'                      => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '65535'),
+			'bool'                      => array('type' => 'bool'),
+			'bigint unsigned'           => array('type' => 'int', 'min' => '0', 'max' => '18446744073709551615'),
+			'datetime'                  => array('type' => 'string'),
+			'decimal unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'double'                    => array('type' => 'float'),
+			'double precision unsigned' => array('type' => 'float', 'min' => '0'),
+			'double unsigned'           => array('type' => 'float', 'min' => '0'),
+			'enum'                      => array('type' => 'string'),
+			'fixed'                     => array('type' => 'float', 'exact' => TRUE),
+			'fixed unsigned'            => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'float unsigned'            => array('type' => 'float', 'min' => '0'),
+			'geometry'                  => array('type' => 'string', 'binary' => TRUE),
+			'int unsigned'              => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'integer unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '4294967295'),
+			'longblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '4294967295'),
+			'longtext'                  => array('type' => 'string', 'character_maximum_length' => '4294967295'),
+			'mediumblob'                => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '16777215'),
+			'mediumint'                 => array('type' => 'int', 'min' => '-8388608', 'max' => '8388607'),
+			'mediumint unsigned'        => array('type' => 'int', 'min' => '0', 'max' => '16777215'),
+			'mediumtext'                => array('type' => 'string', 'character_maximum_length' => '16777215'),
+			'national varchar'          => array('type' => 'string'),
+			'numeric unsigned'          => array('type' => 'float', 'exact' => TRUE, 'min' => '0'),
+			'nvarchar'                  => array('type' => 'string'),
+			'point'                     => array('type' => 'string', 'binary' => TRUE),
+			'real unsigned'             => array('type' => 'float', 'min' => '0'),
+			'set'                       => array('type' => 'string'),
+			'smallint unsigned'         => array('type' => 'int', 'min' => '0', 'max' => '65535'),
+			'text'                      => array('type' => 'string', 'character_maximum_length' => '65535'),
+			'tinyblob'                  => array('type' => 'string', 'binary' => TRUE, 'character_maximum_length' => '255'),
+			'tinyint'                   => array('type' => 'int', 'min' => '-128', 'max' => '127'),
+			'tinyint unsigned'          => array('type' => 'int', 'min' => '0', 'max' => '255'),
+			'tinytext'                  => array('type' => 'string', 'character_maximum_length' => '255'),
+			'year'                      => array('type' => 'string'),
+		);
 
-				$value = '('.$value->last_query.') ';
-			}
-			else
-			{
-				$value = '('.$value->compile()->getCompiled().') ';
-			}
-			return $value;
-		}
-		elseif (strpos($value, '.') !== FALSE) {
-			    $pieces = explode('.', $value);
-			    $count  = count($pieces) ;
+		$type = str_replace(' zerofill', '', $type);
 
-			    foreach ($pieces as $key => $piece) {
-				    if ($count > 1 AND $key == 0 AND ($prefix = $this->table_prefix())) {
-					    $piece = $prefix.$piece;
-				    }
-				    $pieces[$key] = '`'.$piece.'`';
-			    }
-			    $value = implode('.', $pieces);
-			    return $value;
-		}
-		elseif (is_int($value))
-		{
-			return (int) $value;
-		}
-		elseif (is_float($value))
-		{
-			// Convert to non-locale aware float to prevent possible commas
-			return sprintf('%F', $value);
-		}
-		elseif (is_array($value))
-		{
-	        // Supports MVA attributes
-	        return '('.implode(',', $this->quoteArr($value)).')';
-	    }
+		if (isset($types[$type]))
+			return $types[$type];
 
-	    return $this->escape($value);
-	}
-
-	/**
-	* Calls $this->quote() on every element of the array passed.
-	*
-	* @param  array  $array  The array of strings to quote
-	*
-	* @return  array  The array of quotes strings
-	*/
-	public function quoteArr(Array $array = array())
-	{
-		$result = array();
-
-		foreach ($array as $key => $item) {
-		    $result[$key] = $this->quote($item);
-		}
-
-		return $result;
+		return parent::getDataType($type);
 	}
 }
