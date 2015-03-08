@@ -5,7 +5,7 @@
  * @version    1.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
  */
@@ -16,6 +16,8 @@ var Gleez = Gleez || { 'settings': {}, 'locale': {} };
 jQuery.noConflict();
 
 +function ($) { 'use strict';
+	Gleez._isXS = null
+	Gleez._isSM = null
 
     /**
      * Translate strings to the page language or a given language.
@@ -485,6 +487,28 @@ jQuery.noConflict();
 			return '<em class="placeholder">' + Gleez.checkPlain(str) + '</em>';
 		}
     }
+
+	Gleez.isXS = function() {
+		if (Gleez._isXS === null ) {
+			//check if we're in the Bootstrap XS environment
+			var $check = $("<div class='visible-xs'>").appendTo($("body"));
+			Gleez._isXS = $check.is(":visible");
+			$check.remove();
+		}
+
+		return Gleez._isXS;
+	}
+
+	Gleez.isSM = function() {
+		if (Gleez._isSM === null ) {
+			//check if we're in the Bootstrap XS environment
+			var $check = $("<div class='visible-sm'>").appendTo($("body"));
+			Gleez._isSM = $check.is(":visible");
+			$check.remove();
+		}
+
+		return Gleez._isSM;
+	}
 
 	$(window).on('load', function () {
 		$("[rel='tooltip']").tooltip();
