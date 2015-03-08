@@ -1,3 +1,4 @@
+@charset "UTF-8";
 div.dataTables_length label {
     font-weight: normal;
     float: left;
@@ -14,7 +15,7 @@ div.dataTables_filter label {
 }
 
 div.dataTables_filter input {
-    width: 16em;
+   /* width: 16em;*/
 }
 
 div.dataTables_info {
@@ -130,7 +131,7 @@ table.dataTable tr.even td.sorting_2 { background-color: #FFF; }
 table.dataTable tr.even td.sorting_3 { background-color: #FFF; }
 
 div.dataTables_filter {
-    height: 26px;
+    /*height: 26px;*/
     margin: 0;
 }
 table.dataTable.table-bordered {
@@ -203,7 +204,7 @@ table.dataTable tr {
 }
 
 table.dataTable tr .fa {
-    font-size: 13px;
+    /*font-size: 13px;*/
 }
 
 table.dataTable td.dataTables_empty {
@@ -406,4 +407,105 @@ div.FixedHeader_Cloned table {
     .dataTables_filter.form-group{
         float: right !important;
     }
+    div.search-form .dataTables_filter.form-group{
+        float: none !important;
+    }
+}
+
+
+/*div.dataTables_length, div.list-group > table.dataTable > thead {
+    display: none;
+}*/
+div.search-form div.dataTables_filter input {
+    padding-left: 32px;
+}
+div.search-form div.dataTables_filter i.fa-search{
+    color: #999;
+    font-size: 14px;
+    left: 25px;
+    position: absolute;
+    top: 10px;
+}
+div.list-group table.dataTable{
+    margin-bottom: 0 !important;
+}
+div.list-group table.dataTable tr {
+    /*border: 0;*/
+}
+div.list-group table.dataTable tr  h4{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.1;
+}
+div.list-group + .panel-footer {
+  border-top-width: 1px;
+  /* ML: panel-footer has a top border, but that's removed by Bootstrap if there's a list-group before it. We restore it here. */ 
+}
+
+/* LISTS */
+.list-group-item {
+  /*margin-left: 15px;*/
+  padding-left: 15px; 
+}
+  .list-group-item .list-group-item-text {
+    line-height: 18px;
+    margin-bottom: 5px;
+    overflow: hidden; 
+}
+  .list-group-item .list-group-item-heading:last-child,
+  .list-group-item .list-group-item-text:last-child {
+    margin-bottom: 0; 
+}
+  .list-group-item .row div > .list-group-item-heading:last-child,
+  .list-group-item .row div > .list-group-item-text:last-child {
+    margin-bottom: 5px; 
+}
+  .list-group-item .row div:last-child > .list-group-item-heading:last-child,
+  .list-group-item .row div:last-child > .list-group-item-text:last-child {
+    margin-bottom: 0; 
+}
+  .list-group-item img {
+    height: 40px;
+    width: 40px;
+    margin-right: 15px;
+}
+  .list-group-item i {
+    opacity: 0.3;
+    width: 40px;
+    text-align: center;
+    margin-right: 15px; 
+}
+
+a.list-group-item {
+  cursor: pointer; 
+}
+a.list-group-item:hover, a.list-group-item:active, a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+    margin-left: 0;
+    /*padding-left: 15px; */
+}
+
+.panel > .list-group .list-group-item:last-child {
+  border-bottom: 0; 
+}
+
+/* List Images */
+.bootcards-list-group-item-content {
+  overflow: hidden; 
+}
+
+/* Disclosure Indicators */
+a.list-group-item:before {
+  font-family: 'FontAwesome';
+  content: '';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  font-size: 14px;
+  line-height: 14px;
+  margin-top: -7px;
+  color: #ccc; 
+}
+
+.list-group.no-indicators a.list-group-item:before {
+  display: none; 
 }

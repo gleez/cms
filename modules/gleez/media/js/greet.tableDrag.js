@@ -11,12 +11,13 @@
  * @version    1.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    The MIT License (MIT)
  *
  */
 
-+function ($) { 'use strict';
++function ($) {
+	'use strict';
 	/**
 	 * Constructor for the tableDrag object. Provides table and field manipulation.
 	 *
@@ -1281,6 +1282,14 @@
 	// ==============
 
 	$(window).on('load.tabledrag.data-api', function (e) {
+		$('[data-toggle="tabledrag"]').each(function () {
+			var $table = $(this)
+			$table.tabledrag($table.data())
+		})
+	})
+	
+	// Added pajax and jquery mobile support
+	$(document).on('pjax:complete pagecontainerchange', function (e) {
 		$('[data-toggle="tabledrag"]').each(function () {
 			var $table = $(this)
 			$table.tabledrag($table.data())

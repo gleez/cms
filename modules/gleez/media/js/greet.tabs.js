@@ -4,10 +4,10 @@
  * https://github.com/gleez/greet
  * 
  * @package    Greet\Tabs
- * @version    2.0
+ * @version    2.1
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    The MIT License (MIT)
  *
  */
@@ -221,6 +221,13 @@
 
 	// Move Tabs to dropdown if tabs do not fit in a single row
 	$(window).on('load.tabs.data-api', function (e) {
+		$('[data-toggle="tabdrop"]').each(function () {
+			$(this).tabs('drop')
+		})
+	})
+
+	// Added pajax and jquery mobile support
+	$(document).on('pjax:complete pagecontainerchange', function (e) {
 		$('[data-toggle="tabdrop"]').each(function () {
 			$(this).tabs('drop')
 		})

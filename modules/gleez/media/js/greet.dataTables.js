@@ -1,17 +1,20 @@
 /*
  * This is a highly modified version of the bootstrap dataTables.
+ * Requires jquery tmpl plugin @link
  * https://github.com/gleez/greet
  * 
  * @package    Greet\DataTables
- * @version    3.0
+ * @version    4.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    The MIT License (MIT)
+ * @link       https://github.com/blueimp/JavaScript-Templates
  *
  */
 
-+function ($) { 'use strict';
++function ($) {
+	'use strict';
 
 	// GREET DATATABLE CLASS DEFINITION
 	// ======================
@@ -37,6 +40,12 @@
 			}
 		})
 
+		if(options.template){
+			options.pagingType = "simple"
+			options.pretty = true
+			options.dom = "<'panel panel-default'<'panel-body hide'<'search-form'<'row'<'col-xs-9'f><'col-xs-3'>>>r><'list-group't><'panel-footer'<'row'<'col-sm-6'i><'col-sm-6'p>>>"
+		}
+
 		var oTable = $table.dataTable({
 			"columns": columns
 			, "order": options.sorting
@@ -44,6 +53,7 @@
 			, "serverSide": options.serverside
 			, "deferRender": options.deferrender
 			, "paging": options.paginate
+			, "pagingType" : options.pagingType
 			, "sarching": options.filter 
 			, "info ": options.info
 			, "dom": options.dom
@@ -71,19 +81,44 @@
 					$(settings.oInstance).parent().html(errorText)
 				})
 			}
+			, "drawCallback": function( settings ) {
+				if(options.pretty){
+					$table.find("thead").remove()
+				}
+			}
+			, "rowCallback": function ( row, data ) {
+				if(options.pretty && data.length){
+					tmpl.arg = "c";
+					var html = tmpl(options.template, data);
+
+					$(row).empty()
+					$(row).append(html)
+
+					return row
+				}
+			}
+			, "createdRow": function( row, data, dataIndex ) {
+				if(options.pretty && options.template && data.length){
+					// Row click
+					$(row).on('click', function() {
+						//console.log('Row Clicked. Look I have access to all params, thank You closures.', this, data, dataIndex)
+					})
+				}
+			}
 		})
 	}
 
 	/* Default class modification */
 	$.extend( $.fn.dataTableExt.oStdClasses, {
 		"sWrapper": "dataTables_wrapper form-inline",
-		"sFilterInput": "form-control input-sm",
+		"sFilterInput": "form-control",
 		"sLengthSelect": "form-control input-sm"
 	} )
 
 	// Pagination renderers to draw the Bootstrap paging,
 	if ( $.fn.dataTable.Api ) {
 		$.fn.dataTable.defaults.renderer = 'bootstrap';
+
 		$.fn.dataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, buttons, page, pages ) {
 			var api = new $.fn.dataTable.Api( settings );
 			var classes = settings.oClasses;
@@ -117,32 +152,27 @@
 
 							case 'first':
 								btnDisplay = lang.sFirst;
-								btnClass = button + (page > 0 ?
-									'' : ' disabled');
+								btnClass = button + (page > 0 ? '' : ' disabled');
 								break;
 
 							case 'previous':
 								btnDisplay = lang.sPrevious;
-								btnClass = button + (page > 0 ?
-									'' : ' disabled');
+								btnClass = button + (page > 0 ? '' : ' disabled');
 								break;
 
 							case 'next':
 								btnDisplay = lang.sNext;
-								btnClass = button + (page < pages-1 ?
-									'' : ' disabled');
+								btnClass = button + (page < pages-1 ? '' : ' disabled');
 								break;
 
 							case 'last':
 								btnDisplay = lang.sLast;
-								btnClass = button + (page < pages-1 ?
-									'' : ' disabled');
+								btnClass = button + (page < pages-1 ? '' : ' disabled');
 								break;
 
 							default:
 								btnDisplay = button + 1;
-								btnClass = page === button ?
-									'active' : '';
+								btnClass = page === button ? 'active' : '';
 								break;
 						}
 
@@ -151,15 +181,9 @@
 									'class': classes.sPageButton+' '+btnClass,
 									'aria-controls': settings.sTableId,
 									'tabindex': settings.iTabIndex,
-									'id': idx === 0 && typeof button === 'string' ?
-										settings.sTableId +'_'+ button :
-										null
+									'id': idx === 0 && typeof button === 'string' ? settings.sTableId +'_'+ button : null
 								} )
-								.append( $('<a>', {
-										'href': '#'
-									} )
-									.html( btnDisplay )
-								)
+								.append( $('<a>', {'href': '#'}).html(btnDisplay) )
 								.appendTo( container );
 
 							settings.oApi._fnBindAction(
@@ -183,13 +207,14 @@
 			var currentId = $(this).attr('id')
 
 			if (currentId) {
-				var thisLength = $('#' + currentId + '_length')
-				var thisLengthLabel = $('#' + currentId + '_length label')
-				var thisLengthSelect = $('#' + currentId + '_length label select')
-
-				var thisFilter = $('#' + currentId + '_filter')
-				var thisFilterLabel = $('#' + currentId + '_filter label')
-				var thisFilterInput = $('#' + currentId + '_filter label input')
+				var thisLength     = $('#' + currentId + '_length')
+				, thisLengthLabel  = $('#' + currentId + '_length label')
+				, thisLengthSelect = $('#' + currentId + '_length label select')
+				, thisFilter       = $('#' + currentId + '_filter')
+				, thisFilterLabel  = $('#' + currentId + '_filter label')
+				, thisFilterInput  = $('#' + currentId + '_filter label input')
+				, title            = $(this).data('title') || false
+				, pretty           = $(this).data('template') || false
 
 				// Re-arrange the records selection for a form-horizontal layout
 				thisLengthLabel.addClass('control-label').attr('for', currentId + '_length_select')
@@ -199,8 +224,19 @@
 				thisFilter.addClass('form-group')
 				thisFilterInput.appendTo(thisFilter)
 				thisFilterLabel.remove()
-				thisFilterInput.attr('placeholder', 'Search')
+				thisFilterInput.attr('placeholder', 'Search...')
 				thisFilter.parent().removeClass('hide')
+				$(this).find('thread.hide').removeClass('hide')
+
+				// Pretty Support
+				if(title && pretty) {
+					var add = $(document).find('script.card-add').html() || false
+					thisFilter.parents("div.search-form").find("div.col-xs-3").append(add)
+
+					thisFilter.append('<i class="fa fa-search"></i>')
+					thisFilterInput.attr('placeholder', 'Search '+title+'...')
+					thisFilter.parents("div.panel-body.hide").removeClass('hide')
+				}
 			}
 		}
 	})
@@ -218,6 +254,8 @@
 		, stateduration: 7200
 		, serverside   : true
 		, deferrender  : true
+		, pretty  	   : false
+		, template     : ''
 		, localize     : ''
 		, emptytable   : "No active record(s) here. Would you like to create one?"
 		, dom          : "<'table_head row'<'col-sm-6 hidden-xs'l><'col-xs-12 col-sm-6 hide'f>r>t<'row'<'col-sm-6'i><'col-sm-6'p>>"
@@ -253,6 +291,16 @@
 	// ==============
 
 	$(window).on('load.datatable.data-api', function (e) {
+		if (!$.fn.dataTable) return
+		
+		$('[data-toggle="datatable"]').each(function () {
+			var $table = $(this)
+			$table.gdatatable($table.data())
+		})
+	})
+
+	// Added pajax and jquery mobile support
+	$(document).on('pjax:complete pagecontainerchange', function (e) {
 		if (!$.fn.dataTable) return
 		
 		$('[data-toggle="datatable"]').each(function () {
