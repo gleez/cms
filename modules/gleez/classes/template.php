@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Template
  * @author     Gleez Team
- * @version    1.3.0
+ * @version    1.4.0
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -81,6 +81,12 @@ abstract class Template extends Controller {
 	 * @var boolean
 	 */
 	protected $_ajax = FALSE;
+
+	/**
+	 * Is pjax request?
+	 * @var boolean
+	 */
+	protected $_pjax = FALSE;
 
 	/**
 	 * is internal request?
@@ -257,10 +263,25 @@ abstract class Template extends Controller {
 				$this->auto_render = FALSE;
 			}
 
+			// Test whether the current request is pjax request
+			if (isset($_SERVER['HTTP_X_PJAX']) && $this->_config->get('allow_pjax', FALSE))
+			{
+				$this->_pjax       = TRUE;
+			}
+
 			// Test whether the current request is jquery mobile request. ugly hack
-			if (Request::is_mobile() AND $this->_config->get('mobile_theme', FALSE))
+			if (isset($_SERVER['HTTP_X_THEME']) && $_SERVER['HTTP_X_THEME'] == 'mobile' && $this->_config->get('mobile_theme', FALSE))
 			{
 				$this->_ajax       = FALSE;
+				$this->_pjax       = FALSE;
+				$this->auto_render = TRUE;
+			}
+
+			// Test whether the current request is mobile request. ugly hack
+			if (Request::is_mobile() && $this->_config->get('mobile_theme', FALSE))
+			{
+				$this->_ajax       = FALSE;
+				$this->_pjax       = FALSE;
 				$this->auto_render = TRUE;
 			}
 
@@ -364,7 +385,7 @@ abstract class Template extends Controller {
 			Log::debug('Executing Controller [:controller] action [:action]',
 				array(
 					':controller' => $this->request->controller(),
-					':action'     => $this->request->action()
+					':action'     => $this->request->action(),
 			));
 		}
 	}
@@ -477,7 +498,10 @@ abstract class Template extends Controller {
 			$output = $this->response->body();
 			$this->process_ajax();
 
-			if ($this->_response_format === 'application/json')
+			if($this->_pjax) {
+				$output = '<title>'. $this->title .'</title>' . $this->response->body();
+			}
+			elseif ($this->_response_format === 'application/json')
 			{
 				// Check for dataTables request
 				if ($this->request->query('draw') !== NULL) return;
