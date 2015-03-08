@@ -8,17 +8,17 @@
  * @version    1.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  *
  */
 
 +function ($) { 'use strict';
 
-    // tableDrag is required and we should be on the widgets admin page.
-    if (typeof $.fn.tabledrag == 'undefined') {
+	// tableDrag is required and we should be on the widgets admin page.
+	if (typeof $.fn.tabledrag == 'undefined') {
 		return null
-    }
+	}
 
 	var widgets 	= 	$('table#widgets').tabledrag({
 							weight: {
