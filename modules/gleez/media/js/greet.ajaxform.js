@@ -7,13 +7,14 @@
  * @version    2.0
  * @requires   jQuery v1.9 or later
  * @author     Sandeep Sangamreddi - Gleez
- * @copyright  (c) 2005-2014 Gleez Technologies
+ * @copyright  (c) 2005-2015 Gleez Technologies
  * @license    The MIT License (MIT)
  * @link       https://github.com/malsup/form
  *
  */
 
-+function ($) { 'use strict';
++function ($) {
+	'use strict';
 
 	// GREET AJAXFROM CLASS DEFINITION
 	// ======================

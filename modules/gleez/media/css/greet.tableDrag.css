@@ -3,6 +3,7 @@
  *
  * @see tabledrag.js
  */
+@charset "UTF-8";
 body.drag {
   cursor: move;
 }
