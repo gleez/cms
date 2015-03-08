@@ -308,5 +308,12 @@ return array(
 	 * Define Google Analytics ID
 	 * @var string
 	 */
-	'google_ua' => NULL
+	'google_ua' => NULL,
+
+	/**
+	 * Allow pjax requests.
+	 * Change the default false, accepted values: TRUE|FALSE
+	 * @var boolean
+	 */
+	'allow_pjax' => FALSE,
 );
