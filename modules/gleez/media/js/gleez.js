@@ -19,59 +19,59 @@ jQuery.noConflict();
 	Gleez._isXS = null
 	Gleez._isSM = null
 
-    /**
-     * Translate strings to the page language or a given language.
-     *
-     * See the documentation of the server-side t() function for further details.
-     *
-     * @param str
-     *   A string containing the English string to translate.
-     * @param args
-     *   An object of replacements pairs to make after translation. Incidences
-     *   of any key in this array are replaced with the corresponding value.
-     *   Based on the first character of the key, the value is escaped and/or themed:
-     *    - !variable: inserted as is
-     *    - @variable: escape plain text to HTML (Gleez.checkPlain)
-     *    - %variable: escape text and theme as a placeholder for user-submitted
-     *      content (checkPlain + Gleez.theme('placeholder'))
-     * @return
-     *   The translated string.
-     */
-    Gleez.t = function (str, args) {
+	/**
+	 * Translate strings to the page language or a given language.
+	 *
+	 * See the documentation of the server-side t() function for further details.
+	 *
+	 * @param str
+	 *   A string containing the English string to translate.
+	 * @param args
+	 *   An object of replacements pairs to make after translation. Incidences
+	 *   of any key in this array are replaced with the corresponding value.
+	 *   Based on the first character of the key, the value is escaped and/or themed:
+	 *    - !variable: inserted as is
+	 *    - @variable: escape plain text to HTML (Gleez.checkPlain)
+	 *    - %variable: escape text and theme as a placeholder for user-submitted
+	 *      content (checkPlain + Gleez.theme('placeholder'))
+	 * @return
+	 *   The translated string.
+	 */
+	Gleez.t = function (str, args) {
 		// Fetch the localized version of the string.
 		if (Gleez.locale.strings && Gleez.locale.strings[str]) {
-		    str = Gleez.locale.strings[str];
+			str = Gleez.locale.strings[str];
 		}
 
 		if (args) {
 			// Transform arguments before inserting them.
 			for (var key in args) {
 				switch (key.charAt(0)) {
-				    // Escaped only.
-				    case '@':
+					// Escaped only.
+					case '@':
 					args[key] = Gleez.checkPlain(args[key]);
 					break;
-				    // Pass-through.
-				    case '!':
-				    case ':':
+					// Pass-through.
+					case '!':
+					case ':':
 					break;
-				    // Escaped and placeholder.
-				    case '%':
-				    default:
+					// Escaped and placeholder.
+					case '%':
+					default:
 					args[key] = Gleez.theme('placeholder', args[key]);
 					break;
 				}
-			    str = str.replace(key, args[key])
-		    }
+				str = str.replace(key, args[key])
+			}
 		}
 		return str
-    }
+	}
 
-    /**
-     * Freeze the current body height (as minimum height). Used to prevent
-     * unnecessary upwards scrolling when doing DOM manipulations.
-     */
-    Gleez.freezeHeight = function () {
+	/**
+	 * Freeze the current body height (as minimum height). Used to prevent
+	 * unnecessary upwards scrolling when doing DOM manipulations.
+	 */
+	Gleez.freezeHeight = function () {
 		Gleez.unfreezeHeight();
 		$('<div id="freeze-height"></div>').css({
 			position: 'absolute',
@@ -80,29 +80,29 @@ jQuery.noConflict();
 			width: '1px',
 			height: $('body').css('height')
 		}).appendTo('body')
-    }
+	}
 
-    /**
-     * Unfreeze the body height.
-     */
-    Gleez.unfreezeHeight = function () {
+	/**
+	 * Unfreeze the body height.
+	 */
+	Gleez.unfreezeHeight = function () {
 		$('#freeze-height').remove()
-    }
+	}
 
-    /**
-     * Encodes a Gleez path for use in a URL.
-     *
-     * For aesthetic reasons slashes are not escaped.
-     */
-    Gleez.encodePath = function (item, uri) {
+	/**
+	 * Encodes a Gleez path for use in a URL.
+	 *
+	 * For aesthetic reasons slashes are not escaped.
+	 */
+	Gleez.encodePath = function (item, uri) {
 		uri = uri || location.href
 		return encodeURIComponent(item).replace(/%2F/g, '/')
-    }
+	}
 
-    /**
-     * Get the text selection in a textarea.
-    */
-    Gleez.getSelection = function (element) {
+	/**
+	 * Get the text selection in a textarea.
+	*/
+	Gleez.getSelection = function (element) {
 		if (typeof element.selectionStart != 'number' && document.selection) {
 			// The current selection.
 			var range1 = document.selection.createRange()
@@ -120,12 +120,12 @@ jQuery.noConflict();
 		}
 
 		return { 'start': element.selectionStart, 'end': element.selectionEnd }
-    }
+	}
 
-    /**
-     * Build an error message from an Ajax response.
-     */
-    Gleez.ajaxError = function (xmlhttp, uri) {
+	/**
+	 * Build an error message from an Ajax response.
+	 */
+	Gleez.ajaxError = function (xmlhttp, uri) {
 		var statusCode, statusText, pathText, responseText, readyStateText, message;
 		if (xmlhttp.status){
 			statusCode = "\n" + Gleez.t("An AJAX HTTP error occurred.") +  "\n" + Gleez.t("HTTP Result Code: !status", {'!status': xmlhttp.status});
@@ -164,12 +164,12 @@ jQuery.noConflict();
 
 		message = statusCode + pathText + statusText + responseText + readyStateText;
 		return message
-    }
+	}
 
-    /**
-    * Encode special characters in a plain-text string for display as HTML.
-    */
-    Gleez.checkPlain = function (str) {
+	/**
+	* Encode special characters in a plain-text string for display as HTML.
+	*/
+	Gleez.checkPlain = function (str) {
 		str = String(str)
 		var replace = { '&': '&amp;', '"': '&quot;', '<': '&lt;', '>': '&gt;' }
 		for (var character in replace) {
@@ -177,46 +177,46 @@ jQuery.noConflict();
 			str = str.replace(regex, replace[character]);
 		}
 		return str
-    }
-    
-    // Check select2 plugin is loaded
-    if ($.fn.select2){
+	}
+
+	// Check select2 plugin is loaded
+	if ($.fn.select2){
 		$(window).on('load', function () {
-		    $(".select-icons").select2({
-			formatResult: Gleez.theme_icon,
-			formatSelection: Gleez.theme_icon,
-			escapeMarkup: function(m) { return m; }
-		    })
+			$(".select-icons").select2({
+				formatResult: Gleez.theme_icon,
+				formatSelection: Gleez.theme_icon,
+				escapeMarkup: function(m) { return m; }
+			})
 		})
-    }
-    
-    //icon theme for select2 plugin
-    Gleez.theme_icon = function(icon) {
+	}
+
+	//icon theme for select2 plugin
+	Gleez.theme_icon = function(icon) {
 		if (!icon.id) return icon.text; // optgroup
 		return "<i class='fa " + icon.id.toLowerCase() + "'></i> " + icon.text;
-    }
+	}
 
 
-    /**
-     * Dynamic injection of css and js files
-     *
-     * @todo add minor events
-     */
-    Gleez.requires = function(Library, filetype)
-    {
+	/**
+	 * Dynamic injection of css and js files
+	 *
+	 * @todo add minor events
+	 */
+	Gleez.requires = function(Library, filetype)
+	{
 		if(Library == null || Library == false) return;
 		if (!(Library instanceof Array)) Library = [Library];
 		
 		//if filename is a JavaScript file
 		if (filetype=="js"){
-		    $(Library).each(function (i,Lib){
+			$(Library).each(function (i,Lib){
 				// Skip any libs that are ready or processing
 				if (Gleez.Libraries[Lib] === false || Gleez.Libraries[Lib] === true)
 				{
-				    $(document).trigger('attach', Gleez.settings);
-				    return;
+					$(document).trigger('attach', Gleez.settings);
+					return;
 				}
-			    
+
 				// As yet unseen. Try to load
 				Gleez.Libraries[Lib] = false;
 				var script  = document.createElement('script');
@@ -230,13 +230,13 @@ jQuery.noConflict();
 				var src = document.getElementsByTagName('script')[0];
 				src.parentNode.insertBefore(script, src);
 				Gleez.Libraries[Lib] = true;
-		    })
+			})
 		}
-	
+
 		//if filename is an CSS file
 		if (filetype=="css")
 		{
-		    $(Library).each(function (i,Lib){
+			$(Library).each(function (i,Lib){
 				// Skip any libs that are ready or processing
 				if (Gleez.Libraries[Lib] === false || Gleez.Libraries[Lib] === true)
 					return
@@ -249,15 +249,15 @@ jQuery.noConflict();
 				fileref.setAttribute("href", Gleez.settings.basePath+Lib);
 				
 				if (typeof fileref != "undefined"){
-				    document.getElementsByTagName("head")[0].appendChild(fileref);
-				    Gleez.Libraries[Lib] = true;
+					document.getElementsByTagName("head")[0].appendChild(fileref);
+					Gleez.Libraries[Lib] = true;
 				}
-		    })
+			})
 		}
-    }
+	}
 
-    // Take any "inform" messages out of an ajax response and display them on the screen.
-    Gleez.inform = function(response) {
+	// Take any "inform" messages out of an ajax response and display them on the screen.
+	Gleez.inform = function(response) {
 		
 		if (!response)  return false;
 		
@@ -268,213 +268,212 @@ jQuery.noConflict();
 		var informMessages = $('div.messages');
 		if (informMessages.length == 0)
 		{
-		    $('<div class="messages"></div>').appendTo('body');
-		    informMessages = $('div.messages');
+			$('<div class="messages"></div>').appendTo('body');
+			informMessages = $('div.messages');
 		}
 		
 		var wrappers = $('div.messages div.InformWrapper');
-	
+
 		// Loop through the inform messages and add them to the container
 		for (var i = 0; i < response.InformMessages.length; i++){
-		    var css = 'alert';
-		    if (response.InformMessages[i]['type'])
+			var css = 'alert';
+			if (response.InformMessages[i]['type'])
 			css += ' alert-' + response.InformMessages[i]['type'];
 
 			try
-		    {
+			{
 				var message = response.InformMessages[i]['text'];
 				var emptyMessage = message == '';
 				var skip = false;
-			    
+
 				for (var j = 0; j < wrappers.length; j++)
 				{
-				    if ($(wrappers[j]).text() == $(message).text()) {
-					skip = true;
-				    }
+					if ($(wrappers[j]).text() == $(message).text()) {
+						skip = true;
+					}
 				}
 				
 				if (!skip && !emptyMessage)
 				{
-				    // If the message is dismissable, add a close button
-				    message = '<a class="close" data-dismiss="alert">×</a>' + message;
-				    informMessages.prepend('<div class="'+css+'">'+message+'</div>');
+					// If the message is dismissable, add a close button
+					message = '<a class="close" data-dismiss="alert">×</a>' + message;
+					informMessages.prepend('<div class="'+css+'">'+message+'</div>');
 				}
-			
-		    } catch (e) {}
+			} catch (e) {}
 		}
 		
 		informMessages.show()
 
 		return true
-    }
+	}
 
-    // Inform an error returned from an ajax call.
-    Gleez.informError = function(xhr, silentAbort, returnRes) {
+	// Inform an error returned from an ajax call.
+	Gleez.informError = function(xhr, silentAbort, returnRes) {
 		if (xhr == undefined || xhr == null)
-		    return;
+			return;
 
 		if (typeof(xhr) == 'string')
-		    xhr = {responseText: xhr, code: 500};
-	       
+			xhr = {responseText: xhr, code: 500};
+
 		var message = xhr.responseText;
 		var code = xhr.status;
-	       
+
 		if (message == undefined || message == null || message == '') {
-		    switch (xhr.statusText) {
+			switch (xhr.statusText) {
 			case 'error':
-			   if (silentAbort) 
-			      return;
-			   message = Gleez.t('There was an error performing your request. Please try again.');
-			   break;
+				if (silentAbort) 
+					return;
+				message = Gleez.t('There was an error performing your request. Please try again.');
+				break;
 			case 'timeout':
-			   message = Gleez.t('Your request timed out. Please try again.');
-			   break;
+				message = Gleez.t('Your request timed out. Please try again.');
+				break;
 			case 'abort':
-			   return;
-		    }
+				return;
+			}
 		}
-       
+
 		try
 		{
-		    var data = $.parseJSON(message);
-		    if (typeof(data.Exception) == 'string')
+			var data = $.parseJSON(message);
+			if (typeof(data.Exception) == 'string')
 			message = data.Exception;
 		} catch(e) {}
-	       
+
 		if (message == '')
-		    message = Gleez.t('There was an error performing your request. Please try again.')
-	       
+			message = Gleez.t('There was an error performing your request. Please try again.')
+
 		if (returnRes) 
 			return {responseText: message, code: code}
 		
 		Gleez.informMessage('<span class="InformSprite Lightbulb Error'+code+'"></span>'+message)
-    }
-    
-    // Send an informMessage to the screen.
-    Gleez.informMessage = function(message, options) {
+	}
+
+	// Send an informMessage to the screen.
+	Gleez.informMessage = function(message, options) {
 		if (!options)   options = new Array();
 		
 		options['text'] = message;
 		Gleez.inform({'InformMessages' : new Array(options)})
-    }
-    
-    var keyString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-    var uTF8Encode = function(string) {
-	    string = string.replace(/\x0d\x0a/g, "\x0a");
-	    var output = "";
-	    for (var n = 0; n < string.length; n++) {
-		    var c = string.charCodeAt(n);
-		    if (c < 128) {
-			    output += String.fromCharCode(c);
-		    } else if ((c > 127) && (c < 2048)) {
-			    output += String.fromCharCode((c >> 6) | 192);
-			    output += String.fromCharCode((c & 63) | 128);
-		    } else {
-			    output += String.fromCharCode((c >> 12) | 224);
-			    output += String.fromCharCode(((c >> 6) & 63) | 128);
-			    output += String.fromCharCode((c & 63) | 128);
-		    }
-	    }
-	    return output;
-    }
-    
-    var uTF8Decode = function(input) {
-	    var string = "";
-	    var i = 0;
-	    var c = 0, c1 = 0, c2 = 0, c3 = 0;
-	    while ( i < input.length ) {
-		    c = input.charCodeAt(i);
-		    if (c < 128) {
-			    string += String.fromCharCode(c);
-			    i++;
-		    } else if ((c > 191) && (c < 224)) {
-			    c2 = input.charCodeAt(i+1);
-			    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-			    i += 2;
-		    } else {
-			    c2 = input.charCodeAt(i+1);
-			    c3 = input.charCodeAt(i+2);
-			    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-			    i += 3;
-		    }
-	    }
-	    return string;
-    }
-    
-    $.extend({
-	    base64Encode: function(input) {
-		    var output = "";
-		    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-		    var i = 0;
-		    input = uTF8Encode(input);
-		    while (i < input.length) {
-			    chr1 = input.charCodeAt(i++);
-			    chr2 = input.charCodeAt(i++);
-			    chr3 = input.charCodeAt(i++);
-			    enc1 = chr1 >> 2;
-			    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-			    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-			    enc4 = chr3 & 63;
-			    if (isNaN(chr2)) {
-				    enc3 = enc4 = 64;
-			    } else if (isNaN(chr3)) {
-				    enc4 = 64;
-			    }
-			    output = output + keyString.charAt(enc1) + keyString.charAt(enc2) + keyString.charAt(enc3) + keyString.charAt(enc4);
-		    }
-		    return output;
-	    },
-	    base64Decode: function(input) {
-		    var output = "";
-		    var chr1, chr2, chr3;
-		    var enc1, enc2, enc3, enc4;
-		    var i = 0;
-		    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-		    while (i < input.length) {
-			    enc1 = keyString.indexOf(input.charAt(i++));
-			    enc2 = keyString.indexOf(input.charAt(i++));
-			    enc3 = keyString.indexOf(input.charAt(i++));
-			    enc4 = keyString.indexOf(input.charAt(i++));
-			    chr1 = (enc1 << 2) | (enc2 >> 4);
-			    chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-			    chr3 = ((enc3 & 3) << 6) | enc4;
-			    output = output + String.fromCharCode(chr1);
-			    if (enc3 != 64) {
-				    output = output + String.fromCharCode(chr2);
-			    }
-			    if (enc4 != 64) {
-				    output = output + String.fromCharCode(chr3);
-			    }
-		    }
-		    output = uTF8Decode(output);
-		    return output;
-	    }
-    })
-    
-    $.postParseJson = function(json) {
+	}
+
+	var keyString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+	var uTF8Encode = function(string) {
+		string = string.replace(/\x0d\x0a/g, "\x0a");
+		var output = "";
+		for (var n = 0; n < string.length; n++) {
+			var c = string.charCodeAt(n);
+			if (c < 128) {
+				output += String.fromCharCode(c);
+			} else if ((c > 127) && (c < 2048)) {
+				output += String.fromCharCode((c >> 6) | 192);
+				output += String.fromCharCode((c & 63) | 128);
+			} else {
+				output += String.fromCharCode((c >> 12) | 224);
+				output += String.fromCharCode(((c >> 6) & 63) | 128);
+				output += String.fromCharCode((c & 63) | 128);
+			}
+		}
+		return output;
+	}
+
+	var uTF8Decode = function(input) {
+		var string = "";
+		var i = 0;
+		var c = 0, c1 = 0, c2 = 0, c3 = 0;
+		while ( i < input.length ) {
+			c = input.charCodeAt(i);
+			if (c < 128) {
+				string += String.fromCharCode(c);
+				i++;
+			} else if ((c > 191) && (c < 224)) {
+				c2 = input.charCodeAt(i+1);
+				string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+				i += 2;
+			} else {
+				c2 = input.charCodeAt(i+1);
+				c3 = input.charCodeAt(i+2);
+				string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+				i += 3;
+			}
+		}
+		return string;
+	}
+
+	$.extend({
+		base64Encode: function(input) {
+			var output = "";
+			var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+			var i = 0;
+			input = uTF8Encode(input);
+			while (i < input.length) {
+				chr1 = input.charCodeAt(i++);
+				chr2 = input.charCodeAt(i++);
+				chr3 = input.charCodeAt(i++);
+				enc1 = chr1 >> 2;
+				enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+				enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+				enc4 = chr3 & 63;
+				if (isNaN(chr2)) {
+					enc3 = enc4 = 64;
+				} else if (isNaN(chr3)) {
+					enc4 = 64;
+				}
+				output = output + keyString.charAt(enc1) + keyString.charAt(enc2) + keyString.charAt(enc3) + keyString.charAt(enc4);
+			}
+			return output;
+		},
+		base64Decode: function(input) {
+			var output = "";
+			var chr1, chr2, chr3;
+			var enc1, enc2, enc3, enc4;
+			var i = 0;
+			input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+			while (i < input.length) {
+				enc1 = keyString.indexOf(input.charAt(i++));
+				enc2 = keyString.indexOf(input.charAt(i++));
+				enc3 = keyString.indexOf(input.charAt(i++));
+				enc4 = keyString.indexOf(input.charAt(i++));
+				chr1 = (enc1 << 2) | (enc2 >> 4);
+				chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+				chr3 = ((enc3 & 3) << 6) | enc4;
+				output = output + String.fromCharCode(chr1);
+				if (enc3 != 64) {
+					output = output + String.fromCharCode(chr2);
+				}
+				if (enc4 != 64) {
+					output = output + String.fromCharCode(chr3);
+				}
+			}
+			output = uTF8Decode(output);
+			return output;
+		}
+	})
+
+	$.postParseJson = function(json) {
 		if (json.Body) json.Body = $.base64Decode(json.Body)
 		return json
-    }
+	}
 
-    /**
-     * Filter Jquery selector by attribute value
-     **/
-    $.fn.filterAttr = function(attr_name, attr_value) {
+	/**
+	 * Filter Jquery selector by attribute value
+	 **/
+	$.fn.filterAttr = function(attr_name, attr_value) {
 		return this.filter(function() { return $(this).attr(attr_name) === attr_value; });
-    };
-    
-    Gleez.theme = function (func) {
+	};
+
+	Gleez.theme = function (func) {
 		for (var i = 1, args = []; i < arguments.length; i++) {
-	    	args.push(arguments[i]);
+			args.push(arguments[i]);
 		}
 
 		return (Gleez.theme[func] || Gleez.theme.prototype[func]).apply(this, args)
-    }
+	}
 
-    /**
-     * The default themes.
-     */
-    Gleez.theme.prototype = {
+	/**
+	 * The default themes.
+	 */
+	Gleez.theme.prototype = {
 		/**
 		* Formats text for emphasized display in a placeholder inside a sentence.
 		*
@@ -486,10 +485,10 @@ jQuery.noConflict();
 		placeholder: function (str)	{
 			return '<em class="placeholder">' + Gleez.checkPlain(str) + '</em>';
 		}
-    }
+	}
 
 	Gleez.isXS = function() {
-		if (Gleez._isXS === null ) {
+		if(Gleez._isXS === null ) {
 			//check if we're in the Bootstrap XS environment
 			var $check = $("<div class='visible-xs'>").appendTo($("body"));
 			Gleez._isXS = $check.is(":visible");
@@ -500,7 +499,7 @@ jQuery.noConflict();
 	}
 
 	Gleez.isSM = function() {
-		if (Gleez._isSM === null ) {
+		if(Gleez._isSM === null ) {
 			//check if we're in the Bootstrap XS environment
 			var $check = $("<div class='visible-sm'>").appendTo($("body"));
 			Gleez._isSM = $check.is(":visible");
@@ -513,11 +512,11 @@ jQuery.noConflict();
 	$(window).on('load', function () {
 		$("[rel='tooltip']").tooltip();
 	})
-    
-    // Class indicating that JS is enabled; used for styling purpose.
-    $('html').addClass('js');
 
-    // 'js enabled' cookie.
-    document.cookie = 'has_js=1; path=/';
+	// Class indicating that JS is enabled; used for styling purpose.
+	$('html').addClass('js');
+
+	// 'js enabled' cookie.
+	document.cookie = 'has_js=1; path=/';
 
 }(jQuery);
