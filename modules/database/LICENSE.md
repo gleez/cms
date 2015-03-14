@@ -2,7 +2,7 @@ Gleez License Agreement
 
 This license is a legal agreement between you and the Gleez Team for the use of Gleez Database (the "Software"). By obtaining the Software you agree to comply with the terms and conditions of this license.
 
-Copyright (c) 2010-2014 Gleez Team
+Copyright (c) 2010-2015 Gleez Team
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

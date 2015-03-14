@@ -130,6 +130,16 @@ class MySQLi extends Database implements DriverInterface
 			unset($this->_config['password']);
 		}
 
+		if( isset($this->_config['connection']['password']) )
+		{
+			unset($this->_config['connection']['password']);
+		}
+
+		if( isset($this->_config['connection']['username']) )
+		{
+			unset($this->_config['connection']['username']);
+		}
+
 		if ($username) {
 			unset($this->_config['user']);
 		}
