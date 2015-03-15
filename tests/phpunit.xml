@@ -6,7 +6,9 @@
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
-    strict="true">
+    strict-coverage="true"
+    report-useless-tests="true"
+    enforce-time-limit="true">
   <testsuites>
     <testsuite name="Gleez Autoloader Test Suite">
         <directory>./src</directory>
