@@ -1,5 +1,5 @@
-Gleez CMS v2
-============
+Gleez CMS v2 (Bocydium Globulare)
+=================================
 
 ### What is Gleez CMS
 
