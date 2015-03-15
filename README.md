@@ -27,8 +27,13 @@ $ phpunit \
 
 For additional information see [PHPUnit The Command-Line Test Runner] [php-unit]
 
+### License
+
+Licensed under the [Gleez CMS License] [license]. © Gleez Technologies
+
 
 [gleez-site]: http://gleezcms.org/
 [wiki-cms]: http://en.wikipedia.org/wiki/CMS
 [php-unit]: http://phpunit.de/manual/current/en/textui.html
+[license]: http://gleezcms.org/license
 
