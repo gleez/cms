@@ -1,2 +1,5 @@
-/.idea/
-/build/
+.idea/
+build/
+
+composer.lock
+vendor/*

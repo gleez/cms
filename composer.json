@@ -1,0 +1,5 @@
+{
+  "require": {
+    "gleez/autoloader": "dev-master"
+  }
+}
