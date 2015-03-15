@@ -7,7 +7,20 @@ Gleez CMS v2
 
 **Work In Progress. Do not use this version in production!**
 
+### Directory Structure
+
+```
+app/                 ready-to-use application template
+config/              application configs
+public/              public document root
+build/               internally used build tools
+tests/               tests of the core Gleez CMS code
+vendor/              vendor libraries (Composer install path)
+```
+
 ### System Requirements
+
+The minimum requirement by Gleez CMS is that your Web server supports PHP 5.3.9. But requirements may change at any time prior to 5.4 
 
 * PHP >= 5.3.9
 
