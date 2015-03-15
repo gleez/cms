@@ -16,7 +16,7 @@
 error_reporting(E_ALL | E_STRICT);
 
 // Define the absolute paths for configured directories
-define('APPPATH', realpath('../App'));
+define('APPPATH', realpath('../apps'));
 define('SRCPATH', realpath('../src'));
 
 /**
