@@ -10,7 +10,7 @@
 // turn on all errors
 error_reporting(E_ALL);
 
-require_once  dirname(realpath(dirname(__FILE__))).'/src/Gleez/Loader/Autoloader.php';
+require_once dirname(realpath(dirname(__FILE__))) . '/vendor/autoload.php';
 
 // autoloader
 $loader = new Gleez\Loader\Autoloader(array(
