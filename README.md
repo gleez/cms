@@ -14,6 +14,7 @@ app/                 ready-to-use application template
 config/              application configs
 public/              public document root
 build/               internally used build tools
+src/                 core Gleez CMS code
 tests/               tests of the core Gleez CMS code
 vendor/              vendor libraries (Composer install path)
 ```

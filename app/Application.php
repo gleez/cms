@@ -29,39 +29,39 @@ class Application
      */
     protected $environment = Application::DEVELOPMENT;
 
-	/**
-	 * Application constructor
-	 */
-	public function __construct()
-	{
-		$this->init();
-	}
+    /**
+     * Application constructor
+     */
+    public function __construct()
+    {
+        $this->init();
+    }
 
-	/**
-	 * Runs the application performing all initializations
-	 *
-	 * @return Application
-	 */
-	protected function init()
-	{
-		$initializers = [
-			'environment'
-		];
+    /**
+     * Runs the application performing all initializations
+     *
+     * @return Application
+     */
+    protected function init()
+    {
+        $initializers = [
+            'environment'
+        ];
 
-		foreach($initializers as $service) {
-			$function = 'init' . ucfirst($service);
-			$this->$function();
-		}
+        foreach($initializers as $service) {
+            $function = 'init' . ucfirst($service);
+            $this->$function();
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Initializes the Environment
-	 * @throws \RuntimeException
-	 */
-	protected function initEnvironment()
-	{
+    /**
+     * Initializes the Environment
+     * @throws \RuntimeException
+     */
+    protected function initEnvironment()
+    {
         /**
          * @const APP_START_TIME The start time of the application, used for profiling
          */
@@ -116,14 +116,14 @@ class Application
             error_reporting(E_ALL ^ E_NOTICE);
         }
 
-		if (!is_file(DOCROOT . '/vendor/autoload.php')) {
-			throw new RuntimeException(sprintf(
-				'Composer autoloader not found. Try to run "composer install" at :%s',
-				DOCROOT
-			));
-		}
+        if (!is_file(DOCROOT . '/vendor/autoload.php')) {
+            throw new RuntimeException(sprintf(
+                'Composer autoloader not found. Try to run "composer install" at :%s',
+                DOCROOT
+            ));
+        }
 
-		// Include Composer autoloader
-		require_once(DOCROOT . '/vendor/autoload.php');
-	}
+        // Include Composer autoloader
+        require_once(DOCROOT . '/vendor/autoload.php');
+    }
 }
