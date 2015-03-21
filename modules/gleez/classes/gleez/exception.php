@@ -95,6 +95,8 @@ class Gleez_Exception extends Exception {
 	 * exception, and the stack trace of the error.
 	 *
 	 * @param  Exception  $e  Exception
+	 * @link   https://github.com/facebook/hhvm/issues/4055
+	 * @link   https://github.com/facebook/hhvm/issues/993
 	 */
 	public static function handler(Exception $e)
 	{
@@ -103,7 +105,7 @@ class Gleez_Exception extends Exception {
 		// Send the response to the browser
 		echo $response->send_headers()->body();
 
-		exit(1);
+		if ( ! Request::isHHVM() ) exit(1);
 	}
 
 	/**
