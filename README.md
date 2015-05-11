@@ -1,10 +1,10 @@
 # What Is Gleez CMS?
 
-[Gleez CMS](http://gleezcms.org) is a user-friendly website [Content Management System](http://en.wikipedia.org/wiki/CMS).
+[Gleez CMS](https://gleezcms.org) is a user-friendly website [Content Management System](http://en.wikipedia.org/wiki/CMS).
 
-With [Gleez CMS](http://gleezcms.org) you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!
+With [Gleez CMS](https://gleezcms.org) you can easily build dynamic websites within a matter of minutes with just the click of your mouse! Maintain your web content, navigation and even limit what groups or specific users can access, from anywhere in the world with just a web browser!
 
-With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org) is a professional and robust system suitable for any business or organization website. Built on the [PHP](http://php.net) programming language and the [MySQL](http://www.mysql.com) database, [Gleez CMS](http://gleezcms.org) delivers superb performance on any size website.
+With an emphasis on security and functionality, [Gleez CMS](https://gleezcms.org) is a professional and robust system suitable for any business or organization website. Built on the [PHP](http://php.net) programming language and the [MySQL](http://www.mysql.com) database, [Gleez CMS](https://gleezcms.org) delivers superb performance on any size website.
 
 ## Features
 
@@ -28,7 +28,7 @@ With an emphasis on security and functionality, [Gleez CMS](http://gleezcms.org)
 
 You can visit our demo site to become familiar with the basic features of Gleez CMS
 
-[http://demo.gleezcms.org](http://demo.gleezcms.org)
+[https://demo.gleezcms.org](https://demo.gleezcms.org)
 
 | Login details | Typical user | Administrator |
 | ------------- |:------------:| -------------:|
@@ -60,4 +60,4 @@ Chat with fellow Gleez users at [#gleez on Freenode](http://webchat.freenode.net
 
 ***
 
-[Official Website](http://gleezcms.org) | [Facebook Page](https://www.facebook.com/gleezcms) | [License](https://github.com/gleez/cms/wiki/License) | [Contributors](https://github.com/gleez/cms/wiki/Contributors)
+[Official Website](https://gleezcms.org) | [Facebook Page](https://www.facebook.com/gleezcms) | [License](https://github.com/gleez/cms/wiki/License) | [Contributors](https://github.com/gleez/cms/wiki/Contributors)
