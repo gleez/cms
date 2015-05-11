@@ -169,7 +169,7 @@ return array(
 	'The values you entered in the password fields didn\'t match.' => 'Paroolid ei ühti.',
 	'This account is blocked' => 'See konto on blokeeritud',
 	'This email already exists' => 'See email aadress on jube registreeritud',
-	"This email don't exists" => 'See email aadress pole leitud',
+	'Email address does not exist' => 'See email aadress pole leitud',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'See on ühekordne viide ja teda saab kasutada vaid üks kord. Viite kasutamise aeg on üks päev ja midagi ei juhtu kui teda selle ajaga ei kasutata.',
 	'This username already exists' => 'Selline kasutajanimi on juba olemas',
 	'This username is not available' => 'See kasutajanimi pole saadaval',

@@ -148,7 +148,7 @@ return array(
 	'The username must be less than :param2 characters long' => 'lo username deve essere lungo meno di :param2 caratteri',
 	'The values you entered in the password fields didn\'t match.' => 'I valori immessi nei campo per le password non corrispondono.',
 	'This account is blocked' => 'Qusto account è bloccato',
-	"This email don't exists" => 'Questa email non esiste',
+	'Email address does not exist' => 'Questa email non esiste',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Questo è un URL monouso, quindi pu&#328; essere usato una sola volta. Scadr&agrave; dopo un giorno e non accadr&agrave; nulla se non viene utilizzato.',
 	'Try to come up with a complex password' => 'Prova una password più complessa',
 	// U

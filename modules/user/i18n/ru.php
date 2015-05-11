@@ -211,7 +211,7 @@ return array(
 	'The values you entered in the password fields didn\'t match.' => 'Значения введённые вами в поля для паролей не совпадают.',
 	'This account is blocked' => 'Эта учётная запись заблокирована',
 	'This email already exists' => 'Этот email адрес уже зарегистрирован',
-	"This email don't exists" => 'Этот email адрес не обнаружен',
+	'Email address does not exist' => 'Этот email адрес не обнаружен',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Это одноразовая ссылка и она может быть использована одни раз. Срок действия ссылки один день и ничего не произойдёт если она за это время не используется.',
 	'This mail is an automatic notification and requires you to answer.' => 'Данное письмо является автоматическим уведомлением и не требует от вас ответа.',
 	'This username already exists' => 'Такое имя пользователя уже существует',
