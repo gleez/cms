@@ -148,7 +148,7 @@ return array(
 	'The username must be less than :param2 characters long' => 'Numele de utilizator trebuie să fie mai scurt de :param2 caractere',
 	'The values you entered in the password fields didn\'t match' => 'Valorile introduse în câmpurile parolă nu coincid',
 	'This account is blocked' => 'Acest cont este blocat',
-	"This email don't exists" => 'Acest email nu exista',
+	'Email address does not exist' => 'Acest email nu exista',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Acest URL expira după prima utilizare sau după o zi.',
 	'Try to come up with a complex password' => 'Încearcă să folosești o parolă complexă',
 	// U
