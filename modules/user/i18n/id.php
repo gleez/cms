@@ -169,7 +169,7 @@ return array(
 	'The values you entered in the password fields didn\'t match.' => 'Password ga\' sama',
 	'This account is blocked' => 'Akun terkunci',
 	'This email already exists' => 'Email ini udah ada yang pake',
-	"This email don't exists" => 'email ini ga ada',
+	'Email address does not exist' => 'email ini ga ada',
 	"This is a one-time URL, so it can be used only once. It expires after one day and nothing will happen if it's not used." => 'Ini adalah URL sekali pake. Jadi ya cuma bisa dipake sekali. URL ini akan basi setelah satu hari dan ga\' akan terjadi apa2 kalo ga dipake juga',
 	'This username already exists' => 'Nama pengguna udah ada',
 	'This username is not available' => 'Nama pengguna ga tersedia',
@@ -215,7 +215,7 @@ return array(
 	'You must provide old password' => 'Harus masukin password lama',
 	'Your picture will be changed proportionally to the size of :w&times;:h' => 'Gambar anda akan diubah secara proposional dengan ukuran :w&times;:h',
 	// Z
-	
+
 	// tambahan ---------
 	'Messages'=>'Pesan',
 	'Send Message'=>'Kirim Pesan',
