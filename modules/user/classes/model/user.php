@@ -351,15 +351,6 @@ class Model_User extends ORM {
 			// Set the last login date
 			$this->login = time();
 
-			// if the pass is md5.. convert to new hash system
-			if (strlen($this->pass) == 32
-				AND isset($this->password)
-				AND strlen($this->password) > Config::get('auth.password.length_min', 4)
-			)
-			{
-				$this->pass = $this->password;
-			}
-
 			// Save the user
 			$this->update();
 		}
