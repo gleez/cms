@@ -226,12 +226,8 @@ class Auth {
 	public function login($username, $password, $remember = FALSE)
 	{
 		if (empty($password))
-			return FALSE;
-
-		if (is_string($password))
 		{
-			// Create a hashed password
-			//$password = $this->hash($password); //Support for old (Drupal md5 password sum)
+			return FALSE;
 		}
 
 		return $this->_login($username, $password, $remember);
@@ -271,7 +267,7 @@ class Auth {
 			$user->where($user->unique_key($username), '=', $username)->find();
 		}
 
-		return $user->passw;
+		return $user->pass;
 	}
 
 	/**
@@ -286,9 +282,12 @@ class Auth {
 		$user = $user_model->original_values();
 
 		if ( ! $user)
+		{
 			return FALSE;
+		}
 
-		return ($this->hash($password) === $user['pass']);
+		//Avoid Timing attacks
+		return Auth::hashEquals($user['pass'], $this->hash($password));
 	}
 
 	/**
@@ -528,5 +527,23 @@ class Auth {
 		}
 
 		return $key;
+	}
+
+	/**
+	 * Timing attack safe string comparison
+	 *
+	 * @param   string  known_string
+	 * @param   string  user_string
+	 * @return  bool
+	 */
+	public static function hashEquals($known_string, $user_string)
+	{
+		// Available only in php >= 5.6.0
+		if ( function_exists('hash_equals') )
+		{
+			return hash_equals($known_string, $user_string);
+		}
+
+		return System::equalsHashes($known_string, $user_string);
 	}
 }

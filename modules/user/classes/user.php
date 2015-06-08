@@ -263,7 +263,7 @@ class User {
 	}
 
 	/**
-	 * Is the password provided correct? support old/drupal style md5 and new hash
+	 * Is the password provided correct?
 	 *
 	 * @param  Model_User $user     User
 	 * @param  string     $password A plaintext password
@@ -274,17 +274,15 @@ class User {
 	 */
 	public static function check_pass($user, $password)
 	{
-		if( !isset($user) OR !isset($password) ) return FALSE;
-		$valid = $user->pass;
-
-		// Support for old (Drupal md5 password sum) :
-		$guess = (strlen($valid) == 32) ? md5($password) : Auth::instance()->hash($password);
-		if (! strcmp($guess, $valid))
+		if( !isset($user) || !isset($password) )
 		{
-			return TRUE;
+			return FALSE;
 		}
 
-		return FALSE;
+		$valid = $user->pass;
+		$guess = Auth::instance()->hash($password);
+		
+		return Auth::hashEquals($valid, $guess);
 	}
 
 	/**
