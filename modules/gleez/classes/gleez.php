@@ -4,7 +4,7 @@
  *
  * @package    Gleez
  * @author     Gleez Team
- * @version    1.1.7
+ * @version    1.2.0
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
@@ -14,13 +14,13 @@ class Gleez {
 	 * Release version
 	 * @type string
 	 */
-	const VERSION = '1.1.7';
+	const VERSION = '1.2.0';
 
 	/**
 	 * Minimal required version of php
 	 * @type string
 	 */
-	const PHP_MIN_REQ = '5.3.9';
+	const PHP_MIN_REQ = '5.4.1';
 
 	/**
 	 * Release codename
