@@ -274,6 +274,35 @@ class System {
 	 *
 	 * Prevents cryptographic side-channel attacks (timing attacks, specifically).
 	 *
+	 * @since  1.7.0  Introduced
+	 *
+	 * @param   string  known_string
+	 * @param   string  user_string
+	 *
+	 * @return  bool
+	 */
+	public static function hashEquals($known_string, $user_string)
+	{
+		// Available only in php >= 5.6.0
+		if ( function_exists('hash_equals') )
+		{
+			return hash_equals($known_string, $user_string);
+		}
+
+		$diff = strlen($known_string) ^ strlen($user_string);
+
+		for($i = 0; $i < strlen($known_string) && $i < strlen($user_string); $i++) {
+			$diff |= ord($known_string[$i]) ^ ord($user_string[$i]);
+		}
+
+		return $diff === 0;
+	}
+
+	/**
+	 * Compare two hashes in a time-invariant manner
+	 *
+	 * Prevents cryptographic side-channel attacks (timing attacks, specifically).
+	 *
 	 * @since  1.4.0  Introduced
 	 *
 	 * @param  string $a cryptographic hash
@@ -283,13 +312,7 @@ class System {
 	 */
 	public static function equalsHashes($a, $b)
 	{
-		$diff = strlen($a) ^ strlen($b);
-
-		for($i = 0; $i < strlen($a) && $i < strlen($b); $i++) {
-			$diff |= ord($a[$i]) ^ ord($b[$i]);
-		}
-
-		return $diff === 0;
+		return slef::hashEquals($a, $b);
 	}
 
 	/**

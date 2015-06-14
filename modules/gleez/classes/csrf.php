@@ -56,7 +56,7 @@ class CSRF {
 		$time = ceil(time() / self::$csrf_ttl);
 
 		// Check token validity
-		return ($token === self::token($id, $action, $time) || $token === self::token($id, $action, $time - 1));
+		return System::hashEquals($token, self::token($id, $action, $time)) || System::hashEquals($token, self::token($id, $action, $time - 1));
 	}
 
 	/**

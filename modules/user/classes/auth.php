@@ -287,7 +287,7 @@ class Auth {
 		}
 
 		//Avoid Timing attacks
-		return Auth::hashEquals($user['pass'], $this->hash($password));
+		return System::hashEquals($user['pass'], $this->hash($password));
 	}
 
 	/**
@@ -529,21 +529,4 @@ class Auth {
 		return $key;
 	}
 
-	/**
-	 * Timing attack safe string comparison
-	 *
-	 * @param   string  known_string
-	 * @param   string  user_string
-	 * @return  bool
-	 */
-	public static function hashEquals($known_string, $user_string)
-	{
-		// Available only in php >= 5.6.0
-		if ( function_exists('hash_equals') )
-		{
-			return hash_equals($known_string, $user_string);
-		}
-
-		return System::equalsHashes($known_string, $user_string);
-	}
 }
