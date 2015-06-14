@@ -4,7 +4,7 @@
  *
  * @package    Gleez\Core
  * @author     Gleez Team
- * @version    1.6.1
+ * @version    1.7.0
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -312,7 +312,7 @@ class System {
 	 */
 	public static function equalsHashes($a, $b)
 	{
-		return slef::hashEquals($a, $b);
+		return self::hashEquals($a, $b);
 	}
 
 	/**
