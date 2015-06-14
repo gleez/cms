@@ -91,7 +91,7 @@ class Cookie {
 			// Separate the salt and the value
 			list ($hash, $value) = explode('~', $cookie, 2);
 
-			if (System::equalsHashes(Cookie::salt($key, $value), $hash))
+			if (System::hashEquals(Cookie::salt($key, $value), $hash))
 			{
 				// Cookie signature is valid
 				return $value;

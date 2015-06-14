@@ -282,7 +282,7 @@ class User {
 		$valid = $user->pass;
 		$guess = Auth::instance()->hash($password);
 		
-		return Auth::hashEquals($valid, $guess);
+		return System::hashEquals($valid, $guess);
 	}
 
 	/**
