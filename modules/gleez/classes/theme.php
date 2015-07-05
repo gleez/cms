@@ -60,14 +60,14 @@ class Theme {
 			// Load the site theme
 			Theme::$active  = $config->get('theme', 'cerber');
 		}
-	
+
 		//Set mobile theme, if enabled and mobile request
 		if(Request::is_mobile() AND $config->get('mobile_theme', FALSE))
 		{
 			// Load the mobile theme
 			Theme::$active = $config->get('mobile_theme', 'cerber');
 		}
-	
+
 		// Admins can override the site theme, temporarily. This lets us preview themes.
 		if (User::is_admin() AND isset($_GET['theme']) AND $override = Text::plain( $_GET['theme']) )
 		{
@@ -79,7 +79,7 @@ class Theme {
 	}
 
 	/**
-	 * Sets active theme if none supplied or uses the supplied one 
+	 * Sets active theme if none supplied or uses the supplied one
 	 *
 	 * @param  boolean|string  $theme  Theme name [Optional]
 	 */
@@ -102,7 +102,7 @@ class Theme {
 				Log::error('Missing site theme: :theme', array(':theme' => Theme::$active) );
 			}
 		}
-	
+
 		unset($modules);
 	}
 
@@ -158,22 +158,21 @@ class Theme {
 	 * @param   boolean $title returns only title if its true or full object
 	 * @return  array  Available themes array
 	 */
-	public static function available($title = TRUE)
+	public static function available($title = true)
 	{
-		$themes = array();
-		$paths 	= (array) Config::get('site.theme_paths', array(THEMEPATH) );
+		$paths 	= (array) Config::get('site.theme_paths', [THEMEPATH]);
 		$cache  = Cache::instance('themes');
 
-		if ( ! $themes = $cache->get('themes', false))
+		if (!$themes = $cache->get('themes', false))
 		{
 			// Make sure THEMEPATH is set else add last
-			if(!in_array(THEMEPATH, $paths))
+			if (!in_array(THEMEPATH, $paths))
 			{
 				array_push($paths, THEMEPATH);
 			}
 
 			// Iterate over each config path
-			foreach ($paths AS $key => $path)
+			foreach ($paths as $key => $path)
 			{
 				foreach (glob($path . "*/theme.info") as $file)
 				{
@@ -189,7 +188,7 @@ class Theme {
 			$cache->set('themes', $themes, DATE::DAY);
 		}
 
-		if($title === TRUE)
+		if ($title === true && $themes)
 		{
 			foreach ($themes as $name => $theme)
 			{
@@ -199,7 +198,7 @@ class Theme {
 
 		return $themes;
 	}
-	
+
 	public static function route_list()
 	{
 		return implode("|", array_keys( self::available()) );
