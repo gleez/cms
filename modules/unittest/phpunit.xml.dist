@@ -1,0 +1,15 @@
+<phpunit
+        bootstrap="./bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        strict-coverage="true"
+        report-useless-tests="true"
+        enforce-time-limit="true">
+    <testsuites>
+        <testsuite name="Gleez Test Suite">
+            <file>./tests.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>
