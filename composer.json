@@ -1,0 +1,34 @@
+{
+    "name":        "gleez/cms",
+    "type":        "project",
+    "description": "Gleez CMS, user-friendly website Content Management System",
+    "homepage":    "http://gleezcms.org",
+    "keywords":    ["cms", "gleez"],
+    "authors": [
+        {
+            "name":  "Sandeep Sangamreddi",
+            "email": "info@gleeztech.com",
+            "role":  "Developer"
+        },
+        {
+            "name":  "Sergey Yakovlev",
+            "email": "me@klay.me",
+            "role":  "Developer"
+        },
+        {
+            "name":     "Gleez Community",
+            "homepage": "https://github.com/gleez/cms/wiki/Contributors",
+            "role":     "Developer"
+        }
+    ],
+    "support": {
+        "email":  "info@gleeztech.com",
+        "issues": "https://github.com/gleez/cms/issues",
+        "irc":    "irc://irc.freenode.net/gleez",
+        "source": "https://github.com/gleez/cms",
+        "wiki":   "https://github.com/gleez/cms/wiki"
+    },
+    "require": {
+        "php": ">=5.4.1"
+    },
+}
