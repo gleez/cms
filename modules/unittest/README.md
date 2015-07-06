@@ -1,20 +1,26 @@
-# Kohana-PHPUnit integration
+# Gleez-PHPUnit integration
 
-This module integrates PHPUnit with Kohana.
+This module integrates PHPUnit with Gleez.
 
 If you look through any of the tests provided in this module you'll probably notice all theHorribleCamelCase.
 I've chosen to do this because it's part of the PHPUnit coding conventions and is required for certain features such as auto documentation.
 
 ## Requirements
 
-* [PHPUnit](http://www.phpunit.de/) >= 3.4
+* [PHPUnit](http://www.phpunit.de/) >= 4.5
 
 ## Usage
 
-	$ phpunit --bootstrap=modules/unittest/bootstrap.php modules/unittest/tests.php
+```sh
+$ phpunit --bootstrap=modules/unittest/bootstrap.php modules/unittest/tests.php
+```
 
 Alternatively you can use a `phpunit.xml` to have a more fine grained control
 over which tests are included and which files are whitelisted.
+
+```sh
+$ phpunit --configuration modules/unittest/phpunit.xml
+```
 
 Make sure you only whitelist the highest files in the cascading filesystem, else
 you could end up with a lot of "class cannot be redefined" errors.  
