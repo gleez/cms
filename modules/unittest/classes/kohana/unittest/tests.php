@@ -63,15 +63,15 @@ class Kohana_Unittest_Tests {
 		Unittest_Tests::configure_environment();
 
 		$suite = new Unittest_TestSuite;
-		
-		// Load the whitelist and blacklist for code coverage		
+
+		// Load the whitelist and blacklist for code coverage
 		$config = Kohana::$config->load('unittest');
-		
+
 		if ($config->use_whitelist)
 		{
 			Unittest_Tests::whitelist(NULL, $suite);
 		}
-		
+
 		if (count($config['blacklist']))
 		{
 			Unittest_Tests::blacklist($config->blacklist, $suite);
@@ -100,7 +100,7 @@ class Kohana_Unittest_Tests {
 			if (is_array($file))
 			{
 				if ($path != 'tests'.DS.'test_data')
-				{					
+				{
 					self::addTests($suite, $file);
 				}
 			}
