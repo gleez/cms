@@ -1,9 +1,10 @@
 {
     "name":        "gleez/cms",
-    "type":        "project",
+    "type":        "library",
     "description": "Gleez CMS, user-friendly website Content Management System",
     "homepage":    "http://gleezcms.org",
     "keywords":    ["cms", "gleez"],
+    "license":     "BSD-3-Clause",
     "authors": [
         {
             "name":  "Sandeep Sangamreddi",
@@ -11,8 +12,8 @@
             "role":  "Developer"
         },
         {
-            "name":  "Sergey Yakovlev",
-            "email": "me@klay.me",
+            "name":  "Serghei Iakovlev",
+            "email": "sadhooklay@gmail.com",
             "role":  "Developer"
         },
         {
