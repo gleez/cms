@@ -664,8 +664,11 @@ class Kohana {
 			}
 		}
 
-		//@todo better handling instead of init
-		require_once GLZPATH.'init'.EXT;
+		if (is_file(GLZPATH.'init'.EXT))
+		{
+			//@todo better handling instead of init
+			require_once GLZPATH.'init'.EXT;
+		}
 
 		return Kohana::$_modules;
 	}
