@@ -59,6 +59,10 @@ return array(
 			'user_id'     => 'user_id'
 		),
 	),
+	'redis' => array(
+		'host'  => 'localhost',  // Redis Server
+		'port'  => 6379,        // Redis port number
+	),
 	'cookie' => array(
 		'encrypted' => FALSE,
 	),
