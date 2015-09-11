@@ -29,7 +29,7 @@ use Gleez\Database\Expression;
  * You pass the same parameters to these functions as you pass to the objects they return.
  *
  * @package Gleez\Database
- * @version 2.1.1
+ * @version 2.1.2
  * @author Gleez Team
  */
 class DB
@@ -189,5 +189,10 @@ class DB
 	public static function version()
 	{
 		return Database::instance(NULL, self::$_config)->version();
+	}
+
+	public static function prefix()
+	{
+		return Database::instance(NULL, self::$_config)->table_prefix();
 	}
 }
