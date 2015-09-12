@@ -5,7 +5,7 @@
  *
  * @package    Gleez\Session\Redis
  * @author     Gleez Team
- * @version    1.1.1
+ * @version    1.1.0
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -70,7 +70,7 @@ class Session_Redis extends Session {
 		try {
 			// Create a new Redis instance and start a connection using the settings provided.
 			$this->_redis = new Redis;
-			$this->_redis->connect($host, $port);
+			$this->_redis->connect($this->_host, $this->_port);
 		} catch (Exception $e) {
 			Log::error('An error occurred connecting Redis Session: [:error]', [':error' => $e->getMessage()]);
 		}
