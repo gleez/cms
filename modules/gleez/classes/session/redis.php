@@ -5,7 +5,7 @@
  *
  * @package    Gleez\Session\Redis
  * @author     Gleez Team
- * @version    1.1.0
+ * @version    1.1.1
  * @copyright  (c) 2011-2015 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
@@ -25,6 +25,24 @@ class Session_Redis extends Session {
 	protected $_session_id;
 
 	/**
+	 * The Redis host
+	 * @var string
+	 */
+	protected $_host = 'localhost';
+
+	/**
+	 * The Redis port
+	 * @var int
+	 */
+	protected $_port = 6379;
+
+	/**
+	 * The key prefix
+	 * @var string
+	 */
+	protected $_prefix = 'session/';
+
+	/**
 	 * Class constructor
 	 *
 	 * @param  array   $config  Configuration [Optional]
@@ -37,15 +55,16 @@ class Session_Redis extends Session {
 			throw new Gleez_Exception('You must have PhpRedis installed and enabled to use.');
 		}
 
-		$host = 'localhost';
-		$port = 6379;
-
 		if (isset($config['host'])) {
-			$host = $config['host'];
+			$this->_host = $config['host'];
 		}
 
 		if (isset($config['port'])) {
-			$port = (int) $config['port'];
+			$this->_port = (int) $config['port'];
+		}
+
+		if (isset($config['prefix'])) {
+			$this->_prefix = $config['prefix'];
 		}
 
 		try {
@@ -81,7 +100,7 @@ class Session_Redis extends Session {
 	 */
 	protected function _read($id = NULL) {
 		if ($id OR $id = Cookie::get($this->_name)) {
-			$result = $this->_redis->get($id);
+			$result = $this->_redis->get($this->_prefix . $id);
 
 			if ($result) {
 				// Set the current session id
@@ -117,7 +136,7 @@ class Session_Redis extends Session {
 	 */
 	protected function _write() {
 		// Save to Redis
-		$this->_redis->set($this->_session_id, $this->__toString(), $this->_lifetime);
+		$this->_redis->set($this->_prefix . $this->_session_id, $this->__toString(), $this->_lifetime);
 
 		// Update the cookie with the new session id
 		Cookie::set($this->_name, $this->_session_id, $this->_lifetime);
@@ -135,7 +154,7 @@ class Session_Redis extends Session {
 		try
 		{
 			// Execute the query
-			$this->_redis->delete($this->_session_id);
+			$this->_redis->delete($this->_prefix . $this->_session_id);
 
 			// Delete the cookie
 			Cookie::delete($this->_name);
