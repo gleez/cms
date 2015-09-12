@@ -60,8 +60,16 @@ return array(
 		),
 	),
 	'redis' => array(
-		'host'  => 'localhost',  // Redis Server
-		'port'  => 6379,        // Redis port number
+		/**
+		 * Collection field name
+		 *
+		 * string  host    Redis Host
+		 * int     port    Redis Port
+		 * string  prefix  Redis key prefix
+		 */
+		'host'   => 'localhost',
+		'port'   => 6379,
+		'prefix' => 'session'
 	),
 	'cookie' => array(
 		'encrypted' => FALSE,
