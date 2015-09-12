@@ -8,7 +8,7 @@
  * @package    Gleez\Request
  * @version    1.2.0
  * @author     Gleez Team
- * @copyright  (c) 2011-2015 Gleez Technologies
+ * @copyright  (c) 2011-2014 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 class Request implements HTTP_Request {
@@ -839,6 +839,15 @@ class Request implements HTTP_Request {
 	}
 
 	/**
+	* Check if we are running under Pjax
+	*
+	* @return Bool
+	*/
+	public static function isPjax() {
+		return isset($_SERVER['HTTP_X_PJAX']) ? TRUE : FALSE;	
+	}
+
+	/**
 	 * Gets POST max size in bytes
 	 *
 	 * @link    http://php.net/post-max-size
@@ -860,8 +869,16 @@ class Request implements HTTP_Request {
 			Config::set('media', 'post_max_size', $max_size = static::DEFAULT_POST_MAX_SIZE);
 		}
 
-		// Get the post_max_size in bytes from php.ini
-		$php_settings = Num::bytes(ini_get('post_max_size'));
+		if(static::isHHVM())
+		{
+			//$php_settings = ini_get('post_max_size');
+			$php_settings = ini_get('hhvm.server.max_post_size');
+		}
+		else 
+		{
+			// Get the post_max_size in bytes from php.ini
+			$php_settings = Num::bytes(ini_get('post_max_size'));
+		}
 
 		// Get the post_max_size in bytes from `config/media`
 		$gleez_settings = Num::bytes($max_size);
