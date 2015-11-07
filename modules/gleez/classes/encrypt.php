@@ -1,5 +1,34 @@
 <?php
 
+/**
+ * Encrypt component
+ *
+ * The Encrypt component provides two-way encryption of text and binary strings
+ * using the [Mcrypt](http://php.net/mcrypt) extension, which consists of three
+ * parts: the key, the cipher, and the mode.
+ *
+ * The Key
+ * :  A secret passphrase that is used for encoding and decoding
+ *
+ * The Cipher
+ * :  A [cipher](http://php.net/mcrypt.ciphers) determines how the encryption
+ *    is mathematically calculated. By default, the "rijndael-128" cipher
+ *    is used. This is commonly known as "AES-128" and is an industry standard.
+ *
+ * The Mode
+ * :  The [mode](http://php.net/mcrypt.constants) determines how the encrypted
+ *    data is written in binary form. By default, the "nofb" mode is used,
+ *    which produces short output with high entropy.
+ *
+ * @package    Gleez\Security
+ * @author     Kohana Team
+ * @author     Gleez Team
+ * @version    1.0.0
+ * @copyright  (c) 2008-2012 Kohana Team
+ * @copyright  (c) 2011-2015 Gleez Technologies
+ * @license    http://kohanaframework.org/license
+ * @license    http://gleezcms.org/license  Gleez CMS License
+ */
 class Encrypt
 {
     /**
