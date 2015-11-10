@@ -136,10 +136,10 @@ class System {
 	 */
 	public static function os()
 	{
-		if (Kohana::$is_windows)
-		{
+		if (Gleez::$isWindows) {
 			return System::WIN;
 		}
+
 		return System::LIN;
 	}
 
@@ -326,9 +326,9 @@ class System {
 	*/
 	public static function faGetArray($path, $class_prefix = 'fa-')
 	{
-		if( ! file_exists($path) ) 
-		{
-			return false;//if path is incorect or file does not exist, stop.
+		if(!file_exists($path)) {
+			//if path is incorrect or file does not exist, stop.
+			return false;
 		}
 
 		$css = file_get_contents($path);

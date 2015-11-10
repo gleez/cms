@@ -75,6 +75,12 @@ class Gleez {
 	public static $charset = 'utf-8';
 
 	/**
+	 * True if Kohana is running on windows
+	 * @var boolean
+	 */
+	public static $isWindows= false;
+
+	/**
 	 * Runs the Gleez environment
 	 *
 	 * @uses  Gleez::_set_cookie
@@ -118,6 +124,9 @@ class Gleez {
 			// Turn off notices and strict errors
 			error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 		}
+
+		// Determine if we are running in a Windows environment
+		Gleez::$isWindows = ('WIN' === strtoupper(substr(PHP_OS, 0, 3)));
 
 		// Initialize the locale from settings
 		I18n::initialize();
