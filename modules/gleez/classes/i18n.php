@@ -127,22 +127,30 @@ class I18n {
 	/**
 	 * Detect language based on the http request.
 	 *
-	 *     // Get the language
-	 *     $lang = I18n::requestLocale();
+	 * <code>
+	 * // Get the language
+	 * $lang = I18n::requestLocale();
+	 * </code>
 	 *
 	 * @return  string
 	 */
 	public static function requestLocale()
 	{
-		//  Look for a preferred language in the `Accept-Language` header directive.
-		$locale	= Request::initial()->headers()->preferred_language(array_keys(self::$_languages));
+		$request = Request::initial();
 
-		if (self::isAvailable($locale))
-		{
+		// At bootstrap time Request::$initial is null
+		if (!$request instanceof Request) {
+			$locale = static::$default;
+		} else {
+			// Look for a preferred language in the `Accept-Language` header directive.
+			$locale	= $request->headers()->preferred_language(array_keys(static::$_languages));
+		}
+
+		if (static::isAvailable($locale)) {
 			return $locale;
 		}
 
-		return FALSE;
+		return false;
 	}
 
 	/**
@@ -224,7 +232,7 @@ class I18n {
 	/**
 	 * Detect language based on the subdomain.
 	 *
-	 *		ex: fr.example.com
+	 *      ex: fr.example.com
 	 *     	$lang = I18n::domainLocale();
 	 *
 	 * @return  string
