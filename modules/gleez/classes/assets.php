@@ -772,18 +772,18 @@ class Assets {
 	 */
 	public static function editor($name = '.textarea', $lang = 'en')
 	{
-		self::css('redactor', 'media/css/redactor.css', array('default'), array('weight' => 1));
-		self::js('redactor', 'media/js/redactor.min.js', array('jquery'), FALSE, array('weight' => 15));
-		self::js('redactor/lang', 'media/js/redactor/langs/'.$lang.'.js', array('jquery'), FALSE, array('weight' => 16));
+// 		self::css('redactor', 'media/css/redactor.css', array('default'), array('weight' => 1));
+// 		self::js('redactor', 'media/js/redactor.min.js', array('jquery'), FALSE, array('weight' => 15));
+// 		self::js('redactor/lang', 'media/js/redactor/langs/'.$lang.'.js', array('jquery'), FALSE, array('weight' => 16));
 
-		self::codes('editor', 'jQuery(document).ready(function(){
-					jQuery("'.$name.'").redactor({
-						lang: "'.$lang.'",
-						minHeight: 300,
-						autoresize: false
-					});
-			});'
-		);
+// 		self::codes('editor', 'jQuery(document).ready(function(){
+// 					jQuery("'.$name.'").redactor({
+// 						lang: "'.$lang.'",
+// 						minHeight: 300,
+// 						autoresize: false
+// 					});
+// 			});'
+// 		);
 	}
 
 	/**
