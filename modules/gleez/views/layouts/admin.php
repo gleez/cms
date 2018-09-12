@@ -73,7 +73,7 @@
 	<!-- ########## Footer end ########## -->
 
 	<?php echo Assets::js(FALSE); ?>
-	<?php echo Assets::codes(FALSE); ?>
+	<?php echo Assets::codes(FALSE, $getNonce); ?>
 	<?php echo $profiler; ?>
 </body>
 </html>
