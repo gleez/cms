@@ -4,8 +4,8 @@
  *
  * @package    Gleez\Template
  * @author     Gleez Team
- * @version    1.4.0
- * @copyright  (c) 2011-2015 Gleez Technologies
+ * @version    1.5.0
+ * @copyright  (c) 2011-2018 Gleez Technologies
  * @license    http://gleezcms.org/license Gleez CMS License
  */
 abstract class Template extends Controller {
@@ -45,7 +45,7 @@ abstract class Template extends Controller {
 	 * @var string
 	 */
 	public $subtitle = FALSE;
-	
+
 	/**
 	 * The Schema Type
 	 * @var string
@@ -153,13 +153,13 @@ abstract class Template extends Controller {
 	 * @var array
 	 */
 	protected $_subtabs;
-	
+
 	/**
 	 * Quick Links navigation
 	 * @var  array
 	 */
 	protected $_actions;
-	
+
 	/**
 	 * Benchmark token
 	 * @var string
@@ -220,6 +220,9 @@ abstract class Template extends Controller {
 	 */
 	protected $_formsaved = FALSE;
 
+	/** @var String|null */
+	protected $nonce;
+
 	/**
 	 * Loads the template View object, if it is direct request
 	 *
@@ -230,6 +233,11 @@ abstract class Template extends Controller {
 	{
 		// Execute parent::before first
 		parent::before();
+
+		// generation occurs only when $this->nonce is still null
+		if (!$this->nonce) {
+				$this->nonce = base64_encode(random_bytes(20));
+		}
 
 		if($this->bare == FALSE)
 		{
@@ -464,6 +472,7 @@ abstract class Template extends Controller {
 				->set('mission',      $this->template->mission)
 				->set('content',      $this->response->body())
 				->set('messages',     Message::display())
+				->set('getNonce',     $this->nonce)
 				->set('profiler',     FALSE);
 
 			if (count($this->_tabs) > 0)
@@ -475,7 +484,7 @@ abstract class Template extends Controller {
 			{
 				$this->template->subtabs = View::factory('tabs')->set('tabs', $this->_subtabs);
 			}
-	
+
 			if (count($this->_actions) > 0)
 			{
 				$this->template->actions = View::factory('actions')->set('actions', $this->_actions);
@@ -571,6 +580,9 @@ abstract class Template extends Controller {
 		{
 			$headers['X-Pingback'] = URL::site($xmlrpc, TRUE);
 		}
+
+		// replace nonce variable
+		$headers = str_replace('{NONCE}', 'nonce-'.$this->nonce, $headers);
 
 		$this->_set_server_headers($headers);
 	}
@@ -949,6 +961,16 @@ abstract class Template extends Controller {
 			// Force true/false
 			$this->_formsaved = ($Saved) ? TRUE : FALSE;
 		}
+	}
+
+	/**
+	 * Generates a random nonce parameter.
+	 *
+	 * @return string
+	 */
+	public function GetNonce()
+	{
+		return $this->nonce;
 	}
 
 	/**
