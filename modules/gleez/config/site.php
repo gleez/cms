@@ -141,7 +141,8 @@ return array(
 	 * @var array
 	 */
 	'headers' => array(
-		'X-Powered-By' => 'Gleez CMS (http://gleezcms.org)',
+		'X-Powered-By'              => 'Gleez CMS (http://gleezcms.org)',
+	//	'Content-Security-Policy'   => "script-src 'self' '{NONCE}' metrics.gleez.com; frame-ancestors 'self';"
 	),
 
 	/**
@@ -189,7 +190,6 @@ return array(
 			'copyright'  		      => 'Copyright (c) Gleez Technologies (P) Limited 2011-2018. All rights reserved.',
 			'robots'     		      => 'index, follow, noodp',
 			'viewport'   		      => 'width=device-width, initial-scale=1.0',
-			//'Content-Security-Policy'     => "script-src 'self'; frame-ancestors 'self'",
 		),
 	),
 
