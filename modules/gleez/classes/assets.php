@@ -46,8 +46,8 @@
  * @package    Gleez\Assets\Core
  * @author     Corey Worrell
  * @author     Gleez Team
- * @version    1.1.1
- * @copyright  (c) 2011-2015 Gleez Technologies
+ * @version    1.2.0
+ * @copyright  (c) 2011-2018 Gleez Technologies
  * @license    http://gleezcms.org/license  Gleez CMS License
  */
 class Assets {
@@ -406,7 +406,7 @@ class Assets {
 	 * Gets or sets javascript code
 	 *
 	 * @param   mixed   $handle  Asset name if string, sets $footer if boolean
-	 * @param   string  $code    Asset code [Optional]
+	 * @param   string  $code    Asset code/CSP nonce [Optional]
 	 * @param   mixed   $deps    Dependencies [Optional]
 	 * @param   boolean $footer  Whether to show in header or footer [Optional]
 	 * @param   array   $attrs   An array of attributes for the <script> element [Optional]
@@ -416,7 +416,7 @@ class Assets {
 	{
 		if ($handle === TRUE OR $handle === FALSE )
 		{
-			return self::all_codes($handle);
+			return self::all_codes($handle, $code);
 		}
 
 		if ($code === NULL)
@@ -445,10 +445,11 @@ class Assets {
 	 * Get a single javascript code
 	 *
 	 * @param   string  $handle  Asset name
+	 * @param   string  $nonce  CSP nonce [Optional]
 	 * @return  string  Asset HTML
 	 * @uses    HTML::attributes
 	 */
-	public static function get_codes($handle)
+	public static function get_codes($handle, $nonce = NULL)
 	{
 		if ( ! isset(self::$codes[$handle]))
 		{
@@ -457,7 +458,7 @@ class Assets {
 
 		$asset = self::$codes[$handle];
 
-		return "<script".HTML::attributes(array('type' => 'text/javascript')).'>
+		return "<script".HTML::attributes(array('type' => 'text/javascript', 'nonce' => $nonce)).'>
 		<!--//--><![CDATA['.PHP_EOL.$asset['code'].PHP_EOL.'<!--//-->]]></script>';
 	}
 
@@ -465,9 +466,10 @@ class Assets {
 	 * Get all javascript codes of section (header or footer)
 	 *
 	 * @param   boolean  $footer  FALSE for head, TRUE for footer [Optional]
+	 * @param   string   $nonce  CSP nonce [Optional]
 	 * @return  string   Asset HTML
 	 */
-	public static function all_codes($footer = FALSE)
+	public static function all_codes($footer = FALSE, $nonce = NULL)
 	{
 		if (empty(self::$codes))
 		{
@@ -493,7 +495,7 @@ class Assets {
 
 		foreach (self::_sort($assets) as $handle => $data)
 		{
-			$sorted[] = self::get_codes($handle);
+			$sorted[] = self::get_codes($handle, $nonce);
 		}
 
 		return implode(PHP_EOL, $sorted).PHP_EOL;
