@@ -67,6 +67,11 @@ class URL {
 			$protocol = parse_url($base_url, PHP_URL_SCHEME);
 		}
 
+		//Ugly hack
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
+			$protocol = 'https';
+		}
+
 		if ($index === TRUE AND ! empty(Kohana::$index_file))
 		{
 			// Add the index file to the URL
